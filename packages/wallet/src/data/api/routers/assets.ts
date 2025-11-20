@@ -2,7 +2,6 @@ import { cache } from 'react'
 
 import { z } from 'zod'
 
-import { serverEnv } from '../../../config/env.server.mjs'
 import erc20TokenList from '../../../constants/erc20.json'
 import nativeTokenList from '../../../constants/native.json'
 import { toChecksumAddress } from '../../../utils'
@@ -12,7 +11,6 @@ import {
   getNativeTokenBalance,
 } from '../../services/alchemy'
 import {
-  _getCoinIdFromSymbol,
   fetchTokenMetadata,
   legacy_fetchTokenPriceHistory,
   legacy_fetchTokensPrice,
@@ -75,19 +73,61 @@ const DEFAULT_TOKEN_SYMBOLS = [
   'SHIB',
 ]
 
-function getProxyAuthCredentials() {
-  const PROXY_BASE_URL = 'https://test.market.status.im'
+const DEFAULT_TOKEN_METADATA = {
+  SUPPLY_TOTAL: 0,
+  SUPPLY_CIRCULATING: 0,
+  TOPLIST_BASE_RANK: { TOTAL_MKT_CAP_USD: 0 },
+  ASSET_DESCRIPTION: '',
+}
 
-  const PROXY_AUTH = {
-    username: serverEnv['MARKET_PROXY_AUTH_USERNAME'],
-    password: serverEnv['MARKET_PROXY_AUTH_PASSWORD'],
+async function fetchTokenMetadataWithFallback(symbol: string) {
+  try {
+    return await fetchTokenMetadata(
+      symbol,
+      MARKET_PROXY_REVALIDATION_TIMES.TOKEN_METADATA,
+    )
+  } catch {
+    return DEFAULT_TOKEN_METADATA
   }
+}
 
-  const credentials = Buffer.from(
-    `${PROXY_AUTH.username}:${PROXY_AUTH.password}`,
-  ).toString('base64')
+function buildTokenSummary(
+  assets: Asset[],
+  defaultIcon: string,
+  defaultName: string,
+  defaultSymbol: string,
+) {
+  const summary = sum(assets)
+  const firstAsset = assets[0]
 
-  return { PROXY_BASE_URL, credentials }
+  return {
+    ...summary,
+    icon: defaultIcon,
+    name: defaultName,
+    symbol: defaultSymbol,
+    about: firstAsset?.metadata.about ?? '',
+    contracts: assets.reduce(
+      (acc, asset) => {
+        if (asset.contract) {
+          acc[asset.networks[0]] = asset.contract
+        }
+        return acc
+      },
+      {} as Record<NetworkType, string>,
+    ),
+  }
+}
+
+function filterTokensByNetworks<T extends { chainId: number }>(
+  tokens: T[],
+  networks: NetworkType[],
+): T[] {
+  return tokens.filter(token =>
+    Object.entries(STATUS_NETWORKS)
+      .filter(([, network]) => networks.includes(network))
+      .map(([chainId]) => Number(chainId))
+      .includes(token.chainId),
+  )
 }
 
 export const assetsRouter = router({
@@ -191,14 +231,6 @@ export const assetsRouter = router({
     }),
 })
 
-// const cachedAll = cache(async (address: string, networks: NetworkType[]) => {
-//   return await all({ address, networks })
-// })
-
-// const cachedAll = cache((address: string, networks: NetworkType[]) => {
-//   return all({ address, networks })
-// })
-
 const cachedAll = cache(async (key: string) => {
   const { address, networks } = JSON.parse(key)
 
@@ -212,21 +244,15 @@ async function all({
   address: string
   networks: NetworkType[]
 }) {
-  // await cachedDelay()
-  // console.log(' DELAY all()')
-  // await delay()
-
   try {
     const assets: Omit<Asset, 'metadata'>[] = []
 
-    // note: https://docs.alchemy.com/reference/alchemy-gettokenbalances can now return native tokens together with ERC20 tokens
     // Native tokens
-    const filteredNativeTokens = nativeTokenList.tokens.filter(token =>
-      Object.entries(STATUS_NETWORKS)
-        .filter(([, network]) => networks.includes(network))
-        .map(([chainId]) => Number(chainId))
-        .includes(token.chainId),
+    const filteredNativeTokens = filterTokensByNetworks(
+      nativeTokenList.tokens,
+      networks,
     )
+
     await Promise.all(
       filteredNativeTokens.map(async token => {
         const balance = await getNativeTokenBalance(
@@ -266,14 +292,10 @@ async function all({
 
     // ERC20 tokens
     const filteredERC20Tokens = new Map(
-      erc20TokenList.tokens
-        .filter(token =>
-          Object.entries(STATUS_NETWORKS)
-            .filter(([, network]) => networks.includes(network))
-            .map(([chainId]) => Number(chainId))
-            .includes(token.chainId),
-        )
-        .map(token => [toChecksumAddress(token.address), token]),
+      filterTokensByNetworks(erc20TokenList.tokens, networks).map(token => [
+        toChecksumAddress(token.address),
+        token,
+      ]),
     )
 
     const ERC20TokensByNetwork = Array.from(
@@ -457,19 +479,10 @@ async function nativeToken({
   networks: NetworkType[]
   symbol: string
 }) {
-  // console.log(' DELAY nativeToken()')
-  // await delay()
-
-  const filteredNativeTokens = nativeTokenList.tokens.filter(token => {
-    if (token.symbol !== symbol) {
-      return false
-    }
-
-    return Object.entries(STATUS_NETWORKS)
-      .filter(([, network]) => networks.includes(network))
-      .map(([chainId]) => Number(chainId))
-      .includes(token.chainId)
-  })
+  const filteredNativeTokens = filterTokensByNetworks(
+    nativeTokenList.tokens,
+    networks,
+  ).filter(token => token.symbol === symbol)
 
   if (!filteredNativeTokens.length) {
     throw new Error('Token not found')
@@ -500,117 +513,7 @@ async function nativeToken({
         'all',
         MARKET_PROXY_REVALIDATION_TIMES.PRICE_HISTORY,
       )
-      let tokenMetadata
-      try {
-        tokenMetadata = await fetchTokenMetadata(
-          token.symbol,
-          MARKET_PROXY_REVALIDATION_TIMES.TOKEN_METADATA,
-        )
-        // If description is empty, try to fetch it again with fallback
-        if (
-          !tokenMetadata?.['ASSET_DESCRIPTION'] ||
-          tokenMetadata['ASSET_DESCRIPTION'].trim() === ''
-        ) {
-          throw new Error('Description is empty')
-        }
-      } catch {
-        // Try to get at least supply information
-        try {
-          const coinId = await _getCoinIdFromSymbol(token.symbol)
-          if (coinId && coinId.toLowerCase() !== token.symbol.toLowerCase()) {
-            const { PROXY_BASE_URL, credentials } = getProxyAuthCredentials()
-
-            const url = new URL(`${PROXY_BASE_URL}/v1/coins/${coinId}`)
-            url.searchParams.set('localization', 'true')
-            url.searchParams.set('tickers', 'false')
-            url.searchParams.set('market_data', 'true')
-            url.searchParams.set('community_data', 'false')
-            url.searchParams.set('developer_data', 'false')
-            url.searchParams.set('sparkline', 'false')
-
-            const response = await fetch(url, {
-              method: 'GET',
-              headers: {
-                Authorization: `Basic ${credentials}`,
-                'Content-Type': 'application/json',
-              },
-              cache: 'force-cache',
-              next: {
-                revalidate: MARKET_PROXY_REVALIDATION_TIMES.TOKEN_METADATA,
-                tags: ['fetchTokenMetadata_supply_fallback'],
-              },
-            })
-
-            if (response.ok) {
-              const coinData = await response.json()
-
-              // Get description in preferred order: en, then any other language
-              const getDescription = (): string => {
-                if (!coinData.description) {
-                  return ''
-                }
-
-                if (coinData.description['en']) {
-                  return coinData.description['en']
-                }
-                // Try other common languages
-                const languages = [
-                  'ko',
-                  'ja',
-                  'zh',
-                  'es',
-                  'fr',
-                  'de',
-                  'pt',
-                  'ru',
-                ]
-                for (const lang of languages) {
-                  if (coinData.description[lang]) {
-                    return coinData.description[lang]
-                  }
-                }
-                // Return first available description
-                const firstDescription = Object.values(
-                  coinData.description || {},
-                )[0] as string | undefined
-                if (firstDescription) {
-                  return firstDescription
-                }
-
-                return ''
-              }
-              const description = getDescription()
-              tokenMetadata = {
-                SUPPLY_TOTAL: coinData.market_data?.total_supply || 0,
-                SUPPLY_CIRCULATING:
-                  coinData.market_data?.circulating_supply || 0,
-                TOPLIST_BASE_RANK: { TOTAL_MKT_CAP_USD: 0 },
-                ASSET_DESCRIPTION: description,
-              }
-            } else if (response.status === 404) {
-              // Coin ID not found in CoinGecko, use empty description
-              tokenMetadata = {
-                SUPPLY_TOTAL: 0,
-                SUPPLY_CIRCULATING: 0,
-                TOPLIST_BASE_RANK: { TOTAL_MKT_CAP_USD: 0 },
-                ASSET_DESCRIPTION: '',
-              }
-            } else {
-              throw new Error(`Failed to fetch supply info: ${response.status}`)
-            }
-          } else {
-            throw new Error('Coin ID not found')
-          }
-        } catch {
-          // Provide default metadata structure
-          tokenMetadata = {
-            SUPPLY_TOTAL: 0,
-            SUPPLY_CIRCULATING: 0,
-            TOPLIST_BASE_RANK: { TOTAL_MKT_CAP_USD: 0 },
-            ASSET_DESCRIPTION: '',
-          }
-        }
-      }
+      const tokenMetadata = await fetchTokenMetadataWithFallback(token.symbol)
 
       const asset: Asset = map({
         token,
@@ -623,25 +526,15 @@ async function nativeToken({
     }),
   )
 
-  const summary = sum(Object.values(assets).flat())
+  const assetsArray = Object.values(assets).flat()
 
   return {
-    summary: {
-      ...summary,
-      icon: filteredNativeTokens[0].logoURI,
-      name: filteredNativeTokens[0].name,
-      symbol: filteredNativeTokens[0].symbol,
-      about: Object.values(assets)[0]?.metadata.about ?? '',
-      contracts: Object.values(assets).reduce(
-        (acc, asset) => {
-          if (asset.contract) {
-            acc[asset.networks[0]] = asset.contract
-          }
-          return acc
-        },
-        {} as Record<NetworkType, string>,
-      ),
-    },
+    summary: buildTokenSummary(
+      assetsArray,
+      filteredNativeTokens[0].logoURI,
+      filteredNativeTokens[0].name,
+      filteredNativeTokens[0].symbol,
+    ),
     assets,
   }
 }
@@ -661,9 +554,6 @@ async function token({
   networks: NetworkType[]
   contract: string
 }) {
-  // console.log(' DELAY token()')
-  // await delay()
-
   const erc20Token = erc20TokenList.tokens.find(
     token =>
       token.address === contract &&
@@ -709,117 +599,7 @@ async function token({
         'all',
         MARKET_PROXY_REVALIDATION_TIMES.PRICE_HISTORY,
       )
-      let tokenMetadata
-      try {
-        tokenMetadata = await fetchTokenMetadata(
-          token.symbol,
-          MARKET_PROXY_REVALIDATION_TIMES.TOKEN_METADATA,
-        )
-        // If description is empty, try to fetch it again with fallback
-        if (
-          !tokenMetadata?.['ASSET_DESCRIPTION'] ||
-          tokenMetadata['ASSET_DESCRIPTION'].trim() === ''
-        ) {
-          throw new Error('Description is empty')
-        }
-      } catch {
-        // Try to get at least supply information
-        try {
-          const coinId = await _getCoinIdFromSymbol(token.symbol)
-          if (coinId && coinId.toLowerCase() !== token.symbol.toLowerCase()) {
-            const { PROXY_BASE_URL, credentials } = getProxyAuthCredentials()
-
-            const url = new URL(`${PROXY_BASE_URL}/v1/coins/${coinId}`)
-            url.searchParams.set('localization', 'true')
-            url.searchParams.set('tickers', 'false')
-            url.searchParams.set('market_data', 'true')
-            url.searchParams.set('community_data', 'false')
-            url.searchParams.set('developer_data', 'false')
-            url.searchParams.set('sparkline', 'false')
-
-            const response = await fetch(url, {
-              method: 'GET',
-              headers: {
-                Authorization: `Basic ${credentials}`,
-                'Content-Type': 'application/json',
-              },
-              cache: 'force-cache',
-              next: {
-                revalidate: MARKET_PROXY_REVALIDATION_TIMES.TOKEN_METADATA,
-                tags: ['fetchTokenMetadata_supply_fallback'],
-              },
-            })
-
-            if (response.ok) {
-              const coinData = await response.json()
-
-              // Get description in preferred order: en, then any other language
-              const getDescription = (): string => {
-                if (!coinData.description) {
-                  return ''
-                }
-
-                if (coinData.description['en']) {
-                  return coinData.description['en']
-                }
-                // Try other common languages
-                const languages = [
-                  'ko',
-                  'ja',
-                  'zh',
-                  'es',
-                  'fr',
-                  'de',
-                  'pt',
-                  'ru',
-                ]
-                for (const lang of languages) {
-                  if (coinData.description[lang]) {
-                    return coinData.description[lang]
-                  }
-                }
-                // Return first available description
-                const firstDescription = Object.values(
-                  coinData.description || {},
-                )[0] as string | undefined
-                if (firstDescription) {
-                  return firstDescription
-                }
-
-                return ''
-              }
-              const description = getDescription()
-              tokenMetadata = {
-                SUPPLY_TOTAL: coinData.market_data?.total_supply || 0,
-                SUPPLY_CIRCULATING:
-                  coinData.market_data?.circulating_supply || 0,
-                TOPLIST_BASE_RANK: { TOTAL_MKT_CAP_USD: 0 },
-                ASSET_DESCRIPTION: description,
-              }
-            } else if (response.status === 404) {
-              // Coin ID not found in CoinGecko, use empty description
-              tokenMetadata = {
-                SUPPLY_TOTAL: 0,
-                SUPPLY_CIRCULATING: 0,
-                TOPLIST_BASE_RANK: { TOTAL_MKT_CAP_USD: 0 },
-                ASSET_DESCRIPTION: '',
-              }
-            } else {
-              throw new Error(`Failed to fetch supply info: ${response.status}`)
-            }
-          } else {
-            throw new Error('Coin ID not found')
-          }
-        } catch {
-          // Provide default metadata structure
-          tokenMetadata = {
-            SUPPLY_TOTAL: 0,
-            SUPPLY_CIRCULATING: 0,
-            TOPLIST_BASE_RANK: { TOTAL_MKT_CAP_USD: 0 },
-            ASSET_DESCRIPTION: '',
-          }
-        }
-      }
+      const tokenMetadata = await fetchTokenMetadataWithFallback(token.symbol)
 
       const asset = map({
         token,
@@ -832,25 +612,15 @@ async function token({
     }),
   )
 
-  const summary = sum(Object.values(assets).flat())
+  const assetsArray = Object.values(assets).flat()
 
   return {
-    summary: {
-      ...summary,
-      icon: erc20Token.logoURI,
-      name: erc20Token.name,
-      symbol: erc20Token.symbol,
-      about: Object.values(assets)[0]?.metadata.about ?? '',
-      contracts: Object.values(assets).reduce(
-        (acc, asset) => {
-          if (asset.contract) {
-            acc[asset.networks[0]] = asset.contract
-          }
-          return acc
-        },
-        {} as Record<NetworkType, string>,
-      ),
-    },
+    summary: buildTokenSummary(
+      assetsArray,
+      erc20Token.logoURI,
+      erc20Token.name,
+      erc20Token.symbol,
+    ),
     assets,
   }
 }
@@ -868,44 +638,19 @@ async function tokenPriceChart({
   symbol: string
   days?: '1' | '7' | '30' | '90' | '365' | 'all'
 }) {
-  // console.log(' DELAY tokenPriceChart()')
-  // await delay()
-
   const data = await legacy_fetchTokenPriceHistory(symbol, days)
 
-  const mappedData = data.map(({ time, close }) => ({
+  return data.map(({ time, close }) => ({
     date: new Date(time * 1000).toISOString(),
     price: close,
   }))
-
-  return mappedData
 }
 
 const cachedNativeTokenPriceChart = cache(async (key: string) => {
   const { symbol, days } = JSON.parse(key)
 
-  return await nativeTokenPriceChart({ symbol, days })
+  return await tokenPriceChart({ symbol, days })
 })
-
-async function nativeTokenPriceChart({
-  symbol,
-  days,
-}: {
-  symbol: string
-  days?: '1' | '7' | '30' | '90' | '365' | 'all'
-}) {
-  // console.log(' DELAY nativeTokenPriceChart()')
-  // await delay()
-
-  const data = await legacy_fetchTokenPriceHistory(symbol, days)
-
-  const mappedData = data.map(({ time, close }) => ({
-    date: new Date(time * 1000).toISOString(),
-    price: close,
-  }))
-
-  return mappedData
-}
 
 const cachedNativeTokenBalanceChart = cache(async (key: string) => {
   const { address, networks, days } = JSON.parse(key)
@@ -922,9 +667,6 @@ async function nativeTokenBalanceChart({
   networks: NetworkType[]
   days?: '1' | '7' | '30' | '90' | '365' | 'all'
 }) {
-  // console.log(' DELAY nativeTokenBalanceChart()')
-  // await delay()
-
   const currentTime = Math.floor(Date.now() / 1000)
   const responses = await Promise.all(
     networks.map(async network => {
@@ -968,9 +710,6 @@ async function tokenBalanceChart({
   contract: string
   days?: '1' | '7' | '30' | '90' | '365' | 'all'
 }) {
-  // console.log(' DELAY tokenBalanceChart()')
-  // await delay()
-
   const erc20Token = erc20TokenList.tokens.find(
     token =>
       token.address === contract &&
@@ -1203,9 +942,3 @@ function sum(assets: Asset[] | Omit<Asset, 'metadata'>[]) {
     total_percentage_24h_change,
   }
 }
-
-// async function delay() {
-//   await new Promise(resolve => setTimeout(resolve, 3 * 1000))
-// }
-
-// const cachedDelay = cache(wait)
