@@ -33,10 +33,10 @@ const fetchResources = async url => {
       {
         headers: {
           Authorization: `Basic ${btoa(
-            `${env.data.CLOUDINARY_API_KEY}:${env.data.CLOUDINARY_API_SECRET}`,
+            `${env.data.CLOUDINARY_API_KEY}:${env.data.CLOUDINARY_API_SECRET}`
           )}`,
         },
-      },
+      }
     )
 
     const { resources, next_cursor } = await response.json()
@@ -46,7 +46,7 @@ const fetchResources = async url => {
       nextCursor = next_cursor
     } else {
       console.warn(
-        'Empty or undefined response received. Consider running the script again.',
+        'Empty or undefined response received. Consider running the script again.'
       )
       break
     }
@@ -56,11 +56,11 @@ const fetchResources = async url => {
 }
 
 const [images, videos, zipFiles] = await Promise.all(
-  RESOURCE_URLS.map(async url => fetchResources(url)),
+  RESOURCE_URLS.map(async url => fetchResources(url))
 )
 
 fs.writeFile(
-  'src/components/image/types.ts',
+  'src/app/_components/assets/types.ts',
   `
 export type ImageType =
   ${images
@@ -68,7 +68,7 @@ export type ImageType =
       i =>
         `{ id: '${i.public_id}:${i.width}:${i.height}', alt: "${
           i.context?.custom?.alt ?? ''
-        }" }`,
+        }" }`
     )
     .join(' | ')}
 
@@ -85,5 +85,5 @@ export type VideoId = ${[...videos]
      .map(z => `'${z.public_id}'`)
      .sort()
      .join(' | ')}
- `,
+ `
 )
