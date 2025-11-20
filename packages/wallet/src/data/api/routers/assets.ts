@@ -2,6 +2,7 @@ import { cache } from 'react'
 
 import { z } from 'zod'
 
+import { serverEnv } from '../../../config/env.server.mjs'
 import erc20TokenList from '../../../constants/erc20.json'
 import nativeTokenList from '../../../constants/native.json'
 import { toChecksumAddress } from '../../../utils'
@@ -73,6 +74,21 @@ const DEFAULT_TOKEN_SYMBOLS = [
   'UNI',
   'SHIB',
 ]
+
+function getProxyAuthCredentials() {
+  const PROXY_BASE_URL = 'https://test.market.status.im'
+
+  const PROXY_AUTH = {
+    username: serverEnv['MARKET_PROXY_AUTH_USERNAME'],
+    password: serverEnv['MARKET_PROXY_AUTH_PASSWORD'],
+  }
+
+  const credentials = Buffer.from(
+    `${PROXY_AUTH.username}:${PROXY_AUTH.password}`,
+  ).toString('base64')
+
+  return { PROXY_BASE_URL, credentials }
+}
 
 export const assetsRouter = router({
   all: publicProcedure
@@ -502,14 +518,7 @@ async function nativeToken({
         try {
           const coinId = await _getCoinIdFromSymbol(token.symbol)
           if (coinId && coinId.toLowerCase() !== token.symbol.toLowerCase()) {
-            const PROXY_BASE_URL = 'https://test.market.status.im'
-            const PROXY_AUTH = {
-              username: process.env['MARKET_PROXY_AUTH_USERNAME'] || 'test',
-              password: process.env['MARKET_PROXY_AUTH_PASSWORD'] || 'test',
-            }
-            const credentials = Buffer.from(
-              `${PROXY_AUTH.username}:${PROXY_AUTH.password}`,
-            ).toString('base64')
+            const { PROXY_BASE_URL, credentials } = getProxyAuthCredentials()
 
             const url = new URL(`${PROXY_BASE_URL}/v1/coins/${coinId}`)
             url.searchParams.set('localization', 'true')
@@ -718,14 +727,7 @@ async function token({
         try {
           const coinId = await _getCoinIdFromSymbol(token.symbol)
           if (coinId && coinId.toLowerCase() !== token.symbol.toLowerCase()) {
-            const PROXY_BASE_URL = 'https://test.market.status.im'
-            const PROXY_AUTH = {
-              username: process.env['MARKET_PROXY_AUTH_USERNAME'] || 'test',
-              password: process.env['MARKET_PROXY_AUTH_PASSWORD'] || 'test',
-            }
-            const credentials = Buffer.from(
-              `${PROXY_AUTH.username}:${PROXY_AUTH.password}`,
-            ).toString('base64')
+            const { PROXY_BASE_URL, credentials } = getProxyAuthCredentials()
 
             const url = new URL(`${PROXY_BASE_URL}/v1/coins/${coinId}`)
             url.searchParams.set('localization', 'true')

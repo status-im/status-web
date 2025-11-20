@@ -8,6 +8,7 @@
 
 // import 'server-only'
 
+import { serverEnv } from '../../../config/env.server.mjs'
 import { markApiKeyAsRateLimited } from '../api-key-rotation'
 
 import type {
@@ -20,11 +21,9 @@ import type {
 
 const PROXY_BASE_URL = 'https://test.market.status.im'
 
-// Get proxy auth from environment variables, fallback to 'test' for development
-// Uses process.env directly to avoid TypeScript index signature issues with optional fields
 const PROXY_AUTH = {
-  username: process.env['MARKET_PROXY_AUTH_USERNAME'],
-  password: process.env['MARKET_PROXY_AUTH_PASSWORD'],
+  username: serverEnv.MARKET_PROXY_AUTH_USERNAME,
+  password: serverEnv.MARKET_PROXY_AUTH_PASSWORD,
 }
 
 export const MARKET_PROXY_REVALIDATION_TIMES = {
@@ -105,7 +104,6 @@ export async function fetchTokenMetadata(
   }
 
   // Validate coin id is not the same as symbol (which would indicate a lookup issue)
-  // Note: For SNT, coin ID is "status" which is different from symbol "SNT", so this check passes
   if (coinId.toLowerCase() === symbol.toLowerCase()) {
     throw new Error(`Coin not found for symbol: ${symbol}`)
   }
@@ -152,12 +150,13 @@ export async function fetchTokenMetadata(
     }
     // Try other common languages
     const languages = ['ko', 'ja', 'zh', 'es', 'fr', 'de', 'pt', 'ru']
+
     for (const lang of languages) {
       if (coinData.description[lang]) {
         return coinData.description[lang]
       }
     }
-    // Return first available description
+
     const firstDescription = Object.values(coinData.description)[0] as
       | string
       | undefined
@@ -829,9 +828,6 @@ async function _fetchWithAuth<T>(
         markApiKeyAsRateLimited(apiKey)
       }
     }
-
-    // For 404 errors, it might be a proxy server issue or coin not found
-    // We'll let the caller handle it (they can catch and use fallback)
 
     throw new Error(`Failed to fetch: ${response.status} ${errorMessage}`)
   }
