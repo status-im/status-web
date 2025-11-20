@@ -1,5 +1,8 @@
 import {
   faucetAbi,
+  karmaAbi,
+  karmaTierAbi,
+  rewardsAbi,
   stakingManagerAbi,
   tokenAbi,
   vaultFactoryAbi,
@@ -28,4 +31,19 @@ export const SNT_TOKEN = {
 export const FAUCET = {
   address: '0x4Fb609F4a457f47B41D35Dd060447271F000120A' as Address,
   abi: faucetAbi as Abi,
+} as const
+
+export const KARMA = {
+  address: '0x7ec5Dc75D09fAbcD55e76077AFa5d4b77D112fde' as Address,
+  abi: karmaAbi as Abi,
+} as const
+
+export const REWARDS = {
+  address: '0xAEF19bbbe490Ad9C083EcE40c835A2f21B720de8' as Address,
+  abi: rewardsAbi as Abi,
+} as const
+
+export const KARMA_TIER = {
+  address: '0xc7fCD786a161f42bDaF66E18a67C767C23cFd30C' as Address,
+  abi: karmaTierAbi as Abi,
 } as const

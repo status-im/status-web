@@ -4,7 +4,8 @@ import twitterIcon from '../assets/social/twitter.svg'
 
 export const CATS_FISHING_URL = 'https://cats.fishing'
 export const SPLA_LABS_URL = 'https://splalabs.xyz'
-export const STATUS_NETWORK_BRIDGE_URL = 'https://bridge.status.network/'
+export const PONZI_HERO_URL = 'https://www.ponzihero.xyz'
+export const STATUS_NETWORK_BRIDGE_URL = 'https://bridge.status.network'
 
 export const BRAND = {
   name: 'Brand assets',
