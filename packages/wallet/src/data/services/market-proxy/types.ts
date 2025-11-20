@@ -296,6 +296,7 @@ export type TokenMetadataResponseBody = {
       SPOT_MOVING_24_HOUR_QUOTE_VOLUME_USD: number
       SPOT_MOVING_7_DAY_QUOTE_VOLUME_USD: number
       SPOT_MOVING_30_DAY_QUOTE_VOLUME_USD: number
+      RANK?: number
     }
     ASSET_DESCRIPTION: string
     ASSET_DESCRIPTION_SUMMARY: string
@@ -588,6 +589,7 @@ export type deprecated_TokensMetadataResponseBody = {
         SPOT_MOVING_24_HOUR_QUOTE_VOLUME_USD: number
         SPOT_MOVING_7_DAY_QUOTE_VOLUME_USD: number
         SPOT_MOVING_30_DAY_QUOTE_VOLUME_USD: number
+        RANK?: number
       }
       ASSET_DESCRIPTION: string
       ASSET_DESCRIPTION_SUMMARY: string
