@@ -85,7 +85,14 @@ export class EthereumClient {
       const owner = await ownerContract.signerPublicKey()
 
       return owner
-    } catch {
+    } catch (error) {
+      console.error('[EthereumClient] resolveOwner error', {
+        error,
+        errorMessage: error instanceof Error ? error.message : String(error),
+        errorStack: error instanceof Error ? error.stack : undefined,
+        registryContractAddress,
+        communityPublicKey,
+      })
       return
     }
   }
