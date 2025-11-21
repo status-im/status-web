@@ -165,13 +165,24 @@ class RequestClient {
     /** Compressed */
     publicKey: string,
   ): Promise<CommunityInfo | undefined> => {
-    const communityDescription = await this.fetchCommunityDescription(publicKey)
+    try {
+      const communityDescription =
+        await this.fetchCommunityDescription(publicKey)
 
-    if (!communityDescription) {
-      return
+      if (!communityDescription) {
+        return
+      }
+
+      return mapCommunity(communityDescription)
+    } catch (error) {
+      console.error('[RequestClient] error in fetchCommunity', {
+        error,
+        errorMessage: error instanceof Error ? error.message : String(error),
+        errorStack: error instanceof Error ? error.stack : undefined,
+        publicKey,
+      })
+      throw error
     }
-
-    return mapCommunity(communityDescription)
   }
 
   public fetchChannel = async (
@@ -179,124 +190,175 @@ class RequestClient {
     publicKey: string,
     uuid: string,
   ): Promise<ChannelInfo | undefined> => {
-    const communityDescription = await this.fetchCommunityDescription(publicKey)
+    try {
+      const communityDescription =
+        await this.fetchCommunityDescription(publicKey)
 
-    if (!communityDescription) {
-      return
+      if (!communityDescription) {
+        return
+      }
+
+      const communityChat = communityDescription.chats[uuid]
+
+      return mapChannel(communityChat, communityDescription)
+    } catch (error) {
+      console.error('[RequestClient] error in fetchChannel', {
+        error,
+        errorMessage: error instanceof Error ? error.message : String(error),
+        errorStack: error instanceof Error ? error.stack : undefined,
+        publicKey,
+        uuid,
+      })
+      throw error
     }
-
-    const communityChat = communityDescription.chats[uuid]
-
-    return mapChannel(communityChat, communityDescription)
   }
 
   public fetchUser = async (
     /** Uncompressed */
     publicKey: string,
   ): Promise<UserInfo | undefined> => {
-    const contactCodeAdvertisement =
-      await this.fetchContactCodeAdvertisement(publicKey)
+    try {
+      const contactCodeAdvertisement =
+        await this.fetchContactCodeAdvertisement(publicKey)
 
-    if (!contactCodeAdvertisement) {
-      return
+      if (!contactCodeAdvertisement) {
+        return
+      }
+
+      return mapUser(contactCodeAdvertisement, publicKey)
+    } catch (error) {
+      console.error('[RequestClient] error in fetchUser', {
+        error,
+        errorMessage: error instanceof Error ? error.message : String(error),
+        errorStack: error instanceof Error ? error.stack : undefined,
+        publicKey,
+      })
+      throw error
     }
-
-    return mapUser(contactCodeAdvertisement, publicKey)
   }
 
   public fetchCommunityDescription = async (
     /** Compressed */
     communityPublicKey: string,
   ): Promise<CommunityDescription | undefined> => {
-    const contentTopic = idToContentTopic(communityPublicKey)
-    const symmetricKey = await generateKeyFromPassword(communityPublicKey)
+    try {
+      const contentTopic = idToContentTopic(communityPublicKey)
+      const symmetricKey = await generateKeyFromPassword(communityPublicKey)
 
-    const wakuMessageGenerator = this.waku.store.queryGenerator([
-      createDecoder(contentTopic, symmetricKey, {
-        clusterId: 16,
-        shard: 32,
-      }),
-    ])
-    for await (const wakuMessages of wakuMessageGenerator) {
-      for await (const wakuMessage of wakuMessages) {
-        if (!wakuMessage) {
-          continue
-        }
-
-        // handle
-        const message = this.handleWakuMessage(wakuMessage)
-        if (!message) {
-          continue
-        }
-
-        if (
-          message.type !== ApplicationMetadataMessage_Type.COMMUNITY_DESCRIPTION
-        ) {
-          continue
-        }
-
-        // decode
-        const decodedCommunityDescription = CommunityDescription.fromBinary(
-          message.payload,
-        )
-
-        // validate
-        if (
-          !isClockValid(
-            BigInt(decodedCommunityDescription.clock),
-            message.timestamp,
-          )
-        ) {
-          continue
-        }
-
-        const ownerTokenPermission = Object.values(
-          decodedCommunityDescription.tokenPermissions,
-        ).find(
-          permission =>
-            permission.type ===
-            CommunityTokenPermission_Type.BECOME_TOKEN_OWNER,
-        )
-        if (ownerTokenPermission) {
-          const criteria = ownerTokenPermission.tokenCriteria[0]
-          const contracts = criteria?.contractAddresses
-          const chainId = Object.keys(contracts)[0]
-
-          if (!chainId) {
+      const wakuMessageGenerator = this.waku.store.queryGenerator([
+        createDecoder(contentTopic, symmetricKey, {
+          clusterId: 16,
+          shard: 32,
+        }),
+      ])
+      for await (const wakuMessages of wakuMessageGenerator) {
+        for await (const wakuMessage of wakuMessages) {
+          if (!wakuMessage) {
             continue
           }
 
-          const providerUrl = this.#ethProviderURLs[Number(chainId)]
-
-          if (!providerUrl) {
+          // handle
+          const message = this.handleWakuMessage(wakuMessage)
+          if (!message) {
             continue
           }
 
-          const ethereumClient = this.getEthereumClient(Number(chainId))
-
-          if (!ethereumClient) {
+          if (
+            message.type !==
+            ApplicationMetadataMessage_Type.COMMUNITY_DESCRIPTION
+          ) {
             continue
           }
 
-          const ownerPublicKey = await ethereumClient.resolveOwner(
-            this.#contractAddresses[Number(chainId)]
-              .CommunityOwnerTokenRegistry,
-            communityPublicKey,
+          // decode
+          const decodedCommunityDescription = CommunityDescription.fromBinary(
+            message.payload,
           )
 
-          if (ownerPublicKey !== message.signerPublicKey) {
+          // validate
+          if (
+            !isClockValid(
+              BigInt(decodedCommunityDescription.clock),
+              message.timestamp,
+            )
+          ) {
             continue
           }
-        } else if (
-          communityPublicKey !==
-          `0x${compressPublicKey(message.signerPublicKey)}`
-        ) {
-          continue
-        }
 
-        // stop
-        return decodedCommunityDescription
+          const ownerTokenPermission = Object.values(
+            decodedCommunityDescription.tokenPermissions,
+          ).find(
+            permission =>
+              permission.type ===
+              CommunityTokenPermission_Type.BECOME_TOKEN_OWNER,
+          )
+          if (ownerTokenPermission) {
+            const criteria = ownerTokenPermission.tokenCriteria[0]
+            const contracts = criteria?.contractAddresses
+            const chainId = Object.keys(contracts)[0]
+
+            if (!chainId) {
+              continue
+            }
+
+            const providerUrl = this.#ethProviderURLs[Number(chainId)]
+
+            if (!providerUrl) {
+              continue
+            }
+
+            const ethereumClient = this.getEthereumClient(Number(chainId))
+
+            if (!ethereumClient) {
+              continue
+            }
+
+            try {
+              const ownerPublicKey = await ethereumClient.resolveOwner(
+                this.#contractAddresses[Number(chainId)]
+                  .CommunityOwnerTokenRegistry,
+                communityPublicKey,
+              )
+
+              if (ownerPublicKey !== message.signerPublicKey) {
+                continue
+              }
+            } catch (error) {
+              console.error(
+                '[RequestClient] error in resolveOwner during fetchCommunityDescription',
+                {
+                  error,
+                  errorMessage:
+                    error instanceof Error ? error.message : String(error),
+                  errorStack: error instanceof Error ? error.stack : undefined,
+                  chainId: Number(chainId),
+                  communityPublicKey,
+                  registryContractAddress:
+                    this.#contractAddresses[Number(chainId)]
+                      .CommunityOwnerTokenRegistry,
+                },
+              )
+              throw error
+            }
+          } else if (
+            communityPublicKey !==
+            `0x${compressPublicKey(message.signerPublicKey)}`
+          ) {
+            continue
+          }
+
+          // stop
+          return decodedCommunityDescription
+        }
       }
+    } catch (error) {
+      console.error('[RequestClient] error in fetchCommunityDescription', {
+        error,
+        errorMessage: error instanceof Error ? error.message : String(error),
+        errorStack: error instanceof Error ? error.stack : undefined,
+        communityPublicKey,
+      })
+      throw error
     }
   }
 
