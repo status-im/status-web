@@ -122,6 +122,18 @@ export function PreviewPage(props: PreviewPageProps) {
     url,
   } = useURLData(type, decodedData, encodedData)
 
+  console.log('[PreviewPage] URL data', {
+    type,
+    publicKey,
+    urlChannelUuid,
+    urlData: urlData ? 'present' : 'null',
+    urlErrorCode,
+    urlIsLoading,
+    url,
+    decodedData: decodedData ? 'present' : 'null',
+    encodedData: encodedData ? 'present' : 'null',
+  })
+
   const wakuQueryIsEnabled = Boolean(publicKey)
   const {
     data: wakuData,
@@ -134,11 +146,21 @@ export function PreviewPage(props: PreviewPageProps) {
     queryKey: [type],
     enabled: wakuQueryIsEnabled,
     queryFn: async function ({ queryKey }): Promise<Data | null> {
+      console.log('[PreviewPage] queryFn called', {
+        type: queryKey[0],
+        publicKey,
+        wakuQueryIsEnabled,
+      })
       const client = await getRequestClient()
+      console.log('[PreviewPage] client obtained', { type: queryKey[0] })
 
       switch (queryKey[0]) {
         case 'community': {
+          console.log('[PreviewPage] fetching community', { publicKey })
           const info = await client.fetchCommunity(publicKey!)
+          console.log('[PreviewPage] community fetch result', {
+            info: info ? 'found' : 'null',
+          })
 
           if (!info) {
             return null
@@ -152,11 +174,19 @@ export function PreviewPage(props: PreviewPageProps) {
               ? props.channelUuid
               : urlChannelUuid
 
+          console.log('[PreviewPage] fetching channel', {
+            publicKey,
+            channelUuid,
+          })
           if (!channelUuid) {
+            console.log('[PreviewPage] channelUuid missing')
             return null
           }
 
           const info = await client.fetchChannel(publicKey!, channelUuid)
+          console.log('[PreviewPage] channel fetch result', {
+            info: info ? 'found' : 'null',
+          })
 
           if (!info) {
             return null
@@ -165,7 +195,11 @@ export function PreviewPage(props: PreviewPageProps) {
           return { type: 'channel', info }
         }
         case 'profile': {
+          console.log('[PreviewPage] fetching profile', { publicKey })
           const info = await client.fetchUser(publicKey!)
+          console.log('[PreviewPage] profile fetch result', {
+            info: info ? 'found' : 'null',
+          })
 
           if (!info) {
             return null
@@ -175,6 +209,17 @@ export function PreviewPage(props: PreviewPageProps) {
         }
       }
     },
+  })
+
+  console.log('[PreviewPage] query state', {
+    type,
+    publicKey,
+    wakuQueryIsEnabled,
+    wakuData: wakuData ? 'present' : 'null',
+    error: error ? { message: error.message, name: error.name } : null,
+    status,
+    isLoading,
+    isFetching,
   })
 
   function getLoading(): boolean {
@@ -199,9 +244,25 @@ export function PreviewPage(props: PreviewPageProps) {
   }
 
   const loading = getLoading()
+  console.log('[PreviewPage] loading state', {
+    loading,
+    status,
+    urlIsLoading,
+    isFetching,
+    isLoading,
+    settled: status === 'success' || status === 'error',
+  })
 
   useEffect(() => {
+    console.log('[PreviewPage] useEffect triggered', {
+      loading,
+      wakuData: wakuData ? 'present' : 'null',
+      error: error ? { message: error.message, name: error.name } : null,
+      urlData: urlData ? 'present' : 'null',
+    })
+
     if (loading) {
+      console.log('[PreviewPage] still loading, skipping')
       return
     }
 
@@ -213,6 +274,16 @@ export function PreviewPage(props: PreviewPageProps) {
     stopClient()
 
     if (!wakuData || error) {
+      console.log('[PreviewPage] error condition met', {
+        hasWakuData: !!wakuData,
+        hasError: !!error,
+        errorDetails: error
+          ? { message: error.message, name: error.name, stack: error.stack }
+          : null,
+        publicKey,
+        wakuQueryIsEnabled,
+        status,
+      })
       // todo?: rephrase to "fetch latest"
       toast.negative("Couldn't fetch information")
 
