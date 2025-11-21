@@ -63,6 +63,10 @@ export class EthereumClient {
     registryContractAddress: string,
     communityPublicKey: string,
   ): Promise<string | undefined> {
+    console.log('[EthereumClient] resolveOwner called', {
+      registryContractAddress,
+      communityPublicKey,
+    })
     try {
       // Use bracket notation to prevent webpack from statically analyzing the export
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

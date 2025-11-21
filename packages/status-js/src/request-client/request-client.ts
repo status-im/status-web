@@ -297,6 +297,14 @@ class RequestClient {
             const contracts = criteria?.contractAddresses
             const chainId = Object.keys(contracts)[0]
 
+            console.log(
+              '[RequestClient] ownerTokenPermission found, calling resolveOwner',
+              {
+                chainId: Number(chainId),
+                communityPublicKey,
+              },
+            )
+
             if (!chainId) {
               continue
             }
