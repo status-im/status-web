@@ -20,6 +20,10 @@ export const envSchema = z.object({
   MERCURYO_SECRET_KEY: z.string(),
   ALCHEMY_API_KEYS: z.string(),
   COINGECKO_API_KEY: z.string(),
+  ETH_RPC_PROXY_AUTH_USERNAME: z.string(),
+  ETH_RPC_PROXY_AUTH_PASSWORD: z.string(),
+  MARKET_PROXY_AUTH_USERNAME: z.string(),
+  MARKET_PROXY_AUTH_PASSWORD: z.string(),
 })
 
 const result = envSchema.safeParse(process.env)
