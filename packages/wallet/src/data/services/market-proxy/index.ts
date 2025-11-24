@@ -501,6 +501,7 @@ export async function legacy_fetchTokensPrice(
 
   try {
     const coinIdMap = await _getCoinIdsFromSymbols(symbols)
+
     const coinIds = Object.values(coinIdMap).filter(Boolean)
     if (coinIds.length === 0) return {}
 
@@ -623,12 +624,31 @@ function _mapSymbolsToCoinIds(
 ): Record<string, string> {
   const result: Record<string, string> = {}
   for (const symbol of symbols) {
-    const coin = coinList.find(
-      c => c.symbol.toLowerCase() === symbol.toLowerCase(),
+    const symbolLower = symbol.toLowerCase()
+
+    // Find all coins with matching symbol
+    const matchingCoins = coinList.filter(
+      c => c.symbol.toLowerCase() === symbolLower,
     )
-    // Only add if coin id is different from symbol (to avoid false matches)
-    if (coin && coin.id.toLowerCase() !== symbol.toLowerCase()) {
-      result[symbol.toLowerCase()] = coin.id
+
+    if (matchingCoins.length === 0) {
+      continue
+    }
+
+    // Prefer coin where coin ID exactly matches the symbol (e.g., "pepe" -> "pepe")
+    // This helps distinguish between PEPE and BABYPEPE when both have "pepe" symbol
+    const exactMatch = matchingCoins.find(
+      c => c.id.toLowerCase() === symbolLower,
+    )
+
+    if (exactMatch) {
+      result[symbolLower] = exactMatch.id
+    } else {
+      // If no exact match, use the first one found
+      const coin = matchingCoins[0]
+      if (coin.id.toLowerCase() !== symbolLower) {
+        result[symbolLower] = coin.id
+      }
     }
   }
   return result
