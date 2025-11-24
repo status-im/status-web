@@ -850,7 +850,7 @@ function map(data: {
 
   const lows = priceHistory.map(({ low }) => low).filter(low => low > 0)
 
-  // Use price data as fallback when tokenMetadata is missing or has default values
+  // Use price data as fallback when tokenMetadata is missing or as default values
   // Note: tokenMetadata['SUPPLY_TOTAL'] can be 0 or null from CoinGecko, so we need to check for both
   const metadataTotalSupply =
     tokenMetadata?.['SUPPLY_TOTAL'] && tokenMetadata['SUPPLY_TOTAL'] > 0
@@ -890,10 +890,7 @@ function map(data: {
         : 0
 
   // market_cap_rank can be 0 (valid rank), so we only use fallback for null/undefined
-  const rankByMarketCap =
-    tokenMetadata?.['TOPLIST_BASE_RANK']?.['RANK'] != null
-      ? tokenMetadata['TOPLIST_BASE_RANK']['RANK']!
-      : null
+  const rankByMarketCap = tokenMetadata?.['TOPLIST_BASE_RANK']?.['RANK'] ?? null
 
   const about = tokenMetadata?.['ASSET_DESCRIPTION'] || ''
 
