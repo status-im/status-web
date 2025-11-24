@@ -62,10 +62,6 @@
     "protos": "buf generate src/protos",
     "clean": "rimraf dist node_modules .turbo"
   },
-  "resolutions": {
-    "@multiformats/multiaddr": "12.5.1",
-    "@libp2p/interface-internal": "2.3.19"
-  },
   "dependencies": {
     "@bufbuild/protobuf": "1.4.2",
     "@libp2p/bootstrap": "^11.0.42",
