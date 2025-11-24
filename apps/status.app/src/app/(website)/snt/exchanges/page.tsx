@@ -14,13 +14,6 @@ async function getExchangeData() {
   const coins = await getCoins()
   const market = await getMarket()
 
-  if (!Array.isArray(market.tickers) || market.tickers.length === 0) {
-    return {
-      data: [],
-      totalVolume: 0,
-    }
-  }
-
   const tickers = market.tickers.reduce(
     (
       acc: {
