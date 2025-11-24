@@ -9,7 +9,7 @@ import {
 import { notFound } from 'next/navigation'
 import production from 'react/jsx-runtime'
 import rehypeParse from 'rehype-parse'
-import rehypeReact from 'rehype-react'
+import rehypeReact, { type Options } from 'rehype-react'
 import { unified } from 'unified'
 
 import { Metadata } from '~app/_metadata'
@@ -84,12 +84,14 @@ export default async function BlogDetailPage(props: Props) {
     }
   }
 
+  const rehypeReactOptions: Options = {
+    ...production,
+    components: blogComponents,
+  }
+
   const { result } = await unified()
     .use(rehypeParse, { fragment: true })
-    .use(rehypeReact as any, {
-      ...production,
-      components: blogComponents,
-    })
+    .use(rehypeReact, rehypeReactOptions)
     .process(post.html!)
 
   const content = result as ReactElement

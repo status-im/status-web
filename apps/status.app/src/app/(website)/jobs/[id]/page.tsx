@@ -3,7 +3,7 @@ import { cx } from 'class-variance-authority'
 import { redirect } from 'next/navigation'
 import production from 'react/jsx-runtime'
 import rehypeParse from 'rehype-parse'
-import rehypeReact from 'rehype-react'
+import rehypeReact, { type Options } from 'rehype-react'
 import { unified } from 'unified'
 
 import { Metadata } from '~app/_metadata'
@@ -57,12 +57,14 @@ export default async function JobsDetailPage(props: Props) {
     .use(rehypeParse, { fragment: true })
     .parse(job.content)
 
+  const rehypeReactOptions: Options = {
+    ...production,
+    components: jobsComponents,
+  }
+
   const contentResult = await unified()
     .use(rehypeParse, { fragment: true })
-    .use(rehypeReact as any, {
-      ...production,
-      components: jobsComponents,
-    })
+    .use(rehypeReact, rehypeReactOptions)
     .process((result.children[0] as any).value)
 
   const content = contentResult.result as ReactElement
