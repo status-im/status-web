@@ -93,6 +93,10 @@ class RequestClient {
         emitSelf: true,
         // pingKeepAlive: 0,
         // relayKeepAlive: 0,
+        networkConfig: {
+          clusterId: 16,
+          shards: [32],
+        },
         libp2p: {
           peerDiscovery: [
             bootstrap({
