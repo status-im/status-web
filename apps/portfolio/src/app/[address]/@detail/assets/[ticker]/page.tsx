@@ -265,10 +265,7 @@ async function Token({
               },
               {
                 label: 'Rank by Mcap',
-                value:
-                  metadata?.rank_by_market_cap != null
-                    ? metadata.rank_by_market_cap
-                    : 'N/A',
+                value: metadata?.rank_by_market_cap ?? 'N/A',
               },
             ].map((item, index) => (
               <div
