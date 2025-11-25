@@ -99,7 +99,6 @@ class RequestClient {
         // relayKeepAlive: 0,
         networkConfig: {
           clusterId: 16,
-          shards: [32],
         },
         libp2p: {
           peerDiscovery: [
@@ -220,10 +219,15 @@ class RequestClient {
     const symmetricKey = await generateKeyFromPassword(communityPublicKey)
 
     const wakuMessageGenerator = this.waku.store.queryGenerator([
-      createDecoder(contentTopic, symmetricKey, {
-        clusterId: 16,
-        shard: 32,
-      }),
+      createDecoder(
+        contentTopic,
+        {
+          clusterId: 16,
+          shardId: 32,
+          pubsubTopic: '/waku/2/rs/16/32',
+        },
+        symmetricKey,
+      ),
     ])
     for await (const wakuMessages of wakuMessageGenerator) {
       for await (const wakuMessage of wakuMessages) {
@@ -318,10 +322,15 @@ class RequestClient {
     )
 
     const wakuMessageGenerator = this.waku.store.queryGenerator([
-      createDecoder(contentTopic, symmetricKey, {
-        clusterId: 16,
-        shard: 32,
-      }),
+      createDecoder(
+        contentTopic,
+        {
+          clusterId: 16,
+          shardId: 32,
+          pubsubTopic: '/waku/2/rs/16/32',
+        },
+        symmetricKey,
+      ),
     ])
     for await (const wakuMessages of wakuMessageGenerator) {
       for await (const wakuMessage of wakuMessages) {

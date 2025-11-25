@@ -95,10 +95,15 @@ export class Community {
     // most recent page first
     await this.client.waku.store.queryWithOrderedCallback(
       [
-        createDecoder(this.contentTopic, this.symmetricKey, {
-          clusterId: 16,
-          shard: 32,
-        }),
+        createDecoder(
+          this.contentTopic,
+          {
+            clusterId: 16,
+            shardId: 32,
+            pubsubTopic: '/waku/2/rs/16/32',
+          },
+          this.symmetricKey,
+        ),
       ],
       wakuMessage => {
         this.client.handleWakuMessage(wakuMessage)
@@ -115,10 +120,15 @@ export class Community {
   private observe = async () => {
     await this.client.waku.filter.subscribe(
       [
-        createDecoder(this.contentTopic, this.symmetricKey, {
-          clusterId: 16,
-          shard: 32,
-        }),
+        createDecoder(
+          this.contentTopic,
+          {
+            clusterId: 16,
+            shardId: 32,
+            pubsubTopic: '/waku/2/rs/16/32',
+          },
+          this.symmetricKey,
+        ),
       ],
       this.client.handleWakuMessage,
     )
@@ -139,10 +149,15 @@ export class Community {
 
         this.chats.set(chatUuid, chat)
 
-        const decoder = createDecoder(chat.contentTopic, chat.symmetricKey, {
-          clusterId: 16,
-          shard: 32,
-        })
+        const decoder = createDecoder(
+          chat.contentTopic,
+          {
+            clusterId: 16,
+            shardId: 32,
+            pubsubTopic: '/waku/2/rs/16/32',
+          },
+          chat.symmetricKey,
+        )
 
         await this.client.waku.filter.subscribe(
           [decoder],

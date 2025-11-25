@@ -66,8 +66,8 @@
     "@bufbuild/protobuf": "2.10.0",
     "@libp2p/bootstrap": "^11.0.42",
     "@scure/base": "^1.2.6",
-    "@waku/message-encryption": "^0.0.35",
-    "@waku/sdk": "^0.0.33",
+    "@waku/message-encryption": "^0.0.38",
+    "@waku/sdk": "^0.0.36",
     "ethereum-cryptography": "^1.0.3",
     "ethers": "^6.15.0",
     "multiformats": "^11.0.1",
@@ -76,7 +76,7 @@
   "devDependencies": {
     "@bufbuild/protoc-gen-es": "2.10.0",
     "@status-im/eslint-config": "workspace:*",
-    "@waku/interfaces": "^0.0.32",
+    "@waku/interfaces": "^0.0.34",
     "happy-dom": "^9.1.7"
   },
   "files": [

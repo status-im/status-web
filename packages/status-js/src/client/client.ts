@@ -277,9 +277,10 @@ class Client {
         contentTopic,
         symKey,
         sigPrivKey: hexToBytes(this.#account.privateKey),
-        pubsubTopicShardInfo: {
+        routingInfo: {
           clusterId: 16,
-          shard: 32,
+          shardId: 32,
+          pubsubTopic: '/waku/2/rs/16/32',
         },
       }),
       { payload: message },
