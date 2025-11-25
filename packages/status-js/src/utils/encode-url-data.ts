@@ -1,10 +1,16 @@
+import { create, fromBinary, toBinary, toJson } from '@bufbuild/protobuf'
 import { base64url } from '@scure/base'
 import { brotliCompressSync, brotliDecompressSync } from 'zlib'
 import { z } from 'zod'
 
-import { Channel, Community, URLData, User } from '../protos/url_pb'
+import {
+  ChannelSchema,
+  CommunitySchema,
+  URLDataSchema,
+  UserSchema,
+} from '../protos/url_pb'
 
-import type { PlainMessage } from '@bufbuild/protobuf'
+import type { Channel, Community, URLData, User } from '../protos/url_pb'
 
 export type EncodedURLData = string & { _: 'EncodedURLData' }
 
@@ -19,16 +25,19 @@ const communitySchema = z.object({
   tagIndices: z.number().nonnegative().array().optional(),
 })
 
-export function encodeCommunityURLData(
-  data: PlainMessage<Community>,
-): EncodedURLData {
-  return encodeURLData(new Community(data).toBinary()) as EncodedURLData
+export function encodeCommunityURLData(data: Community): EncodedURLData {
+  return encodeURLData(
+    toBinary(CommunitySchema, create(CommunitySchema, data)),
+  ) as EncodedURLData
 }
 
 export function decodeCommunityURLData(data: string) {
   const deserialized = decodeURLData(data)
 
-  const community = Community.fromBinary(deserialized.content).toJson()
+  const community = toJson(
+    CommunitySchema,
+    fromBinary(CommunitySchema, deserialized.content),
+  )
 
   return communitySchema.parse(community)
 }
@@ -44,16 +53,19 @@ const channelSchema = z.object({
   uuid: z.string().uuid(),
 })
 
-export function encodeChannelURLData(
-  data: PlainMessage<Channel>,
-): EncodedURLData {
-  return encodeURLData(new Channel(data).toBinary()) as EncodedURLData
+export function encodeChannelURLData(data: Channel): EncodedURLData {
+  return encodeURLData(
+    toBinary(ChannelSchema, create(ChannelSchema, data)),
+  ) as EncodedURLData
 }
 
 export function decodeChannelURLData(data: string) {
   const deserialized = decodeURLData(data)
 
-  const channel = Channel.fromBinary(deserialized.content).toJson()
+  const channel = toJson(
+    ChannelSchema,
+    fromBinary(ChannelSchema, deserialized.content),
+  )
 
   return channelSchema.parse(channel)
 }
@@ -65,22 +77,27 @@ const userSchema = z.object({
   color: colorSchema.optional().default('#ffffff'),
 })
 
-export function encodeUserURLData(data: PlainMessage<User>): EncodedURLData {
-  return encodeURLData(new User(data).toBinary()) as EncodedURLData
+export function encodeUserURLData(data: User): EncodedURLData {
+  return encodeURLData(
+    toBinary(UserSchema, create(UserSchema, data)),
+  ) as EncodedURLData
 }
 
 export function decodeUserURLData(data: string) {
   const deserialized = decodeURLData(data)
 
-  const user = User.fromBinary(deserialized.content).toJson()
+  const user = toJson(UserSchema, fromBinary(UserSchema, deserialized.content))
 
   return userSchema.parse(user)
 }
 
 function encodeURLData(data: Uint8Array): string {
-  const serialized = new URLData({
-    content: new Uint8Array(data),
-  }).toBinary()
+  const serialized = toBinary(
+    URLDataSchema,
+    create(URLDataSchema, {
+      content: new Uint8Array(data),
+    }),
+  )
   const compressed = brotliCompressSync(serialized)
   const encoded = base64url.encode(compressed as unknown as Uint8Array)
 
@@ -95,7 +112,10 @@ function decodeURLData(data: string): URLData {
 
   const decoded = base64url.decode(data)
   const decompressed = brotliDecompressSync(decoded)
-  const deserialized = URLData.fromBinary(decompressed as unknown as Uint8Array)
+  const deserialized = fromBinary(
+    URLDataSchema,
+    decompressed as unknown as Uint8Array,
+  )
 
   return deserialized
 }

@@ -18,8 +18,11 @@ import type {
   CommunityDescription,
 } from '../protos/communities_pb'
 import type { ContactCodeAdvertisement } from '../protos/push-notifications_pb'
-import type { Channel as ChannelProto } from '../protos/url_pb'
-import type { PlainMessage } from '@bufbuild/protobuf'
+import type {
+  Channel as ChannelProto,
+  Community as CommunityProto,
+  User,
+} from '../protos/url_pb'
 
 /**
  * @see https://github.com/microsoft/TypeScript/issues/24509
@@ -57,7 +60,7 @@ describe('Create URLs', () => {
             color: community.description.identity!.color,
             membersCount: 446_744,
             tagIndices: [1, 33, 51],
-          },
+          } as unknown as CommunityProto,
           community.chatKey,
         )
       ).toString(),
@@ -111,7 +114,7 @@ describe('Create URLs', () => {
             community: {
               displayName: community.description.identity!.displayName,
             },
-          } as unknown as PlainMessage<ChannelProto>,
+          } as unknown as ChannelProto,
           community.chatKey,
         )
       ).toString(),
@@ -146,7 +149,7 @@ describe('Create URLs', () => {
             description: account.description.chatIdentity!.description,
             displayName: account.description.chatIdentity!.displayName,
             color: account.description.chatIdentity!.color,
-          },
+          } as unknown as User,
           account.chatKey,
         )
       ).toString(),

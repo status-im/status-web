@@ -5,7 +5,6 @@ import {
 } from './encode-url-data'
 
 import type { Channel, Community, User } from '../protos/url_pb'
-import type { PlainMessage } from '@bufbuild/protobuf'
 
 const BASE_URL = 'https://status.app'
 
@@ -14,7 +13,7 @@ export function createCommunityURLWithChatKey(communityChatKey: string): URL {
 }
 
 export async function createCommunityURLWithData(
-  communityData: PlainMessage<Community>,
+  communityData: Community,
   communityChatKey: string,
 ): Promise<URL> {
   const encodedURLData = encodeCommunityURLData(communityData)
@@ -30,7 +29,7 @@ export function createChannelURLWithChatKey(
 }
 
 export async function createChannelURLWithData(
-  channelData: PlainMessage<Channel>,
+  channelData: Channel,
   communityChatKey: string,
 ): Promise<URL> {
   const encodedURLData = encodeChannelURLData(channelData)
@@ -47,7 +46,7 @@ export function createUserURLWithChatKey(chatKey: string): URL {
 }
 
 export async function createUserURLWithData(
-  userData: PlainMessage<User>,
+  userData: User,
   userChatKey: string,
 ): Promise<URL> {
   const encodedURLData = encodeUserURLData(userData)

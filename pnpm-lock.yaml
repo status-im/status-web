@@ -2135,8 +2135,8 @@ importers:
   packages/status-js:
     dependencies:
       '@bufbuild/protobuf':
-        specifier: 1.4.2
-        version: 1.4.2
+        specifier: 2.10.0
+        version: 2.10.0
       '@libp2p/bootstrap':
         specifier: ^11.0.42
         version: 11.0.47
@@ -2164,7 +2164,7 @@ importers:
     devDependencies:
       '@bufbuild/protoc-gen-es':
         specifier: 2.10.0
-        version: 2.10.0(@bufbuild/protobuf@1.4.2)
+        version: 2.10.0(@bufbuild/protobuf@2.10.0)
       '@status-im/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
@@ -2836,9 +2836,6 @@ packages:
   '@biglup/is-cid@1.0.3':
     resolution: {integrity: sha512-R0XPZ/IQhU2TtetSFI9vI+7kJOJYNiCncn5ixEBW+/LNaZCo2HK37Mq3pRNzrM4FryuAkyeqY7Ujmj3I3e3t9g==}
     engines: {node: '>=16.0.0', npm: '>=7.0.0'}
-
-  '@bufbuild/protobuf@1.4.2':
-    resolution: {integrity: sha512-JyEH8Z+OD5Sc2opSg86qMHn1EM1Sa+zj/Tc0ovxdwk56ByVNONJSabuCUbLQp+eKN3rWNfrho0X+3SEqEPXIow==}
 
   '@bufbuild/protobuf@2.10.0':
     resolution: {integrity: sha512-fdRs9PSrBF7QUntpZpq6BTw58fhgGJojgg39m9oFOJGZT+nip9b0so5cYY1oWl5pvemDLr0cPPsH46vwThEbpQ==}
@@ -19506,15 +19503,13 @@ snapshots:
       multiformats: 13.4.1
       uint8arrays: 5.1.0
 
-  '@bufbuild/protobuf@1.4.2': {}
-
   '@bufbuild/protobuf@2.10.0': {}
 
-  '@bufbuild/protoc-gen-es@2.10.0(@bufbuild/protobuf@1.4.2)':
+  '@bufbuild/protoc-gen-es@2.10.0(@bufbuild/protobuf@2.10.0)':
     dependencies:
       '@bufbuild/protoplugin': 2.10.0
     optionalDependencies:
-      '@bufbuild/protobuf': 1.4.2
+      '@bufbuild/protobuf': 2.10.0
     transitivePeerDependencies:
       - supports-color
 
@@ -23927,7 +23922,7 @@ snapshots:
       posthtml: 0.16.7
       posthtml-parser: 0.10.2
       posthtml-render: 3.0.0
-      semver: 7.5.4
+      semver: 7.7.3
       srcset: 4.0.0
     transitivePeerDependencies:
       - '@parcel/core'
@@ -23996,7 +23991,7 @@ snapshots:
       posthtml: 0.16.7
       posthtml-parser: 0.10.2
       posthtml-render: 3.0.0
-      semver: 7.5.4
+      semver: 7.7.3
     transitivePeerDependencies:
       - '@parcel/core'
 
@@ -24041,7 +24036,7 @@ snapshots:
       posthtml: 0.16.7
       posthtml-parser: 0.10.2
       posthtml-render: 3.0.0
-      semver: 7.5.4
+      semver: 7.7.3
     transitivePeerDependencies:
       - '@parcel/core'
 
@@ -38360,7 +38355,7 @@ snapshots:
 
   node-abi@3.80.0:
     dependencies:
-      semver: 7.5.4
+      semver: 7.7.3
 
   node-addon-api@2.0.2: {}
 
