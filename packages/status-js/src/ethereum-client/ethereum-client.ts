@@ -63,10 +63,6 @@ export class EthereumClient {
     registryContractAddress: string,
     communityPublicKey: string,
   ): Promise<string | undefined> {
-    console.log('[EthereumClient] resolveOwner called', {
-      registryContractAddress,
-      communityPublicKey,
-    })
     try {
       // Use bracket notation to prevent webpack from statically analyzing the export
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -89,14 +85,7 @@ export class EthereumClient {
       const owner = await ownerContract.signerPublicKey()
 
       return owner
-    } catch (error) {
-      console.error('[EthereumClient] resolveOwner error', {
-        error,
-        errorMessage: error instanceof Error ? error.message : String(error),
-        errorStack: error instanceof Error ? error.stack : undefined,
-        registryContractAddress,
-        communityPublicKey,
-      })
+    } catch {
       return
     }
   }
