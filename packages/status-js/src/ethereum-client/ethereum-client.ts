@@ -4,16 +4,10 @@ import { ethers } from 'ethers'
 import { publicKeyToETHAddress } from '../utils/public-key-to-eth-address'
 
 export class EthereumClient {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  #provider: any
+  #provider: ethers.JsonRpcApiProvider
 
   constructor(url: string) {
-    // Use bracket notation to prevent webpack from statically analyzing the export
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const ethersAny = ethers as any
-    const JsonRpcProviderClass =
-      ethersAny.providers?.JsonRpcProvider ?? ethersAny['JsonRpcProvider']
-    this.#provider = new JsonRpcProviderClass(url)
+    this.#provider = new ethers.JsonRpcProvider(url)
   }
 
   stop() {
@@ -36,13 +30,9 @@ export class EthereumClient {
         'function pubkey(bytes32 node) view returns (bytes32 x, bytes32 y)',
       ]
 
-      // Use bracket notation to prevent webpack from statically analyzing the export
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const ethersAny = ethers as any
-      const ContractClass = ethersAny.Contract ?? ethersAny['Contract']
-      const resolverContract = new ContractClass(address, abi, this.#provider)
-      const node =
-        ethersAny.utils?.namehash?.(ensName) ?? ethersAny['namehash']?.(ensName)
+      const resolverContract = new ethers.Contract(address, abi, this.#provider)
+
+      const node = ethers.namehash(ensName)
       const [x, y] = await resolverContract.pubkey(node)
 
       const px = BigInt(x)
@@ -64,11 +54,7 @@ export class EthereumClient {
     communityPublicKey: string,
   ): Promise<string | undefined> {
     try {
-      // Use bracket notation to prevent webpack from statically analyzing the export
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const ethersAny = ethers as any
-      const ContractClass = ethersAny.Contract ?? ethersAny['Contract']
-      const registryContract = new ContractClass(
+      const registryContract = new ethers.Contract(
         registryContractAddress,
         ['function getEntry(address _communityAddress) view returns (address)'],
         this.#provider,
@@ -77,7 +63,7 @@ export class EthereumClient {
         publicKeyToETHAddress(communityPublicKey),
       )
 
-      const ownerContract = new ContractClass(
+      const ownerContract = new ethers.Contract(
         ownerContractAddress,
         ['function signerPublicKey() view returns (bytes)'],
         this.#provider,
