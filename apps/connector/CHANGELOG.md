@@ -1,5 +1,11 @@
 # connector
 
+## 0.0.5
+
+### Patch Changes
+
+- 4500418: update build step
+
 ## 0.0.4
 
 ### Patch Changes
