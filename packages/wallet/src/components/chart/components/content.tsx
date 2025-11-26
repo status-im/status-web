@@ -18,6 +18,12 @@ type Props = BaseChartProps & {
 const AnimatedAreaClosed = animated(AreaClosed)
 const AnimatedLinePath = animated(LinePath)
 
+// Tag dimensions constants
+const MIN_TAG_WIDTH = 40 // Minimum width of the tag
+const CHAR_WIDTH = 7 // Approximate width per character for fontSize 12
+const TAG_HORIZONTAL_PADDING = 16 // Total horizontal padding (left + right)
+const TAG_BASE_OFFSET = 20 // Base offset from tag center point
+
 const Content = (props: Props) => {
   const {
     pricesData,
@@ -41,8 +47,13 @@ const Content = (props: Props) => {
   const tagX = xScale(lastData.date)
   const tagY = yScale(lastData.value)
   const formattedValue = formatChartValue(lastData.value, dataType)
-  const tagWidth = Math.min(40 + formattedValue.length * 4, 80)
-  const tagXOffset = Math.max(0, 20 - tagWidth / 2)
+
+  // Calculate width based on text length, with minimum width and padding
+  const tagWidth = Math.max(
+    MIN_TAG_WIDTH,
+    formattedValue.length * CHAR_WIDTH + TAG_HORIZONTAL_PADDING,
+  )
+  const tagXOffset = Math.max(0, TAG_BASE_OFFSET - tagWidth / 2)
   const textX = tagXOffset + tagWidth / 2
 
   return (
