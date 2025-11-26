@@ -1,19 +1,20 @@
+import { fromBinary } from '@bufbuild/protobuf'
 import { bytesToHex } from 'ethereum-cryptography/utils'
 
 import {
-  ApplicationMetadataMessage,
   ApplicationMetadataMessage_Type,
+  ApplicationMetadataMessageSchema,
 } from '../../protos/application-metadata-message_pb'
 import {
-  ChatMessage,
-  DeleteMessage,
-  EditMessage,
+  ChatMessageSchema,
+  DeleteMessageSchema,
+  EditMessageSchema,
 } from '../../protos/chat-message_pb'
-import { CommunityDescription } from '../../protos/communities_pb'
-import { EmojiReaction } from '../../protos/emoji-reaction_pb'
+import { CommunityDescriptionSchema } from '../../protos/communities_pb'
+import { EmojiReactionSchema } from '../../protos/emoji-reaction_pb'
 import { MessageType } from '../../protos/enums_pb'
-import { PinMessage } from '../../protos/pin-message_pb'
-import { ProtocolMessage } from '../../protos/protocol-message_pb'
+import { PinMessageSchema } from '../../protos/pin-message_pb'
+import { ProtocolMessageSchema } from '../../protos/protocol-message_pb'
 import { isClockValid } from '../../utils/is-clock-valid'
 import { payloadToId } from '../../utils/payload-to-id'
 import { recoverPublicKey } from '../../utils/recover-public-key'
@@ -53,14 +54,17 @@ export function handleWakuMessage(
   let messageToDecode = wakuMessage.payload
   let decodedProtocol
   try {
-    decodedProtocol = ProtocolMessage.fromBinary(messageToDecode)
+    decodedProtocol = fromBinary(ProtocolMessageSchema, messageToDecode)
     if (decodedProtocol) {
       messageToDecode = decodedProtocol.publicMessage
     }
     // eslint-disable-next-line no-empty
   } catch {}
 
-  const decodedMetadata = ApplicationMetadataMessage.fromBinary(messageToDecode)
+  const decodedMetadata = fromBinary(
+    ApplicationMetadataMessageSchema,
+    messageToDecode,
+  )
   if (!decodedMetadata.payload) {
     return
   }
@@ -90,7 +94,10 @@ export function handleWakuMessage(
     switch (decodedMetadata.type) {
       case ApplicationMetadataMessage_Type.COMMUNITY_DESCRIPTION: {
         // decode
-        const decodedPayload = CommunityDescription.fromBinary(messageToDecode)
+        const decodedPayload = fromBinary(
+          CommunityDescriptionSchema,
+          messageToDecode,
+        )
 
         // validate
         if (!isClockValid(BigInt(decodedPayload.clock), messageTimestamp)) {
@@ -112,7 +119,7 @@ export function handleWakuMessage(
 
       case ApplicationMetadataMessage_Type.CHAT_MESSAGE: {
         // decode
-        const decodedPayload = ChatMessage.fromBinary(messageToDecode)
+        const decodedPayload = fromBinary(ChatMessageSchema, messageToDecode)
 
         if (!isClockValid(BigInt(decodedPayload.clock), messageTimestamp)) {
           return
@@ -156,7 +163,7 @@ export function handleWakuMessage(
       }
 
       case ApplicationMetadataMessage_Type.EDIT_MESSAGE: {
-        const decodedPayload = EditMessage.fromBinary(messageToDecode)
+        const decodedPayload = fromBinary(EditMessageSchema, messageToDecode)
 
         if (!isClockValid(BigInt(decodedPayload.clock), messageTimestamp)) {
           return
@@ -196,7 +203,7 @@ export function handleWakuMessage(
       }
 
       case ApplicationMetadataMessage_Type.DELETE_MESSAGE: {
-        const decodedPayload = DeleteMessage.fromBinary(messageToDecode)
+        const decodedPayload = fromBinary(DeleteMessageSchema, messageToDecode)
 
         if (!isClockValid(BigInt(decodedPayload.clock), messageTimestamp)) {
           return
@@ -235,7 +242,7 @@ export function handleWakuMessage(
       }
 
       case ApplicationMetadataMessage_Type.PIN_MESSAGE: {
-        const decodedPayload = PinMessage.fromBinary(messageToDecode)
+        const decodedPayload = fromBinary(PinMessageSchema, messageToDecode)
 
         if (!isClockValid(BigInt(decodedPayload.clock), messageTimestamp)) {
           return
@@ -274,7 +281,7 @@ export function handleWakuMessage(
       }
 
       case ApplicationMetadataMessage_Type.EMOJI_REACTION: {
-        const decodedPayload = EmojiReaction.fromBinary(messageToDecode)
+        const decodedPayload = fromBinary(EmojiReactionSchema, messageToDecode)
 
         if (!isClockValid(BigInt(decodedPayload.clock), messageTimestamp)) {
           return

@@ -1,10 +1,9 @@
-import { createElement, Fragment } from 'react'
-
 import { Button, Tag, Text } from '@status-im/components'
 import { cx } from 'class-variance-authority'
 import { redirect } from 'next/navigation'
+import production from 'react/jsx-runtime'
 import rehypeParse from 'rehype-parse'
-import rehypeReact from 'rehype-react'
+import rehypeReact, { type Options } from 'rehype-react'
 import { unified } from 'unified'
 
 import { Metadata } from '~app/_metadata'
@@ -14,6 +13,8 @@ import { jobsComponents } from '~components/content'
 import { getStatusJob, getStatusJobs } from '~website/_lib/greenhouse'
 
 import { ApplicationFormDialog } from './_components/application-form-dialog'
+
+import type { ReactElement } from 'react'
 
 export const revalidate = 3600 // 1 hour
 export const dynamicParams = true
@@ -56,14 +57,17 @@ export default async function JobsDetailPage(props: Props) {
     .use(rehypeParse, { fragment: true })
     .parse(job.content)
 
-  const content = await unified()
+  const rehypeReactOptions: Options = {
+    ...production,
+    components: jobsComponents,
+  }
+
+  const contentResult = await unified()
     .use(rehypeParse, { fragment: true })
-    .use(rehypeReact, {
-      createElement,
-      Fragment,
-      components: jobsComponents,
-    })
+    .use(rehypeReact, rehypeReactOptions)
     .process((result.children[0] as any).value)
+
+  const content = contentResult.result as ReactElement
 
   return (
     <Body>
@@ -90,7 +94,7 @@ export default async function JobsDetailPage(props: Props) {
         </div>
 
         {/* CONTENT */}
-        <div className="root-content pb-12 xl:pb-20">{content.result}</div>
+        <div className="root-content pb-12 xl:pb-20">{content}</div>
 
         {/* FOOTER */}
         <div
