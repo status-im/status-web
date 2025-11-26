@@ -39,7 +39,7 @@
     "vite-node": "3.1.4",
     "protons-runtime": "^5.4.0",
     "it-length-prefixed": "9.0.3",
-    "remark-lint": "9.1.2",
+    "remark-lint": "10.0.1",
     "@scure/base": "^1.2.6",
     "vfile": "5.3.7",
     "vfile-message": "3.1.4",
