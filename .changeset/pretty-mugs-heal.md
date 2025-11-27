@@ -1,5 +1,5 @@
 ---
-"status.app": patch
+'status.app': patch
 ---
 
 reference new mobile app

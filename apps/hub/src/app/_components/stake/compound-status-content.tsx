@@ -3,12 +3,11 @@ import { InfoIcon } from '@status-im/icons/16'
 import { formatUnits } from 'viem'
 
 import { LaunchIcon } from '~components/icons'
+import { SNT_TOKEN } from '~constants/index'
 import { useMultiplierPointsBalance } from '~hooks/useMultiplierPoints'
 import { useStakingVaults } from '~hooks/useStakingVaults'
 import { useWeightedBoost } from '~hooks/useWeightedBoost'
 import { formatSNT } from '~utils/currency'
-
-import { SNT_TOKEN } from '../../_constants'
 
 export const CompoundStatusContent = () => {
   const { data: vaults } = useStakingVaults()
