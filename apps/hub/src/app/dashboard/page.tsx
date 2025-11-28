@@ -1,21 +1,27 @@
 'use client'
 
+import { useState } from 'react'
+
 import { ExternalIcon } from '@status-im/icons/20'
-import {
-  // ButtonLink,
-  Link,
-} from '@status-im/status-network/components'
+import { ButtonLink, Link } from '@status-im/status-network/components'
 import Image from 'next/image'
 
 import { HubLayout } from '~components/hub-layout'
+import { PreDepositModal } from '~components/pre-deposit-modal'
+import { VaultCard } from '~components/vault-card'
+import { type Vault, VAULTS } from '~constants/index'
 
-// import { VaultCard } from '~components/vault-card'
 import { Apps } from '../_components/apps'
 import { Hero } from '../_components/hero'
 
-// const REWARDS = ['karma', 'linea', 'snt']
+const REWARDS = ['KARMA', 'SNT', 'LINEA']
 
 export default function DashboardPage() {
+  const [selectedVault, setActiveVault] = useState<Vault | null>(null)
+
+  // Default to SNT vault when opening modal without selection
+  const defaultVault = VAULTS.find(v => v.id === 'SNT') ?? VAULTS[0]
+
   return (
     <HubLayout>
       <div className="flex flex-col px-6 py-8">
@@ -24,7 +30,7 @@ export default function DashboardPage() {
 
         {/* Main Content Card */}
         <div className="mx-auto mt-7 w-full max-w-[1176px]">
-          {/* <div className="mb-8 rounded-32 bg-neutral-2.5 p-8">
+          <div className="mb-8 rounded-32 bg-neutral-2.5 p-8">
             <div className="mb-6 flex items-start justify-between">
               <div className="max-w-2xl">
                 <h3 className="mb-2 text-27 font-600 text-neutral-90">
@@ -68,47 +74,26 @@ export default function DashboardPage() {
                 className="absolute left-[-290px] top-[120px]"
               />
               <div className="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2">
-                <VaultCard
-                  name="ETH vault"
-                  apy="5.2%"
-                  rewards={['KARMA', 'SNT', 'LINEA']}
-                  icon="ETH"
-                  onDeposit={() => console.log('Deposit to ETH vault')}
-                />
-                <VaultCard
-                  name="SNT vault"
-                  apy="8.7%"
-                  rewards={['KARMA', 'MetaFi', 'Points']}
-                  icon="SNT"
-                  onDeposit={() => console.log('Deposit to SNT vault')}
-                />
-                <VaultCard
-                  name="USDC vault"
-                  apy="3.9%"
-                  rewards={['KARMA', 'SNT', 'Points']}
-                  icon="USDC"
-                  onDeposit={() => console.log('Deposit to USDC vault')}
-                />
-                <VaultCard
-                  name="LINEA vault"
-                  apy="6.1%"
-                  rewards={['KARMA', 'MetaFi', 'LINEA']}
-                  icon="LINEA"
-                  onDeposit={() => console.log('Deposit to LINEA vault')}
-                />
+                {VAULTS.map(vault => (
+                  <VaultCard
+                    key={vault.id}
+                    vault={vault}
+                    onDeposit={() => setActiveVault(vault)}
+                  />
+                ))}
               </div>
             </section>
-          </div> */}
+          </div>
           <Apps />
         </div>
 
         <div className="py-12">
           <div className="flex flex-col items-center gap-8 lg:flex-row lg:items-center lg:justify-center">
             <div className="max-w-2xl">
-              <h3 className="mb-3 text-64 font-bold text-neutral-90">
+              <h3 className="mb-3 text-64 font-700 text-neutral-90">
                 Build with us
               </h3>
-              <p className="mb-8 text-27 font-medium text-neutral-60">
+              <p className="mb-8 text-27 font-500 text-neutral-60">
                 Launch your app on the free network
               </p>
 
@@ -143,6 +128,13 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+      <PreDepositModal
+        open={selectedVault !== null}
+        onOpenChange={open => !open && setActiveVault(null)}
+        vault={selectedVault ?? defaultVault}
+        vaults={VAULTS}
+        setActiveVault={setActiveVault}
+      />
     </HubLayout>
   )
 }

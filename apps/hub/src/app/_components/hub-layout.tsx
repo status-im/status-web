@@ -1,13 +1,16 @@
 'use client'
 import { useState } from 'react'
 
+import { ToastContainer } from '@status-im/components'
 import { Divider, Footer } from '@status-im/status-network/components'
 import { useReadContract } from 'wagmi'
 
+import { type Vault, VAULTS } from '~constants/index'
 import { STAKING_MANAGER } from '~constants/index'
 import { CACHE_CONFIG } from '~constants/staking'
 
 import { EmergencyBar } from './emergency-bar'
+import { PreDepositModal } from './pre-deposit-modal'
 import { Sidebar } from './sidebar'
 import { TopBar } from './top-bar'
 
@@ -17,6 +20,11 @@ interface HubLayoutProps {
 
 export function HubLayout({ children }: HubLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [selectedVault, setSelectedVault] = useState<Vault | null>(null)
+
+  const handleDepositClick = () => {
+    setSelectedVault(VAULTS[0])
+  }
   const { data: emergencyModeEnabled } = useReadContract({
     address: STAKING_MANAGER.address,
     abi: STAKING_MANAGER.abi,
@@ -36,7 +44,11 @@ export function HubLayout({ children }: HubLayoutProps) {
         {Boolean(emergencyModeEnabled) && <EmergencyBar />}
         <div className="mx-auto flex h-[calc(100vh-64px-123px)] w-full max-w-[1504px] flex-row overflow-hidden lg:h-[calc(100vh-64px-50px)]">
           {/* Sidebar */}
-          <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+          <Sidebar
+            isOpen={sidebarOpen}
+            onClose={() => setSidebarOpen(false)}
+            onDepositClick={handleDepositClick}
+          />
 
           {/* Main Content */}
           <main className="min-w-0 flex-1 overflow-auto">{children}</main>
@@ -44,17 +56,27 @@ export function HubLayout({ children }: HubLayoutProps) {
 
         <section className="sticky z-50 overflow-visible">
           <div className="relative">
-            <div className="absolute left-0 top-0 h-px w-9 bg-gradient-to-l from-[#E7EAEE] to-transparent" />
+            <div className="absolute left-0 top-0 h-px w-9 bg-gradient-to-l from-[#E7EAEE] to-[transparent]" />
             <div className="px-10">
               <Divider variant="fullscreen" />
             </div>
-            <div className="absolute right-0 top-0 h-px w-9 bg-gradient-to-r from-[#E7EAEE] to-transparent" />
+            <div className="absolute right-0 top-0 h-px w-9 bg-gradient-to-r from-[#E7EAEE] to-[transparent]" />
           </div>
           <div className="px-0 lg:px-12">
             <Footer />
           </div>
         </section>
       </div>
+      <ToastContainer />
+      {selectedVault && (
+        <PreDepositModal
+          open={true}
+          onOpenChange={open => !open && setSelectedVault(null)}
+          vault={selectedVault}
+          setActiveVault={setSelectedVault}
+          vaults={VAULTS}
+        />
+      )}
     </div>
   )
 }
