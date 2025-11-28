@@ -1,5 +1,11 @@
 # @status-im/wallet
 
+## 0.1.1
+
+### Patch Changes
+
+- f50d31d: Enhance chart tag label text width measurement using canvas measureText() for accurate proportional font rendering
+
 ## 0.1.0
 
 ### Minor Changes
