@@ -51,7 +51,6 @@ export default defineConfig({
       'process.env': {
         ALCHEMY_API_KEYS: 'test',
         INFURA_API_KEY: 'test',
-        CRYPTOCOMPARE_API_KEYS: 'test',
         COINGECKO_API_KEY: 'test',
         MERCURYO_SECRET_KEY: 'test',
         VERCEL: 'test',
