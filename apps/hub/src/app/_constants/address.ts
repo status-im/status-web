@@ -1,5 +1,8 @@
+import { linea, mainnet } from 'viem/chains'
+
 import {
   faucetAbi,
+  lidoStETHAbi,
   // karmaAbi,
   // karmaTierAbi,
   // rewardsAbi,
@@ -8,7 +11,6 @@ import {
   vaultFactoryAbi,
 } from './contracts'
 import { lineaTokenAbi } from './contracts/LineaTokenAbi'
-import { MockTokenAbi } from './contracts/MockTokenAbi'
 import { PreDepositVaultAbi } from './contracts/PreDepositVaultAbi'
 
 import type { Abi, Address } from 'viem'
@@ -19,6 +21,7 @@ export type Token = {
   symbol: string
   decimals: number
   abi: Abi
+  priceKey?: string
 }
 
 export type Vault = {
@@ -29,6 +32,7 @@ export type Vault = {
   rewards: string[]
   icon: string
   token: Token
+  chainId: number
   abi: typeof PreDepositVaultAbi
 }
 
@@ -52,13 +56,22 @@ export const wETH_TOKEN: Token = {
   name: 'Wrapped Ether',
   symbol: 'WETH',
   decimals: 18,
+  priceKey: 'ETH',
   abi: tokenAbi,
 } as const
 
+export const stETH_TOKEN: Token = {
+  address: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
+  name: 'Liquid staked Ether 2.0',
+  symbol: 'stETH',
+  decimals: 18,
+  abi: lidoStETHAbi,
+} as const
+
 export const SNT_TOKEN: Token = {
-  address: '0x1C3Ac2a186c6149Ae7Cb4D716eBbD0766E4f898a',
-  name: 'Status Test Token',
-  symbol: 'STT',
+  address: '0x744d70FDBE2Ba4CF95131626614a1763DF805B9E',
+  name: 'Status Network',
+  symbol: 'SNT',
   decimals: 18,
   abi: tokenAbi,
 } as const
@@ -71,73 +84,47 @@ export const LINEA_TOKEN: Token = {
   abi: lineaTokenAbi,
 } as const
 
-export const MOCK_TOKEN: Token = {
-  address: '0x3841E6CD6466599d30FdFF9166E5b38452b7F232',
-  name: 'MockERC20',
-  symbol: 'MERC',
-  decimals: 18,
-  abi: MockTokenAbi,
-} as const
-
 // ============================================================================
 // Vaults
 // ============================================================================
 
-export const TEST_VAULT: Vault = {
-  id: 'MERC',
-  name: 'MockERC20 vault',
-  apy: '10.5%',
-  rewards: ['SNT'],
+export const SNT_VAULT: Vault = {
+  id: 'SNT',
+  name: 'Status Network Token Vault',
+  apy: '',
+  rewards: ['KARMA'],
   icon: 'SNT',
-  address: '0x88DfF41EE1958b7B7EbA809Ab7F6FCC33fd9969E',
-  token: MOCK_TOKEN,
-  abi: PreDepositVaultAbi,
-} as const
-
-export const STT_VAULT: Vault = {
-  id: 'STT',
-  name: 'Status Test Token',
-  apy: '10.5%',
-  rewards: ['SNT'],
-  icon: 'SNT',
-  address: '0x3cb680f84f7729b56c18907C899a26bC1f4ad4D4',
+  address: '0x493957E168aCCdDdf849913C3d60988c652935Cd',
   token: SNT_TOKEN,
   abi: PreDepositVaultAbi,
+  chainId: mainnet.id,
 } as const
 
-export const VAULTS: Vault[] = [
-  TEST_VAULT,
-  // {
-  //   id: 'SNT',
-  //   name: 'SNT vault',
-  //   apy: '8.7%',
-  //   rewards: ['KARMA', 'MetaFi', 'Points'],
-  //   icon: 'SNT',
-  //   token: SNT_TOKEN,
-  //   address: '0x0000000000000000000000000000000000000000',
-  //   abi: PreDepositVaultAbi,
-  // },
-  // {
-  //   id: 'LINEA',
-  //   name: 'LINEA vault',
-  //   apy: '3.9%',
-  //   rewards: ['KARMA', 'SNT', 'Points'],
-  //   icon: 'LINEA',
-  //   token: LINEA_TOKEN,
-  //   address: '0x0000000000000000000000000000000000000000',
-  //   abi: PreDepositVaultAbi,
-  // },
-  // {
-  //   id: 'ETH',
-  //   name: 'ETH vault',
-  //   apy: '5.2%',
-  //   rewards: ['KARMA', 'SNT', 'LINEA'],
-  //   icon: 'ETH',
-  //   token: wETH_TOKEN,
-  //   address: '0x0000000000000000000000000000000000000000',
-  //   abi: PreDepositVaultAbi,
-  // },
-]
+export const LINEA_VAULT: Vault = {
+  id: 'LINEA',
+  name: 'LINEA Token Vault',
+  apy: '',
+  rewards: ['KARMA'],
+  icon: 'LINEA',
+  address: '0xb223cA53A53A5931426b601Fa01ED2425D8540fB',
+  token: LINEA_TOKEN,
+  abi: PreDepositVaultAbi,
+  chainId: linea.id,
+} as const
+
+export const LIDO_VAULT: Vault = {
+  id: 'LIDO',
+  name: 'Lido Staked Ether Vault',
+  apy: '',
+  rewards: ['KARMA'],
+  icon: 'ETH',
+  address: '0xc71Ec84Ee70a54000dB3370807bfAF4309a67a1f',
+  token: wETH_TOKEN,
+  abi: PreDepositVaultAbi,
+  chainId: mainnet.id,
+} as const
+
+export const VAULTS: Vault[] = [SNT_VAULT, LINEA_VAULT, LIDO_VAULT]
 
 // export const KARMA = {
 //   address: '0x7ec5Dc75D09fAbcD55e76077AFa5d4b77D112fde' as Address,

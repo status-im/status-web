@@ -6,16 +6,16 @@ import Image from 'next/image'
 
 import { PercentIcon, PlusIcon } from './icons'
 
+import type { Vault } from '../_constants'
+import type { FC } from 'react'
+
 type Props = {
-  name: string
-  apy: string
-  rewards: string[]
-  icon: string
+  vault: Vault
   onDeposit: () => void
 }
 
-const VaultCard = (props: Props) => {
-  const { name, apy, rewards, icon, onDeposit } = props
+const VaultCard: FC<Props> = ({ vault, onDeposit }: Props) => {
+  const { name, apy, rewards, icon } = vault
   const apyValue = apy.endsWith('%') ? apy.slice(0, -1) : apy
   const rewardsLine = rewards.join(', ')
 

@@ -10,6 +10,7 @@ export const PreDepositVaultAbi = [
         name: '_strategy',
         type: 'address',
       },
+      { internalType: 'uint32', name: '_withdrawalCooldown', type: 'uint32' },
     ],
     stateMutability: 'nonpayable',
     type: 'constructor',
@@ -98,6 +99,8 @@ export const PreDepositVaultAbi = [
     name: 'ERC4626ExceededMaxWithdraw',
     type: 'error',
   },
+  { inputs: [], name: 'EnforcedPause', type: 'error' },
+  { inputs: [], name: 'ExpectedPause', type: 'error' },
   { inputs: [], name: 'InsufficientBalance', type: 'error' },
   { inputs: [], name: 'InvalidAddress', type: 'error' },
   { inputs: [], name: 'InvalidAmount', type: 'error' },
@@ -108,6 +111,8 @@ export const PreDepositVaultAbi = [
     name: 'SafeERC20FailedOperation',
     type: 'error',
   },
+  { inputs: [], name: 'WithdrawalCooldownActive', type: 'error' },
+  { inputs: [], name: 'ZeroShares', type: 'error' },
   {
     anonymous: false,
     inputs: [
@@ -255,9 +260,27 @@ export const PreDepositVaultAbi = [
   {
     anonymous: false,
     inputs: [
-      { indexed: false, internalType: 'bool', name: 'enabled', type: 'bool' },
+      {
+        components: [
+          {
+            internalType: 'uint256',
+            name: 'minDepositAmount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'maxDepositAmount',
+            type: 'uint256',
+          },
+          { internalType: 'uint256', name: 'maxTotalAssets', type: 'uint256' },
+        ],
+        indexed: false,
+        internalType: 'struct IPreDepositVault.DepositLimits',
+        name: 'limits',
+        type: 'tuple',
+      },
     ],
-    name: 'DepositsEnabled',
+    name: 'DepositLimitsUpdated',
     type: 'event',
   },
   {
@@ -291,24 +314,12 @@ export const PreDepositVaultAbi = [
     inputs: [
       {
         indexed: false,
-        internalType: 'uint256',
-        name: 'minDeposit',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'maxDeposit',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'maxTotalAssets',
-        type: 'uint256',
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
       },
     ],
-    name: 'LimitsUpdated',
+    name: 'Paused',
     type: 'event',
   },
   {
@@ -388,6 +399,19 @@ export const PreDepositVaultAbi = [
     anonymous: false,
     inputs: [
       {
+        indexed: false,
+        internalType: 'uint8',
+        name: 'newState',
+        type: 'uint8',
+      },
+    ],
+    name: 'StateAdvanced',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: true,
         internalType: 'address',
         name: 'strategy',
@@ -454,6 +478,19 @@ export const PreDepositVaultAbi = [
       },
     ],
     name: 'Transfer',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
+      },
+    ],
+    name: 'Unpaused',
     type: 'event',
   },
   {
@@ -533,9 +570,14 @@ export const PreDepositVaultAbi = [
   {
     anonymous: false,
     inputs: [
-      { indexed: false, internalType: 'bool', name: 'enabled', type: 'bool' },
+      {
+        indexed: false,
+        internalType: 'uint32',
+        name: 'newCooldown',
+        type: 'uint32',
+      },
     ],
-    name: 'WithdrawalsEnabled',
+    name: 'WithdrawalCooldownUpdated',
     type: 'event',
   },
   {
@@ -567,15 +609,8 @@ export const PreDepositVaultAbi = [
   },
   {
     inputs: [],
-    name: 'GUARDIAN_ROLE',
-    outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'KEEPER_ROLE',
-    outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
+    name: 'MAX_WITHDRAWAL_COOLDOWN',
+    outputs: [{ internalType: 'uint32', name: '', type: 'uint32' }],
     stateMutability: 'view',
     type: 'function',
   },
@@ -586,6 +621,13 @@ export const PreDepositVaultAbi = [
       { internalType: 'contract IStrategy', name: '', type: 'address' },
     ],
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'uint8', name: 'newState', type: 'uint8' }],
+    name: 'advanceState',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -682,22 +724,33 @@ export const PreDepositVaultAbi = [
       { internalType: 'address', name: 'receiver', type: 'address' },
     ],
     name: 'deposit',
-    outputs: [{ internalType: 'uint256', name: 'shares', type: 'uint256' }],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'uint8', name: 'newState', type: 'uint8' }],
+    name: 'emergencySetState',
+    outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
   },
   {
     inputs: [],
-    name: 'depositsEnabled',
-    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    name: 'getCurrentState',
+    outputs: [{ internalType: 'uint8', name: '', type: 'uint8' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
-    name: 'emergencyPauseAll',
-    outputs: [],
-    stateMutability: 'nonpayable',
+    name: 'getDepositLimits',
+    outputs: [
+      { internalType: 'uint256', name: '', type: 'uint256' },
+      { internalType: 'uint256', name: '', type: 'uint256' },
+      { internalType: 'uint256', name: '', type: 'uint256' },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -735,8 +788,28 @@ export const PreDepositVaultAbi = [
     type: 'function',
   },
   {
+    inputs: [
+      {
+        internalType: 'enum PreDepositVault.VaultState',
+        name: 'expectedState',
+        type: 'uint8',
+      },
+    ],
+    name: 'isStateValid',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [],
     name: 'l2PrincipalBalance',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'address', name: '', type: 'address' }],
+    name: 'lastWithdrawalTime',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
@@ -749,14 +822,7 @@ export const PreDepositVaultAbi = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'maxDepositAmount',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'address', name: 'owner', type: 'address' }],
+    inputs: [{ internalType: 'address', name: '', type: 'address' }],
     name: 'maxMint',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
@@ -770,22 +836,8 @@ export const PreDepositVaultAbi = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'maxTotalAssets',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [{ internalType: 'address', name: 'owner', type: 'address' }],
     name: 'maxWithdraw',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'minDepositAmount',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
@@ -796,7 +848,7 @@ export const PreDepositVaultAbi = [
       { internalType: 'address', name: 'receiver', type: 'address' },
     ],
     name: 'mint',
-    outputs: [{ internalType: 'uint256', name: 'assets', type: 'uint256' }],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'nonpayable',
     type: 'function',
   },
@@ -804,6 +856,20 @@ export const PreDepositVaultAbi = [
     inputs: [],
     name: 'name',
     outputs: [{ internalType: 'string', name: '', type: 'string' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'pause',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'paused',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
     stateMutability: 'view',
     type: 'function',
   },
@@ -837,7 +903,7 @@ export const PreDepositVaultAbi = [
   },
   {
     inputs: [],
-    name: 'principalInStrategy',
+    name: 'receivedFromStrategy',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
@@ -851,6 +917,13 @@ export const PreDepositVaultAbi = [
     name: 'redeem',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'remainingCapacity',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -869,7 +942,7 @@ export const PreDepositVaultAbi = [
     ],
     name: 'retryWithdrawal',
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'payable',
     type: 'function',
   },
   {
@@ -883,6 +956,13 @@ export const PreDepositVaultAbi = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'sentToStrategy',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [{ internalType: 'address', name: 'newBridge', type: 'address' }],
     name: 'setBridge',
     outputs: [],
@@ -890,26 +970,34 @@ export const PreDepositVaultAbi = [
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'bool', name: 'enabled', type: 'bool' }],
-    name: 'setDepositsEnabled',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
     inputs: [
-      { internalType: 'uint256', name: '_minDepositAmount', type: 'uint256' },
-      { internalType: 'uint256', name: '_maxDepositAmount', type: 'uint256' },
-      { internalType: 'uint256', name: '_maxTotalAssets', type: 'uint256' },
+      {
+        components: [
+          {
+            internalType: 'uint256',
+            name: 'minDepositAmount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'maxDepositAmount',
+            type: 'uint256',
+          },
+          { internalType: 'uint256', name: 'maxTotalAssets', type: 'uint256' },
+        ],
+        internalType: 'struct IPreDepositVault.DepositLimits',
+        name: '_limits',
+        type: 'tuple',
+      },
     ],
-    name: 'setLimits',
+    name: 'setDepositLimits',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'bool', name: 'enabled', type: 'bool' }],
-    name: 'setWithdrawalsEnabled',
+    inputs: [{ internalType: 'uint32', name: 'newCooldown', type: 'uint32' }],
+    name: 'setWithdrawalCooldown',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -980,6 +1068,13 @@ export const PreDepositVaultAbi = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'unpause',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [
       { internalType: 'uint256', name: 'assets', type: 'uint256' },
       { internalType: 'address', name: 'receiver', type: 'address' },
@@ -991,9 +1086,20 @@ export const PreDepositVaultAbi = [
     type: 'function',
   },
   {
+    inputs: [
+      { internalType: 'uint256', name: 'assets', type: 'uint256' },
+      { internalType: 'address', name: 'receiver', type: 'address' },
+      { internalType: 'address', name: 'owner', type: 'address' },
+    ],
+    name: 'withdrawWithPayable',
+    outputs: [{ internalType: 'uint256', name: 'shares', type: 'uint256' }],
+    stateMutability: 'payable',
+    type: 'function',
+  },
+  {
     inputs: [],
-    name: 'withdrawalsEnabled',
-    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    name: 'withdrawalCooldown',
+    outputs: [{ internalType: 'uint32', name: '', type: 'uint32' }],
     stateMutability: 'view',
     type: 'function',
   },

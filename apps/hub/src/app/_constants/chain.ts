@@ -1,6 +1,6 @@
 import { getDefaultConfig } from 'connectkit'
 import { createConfig, http } from 'wagmi'
-import { type Chain, statusSepolia } from 'wagmi/chains'
+import { type Chain, linea, mainnet, statusSepolia } from 'wagmi/chains'
 
 import { clientEnv } from './env.client.mjs'
 
@@ -12,9 +12,11 @@ import type {
 
 export const getDefaultWagmiConfig = () =>
   getDefaultConfig({
-    chains: [statusSepolia],
+    chains: [statusSepolia, mainnet, linea],
     transports: {
       [statusSepolia.id]: http(statusSepolia.rpcUrls.default.http[0]),
+      [mainnet.id]: http(mainnet.rpcUrls.default.http[0]),
+      [linea.id]: http(linea.rpcUrls.default.http[0]),
     },
     walletConnectProjectId:
       clientEnv.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID as string,

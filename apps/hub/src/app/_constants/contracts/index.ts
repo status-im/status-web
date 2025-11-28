@@ -1,6 +1,7 @@
 export { faucetAbi } from './faucet'
 export { karmaAbi } from './karmaAbi'
 export { karmaTierAbi } from './karmaTierAbi'
+export { lidoStETHAbi } from './LidoStETHAbi'
 export { rewardsAbi } from './rewardsAbi'
 export { stakingManagerAbi } from './stakingManagerAbi'
 export { tokenAbi } from './TokenAbi'

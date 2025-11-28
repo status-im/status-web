@@ -135,6 +135,7 @@ export function usePreDepositVault(): UsePreDepositVaultReturn {
           abi: vault.abi,
           functionName: 'deposit',
           args: [amountWei, address],
+          chainId: vault.chainId,
         })
 
         sendPreDepositEvent({ type: 'EXECUTE' })

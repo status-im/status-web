@@ -1,4 +1,4 @@
-import { useAccount, useReadContract } from 'wagmi'
+import { useReadContract } from 'wagmi'
 
 import type { Vault } from '~constants/index'
 
@@ -7,10 +7,10 @@ import type { Vault } from '~constants/index'
 // ============================================================================
 
 /**
- * Parameters for reading max deposit amount
+ * Parameters for reading Min deposit amount
  */
-export interface MaxPreDepositValueParams {
-  /** Vault to query max deposit for */
+export interface MinPreDepositValueParams {
+  /** Vault to query Min deposit for */
   vault: Vault
 }
 
@@ -19,16 +19,16 @@ export interface MaxPreDepositValueParams {
 // ============================================================================
 
 /**
- * Hook to read the maximum deposit amount for a user in a pre-deposit vault.
+ * Hook to read the minimum deposit amount for a user in a pre-deposit vault.
  *
  * **Query Process:**
  * 1. Validates wallet connection
- * 2. Calls vault's `maxDeposit` function with user's address
- * 3. Returns the maximum amount (in wei) that can be deposited
+ * 2. Calls vault's `minDeposit` function with user's address
+ * 3. Returns the minimum amount (in wei) that can be deposited
  * 4. Automatically refetches when dependencies change
  *
  * @returns Query result with the following properties:
- * - `data`: Maximum deposit amount in wei (bigint | undefined)
+ * - `data`: Minimum deposit amount in wei (bigint | undefined)
  * - `isLoading`: Whether the initial query is loading
  * - `isFetching`: Whether the query is fetching (initial or refetch)
  * - `isError`: Whether the query has errored
@@ -43,13 +43,13 @@ export interface MaxPreDepositValueParams {
  * Basic usage
  * ```tsx
  * function DepositForm() {
- *   const { data: maxDeposit, isLoading } = useMaxPreDepositValue({ vault })
+ *   const { data: depositLimits, isLoading } = useMinPreDepositValue({ vault })
  *
  *   if (isLoading) return <div>Loading...</div>
  *
  *   return (
  *     <div>
- *       Max deposit: {maxDeposit ? formatUnits(maxDeposit, 18) : '0'} tokens
+ *       Min deposit: {depositLimits ? formatUnits(minDeposit, 18) : '0'} tokens
  *     </div>
  *   )
  * }
@@ -60,11 +60,11 @@ export interface MaxPreDepositValueParams {
  * ```tsx
  * function DepositForm() {
  *   const {
- *     data: maxDeposit,
+ *     data: minDeposit,
  *     isLoading,
  *     isError,
  *     error
- *   } = useMaxPreDepositValue({ vault })
+ *   } = useMinPreDepositValue({ vault })
  *
  *   if (isError) {
  *     return <div>Error: {error?.message}</div>
@@ -75,7 +75,7 @@ export interface MaxPreDepositValueParams {
  *   return (
  *     <input
  *       type="number"
- *       max={maxDeposit ? formatUnits(maxDeposit, 18) : '0'}
+ *       min={minDeposit ? formatUnits(minDeposit, 18) : '0'}
  *       placeholder="Enter amount"
  *     />
  *   )
@@ -83,16 +83,21 @@ export interface MaxPreDepositValueParams {
  * ```
  *
  */
-export function useMaxPreDepositValue({ vault }: MaxPreDepositValueParams) {
-  const { address } = useAccount()
-
+export function usePreDepositLimits({ vault }: MinPreDepositValueParams) {
   return useReadContract({
     abi: vault.abi,
     address: vault.address,
-    functionName: 'maxDeposit',
-    args: address ? [address] : undefined,
+    functionName: 'getDepositLimits',
+    chainId: vault.chainId,
     query: {
-      enabled: !!address && vault !== null,
+      enabled: vault !== null,
+      select: data => {
+        return {
+          minDeposit: data[0],
+          maxDeposit: data[1],
+          maxTotalAssets: data[2],
+        }
+      },
     },
   })
 }

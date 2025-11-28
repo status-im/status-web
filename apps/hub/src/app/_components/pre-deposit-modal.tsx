@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { type Dispatch, type SetStateAction, useMemo } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -11,22 +11,18 @@ import Image from 'next/image'
 import { useForm, useWatch } from 'react-hook-form'
 import { match, P } from 'ts-pattern'
 import { formatUnits, parseUnits } from 'viem'
-import { useAccount, useBalance, useReadContract } from 'wagmi'
+import { useAccount, useChainId, useSwitchChain } from 'wagmi'
 import { z } from 'zod'
 
 import { PercentIcon, PlusIcon } from '~components/icons/index'
 import { type Vault } from '~constants/index'
 import { useApproveToken } from '~hooks/useApprovePreDepositToken'
+import { useDepositFlow } from '~hooks/useDepositFlow'
 import { useExchangeRate } from '~hooks/useExchangeRate'
-import { useMaxPreDepositValue } from '~hooks/useMaxPreDepositValue'
-import { useMinPreDepositValue } from '~hooks/useMinPreDepositValue'
 import { usePreDepositVault } from '~hooks/usePreDepositVault'
 import { formatCurrency, formatTokenAmount } from '~utils/currency'
 
 import { VaultImage } from './vault-image'
-
-import type { allowanceAbi } from '~constants/contracts/AllowanceAbi'
-import type { Dispatch, SetStateAction } from 'react'
 
 type PreDepositModalProps = {
   open: boolean
@@ -41,14 +37,6 @@ const depositFormSchema = z.object({
 })
 
 type FormValues = z.infer<typeof depositFormSchema>
-
-type DepositAction =
-  | 'idle'
-  | 'approve'
-  | 'deposit'
-  | 'invalid'
-  | 'exceeds-max'
-  | 'below-min'
 
 const inputContainerStyles = cva({
   base: 'rounded-16 border bg-white-100 px-4 py-3 transition-colors',
@@ -83,52 +71,32 @@ const PreDepositModal = ({
   vaults,
   setActiveVault,
 }: PreDepositModalProps) => {
-  const { address, isConnected } = useAccount()
-  // TODO: Replace with useExhangeRate({ token: vault.token.symbol }) before prod
-  const { data: exchangeRate } = useExchangeRate()
-
-  const { mutate: approveToken, isPending: isApproving } = useApproveToken()
-  const { mutate: preDeposit, isPending: isDepositing } = usePreDepositVault()
+  const { address } = useAccount()
+  const chainId = useChainId()
+  const { switchChain, isPending: isSwitchingChain } = useSwitchChain()
 
   const form = useForm<FormValues>({
     resolver: zodResolver(depositFormSchema),
     mode: 'onChange',
-    defaultValues: {
-      amount: '',
-    },
+    defaultValues: { amount: '' },
   })
 
-  // TODO: I've seen a bunch of useBalance around this is deprecated in wagmi in favor of readContract on the ERC20 etc.
-  const { data: balance } = useBalance({
-    address,
-    token: vault?.token.address,
-    query: {
-      enabled: isConnected && open && !!vault,
-    },
-  })
+  const amountValue = useWatch({ control: form.control, name: 'amount' })
 
-  const { data: maxDeposit } = useMaxPreDepositValue({
-    vault,
-  })
+  const { mutate: approveToken, isPending: isApproving } = useApproveToken()
+  const { mutate: preDeposit, isPending: isDepositing } = usePreDepositVault()
 
-  const { data: minDeposit } = useMinPreDepositValue({
-    vault,
-  })
+  const amountWei = useMemo(() => {
+    if (!vault || !amountValue) return 0n
+    try {
+      return parseUnits(amountValue, vault.token.decimals)
+    } catch {
+      return 0n
+    }
+  }, [amountValue, vault])
 
-  const amountValue = useWatch({
-    control: form.control,
-    name: 'amount',
-    defaultValue: '',
-  })
-
-  const { data: currentAllowance, refetch } = useReadContract({
-    address: vault?.token.address,
-    abi: vault?.token.abi as typeof allowanceAbi,
-    functionName: 'allowance',
-    args: address && vault ? [address, vault.address] : undefined,
-    query: {
-      enabled: isConnected && open && !!vault && !!address,
-    },
+  const { data: exchangeRate } = useExchangeRate({
+    token: vault.token.priceKey || vault.token.symbol,
   })
 
   const amountInUSD = useMemo(() => {
@@ -143,145 +111,96 @@ const PreDepositModal = ({
       .otherwise(({ calculatedUSD }) => calculatedUSD)
   }, [amountValue, exchangeRate])
 
-  const depositAction = useMemo(() => {
-    if (!vault || !balance || !amountValue || amountValue.trim() === '') {
-      return 'idle'
-    }
+  const {
+    actionState,
+    balance,
+    maxDeposit,
+    minDeposit,
+    sharesValidation,
+    refetchAllowance,
+  } = useDepositFlow({ vault, amountWei, address })
 
-    let amountWei: bigint
-    try {
-      amountWei = parseUnits(amountValue, vault.token.decimals)
-    } catch {
-      return 'idle'
-    }
-
-    if (amountWei <= 0n) return 'idle'
-
-    const allowance: bigint = currentAllowance ?? 0n
-
-    return match({
-      amountWei,
-      balance: balance.value,
-      allowance,
-      maxDeposit,
-      minDeposit,
-    })
-      .returnType<DepositAction>()
-      .with({ amountWei: P.when(amt => amt > balance.value) }, () => 'invalid')
-      .with(
-        {
-          maxDeposit: P.not(P.nullish),
-          amountWei: P.when(amt => maxDeposit && amt > maxDeposit),
-        },
-        () => 'exceeds-max'
-      )
-      .with(
-        {
-          minDeposit: P.not(P.nullish),
-          amountWei: P.when(amt => minDeposit && amt < minDeposit),
-        },
-        () => 'below-min'
-      )
-      .with({ amountWei: P.when(amt => amt > allowance) }, () => 'approve')
-      .otherwise(() => 'deposit')
-  }, [amountValue, balance, vault, currentAllowance, maxDeposit, minDeposit])
+  const isWrongChain = useMemo(() => {
+    if (!vault || !chainId) return false
+    return vault.chainId !== chainId
+  }, [vault, chainId])
 
   if (!vault) return null
 
   const handleOpenChange = (nextOpen: boolean) => {
-    if (!nextOpen) {
-      form.reset()
-    }
+    if (!nextOpen) form.reset()
     onOpenChange(nextOpen)
   }
 
-  const handleSubmit = async (data: FormValues) => {
-    if (!vault || !address) return
+  const handleSubmit = (data: FormValues) => {
+    if (!vault || !address || isWrongChain) return
 
-    const deposit = () => {
-      preDeposit(
-        { amount: data.amount, vault },
-        { onSuccess: () => onOpenChange(false) }
-      )
-    }
-
-    const approve = () => {
-      approveToken(
-        {
-          token: vault.token,
-          amount: data.amount,
-          spenderAddress: vault.address,
-        },
-        {
-          async onSuccess() {
-            await refetch()
-            deposit()
+    match(actionState)
+      .with('approve', () => {
+        approveToken(
+          {
+            token: vault.token,
+            amount: data.amount,
+            spenderAddress: vault.address,
           },
-        }
-      )
-    }
-
-    try {
-      match(depositAction)
-        .with('approve', approve)
-        .with('deposit', deposit)
-        .otherwise(() => {})
-    } catch (error) {
-      console.error('Error during deposit:', error)
-      form.setError('amount', {
-        type: 'manual',
-        message: 'Failed to process deposit',
+          {
+            onSuccess: async () => {
+              await refetchAllowance()
+              preDeposit(
+                { amount: data.amount, vault },
+                { onSuccess: () => onOpenChange(false) }
+              )
+            },
+          }
+        )
       })
-    }
+      .with('deposit', () => {
+        preDeposit(
+          { amount: data.amount, vault },
+          { onSuccess: () => onOpenChange(false) }
+        )
+      })
+      .otherwise(() => {})
+  }
+
+  const handleSetMax = () => {
+    let maxAmount = balance ?? 0n
+    if (maxDeposit && maxAmount > maxDeposit) maxAmount = maxDeposit
+    form.setValue('amount', formatUnits(maxAmount, vault.token.decimals))
   }
 
   const isPending = isApproving || isDepositing
 
-  const formattedBalance = formatTokenAmount(
-    balance?.value ?? 0n,
-    vault.token.symbol,
-    {
-      tokenDecimals: vault.token.decimals,
-      includeSymbol: true,
-    }
-  )
-
-  const formattedMaxDeposit = formatTokenAmount(
-    maxDeposit ?? 0n,
-    vault.token.symbol,
-    {
-      tokenDecimals: vault.token.decimals,
-      includeSymbol: true,
-    }
-  )
-
-  const formattedMinDeposit = formatTokenAmount(
-    minDeposit ?? 0n,
-    vault.token.symbol,
-    {
-      tokenDecimals: vault.token.decimals,
-      includeSymbol: true,
-    }
-  )
-
-  const inputState = match(depositAction)
+  const isInputError = match(actionState)
     .with(
-      P.union('invalid', 'exceeds-max', 'below-min'),
-      () => 'error' as const
+      P.union('invalid-balance', 'exceeds-max', 'below-min', 'invalid-shares'),
+      () => true
     )
-    .otherwise(() => 'default' as const)
+    .otherwise(() => false)
 
-  const errorMessage = match(depositAction)
-    .with('invalid', () => `Insufficient balance. Maximum: ${formattedBalance}`)
+  const errorMessage = match(actionState)
+    .with(
+      'invalid-balance',
+      () =>
+        `Insufficient balance. Max: ${formatTokenAmount(balance, vault.token.symbol)}`
+    )
     .with(
       'exceeds-max',
-      () => `Exceeds vault limit. Maximum: ${formattedMaxDeposit}`
+      () =>
+        `Exceeds vault limit. Max: ${formatTokenAmount(maxDeposit ?? 0n, vault.token.symbol)}`
     )
     .with(
       'below-min',
-      () => `Below minimum deposit. Minimum: ${formattedMinDeposit}`
+      () =>
+        `Below minimum deposit. Min: ${formatTokenAmount(minDeposit ?? 0n, vault.token.symbol)}`
     )
+    .with('invalid-shares', () => sharesValidation.validationMessage)
     .otherwise(() => form.formState.errors.amount?.message)
+
+  const warningMessage =
+    !isInputError && sharesValidation.validationMessage
+      ? sharesValidation.validationMessage
+      : null
 
   return (
     <Dialog.Root open={open} onOpenChange={handleOpenChange}>
@@ -363,11 +282,15 @@ const PreDepositModal = ({
                   >
                     Amount to deposit
                   </label>
-                  <div className={inputContainerStyles({ state: inputState })}>
+
+                  <div
+                    className={inputContainerStyles({
+                      state: isInputError ? 'error' : 'default',
+                    })}
+                  >
                     <div className="flex items-center justify-between">
                       <input
                         id="deposit-amount"
-                        type="text"
                         inputMode="decimal"
                         {...form.register('amount')}
                         placeholder="0"
@@ -380,41 +303,42 @@ const PreDepositModal = ({
                           vault={vault.icon}
                         />
                         <span className="text-19 font-600 text-neutral-80">
-                          l{vault.token.symbol}
+                          {vault.token.symbol}
                         </span>
                       </div>
                     </div>
-                    <div className={dividerStyles({ state: inputState })} />
+
+                    <div
+                      className={dividerStyles({
+                        state: isInputError ? 'error' : 'default',
+                      })}
+                    />
+
                     <div className="flex items-center justify-between text-13 font-500 text-neutral-50">
                       <span>
-                        {match(amountInUSD)
-                          .with(null, () => '—')
-                          .otherwise(usd => formatCurrency(usd))}
+                        {amountInUSD ? formatCurrency(amountInUSD) : '—'}
                       </span>
                       <button
                         type="button"
                         disabled={isPending}
-                        onClick={() => {
-                          const maxAmount =
-                            balance?.value && maxDeposit
-                              ? balance.value < maxDeposit
-                                ? balance.value
-                                : maxDeposit
-                              : (balance?.value ?? 0n)
-
-                          form.setValue(
-                            'amount',
-                            formatUnits(maxAmount, vault.token.decimals)
-                          )
-                        }}
-                        className="uppercase text-neutral-100 transition-colors hover:text-neutral-80"
+                        onClick={handleSetMax}
+                        className="uppercase text-neutral-100 hover:text-neutral-80"
                       >
-                        MAX {formattedBalance}
+                        MAX{' '}
+                        {formatTokenAmount(balance, vault.token.symbol, {
+                          includeSymbol: true,
+                        })}
                       </button>
                     </div>
                   </div>
+
                   {errorMessage && (
                     <p className="text-13 text-danger-50">{errorMessage}</p>
+                  )}
+                  {warningMessage && (
+                    <p className="text-13 text-customisation-yellow-50">
+                      {warningMessage}
+                    </p>
                   )}
                 </div>
 
@@ -443,23 +367,33 @@ const PreDepositModal = ({
 
                 {/* Actions */}
                 <div className="flex w-full gap-3 pt-4">
-                  <Button
-                    type="submit"
-                    className="w-full justify-center"
-                    disabled={match(depositAction)
-                      .with(
-                        P.union('idle', 'invalid', 'exceeds-max', 'below-min'),
-                        () => true
-                      )
-                      .otherwise(() => isPending)}
-                  >
-                    {match({ action: depositAction, isApproving, isDepositing })
-                      .with({ isApproving: true }, () => 'Approving...')
-                      .with({ isDepositing: true }, () => 'Depositing...')
-                      .with({ action: 'approve' }, () => 'Approve Deposit')
-                      .with({ action: 'deposit' }, () => 'Deposit')
-                      .otherwise(() => 'Enter amount')}
-                  </Button>
+                  {isWrongChain ? (
+                    <Button
+                      type="button"
+                      className="w-full justify-center"
+                      onClick={() => switchChain({ chainId: vault.chainId })}
+                      disabled={isSwitchingChain}
+                    >
+                      {isSwitchingChain
+                        ? 'Switching...'
+                        : 'Switch Network to Deposit'}
+                    </Button>
+                  ) : (
+                    <Button
+                      type="submit"
+                      className="w-full justify-center"
+                      disabled={
+                        isPending || isInputError || actionState === 'idle'
+                      }
+                    >
+                      {match({ action: actionState, isApproving, isDepositing })
+                        .with({ isApproving: true }, () => 'Approving...')
+                        .with({ isDepositing: true }, () => 'Depositing...')
+                        .with({ action: 'approve' }, () => 'Approve Deposit')
+                        .with({ action: 'deposit' }, () => 'Deposit')
+                        .otherwise(() => 'Enter amount')}
+                    </Button>
+                  )}
                 </div>
               </div>
             </form>
@@ -471,4 +405,3 @@ const PreDepositModal = ({
 }
 
 export { PreDepositModal }
-export type { Vault }
