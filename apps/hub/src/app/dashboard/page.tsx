@@ -76,6 +76,7 @@ export default function DashboardPage() {
               <div className="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2">
                 {VAULTS.map(vault => (
                   <VaultCard
+                    key={vault.id}
                     vault={vault}
                     onDeposit={() => setActiveVault(vault)}
                   />
