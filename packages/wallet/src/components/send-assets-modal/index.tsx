@@ -514,7 +514,7 @@ const SendAssetsModal = (props: Props) => {
                           variant="danger"
                           size="24"
                           className="ml-2"
-                          href={`https://exchange.mercuryo.io/?type=buy&network=${asset.network}&currency=ETH&address=${account.address}&hide_address=false&fix_address=true&widget_id=6a7eb330-2b09-49b7-8fd3-1c77cfb6cd47`}
+                          href={`https://buy.moonpay.com?apiKey=pk_live_YQC6CQPA5qqDu0unEwHJyAYQyeIqFGR`}
                         >
                           Add ETH
                         </Button>

@@ -12,7 +12,7 @@ import { Image, type ImageId } from '../image'
 
 import type { Account } from '../address'
 
-export type Provider = 'mercuryo' | 'moonpay'
+export type Provider = 'moonpay'
 
 export type Currency = {
   contract_address: string
@@ -62,12 +62,6 @@ export const BuyCryptoDrawer = (props: Props) => {
     account,
     providers = [
       {
-        name: 'mercuryo',
-        // description: 'Buy crypto within 15 seconds',
-        fee: '1% - 4.5%',
-        image: 'Wallet/Icons/Logos/mercuryo:64:64',
-      },
-      {
         name: 'moonpay',
         // description: 'The new standard for fiat to crypto',
         fee: '1% - 4.5%',
@@ -102,7 +96,6 @@ export const BuyCryptoDrawer = (props: Props) => {
         url = data.url
       } else {
         const providerUrls = {
-          mercuryo: `https://exchange.mercuryo.io/?type=buy&network=${network.id}&currency=${currency.code}&address=${account.address}&hide_address=false&fix_address=true&widget_id=6a7eb330-2b09-49b7-8fd3-1c77cfb6cd47`,
           moonpay: `https://buy.moonpay.com?apiKey=pk_live_YQC6CQPA5qqDu0unEwHJyAYQyeIqFGR`,
         }
 
@@ -159,8 +152,6 @@ export const BuyCryptoDrawer = (props: Props) => {
                 {account.name}
               </span>
             </div>
-
-            {/* Removed isMercuryoSelected and its related ContextTag */}
           </div>
         </Drawer.Header>
 

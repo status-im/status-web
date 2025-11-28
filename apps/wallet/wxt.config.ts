@@ -53,7 +53,6 @@ export default defineConfig({
         INFURA_API_KEY: 'test',
         CRYPTOCOMPARE_API_KEYS: 'test',
         COINGECKO_API_KEY: 'test',
-        MERCURYO_SECRET_KEY: 'test',
         VERCEL: 'test',
         VERCEL_ENV: 'test',
       },
