@@ -1,3 +1,5 @@
+import { Suspense } from 'react'
+
 import { Avatar, Skeleton } from '@status-im/components'
 import { Balance, StickyHeaderContainer } from '@status-im/wallet/components'
 
@@ -56,14 +58,18 @@ const SplittedLayout = (props: Props) => {
             >
               <div className="relative -mt-8 flex flex-1 flex-col px-3 xl:mt-0 xl:px-12">
                 <MainContentBody />
-                {isLoading ? loadingState : list}
+                <Suspense fallback={loadingState}>
+                  {isLoading ? loadingState : list}
+                </Suspense>
               </div>
             </StickyHeaderContainer>
           </div>
         </div>
 
         <div className="relative hidden basis-1/2 flex-col bg-white-100 2xl:flex">
-          <div className="relative z-20 size-full">{detail}</div>
+          <div className="relative z-20 size-full">
+            <Suspense fallback={<div>Loading...</div>}>{detail}</Suspense>
+          </div>
 
           <div
             className="absolute z-10 size-full"

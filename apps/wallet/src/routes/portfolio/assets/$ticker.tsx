@@ -36,6 +36,17 @@ function Component() {
     return null
   }
 
+  const findAsset = (ticker: string) =>
+    assets?.assets?.find(a => {
+      if (ticker.startsWith('0x')) {
+        return (
+          'contract' in a && a.contract?.toLowerCase() === ticker.toLowerCase()
+        )
+      } else {
+        return a.symbol?.toLowerCase() === ticker.toLowerCase()
+      }
+    })
+
   return (
     <>
       <div className="hidden 2xl:block">
@@ -62,12 +73,18 @@ function Component() {
             />
           }
           loadingState={<AssetsListLoading />}
-          detail={<Token ticker={ticker} address={address} />}
+          detail={
+            <Token
+              ticker={ticker}
+              address={address}
+              asset={findAsset(ticker)}
+            />
+          }
           isLoading={isLoading}
         />
       </div>
       <div className="block 2xl:hidden">
-        <Token ticker={ticker} address={address} />
+        <Token ticker={ticker} address={address} asset={findAsset(ticker)} />
       </div>
     </>
   )
