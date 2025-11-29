@@ -1,25 +1,25 @@
+// note: https://github.com/contentlayerdev/contentlayer/issues/84 – support for multiple sources
+// import { makeSource } from '@contentlayer/source-remote-files'
+import remarkHeadings from '@vcarl/remark-headings'
 import {
   defineDocumentType,
   defineNestedType,
   makeSource,
-} from '@contentlayer/source-files'
-// note: https://github.com/contentlayerdev/contentlayer/issues/84 – support for multiple sources
-// import { makeSource } from '@contentlayer/source-remote-files'
-import remarkHeadings from '@vcarl/remark-headings'
+} from 'contentlayer2/source-files'
 import { slug as slugify } from 'github-slugger'
 import { toString } from 'mdast-util-to-string'
 import { spawn } from 'node:child_process'
 import * as fs from 'node:fs/promises'
 import path from 'node:path'
 import { stderr } from 'node:process'
-import rehypePrettyCode from 'rehype-pretty-code'
+import { rehypePrettyCode } from 'rehype-pretty-code'
 import rehypeSlug from 'rehype-slug'
 // note: https://github.com/mdx-js/mdx/issues/1042#issuecomment-1027059063
 import remarkComment from 'remark-comment'
 // import { remark } from 'remark'
 import remarkDirective from 'remark-directive'
 // import remarkFrontmatter from 'remark-frontmatter'
-import remarkGfm from 'remark-gfm-v3'
+import remarkGfm from 'remark-gfm'
 import remarkMdx from 'remark-mdx'
 import remarkParse from 'remark-parse'
 import strip from 'strip-markdown'
@@ -580,16 +580,14 @@ export default makeSource({
     for (const helpDoc of allHelpDocs) {
       // todo?: use mdx and markdown fields instead
       const processor = unified()
+        .use(remarkMdx)
         .use(remarkParse)
         // .use(remarkComment)
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        .use(remarkMdx)
         .use(strip, {
           keep: ['heading'],
         })
         .use(remarkGfm)
-        .use(remarkIndexer, { path: '/' + helpDoc._raw.flattenedPath })
+        .use(remarkIndexer)
       const tree = await processor.parse(helpDoc.body.raw)
       const file = await new Promise<VFile | undefined>(resolve => {
         processor.run(tree, (_error, _tree, file) => {
@@ -645,7 +643,7 @@ export default makeSource({
           keep: ['heading'],
         })
         .use(remarkGfm)
-        .use(remarkIndexer, { path: '/' + specsDoc._raw.flattenedPath })
+        .use(remarkIndexer)
       const tree = await processor.parse(specsDoc.body.raw)
       const file = await new Promise<VFile | undefined>(resolve => {
         processor.run(tree, (_error, _tree, file) => {

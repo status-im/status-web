@@ -1,6 +1,6 @@
 {
   "name": "portfolio",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "preinstall": "npx only-allow pnpm",
@@ -222,7 +222,7 @@
     "vfile": "^5.3.7"
   },
   "engines": {
-    "node": "20.x"
+    "node": "22.x"
   },
   "lint-staged": {
     "{.env,src/config/env.{server,client}.mjs}": [

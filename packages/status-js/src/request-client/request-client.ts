@@ -1,3 +1,4 @@
+import { fromBinary } from '@bufbuild/protobuf'
 import { bootstrap } from '@libp2p/bootstrap'
 import { Protocols } from '@waku/interfaces'
 import { createDecoder } from '@waku/message-encryption/symmetric'
@@ -9,16 +10,16 @@ import { peers } from '../consts/peers'
 import { providers } from '../consts/providers'
 import { EthereumClient } from '../ethereum-client/ethereum-client'
 import {
-  ApplicationMetadataMessage,
   ApplicationMetadataMessage_Type,
+  ApplicationMetadataMessageSchema,
 } from '../protos/application-metadata-message_pb'
 import {
-  CommunityDescription,
+  CommunityDescriptionSchema,
   CommunityTokenPermission_Type,
 } from '../protos/communities_pb'
-import { ProtocolMessage } from '../protos/protocol-message_pb'
-import { ContactCodeAdvertisement } from '../protos/push-notifications_pb'
-import { SegmentMessage } from '../protos/segment-message_pb'
+import { ProtocolMessageSchema } from '../protos/protocol-message_pb'
+import { ContactCodeAdvertisementSchema } from '../protos/push-notifications_pb'
+import { SegmentMessageSchema } from '../protos/segment-message_pb'
 import { compressPublicKey } from '../utils/compress-public-key'
 import { generateKeyFromPassword } from '../utils/generate-key-from-password'
 import { idToContentTopic } from '../utils/id-to-content-topic'
@@ -30,6 +31,9 @@ import { mapCommunity } from './map-community'
 import { mapUser } from './map-user'
 
 import type { DecodedMessage } from '../client/community/handle-waku-message'
+import type { CommunityDescription } from '../protos/communities_pb'
+import type { ContactCodeAdvertisement } from '../protos/push-notifications_pb'
+import type { SegmentMessage } from '../protos/segment-message_pb'
 import type { ChannelInfo } from './map-channel'
 import type { CommunityInfo } from './map-community'
 import type { UserInfo } from './map-user'
@@ -93,6 +97,9 @@ class RequestClient {
         emitSelf: true,
         // pingKeepAlive: 0,
         // relayKeepAlive: 0,
+        networkConfig: {
+          clusterId: 16,
+        },
         libp2p: {
           peerDiscovery: [
             bootstrap({
@@ -212,10 +219,15 @@ class RequestClient {
     const symmetricKey = await generateKeyFromPassword(communityPublicKey)
 
     const wakuMessageGenerator = this.waku.store.queryGenerator([
-      createDecoder(contentTopic, symmetricKey, {
-        clusterId: 16,
-        shard: 32,
-      }),
+      createDecoder(
+        contentTopic,
+        {
+          clusterId: 16,
+          shardId: 32,
+          pubsubTopic: '/waku/2/rs/16/32',
+        },
+        symmetricKey,
+      ),
     ])
     for await (const wakuMessages of wakuMessageGenerator) {
       for await (const wakuMessage of wakuMessages) {
@@ -236,7 +248,8 @@ class RequestClient {
         }
 
         // decode
-        const decodedCommunityDescription = CommunityDescription.fromBinary(
+        const decodedCommunityDescription = fromBinary(
+          CommunityDescriptionSchema,
           message.payload,
         )
 
@@ -309,10 +322,15 @@ class RequestClient {
     )
 
     const wakuMessageGenerator = this.waku.store.queryGenerator([
-      createDecoder(contentTopic, symmetricKey, {
-        clusterId: 16,
-        shard: 32,
-      }),
+      createDecoder(
+        contentTopic,
+        {
+          clusterId: 16,
+          shardId: 32,
+          pubsubTopic: '/waku/2/rs/16/32',
+        },
+        symmetricKey,
+      ),
     ])
     for await (const wakuMessages of wakuMessageGenerator) {
       for await (const wakuMessage of wakuMessages) {
@@ -335,7 +353,8 @@ class RequestClient {
         }
 
         // decode
-        const decodedContactCode = ContactCodeAdvertisement.fromBinary(
+        const decodedContactCode = fromBinary(
+          ContactCodeAdvertisementSchema,
           message.payload,
         )
 
@@ -390,7 +409,7 @@ class RequestClient {
     let messageToDecode = wakuMessage.payload // default
 
     try {
-      const decodedSegment = SegmentMessage.fromBinary(messageToDecode)
+      const decodedSegment = fromBinary(SegmentMessageSchema, messageToDecode)
 
       if (decodedSegment) {
         const unsegmentedMessageHash = bytesToHex(
@@ -439,7 +458,7 @@ class RequestClient {
 
     let decodedProtocol
     try {
-      decodedProtocol = ProtocolMessage.fromBinary(messageToDecode)
+      decodedProtocol = fromBinary(ProtocolMessageSchema, messageToDecode)
 
       if (decodedProtocol.encryptedMessage.none) {
         messageToDecode = decodedProtocol.encryptedMessage.none.payload
@@ -451,7 +470,10 @@ class RequestClient {
 
     let decodedMetadata
     try {
-      decodedMetadata = ApplicationMetadataMessage.fromBinary(messageToDecode)
+      decodedMetadata = fromBinary(
+        ApplicationMetadataMessageSchema,
+        messageToDecode,
+      )
     } catch {
       return
     }

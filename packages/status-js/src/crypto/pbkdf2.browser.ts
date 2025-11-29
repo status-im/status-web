@@ -10,7 +10,7 @@ export const pbkdf2: PBKDF2 = async (
 ): Promise<Uint8Array> => {
   const cryptoKey = await window.crypto.subtle.importKey(
     'raw',
-    password,
+    new Uint8Array(password),
     { name: 'PBKDF2' },
     false,
     ['deriveBits'],
@@ -19,7 +19,7 @@ export const pbkdf2: PBKDF2 = async (
   const derivedKey = await window.crypto.subtle.deriveBits(
     {
       name: 'PBKDF2',
-      salt,
+      salt: new Uint8Array(salt),
       iterations,
       hash: {
         name: 'SHA-256',

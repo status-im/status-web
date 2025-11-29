@@ -1,15 +1,18 @@
-import { PageDirection } from '@waku/interfaces'
+import { create, toBinary } from '@bufbuild/protobuf'
 import { createDecoder } from '@waku/message-encryption/symmetric'
 
 import { containsOnlyEmoji } from '../helpers/contains-only-emoji'
 import { ApplicationMetadataMessage_Type } from '../protos/application-metadata-message_pb'
 import {
-  ChatMessage as ChatMessageProto,
   ChatMessage_ContentType,
-  DeleteMessage,
-  EditMessage,
+  ChatMessageSchema,
+  DeleteMessageSchema,
+  EditMessageSchema,
 } from '../protos/chat-message_pb'
-import { EmojiReaction, EmojiReaction_Type } from '../protos/emoji-reaction_pb'
+import {
+  EmojiReaction_Type,
+  EmojiReactionSchema,
+} from '../protos/emoji-reaction_pb'
 import { MessageType } from '../protos/enums_pb'
 import { createChannelURLWithChatKey } from '../utils/create-url'
 import { generateKeyFromPassword } from '../utils/generate-key-from-password'
@@ -17,19 +20,20 @@ import { getNextClock } from '../utils/get-next-clock'
 import { idToContentTopic } from '../utils/id-to-content-topic'
 import { getReactions } from './community/get-reactions'
 
-import type { ImageMessage } from '../protos/chat-message_pb'
-import type { CommunityChat as CommunityChatProto } from '../protos/communities_pb'
+import type {
+  ChatMessage as ChatMessageProto,
+  ImageMessage,
+} from '../protos/chat-message_pb'
+import type { CommunityChat } from '../protos/communities_pb'
+import type { EmojiReaction } from '../protos/emoji-reaction_pb'
 import type { Client } from './client'
 import type { Community } from './community/community'
 import type { Reactions } from './community/get-reactions'
 import type { Member } from './member'
-import type { PlainMessage } from '@bufbuild/protobuf'
 
 export { ChatMessage_ContentType as ChatMessageContentType } from '../protos/chat-message_pb'
 
-export type CommunityChat = PlainMessage<CommunityChatProto>
-
-export type ChatMessage = PlainMessage<ChatMessageProto> & {
+export type ChatMessage = ChatMessageProto & {
   messageId: string
   pinned: boolean
   reactions: Reactions
@@ -209,10 +213,15 @@ export class Chat {
 
     await this.client.waku.store.queryWithOrderedCallback(
       [
-        createDecoder(this.contentTopic, this.symmetricKey, {
-          clusterId: 16,
-          shard: 32,
-        }),
+        createDecoder(
+          this.contentTopic,
+          {
+            clusterId: 16,
+            shardId: 32,
+            pubsubTopic: '/waku/2/rs/16/32',
+          },
+          this.symmetricKey,
+        ),
       ],
       wakuMessage => {
         this.#fetchingMessages = true
@@ -220,13 +229,11 @@ export class Chat {
         this.#fetchingMessages = false
       },
       {
-        timeFilter: {
-          startTime: startTime,
-          endTime: endTime,
-        },
-        pageSize: 50,
+        timeStart: startTime,
+        timeEnd: endTime,
+        paginationLimit: 50,
         // most recent page first
-        pageDirection: PageDirection.BACKWARD,
+        paginationForward: false,
       },
     )
 
@@ -472,18 +479,21 @@ export class Chat {
       : ChatMessage_ContentType.TEXT_PLAIN
 
     // TODO: protos does not support optional fields :-(
-    const payload = new ChatMessageProto({
-      clock: this.setClock(this.#clock),
-      timestamp: BigInt(Date.now()),
-      text,
-      responseTo: responseTo ?? '',
-      ensName: '',
-      chatId: this.id,
-      contentType: type,
-      messageType: MessageType.COMMUNITY_CHAT,
-      grant: new Uint8Array([]),
-      displayName: '',
-    }).toBinary()
+    const payload = toBinary(
+      ChatMessageSchema,
+      create(ChatMessageSchema, {
+        clock: this.setClock(this.#clock),
+        timestamp: BigInt(Date.now()),
+        text,
+        responseTo: responseTo ?? '',
+        ensName: '',
+        chatId: this.id,
+        contentType: type,
+        messageType: MessageType.COMMUNITY_CHAT,
+        grant: new Uint8Array([]),
+        displayName: '',
+      }),
+    )
 
     await this.client.sendWakuMessage(
       ApplicationMetadataMessage_Type.CHAT_MESSAGE,
@@ -494,25 +504,28 @@ export class Chat {
   }
 
   public sendImageMessage = async (image: ImageMessage) => {
-    const payload = new ChatMessageProto({
-      clock: this.setClock(this.#clock),
-      timestamp: BigInt(Date.now()),
-      text: '',
-      responseTo: '',
-      ensName: '',
-      chatId: this.id,
-      messageType: MessageType.COMMUNITY_CHAT,
-      contentType: ChatMessage_ContentType.IMAGE,
-      payload: {
-        case: 'image',
-        value: {
-          format: image.format,
-          payload: image.payload,
+    const payload = toBinary(
+      ChatMessageSchema,
+      create(ChatMessageSchema, {
+        clock: this.setClock(this.#clock),
+        timestamp: BigInt(Date.now()),
+        text: '',
+        responseTo: '',
+        ensName: '',
+        chatId: this.id,
+        messageType: MessageType.COMMUNITY_CHAT,
+        contentType: ChatMessage_ContentType.IMAGE,
+        payload: {
+          case: 'image',
+          value: {
+            format: image.format,
+            payload: image.payload,
+          },
         },
-      },
-      grant: new Uint8Array([]),
-      displayName: '',
-    }).toBinary()
+        grant: new Uint8Array([]),
+        displayName: '',
+      }),
+    )
 
     await this.client.sendWakuMessage(
       ApplicationMetadataMessage_Type.CHAT_MESSAGE,
@@ -541,14 +554,17 @@ export class Chat {
       throw new Error('Text message cannot be empty')
     }
 
-    const payload = new EditMessage({
-      clock: this.setClock(this.#clock),
-      text,
-      messageId,
-      chatId: this.id,
-      grant: new Uint8Array([]),
-      messageType: MessageType.COMMUNITY_CHAT,
-    }).toBinary()
+    const payload = toBinary(
+      EditMessageSchema,
+      create(EditMessageSchema, {
+        clock: this.setClock(this.#clock),
+        text,
+        messageId,
+        chatId: this.id,
+        grant: new Uint8Array([]),
+        messageType: MessageType.COMMUNITY_CHAT,
+      }),
+    )
 
     await this.client.sendWakuMessage(
       ApplicationMetadataMessage_Type.EDIT_MESSAGE,
@@ -575,13 +591,16 @@ export class Chat {
       throw new Error('Text message can only be deleted by its author')
     }
 
-    const payload = new DeleteMessage({
-      clock: this.setClock(this.#clock),
-      messageId,
-      chatId: this.id,
-      grant: new Uint8Array([]),
-      messageType: MessageType.COMMUNITY_CHAT,
-    }).toBinary()
+    const payload = toBinary(
+      DeleteMessageSchema,
+      create(DeleteMessageSchema, {
+        clock: this.setClock(this.#clock),
+        messageId,
+        chatId: this.id,
+        grant: new Uint8Array([]),
+        messageType: MessageType.COMMUNITY_CHAT,
+      }),
+    )
 
     await this.client.sendWakuMessage(
       ApplicationMetadataMessage_Type.DELETE_MESSAGE,
@@ -609,15 +628,18 @@ export class Chat {
       `0x${this.client.account.publicKey}`,
     )
 
-    const payload = new EmojiReaction({
-      clock: this.setClock(this.#clock),
-      chatId: this.id,
-      messageType: MessageType.COMMUNITY_CHAT,
-      messageId,
-      type: EmojiReaction_Type[reaction],
-      retracted,
-      grant: new Uint8Array([]),
-    }).toBinary()
+    const payload = toBinary(
+      EmojiReactionSchema,
+      create(EmojiReactionSchema, {
+        clock: this.setClock(this.#clock),
+        chatId: this.id,
+        messageType: MessageType.COMMUNITY_CHAT,
+        messageId,
+        type: EmojiReaction_Type[reaction],
+        retracted,
+        grant: new Uint8Array([]),
+      }),
+    )
 
     await this.client.sendWakuMessage(
       ApplicationMetadataMessage_Type.EMOJI_REACTION,

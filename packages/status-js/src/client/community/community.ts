@@ -1,10 +1,11 @@
+import { create, toBinary } from '@bufbuild/protobuf'
 import { createDecoder } from '@waku/message-encryption/symmetric'
 import { hexToBytes } from 'ethereum-cryptography/utils'
 
 import { getDifferenceByKeys } from '../../helpers/get-difference-by-keys'
 import { getObjectsDifference } from '../../helpers/get-objects-difference'
 import { ApplicationMetadataMessage_Type } from '../../protos/application-metadata-message_pb'
-import { CommunityRequestToJoin } from '../../protos/communities_pb'
+import { CommunityRequestToJoinSchema } from '../../protos/communities_pb'
 import { MessageType } from '../../protos/enums_pb'
 import { compressPublicKey } from '../../utils/compress-public-key'
 import { createCommunityURLWithChatKey } from '../../utils/create-url'
@@ -15,12 +16,11 @@ import { serializePublicKey } from '../../utils/serialize-public-key'
 import { Chat } from '../chat'
 import { Member } from '../member'
 
-import type { CommunityDescription as CommunityDescriptionProto } from '../../protos/communities_pb'
-import type { CommunityChat } from '../chat'
+import type {
+  CommunityChat,
+  CommunityDescription,
+} from '../../protos/communities_pb'
 import type { Client } from '../client'
-import type { PlainMessage } from '@bufbuild/protobuf'
-
-type CommunityDescription = PlainMessage<CommunityDescriptionProto>
 
 export class Community {
   private client: Client
@@ -95,10 +95,15 @@ export class Community {
     // most recent page first
     await this.client.waku.store.queryWithOrderedCallback(
       [
-        createDecoder(this.contentTopic, this.symmetricKey, {
-          clusterId: 16,
-          shard: 32,
-        }),
+        createDecoder(
+          this.contentTopic,
+          {
+            clusterId: 16,
+            shardId: 32,
+            pubsubTopic: '/waku/2/rs/16/32',
+          },
+          this.symmetricKey,
+        ),
       ],
       wakuMessage => {
         this.client.handleWakuMessage(wakuMessage)
@@ -115,10 +120,15 @@ export class Community {
   private observe = async () => {
     await this.client.waku.filter.subscribe(
       [
-        createDecoder(this.contentTopic, this.symmetricKey, {
-          clusterId: 16,
-          shard: 32,
-        }),
+        createDecoder(
+          this.contentTopic,
+          {
+            clusterId: 16,
+            shardId: 32,
+            pubsubTopic: '/waku/2/rs/16/32',
+          },
+          this.symmetricKey,
+        ),
       ],
       this.client.handleWakuMessage,
     )
@@ -139,15 +149,24 @@ export class Community {
 
         this.chats.set(chatUuid, chat)
 
-        const unobserveFn = await this.client.waku.filter.subscribe(
-          [
-            createDecoder(chat.contentTopic, chat.symmetricKey, {
-              clusterId: 16,
-              shard: 32,
-            }),
-          ],
+        const decoder = createDecoder(
+          chat.contentTopic,
+          {
+            clusterId: 16,
+            shardId: 32,
+            pubsubTopic: '/waku/2/rs/16/32',
+          },
+          chat.symmetricKey,
+        )
+
+        await this.client.waku.filter.subscribe(
+          [decoder],
           this.client.handleWakuMessage,
         )
+
+        const unobserveFn = () => {
+          this.client.waku.filter.unsubscribe([decoder])
+        }
 
         this.#chatUnobserveFns.set(chat.contentTopic, unobserveFn)
       },
@@ -264,12 +283,15 @@ export class Community {
   }
 
   public requestToJoin = async (chatId = '') => {
-    const payload = new CommunityRequestToJoin({
-      clock: this.setClock(this.#clock),
-      chatId,
-      communityId: hexToBytes(this.id),
-      ensName: '',
-    }).toBinary()
+    const payload = toBinary(
+      CommunityRequestToJoinSchema,
+      create(CommunityRequestToJoinSchema, {
+        clock: this.setClock(this.#clock),
+        chatId,
+        communityId: new Uint8Array(hexToBytes(this.id)),
+        ensName: '',
+      }),
+    )
 
     await this.client.sendWakuMessage(
       ApplicationMetadataMessage_Type.COMMUNITY_REQUEST_TO_JOIN,

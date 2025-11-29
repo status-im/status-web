@@ -4,7 +4,7 @@
 import './src/config/env.server.mjs'
 import './src/config/env.client.mjs'
 
-import { withContentlayer } from 'next-contentlayer'
+import { withContentlayer } from 'next-contentlayer2'
 // eslint-disable-next-line import/no-unresolved
 import withVercelToolbar from '@vercel/toolbar/plugins/next'
 
