@@ -47,12 +47,12 @@ export async function getMilestones() {
       _or: [
         {
           repository: {
-            _eq: 'status-im/status-mobile',
+            _eq: 'status-im/status-legacy',
           },
         },
         {
           repository: {
-            _eq: 'status-im/status-desktop',
+            _eq: 'status-im/status-app',
           },
         },
       ],

@@ -19,7 +19,7 @@ const mapGitHubMilestoneToRelease = (milestone: GitHubMilestone) => ({
   description: milestone.description,
   dueOn: milestone.due_on,
   url: milestone.html_url,
-  platform: (milestone.repository === 'status-im/status-desktop'
+  platform: (milestone.repository === 'status-im/status-app'
     ? 'desktop'
     : 'mobile') as ReleasePlatform,
 })

@@ -9,7 +9,7 @@ export const MESSARI_URL = 'https://messari.io/asset/status'
 export const KEYCARD_STORE_URL = 'https://keycard.tech?buyKeycard=true'
 
 export const STATUS_DESKTOP_REPO_ISSUES_URL =
-  'https://github.com/status-im/status-desktop/issues/new?assignees=&labels=bug&projects=&template=bug.md'
+  'https://github.com/status-im/status-app/issues/new?assignees=&labels=bug&projects=&template=bug.md'
 export const STATUS_DESKTOP_DOWNLOAD_URL_MACOS_SILICON =
   '/api/download/macos-silicon'
 export const STATUS_DESKTOP_DOWNLOAD_URL_MACOS_INTEL =
@@ -33,7 +33,7 @@ export const STATUS_PORTFOLIO_WALLET_CHROME_URL =
 
 // https://vercel.live/link/status-website-git-desktop-app-focus-status-im-web.vercel.app?page=%2F%3FvercelThreadId%3DfrG-m&via=in-app-copy-link&p=1
 export const LEARN_MORE_MOBILE_APP_URL =
-  'https://github.com/status-im/status-desktop/issues/18082'
+  'https://github.com/status-im/status-app/issues/18082'
 
 export const ROUTES = {
   Apps: [

@@ -25,7 +25,7 @@ export class DesktopClient {
     this.#rpcClient?.destroy()
     this.#rpcClient = null
 
-    // todo: publish disconnect message/event after https://github.com/status-im/status-desktop/issues/16014
+    // todo: publish disconnect message/event after https://github.com/status-im/status-app/issues/16014
   }
 
   public async send(args: DesktopRequestArguments) {
