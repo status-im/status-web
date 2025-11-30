@@ -198,18 +198,20 @@ export default function StakePage() {
 
   return (
     <HubLayout>
-      <div className="mx-auto flex size-full flex-col gap-8 p-8">
+      <div className="mx-auto flex size-full flex-col gap-8 p-4 md:p-8">
         <header className="flex flex-col gap-2">
-          <h1 className="text-40 font-bold">Stake SNT, receive good Karma</h1>
-          <p className="text-19">
+          <h1 className="text-27 font-bold md:text-40">
+            Stake SNT, receive good Karma
+          </h1>
+          <p className="text-13 md:text-19">
             Stake SNT to increase your Karma, unlock more gasless transactions
             and increase your power over the network
           </p>
         </header>
 
-        <section className="rounded-8 bg-neutral-2.5 p-8">
-          <div className="flex flex-col gap-8">
-            <div className="flex flex-col gap-8 rounded-32 border border-neutral-10 bg-white-100 p-6 shadow-2 md:flex-row md:items-center md:justify-between md:p-8">
+        <section className="rounded-8 md:bg-neutral-2.5 md:p-8">
+          <div className="flex flex-col gap-4 md:gap-8">
+            <div className="flex flex-col gap-4 rounded-16 border border-neutral-10 bg-white-100 p-4 shadow-2 md:flex-row md:items-center md:justify-between md:gap-8 md:rounded-32 md:p-8">
               <div className="flex items-start gap-4 md:gap-6">
                 <div className="relative h-[88px]">
                   <Image
@@ -248,7 +250,7 @@ export default function StakePage() {
               </div>
 
               <Button
-                className="self-end"
+                className="w-full justify-center md:w-auto md:self-end"
                 disabled={
                   !isConnected ||
                   hasReachedDailyLimit ||
@@ -272,10 +274,10 @@ export default function StakePage() {
               </Button>
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,1fr)]">
+            <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,1fr)]">
               <form
                 onSubmit={form.handleSubmit(handleSubmit)}
-                className="flex flex-col gap-4 rounded-32 border border-neutral-10 bg-white-100 p-6 shadow-2 md:p-8"
+                className="flex flex-col gap-4 rounded-16 border border-neutral-10 bg-white-100 p-4 shadow-2 md:rounded-32 md:p-8"
               >
                 <div className="flex flex-1 flex-col gap-4">
                   <div
@@ -435,7 +437,7 @@ export default function StakePage() {
 
               <div className="flex flex-col gap-[18px]">
                 {!emergencyModeEnabled && (
-                  <div className="rounded-32 border border-neutral-10 bg-white-100 p-8 shadow-2">
+                  <div className="rounded-16 border border-neutral-10 bg-white-100 p-4 shadow-2 md:rounded-32 md:p-8">
                     <div className="mb-2 flex items-start justify-between">
                       <p className="text-13 font-500 text-neutral-60">
                         Total staked
@@ -456,7 +458,7 @@ export default function StakePage() {
                   </div>
                 )}
 
-                <div className="rounded-32 border border-neutral-10 bg-white-100 p-8 shadow-2">
+                <div className="rounded-16 border border-neutral-10 bg-white-100 p-4 shadow-2 md:rounded-32 md:p-8">
                   <div className="mb-2 flex items-start justify-between">
                     <p className="text-13 font-500 text-neutral-60">
                       Weighted aggregated boost
@@ -469,7 +471,7 @@ export default function StakePage() {
                       {weightedBoost.formatted}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col items-center justify-between gap-2 md:flex-row md:items-center md:justify-between">
                     <span className="text-13 font-500 text-neutral-40">
                       {messageMultiplierPoints}
                     </span>
@@ -481,6 +483,7 @@ export default function StakePage() {
                       variant="primary"
                       size="40"
                       onClick={() => compoundMultiplierPoints()}
+                      className="w-full justify-center md:w-auto"
                     >
                       Compound
                     </Button>
