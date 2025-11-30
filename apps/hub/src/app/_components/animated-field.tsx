@@ -129,7 +129,13 @@ const AnimatedField = () => {
   ]
 
   return (
-    <motion.div ref={ref} initial="hidden" animate="visible" style={{ y }}>
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate="visible"
+      style={{ y }}
+      className="hidden md:block"
+    >
       {coins.map((coin, i) => {
         return (
           <AnimatedElement

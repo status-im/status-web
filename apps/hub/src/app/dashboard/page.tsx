@@ -18,7 +18,7 @@ import { Hero } from '../_components/hero'
 export default function DashboardPage() {
   return (
     <HubLayout>
-      <div className="flex flex-col px-6 py-8">
+      <div className="flex flex-col p-4 lg:px-6 lg:py-8">
         {/* Hero Section */}
         <Hero />
 

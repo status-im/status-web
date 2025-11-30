@@ -5,8 +5,8 @@ import { AnimatedField } from './animated-field'
 const Hero = () => {
   return (
     <section className="relative z-20 mx-auto mt-0 w-full max-w-[1176px]">
-      <div className="relative min-h-[682px] rounded-32">
-        <div className="absolute inset-0 flex justify-center overflow-hidden rounded-32 bg-sea">
+      <div className="relative min-h-[240px] md:rounded-32 lg:min-h-[682px]">
+        <div className="absolute inset-0 flex justify-center overflow-hidden rounded-16 bg-sea lg:rounded-32">
           <Image
             src="/hero/landscape.png"
             alt="Landscape"
@@ -19,13 +19,13 @@ const Hero = () => {
 
         <AnimatedField />
 
-        <div className="relative p-12">
+        <div className="relative px-4 py-[14px] md:p-12">
           <div className="flex flex-col items-start text-left text-white-100">
-            <h1 className="mb-5 text-56 font-600 lg:text-64">
+            <h1 className="mb-1 text-19 font-600 md:mb-5 md:text-56 lg:text-64">
               Get started <br /> on the free network
             </h1>
 
-            <p className="mb-8 max-w-[558px] text-19 text-white-90 sm:text-27">
+            <p className="mb-8 max-w-[180px] text-13 text-white-90 md:max-w-[558px] md:text-19 lg:text-27">
               Try apps and deposit assets to earn Karma
             </p>
           </div>
