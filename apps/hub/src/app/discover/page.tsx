@@ -35,15 +35,15 @@ export default function DiscoverPage() {
 
   return (
     <HubLayout>
-      <div className="flex flex-col p-8">
+      <div className="flex flex-col p-4 lg:p-8">
         {/* Main Content */}
-        <div className="mx-auto mt-6 flex w-full max-w-[1176px] flex-col gap-8">
+        <div className="mx-auto mt-6 flex w-full max-w-[1176px] flex-col gap-4 md:gap-8">
           {/* Hero Section */}
           <div className="flex flex-col gap-2">
-            <h1 className="text-40 font-bold text-neutral-90">
+            <h1 className="text-27 font-bold text-neutral-90 lg:text-40">
               Gasless apps FTW
             </h1>
-            <p className="text-19 text-neutral-60">
+            <p className="text-13 text-neutral-60 lg:text-19">
               Explore curated dApps and services built on Status Network
             </p>
           </div>
@@ -51,7 +51,9 @@ export default function DiscoverPage() {
           {/* Featured Section */}
           <div className="flex flex-col gap-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-27 font-600 text-neutral-100">Featured</h2>
+              <h2 className="text-19 font-600 text-neutral-100 lg:text-27">
+                Featured
+              </h2>
               <ButtonLink
                 variant="white"
                 size="32"
@@ -62,7 +64,7 @@ export default function DiscoverPage() {
             </div>
 
             {/* Featured Apps Grid */}
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-3">
               {featuredApps.map(app => (
                 <AppCard key={app.id} {...app} />
               ))}
@@ -71,8 +73,8 @@ export default function DiscoverPage() {
 
           <div className="">
             {/* Header with Title and Sorting Options */}
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-27 font-600 text-neutral-100">
+            <div className="mb-6 flex flex-col items-start justify-between gap-5 md:flex-row md:items-center md:gap-0">
+              <h2 className="text-19 font-600 text-neutral-100 lg:text-27">
                 {activeTab === 'popular'
                   ? 'Popular Apps'
                   : activeTab === 'new'
