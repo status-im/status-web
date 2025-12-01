@@ -1,10 +1,7 @@
 'use client'
 
 import { ExternalIcon } from '@status-im/icons/20'
-import {
-  // ButtonLink,
-  Link,
-} from '@status-im/status-network/components'
+import { ButtonLink } from '@status-im/status-network/components'
 import Image from 'next/image'
 
 import { HubLayout } from '~components/hub-layout'
@@ -12,8 +9,6 @@ import { HubLayout } from '~components/hub-layout'
 // import { VaultCard } from '~components/vault-card'
 import { Apps } from '../_components/apps'
 import { Hero } from '../_components/hero'
-
-// const REWARDS = ['karma', 'linea', 'snt']
 
 export default function DashboardPage() {
   return (
@@ -102,36 +97,38 @@ export default function DashboardPage() {
           <Apps />
         </div>
 
-        <div className="py-12">
-          <div className="flex flex-col items-center gap-8 lg:flex-row lg:items-center lg:justify-center">
-            <div className="max-w-2xl">
-              <h3 className="mb-3 text-64 font-bold text-neutral-90">
+        <div className="pb-8 pt-4 lg:py-12">
+          <div className="flex flex-col items-center justify-center gap-8 text-center lg:flex-row lg:items-center lg:justify-center lg:text-left">
+            <div className="order-2 max-w-2xl lg:order-1">
+              <h3 className="mb-2 text-27 font-medium text-neutral-90 lg:mb-3 lg:text-64 lg:font-bold">
                 Build with us
               </h3>
-              <p className="mb-8 text-27 font-medium text-neutral-60">
+              <p className="mb-4 text-13 font-medium text-neutral-60 lg:mb-8 lg:text-27">
                 Launch your app on the free network
               </p>
 
-              <div className="flex flex-wrap gap-3">
-                <Link
+              <div className="flex flex-wrap justify-center gap-3 lg:justify-start">
+                <ButtonLink
                   href="https://docs.status.network"
-                  className="inline-flex items-center gap-2 rounded-12 bg-purple px-5 py-3 text-15 font-600 text-white-100 transition-colors hover:bg-purple-dark"
+                  variant="primary"
+                  size="32"
                 >
-                  Explore documentation
+                  Read docs
                   <ExternalIcon className="text-blur-white/70" />
-                </Link>
+                </ButtonLink>
 
-                <Link
+                <ButtonLink
                   href="https://statusnetwork.typeform.com/partner"
-                  className="inline-flex items-center gap-2 rounded-12 bg-neutral-10 px-5 py-3 text-15 font-600 text-neutral-90 ring-1 ring-inset ring-neutral-20 transition-colors hover:bg-neutral-80/20"
+                  variant="grey"
+                  size="32"
                 >
                   Submit an app
                   <ExternalIcon className="text-neutral-50" />
-                </Link>
+                </ButtonLink>
               </div>
             </div>
 
-            <div className="relative w-full max-w-[420px]">
+            <div className="relative order-1 w-full max-w-[420px] lg:order-4">
               <Image
                 src="/build-unicorn.png"
                 alt="Unicorn"
