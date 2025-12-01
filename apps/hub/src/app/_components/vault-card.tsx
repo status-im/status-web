@@ -27,7 +27,7 @@ const VaultCard: FC<Props> = ({ vault, onDeposit }: Props) => {
           <div className="relative">
             <Image
               className="flex size-10 items-center justify-center rounded-full bg-purple"
-              src={`/vaults/${icon}.png`}
+              src={`/vaults/${icon.toLowerCase()}.png`}
               alt={icon}
               width="56"
               height="56"

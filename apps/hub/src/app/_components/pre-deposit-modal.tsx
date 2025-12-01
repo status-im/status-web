@@ -247,7 +247,7 @@ const PreDepositModal = ({
                     >
                       <div className="flex items-center justify-center gap-2">
                         <Image
-                          src={`/vaults/${vault?.icon}.png`}
+                          src={`/vaults/${vault?.icon.toLowerCase()}.png`}
                           alt={vault?.icon}
                           width="20"
                           height="20"
@@ -267,7 +267,7 @@ const PreDepositModal = ({
                           label={`${v.token.name}, ${v.token.symbol}`}
                           selected={v.id === vault.id}
                           onSelect={() => setActiveVault(v)}
-                          icon={v.icon}
+                          icon={v.icon.toLowerCase()}
                         />
                       ))}
                     </DropdownMenu.Content>

@@ -9,14 +9,14 @@ export function VaultImage({ token, vault }: VaultImageType) {
   return (
     <div className="relative size-8">
       <Image
-        src={`/tokens/${vault}.png`}
+        src={`/tokens/${vault.toLowerCase()}.png`}
         alt={vault}
         width="64"
         height="64"
         quality="100"
       />
       <Image
-        src={`/vaults/${token}.png`}
+        src={`/vaults/${token.toLowerCase()}.png`}
         alt={token}
         width="24"
         height="24"
