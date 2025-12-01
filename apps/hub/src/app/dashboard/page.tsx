@@ -41,7 +41,7 @@ export default function DashboardPage() {
                     {REWARDS.map((reward, index) => (
                       <Image
                         key={index}
-                        src={`/tokens/${reward}.png`}
+                        src={`/tokens/${reward.toLowerCase()}.png`}
                         alt={reward}
                         width="22"
                         height="22"
