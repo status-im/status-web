@@ -128,27 +128,78 @@ const AnimatedField = () => {
     },
   ]
 
+  // Mobile/tablet static elements (subset, scaled positions)
+  const mobileCoins = [
+    {
+      src: '/hero/waifu.png',
+      className:
+        'right-0 top-[10%] max-w-[100px] md:max-w-[180px] !aspect-[500/754]',
+    },
+    {
+      src: '/hero/key.png',
+      className: 'left-[28%] top-[55%] max-w-[40px] md:max-w-[80px]',
+    },
+    {
+      src: '/coins/coin-1.png',
+      className: 'left-[15%] top-[62%] max-w-[10px] md:max-w-[18px]',
+    },
+    {
+      src: '/coins/coin-2.png',
+      className: 'left-[20%] top-[70%] max-w-[14px] md:max-w-[24px]',
+    },
+    {
+      src: '/coins/coin-3.png',
+      className: 'left-[17%] top-[78%] max-w-[18px] md:max-w-[35px]',
+    },
+    {
+      src: '/coins/coin-5.png',
+      className: 'left-[32%] top-[50%] max-w-[16px] md:max-w-[30px]',
+    },
+    {
+      src: '/coins/coin-9.png',
+      className: 'left-[45%] top-[85%] max-w-[20px] md:max-w-[40px]',
+    },
+  ]
+
   return (
-    <motion.div
-      ref={ref}
-      initial="hidden"
-      animate="visible"
-      style={{ y }}
-      className="hidden md:block"
-    >
-      {coins.map((coin, i) => {
-        return (
-          <AnimatedElement
+    <>
+      {/* Mobile/Tablet - static positioned elements */}
+      <div className="lg:hidden">
+        {mobileCoins.map((coin, i) => (
+          <div
             key={i}
-            y={coin.y}
-            delay={coin.delay}
-            parallaxSpeed={coin.speed}
-            src={coin.src}
-            className={coin.className}
+            className={`absolute aspect-square w-full ${coin.className}`}
+            style={{
+              backgroundImage: `url(${coin.src})`,
+              backgroundSize: 'contain',
+              backgroundRepeat: 'no-repeat',
+            }}
           />
-        )
-      })}
-    </motion.div>
+        ))}
+      </div>
+
+      {/* Desktop - original animated elements */}
+      <motion.div
+        ref={ref}
+        initial="hidden"
+        animate="visible"
+        style={{ y }}
+        className="hidden lg:block"
+      >
+        {coins.map((coin, i) => {
+          return (
+            <AnimatedElement
+              key={i}
+              y={coin.y}
+              delay={coin.delay}
+              parallaxSpeed={coin.speed}
+              src={coin.src}
+              className={coin.className}
+            />
+          )
+        })}
+      </motion.div>
+    </>
   )
 }
 

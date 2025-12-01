@@ -5,15 +5,14 @@ import { AnimatedField } from './animated-field'
 const Hero = () => {
   return (
     <section className="relative z-20 mx-auto mt-0 w-full max-w-[1176px]">
-      <div className="relative min-h-[240px] md:rounded-32 lg:min-h-[682px]">
-        <div className="absolute inset-0 flex justify-center overflow-hidden rounded-16 bg-sea lg:rounded-32">
+      <div className="relative min-h-[240px] md:min-h-[450px] md:rounded-32 lg:min-h-[682px]">
+        <div className="absolute inset-0 overflow-hidden rounded-16 bg-sea lg:rounded-32">
           <Image
             src="/hero/landscape.png"
             alt="Landscape"
-            className="mx-auto h-full w-[1512px] max-w-fit rounded-32 object-cover"
+            className="size-full object-cover"
             priority
-            width={1400}
-            height={486}
+            fill
           />
         </div>
 
