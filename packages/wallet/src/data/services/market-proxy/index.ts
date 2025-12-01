@@ -9,6 +9,7 @@
 // import 'server-only'
 
 import { serverEnv } from '../../../config/env.server.mjs'
+import erc20TokenList from '../../../constants/erc20.json'
 import { markApiKeyAsRateLimited } from '../api-key-rotation'
 
 import type {
@@ -304,7 +305,7 @@ export async function fetchTokenMetadata(
   revalidate: Revalidation = MARKET_PROXY_REVALIDATION_TIMES.TOKEN_METADATA,
 ) {
   const coinId = await _getCoinIdFromSymbol(symbol)
-  if (!coinId || coinId.toLowerCase() === symbol.toLowerCase()) {
+  if (!coinId) {
     throw new Error(`Coin not found for symbol: ${symbol}`)
   }
 
@@ -633,19 +634,121 @@ export async function fetchTokensPriceForDate(
 }
 
 // Cache for coin list to avoid repeated API calls
-let coinListCache: Array<{ id: string; symbol: string; name: string }> | null =
-  null
+let coinListCache: Array<{
+  id: string
+  symbol: string
+  name: string
+  platforms?: Record<string, string>
+}> | null = null
 let coinListCacheTime = 0
 const COIN_LIST_CACHE_TTL = 3600 * 1000 // 1 hour
 
 /**
  * Helper function to get coin id from symbol
+ * For DEFAULT_TOKEN_SYMBOLS, uses erc20.json address to find coin ID via contract API
  */
 export async function _getCoinIdFromSymbol(
   symbol: string,
 ): Promise<string | null> {
+  // Try to get coin ID from contract address for DEFAULT_TOKEN_SYMBOLS
+  const coinIdFromAddress = await _getCoinIdFromAddress(symbol)
+  if (coinIdFromAddress) {
+    return coinIdFromAddress
+  }
+
+  // Fallback to symbol-based lookup
   const coinIdMap = await _getCoinIdsFromSymbols([symbol])
   return coinIdMap[symbol.toLowerCase()] || null
+}
+
+/**
+ * Helper function to get coin ID from contract address for DEFAULT_TOKEN_SYMBOLS
+ * Uses coin list to find coin ID by matching contract address
+ */
+async function _getCoinIdFromAddress(symbol: string): Promise<string | null> {
+  try {
+    if (!erc20TokenList?.tokens) {
+      return null
+    }
+
+    // Find token in erc20.json by symbol and chainId 1 (ethereum)
+    const token = erc20TokenList.tokens.find(
+      t => t.symbol.toUpperCase() === symbol.toUpperCase() && t.chainId === 1,
+    )
+
+    if (!token?.address) {
+      return null
+    }
+
+    // Get coin list and find coin ID by contract address
+    const coinList = await _getCoinList()
+    const normalizedAddress = token.address.toLowerCase()
+
+    // Find coin where platforms.ethereum matches the address
+    const coin = coinList.find(
+      c => c.platforms?.['ethereum']?.toLowerCase() === normalizedAddress,
+    )
+
+    if (!coin?.id) {
+      return null
+    }
+
+    return coin.id
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Helper function to get coin list with platforms data
+ */
+async function _getCoinList(): Promise<
+  Array<{
+    id: string
+    symbol?: string
+    name?: string
+    platforms?: Record<string, string>
+  }>
+> {
+  const now = Date.now()
+
+  // Use cache if available and not expired
+  if (
+    coinListCache &&
+    coinListCacheTime > 0 &&
+    now - coinListCacheTime < COIN_LIST_CACHE_TTL
+  ) {
+    return coinListCache as Array<{
+      id: string
+      symbol?: string
+      name?: string
+      platforms?: Record<string, string>
+    }>
+  }
+
+  // Fetch coin list with platforms data
+  const url = new URL(`${PROXY_BASE_URL}/v1/coins/list`)
+  url.searchParams.set('include_platform', 'true')
+
+  const coinList = await _fetchWithAuth<
+    Array<{
+      id: string
+      symbol?: string
+      name?: string
+      platforms?: Record<string, string>
+    }>
+  >(url, MARKET_PROXY_REVALIDATION_TIMES.TOKEN_METADATA, 'coinList')
+
+  // Update cache
+  coinListCache = coinList as Array<{
+    id: string
+    symbol: string
+    name: string
+    platforms?: Record<string, string>
+  }>
+  coinListCacheTime = now
+
+  return coinList
 }
 
 /**
@@ -704,12 +807,18 @@ async function _getCoinIdsFromSymbols(
     return _mapSymbolsToCoinIds(symbols, coinListCache)
   }
 
-  // Fetch coin list
+  // Fetch coin list with platforms data
   const url = new URL(`${PROXY_BASE_URL}/v1/coins/list`)
+  url.searchParams.set('include_platform', 'true')
 
   try {
     coinListCache = await _fetchWithAuth<
-      Array<{ id: string; symbol: string; name: string }>
+      Array<{
+        id: string
+        symbol: string
+        name: string
+        platforms?: Record<string, string>
+      }>
     >(url, MARKET_PROXY_REVALIDATION_TIMES.TOKEN_METADATA, 'coin_list_cache')
     coinListCacheTime = now
 
