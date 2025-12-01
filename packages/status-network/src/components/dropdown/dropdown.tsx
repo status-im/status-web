@@ -124,7 +124,7 @@ export const Item = forwardRef<
   return (
     <DropdownMenu.Item {...itemProps} ref={ref} className={itemStyles()}>
       <Image
-        src={`/vaults/${icon}.png`}
+        src={`/vaults/${icon.toLowerCase()}.png`}
         alt={icon}
         width="20"
         height="20"
