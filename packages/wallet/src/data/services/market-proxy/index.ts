@@ -35,6 +35,18 @@ export const MARKET_PROXY_REVALIDATION_TIMES = {
   PRICE_FOR_DATE: 15,
 } as const
 
+const DEFAULT_NUMERIC_VALUE = 0
+const DEFAULT_EMPTY_ARRAY: never[] = []
+const DEFAULT_EMPTY_STRING = ''
+const PERCENTAGE_MULTIPLIER = 0.01
+const DESCRIPTION_SNIPPET_LENGTH = 200
+const DESCRIPTION_SUMMARY_LENGTH = 500
+const SEO_DESCRIPTION_LENGTH = 160
+const DEFAULT_LANGUAGE_CODE = 'en'
+const DEFAULT_CURRENCY_CODE = 'USD'
+const PRICE_SOURCE = 'CoinGecko'
+const CONVERSION_TYPE = 'direct'
+
 type Revalidation =
   (typeof MARKET_PROXY_REVALIDATION_TIMES)[keyof typeof MARKET_PROXY_REVALIDATION_TIMES]
 
@@ -138,6 +150,7 @@ export async function legacy_fetchTokenPriceHistory(
   const daysParam = days === 'all' ? 'max' : days
 
   const url = new URL(`${PROXY_BASE_URL}/v1/coins/${coinId}/market_chart`)
+
   url.searchParams.set('vs_currency', 'usd')
   url.searchParams.set('days', daysParam)
 
@@ -150,7 +163,7 @@ export async function legacy_fetchTokenPriceHistory(
   // Convert CoinGecko format to legacy format
   const data: legacy_TokenPriceHistoryResponseBody['Data']['Data'] =
     response.prices.map(([timestamp, price], index) => {
-      const volume = response.total_volumes[index]?.[1] || 0
+      const volume = response.total_volumes[index]?.[1] || DEFAULT_NUMERIC_VALUE
 
       return {
         time: Math.floor(timestamp / 1000), // Convert to seconds
@@ -160,8 +173,8 @@ export async function legacy_fetchTokenPriceHistory(
         open: price,
         volumefrom: volume,
         volumeto: volume * price,
-        conversionType: 'direct',
-        conversionSymbol: 'USD',
+        conversionType: CONVERSION_TYPE,
+        conversionSymbol: DEFAULT_CURRENCY_CODE,
       }
     })
 
@@ -172,10 +185,11 @@ export async function legacy_fetchTokenPriceHistory(
  * Helper: Extract description from CoinGecko description object
  */
 function _getDescription(description: Record<string, string>): string {
-  if (!description) return ''
-  if (description['en']) return description['en']
+  if (!description) return DEFAULT_EMPTY_STRING
+  if (description[DEFAULT_LANGUAGE_CODE])
+    return description[DEFAULT_LANGUAGE_CODE]
 
-  const languages = ['en']
+  const languages = [DEFAULT_LANGUAGE_CODE]
 
   for (const lang of languages) {
     if (description[lang]) return description[lang]
@@ -212,15 +226,16 @@ function _convertCoinGeckoToTokenMetadata(coinData: {
     whitepaper: string | null
   }
 }): TokenMetadataResponseBody['Data'] {
-  const description = _getDescription(coinData.description)
+  const description =
+    coinData.description?.[DEFAULT_LANGUAGE_CODE] ||
+    _getDescription(coinData.description)
   const now = Date.now()
   const { market_data } = coinData
 
-  // market_cap_rank can be at top level or in market_data
   const marketCapRank =
-    coinData.market_cap_rank ?? market_data.market_cap_rank ?? undefined
+    coinData.market_cap_rank ?? market_data?.market_cap_rank ?? null
 
-  return {
+  const result = {
     ...EMPTY_METADATA_DEFAULTS,
     TYPE: 'CRYPTO',
     ASSET_TYPE: 'CRYPTO',
@@ -228,40 +243,55 @@ function _convertCoinGeckoToTokenMetadata(coinData: {
     UPDATED_ON: now,
     NAME: coinData.name,
     LOGO_URL: coinData.image.large || coinData.image.small,
-    ASSET_DESCRIPTION_SNIPPET: description.substring(0, 200),
-    SUPPLY_MAX: market_data.max_supply || 0,
-    SUPPLY_ISSUED: market_data.total_supply || 0,
-    SUPPLY_TOTAL: market_data.total_supply || 0,
-    SUPPLY_CIRCULATING: market_data.circulating_supply || 0,
-    WEBSITE_URL: coinData.links.homepage?.[0] || '',
-    WHITE_PAPER_URL: coinData.links.whitepaper || '',
-    EXPLORER_ADDRESSES: coinData.links.blockchain_site.map(url => ({
-      URL: url,
-    })),
-    PRICE_USD: market_data.current_price.usd,
-    PRICE_USD_SOURCE: 'CoinGecko',
+    ASSET_DESCRIPTION_SNIPPET: description.substring(
+      0,
+      DESCRIPTION_SNIPPET_LENGTH,
+    ),
+    SUPPLY_MAX: market_data?.max_supply || DEFAULT_NUMERIC_VALUE,
+    SUPPLY_ISSUED: market_data?.total_supply || DEFAULT_NUMERIC_VALUE,
+    SUPPLY_TOTAL: market_data?.total_supply || DEFAULT_NUMERIC_VALUE,
+    SUPPLY_CIRCULATING:
+      market_data?.circulating_supply || DEFAULT_NUMERIC_VALUE,
+    WEBSITE_URL: coinData.links.homepage?.[0] || DEFAULT_EMPTY_STRING,
+    WHITE_PAPER_URL: coinData.links.whitepaper || DEFAULT_EMPTY_STRING,
+    EXPLORER_ADDRESSES:
+      coinData.links.blockchain_site?.map(url => ({
+        URL: url,
+      })) || DEFAULT_EMPTY_ARRAY,
+    PRICE_USD: market_data?.current_price?.usd || DEFAULT_NUMERIC_VALUE,
+    PRICE_USD_SOURCE: PRICE_SOURCE,
     PRICE_USD_LAST_UPDATE_TS: now,
-    CIRCULATING_MKT_CAP_USD: market_data.market_cap.usd,
-    TOTAL_MKT_CAP_USD: market_data.market_cap.usd,
-    SPOT_MOVING_24_HOUR_QUOTE_VOLUME_USD: market_data.total_volume.usd,
-    SPOT_MOVING_24_HOUR_CHANGE_USD: market_data.price_change_24h,
+    CIRCULATING_MKT_CAP_USD:
+      market_data?.market_cap?.usd || DEFAULT_NUMERIC_VALUE,
+    TOTAL_MKT_CAP_USD: market_data?.market_cap?.usd || DEFAULT_NUMERIC_VALUE,
+    SPOT_MOVING_24_HOUR_QUOTE_VOLUME_USD:
+      market_data?.total_volume?.usd || DEFAULT_NUMERIC_VALUE,
+    SPOT_MOVING_24_HOUR_CHANGE_USD:
+      market_data?.price_change_24h || DEFAULT_NUMERIC_VALUE,
     SPOT_MOVING_24_HOUR_CHANGE_PERCENTAGE_USD:
-      market_data.price_change_percentage_24h,
+      market_data?.price_change_percentage_24h || DEFAULT_NUMERIC_VALUE,
     TOPLIST_BASE_RANK: {
-      CREATED_ON: 0,
-      LAUNCH_DATE: 0,
-      CIRCULATING_MKT_CAP_USD: market_data.market_cap.usd,
-      TOTAL_MKT_CAP_USD: market_data.market_cap.usd,
-      SPOT_MOVING_24_HOUR_QUOTE_VOLUME_USD: market_data.total_volume.usd,
-      SPOT_MOVING_7_DAY_QUOTE_VOLUME_USD: 0,
-      SPOT_MOVING_30_DAY_QUOTE_VOLUME_USD: 0,
+      CREATED_ON: DEFAULT_NUMERIC_VALUE,
+      LAUNCH_DATE: DEFAULT_NUMERIC_VALUE,
+      CIRCULATING_MKT_CAP_USD:
+        market_data?.market_cap?.usd || DEFAULT_NUMERIC_VALUE,
+      TOTAL_MKT_CAP_USD: market_data?.market_cap?.usd || DEFAULT_NUMERIC_VALUE,
+      SPOT_MOVING_24_HOUR_QUOTE_VOLUME_USD:
+        market_data?.total_volume?.usd || DEFAULT_NUMERIC_VALUE,
+      SPOT_MOVING_7_DAY_QUOTE_VOLUME_USD: DEFAULT_NUMERIC_VALUE,
+      SPOT_MOVING_30_DAY_QUOTE_VOLUME_USD: DEFAULT_NUMERIC_VALUE,
       RANK: marketCapRank,
     },
     ASSET_DESCRIPTION: description,
-    ASSET_DESCRIPTION_SUMMARY: description.substring(0, 500),
+    ASSET_DESCRIPTION_SUMMARY: description.substring(
+      0,
+      DESCRIPTION_SUMMARY_LENGTH,
+    ),
     SEO_TITLE: coinData.name,
-    SEO_DESCRIPTION: description.substring(0, 160),
+    SEO_DESCRIPTION: description.substring(0, SEO_DESCRIPTION_LENGTH),
   } as TokenMetadataResponseBody['Data']
+
+  return result
 }
 
 /**
@@ -430,25 +460,28 @@ function _convertCoinGeckoToLegacyPrice(
   },
 ): legacy_TokensPriceResponseBody['RAW'][string] {
   const now = Math.floor(Date.now() / 1000)
-  const volume24h = price.usd_24h_vol || 0
+  const volume24h = price.usd_24h_vol || DEFAULT_NUMERIC_VALUE
   const volume24hTo = volume24h * price.usd
-  const change24h = (price.usd_24h_change || 0) * price.usd * 0.01
+  const change24h =
+    (price.usd_24h_change || DEFAULT_NUMERIC_VALUE) *
+    price.usd *
+    PERCENTAGE_MULTIPLIER
 
   return {
     USD: {
       TYPE: '5',
       MARKET: 'CCCAGG',
       FROMSYMBOL: symbol.toUpperCase(),
-      TOSYMBOL: 'USD',
+      TOSYMBOL: DEFAULT_CURRENCY_CODE,
       FLAGS: '4',
       PRICE: price.usd,
       LASTUPDATE: now,
       MEDIAN: price.usd,
-      LASTVOLUME: 0,
-      LASTVOLUMETO: 0,
-      LASTTRADEID: '',
-      VOLUMEDAY: 0,
-      VOLUMEDAYTO: 0,
+      LASTVOLUME: DEFAULT_NUMERIC_VALUE,
+      LASTVOLUMETO: DEFAULT_NUMERIC_VALUE,
+      LASTTRADEID: DEFAULT_EMPTY_STRING,
+      VOLUMEDAY: DEFAULT_NUMERIC_VALUE,
+      VOLUMEDAYTO: DEFAULT_NUMERIC_VALUE,
       VOLUME24HOUR: volume24h,
       VOLUME24HOURTO: volume24hTo,
       OPENDAY: price.usd,
@@ -457,28 +490,28 @@ function _convertCoinGeckoToLegacyPrice(
       OPEN24HOUR: price.usd,
       HIGH24HOUR: price.usd,
       LOW24HOUR: price.usd,
-      LASTMARKET: 'CoinGecko',
-      VOLUMEHOUR: 0,
-      VOLUMEHOURTO: 0,
+      LASTMARKET: PRICE_SOURCE,
+      VOLUMEHOUR: DEFAULT_NUMERIC_VALUE,
+      VOLUMEHOURTO: DEFAULT_NUMERIC_VALUE,
       OPENHOUR: price.usd,
       HIGHHOUR: price.usd,
       LOWHOUR: price.usd,
       TOPTIERVOLUME24HOUR: volume24h,
       TOPTIERVOLUME24HOURTO: volume24hTo,
       CHANGE24HOUR: change24h,
-      CHANGEPCT24HOUR: price.usd_24h_change || 0,
-      CHANGEDAY: 0,
-      CHANGEPCTDAY: 0,
-      CHANGEHOUR: 0,
-      CHANGEPCTHOUR: 0,
-      CONVERSIONTYPE: 'direct',
-      CONVERSIONSYMBOL: 'USD',
+      CHANGEPCT24HOUR: price.usd_24h_change || DEFAULT_NUMERIC_VALUE,
+      CHANGEDAY: DEFAULT_NUMERIC_VALUE,
+      CHANGEPCTDAY: DEFAULT_NUMERIC_VALUE,
+      CHANGEHOUR: DEFAULT_NUMERIC_VALUE,
+      CHANGEPCTHOUR: DEFAULT_NUMERIC_VALUE,
+      CONVERSIONTYPE: CONVERSION_TYPE,
+      CONVERSIONSYMBOL: DEFAULT_CURRENCY_CODE,
       CONVERSIONLASTUPDATE: now,
-      SUPPLY: 0,
-      MKTCAP: price.usd_market_cap || 0,
-      MKTCAPPENALTY: 0,
-      CIRCULATINGSUPPLY: 0,
-      CIRCULATINGSUPPLYMKTCAP: price.usd_market_cap || 0,
+      SUPPLY: DEFAULT_NUMERIC_VALUE,
+      MKTCAP: price.usd_market_cap || DEFAULT_NUMERIC_VALUE,
+      MKTCAPPENALTY: DEFAULT_NUMERIC_VALUE,
+      CIRCULATINGSUPPLY: DEFAULT_NUMERIC_VALUE,
+      CIRCULATINGSUPPLYMKTCAP: price.usd_market_cap || DEFAULT_NUMERIC_VALUE,
       TOTALVOLUME24H: volume24h,
       TOTALVOLUME24HTO: volume24hTo,
       TOTALTOPTIERVOLUME24H: volume24h,
