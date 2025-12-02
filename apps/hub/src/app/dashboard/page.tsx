@@ -128,7 +128,7 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            <div className="relative order-1 w-full max-w-[420px] lg:order-4">
+            <div className="relative order-1 w-full max-w-[420px] lg:order-2">
               <Image
                 src="/build-unicorn.png"
                 alt="Unicorn"
