@@ -211,37 +211,40 @@ export default function StakePage() {
 
         <section className="rounded-8 md:bg-neutral-2.5 md:p-8">
           <div className="flex flex-col gap-4 md:gap-8">
-            <div className="flex flex-col gap-4 rounded-16 border border-neutral-10 bg-white-100 p-4 shadow-2 md:flex-row md:items-center md:justify-between md:gap-8 md:rounded-32 md:p-8">
-              <div className="flex items-start gap-4 md:gap-6">
-                <div className="relative h-[88px]">
-                  <Image
-                    width="103"
-                    height="174"
-                    src="/piggy-bank.png"
-                    alt="Piggy Bank"
-                    className="-mt-12"
-                  />
-                </div>
+            <div className="flex flex-col gap-6 rounded-16 border border-neutral-10 bg-white-100 p-6 shadow-2 md:flex-row md:items-center md:justify-between md:gap-8 md:rounded-32 md:py-4 md:pl-4 md:pr-8">
+              <h3 className="text-19 font-500 md:hidden">
+                Free Testnet SNT faucet
+              </h3>
 
-                <div className="space-y-3">
-                  <div>
-                    <p className="text-19 font-500">Free Testnet SNT faucet</p>
-                  </div>
+              <div className="flex items-end gap-4 md:items-center md:gap-6">
+                <Image
+                  width="103"
+                  height="124"
+                  src="/piggy-bank.png"
+                  alt="Piggy Bank"
+                  className="-ml-2 -mt-4 shrink-0 md:-ml-0 md:-mt-0"
+                />
 
-                  <div className="flex flex-wrap gap-4 md:gap-6">
-                    <div className="min-w-[128px] space-y-1 text-13 font-500">
+                <div className="flex flex-col gap-4">
+                  <h3 className="hidden text-19 font-500 md:block">
+                    Free Testnet SNT faucet
+                  </h3>
+                  <div className="flex flex-col flex-wrap gap-x-14 gap-y-2 lg:flex-row">
+                    <div className="flex flex-col gap-1.5 text-13 font-500">
                       <p className="text-neutral-50">Daily limit</p>
-                      <span>{formatSNT(faucetData?.dailyLimit ?? 0)} SNT</span>
+                      <span className="text-15 font-500">
+                        {formatSNT(faucetData?.dailyLimit ?? 0)} SNT
+                      </span>
                     </div>
-                    <div className="min-w-[128px] space-y-1 text-13 font-500">
+                    <div className="flex flex-col gap-1.5 text-13 font-500">
                       <p className="text-neutral-50">Used today</p>
-                      <span>
+                      <span className="text-15 font-500">
                         {formatSNT(faucetData?.accountDailyRequests ?? 0)} SNT
                       </span>
                     </div>
-                    <div className="min-w-[128px] space-y-1 text-13 font-500">
+                    <div className="flex flex-col gap-1.5 text-13 font-500">
                       <p className="text-neutral-50">Available</p>
-                      <span>
+                      <span className="text-15 font-500">
                         {formatSNT(faucetData?.remainingRequests ?? 0)} SNT
                       </span>
                     </div>
@@ -249,8 +252,9 @@ export default function StakePage() {
                 </div>
               </div>
 
+              {/* Button */}
               <Button
-                className="w-full justify-center md:w-auto md:self-end"
+                className="w-full shrink-0 justify-center md:w-auto"
                 disabled={
                   !isConnected ||
                   hasReachedDailyLimit ||

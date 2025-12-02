@@ -59,7 +59,7 @@ export default function DiscoverPage() {
                 size="32"
                 href="https://statusnetwork.typeform.com/getfeatured"
               >
-                Get featured
+                Get your app featured
               </ButtonLink>
             </div>
 

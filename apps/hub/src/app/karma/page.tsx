@@ -23,7 +23,7 @@ export default function KarmaPage() {
 
   // TODO: Replace with actual data from API/state
   const visualData = {
-    imageSrc: '/karma/media.png',
+    imageSrc: '/karma/media.jpg',
     imageAlt: 'Karma Visual',
     isLoading: false,
     onRefresh: () => {
@@ -54,10 +54,12 @@ export default function KarmaPage() {
 
   return (
     <HubLayout>
-      <div className="mx-auto flex size-full flex-col gap-8 p-8">
+      <div className="mx-auto flex size-full flex-col gap-4 p-4 lg:gap-8 lg:p-8">
         <div className="flex flex-col gap-2">
-          <h1 className="text-64 font-bold text-neutral-100">Karma</h1>
-          <p className="text-19 font-regular text-neutral-100">
+          <h1 className="text-27 font-bold text-neutral-100 lg:text-64">
+            Karma
+          </h1>
+          <p className="text-13 font-regular text-neutral-100 lg:text-19">
             Increase your Karma, unlock more free transactions, gain power over
             the network
           </p>
@@ -68,7 +70,7 @@ export default function KarmaPage() {
         </div>
         <div className="flex flex-col gap-6">
           <h2 className="text-19 font-semibold text-neutral-100">
-            Karma breakdown
+            Receive Karma
           </h2>
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
             {karmaSources.map((source, index) => (
