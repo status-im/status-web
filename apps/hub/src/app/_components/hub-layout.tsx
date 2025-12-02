@@ -5,12 +5,10 @@ import { ToastContainer } from '@status-im/components'
 import { Divider, Footer } from '@status-im/status-network/components'
 import { useReadContract } from 'wagmi'
 
-import { type Vault, VAULTS } from '~constants/index'
 import { STAKING_MANAGER } from '~constants/index'
 import { CACHE_CONFIG } from '~constants/staking'
 
 import { EmergencyBar } from './emergency-bar'
-import { PreDepositModal } from './pre-deposit-modal'
 import { Sidebar } from './sidebar'
 import { TopBar } from './top-bar'
 
@@ -20,11 +18,7 @@ interface HubLayoutProps {
 
 export function HubLayout({ children }: HubLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [selectedVault, setSelectedVault] = useState<Vault | null>(null)
 
-  const handleDepositClick = () => {
-    setSelectedVault(VAULTS[0])
-  }
   const { data: emergencyModeEnabled } = useReadContract({
     address: STAKING_MANAGER.address,
     abi: STAKING_MANAGER.abi,
@@ -44,11 +38,7 @@ export function HubLayout({ children }: HubLayoutProps) {
         {Boolean(emergencyModeEnabled) && <EmergencyBar />}
         <div className="mx-auto flex w-full max-w-[1504px] flex-row gap-12 lg:h-[calc(100vh-64px-50px)] lg:overflow-hidden">
           {/* Sidebar */}
-          <Sidebar
-            isOpen={sidebarOpen}
-            onClose={() => setSidebarOpen(false)}
-            onDepositClick={handleDepositClick}
-          />
+          <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
           {/* Main Content */}
           <main className="min-w-0 flex-1 lg:overflow-auto">{children}</main>
@@ -68,15 +58,6 @@ export function HubLayout({ children }: HubLayoutProps) {
         </section>
       </div>
       <ToastContainer />
-      {selectedVault && (
-        <PreDepositModal
-          open={true}
-          onOpenChange={open => !open && setSelectedVault(null)}
-          vault={selectedVault}
-          setActiveVault={setSelectedVault}
-          vaults={VAULTS}
-        />
-      )}
     </div>
   )
 }

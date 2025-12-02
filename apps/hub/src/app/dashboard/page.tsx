@@ -14,13 +14,14 @@ import { type Vault, VAULTS } from '~constants/index'
 import { Apps } from '../_components/apps'
 import { Hero } from '../_components/hero'
 
-const REWARDS = ['KARMA', 'SNT', 'LINEA']
+export const REWARDS = ['KARMA', 'SNT', 'LINEA']
 
 export default function DashboardPage() {
-  const [selectedVault, setActiveVault] = useState<Vault | null>(null)
+  const [selectedVault, setSelectedVault] = useState<Vault | null>(null)
 
-  // Default to SNT vault when opening modal without selection
   const defaultVault = VAULTS.find(v => v.id === 'SNT') ?? VAULTS[0]
+
+  const activeVaults = VAULTS.filter(v => !v.soon)
 
   return (
     <HubLayout>
@@ -30,13 +31,13 @@ export default function DashboardPage() {
 
         {/* Main Content Card */}
         <div className="mx-auto mt-7 w-full max-w-[1176px]">
-          <div className="mb-8 rounded-32 bg-neutral-2.5 p-8">
+          <div className="mb-8 rounded-32 bg-neutral-2.5 p-0 lg:p-8">
             <div className="mb-6 flex items-start justify-between">
               <div className="max-w-2xl">
-                <h3 className="mb-2 text-27 font-600 text-neutral-90">
+                <h3 className="text-19 font-600 text-neutral-90 lg:text-27">
                   Deposit funds for yield and rewards
                 </h3>
-                <div className="flex items-center">
+                <div className="flex flex-col gap-2 lg:flex-row lg:items-start">
                   <div className="flex -space-x-2">
                     {REWARDS.map((reward, index) => (
                       <Image
@@ -49,7 +50,7 @@ export default function DashboardPage() {
                       />
                     ))}
                   </div>
-                  <p className="ml-1 text-15 text-neutral-60">
+                  <p className="text-15 text-neutral-60">
                     Rewards in KARMA, SNT, LINEA, MetaFi and points from native
                     apps
                   </p>
@@ -57,7 +58,7 @@ export default function DashboardPage() {
               </div>
               <ButtonLink
                 variant="outline"
-                size="32"
+                size="24"
                 href="https://status-im.gitbook.io/status-network/user-guides/hub"
               >
                 Learn more
@@ -65,23 +66,24 @@ export default function DashboardPage() {
               </ButtonLink>
             </div>
 
-            <section className="relative ml-auto w-full max-w-[906px]">
+            <section className="relative w-full">
+              <div className="-mx-4 flex gap-4 overflow-x-auto px-4 pb-4 lg:-mx-0 lg:px-0">
+                {VAULTS.map(vault => (
+                  <div key={vault.id} className="w-[200px] shrink-0">
+                    <VaultCard
+                      vault={vault}
+                      onDeposit={() => setSelectedVault(vault)}
+                    />
+                  </div>
+                ))}
+              </div>
               <Image
                 src="/dragon.png"
                 alt="Dragon"
                 width="354"
                 height="320"
-                className="absolute left-[-290px] top-[120px]"
+                className="relative lg:absolute lg:left-[-290px] lg:top-[120px]"
               />
-              <div className="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2">
-                {VAULTS.map(vault => (
-                  <VaultCard
-                    key={vault.id}
-                    vault={vault}
-                    onDeposit={() => setActiveVault(vault)}
-                  />
-                ))}
-              </div>
             </section>
           </div>
           <Apps />
@@ -132,10 +134,10 @@ export default function DashboardPage() {
       </div>
       <PreDepositModal
         open={selectedVault !== null}
-        onOpenChange={open => !open && setActiveVault(null)}
+        onOpenChange={open => !open && setSelectedVault(null)}
         vault={selectedVault ?? defaultVault}
-        vaults={VAULTS}
-        setActiveVault={setActiveVault}
+        vaults={activeVaults}
+        setActiveVault={setSelectedVault}
       />
     </HubLayout>
   )

@@ -34,6 +34,7 @@ export type Vault = {
   token: Token
   chainId: number
   abi: typeof PreDepositVaultAbi
+  soon?: boolean
 }
 
 export const STAKING_MANAGER = {
@@ -90,7 +91,7 @@ export const LINEA_TOKEN: Token = {
 
 export const SNT_VAULT: Vault = {
   id: 'SNT',
-  name: 'Status Network Token Vault',
+  name: 'SNT Vault',
   apy: '',
   rewards: ['KARMA'],
   icon: 'SNT',
@@ -102,7 +103,7 @@ export const SNT_VAULT: Vault = {
 
 export const LINEA_VAULT: Vault = {
   id: 'LINEA',
-  name: 'LINEA Token Vault',
+  name: 'LINEA Vault',
   apy: '',
   rewards: ['KARMA'],
   icon: 'LINEA',
@@ -114,7 +115,7 @@ export const LINEA_VAULT: Vault = {
 
 export const LIDO_VAULT: Vault = {
   id: 'LIDO',
-  name: 'Lido Staked Ether Vault',
+  name: 'ETH Vault',
   apy: '',
   rewards: ['KARMA'],
   icon: 'ETH',
@@ -122,9 +123,23 @@ export const LIDO_VAULT: Vault = {
   token: wETH_TOKEN,
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
+  soon: true,
 } as const
 
-export const VAULTS: Vault[] = [SNT_VAULT, LINEA_VAULT, LIDO_VAULT]
+export const GUSD_VAULT: Vault = {
+  id: 'GUSD',
+  name: 'GUSD Vault',
+  apy: '',
+  rewards: ['KARMA'],
+  icon: 'GUSD',
+  address: '0x0000000000000000000000000000000000000000',
+  token: wETH_TOKEN,
+  abi: PreDepositVaultAbi,
+  chainId: mainnet.id,
+  soon: true,
+} as const
+
+export const VAULTS: Vault[] = [SNT_VAULT, LINEA_VAULT, LIDO_VAULT, GUSD_VAULT]
 
 export const KARMA = {
   address: '0x7ec5Dc75D09fAbcD55e76077AFa5d4b77D112fde' as Address,

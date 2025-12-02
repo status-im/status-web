@@ -1,32 +1,48 @@
 'use client'
 
-import { ExternalIcon } from '@status-im/icons/20'
 import { Button } from '@status-im/status-network/components'
 import Image from 'next/image'
 
-import { PercentIcon, PlusIcon } from './icons'
+import { formatCurrency, formatTokenAmount } from '~/utils/currency'
+import { usePreDepositTVLInUSD } from '~hooks/usePreDepositTVLInUSD'
 
-import type { Vault } from '../_constants'
+import { DollarIcon, PercentIcon, PlusIcon } from './icons'
+
+import type { Vault } from '~constants/index'
 import type { FC } from 'react'
 
 type Props = {
   vault: Vault
   onDeposit: () => void
+  /** User's deposited balance in wei (optional - shows deposit info when provided) */
+  depositedBalance?: bigint
 }
 
-const VaultCard: FC<Props> = ({ vault, onDeposit }: Props) => {
-  const { name, apy, rewards, icon } = vault
+const VaultCard: FC<Props> = ({
+  vault,
+  onDeposit,
+  depositedBalance,
+}: Props) => {
+  const { apy, rewards, icon, token } = vault
+  const { data: tvlData } = usePreDepositTVLInUSD({ vault })
+
   const apyValue = apy.endsWith('%') ? apy.slice(0, -1) : apy
-  const rewardsLine = rewards.join(', ')
+  const rewardsLine = rewards.join(', ') + ' points'
+
+  const formattedTVL = tvlData?.tvlUSD
+    ? formatCurrency(tvlData.tvlUSD, { compact: true }).replace('$', '')
+    : null
+
+  const hasDeposit = depositedBalance !== undefined && depositedBalance > 0n
 
   return (
-    <div className="size-full rounded-32 border border-neutral-20 bg-white-100 p-8 shadow-1">
+    <div className="size-full rounded-32 border border-neutral-20 bg-white-100 p-4 shadow-1 lg:p-8">
       {/* header */}
       <div className="mb-6 flex items-start justify-between">
         <div className="flex items-center gap-4">
           <div className="relative">
             <Image
-              className="flex size-10 items-center justify-center rounded-full bg-purple"
+              className="flex size-10 items-center justify-center rounded-full"
               src={`/vaults/${icon.toLowerCase()}.png`}
               alt={icon}
               width="56"
@@ -45,27 +61,55 @@ const VaultCard: FC<Props> = ({ vault, onDeposit }: Props) => {
         </div>
       </div>
 
+      <h3 className="mb-2 text-19 font-600 lg:text-27">{vault.name}</h3>
+
+      {hasDeposit && (
+        <div className="mb-4">
+          <p className="text-15 font-400 text-neutral-50">Deposited</p>
+          <p className="text-27 font-600">
+            {formatTokenAmount(depositedBalance, token.symbol, {
+              tokenDecimals: token.decimals,
+              decimals: 0,
+              includeSymbol: true,
+            })}
+          </p>
+        </div>
+      )}
+
       {/* meta */}
-      <ul className="my-6 space-y-4">
-        <li className="text-27 font-600">{name}</li>
-        <li className="flex items-center gap-2 text-[15px]">
-          <span className="text-neutral-50">
-            <PercentIcon />
-          </span>
-          <span>{apyValue} APY</span>
-        </li>
-        <li className="flex items-center gap-2 text-[15px]">
+      <ul className="my-4 space-y-2">
+        {apyValue && (
+          <li className="flex items-center gap-2 text-13">
+            <span className="text-neutral-50">
+              <PercentIcon />
+            </span>
+            <span>{apyValue} liquid APY</span>
+          </li>
+        )}
+        <li className="flex items-center gap-2 text-13">
           <span className="text-neutral-50">
             <PlusIcon />
           </span>
           <span>{rewardsLine}</span>
         </li>
+        {formattedTVL && (
+          <li className="flex items-center gap-2 text-13">
+            <span className="text-neutral-50">
+              <DollarIcon />
+            </span>
+            <span>{formattedTVL} TVL</span>
+          </li>
+        )}
       </ul>
 
       {/* cta */}
-      <Button size="32" onClick={onDeposit}>
-        Deposit
-        <ExternalIcon className="text-blur-white/70" />
+      <Button
+        size="40"
+        onClick={onDeposit}
+        disabled={vault.soon}
+        className="w-full justify-center lg:w-auto"
+      >
+        {vault.soon ? 'Coming soon' : 'Deposit'}
       </Button>
     </div>
   )

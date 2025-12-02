@@ -19,9 +19,9 @@ const NAV_LINKS = [
   { id: 'dashboard', label: 'Home', icon: HomeIcon, href: '/dashboard' },
   {
     id: 'deposit',
-    label: 'Deposit',
+    label: 'Pre-Deposits',
     icon: DepositIcon,
-    href: 'https://status-im.notion.site/Status-Network-Early-Access-List-2a18f96fb65c80f18f00d96f7304a597',
+    href: '/pre-deposits',
     // tag: 'Mainnet',
   },
   { id: 'discover', label: 'Discover', icon: DiscoverIcon, href: '/discover' },
@@ -74,11 +74,10 @@ const OTHER_LINKS = [
 type Props = {
   isOpen: boolean
   onClose: () => void
-  onDepositClick?: () => void
 }
 
 const Sidebar = (props: Props) => {
-  const { isOpen, onClose, onDepositClick } = props
+  const { isOpen, onClose } = props
 
   return (
     <>
@@ -104,11 +103,7 @@ const Sidebar = (props: Props) => {
           <nav className="flex-1 px-6 lg:px-0">
             <ul className="space-y-1">
               {NAV_LINKS.map(item => (
-                <LinkItem
-                  key={item.id}
-                  {...item}
-                  onClick={item.id === 'deposit' ? onDepositClick : undefined}
-                />
+                <LinkItem key={item.id} {...item} />
               ))}
             </ul>
 
