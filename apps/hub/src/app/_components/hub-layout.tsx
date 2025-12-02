@@ -32,9 +32,9 @@ export function HubLayout({ children }: HubLayoutProps) {
       <TopBar onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
 
       {/* Main Content Area */}
-      <div className="relative w-full rounded-20 bg-white-100 lg:overflow-hidden">
+      <div className="relative w-full rounded-20 bg-white-100 lg:overflow-hidden lg:px-6">
         {Boolean(emergencyModeEnabled) && <EmergencyBar />}
-        <div className="mx-auto flex w-full max-w-[1504px] flex-row lg:h-[calc(100vh-64px-50px)] lg:overflow-hidden">
+        <div className="mx-auto flex w-full max-w-[1504px] flex-row gap-12 lg:h-[calc(100vh-64px-50px)] lg:overflow-hidden">
           {/* Sidebar */}
           <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 

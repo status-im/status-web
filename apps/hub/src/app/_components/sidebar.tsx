@@ -6,6 +6,7 @@ import {
   DiscoverIcon,
   DocsIcon,
   ExplorerIcon,
+  HandIcon,
   // GovernanceIcon,
   HomeIcon,
   KarmaIcon,
@@ -38,6 +39,12 @@ const TOKENS_LINKS = [
 ]
 
 const OTHER_LINKS = [
+  {
+    id: 'community-votes',
+    label: 'Community Votes',
+    icon: HandIcon,
+    href: 'https://snapshot.org/#/s:status.eth/proposals',
+  },
   {
     id: 'explorer',
     label: 'Explorer',
@@ -87,13 +94,13 @@ const Sidebar = (props: Props) => {
 
       {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 z-[70] w-60 transform bg-white-100 transition-transform duration-300 ease-in-out lg:static lg:z-auto lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-[70] w-72 transform bg-white-100 transition-transform duration-300 ease-in-out lg:static lg:z-auto lg:w-60 lg:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="flex h-full flex-col overflow-auto py-8">
           {/* Main Navigation */}
-          <nav className="flex-1 px-6">
+          <nav className="flex-1 px-6 lg:px-0">
             <ul className="space-y-1">
               {NAV_LINKS.map(item => {
                 return <LinkItem key={item.id} {...item} />
