@@ -13,7 +13,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'Status Hub - DeFi Dashboard',
+  title: 'Status Hub',
   description:
     'Manage your Status Network assets, discover applications, and navigate to various services.',
 }
