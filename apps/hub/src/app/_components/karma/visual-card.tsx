@@ -14,7 +14,7 @@ const KarmaVisualCard = ({
 }: KarmaVisualCardProps) => {
   if (isLoading) {
     return (
-      <div className="h-[302px] w-[304px] overflow-hidden rounded-20 border border-neutral-20 bg-white-100 shadow-1">
+      <div className="aspect-[304/302] w-full max-w-[400px] overflow-hidden rounded-20 border border-neutral-20 bg-white-100 shadow-1 lg:h-[302px] lg:w-[304px]">
         <div className="p-2">
           <Skeleton
             height={286}
@@ -27,7 +27,7 @@ const KarmaVisualCard = ({
     )
   }
   return (
-    <div className="h-[302px] w-[304px] overflow-hidden rounded-20 border border-neutral-20 bg-white-100 shadow-1">
+    <div className="flex aspect-[304/302] w-full max-w-[400px] items-center justify-center overflow-hidden rounded-20 border border-neutral-20 bg-white-100 shadow-1 lg:h-[302px] lg:w-[304px]">
       <div className="relative size-full p-2">
         <div className="relative size-full overflow-hidden rounded-16">
           <Image src={imageSrc} alt={imageAlt} fill className="object-cover" />

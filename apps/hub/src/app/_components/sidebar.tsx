@@ -78,7 +78,7 @@ const Sidebar = (props: Props) => {
       {isOpen && (
         <button
           type="button"
-          className="fixed inset-0 z-50 bg-neutral-80/50 lg:hidden"
+          className="fixed inset-0 z-[70] bg-neutral-80/50 lg:hidden"
           onClick={onClose}
           onKeyDown={e => e.key === 'Escape' && onClose()}
           aria-label="Close sidebar"
@@ -87,7 +87,7 @@ const Sidebar = (props: Props) => {
 
       {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 z-50 w-60 transform bg-white-100 transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-[70] w-60 transform bg-white-100 transition-transform duration-300 ease-in-out lg:static lg:z-auto lg:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
