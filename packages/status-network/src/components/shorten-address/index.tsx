@@ -12,7 +12,11 @@ export const shortenAddress = (address: string) => {
 const ShortenAddress = ({ address }: Props) => {
   const shortenedAddress = shortenAddress(address)
 
-  return shortenedAddress
+  return (
+    <div className="max-w-[54px] truncate md:max-w-full">
+      {shortenedAddress}
+    </div>
+  )
 }
 
 export { ShortenAddress }

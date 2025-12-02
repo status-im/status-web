@@ -168,7 +168,7 @@ export function VaultsTable() {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 lg:justify-between">
         <h2 className="text-19 font-semibold leading-none text-neutral-100">
           My vaults
         </h2>
@@ -177,7 +177,6 @@ export function VaultsTable() {
             variant="outline"
             size="32"
             onClick={() => createVault()}
-            className="w-full sm:w-auto"
             disabled={Boolean(emergencyModeEnabled)}
           >
             <AddCircleIcon />

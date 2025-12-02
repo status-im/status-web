@@ -21,7 +21,7 @@ export const getDefaultWagmiConfig = () =>
     walletConnectProjectId:
       clientEnv.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID as string,
     appName: 'Status Hub',
-    appDescription: 'Status Network DeFi Dashboard',
+    appDescription: 'Status Network',
     appUrl: 'https://status.app',
     appIcon: 'https://status.app/icon.png',
   }) as CreateConfigParameters<

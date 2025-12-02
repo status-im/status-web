@@ -15,12 +15,12 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
       data-theme="dark"
       className="sticky inset-x-0 top-0 z-40 flex h-[56px] items-center bg-neutral-100"
     >
-      <div className="flex w-full items-center justify-between px-6 pl-4">
+      <div className="flex w-full items-center justify-between px-3 lg:pr-5">
         {/* Left side - Menu button and branding */}
         <div className="flex items-center gap-2">
           <button
             onClick={onMenuToggle}
-            className="rounded mr-3 p-1 text-white-80 hover:bg-white-10 lg:hidden"
+            className="rounded p-1 text-white-80 hover:bg-white-10 lg:mr-3 lg:hidden"
             aria-label="Toggle menu"
           >
             <svg
@@ -84,7 +84,16 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
           </div>
 
           {/* Connect Wallet Button */}
-          <ConnectButton />
+          <ConnectButton
+            label="Connect wallet"
+            size="32"
+            className="hidden md:block"
+          />
+          <ConnectButton
+            label="Connect"
+            size="24"
+            className="block md:hidden"
+          />
         </div>
       </div>
     </div>
