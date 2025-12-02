@@ -32,17 +32,17 @@ export function HubLayout({ children }: HubLayoutProps) {
       <TopBar onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
 
       {/* Main Content Area */}
-      <div className="relative w-full overflow-hidden rounded-20 bg-white-100">
+      <div className="relative w-full rounded-20 bg-white-100 lg:overflow-hidden">
         {Boolean(emergencyModeEnabled) && <EmergencyBar />}
-        <div className="mx-auto flex h-[calc(100vh-64px-123px)] w-full max-w-[1504px] flex-row overflow-hidden lg:h-[calc(100vh-64px-50px)]">
+        <div className="mx-auto flex w-full max-w-[1504px] flex-row lg:h-[calc(100vh-64px-50px)] lg:overflow-hidden">
           {/* Sidebar */}
           <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
           {/* Main Content */}
-          <main className="min-w-0 flex-1 overflow-auto">{children}</main>
+          <main className="min-w-0 flex-1 lg:overflow-auto">{children}</main>
         </div>
 
-        <section className="sticky z-50 overflow-visible">
+        <section className="z-30 overflow-visible lg:sticky lg:z-50">
           <div className="relative">
             <div className="absolute left-0 top-0 h-px w-9 bg-gradient-to-l from-[#E7EAEE] to-transparent" />
             <div className="px-10">
