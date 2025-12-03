@@ -30,6 +30,7 @@ type PreDepositModalProps = {
   vault: Vault
   vaults: Vault[]
   setActiveVault: Dispatch<SetStateAction<Vault | null>>
+  onDepositSuccess?: () => void
 }
 
 const depositFormSchema = z.object({
@@ -70,6 +71,7 @@ const PreDepositModal = ({
   vault,
   vaults,
   setActiveVault,
+  onDepositSuccess,
 }: PreDepositModalProps) => {
   const { address } = useAccount()
   const chainId = useChainId()
@@ -148,7 +150,12 @@ const PreDepositModal = ({
               await refetchAllowance()
               preDeposit(
                 { amount: data.amount, vault },
-                { onSuccess: () => onOpenChange(false) }
+                {
+                  onSuccess: () => {
+                    onDepositSuccess?.()
+                    onOpenChange(false)
+                  },
+                }
               )
             },
           }
@@ -157,7 +164,12 @@ const PreDepositModal = ({
       .with('deposit', () => {
         preDeposit(
           { amount: data.amount, vault },
-          { onSuccess: () => onOpenChange(false) }
+          {
+            onSuccess: () => {
+              onDepositSuccess?.()
+              onOpenChange(false)
+            },
+          }
         )
       })
       .otherwise(() => {})

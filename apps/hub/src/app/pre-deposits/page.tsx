@@ -1,23 +1,67 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 
 import { Tooltip } from '@status-im/components'
 import { InfoIcon } from '@status-im/icons/16'
 import Image from 'next/image'
+
+import { formatCurrency } from '~/utils/currency'
 
 import { HubLayout } from '../_components/hub-layout'
 import { PreDepositModal } from '../_components/pre-deposit-modal'
 import { VaultCard } from '../_components/vault-card'
 import { type Vault, VAULTS } from '../_constants/address'
 import { TOOLTIP_CONFIG } from '../_constants/staking'
+import { useTotalTVL } from '../_hooks/useTotalTVL'
+import { useUserVaultDeposit } from '../_hooks/useUserVaultDeposit'
 import { REWARDS } from '../dashboard/page'
+
+function VaultCardWithDeposit({
+  vault,
+  onDeposit,
+  registerRefetch,
+}: {
+  vault: Vault
+  onDeposit: () => void
+  registerRefetch: (vaultId: string, refetch: () => void) => void
+}) {
+  const { data: depositedBalance, refetch } = useUserVaultDeposit({ vault })
+
+  registerRefetch(vault.id, refetch)
+
+  return (
+    <VaultCard
+      vault={vault}
+      onDeposit={onDeposit}
+      depositedBalance={depositedBalance}
+    />
+  )
+}
 
 export default function PreDepositPage() {
   const [selectedVault, setSelectedVault] = useState<Vault | null>(null)
+  const { data: totalTVL, isLoading: isLoadingTVL } = useTotalTVL()
+
+  const refetchFunctionsRef = useRef<Record<string, () => void>>({})
+
+  const registerRefetch = useCallback(
+    (vaultId: string, refetch: () => void) => {
+      refetchFunctionsRef.current[vaultId] = refetch
+    },
+    []
+  )
+
+  const handleDepositSuccess = useCallback(() => {
+    if (selectedVault) {
+      refetchFunctionsRef.current[selectedVault.id]?.()
+    }
+  }, [selectedVault])
 
   const defaultVault = VAULTS.find(v => v.id === 'SNT') ?? VAULTS[0]
   const activeVaults = VAULTS.filter(v => !v.soon)
+
+  const formattedTVL = totalTVL ? formatCurrency(totalTVL) : '$0'
 
   return (
     <HubLayout>
@@ -42,8 +86,8 @@ export default function PreDepositPage() {
               </div>
               <p className="text-15 text-neutral-60">
                 Rewards in KARMA, SNT, LINEA and points from Generic Protocol
-                and native app. <br />
-                Funds will be unlocked during mainnet launch.
+                and native apps. <br />
+                Funds will be unlocked at mainnet launch.
               </p>
             </div>
           </div>
@@ -52,15 +96,18 @@ export default function PreDepositPage() {
               Total Value Locked
             </p>
             <InfoTooltip />
-            <p className="text-27 font-600 text-neutral-100">$100M</p>
+            <p className="text-27 font-600 text-neutral-100">
+              {isLoadingTVL ? '...' : formattedTVL}
+            </p>
           </div>
         </div>
         <div className="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2">
           {VAULTS.map(vault => (
-            <VaultCard
+            <VaultCardWithDeposit
               key={vault.id}
               vault={vault}
               onDeposit={() => setSelectedVault(vault)}
+              registerRefetch={registerRefetch}
             />
           ))}
         </div>
@@ -71,6 +118,7 @@ export default function PreDepositPage() {
         vault={selectedVault ?? defaultVault}
         vaults={activeVaults}
         setActiveVault={setSelectedVault}
+        onDepositSuccess={handleDepositSuccess}
       />
     </HubLayout>
   )
@@ -83,8 +131,7 @@ const InfoTooltip = () => (
     content={
       <div className="flex w-[286px] flex-col gap-4 rounded-8 bg-white-100 p-4">
         <span className="text-13 text-neutral-100">
-          Sum of value of all coins held in smart contracts of all the protocols
-          on the chain
+          Sum of token value locked across all vaults
         </span>
       </div>
     }

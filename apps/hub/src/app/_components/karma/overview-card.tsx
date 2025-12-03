@@ -73,7 +73,7 @@ const KarmaOverviewCard = () => {
               </span>
             </div>
             <span className="text-15 font-regular text-neutral-50">
-              Level {levelData?.level ?? 1} Kanji
+              Level {levelData?.level ?? 0}
             </span>
           </div>
         </div>

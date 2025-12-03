@@ -29,11 +29,11 @@ const VaultCard: FC<Props> = ({
   const apyValue = apy.endsWith('%') ? apy.slice(0, -1) : apy
   const rewardsLine = rewards.join(', ') + ' points'
 
-  const formattedTVL = tvlData?.tvlUSD
-    ? formatCurrency(tvlData.tvlUSD, { compact: true }).replace('$', '')
+  const formattedTVL = !vault.soon
+    ? formatCurrency(tvlData?.tvlUSD ?? 0, { compact: true }).replace('$', '')
     : null
 
-  const hasDeposit = depositedBalance !== undefined && depositedBalance > 0n
+  const showDeposit = !vault.soon
 
   return (
     <div className="size-full rounded-32 border border-neutral-20 bg-white-100 p-4 shadow-1 lg:p-8">
@@ -63,11 +63,11 @@ const VaultCard: FC<Props> = ({
 
       <h3 className="mb-2 text-19 font-600 lg:text-27">{vault.name}</h3>
 
-      {hasDeposit && (
+      {showDeposit && (
         <div className="mb-4">
           <p className="text-15 font-400 text-neutral-50">Deposited</p>
           <p className="text-27 font-600">
-            {formatTokenAmount(depositedBalance, token.symbol, {
+            {formatTokenAmount(depositedBalance ?? 0n, token.symbol, {
               tokenDecimals: token.decimals,
               decimals: 0,
               includeSymbol: true,
