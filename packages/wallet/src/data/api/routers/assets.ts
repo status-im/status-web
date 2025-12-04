@@ -62,7 +62,7 @@ const STATUS_NETWORKS: Record<number, NetworkType> = {
   1: 'ethereum',
 }
 
-const DEFAULT_TOKEN_SYMBOLS = [
+export const DEFAULT_TOKEN_SYMBOLS = [
   'ETH',
   'SNT',
   'USDC',
@@ -71,7 +71,20 @@ const DEFAULT_TOKEN_SYMBOLS = [
   'PEPE',
   'UNI',
   'SHIB',
-]
+] as const
+
+export type DefaultTokenSymbol = (typeof DEFAULT_TOKEN_SYMBOLS)[number]
+
+export const DEFAULT_TOKEN_IDS: Record<DefaultTokenSymbol, string> = {
+  ETH: 'ethereum',
+  SNT: 'status',
+  USDC: 'usd-coin',
+  USDT: 'tether',
+  LINK: 'chainlink',
+  PEPE: 'pepe',
+  UNI: 'uniswap',
+  SHIB: 'shiba-inu',
+} as const
 
 const DEFAULT_TOKEN_METADATA = {
   SUPPLY_TOTAL: 0,
@@ -852,7 +865,6 @@ function map(data: {
     .map(([, price]) => price)
     .filter(p => p > 0)
 
-  // Use price data as fallback when tokenMetadata is missing or as default values
   // Note: tokenMetadata['SUPPLY_TOTAL'] can be 0 or null from CoinGecko, so we need to check for both
   const metadataTotalSupply =
     tokenMetadata?.['SUPPLY_TOTAL'] && tokenMetadata['SUPPLY_TOTAL'] > 0
@@ -865,22 +877,37 @@ function map(data: {
       ? tokenMetadata['SUPPLY_CIRCULATING']
       : null
 
-  // Try to get supply from market cap and price if available
-  const supplyFromMarketCap =
-    price.usd_market_cap && price.usd && price.usd > 0
-      ? price.usd_market_cap / price.usd
+  // Get market cap from tokenMetadata first (more accurate), then fallback to price data
+  const marketCapFromMetadata =
+    tokenMetadata?.['CIRCULATING_MKT_CAP_USD'] &&
+    tokenMetadata['CIRCULATING_MKT_CAP_USD'] > 0
+      ? tokenMetadata['CIRCULATING_MKT_CAP_USD']
       : null
+
+  const marketCap = marketCapFromMetadata ?? price.usd_market_cap ?? 0
+
+  // Try to get supply from market cap and price if metadata supply is not available
+  const supplyFromMarketCap =
+    marketCap && price.usd && price.usd > 0 ? marketCap / price.usd : null
 
   const totalSupply = metadataTotalSupply || supplyFromMarketCap || 0
 
   const circulation = metadataCirculatingSupply || supplyFromMarketCap || 0
 
+  // Fully diluted = price * total supply (or max supply if available)
+  const maxSupply =
+    tokenMetadata?.['SUPPLY_MAX'] && tokenMetadata['SUPPLY_MAX'] > 0
+      ? tokenMetadata['SUPPLY_MAX']
+      : null
+
   const fullyDiluted =
-    metadataTotalSupply && metadataTotalSupply > 0
-      ? price.usd * metadataTotalSupply
-      : totalSupply > 0
-        ? price.usd * totalSupply
-        : 0
+    maxSupply && maxSupply > 0
+      ? price.usd * maxSupply
+      : metadataTotalSupply && metadataTotalSupply > 0
+        ? price.usd * metadataTotalSupply
+        : totalSupply > 0
+          ? price.usd * totalSupply
+          : 0
 
   // market_cap_rank can be 0 (valid rank), so we only use fallback for null/undefined
   const rankByMarketCap = tokenMetadata?.['TOPLIST_BASE_RANK']?.['RANK'] ?? null
@@ -901,7 +928,7 @@ function map(data: {
     total_eur: (Number(balance) / 10 ** token.decimals) * price.usd,
     decimals: token.decimals,
     metadata: {
-      market_cap: price.usd_market_cap ?? 0,
+      market_cap: marketCap,
       fully_dilluted: fullyDiluted,
       circulation: circulation,
       total_supply: totalSupply,

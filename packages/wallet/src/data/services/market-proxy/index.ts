@@ -10,6 +10,7 @@
 
 import { serverEnv } from '../../../config/env.server.mjs'
 import erc20TokenList from '../../../constants/erc20.json'
+import { DEFAULT_TOKEN_IDS } from '../../api/routers/assets'
 import { markApiKeyAsRateLimited } from '../api-key-rotation'
 
 import type {
@@ -47,6 +48,17 @@ const PRICE_SOURCE = 'CoinGecko'
 
 type Revalidation =
   (typeof MARKET_PROXY_REVALIDATION_TIMES)[keyof typeof MARKET_PROXY_REVALIDATION_TIMES]
+
+/**
+ * Default token IDs mapped by lowercase symbol keys
+ * Uses DEFAULT_TOKEN_IDS from assets router, converted to lowercase keys for lookup
+ */
+const DEFAULT_TOKEN_IDS_LOWERCASE: Record<string, string> = Object.fromEntries(
+  Object.entries(DEFAULT_TOKEN_IDS).map(([key, value]) => [
+    key.toLowerCase(),
+    value,
+  ]),
+)
 
 // Default empty values for token metadata (for backward compatibility conversion)
 const EMPTY_METADATA_DEFAULTS: Partial<Record<string, unknown>> = {
@@ -438,6 +450,19 @@ const COIN_LIST_CACHE_TTL = 3600 * 1000 // 1 hour
 export async function _getCoinIdFromSymbol(
   symbol: string,
 ): Promise<string | null> {
+  const symbolLower = symbol.toLowerCase()
+
+  // Check default token IDs first
+  if (DEFAULT_TOKEN_IDS_LOWERCASE[symbolLower]) {
+    const knownCoinId = DEFAULT_TOKEN_IDS_LOWERCASE[symbolLower]
+    // Verify the coin ID exists in the coin list
+    const coinList = await _getCoinList()
+    const knownCoin = coinList.find(c => c.id === knownCoinId)
+    if (knownCoin) {
+      return knownCoinId
+    }
+  }
+
   // Try to get coin ID from contract address for DEFAULT_TOKEN_SYMBOLS
   const coinIdFromAddress = await _getCoinIdFromAddress(symbol)
   if (coinIdFromAddress) {
@@ -446,7 +471,7 @@ export async function _getCoinIdFromSymbol(
 
   // Fallback to symbol-based lookup
   const coinIdMap = await _getCoinIdsFromSymbols([symbol])
-  return coinIdMap[symbol.toLowerCase()] || null
+  return coinIdMap[symbolLower] || null
 }
 
 /**
@@ -530,6 +555,17 @@ function _mapSymbolsToCoinIds(
   for (const symbol of symbols) {
     const symbolLower = symbol.toLowerCase()
 
+    // Check default token IDs first
+    if (DEFAULT_TOKEN_IDS_LOWERCASE[symbolLower]) {
+      const knownCoinId = DEFAULT_TOKEN_IDS_LOWERCASE[symbolLower]
+      // Verify the coin ID exists in the coin list
+      const knownCoin = coinList.find(c => c.id === knownCoinId)
+      if (knownCoin) {
+        result[symbolLower] = knownCoinId
+        continue
+      }
+    }
+
     // Find all coins with matching symbol
     const matchingCoins = coinList.filter(
       c => c.symbol.toLowerCase() === symbolLower,
@@ -550,9 +586,7 @@ function _mapSymbolsToCoinIds(
     } else {
       // If no exact match, use the first one found
       const coin = matchingCoins[0]
-      if (coin.id.toLowerCase() !== symbolLower) {
-        result[symbolLower] = coin.id
-      }
+      result[symbolLower] = coin.id
     }
   }
   return result
