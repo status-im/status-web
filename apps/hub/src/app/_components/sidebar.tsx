@@ -40,8 +40,8 @@ const TOKENS_LINKS = [
 
 const OTHER_LINKS = [
   {
-    id: 'community-votes',
-    label: 'Community Votes',
+    id: 'snt-vote',
+    label: 'SNT Vote',
     icon: HandIcon,
     href: 'https://snapshot.org/#/s:status.eth/proposals',
   },
