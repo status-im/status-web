@@ -183,6 +183,7 @@ export function useKarmaBalance(
     staleTime,
     refetchInterval,
     retry: 3,
-    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30_000),
+    retryDelay: (attemptIndex: number) =>
+      Math.min(1000 * 2 ** attemptIndex, 30_000),
   })
 }

@@ -33,6 +33,7 @@ export type Vault = {
   icon: string
   token: Token
   chainId: number
+  network: (typeof mainnet | typeof linea)['name']
   abi: typeof PreDepositVaultAbi
   soon?: boolean
 }
@@ -93,36 +94,39 @@ export const SNT_VAULT: Vault = {
   id: 'SNT',
   name: 'SNT Vault',
   apy: '',
-  rewards: ['KARMA'],
+  rewards: ['LINEA', 'native apps points'],
   icon: 'SNT',
   address: '0x493957E168aCCdDdf849913C3d60988c652935Cd',
   token: SNT_TOKEN,
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
+  network: mainnet.name,
 } as const
 
 export const LINEA_VAULT: Vault = {
   id: 'LINEA',
   name: 'LINEA Vault',
   apy: '',
-  rewards: ['KARMA'],
+  rewards: ['SNT', 'native apps points'],
   icon: 'LINEA',
   address: '0xb223cA53A53A5931426b601Fa01ED2425D8540fB',
   token: LINEA_TOKEN,
   abi: PreDepositVaultAbi,
   chainId: linea.id,
+  network: linea.name,
 } as const
 
 export const LIDO_VAULT: Vault = {
   id: 'LIDO',
   name: 'ETH Vault',
   apy: '',
-  rewards: ['KARMA'],
+  rewards: ['SNT, LINEA', 'native apps points'],
   icon: 'ETH',
   address: '0xc71Ec84Ee70a54000dB3370807bfAF4309a67a1f',
   token: wETH_TOKEN,
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
+  network: mainnet.name,
   soon: true,
 } as const
 
@@ -130,12 +134,13 @@ export const GUSD_VAULT: Vault = {
   id: 'GUSD',
   name: 'GUSD Vault',
   apy: '',
-  rewards: ['KARMA'],
+  rewards: ['SNT, LINEA', 'native apps points'],
   icon: 'GUSD',
   address: '0x0000000000000000000000000000000000000000',
   token: wETH_TOKEN,
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
+  network: mainnet.name,
   soon: true,
 } as const
 

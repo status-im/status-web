@@ -22,7 +22,7 @@ const NAV_LINKS = [
     label: 'Pre-Deposits',
     icon: DepositIcon,
     href: '/pre-deposits',
-    // tag: 'Mainnet',
+    tag: 'Mainnet',
   },
   { id: 'discover', label: 'Discover', icon: DiscoverIcon, href: '/discover' },
   { id: 'stake', label: 'Stake', icon: StakeIcon, href: '/stake' },
