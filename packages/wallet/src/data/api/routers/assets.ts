@@ -264,7 +264,7 @@ async function all({
         ]
 
         // Skip if price data is not available
-        if (!price || !price.USD) {
+        if (!price || price.usd === undefined) {
           console.warn(
             `Price data not available for token ${token.symbol}, skipping`,
           )
@@ -278,11 +278,10 @@ async function all({
           icon: token.logoURI,
           name: token.name,
           symbol: token.symbol,
-          price_eur: price.USD['PRICE'],
-          price_percentage_24h_change: price.USD['CHANGEPCT24HOUR'],
+          price_eur: price.usd,
+          price_percentage_24h_change: price.usd_24h_change ?? 0,
           balance: Number(balance) / 10 ** token.decimals,
-          total_eur:
-            (Number(balance) / 10 ** token.decimals) * price.USD['PRICE'],
+          total_eur: (Number(balance) / 10 ** token.decimals) * price.usd,
           decimals: token.decimals,
         }
 
@@ -378,13 +377,13 @@ async function all({
       for (const [, partialAsset] of batch) {
         const price = prices[partialAsset.symbol]
 
-        if (price) {
+        if (price && price.usd !== undefined) {
           const asset: Omit<Asset, 'metadata'> = {
             ...partialAsset,
-            price_eur: price['USD']['PRICE'] ?? 0,
-            price_percentage_24h_change: price['USD']['CHANGEPCT24HOUR'] ?? 0,
-            total_eur: partialAsset.balance * (price['USD']['PRICE'] ?? 0),
-            decimals: partialAsset.decimals, // <-- Mantém decimals
+            price_eur: price.usd,
+            price_percentage_24h_change: price.usd_24h_change ?? 0,
+            total_eur: partialAsset.balance * price.usd,
+            decimals: partialAsset.decimals,
           }
 
           assets.push(asset)
@@ -430,7 +429,7 @@ async function all({
         const token = erc20TokenList.tokens.find(
           t => t.symbol === symbol && t.chainId === 1,
         )
-        if (token && prices[symbol]) {
+        if (token && prices[symbol] && prices[symbol].usd !== undefined) {
           aggregatedAssets.push({
             networks: ['ethereum'],
             native: false,
@@ -438,8 +437,8 @@ async function all({
             icon: token.logoURI,
             name: token.name,
             symbol: token.symbol,
-            price_eur: prices[symbol].USD.PRICE,
-            price_percentage_24h_change: prices[symbol].USD.CHANGEPCT24HOUR,
+            price_eur: prices[symbol].usd,
+            price_percentage_24h_change: prices[symbol].usd_24h_change ?? 0,
             balance: 0,
             total_eur: 0,
             decimals: token.decimals,
@@ -640,9 +639,9 @@ async function tokenPriceChart({
 }) {
   const data = await legacy_fetchTokenPriceHistory(symbol, days)
 
-  return data.map(({ time, close }) => ({
-    date: new Date(time * 1000).toISOString(),
-    price: close,
+  return data.prices.map(([timestamp, price]) => ({
+    date: new Date(timestamp).toISOString(),
+    price: price,
   }))
 }
 
@@ -848,7 +847,10 @@ function map(data: {
 }): Asset {
   const { token, balance, price, priceHistory, tokenMetadata } = data
 
-  const lows = priceHistory.map(({ low }) => low).filter(low => low > 0)
+  // CoinGecko price history format: prices is [timestamp, price][]
+  const prices = priceHistory.prices
+    .map(([, price]) => price)
+    .filter(p => p > 0)
 
   // Use price data as fallback when tokenMetadata is missing or as default values
   // Note: tokenMetadata['SUPPLY_TOTAL'] can be 0 or null from CoinGecko, so we need to check for both
@@ -865,28 +867,19 @@ function map(data: {
 
   // Try to get supply from market cap and price if available
   const supplyFromMarketCap =
-    price.USD['MKTCAP'] && price.USD['PRICE'] && price.USD['PRICE'] > 0
-      ? price.USD['MKTCAP'] / price.USD['PRICE']
+    price.usd_market_cap && price.usd && price.usd > 0
+      ? price.usd_market_cap / price.usd
       : null
 
-  const totalSupply =
-    metadataTotalSupply ||
-    price.USD['SUPPLY'] ||
-    price.USD['CIRCULATINGSUPPLY'] ||
-    supplyFromMarketCap ||
-    0
+  const totalSupply = metadataTotalSupply || supplyFromMarketCap || 0
 
-  const circulation =
-    price.USD['CIRCULATINGSUPPLY'] ||
-    metadataCirculatingSupply ||
-    supplyFromMarketCap ||
-    0
+  const circulation = metadataCirculatingSupply || supplyFromMarketCap || 0
 
   const fullyDiluted =
     metadataTotalSupply && metadataTotalSupply > 0
-      ? price.USD['PRICE'] * metadataTotalSupply
+      ? price.usd * metadataTotalSupply
       : totalSupply > 0
-        ? price.USD['PRICE'] * totalSupply
+        ? price.usd * totalSupply
         : 0
 
   // market_cap_rank can be 0 (valid rank), so we only use fallback for null/undefined
@@ -902,19 +895,19 @@ function map(data: {
     icon: token.logoURI,
     name: token.name,
     symbol: token.symbol,
-    price_eur: price.USD['PRICE'],
-    price_percentage_24h_change: price.USD['CHANGEPCT24HOUR'],
+    price_eur: price.usd,
+    price_percentage_24h_change: price.usd_24h_change ?? 0,
     balance: Number(balance) / 10 ** token.decimals,
-    total_eur: (Number(balance) / 10 ** token.decimals) * price.USD['PRICE'],
+    total_eur: (Number(balance) / 10 ** token.decimals) * price.usd,
     decimals: token.decimals,
     metadata: {
-      market_cap: price.USD['MKTCAP'],
+      market_cap: price.usd_market_cap ?? 0,
       fully_dilluted: fullyDiluted,
       circulation: circulation,
       total_supply: totalSupply,
-      all_time_high: Math.max(...priceHistory.map(({ high }) => high)),
-      all_time_low: lows.length ? Math.min(...lows) : price.USD['PRICE'],
-      volume_24: price.USD['TOTALVOLUME24HTO'],
+      all_time_high: prices.length ? Math.max(...prices) : price.usd,
+      all_time_low: prices.length ? Math.min(...prices) : price.usd,
+      volume_24: price.usd_24h_vol ?? 0,
       rank_by_market_cap: rankByMarketCap,
       about: about,
     },

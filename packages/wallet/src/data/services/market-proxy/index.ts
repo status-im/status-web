@@ -13,11 +13,11 @@ import erc20TokenList from '../../../constants/erc20.json'
 import { markApiKeyAsRateLimited } from '../api-key-rotation'
 
 import type {
-  deprecated_TokensMetadataResponseBody,
-  legacy_research_TokenMetadataResponseBody,
-  legacy_TokenPriceHistoryResponseBody,
-  legacy_TokensPriceResponseBody,
-  TokenMetadataResponseBody,
+  CoinGeckoCoinDetailResponse,
+  CoinGeckoCoinHistoryResponse,
+  CoinGeckoCoinListResponse,
+  CoinGeckoMarketChartResponse,
+  CoinGeckoSimplePriceResponse,
 } from './types'
 
 const PROXY_BASE_URL = 'https://test.market.status.im'
@@ -39,20 +39,17 @@ export const MARKET_PROXY_REVALIDATION_TIMES = {
 const DEFAULT_NUMERIC_VALUE = 0
 const DEFAULT_EMPTY_ARRAY: never[] = []
 const DEFAULT_EMPTY_STRING = ''
-const PERCENTAGE_MULTIPLIER = 0.01
 const DESCRIPTION_SNIPPET_LENGTH = 200
 const DESCRIPTION_SUMMARY_LENGTH = 500
 const SEO_DESCRIPTION_LENGTH = 160
 const DEFAULT_LANGUAGE_CODE = 'en'
-const DEFAULT_CURRENCY_CODE = 'USD'
 const PRICE_SOURCE = 'CoinGecko'
-const CONVERSION_TYPE = 'direct'
 
 type Revalidation =
   (typeof MARKET_PROXY_REVALIDATION_TIMES)[keyof typeof MARKET_PROXY_REVALIDATION_TIMES]
 
-// Default empty values for token metadata
-const EMPTY_METADATA_DEFAULTS: Partial<TokenMetadataResponseBody['Data']> = {
+// Default empty values for token metadata (for backward compatibility conversion)
+const EMPTY_METADATA_DEFAULTS: Partial<Record<string, unknown>> = {
   ID: 0,
   ID_LEGACY: 0,
   ID_PARENT_ASSET: null,
@@ -155,31 +152,14 @@ export async function legacy_fetchTokenPriceHistory(
   url.searchParams.set('vs_currency', 'usd')
   url.searchParams.set('days', daysParam)
 
-  const response = await _fetchWithAuth<{
-    prices: [number, number][]
-    market_caps: [number, number][]
-    total_volumes: [number, number][]
-  }>(url, revalidate, 'legacy_fetchTokenPriceHistory')
+  const response = await _fetchWithAuth<CoinGeckoMarketChartResponse>(
+    url,
+    revalidate,
+    'legacy_fetchTokenPriceHistory',
+  )
 
-  // Convert CoinGecko format to legacy format
-  const data: legacy_TokenPriceHistoryResponseBody['Data']['Data'] =
-    response.prices.map(([timestamp, price], index) => {
-      const volume = response.total_volumes[index]?.[1] || DEFAULT_NUMERIC_VALUE
-
-      return {
-        time: Math.floor(timestamp / 1000), // Convert to seconds
-        close: price,
-        high: price, // CoinGecko doesn't provide high/low for hourly data
-        low: price,
-        open: price,
-        volumefrom: volume,
-        volumeto: volume * price,
-        conversionType: CONVERSION_TYPE,
-        conversionSymbol: DEFAULT_CURRENCY_CODE,
-      }
-    })
-
-  return data
+  // Return CoinGecko format directly
+  return response
 }
 
 /**
@@ -201,32 +181,11 @@ function _getDescription(description: Record<string, string>): string {
 }
 
 /**
- * Helper: Convert CoinGecko coin data to token metadata format
+ * Helper: Convert CoinGecko coin data to token metadata format (for backward compatibility)
  */
-function _convertCoinGeckoToTokenMetadata(coinData: {
-  id: string
-  symbol: string
-  name: string
-  image: { small: string; large: string; thumb: string }
-  market_cap_rank?: number | null
-  market_data: {
-    current_price: { usd: number }
-    market_cap: { usd: number }
-    market_cap_rank?: number | null
-    total_volume: { usd: number }
-    price_change_24h: number
-    price_change_percentage_24h: number
-    circulating_supply: number
-    total_supply: number
-    max_supply: number | null
-  }
-  description: Record<string, string>
-  links: {
-    homepage: string[]
-    blockchain_site: string[]
-    whitepaper: string | null
-  }
-}): TokenMetadataResponseBody['Data'] {
+function _convertCoinGeckoToTokenMetadata(
+  coinData: CoinGeckoCoinDetailResponse,
+): Record<string, unknown> {
   const description =
     coinData.description?.[DEFAULT_LANGUAGE_CODE] ||
     _getDescription(coinData.description)
@@ -290,7 +249,7 @@ function _convertCoinGeckoToTokenMetadata(coinData: {
     ),
     SEO_TITLE: coinData.name,
     SEO_DESCRIPTION: description.substring(0, SEO_DESCRIPTION_LENGTH),
-  } as TokenMetadataResponseBody['Data']
+  }
 
   return result
 }
@@ -317,30 +276,11 @@ export async function fetchTokenMetadata(
   url.searchParams.set('developer_data', 'false')
   url.searchParams.set('sparkline', 'false')
 
-  const coinData = await _fetchWithAuth<{
-    id: string
-    symbol: string
-    name: string
-    image: { small: string; large: string; thumb: string }
-    market_cap_rank?: number | null
-    market_data: {
-      current_price: { usd: number }
-      market_cap: { usd: number }
-      market_cap_rank?: number | null
-      total_volume: { usd: number }
-      price_change_24h: number
-      price_change_percentage_24h: number
-      circulating_supply: number
-      total_supply: number
-      max_supply: number | null
-    }
-    description: Record<string, string>
-    links: {
-      homepage: string[]
-      blockchain_site: string[]
-      whitepaper: string | null
-    }
-  }>(url, revalidate, 'fetchTokenMetadata')
+  const coinData = await _fetchWithAuth<CoinGeckoCoinDetailResponse>(
+    url,
+    revalidate,
+    'fetchTokenMetadata',
+  )
 
   return _convertCoinGeckoToTokenMetadata(coinData)
 }
@@ -356,64 +296,9 @@ export async function deprecated_fetchTokenMetadata(
 ) {
   const metadata = await fetchTokenMetadata(symbol, revalidate)
 
-  // Convert to deprecated format - most fields are the same, only SUPPORTED_PLATFORMS needs mapping
-  return {
-    ...metadata,
-    ID: 0,
-    ID_LEGACY: 0,
-    ID_PARENT_ASSET: null,
-    ID_ASSET_ISSUER: 0,
-    PARENT_ASSET_SYMBOL: null,
-    SUPPORTED_PLATFORMS: metadata.SUPPORTED_PLATFORMS.map(platform => ({
-      ...platform,
-      LAUNCH_DATE: platform.LAUNCH_DATE ?? 0,
-    })),
-  } as deprecated_TokensMetadataResponseBody['Data'][string]
+  // Return CoinGecko format directly
+  return metadata
 }
-
-const EMPTY_LEGACY_RESEARCH_DEFAULTS = {
-  ContentCreatedOn: 0,
-  Description: '',
-  AssetTokenStatus: 'Active' as const,
-  Algorithm: '',
-  ProofType: '',
-  SortOrder: '0',
-  Sponsored: false,
-  Taxonomy: {
-    Access: '',
-    FCA: '',
-    FINMA: '',
-    Industry: '',
-    CollateralizedAsset: '',
-    CollateralizedAssetType: '',
-    CollateralType: '',
-    CollateralInfo: '',
-  },
-  Rating: {
-    Weiss: {
-      Rating: '',
-      TechnologyAdoptionRating: '',
-      MarketPerformanceRating: '',
-    },
-  },
-  IsTrading: true,
-  TotalCoinsMined: 0,
-  CirculatingSupply: 0,
-  BlockNumber: 0,
-  NetHashesPerSecond: 0,
-  BlockReward: 0,
-  BlockTime: 0,
-  AssetLaunchDate: '',
-  AssetWhitepaperUrl: '',
-  AssetWebsiteUrl: '',
-  MaxSupply: 0,
-  MktCapPenalty: 0,
-  IsUsedInDefi: 0,
-  IsUsedInNft: 0,
-  PlatformType: '',
-  DecimalPoints: 18,
-  AlgorithmType: '',
-} as const
 
 /**
  * @see https://docs.coingecko.com/reference/coins-list
@@ -426,100 +311,19 @@ export async function legacy_research_fetchTokenMetadata(
 ) {
   const url = new URL(`${PROXY_BASE_URL}/v1/coins/list`)
 
-  const coins = await _fetchWithAuth<
-    Array<{ id: string; symbol: string; name: string }>
-  >(url, revalidate, 'legacy_research_fetchTokenMetadata')
+  const coins = await _fetchWithAuth<CoinGeckoCoinListResponse>(
+    url,
+    revalidate,
+    'legacy_research_fetchTokenMetadata',
+  )
 
   const coin = coins.find(c => c.symbol.toLowerCase() === symbol.toLowerCase())
   if (!coin) {
     throw new Error(`Coin not found for symbol: ${symbol}`)
   }
 
-  return {
-    ...EMPTY_LEGACY_RESEARCH_DEFAULTS,
-    Id: coin.id,
-    Url: `https://www.coingecko.com/en/coins/${coin.id}`,
-    ImageUrl: `https://assets.coingecko.com/coins/images/${coin.id}/large/${coin.id}.png`,
-    Name: coin.name,
-    Symbol: coin.symbol.toUpperCase(),
-    CoinName: coin.name,
-    FullName: coin.name,
-  } as legacy_research_TokenMetadataResponseBody['Data'][string]
-}
-
-/**
- * Helper: Convert CoinGecko price data to legacy format
- */
-function _convertCoinGeckoToLegacyPrice(
-  symbol: string,
-  coinId: string,
-  price: {
-    usd: number
-    usd_24h_change?: number
-    usd_market_cap?: number
-    usd_24h_vol?: number
-  },
-): legacy_TokensPriceResponseBody['RAW'][string] {
-  const now = Math.floor(Date.now() / 1000)
-  const volume24h = price.usd_24h_vol || DEFAULT_NUMERIC_VALUE
-  const volume24hTo = volume24h * price.usd
-  const change24h =
-    (price.usd_24h_change || DEFAULT_NUMERIC_VALUE) *
-    price.usd *
-    PERCENTAGE_MULTIPLIER
-
-  return {
-    USD: {
-      TYPE: '5',
-      MARKET: 'CCCAGG',
-      FROMSYMBOL: symbol.toUpperCase(),
-      TOSYMBOL: DEFAULT_CURRENCY_CODE,
-      FLAGS: '4',
-      PRICE: price.usd,
-      LASTUPDATE: now,
-      MEDIAN: price.usd,
-      LASTVOLUME: DEFAULT_NUMERIC_VALUE,
-      LASTVOLUMETO: DEFAULT_NUMERIC_VALUE,
-      LASTTRADEID: DEFAULT_EMPTY_STRING,
-      VOLUMEDAY: DEFAULT_NUMERIC_VALUE,
-      VOLUMEDAYTO: DEFAULT_NUMERIC_VALUE,
-      VOLUME24HOUR: volume24h,
-      VOLUME24HOURTO: volume24hTo,
-      OPENDAY: price.usd,
-      HIGHDAY: price.usd,
-      LOWDAY: price.usd,
-      OPEN24HOUR: price.usd,
-      HIGH24HOUR: price.usd,
-      LOW24HOUR: price.usd,
-      LASTMARKET: PRICE_SOURCE,
-      VOLUMEHOUR: DEFAULT_NUMERIC_VALUE,
-      VOLUMEHOURTO: DEFAULT_NUMERIC_VALUE,
-      OPENHOUR: price.usd,
-      HIGHHOUR: price.usd,
-      LOWHOUR: price.usd,
-      TOPTIERVOLUME24HOUR: volume24h,
-      TOPTIERVOLUME24HOURTO: volume24hTo,
-      CHANGE24HOUR: change24h,
-      CHANGEPCT24HOUR: price.usd_24h_change || DEFAULT_NUMERIC_VALUE,
-      CHANGEDAY: DEFAULT_NUMERIC_VALUE,
-      CHANGEPCTDAY: DEFAULT_NUMERIC_VALUE,
-      CHANGEHOUR: DEFAULT_NUMERIC_VALUE,
-      CHANGEPCTHOUR: DEFAULT_NUMERIC_VALUE,
-      CONVERSIONTYPE: CONVERSION_TYPE,
-      CONVERSIONSYMBOL: DEFAULT_CURRENCY_CODE,
-      CONVERSIONLASTUPDATE: now,
-      SUPPLY: DEFAULT_NUMERIC_VALUE,
-      MKTCAP: price.usd_market_cap || DEFAULT_NUMERIC_VALUE,
-      MKTCAPPENALTY: DEFAULT_NUMERIC_VALUE,
-      CIRCULATINGSUPPLY: DEFAULT_NUMERIC_VALUE,
-      CIRCULATINGSUPPLYMKTCAP: price.usd_market_cap || DEFAULT_NUMERIC_VALUE,
-      TOTALVOLUME24H: volume24h,
-      TOTALVOLUME24HTO: volume24hTo,
-      TOTALTOPTIERVOLUME24H: volume24h,
-      TOTALTOPTIERVOLUME24HTO: volume24hTo,
-      IMAGEURL: `https://assets.coingecko.com/coins/images/${coinId}/large/${coinId}.png`,
-    },
-  }
+  // Return CoinGecko format directly
+  return coin
 }
 
 /**
@@ -546,33 +350,22 @@ export async function legacy_fetchTokensPrice(
     url.searchParams.set('include_market_cap', 'true')
     url.searchParams.set('include_24hr_vol', 'true')
 
-    const priceData = await _fetchWithAuth<
-      Record<
-        string,
-        {
-          usd: number
-          usd_24h_change?: number
-          usd_market_cap?: number
-          usd_24h_vol?: number
-        }
-      >
-    >(url, revalidate, 'legacy_fetchTokensPrice')
+    const priceData = await _fetchWithAuth<CoinGeckoSimplePriceResponse>(
+      url,
+      revalidate,
+      'legacy_fetchTokensPrice',
+    )
 
-    const data: legacy_TokensPriceResponseBody['RAW'] = {}
+    // Return CoinGecko format directly, but map by symbol for backward compatibility
+    const data: Record<string, CoinGeckoSimplePriceResponse[string]> = {}
 
     for (const symbol of symbols) {
       const coinId = coinIdMap[symbol.toLowerCase()]
       if (!coinId || !priceData[coinId]) continue
 
-      const priceDataEntry = _convertCoinGeckoToLegacyPrice(
-        symbol,
-        coinId,
-        priceData[coinId],
-      )
-
       // Store with both original symbol and uppercase symbol for compatibility
-      data[symbol] = priceDataEntry
-      data[symbol.toUpperCase()] = priceDataEntry
+      data[symbol] = priceData[coinId]
+      data[symbol.toUpperCase()] = priceData[coinId]
     }
 
     return data
@@ -612,11 +405,11 @@ export async function fetchTokensPriceForDate(
       url.searchParams.set('date', dateStr)
       url.searchParams.set('localization', 'false')
 
-      const historyData = await _fetchWithAuth<{
-        market_data: {
-          current_price: { usd: number }
-        }
-      }>(url, revalidate, 'fetchTokensPriceForDate')
+      const historyData = await _fetchWithAuth<CoinGeckoCoinHistoryResponse>(
+        url,
+        revalidate,
+        'fetchTokensPriceForDate',
+      )
 
       if (historyData.market_data?.current_price?.usd) {
         data[symbol.toUpperCase()] = {
@@ -634,12 +427,7 @@ export async function fetchTokensPriceForDate(
 }
 
 // Cache for coin list to avoid repeated API calls
-let coinListCache: Array<{
-  id: string
-  symbol: string
-  name: string
-  platforms?: Record<string, string>
-}> | null = null
+let coinListCache: CoinGeckoCoinListResponse | null = null
 let coinListCacheTime = 0
 const COIN_LIST_CACHE_TTL = 3600 * 1000 // 1 hour
 
@@ -702,14 +490,7 @@ async function _getCoinIdFromAddress(symbol: string): Promise<string | null> {
 /**
  * Helper function to get coin list with platforms data
  */
-async function _getCoinList(): Promise<
-  Array<{
-    id: string
-    symbol?: string
-    name?: string
-    platforms?: Record<string, string>
-  }>
-> {
+async function _getCoinList(): Promise<CoinGeckoCoinListResponse> {
   const now = Date.now()
 
   // Use cache if available and not expired
@@ -718,34 +499,21 @@ async function _getCoinList(): Promise<
     coinListCacheTime > 0 &&
     now - coinListCacheTime < COIN_LIST_CACHE_TTL
   ) {
-    return coinListCache as Array<{
-      id: string
-      symbol?: string
-      name?: string
-      platforms?: Record<string, string>
-    }>
+    return coinListCache
   }
 
   // Fetch coin list with platforms data
   const url = new URL(`${PROXY_BASE_URL}/v1/coins/list`)
   url.searchParams.set('include_platform', 'true')
 
-  const coinList = await _fetchWithAuth<
-    Array<{
-      id: string
-      symbol?: string
-      name?: string
-      platforms?: Record<string, string>
-    }>
-  >(url, MARKET_PROXY_REVALIDATION_TIMES.TOKEN_METADATA, 'coinList')
+  const coinList = await _fetchWithAuth<CoinGeckoCoinListResponse>(
+    url,
+    MARKET_PROXY_REVALIDATION_TIMES.TOKEN_METADATA,
+    'coinList',
+  )
 
   // Update cache
-  coinListCache = coinList as Array<{
-    id: string
-    symbol: string
-    name: string
-    platforms?: Record<string, string>
-  }>
+  coinListCache = coinList
   coinListCacheTime = now
 
   return coinList
@@ -804,7 +572,13 @@ async function _getCoinIdsFromSymbols(
     coinListCacheTime > 0 &&
     now - coinListCacheTime < COIN_LIST_CACHE_TTL
   ) {
-    return _mapSymbolsToCoinIds(symbols, coinListCache)
+    // Filter out coins without required fields for mapping
+    const validCoins = coinListCache.filter(c => c.symbol && c.name) as Array<{
+      id: string
+      symbol: string
+      name: string
+    }>
+    return _mapSymbolsToCoinIds(symbols, validCoins)
   }
 
   // Fetch coin list with platforms data
@@ -812,17 +586,20 @@ async function _getCoinIdsFromSymbols(
   url.searchParams.set('include_platform', 'true')
 
   try {
-    coinListCache = await _fetchWithAuth<
-      Array<{
-        id: string
-        symbol: string
-        name: string
-        platforms?: Record<string, string>
-      }>
-    >(url, MARKET_PROXY_REVALIDATION_TIMES.TOKEN_METADATA, 'coin_list_cache')
+    coinListCache = await _fetchWithAuth<CoinGeckoCoinListResponse>(
+      url,
+      MARKET_PROXY_REVALIDATION_TIMES.TOKEN_METADATA,
+      'coin_list_cache',
+    )
     coinListCacheTime = now
 
-    return _mapSymbolsToCoinIds(symbols, coinListCache)
+    // Filter out coins without required fields for mapping
+    const validCoins = coinListCache.filter(c => c.symbol && c.name) as Array<{
+      id: string
+      symbol: string
+      name: string
+    }>
+    return _mapSymbolsToCoinIds(symbols, validCoins)
   } catch (error) {
     console.error('Failed to fetch coin list:', error)
     return {}
