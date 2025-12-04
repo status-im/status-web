@@ -2,9 +2,7 @@
  * CoinGecko API Service
  * @see https://docs.coingecko.com/ for CoinGecko API documentation
  *
- * Supports both direct API calls and proxy endpoint
- * Proxy: https://test.market.status.im
- * Direct: https://api.coingecko.com/api/v3
+ * Uses proxy endpoint: https://test.market.status.im
  */
 
 import retry from 'async-retry'
@@ -25,7 +23,6 @@ import type {
 } from './types'
 
 const PROXY_BASE_URL = 'https://test.market.status.im'
-const DIRECT_API_BASE_URL = 'https://api.coingecko.com/api/v3'
 
 const PROXY_AUTH = {
   username: serverEnv.MARKET_PROXY_AUTH_USERNAME,
@@ -148,44 +145,9 @@ async function _fetchWithAuth<T>(
 }
 
 /**
- * Fetch from direct CoinGecko API
- */
-async function _fetchDirect<T>(
-  url: URL,
-  revalidate: number,
-  useApiKey = false,
-): Promise<T> {
-  const headers: HeadersInit = {
-    'Content-Type': 'application/json',
-  }
-
-  if (useApiKey && serverEnv.COINGECKO_API_KEY) {
-    headers['x-cg-demo-api-key'] = serverEnv.COINGECKO_API_KEY
-  }
-
-  const response = await fetch(url, {
-    headers,
-    next: {
-      revalidate,
-    },
-  })
-
-  if (!response.ok) {
-    console.error(response.statusText)
-    throw new Error(
-      `Failed to fetch: ${response.status} ${response.statusText}`,
-    )
-  }
-
-  return response.json()
-}
-
-/**
  * Helper function to get coin list with platforms data
  */
-async function _getCoinList(
-  useProxy = true,
-): Promise<CoinGeckoCoinListResponse> {
+async function _getCoinList(): Promise<CoinGeckoCoinListResponse> {
   const now = Date.now()
 
   // Use cache if available and not expired
@@ -197,27 +159,14 @@ async function _getCoinList(
     return coinListCache
   }
 
-  const url = useProxy
-    ? new URL(`${PROXY_BASE_URL}/v1/coins/list`)
-    : new URL(`${DIRECT_API_BASE_URL}/coins/list`)
+  const url = new URL(`${PROXY_BASE_URL}/v1/coins/list`)
+  url.searchParams.set('include_platform', 'true')
 
-  if (useProxy) {
-    url.searchParams.set('include_platform', 'true')
-  } else {
-    url.searchParams.set('include_platform', 'true')
-  }
-
-  const coinList = useProxy
-    ? await _fetchWithAuth<CoinGeckoCoinListResponse>(
-        url,
-        COINGECKO_REVALIDATION_TIMES.TOKEN_METADATA,
-        'coinList',
-      )
-    : await _fetchDirect<CoinGeckoCoinListResponse>(
-        url,
-        COINGECKO_REVALIDATION_TIMES.TOKEN_METADATA,
-        true,
-      )
+  const coinList = await _fetchWithAuth<CoinGeckoCoinListResponse>(
+    url,
+    COINGECKO_REVALIDATION_TIMES.TOKEN_METADATA,
+    'coinList',
+  )
 
   // Update cache
   coinListCache = coinList
@@ -279,7 +228,6 @@ function _mapSymbolsToCoinIds(
  */
 async function _getCoinIdsFromSymbols(
   symbols: string[],
-  useProxy = true,
 ): Promise<Record<string, string>> {
   const now = Date.now()
 
@@ -299,7 +247,7 @@ async function _getCoinIdsFromSymbols(
   }
 
   // Fetch coin list with platforms data
-  const coinList = await _getCoinList(useProxy)
+  const coinList = await _getCoinList()
 
   // Filter out coins without required fields for mapping
   const validCoins = coinList.filter(c => c.symbol && c.name) as Array<{
@@ -313,10 +261,7 @@ async function _getCoinIdsFromSymbols(
 /**
  * Helper function to get coin ID from contract address
  */
-async function _getCoinIdFromAddress(
-  symbol: string,
-  useProxy = true,
-): Promise<string | null> {
+async function _getCoinIdFromAddress(symbol: string): Promise<string | null> {
   try {
     if (!erc20TokenList?.tokens) {
       return null
@@ -332,7 +277,7 @@ async function _getCoinIdFromAddress(
     }
 
     // Get coin list and find coin ID by contract address
-    const coinList = await _getCoinList(useProxy)
+    const coinList = await _getCoinList()
     const normalizedAddress = token.address.toLowerCase()
 
     // Find coin where platforms.ethereum matches the address
@@ -355,7 +300,6 @@ async function _getCoinIdFromAddress(
  */
 export async function getCoinIdFromSymbol(
   symbol: string,
-  useProxy = true,
 ): Promise<string | null> {
   const symbolLower = symbol.toLowerCase()
 
@@ -364,7 +308,7 @@ export async function getCoinIdFromSymbol(
   if (symbolUpper in DEFAULT_TOKEN_IDS) {
     const knownCoinId = DEFAULT_TOKEN_IDS[symbolUpper]
     // Verify the coin ID exists in the coin list
-    const coinList = await _getCoinList(useProxy)
+    const coinList = await _getCoinList()
     const knownCoin = coinList.find(c => c.id === knownCoinId)
     if (knownCoin) {
       return knownCoinId
@@ -372,13 +316,13 @@ export async function getCoinIdFromSymbol(
   }
 
   // Try to get coin ID from contract address
-  const coinIdFromAddress = await _getCoinIdFromAddress(symbol, useProxy)
+  const coinIdFromAddress = await _getCoinIdFromAddress(symbol)
   if (coinIdFromAddress) {
     return coinIdFromAddress
   }
 
   // Fallback to symbol-based lookup
-  const coinIdMap = await _getCoinIdsFromSymbols([symbol], useProxy)
+  const coinIdMap = await _getCoinIdsFromSymbols([symbol])
   return coinIdMap[symbolLower] || null
 }
 
@@ -391,9 +335,8 @@ export async function fetchTokenPriceHistory(
   symbol: string,
   days: '1' | '7' | '30' | '90' | '365' | 'all' = '1',
   revalidate: Revalidation = COINGECKO_REVALIDATION_TIMES.PRICE_HISTORY,
-  useProxy = true,
 ): Promise<CoinGeckoMarketChartResponse> {
-  const coinId = await getCoinIdFromSymbol(symbol, useProxy)
+  const coinId = await getCoinIdFromSymbol(symbol)
   if (!coinId) {
     throw new Error(`Coin not found for symbol: ${symbol}`)
   }
@@ -401,20 +344,15 @@ export async function fetchTokenPriceHistory(
   // Map days to CoinGecko format
   const daysParam = days === 'all' ? 'max' : days
 
-  const url = useProxy
-    ? new URL(`${PROXY_BASE_URL}/v1/coins/${coinId}/market_chart`)
-    : new URL(`${DIRECT_API_BASE_URL}/coins/${coinId}/market_chart`)
-
+  const url = new URL(`${PROXY_BASE_URL}/v1/coins/${coinId}/market_chart`)
   url.searchParams.set('vs_currency', 'usd')
   url.searchParams.set('days', daysParam)
 
-  return useProxy
-    ? _fetchWithAuth<CoinGeckoMarketChartResponse>(
-        url,
-        revalidate,
-        'fetchTokenPriceHistory',
-      )
-    : _fetchDirect<CoinGeckoMarketChartResponse>(url, revalidate)
+  return _fetchWithAuth<CoinGeckoMarketChartResponse>(
+    url,
+    revalidate,
+    'fetchTokenPriceHistory',
+  )
 }
 
 /**
@@ -425,17 +363,13 @@ export async function fetchTokenPriceHistory(
 export async function fetchTokenMetadata(
   symbol: string,
   revalidate: Revalidation = COINGECKO_REVALIDATION_TIMES.TOKEN_METADATA,
-  useProxy = true,
 ): Promise<CoinGeckoCoinDetailResponse> {
-  const coinId = await getCoinIdFromSymbol(symbol, useProxy)
+  const coinId = await getCoinIdFromSymbol(symbol)
   if (!coinId) {
     throw new Error(`Coin not found for symbol: ${symbol}`)
   }
 
-  const url = useProxy
-    ? new URL(`${PROXY_BASE_URL}/v1/coins/${coinId}`)
-    : new URL(`${DIRECT_API_BASE_URL}/coins/${coinId}`)
-
+  const url = new URL(`${PROXY_BASE_URL}/v1/coins/${coinId}`)
   url.searchParams.set('localization', 'true')
   url.searchParams.set('tickers', 'false')
   url.searchParams.set('market_data', 'true')
@@ -443,13 +377,13 @@ export async function fetchTokenMetadata(
   url.searchParams.set('developer_data', 'false')
   url.searchParams.set('sparkline', 'false')
 
-  return useProxy
-    ? _fetchWithAuth<CoinGeckoCoinDetailResponse>(
-        url,
-        revalidate,
-        'fetchTokenMetadata',
-      )
-    : _fetchDirect<CoinGeckoCoinDetailResponse>(url, revalidate)
+  const result = await _fetchWithAuth<CoinGeckoCoinDetailResponse>(
+    url,
+    revalidate,
+    'fetchTokenMetadata',
+  )
+
+  return result
 }
 
 /**
@@ -460,33 +394,27 @@ export async function fetchTokenMetadata(
 export async function fetchTokensPrice(
   symbols: string[],
   revalidate: Revalidation = COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE,
-  useProxy = true,
 ): Promise<Record<string, CoinGeckoSimplePriceResponse[string]>> {
   if (symbols.length === 0) return {}
 
   try {
-    const coinIdMap = await _getCoinIdsFromSymbols(symbols, useProxy)
+    const coinIdMap = await _getCoinIdsFromSymbols(symbols)
 
     const coinIds = Object.values(coinIdMap).filter(Boolean)
     if (coinIds.length === 0) return {}
 
-    const url = useProxy
-      ? new URL(`${PROXY_BASE_URL}/v1/simple/price`)
-      : new URL(`${DIRECT_API_BASE_URL}/simple/price`)
-
+    const url = new URL(`${PROXY_BASE_URL}/v1/simple/price`)
     url.searchParams.set('ids', coinIds.join(','))
     url.searchParams.set('vs_currencies', 'usd')
     url.searchParams.set('include_24hr_change', 'true')
     url.searchParams.set('include_market_cap', 'true')
     url.searchParams.set('include_24hr_vol', 'true')
 
-    const priceData = useProxy
-      ? await _fetchWithAuth<CoinGeckoSimplePriceResponse>(
-          url,
-          revalidate,
-          'fetchTokensPrice',
-        )
-      : await _fetchDirect<CoinGeckoSimplePriceResponse>(url, revalidate, true)
+    const priceData = await _fetchWithAuth<CoinGeckoSimplePriceResponse>(
+      url,
+      revalidate,
+      'fetchTokensPrice',
+    )
 
     // Map by symbol for backward compatibility
     const data: Record<string, CoinGeckoSimplePriceResponse[string]> = {}
@@ -515,12 +443,11 @@ export async function fetchTokensPriceForDate(
   symbols: string[],
   timestamp: number,
   revalidate: Revalidation = COINGECKO_REVALIDATION_TIMES.PRICE_FOR_DATE,
-  useProxy = true,
 ): Promise<Record<string, { usd: number }>> {
   const data: Record<string, { usd: number }> = {}
 
   // Get coin ids from symbols
-  const coinIdMap = await _getCoinIdsFromSymbols(symbols, useProxy)
+  const coinIdMap = await _getCoinIdsFromSymbols(symbols)
 
   for (const symbol of symbols) {
     try {
@@ -534,20 +461,15 @@ export async function fetchTokensPriceForDate(
       const date = new Date(timestamp * 1000)
       const dateStr = date.toISOString().split('T')[0] // YYYY-MM-DD
 
-      const url = useProxy
-        ? new URL(`${PROXY_BASE_URL}/v1/coins/${coinId}/history`)
-        : new URL(`${DIRECT_API_BASE_URL}/coins/${coinId}/history`)
-
+      const url = new URL(`${PROXY_BASE_URL}/v1/coins/${coinId}/history`)
       url.searchParams.set('date', dateStr)
       url.searchParams.set('localization', 'false')
 
-      const historyData = useProxy
-        ? await _fetchWithAuth<CoinGeckoCoinHistoryResponse>(
-            url,
-            revalidate,
-            'fetchTokensPriceForDate',
-          )
-        : await _fetchDirect<CoinGeckoCoinHistoryResponse>(url, revalidate)
+      const historyData = await _fetchWithAuth<CoinGeckoCoinHistoryResponse>(
+        url,
+        revalidate,
+        'fetchTokensPriceForDate',
+      )
 
       if (historyData.market_data?.current_price?.usd) {
         data[symbol.toUpperCase()] = {
@@ -567,10 +489,8 @@ export async function fetchTokensPriceForDate(
  *
  * Returns coin list from CoinGecko API.
  */
-export async function getCoinList(
-  useProxy = true,
-): Promise<CoinGeckoCoinListResponse> {
-  return _getCoinList(useProxy)
+export async function getCoinList(): Promise<CoinGeckoCoinListResponse> {
+  return _getCoinList()
 }
 
 /**
@@ -579,15 +499,15 @@ export async function getCoinList(
  * Fetches native token price for a network.
  */
 export const getNativeTokenPrice = async (network: NetworkType) => {
-  const url = new URL(`${DIRECT_API_BASE_URL}/simple/price`)
+  const url = new URL(`${PROXY_BASE_URL}/v1/simple/price`)
   url.searchParams.set('ids', coingeckoNativeTokens[network])
   url.searchParams.set('vs_currencies', 'usd')
   url.searchParams.set('include_24hr_change', 'true')
 
-  const prices = await _fetchDirect<CoinGeckoSimplePriceResponse>(
+  const prices = await _fetchWithAuth<CoinGeckoSimplePriceResponse>(
     url,
     COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE,
-    true,
+    'getNativeTokenPrice',
   )
 
   return prices[coingeckoNativeTokens[network]]
@@ -603,14 +523,15 @@ export const getNativeTokenPriceChartData = async (
   days: '1' | '7' | '30' | '90' | '365' | 'all' = '1',
 ) => {
   const url = new URL(
-    `${DIRECT_API_BASE_URL}/coins/${coingeckoNativeTokens[network]}/market_chart`,
+    `${PROXY_BASE_URL}/v1/coins/${coingeckoNativeTokens[network]}/market_chart`,
   )
   url.searchParams.set('vs_currency', 'usd')
   url.searchParams.set('days', days === 'all' ? 'max' : days)
 
-  const chartData = await _fetchDirect<CoinGeckoMarketChartResponse>(
+  const chartData = await _fetchWithAuth<CoinGeckoMarketChartResponse>(
     url,
     COINGECKO_REVALIDATION_TIMES.PRICE_HISTORY,
+    'getNativeTokenPriceChartData',
   )
 
   return calculateHourlyPrices(chartData.prices)
@@ -627,14 +548,15 @@ export const getERC20TokenPriceChartData = async (
   days: '1' | '7' | '30' | '90' | '365' | 'all' = '1',
 ) => {
   const url = new URL(
-    `${DIRECT_API_BASE_URL}/coins/${coingeckoNetworks[network]}/contract/${address}/market_chart`,
+    `${PROXY_BASE_URL}/v1/coins/${coingeckoNetworks[network]}/contract/${address}/market_chart`,
   )
   url.searchParams.set('vs_currency', 'usd')
   url.searchParams.set('days', days === 'all' ? 'max' : days)
 
-  const chartData = await _fetchDirect<CoinGeckoMarketChartResponse>(
+  const chartData = await _fetchWithAuth<CoinGeckoMarketChartResponse>(
     url,
     COINGECKO_REVALIDATION_TIMES.PRICE_HISTORY,
+    'getERC20TokenPriceChartData',
   )
 
   return calculateHourlyPrices(chartData.prices)
@@ -649,7 +571,7 @@ export const getNativeTokenMetadata = async (
   network: NetworkType,
 ): Promise<CoinGeckoCoinDetailResponse> => {
   const url = new URL(
-    `${DIRECT_API_BASE_URL}/coins/${coingeckoNativeTokens[network]}`,
+    `${PROXY_BASE_URL}/v1/coins/${coingeckoNativeTokens[network]}`,
   )
   url.searchParams.set('localization', 'false')
   url.searchParams.set('tickers', 'false')
@@ -658,9 +580,10 @@ export const getNativeTokenMetadata = async (
   url.searchParams.set('developer_data', 'false')
   url.searchParams.set('sparkline', 'true')
 
-  return _fetchDirect<CoinGeckoCoinDetailResponse>(
+  return _fetchWithAuth<CoinGeckoCoinDetailResponse>(
     url,
     COINGECKO_REVALIDATION_TIMES.TOKEN_METADATA,
+    'getNativeTokenMetadata',
   )
 }
 
@@ -674,7 +597,7 @@ export const getERC20TokenMetadata = async (
   network: NetworkType,
 ): Promise<CoinGeckoCoinDetailResponse> => {
   const url = new URL(
-    `${DIRECT_API_BASE_URL}/coins/${coingeckoNetworks[network]}/contract/${address}`,
+    `${PROXY_BASE_URL}/v1/coins/${coingeckoNetworks[network]}/contract/${address}`,
   )
   url.searchParams.set('localization', 'false')
   url.searchParams.set('tickers', 'false')
@@ -683,9 +606,10 @@ export const getERC20TokenMetadata = async (
   url.searchParams.set('developer_data', 'false')
   url.searchParams.set('sparkline', 'true')
 
-  return _fetchDirect<CoinGeckoCoinDetailResponse>(
+  return _fetchWithAuth<CoinGeckoCoinDetailResponse>(
     url,
     COINGECKO_REVALIDATION_TIMES.TOKEN_METADATA,
+    'getERC20TokenMetadata',
   )
 }
 
@@ -707,16 +631,16 @@ export const getERC20TokensPrice = async (
   const response = await retry(
     async () => {
       const url = new URL(
-        `${DIRECT_API_BASE_URL}/simple/token_price/${coingeckoNetworks[network]}`,
+        `${PROXY_BASE_URL}/v1/simple/token_price/${coingeckoNetworks[network]}`,
       )
       url.searchParams.set('contract_addresses', _addresses.join(','))
       url.searchParams.set('vs_currencies', 'usd')
       url.searchParams.set('include_24hr_change', 'true')
 
-      const result = await _fetchDirect<CoinGeckoSimplePriceResponse>(
+      const result = await _fetchWithAuth<CoinGeckoSimplePriceResponse>(
         url,
         COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE,
-        true,
+        'getERC20TokensPrice',
       )
 
       return result
@@ -739,12 +663,13 @@ export const getERC20TokensPrice = async (
  * Fetches token list from CoinGecko.
  */
 export const getTokenList = async (): Promise<CoinGeckoCoinListResponse> => {
-  const url = new URL(`${DIRECT_API_BASE_URL}/coins/list`)
+  const url = new URL(`${PROXY_BASE_URL}/v1/coins/list`)
+  url.searchParams.set('include_platform', 'true')
 
-  return _fetchDirect<CoinGeckoCoinListResponse>(
+  return _fetchWithAuth<CoinGeckoCoinListResponse>(
     url,
     COINGECKO_REVALIDATION_TIMES.TOKEN_METADATA,
-    true,
+    'getTokenList',
   )
 }
 
@@ -758,13 +683,13 @@ export const getNFTFloorPrice = async (
   network: NetworkType,
 ): Promise<number> => {
   const url = new URL(
-    `${DIRECT_API_BASE_URL}/nfts/${coingeckoNetworks[network]}/contract/${contract}`,
+    `${PROXY_BASE_URL}/v1/nfts/${coingeckoNetworks[network]}/contract/${contract}`,
   )
 
-  const body = await _fetchDirect<CoinGeckoNFTFloorPriceResponse>(
+  const body = await _fetchWithAuth<CoinGeckoNFTFloorPriceResponse>(
     url,
     COINGECKO_REVALIDATION_TIMES.TOKEN_METADATA,
-    true,
+    'getNFTFloorPrice',
   )
 
   return body.floor_price.native_currency
@@ -810,11 +735,10 @@ export const legacy_fetchTokensPrice = fetchTokensPrice
 export const legacy_research_fetchTokenMetadata = async (
   symbol: string,
   _revalidate: Revalidation = COINGECKO_REVALIDATION_TIMES.TOKEN_METADATA,
-  useProxy = true,
 ) => {
   // _revalidate is kept for backward compatibility but not used
   void _revalidate
-  const coinList = await _getCoinList(useProxy)
+  const coinList = await _getCoinList()
   const coin = coinList.find(
     c => c.symbol.toLowerCase() === symbol.toLowerCase(),
   )
