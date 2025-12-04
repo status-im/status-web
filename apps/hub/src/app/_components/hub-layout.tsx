@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 
+import { ToastContainer } from '@status-im/components'
 import { Divider, Footer } from '@status-im/status-network/components'
 import { useReadContract } from 'wagmi'
 
@@ -17,6 +18,7 @@ interface HubLayoutProps {
 
 export function HubLayout({ children }: HubLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+
   const { data: emergencyModeEnabled } = useReadContract({
     address: STAKING_MANAGER.address,
     abi: STAKING_MANAGER.abi,
@@ -44,17 +46,18 @@ export function HubLayout({ children }: HubLayoutProps) {
 
         <section className="z-30 overflow-visible lg:sticky lg:z-50">
           <div className="relative">
-            <div className="absolute left-0 top-0 h-px w-9 bg-gradient-to-l from-[#E7EAEE] to-transparent" />
+            <div className="absolute left-0 top-0 h-px w-9 bg-gradient-to-l from-[#E7EAEE] to-[transparent]" />
             <div className="px-10">
               <Divider variant="fullscreen" />
             </div>
-            <div className="absolute right-0 top-0 h-px w-9 bg-gradient-to-r from-[#E7EAEE] to-transparent" />
+            <div className="absolute right-0 top-0 h-px w-9 bg-gradient-to-r from-[#E7EAEE] to-[transparent]" />
           </div>
           <div className="px-0 lg:px-12">
             <Footer />
           </div>
         </section>
       </div>
+      <ToastContainer />
     </div>
   )
 }

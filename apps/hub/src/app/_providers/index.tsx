@@ -8,6 +8,7 @@ import { statusSepolia } from 'wagmi/chains'
 
 import { wagmiConfig } from '~constants/chain'
 import { siweConfig } from '~constants/siwe'
+import { PreDepositStateProvider } from '~hooks/usePreDepositStateContext'
 import { VaultStateProvider } from '~hooks/useVaultStateContext'
 
 import { VaultProvider } from './vault-provider'
@@ -36,8 +37,9 @@ const queryClient = new QueryClient({
  * 2. QueryClientProvider - React Query for data fetching
  * 3. SiweProvider - SIWE authentication
  * 4. ConnectKitProvider - Wallet connection UI
- * 5. VaultStateProvider - Vault operation state machine
- * 6. VaultProvider - Vault-specific features
+ * 5. PreDepositStateProvider - Pre-deposit state machine
+ * 6. VaultStateProvider - Vault operation state machine
+ * 7. VaultProvider - Vault-specific features
  */
 export function Providers({ children }: ProvidersProps) {
   return (
@@ -49,12 +51,14 @@ export function Providers({ children }: ProvidersProps) {
               initialChainId: statusSepolia.id,
             }}
           >
-            <VaultStateProvider>
-              <VaultProvider>
-                {children}
-                <ToastContainer />
-              </VaultProvider>
-            </VaultStateProvider>
+            <PreDepositStateProvider>
+              <VaultStateProvider>
+                <VaultProvider>
+                  {children}
+                  <ToastContainer />
+                </VaultProvider>
+              </VaultStateProvider>
+            </PreDepositStateProvider>
           </ConnectKitProvider>
         </SIWEProvider>
       </QueryClientProvider>

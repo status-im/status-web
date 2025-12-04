@@ -1,16 +1,28 @@
 'use client'
 
+import { useState } from 'react'
+
 import { ExternalIcon } from '@status-im/icons/20'
 import { ButtonLink } from '@status-im/status-network/components'
 import Image from 'next/image'
 
 import { HubLayout } from '~components/hub-layout'
+import { PreDepositModal } from '~components/pre-deposit-modal'
+import { VaultCard } from '~components/vault-card'
+import { type Vault, VAULTS } from '~constants/index'
 
-// import { VaultCard } from '~components/vault-card'
 import { Apps } from '../_components/apps'
 import { Hero } from '../_components/hero'
 
+export const REWARDS = ['KARMA', 'SNT', 'LINEA']
+
 export default function DashboardPage() {
+  const [selectedVault, setSelectedVault] = useState<Vault | null>(null)
+
+  const defaultVault = VAULTS.find(v => v.id === 'SNT') ?? VAULTS[0]
+
+  const activeVaults = VAULTS.filter(v => !v.soon)
+
   return (
     <HubLayout>
       <div className="flex flex-col p-4 lg:px-6 lg:py-8">
@@ -19,18 +31,18 @@ export default function DashboardPage() {
 
         {/* Main Content Card */}
         <div className="mx-auto mt-7 w-full max-w-[1176px]">
-          {/* <div className="mb-8 rounded-32 bg-neutral-2.5 p-8">
+          <div className="mb-8 rounded-32 bg-neutral-2.5 p-0 lg:p-8">
             <div className="mb-6 flex items-start justify-between">
               <div className="max-w-2xl">
-                <h3 className="mb-2 text-27 font-600 text-neutral-90">
+                <h3 className="text-19 font-600 text-neutral-90 lg:text-27">
                   Deposit funds for yield and rewards
                 </h3>
-                <div className="flex items-center">
+                <div className="flex flex-col gap-2 lg:flex-row lg:items-start">
                   <div className="flex -space-x-2">
                     {REWARDS.map((reward, index) => (
                       <Image
                         key={index}
-                        src={`/tokens/${reward}.png`}
+                        src={`/tokens/${reward.toLowerCase()}.png`}
                         alt={reward}
                         width="22"
                         height="22"
@@ -38,7 +50,7 @@ export default function DashboardPage() {
                       />
                     ))}
                   </div>
-                  <p className="ml-1 text-15 text-neutral-60">
+                  <p className="text-15 text-neutral-60">
                     Rewards in KARMA, SNT, LINEA, MetaFi and points from native
                     apps
                   </p>
@@ -46,7 +58,7 @@ export default function DashboardPage() {
               </div>
               <ButtonLink
                 variant="outline"
-                size="32"
+                size="24"
                 href="https://status-im.gitbook.io/status-network/user-guides/hub"
               >
                 Learn more
@@ -54,46 +66,26 @@ export default function DashboardPage() {
               </ButtonLink>
             </div>
 
-            <section className="relative ml-auto w-full max-w-[906px]">
+            <section className="relative w-full">
+              <div className="-mx-4 flex gap-4 overflow-x-auto px-4 pb-4 lg:-mx-0 lg:px-0">
+                {VAULTS.map(vault => (
+                  <div key={vault.id} className="w-[200px] shrink-0">
+                    <VaultCard
+                      vault={vault}
+                      onDeposit={() => setSelectedVault(vault)}
+                    />
+                  </div>
+                ))}
+              </div>
               <Image
                 src="/dragon.png"
                 alt="Dragon"
                 width="354"
                 height="320"
-                className="absolute left-[-290px] top-[120px]"
+                className="relative lg:absolute lg:left-[-290px] lg:top-[120px]"
               />
-              <div className="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2">
-                <VaultCard
-                  name="ETH vault"
-                  apy="5.2%"
-                  rewards={['KARMA', 'SNT', 'LINEA']}
-                  icon="ETH"
-                  onDeposit={() => console.log('Deposit to ETH vault')}
-                />
-                <VaultCard
-                  name="SNT vault"
-                  apy="8.7%"
-                  rewards={['KARMA', 'MetaFi', 'Points']}
-                  icon="SNT"
-                  onDeposit={() => console.log('Deposit to SNT vault')}
-                />
-                <VaultCard
-                  name="USDC vault"
-                  apy="3.9%"
-                  rewards={['KARMA', 'SNT', 'Points']}
-                  icon="USDC"
-                  onDeposit={() => console.log('Deposit to USDC vault')}
-                />
-                <VaultCard
-                  name="LINEA vault"
-                  apy="6.1%"
-                  rewards={['KARMA', 'MetaFi', 'LINEA']}
-                  icon="LINEA"
-                  onDeposit={() => console.log('Deposit to LINEA vault')}
-                />
-              </div>
             </section>
-          </div> */}
+          </div>
           <Apps />
         </div>
 
@@ -140,6 +132,13 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+      <PreDepositModal
+        open={selectedVault !== null}
+        onOpenChange={open => !open && setSelectedVault(null)}
+        vault={selectedVault ?? defaultVault}
+        vaults={activeVaults}
+        setActiveVault={setSelectedVault}
+      />
     </HubLayout>
   )
 }
