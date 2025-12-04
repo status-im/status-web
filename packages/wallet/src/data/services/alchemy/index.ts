@@ -81,7 +81,7 @@ const allCategories = [
   'specialnft',
 ] as const
 
-const STATUS_ETH_RPC_PROXY = 'https://test.eth-rpc.status.im'
+const STATUS_ETH_RPC_PROXY = serverEnv.ETH_RPC_PROXY_URL
 
 const STATUS_RPC_AUTH: { username: string; password: string } = {
   username: serverEnv.ETH_RPC_PROXY_AUTH_USERNAME,

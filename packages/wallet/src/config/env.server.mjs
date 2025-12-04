@@ -13,8 +13,10 @@ export const envSchema = z.object({
   COINGECKO_API_KEY: z.string(),
   PORT: z.coerce.number().optional(),
   MERCURYO_SECRET_KEY: z.string(),
+  ETH_RPC_PROXY_URL: z.string(),
   ETH_RPC_PROXY_AUTH_USERNAME: z.string(),
   ETH_RPC_PROXY_AUTH_PASSWORD: z.string(),
+  MARKET_PROXY_URL: z.string(),
   MARKET_PROXY_AUTH_USERNAME: z.string(),
   MARKET_PROXY_AUTH_PASSWORD: z.string(),
 })

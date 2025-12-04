@@ -2,7 +2,7 @@
  * CoinGecko API Service
  * @see https://docs.coingecko.com/ for CoinGecko API documentation
  *
- * Uses proxy endpoint: https://test.market.status.im
+ * Uses proxy endpoint: serverEnv.MARKET_PROXY_URL
  */
 
 import retry from 'async-retry'
@@ -22,7 +22,7 @@ import type {
   CoinGeckoSimplePriceResponse,
 } from './types'
 
-const PROXY_BASE_URL = 'https://test.market.status.im'
+const PROXY_BASE_URL = serverEnv.MARKET_PROXY_URL
 
 const PROXY_AUTH = {
   username: serverEnv.MARKET_PROXY_AUTH_USERNAME,
