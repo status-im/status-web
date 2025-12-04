@@ -16,9 +16,9 @@ import {
   markApiKeyAsSuccessful,
 } from '../api-key-rotation'
 import {
-  legacy_fetchTokensPrice,
-  MARKET_PROXY_REVALIDATION_TIMES,
-} from '../market-proxy'
+  COINGECKO_REVALIDATION_TIMES,
+  fetchTokensPrice,
+} from '../coingecko/index'
 import { estimateConfirmationTime, processFeeHistory } from './utils'
 
 import type { NetworkType } from '../../api/types'
@@ -1026,10 +1026,7 @@ export async function getFeeRate(
             STATUS_RPC_AUTH,
           )
         }),
-        legacy_fetchTokensPrice(
-          ['ETH'],
-          MARKET_PROXY_REVALIDATION_TIMES.TRADING_PRICE,
-        ),
+        fetchTokensPrice(['ETH'], COINGECKO_REVALIDATION_TIMES.TRADING_PRICE),
       ])
   } catch (error) {
     console.error('Failed to fetch fee rate:', error)
@@ -1055,7 +1052,7 @@ export async function getFeeRate(
     reward: feeHistory?.result?.reward ?? null,
   })
 
-  const ethPrice = ethPriceData?.['ETH']?.['USD']?.['PRICE'] || 0
+  const ethPrice = ethPriceData?.['ETH']?.usd || 0
 
   const feeEth = parseFloat(formatEther(gasLimit * (baseFee + priorityFee)))
   const feeEur = parseFloat((ethPrice > 0 ? feeEth * ethPrice : 0).toFixed(6))

@@ -8,9 +8,9 @@ import {
   getNFTs,
 } from '../../services/alchemy'
 import {
-  legacy_fetchTokensPrice,
-  MARKET_PROXY_REVALIDATION_TIMES,
-} from '../../services/market-proxy'
+  COINGECKO_REVALIDATION_TIMES,
+  fetchTokensPrice,
+} from '../../services/coingecko/index'
 import { publicProcedure, router } from '../lib/trpc'
 
 import type {
@@ -170,14 +170,14 @@ async function collectible(
   const currency = 'USD'
   let price: number | undefined
   let floorPrice: number | undefined
+
   if (network === 'ethereum') {
     const symbol = 'ETH'
-    price = (
-      await legacy_fetchTokensPrice(
-        [symbol],
-        MARKET_PROXY_REVALIDATION_TIMES.CURRENT_PRICE,
-      )
-    )[symbol][currency].PRICE
+    const priceData = await fetchTokensPrice(
+      [symbol],
+      COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE,
+    )
+    price = priceData[symbol]?.usd
     floorPrice = nft.contract.openSeaMetadata.floorPrice ?? undefined
     // note: looksRare data is significantly inconsistent with opensea data
     // floorPrice = (await getNFTFloorPrice(contract, network)).openSea.floorPrice

@@ -11,13 +11,14 @@ import {
   getNativeTokenBalance,
 } from '../../services/alchemy'
 import {
+  COINGECKO_REVALIDATION_TIMES,
   fetchTokenMetadata,
-  legacy_fetchTokenPriceHistory,
-  legacy_fetchTokensPrice,
-  MARKET_PROXY_REVALIDATION_TIMES,
-} from '../../services/market-proxy'
+  fetchTokenPriceHistory,
+  fetchTokensPrice,
+} from '../../services/coingecko/index'
 import { publicProcedure, router } from '../lib/trpc'
 
+import type { CoinGeckoCoinDetailResponse } from '../../services/coingecko/types'
 import type { NetworkType } from '../types'
 
 type ERC20Token = (typeof erc20TokenList)['tokens'][number]
@@ -75,7 +76,7 @@ export const DEFAULT_TOKEN_SYMBOLS = [
 
 export type DefaultTokenSymbol = (typeof DEFAULT_TOKEN_SYMBOLS)[number]
 
-export const DEFAULT_TOKEN_IDS: Record<DefaultTokenSymbol, string> = {
+export const DEFAULT_TOKEN_IDS: Record<string, string> = {
   ETH: 'ethereum',
   SNT: 'status',
   USDC: 'usd-coin',
@@ -84,20 +85,32 @@ export const DEFAULT_TOKEN_IDS: Record<DefaultTokenSymbol, string> = {
   PEPE: 'pepe',
   UNI: 'uniswap',
   SHIB: 'shiba-inu',
-} as const
+}
 
-const DEFAULT_TOKEN_METADATA = {
-  SUPPLY_TOTAL: 0,
-  SUPPLY_CIRCULATING: 0,
-  TOPLIST_BASE_RANK: { TOTAL_MKT_CAP_USD: 0 },
-  ASSET_DESCRIPTION: '',
+const DEFAULT_TOKEN_METADATA: Partial<CoinGeckoCoinDetailResponse> = {
+  market_data: {
+    current_price: { usd: 0 },
+    market_cap: { usd: 0 },
+    total_volume: { usd: 0 },
+    price_change_24h: 0,
+    price_change_percentage_24h: 0,
+    circulating_supply: 0,
+    total_supply: 0,
+    max_supply: null,
+  },
+  description: {},
+  links: {
+    homepage: [],
+    blockchain_site: [],
+    whitepaper: null,
+  },
 }
 
 async function fetchTokenMetadataWithFallback(symbol: string) {
   try {
     return await fetchTokenMetadata(
       symbol,
-      MARKET_PROXY_REVALIDATION_TIMES.TOKEN_METADATA,
+      COINGECKO_REVALIDATION_TIMES.TOKEN_METADATA,
     )
   } catch {
     return DEFAULT_TOKEN_METADATA
@@ -272,9 +285,7 @@ async function all({
           address,
           STATUS_NETWORKS[token.chainId],
         )
-        const price = (await legacy_fetchTokensPrice([token.symbol]))[
-          token.symbol
-        ]
+        const price = (await fetchTokensPrice([token.symbol]))[token.symbol]
 
         // Skip if price data is not available
         if (!price || price.usd === undefined) {
@@ -385,7 +396,7 @@ async function all({
       const batch = partialAssetEntries.slice(i, i + batchSize)
       const symbols = [...new Set(batch.map(([, asset]) => asset.symbol))]
 
-      const prices = await legacy_fetchTokensPrice(symbols)
+      const prices = await fetchTokensPrice(symbols)
 
       for (const [, partialAsset] of batch) {
         const price = prices[partialAsset.symbol]
@@ -433,9 +444,9 @@ async function all({
     )
 
     if (missingSymbols.length > 0) {
-      const prices = await legacy_fetchTokensPrice(
+      const prices = await fetchTokensPrice(
         missingSymbols,
-        MARKET_PROXY_REVALIDATION_TIMES.CURRENT_PRICE,
+        COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE,
       )
 
       for (const symbol of missingSymbols) {
@@ -515,15 +526,15 @@ async function nativeToken({
       }
 
       const price = (
-        await legacy_fetchTokensPrice(
+        await fetchTokensPrice(
           [token.symbol],
-          MARKET_PROXY_REVALIDATION_TIMES.CURRENT_PRICE,
+          COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE,
         )
       )[token.symbol]
-      const priceHistory = await legacy_fetchTokenPriceHistory(
+      const priceHistory = await fetchTokenPriceHistory(
         token.symbol,
         'all',
-        MARKET_PROXY_REVALIDATION_TIMES.PRICE_HISTORY,
+        COINGECKO_REVALIDATION_TIMES.PRICE_HISTORY,
       )
       const tokenMetadata = await fetchTokenMetadataWithFallback(token.symbol)
 
@@ -601,15 +612,15 @@ async function token({
       }
 
       const price = (
-        await legacy_fetchTokensPrice(
+        await fetchTokensPrice(
           [token.symbol],
-          MARKET_PROXY_REVALIDATION_TIMES.CURRENT_PRICE,
+          COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE,
         )
       )[token.symbol]
-      const priceHistory = await legacy_fetchTokenPriceHistory(
+      const priceHistory = await fetchTokenPriceHistory(
         token.symbol,
         'all',
-        MARKET_PROXY_REVALIDATION_TIMES.PRICE_HISTORY,
+        COINGECKO_REVALIDATION_TIMES.PRICE_HISTORY,
       )
       const tokenMetadata = await fetchTokenMetadataWithFallback(token.symbol)
 
@@ -650,9 +661,9 @@ async function tokenPriceChart({
   symbol: string
   days?: '1' | '7' | '30' | '90' | '365' | 'all'
 }) {
-  const data = await legacy_fetchTokenPriceHistory(symbol, days)
+  const data = await fetchTokenPriceHistory(symbol, days)
 
-  return data.prices.map(([timestamp, price]) => ({
+  return data.prices.map(([timestamp, price]: [number, number]) => ({
     date: new Date(timestamp).toISOString(),
     price: price,
   }))
@@ -853,35 +864,37 @@ function map(data: {
     | (typeof nativeTokenList.tokens)[number]
     | (typeof erc20TokenList.tokens)[number]
   balance: string
-  price: Awaited<ReturnType<typeof legacy_fetchTokensPrice>>[string]
-  priceHistory: Awaited<ReturnType<typeof legacy_fetchTokenPriceHistory>>
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  tokenMetadata: any
+  price: Awaited<ReturnType<typeof fetchTokensPrice>>[string]
+  priceHistory: Awaited<ReturnType<typeof fetchTokenPriceHistory>>
+  tokenMetadata:
+    | CoinGeckoCoinDetailResponse
+    | Partial<CoinGeckoCoinDetailResponse>
 }): Asset {
   const { token, balance, price, priceHistory, tokenMetadata } = data
 
   // CoinGecko price history format: prices is [timestamp, price][]
   const prices = priceHistory.prices
-    .map(([, price]) => price)
-    .filter(p => p > 0)
+    .map(([, price]: [number, number]) => price)
+    .filter((p: number) => p > 0)
 
-  // Note: tokenMetadata['SUPPLY_TOTAL'] can be 0 or null from CoinGecko, so we need to check for both
+  // Get supply data from CoinGecko market_data
   const metadataTotalSupply =
-    tokenMetadata?.['SUPPLY_TOTAL'] && tokenMetadata['SUPPLY_TOTAL'] > 0
-      ? tokenMetadata['SUPPLY_TOTAL']
+    tokenMetadata?.market_data?.total_supply &&
+    tokenMetadata.market_data.total_supply > 0
+      ? tokenMetadata.market_data.total_supply
       : null
 
   const metadataCirculatingSupply =
-    tokenMetadata?.['SUPPLY_CIRCULATING'] &&
-    tokenMetadata['SUPPLY_CIRCULATING'] > 0
-      ? tokenMetadata['SUPPLY_CIRCULATING']
+    tokenMetadata?.market_data?.circulating_supply &&
+    tokenMetadata.market_data.circulating_supply > 0
+      ? tokenMetadata.market_data.circulating_supply
       : null
 
-  // Get market cap from tokenMetadata first (more accurate), then fallback to price data
+  // Get market cap from CoinGecko market_data
   const marketCapFromMetadata =
-    tokenMetadata?.['CIRCULATING_MKT_CAP_USD'] &&
-    tokenMetadata['CIRCULATING_MKT_CAP_USD'] > 0
-      ? tokenMetadata['CIRCULATING_MKT_CAP_USD']
+    tokenMetadata?.market_data?.market_cap?.usd &&
+    tokenMetadata.market_data.market_cap.usd > 0
+      ? tokenMetadata.market_data.market_cap.usd
       : null
 
   const marketCap = marketCapFromMetadata ?? price.usd_market_cap ?? 0
@@ -896,8 +909,9 @@ function map(data: {
 
   // Fully diluted = price * total supply (or max supply if available)
   const maxSupply =
-    tokenMetadata?.['SUPPLY_MAX'] && tokenMetadata['SUPPLY_MAX'] > 0
-      ? tokenMetadata['SUPPLY_MAX']
+    tokenMetadata?.market_data?.max_supply &&
+    tokenMetadata.market_data.max_supply > 0
+      ? tokenMetadata.market_data.max_supply
       : null
 
   const fullyDiluted =
@@ -910,9 +924,20 @@ function map(data: {
           : 0
 
   // market_cap_rank can be 0 (valid rank), so we only use fallback for null/undefined
-  const rankByMarketCap = tokenMetadata?.['TOPLIST_BASE_RANK']?.['RANK'] ?? null
+  const rankByMarketCap =
+    tokenMetadata?.market_cap_rank ??
+    tokenMetadata?.market_data?.market_cap_rank ??
+    null
 
-  const about = tokenMetadata?.['ASSET_DESCRIPTION'] || ''
+  // Get description from CoinGecko description object
+  const description =
+    tokenMetadata?.description?.['en'] ||
+    (tokenMetadata?.description
+      ? Object.values(tokenMetadata.description)[0]
+      : '') ||
+    ''
+
+  const about = description
 
   return {
     networks: [STATUS_NETWORKS[token.chainId]],

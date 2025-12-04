@@ -6,7 +6,7 @@ import { z } from 'zod'
 import erc20TokenList from '../../../constants/erc20.json'
 import { groupBy } from '../../../utils/group-by'
 import { getAssetTransfers, getTransactionStatus } from '../../services/alchemy'
-import { fetchTokensPriceForDate } from '../../services/market-proxy'
+import { fetchTokensPriceForDate } from '../../services/coingecko/index'
 import { publicProcedure, router } from '../lib/trpc'
 
 import type { AssetTransfer } from '../../services/alchemy/types'
@@ -41,7 +41,7 @@ const cachedPriceData = cache(async (key: string) => {
   return await fetchTokensPriceForDate(symbols, timestamp)
 })
 
-type PriceDataResponse = Record<string, { USD?: { PRICE: number } }>
+type PriceDataResponse = Record<string, { usd: number }>
 
 const batchPriceRequests = async (
   priceRequests: Array<{ symbols: string[]; timestamp: number }>,
@@ -242,7 +242,7 @@ export async function page({
         activity.asset || (activity.category === 'external' ? 'ETH' : null)
 
       if (assetSymbol && priceData[assetSymbol]) {
-        const eurRate = priceData[assetSymbol].USD?.PRICE ?? 0
+        const eurRate = priceData[assetSymbol]?.usd ?? 0
 
         return {
           ...activity,
@@ -346,7 +346,7 @@ export async function activity(
         activity.asset || (activity.category === 'external' ? 'ETH' : null)
 
       if (assetSymbol && priceData[assetSymbol]) {
-        const eurRate = priceData[assetSymbol].USD?.PRICE ?? 0
+        const eurRate = priceData[assetSymbol]?.usd ?? 0
 
         return {
           ...activity,
