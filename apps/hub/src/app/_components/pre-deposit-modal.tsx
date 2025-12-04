@@ -311,8 +311,9 @@ const PreDepositModal = ({
                       />
                       <div className="flex items-center gap-1">
                         <VaultImage
-                          token={vault.token.symbol}
                           vault={vault.icon}
+                          network={vault.network}
+                          size="32"
                         />
                         <span className="text-19 font-600 text-neutral-80">
                           {vault.token.symbol}

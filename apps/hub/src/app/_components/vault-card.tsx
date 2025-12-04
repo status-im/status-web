@@ -1,12 +1,12 @@
 'use client'
 
+import { type FC, useEffect, useRef } from 'react'
+
 import { Tooltip } from '@status-im/components'
 import { InfoIcon } from '@status-im/icons/16'
 import { Button } from '@status-im/status-network/components'
+import { ConnectKitButton } from 'connectkit'
 import { cva } from 'cva'
-import Image from 'next/image'
-import { match } from 'ts-pattern'
-import { linea, mainnet } from 'viem/chains'
 
 import { formatCurrency, formatTokenAmount } from '~/utils/currency'
 import { TOOLTIP_CONFIG, type Vault } from '~constants/index'
@@ -14,8 +14,7 @@ import { usePreDepositTVLInUSD } from '~hooks/usePreDepositTVLInUSD'
 import { useVaultsAPY } from '~hooks/useVaultsAPY'
 
 import { DollarIcon, GusdIcon, PercentIcon, PlusIcon } from './icons'
-
-import type { FC } from 'react'
+import { VaultImage } from './vault-image'
 
 type Props = {
   vault: Vault
@@ -36,11 +35,20 @@ const vaultCardStyles = cva({
   },
 })
 
-const VaultCard: FC<Props> = ({
+type VaultCardContentProps = Props & {
+  show?: () => void
+  isConnected: boolean
+  pendingDepositRef: React.MutableRefObject<boolean>
+}
+
+const VaultCardContent: FC<VaultCardContentProps> = ({
   vault,
   onDeposit,
   depositedBalance,
-}: Props) => {
+  show,
+  isConnected,
+  pendingDepositRef,
+}) => {
   const { rewards, icon, token } = vault
   const { data: tvlData } = usePreDepositTVLInUSD({ vault })
   const { data: apyMap } = useVaultsAPY()
@@ -54,31 +62,30 @@ const VaultCard: FC<Props> = ({
     ? formatCurrency(tvlData?.tvlUSD ?? 0, { compact: true }).replace('$', '')
     : null
 
-  const showDeposit = !vault.soon
+  const showDepositSection = !vault.soon
 
-  const networkImage = match(vault.network)
-    .with(mainnet.name, () => '/networks/ethereum.png')
-    .with(linea.name, () => '/networks/linea.png')
-    .exhaustive()
+  useEffect(() => {
+    if (isConnected && pendingDepositRef.current) {
+      pendingDepositRef.current = false
+      onDeposit()
+    }
+  }, [isConnected, onDeposit, pendingDepositRef])
+
+  const handleClick = () => {
+    if (isConnected) {
+      onDeposit()
+    } else {
+      pendingDepositRef.current = true
+      show?.()
+    }
+  }
 
   return (
     <div className={vaultCardStyles({ disabled: !!vault.soon })}>
       {/* header */}
       <div className="mb-6 flex items-start justify-between">
         <div className="flex items-center gap-4">
-          <div className="relative">
-            <Image
-              className="flex size-10 items-center justify-center rounded-full"
-              src={`/vaults/${icon.toLowerCase()}.png`}
-              alt={icon}
-              width="56"
-              height="56"
-            />
-
-            <div className="absolute -bottom-1 -right-1 flex size-5 items-center justify-center rounded-full border-2 border-neutral-5 bg-white-100">
-              <Image src={networkImage} alt="KARMA" width="16" height="16" />
-            </div>
-          </div>
+          <VaultImage vault={icon} network={vault.network} size="56" />
         </div>
       </div>
 
@@ -101,7 +108,7 @@ const VaultCard: FC<Props> = ({
 
       <h3 className="mb-2 text-19 font-600 lg:text-27">{vault.name}</h3>
 
-      {showDeposit && (
+      {showDepositSection && isConnected && (
         <div className="mb-4">
           <p className="text-15 font-400 text-neutral-50">Deposited</p>
           <p className="text-27 font-600">
@@ -149,13 +156,30 @@ const VaultCard: FC<Props> = ({
       {/* cta */}
       <Button
         size="40"
-        onClick={onDeposit}
+        onClick={handleClick}
         disabled={vault.soon}
         className="mt-auto w-full justify-center lg:w-fit"
       >
         {vault.soon ? 'Coming soon' : 'Deposit'}
       </Button>
     </div>
+  )
+}
+
+const VaultCard: FC<Props> = props => {
+  const pendingDepositRef = useRef(false)
+
+  return (
+    <ConnectKitButton.Custom>
+      {({ show, isConnected }: { show?: () => void; isConnected: boolean }) => (
+        <VaultCardContent
+          {...props}
+          show={show}
+          isConnected={isConnected}
+          pendingDepositRef={pendingDepositRef}
+        />
+      )}
+    </ConnectKitButton.Custom>
   )
 }
 
