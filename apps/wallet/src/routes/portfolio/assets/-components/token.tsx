@@ -56,6 +56,7 @@ type AssetData = ApiOutput['assets']['all']['assets'][number]
 type Props = {
   address: string
   ticker: string
+  asset?: AssetData
 }
 
 const NETWORKS = ['ethereum'] as const
@@ -75,7 +76,7 @@ function matchesAsset(asset: AssetData, ticker: string): boolean {
 }
 
 const Token = (props: Props) => {
-  const { ticker, address } = props
+  const { ticker, address, asset: assetProp } = props
   const [markdownContent, setMarkdownContent] = useState<React.ReactNode>(null)
   const [, copy] = useCopyToClipboard()
 
@@ -128,7 +129,7 @@ const Token = (props: Props) => {
       const body = await response.json()
       return body.result.data.json
     },
-    enabled: !!address,
+    enabled: !!address && !assetProp,
     staleTime: 15 * 1000,
     gcTime: 60 * 60 * 1000,
   })
@@ -140,14 +141,15 @@ const Token = (props: Props) => {
     }
   }, [hasErrorFetchingAssets, toast])
 
-  const asset = data?.assets?.find((a: AssetData) => matchesAsset(a, ticker))
+  const asset =
+    assetProp || data?.assets?.find((a: AssetData) => matchesAsset(a, ticker))
 
   const {
     data: tokenDetail,
     isLoading: isTokenLoading,
     isError: hasErrorFetchingToken,
   } = useQuery<TokenData>({
-    queryKey: ['token', ticker],
+    queryKey: ['token', ticker, address],
     queryFn: async () => {
       const endpoint = ticker.startsWith('0x')
         ? 'assets.token'
@@ -183,8 +185,9 @@ const Token = (props: Props) => {
       return body.result.data.json
     },
     enabled: !!asset,
-    staleTime: 15 * 1000,
+    staleTime: 5 * 60 * 1000,
     gcTime: 60 * 60 * 1000,
+    placeholderData: previousData => previousData,
   })
 
   // Show error toast if fetching token detail fails
@@ -194,15 +197,18 @@ const Token = (props: Props) => {
     }
   }, [hasErrorFetchingToken, toast])
 
-  const isLoading = !data?.assets || isTokenLoading || !tokenDetail
+  const isLoading =
+    (!assetProp && !data?.assets) || isTokenLoading || !tokenDetail
 
   const needsEthBalance = tokenDetail?.summary.symbol !== 'ETH'
 
   const ethBalanceQuery = useEthBalance(address, needsEthBalance)
 
+  const tokenBalance = asset?.balance ?? tokenDetail?.summary.total_balance ?? 0
+
   const ethBalance = needsEthBalance
     ? ethBalanceQuery.data?.summary.total_balance || 0
-    : tokenDetail.summary.total_balance
+    : tokenBalance
 
   // Get gas fees for the current network
   const gasFeeQuery = useQuery({
