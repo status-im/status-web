@@ -1,3 +1,4 @@
+import { useToast } from '@status-im/components'
 import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { type Address } from 'viem'
 import { useAccount, useChainId, useConfig } from 'wagmi'
@@ -149,6 +150,7 @@ export function useKarmaBalance(
   const { address: connectedAddress } = useAccount()
   const config = useConfig()
   const chainId = useChainId()
+  const toast = useToast()
 
   const {
     address: queryAddress,
@@ -175,7 +177,9 @@ export function useKarmaBalance(
           account: targetAddress,
         }
       } catch (error) {
-        console.error('Failed to fetch karma balance:', error)
+        toast.negative(
+          `Failed to fetch karma balance: ${error instanceof Error ? error.message : 'Unknown error'}`
+        )
         throw error
       }
     },

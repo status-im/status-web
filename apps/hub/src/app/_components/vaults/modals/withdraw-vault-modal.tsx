@@ -3,6 +3,7 @@
 import { useCallback } from 'react'
 
 import * as Dialog from '@radix-ui/react-dialog'
+import { useToast } from '@status-im/components'
 import { InfoIcon } from '@status-im/icons/12'
 import { Button } from '@status-im/status-network/components'
 import { useAccount } from 'wagmi'
@@ -26,6 +27,7 @@ interface WithdrawVaultModalProps {
  * Modal for emergency withdrawal from vault
  */
 export function WithdrawVaultModal(props: WithdrawVaultModalProps) {
+  const toast = useToast()
   const { onClose, vaultAddress, amountWei, open, onOpenChange, children } =
     props
 
@@ -44,10 +46,13 @@ export function WithdrawVaultModal(props: WithdrawVaultModalProps) {
         vaultAddress,
         onSigned: () => {
           onClose()
+          toast.positive('Emergency exit successful')
         },
       })
     } catch (error) {
-      console.error('Error calling emergencyExit:', error)
+      toast.negative(
+        `Error calling emergencyExit: ${error instanceof Error ? error.message : 'Unknown error'}`
+      )
     }
   }, [address, amountWei, onClose, vaultAddress, emergencyExit])
 

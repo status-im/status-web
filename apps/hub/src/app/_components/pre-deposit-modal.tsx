@@ -24,6 +24,8 @@ import { formatCurrency, formatTokenAmount } from '~utils/currency'
 
 import { VaultImage } from './vault-image'
 
+const MAX_USD_VALUE = 1_000_000_000_000
+
 type PreDepositModalProps = {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -109,7 +111,7 @@ const PreDepositModal = ({
       .with({ exchangeRate: P.nullish }, () => 0)
       .with({ amountInputNumber: P.when(n => isNaN(n) || n <= 0) }, () => 0)
       .with({ calculatedUSD: P.when(n => !isFinite(n)) }, () => null)
-      .with({ calculatedUSD: P.when(n => n > 1_000_000_000_000) }, () => null)
+      .with({ calculatedUSD: P.when(n => n > MAX_USD_VALUE) }, () => null)
       .otherwise(({ calculatedUSD }) => calculatedUSD)
   }, [amountValue, exchangeRate])
 

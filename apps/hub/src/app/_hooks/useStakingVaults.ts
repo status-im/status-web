@@ -1,3 +1,4 @@
+import { useToast } from '@status-im/components'
 import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { type Address } from 'viem'
 import { useAccount, useChainId, useConfig } from 'wagmi'
@@ -140,9 +141,7 @@ async function fetchVaultData(
             ? lockUntilResult.error
             : depositedBalanceResult.error
       )
-      return null
     }
-
     // Extract the actual data from successful results
     const vaultData = vaultResult.result as Omit<
       StakingVaultData,
@@ -246,6 +245,7 @@ export function useStakingVaults(
   const { address } = useAccount()
   const config = useConfig()
   const chainId = useChainId()
+  const toast = useToast()
 
   return useQuery<StakingVault[], Error>({
     queryKey: [QUERY_KEY, address, chainId],
@@ -255,21 +255,28 @@ export function useStakingVaults(
         return []
       }
 
-      // Step 1: Fetch all vault addresses for the account
-      const vaultAddresses = await fetchAccountVaultAddresses(
-        config,
-        chainId,
-        address
-      )
-
-      // Step 2: Fetch detailed data for each vault in parallel
-      const vaults = await Promise.all(
-        vaultAddresses.map(vaultAddress =>
-          enrichVaultWithData(config, chainId, vaultAddress)
+      try {
+        // Step 1: Fetch all vault addresses for the account
+        const vaultAddresses = await fetchAccountVaultAddresses(
+          config,
+          chainId,
+          address
         )
-      )
 
-      return vaults
+        // Step 2: Fetch detailed data for each vault in parallel
+        const vaults = await Promise.all(
+          vaultAddresses.map(vaultAddress =>
+            enrichVaultWithData(config, chainId, vaultAddress)
+          )
+        )
+
+        return vaults
+      } catch (error) {
+        toast.negative(
+          `Failed to fetch staking vaults: ${error instanceof Error ? error.message : 'Unknown error'}`
+        )
+        throw error
+      }
     },
     enabled: options?.enabled ?? !!address,
     staleTime: options?.staleTime ?? CACHE_CONFIG.DEFAULT_STALE_TIME,
