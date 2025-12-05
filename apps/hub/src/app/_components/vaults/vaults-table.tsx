@@ -10,6 +10,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { useSIWE } from 'connectkit'
 import { useAccount, useChainId } from 'wagmi'
 
 import { useCreateVault } from '~hooks/useCreateVault'
@@ -195,6 +196,7 @@ export function VaultsTable({ isLoading }: VaultsTableProps) {
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null)
   const { data: vaultDataList } = useStakingVaults()
   const { isConnected } = useAccount()
+  const { isSignedIn, isLoading: isLoadingSIWE } = useSIWE()
   const chainId = useChainId()
   const { mutate: createVault } = useCreateVault()
   const { data: emergencyModeEnabled } = useEmergencyModeEnabled()
@@ -242,7 +244,7 @@ export function VaultsTable({ isLoading }: VaultsTableProps) {
         <h2 className="text-19 font-semibold leading-none text-neutral-100">
           My vaults
         </h2>
-        {isConnected && (
+        {isConnected && isSignedIn && (
           <Button
             variant="outline"
             size="32"
@@ -256,7 +258,7 @@ export function VaultsTable({ isLoading }: VaultsTableProps) {
       </div>
 
       <div className="relative mb-4 w-full overflow-hidden rounded-16 border border-solid border-neutral-10 bg-white-100">
-        {isLoading ? (
+        {isLoading || isLoadingSIWE ? (
           <VaultsTableSkeleton />
         ) : !isConnected ? (
           <div className="flex items-center justify-center p-12 text-center">

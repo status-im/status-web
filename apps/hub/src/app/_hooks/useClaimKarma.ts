@@ -143,6 +143,14 @@ export function useClaimKarma(): UseClaimKarmaReturn {
       queryClient.invalidateQueries({
         queryKey: ['current-user'],
       })
+      // Invalidate karma balance query to refetch updated balance in KarmaOverviewCard
+      queryClient.invalidateQueries({
+        queryKey: ['karma-balance'],
+      })
+      // Invalidate karma rewards balance query to refetch updated rewards
+      queryClient.invalidateQueries({
+        queryKey: ['karma-rewards-balance'],
+      })
     },
   })
 }

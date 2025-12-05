@@ -4,6 +4,7 @@ import { useState } from 'react'
 
 import { Skeleton, useToast } from '@status-im/components'
 import { Button } from '@status-im/status-network/components'
+import { useSIWE } from 'connectkit'
 import dynamic from 'next/dynamic'
 import { useAccount } from 'wagmi'
 
@@ -39,6 +40,7 @@ const KarmaSourceCard = ({
   const [capToken, setCapToken] = useState<string | null>(null)
   const [capError, setCapError] = useState<string | null>(null)
   const { isConnected, isConnecting } = useAccount()
+  const { isSignedIn, isLoading: isLoadingSIWE } = useSIWE()
   const { mutateAsync: claimKarma, isPending: isClaimingKarma } =
     useClaimKarma()
   const [isClaiming, setIsClaiming] = useState<boolean>(false)
@@ -98,7 +100,7 @@ const KarmaSourceCard = ({
     }
   }
 
-  if (isLoading || isConnecting) {
+  if (isLoading || isConnecting || isLoadingSIWE) {
     return (
       <div className="w-full overflow-hidden rounded-20 border border-neutral-20 bg-white-100">
         <div className="flex flex-col">
@@ -125,7 +127,7 @@ const KarmaSourceCard = ({
     )
   }
 
-  if (isComplete && isConnected) {
+  if (isComplete && isConnected && isSignedIn) {
     return (
       <div className="w-full overflow-hidden rounded-20 border border-neutral-20 bg-white-100">
         <div className="flex flex-col">
@@ -174,7 +176,7 @@ const KarmaSourceCard = ({
 
   return (
     <>
-      <div className="h-[200px] w-full overflow-hidden rounded-20 border border-neutral-10 bg-white-100">
+      <div className="min-h-[200px] w-full overflow-hidden rounded-20 border border-neutral-10 bg-white-100">
         <div className="flex h-full flex-col items-start p-4">
           <div className="flex w-full flex-col gap-0.5">
             <p className="text-15 font-regular text-neutral-50">{title}</p>
@@ -206,6 +208,7 @@ const KarmaSourceCard = ({
                 !capToken ||
                 isComplete ||
                 !isConnected ||
+                !isSignedIn ||
                 isClaimingKarma ||
                 isClaiming
               }
