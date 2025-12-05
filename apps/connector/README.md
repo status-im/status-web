@@ -6,12 +6,12 @@ Status Desktop Wallet extended to decentralized applications in your browser.
 
 Depends on:
 
-- **[Status Desktop](https://github.com/status-im/status-desktop/releases)** >=2.32.x
+*   **[Status Desktop](https://github.com/status-im/status-app/releases)** >=2.32.x
 
 Tested with these browsers:
 
-- Google Chrome
-- Arc
+*   Google Chrome
+*   Arc
 
 ## Development
 
@@ -81,7 +81,7 @@ pnpm build:firefox
 
 #### Load
 
-https://support.mozilla.org/en-US/kb/add-on-signing-in-firefox#w_what-are-my-options-if-i-want-to-use-an-unsigned-add-on-advanced-users
+https://support.mozilla.org/en-US/kb/add-on-signing-in-firefox#w\_what-are-my-options-if-i-want-to-use-an-unsigned-add-on-advanced-users
 
 Firefox Developer Edition > Tools > Add-ons and Themes > click on gear icon (Tools for all add-ons) > Install Add-on From File... > select build (build/firefox-mv3-prod.zip)
 
@@ -107,6 +107,4 @@ Download latest build from last merged PR or build from source. To use the exten
 
 Browser > Console
 
-```
-await connector.enableLogging(true)
-```
+    await connector.enableLogging(true)
