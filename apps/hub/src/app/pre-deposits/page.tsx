@@ -91,7 +91,7 @@ export default function PreDepositPage() {
               </p>
             </div>
           </div>
-          <div className="relative flex w-full flex-col gap-2 rounded-32 bg-white-100 px-4 py-3 shadow-1 lg:max-w-[248px] lg:self-end">
+          <div className="relative flex w-full flex-col gap-2 rounded-32 bg-white-100 px-5 py-3 shadow-1 lg:max-w-[208px] lg:self-end">
             <p className="text-13 font-500 text-neutral-50">
               Total Value Locked
             </p>
