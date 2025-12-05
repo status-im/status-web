@@ -1,4 +1,4 @@
-import { createElement, Fragment } from 'react'
+import { type ReactElement } from 'react'
 
 import { Avatar, Text } from '@status-im/components'
 import {
@@ -7,8 +7,9 @@ import {
   TwitterIcon,
 } from '@status-im/icons/social'
 import { notFound } from 'next/navigation'
+import production from 'react/jsx-runtime'
 import rehypeParse from 'rehype-parse'
-import rehypeReact from 'rehype-react'
+import rehypeReact, { type Options } from 'rehype-react'
 import { unified } from 'unified'
 
 import { Metadata } from '~app/_metadata'
@@ -83,14 +84,17 @@ export default async function BlogDetailPage(props: Props) {
     }
   }
 
+  const rehypeReactOptions: Options = {
+    ...production,
+    components: blogComponents,
+  }
+
   const { result } = await unified()
     .use(rehypeParse, { fragment: true })
-    .use(rehypeReact, {
-      createElement,
-      Fragment,
-      components: blogComponents,
-    })
+    .use(rehypeReact, rehypeReactOptions)
     .process(post.html!)
+
+  const content = result as ReactElement
 
   // root
   const breadcrumbs = [
@@ -148,7 +152,7 @@ export default async function BlogDetailPage(props: Props) {
         </div>
 
         {/* Content */}
-        <div className="root-content container-blog py-6">{result}</div>
+        <div className="root-content container-blog py-6">{content}</div>
 
         <div className="container-blog py-6">
           <div className="mb-4 flex flex-row items-center gap-2">

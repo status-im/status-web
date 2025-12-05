@@ -9,8 +9,7 @@ import {
   encodeUserURLData,
 } from './encode-url-data'
 
-import type { Channel } from '../protos/url_pb'
-import type { PlainMessage } from '@bufbuild/protobuf'
+import type { Channel, Community, User } from '../protos/url_pb'
 
 describe('Encode URL data', () => {
   test('should encode and decode community', () => {
@@ -23,7 +22,7 @@ describe('Encode URL data', () => {
       tagIndices: [1, 2, 3, 4],
     }
 
-    const encodedData = encodeCommunityURLData(data)
+    const encodedData = encodeCommunityURLData(data as unknown as Community)
     const decodedData = decodeCommunityURLData(encodedData)
 
     expect(encodedData).toBe(
@@ -72,9 +71,7 @@ describe('Encode URL data', () => {
       },
     }
 
-    const encodedData = encodeChannelURLData(
-      data as unknown as PlainMessage<Channel>,
-    )
+    const encodedData = encodeChannelURLData(data as unknown as Channel)
     const decodedData = decodeChannelURLData(encodedData)
 
     expect(encodedData).toBe(
@@ -146,7 +143,7 @@ describe('Encode URL data', () => {
       color: '#EAB700',
     }
 
-    const encodedData = encodeUserURLData(data)
+    const encodedData = encodeUserURLData(data as unknown as User)
     const decodedData = decodeUserURLData(encodedData)
 
     expect(encodedData).toBe(

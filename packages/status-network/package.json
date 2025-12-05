@@ -1,6 +1,6 @@
 {
   "name": "@status-im/status-network",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "license": "MPL-2.0",
   "private": true,
   "main": "./dist/src/index.cjs.js",
@@ -39,7 +39,7 @@
     "dist"
   ],
   "engines": {
-    "node": "20.x"
+    "node": "22.x"
   },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
@@ -47,10 +47,8 @@
     "build": "vite build && pnpm build:types",
     "build:types": "tsc --noEmit false --emitDeclarationOnly",
     "typecheck": "tsc",
-    "env:check": "node -r dotenv/config ./src/config/env.server.mjs dotenv_config_path=./.env && :",
     "lint": "eslint src",
     "format": "prettier --write .",
-    "sync:cloudinary": "DOTENV_CONFIG_PATH='.env.local' node -r dotenv/config scripts/generate-cloudinary-type.mjs && prettier -w 'src/components/image/types.ts'",
     "clean": "rimraf node_modules dist .turbo",
     "prepack": "pnpm build"
   },

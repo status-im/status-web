@@ -2,6 +2,7 @@
  * @see https://specs.status.im/spec/1
  */
 
+import { create, toBinary } from '@bufbuild/protobuf'
 import { bootstrap } from '@libp2p/bootstrap'
 import { Protocols } from '@waku/interfaces'
 import { createEncoder } from '@waku/message-encryption/symmetric'
@@ -9,7 +10,7 @@ import { createLightNode, waitForRemotePeer } from '@waku/sdk'
 import { hexToBytes } from 'ethereum-cryptography/utils'
 
 import { peers } from '../consts/peers'
-import { ApplicationMetadataMessage } from '../protos/application-metadata-message_pb'
+import { ApplicationMetadataMessageSchema } from '../protos/application-metadata-message_pb'
 import { Account } from './account'
 import { ActivityCenter } from './activityCenter'
 import { Community } from './community/community'
@@ -262,20 +263,24 @@ class Client {
 
     const signature = await this.#account.sign(payload)
 
-    const message = new ApplicationMetadataMessage({
-      type: type,
-      signature,
-      payload,
-    }).toBinary()
+    const message = toBinary(
+      ApplicationMetadataMessageSchema,
+      create(ApplicationMetadataMessageSchema, {
+        type: type,
+        signature: new Uint8Array(signature),
+        payload: new Uint8Array(payload),
+      }),
+    )
 
     await this.waku.lightPush.send(
       createEncoder({
         contentTopic,
         symKey,
         sigPrivKey: hexToBytes(this.#account.privateKey),
-        pubsubTopicShardInfo: {
+        routingInfo: {
           clusterId: 16,
-          shard: 32,
+          shardId: 32,
+          pubsubTopic: '/waku/2/rs/16/32',
         },
       }),
       { payload: message },

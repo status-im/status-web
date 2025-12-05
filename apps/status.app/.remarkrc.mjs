@@ -47,7 +47,6 @@
 // import remarkPresetLintConsistent from 'remark-preset-lint-consistent'
 // import remarkPresetLintRecommended from 'remark-preset-lint-recommended'
 import remarkLintListItemIndent from 'remark-lint-list-item-indent'
-import remarkStringify from 'remark-stringify'
 import remarkMdx from 'remark-mdx'
 // import remarkParse from 'remark-parse'
 import remarkPresetWoorm from 'remark-preset-wooorm'
@@ -55,9 +54,9 @@ import remarkPresetWoorm from 'remark-preset-wooorm'
 import remarkLintMaximumLineLength from 'remark-lint-maximum-line-length'
 // import remarkFrontmatter from 'remark-frontmatter'
 // import remarkLint from 'remark-lint'
-import remarkGfm from 'remark-gfm-v3'
+import remarkGfm from 'remark-gfm'
 import remarkPreset from '@1stg/remark-preset'
-import remarkValidateLinks from 'remark-validate-links'
+// import remarkValidateLinks from 'remark-validate-links'
 import remarkRetext from 'remark-retext'
 import { unified } from 'unified'
 import retextEnglish from 'retext-english'
@@ -75,10 +74,12 @@ import remarkLintOrderedListMarkerValue from 'remark-lint-ordered-list-marker-va
 // remarkPresetWoorm.plugins.splice(0, 1)
 // remarkPresetWoorm.plugins.splice(2, 1)
 remarkPresetWoorm.plugins.splice(3, 1)
-remarkPreset.plugins.splice(7, 1)
+// index 9 = remarkValidateLinks in @1stg/remark-preset
+remarkPreset.plugins.splice(9, 1)
 
 /** @type {Array<import('unified').Plugin | import('unified').Preset>} */
 const plugins = [
+  remarkMdx,
   // note: incl. code/node indenting
   remarkPresetWoorm,
   // // note: https://github.com/retextjs/retext-quotes/issues/6
@@ -137,11 +138,6 @@ const plugins = [
   // remarkLint,
   // [remarkFrontmatter, { type: 'custom', marker: { open: '<', close: '>' } }],
   [remarkLintListItemIndent, 'space'],
-  [
-    remarkStringify,
-    { listItemIndent: 'one', rule: '-', incrementListMarker: false },
-  ],
-  remarkMdx,
   // remarkParse,
   [remarkLintMaximumLineLength, 'off'],
   remarkGfm,
@@ -164,10 +160,11 @@ const plugins = [
   ['remark-lint-file-extension', false],
   ['remark-lint-no-emphasis-as-heading', false],
   ['remark-lint-table-pipe-alignment', false],
-  [
-    remarkValidateLinks,
-    { repository: 'https://github.com/status-im/status-website.git' },
-  ],
+  // Disabled because remark-validate-links doesn't support .mdx files
+  // [
+  //   remarkValidateLinks,
+  //   { repository: 'https://github.com/status-im/status-website.git' },
+  // ],
   // [remarkValidateLinks, false],
   // note: use https://github.com/orgs/remarkjs/discussions/734#discussioncomment-819364 --frail option
   // [remarkValidateLinks, [2]],
@@ -201,10 +198,9 @@ export default {
     emphasis: '_',
     bullet: '-',
     quote: '"',
-    // position: {
-    //   start: { line: 1, column: 1, offset: 0 },
-    // },
-    //  position: false
+    listItemIndent: 'one',
+    rule: '-',
+    incrementListMarker: false,
   },
   plugins,
 }

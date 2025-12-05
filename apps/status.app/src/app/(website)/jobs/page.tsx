@@ -89,13 +89,13 @@ export default async function JobsPage() {
       <div className="mx-auto mb-12 mt-8 max-w-[1224px] px-5 2md:mb-0 2md:mt-[-72px] 2md:px-0">
         <div className="relative z-[2] 2md:mx-[-18%]">
           <Image
-            id="Jobs/Top Section/Jobs_01:5113:2971"
+            id="Jobs/Top Section/Jobs_01-optimized:2448:1422"
             alt=""
             className="hidden 2md:block"
             priority
           />
           <Image
-            id="Jobs/Top Section/Jobs_01_Mobile:1745:1867"
+            id="Jobs/Top Section/Jobs_01_Mobile-optimized:1745:1867"
             alt=""
             className="2md:hidden"
           />

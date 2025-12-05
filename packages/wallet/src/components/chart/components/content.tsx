@@ -18,6 +18,39 @@ type Props = BaseChartProps & {
 const AnimatedAreaClosed = animated(AreaClosed)
 const AnimatedLinePath = animated(LinePath)
 
+// Tag dimensions constants
+const MIN_TAG_WIDTH = 40 // Minimum width of the tag
+const TAG_HORIZONTAL_PADDING = 16 // Total horizontal padding (left + right)
+const TAG_BASE_OFFSET = 20 // Base offset from tag center point
+const FONT_SIZE = 12 // Font size used for the tag text
+const CHAR_WIDTH = 7 // Approximate width per character for fontSize 12
+
+// Cache for canvas context to avoid recreating it
+let canvasContext: CanvasRenderingContext2D | null = null
+
+/**
+ * Get or create a canvas context for measuring text width
+ */
+function getCanvasContext(): CanvasRenderingContext2D | null {
+  if (typeof document === 'undefined') return null
+  if (!canvasContext) {
+    const canvas = document.createElement('canvas')
+    canvasContext = canvas.getContext('2d')
+    if (canvasContext) {
+      // Match the font used in SVG (system default sans-serif, 12px)
+      canvasContext.font = `${FONT_SIZE}px sans-serif`
+    }
+  }
+  return canvasContext
+}
+function measureTextWidth(text: string): number {
+  const context = getCanvasContext()
+  if (context) {
+    return context.measureText(text).width
+  }
+  return text.length * CHAR_WIDTH
+}
+
 const Content = (props: Props) => {
   const {
     pricesData,
@@ -41,8 +74,12 @@ const Content = (props: Props) => {
   const tagX = xScale(lastData.date)
   const tagY = yScale(lastData.value)
   const formattedValue = formatChartValue(lastData.value, dataType)
-  const tagWidth = Math.min(40 + formattedValue.length * 4, 80)
-  const tagXOffset = Math.max(0, 20 - tagWidth / 2)
+
+  // Calculate width based on actual measured text width, accounting for proportional fonts
+  // This handles currency symbols, decimal points, and commas correctly
+  const textWidth = measureTextWidth(formattedValue)
+  const tagWidth = Math.max(MIN_TAG_WIDTH, textWidth + TAG_HORIZONTAL_PADDING)
+  const tagXOffset = Math.max(0, TAG_BASE_OFFSET - tagWidth / 2)
   const textX = tagXOffset + tagWidth / 2
 
   return (

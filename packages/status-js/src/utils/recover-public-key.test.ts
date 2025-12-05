@@ -1,10 +1,11 @@
+import { create } from '@bufbuild/protobuf'
 import { bytesToHex, utf8ToBytes } from 'ethereum-cryptography/utils'
 import { expect, test } from 'vitest'
 
 import { Account } from '../client/account'
 import {
-  ApplicationMetadataMessage,
   ApplicationMetadataMessage_Type,
+  ApplicationMetadataMessageSchema,
 } from '../protos/application-metadata-message_pb'
 import { recoverPublicKey } from './recover-public-key'
 
@@ -23,7 +24,7 @@ test('should recover public key', async () => {
 })
 
 test('should recover public key from fixture', async () => {
-  const metadataFixture = new ApplicationMetadataMessage({
+  const metadataFixture = create(ApplicationMetadataMessageSchema, {
     type: ApplicationMetadataMessage_Type.EMOJI_REACTION,
     signature: new Uint8Array([
       250, 132, 234, 119, 159, 124, 98, 93, 197, 108, 99, 52, 186, 234, 142,

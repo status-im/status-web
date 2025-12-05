@@ -1,6 +1,6 @@
 import { Text } from '@status-im/components'
 
-import { Icon, Video } from '~components/assets'
+import { Icon, Image } from '~components/assets'
 
 import type { ImageId } from '~components/assets'
 
@@ -9,18 +9,18 @@ const HandsSection = () => {
     <div className="relative z-20 bg-white-100">
       <div className="container-lg relative pb-24 pt-40 xl:pb-40 xl:pt-20">
         <div className="relative grid aspect-[0.44] place-content-center 2md:aspect-[1.715]">
-          {/* MOBILE VIDEO */}
           <div className="absolute -inset-x-6 top-10 scale-[1.7] sm:scale-150 2md:hidden">
-            <Video
-              id="Non Beta Release/Animations/Wallet_01_Mobile:990:1467"
-              posterId="Non Beta Release/Animations/Frames/Wallet_01_Mobile_Frame:990:1467"
+            <Image
+              id="Non Beta Release/Animations/Frames/Wallet_01_Mobile_Frame:990:1467"
+              alt=""
+              aria-hidden="true"
             />
           </div>
-          {/* DESKTOP VIDEO  */}
           <div className="absolute -inset-x-10 top-10 z-0 hidden h-full scale-[1.15] 2md:block">
-            <Video
-              id="Non Beta Release/Animations/Wallet_01:2256:1178"
-              posterId="Non Beta Release/Animations/Frames/Wallet_01_Frame:2256:1178"
+            <Image
+              id="Non Beta Release/Animations/Frames/Wallet_01_Frame:2256:1178"
+              alt=""
+              aria-hidden="true"
             />
           </div>
 

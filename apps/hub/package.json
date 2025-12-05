@@ -1,6 +1,6 @@
 {
   "name": "hub",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "preinstall": "npx only-allow pnpm",
@@ -62,7 +62,7 @@
     "typescript-eslint": "^8.22.0"
   },
   "engines": {
-    "node": "20.x"
+    "node": "22.x"
   },
   "lint-staged": {
     "*.{js,mjs,ts,tsx}": [
