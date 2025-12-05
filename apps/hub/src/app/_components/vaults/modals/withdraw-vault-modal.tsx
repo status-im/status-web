@@ -54,7 +54,7 @@ export function WithdrawVaultModal(props: WithdrawVaultModalProps) {
         `Error calling emergencyExit: ${error instanceof Error ? error.message : 'Unknown error'}`
       )
     }
-  }, [address, amountWei, onClose, vaultAddress, emergencyExit])
+  }, [address, amountWei, onClose, vaultAddress, emergencyExit, toast])
 
   return (
     <BaseVaultModal

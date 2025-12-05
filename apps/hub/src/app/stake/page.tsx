@@ -16,7 +16,7 @@ export default function StakePage() {
           <h1 className="text-27 font-bold md:text-40">
             Stake SNT, receive good Karma
           </h1>
-          <p className="text-17 md:text-19">
+          <p className="text-13 md:text-19">
             Stake SNT to increase your Karma, unlock more gasless transactions
             and increase your power over the network
           </p>
