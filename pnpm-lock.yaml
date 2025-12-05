@@ -339,6 +339,9 @@ importers:
       siwe:
         specifier: ^2.3.2
         version: 2.3.2(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
+      superjson:
+        specifier: ^2.2.1
+        version: 2.2.5
       ts-pattern:
         specifier: ^5.6.2
         version: 5.9.0

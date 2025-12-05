@@ -1,4 +1,6 @@
-import { useQueries } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
+
+import { clientEnv } from '~constants/env.client.mjs'
 
 import type {
   ExchangeRateData,
@@ -33,7 +35,7 @@ export interface TokenExchangeRateResult {
  * Return type for useMultipleExchangeRates hook
  */
 export interface UseMultipleExchangeRatesReturn {
-  data: Map<TokenSymbol, ExchangeRateData | undefined> | undefined
+  data: Map<TokenSymbol, ExchangeRateData> | undefined
   results: TokenExchangeRateResult[]
   isLoading: boolean
   isError: boolean
@@ -45,57 +47,59 @@ export interface UseMultipleExchangeRatesReturn {
 // Constants
 // ============================================================================
 
-const QUERY_KEY_PREFIX = 'exchangeRate'
-const BINANCE_API_BASE_URL = 'https://api.binance.com/api/v3/ticker/price'
+const QUERY_KEY_PREFIX = 'exchangeRates'
+const API_BASE_URL = clientEnv.NEXT_PUBLIC_STATUS_API_URL
 const DEFAULT_REFETCH_INTERVAL = 60_000 // 1 minute
 const DEFAULT_STALE_TIME = 30_000 // 30 seconds
-const QUOTE_TOKEN = 'USDT'
 
 // ============================================================================
 // Helper Functions
 // ============================================================================
 
 /**
- * Formats a token symbol for Binance (e.g., SNTUSDT, ETHUSDT)
+ * Fetches exchange rates for multiple tokens in a single API call
  */
-function formatSymbol(token: string): string {
-  return `${token.toUpperCase()}${QUOTE_TOKEN}`
-}
+async function fetchMultipleExchangeRates(
+  tokens: string[]
+): Promise<Map<string, ExchangeRateData>> {
+  const url = new URL(`${API_BASE_URL}/api/trpc/market.tokenPrice`)
+  url.searchParams.set('input', JSON.stringify({ json: { symbols: tokens } }))
 
-/**
- * Fetches the current exchange rate for a token in USDT from Binance
- */
-async function fetchExchangeRate(token: string): Promise<ExchangeRateData> {
-  const symbol = formatSymbol(token)
-  const url = `${BINANCE_API_BASE_URL}?symbol=${symbol}`
-
-  const response = await fetch(url)
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
 
   if (!response.ok) {
     throw new Error(
-      `Failed to fetch exchange rate for ${symbol}: ${response.status} ${response.statusText}`
+      `Failed to fetch exchange rates: ${response.status} ${response.statusText}`
     )
   }
 
   const data = await response.json()
 
-  if (!data.price) {
-    throw new Error(
-      `Invalid response from Binance API: missing price for ${symbol}`
-    )
+  // tRPC response structure: { result: { data: { json: { TOKEN: { usd, ... } } } } }
+  const prices = data?.result?.data?.json
+
+  const pricesMap = new Map<string, ExchangeRateData>()
+  const timestamp = Date.now()
+
+  for (const token of tokens) {
+    const tokenPrice = prices?.[token]
+
+    if (tokenPrice?.usd !== undefined && !isNaN(tokenPrice.usd)) {
+      pricesMap.set(token, {
+        price: tokenPrice.usd,
+        priceChange24h: tokenPrice.usd_24h_change,
+        timestamp,
+        token,
+      })
+    }
   }
 
-  const price = parseFloat(data.price)
-
-  if (isNaN(price)) {
-    throw new Error(`Invalid price value for ${symbol}: ${data.price}`)
-  }
-
-  return {
-    price,
-    timestamp: Date.now(),
-    token,
-  }
+  return pricesMap
 }
 
 // ============================================================================
@@ -103,7 +107,10 @@ async function fetchExchangeRate(token: string): Promise<ExchangeRateData> {
 // ============================================================================
 
 /**
- * Hook to fetch multiple exchange rates in parallel using useQueries
+ * Hook to fetch multiple exchange rates in a single API call
+ *
+ * More efficient than calling useExchangeRate multiple times as it batches
+ * all token requests into a single API call.
  *
  * @returns Combined exchange rate data and loading states
  *
@@ -111,7 +118,7 @@ async function fetchExchangeRate(token: string): Promise<ExchangeRateData> {
  * ```tsx
  * function PriceDisplay() {
  *   const { data: rates, isLoading } = useMultipleExchangeRates({
- *     tokens: ['SNT', 'ETH', 'LINEA']
+ *     tokens: ['SNT', 'ETH', 'BTC']
  *   })
  *
  *   if (isLoading) return <div>Loading...</div>
@@ -136,42 +143,32 @@ export function useMultipleExchangeRates({
     staleTime = DEFAULT_STALE_TIME,
   } = options
 
-  const queries = useQueries({
-    queries: tokens.map(token => ({
-      queryKey: [QUERY_KEY_PREFIX, token] as const,
-      queryFn: async () => await fetchExchangeRate(token),
-      enabled,
-      refetchInterval,
-      staleTime,
-      retry: 3,
-      retryDelay: (attemptIndex: number) =>
-        Math.min(1000 * 2 ** attemptIndex, DEFAULT_STALE_TIME),
-    })),
+  const query = useQuery({
+    queryKey: [QUERY_KEY_PREFIX, ...tokens.sort()] as const,
+    queryFn: () => fetchMultipleExchangeRates(tokens),
+    enabled: enabled && tokens.length > 0,
+    refetchInterval,
+    staleTime,
+    retry: 3,
+    retryDelay: (attemptIndex: number) =>
+      Math.min(1000 * 2 ** attemptIndex, DEFAULT_STALE_TIME),
   })
 
-  const results: TokenExchangeRateResult[] = queries.map((query, index) => ({
-    token: tokens[index],
-    data: query.data,
+  // Build results array for backwards compatibility
+  const results: TokenExchangeRateResult[] = tokens.map(token => ({
+    token,
+    data: query.data?.get(token),
     isLoading: query.isLoading,
     isError: query.isError,
     error: query.error,
   }))
 
-  const data = queries.every(q => q.data)
-    ? new Map(results.map(result => [result.token, result.data]))
-    : undefined
-
-  const isLoading = queries.some(q => q.isLoading)
-  const isError = queries.some(q => q.isError)
-  const error = queries.find(q => q.error)?.error || null
-  const isFetching = queries.some(q => q.isFetching)
-
   return {
-    data,
+    data: query.data,
     results,
-    isLoading,
-    isError,
-    error,
-    isFetching,
+    isLoading: query.isLoading,
+    isError: query.isError,
+    error: query.error,
+    isFetching: query.isFetching,
   }
 }

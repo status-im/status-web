@@ -59,6 +59,7 @@ async function handler(request: NextRequest) {
               'assets.nativeToken',
               'assets.token',
               'collectibles.page',
+              'market.tokenPrice',
             ].includes(path)
           ) ||
           opts?.type === 'mutation'
