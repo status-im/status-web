@@ -1,6 +1,7 @@
 import { create, toBinary } from '@bufbuild/protobuf'
 import { createDecoder } from '@waku/message-encryption/symmetric'
 
+import { getRoutingInfo, SHARDS } from '../consts/waku'
 import { containsOnlyEmoji } from '../helpers/contains-only-emoji'
 import { ApplicationMetadataMessage_Type } from '../protos/application-metadata-message_pb'
 import {
@@ -211,31 +212,32 @@ export class Chat {
       endTime = new Date()
     }
 
-    await this.client.waku.store.queryWithOrderedCallback(
-      [
-        createDecoder(
+    for (const shardId of SHARDS) {
+      try {
+        const decoder = createDecoder(
           this.contentTopic,
-          {
-            clusterId: 16,
-            shardId: 32,
-            pubsubTopic: '/waku/2/rs/16/32',
-          },
+          getRoutingInfo(shardId),
           this.symmetricKey,
-        ),
-      ],
-      wakuMessage => {
-        this.#fetchingMessages = true
-        this.client.handleWakuMessage(wakuMessage)
-        this.#fetchingMessages = false
-      },
-      {
-        timeStart: startTime,
-        timeEnd: endTime,
-        paginationLimit: 50,
-        // most recent page first
-        paginationForward: false,
-      },
-    )
+        )
+        await this.client.waku.store.queryWithOrderedCallback(
+          [decoder],
+          wakuMessage => {
+            this.#fetchingMessages = true
+            this.client.handleWakuMessage(wakuMessage)
+            this.#fetchingMessages = false
+          },
+          {
+            timeStart: startTime,
+            timeEnd: endTime,
+            paginationLimit: 50,
+            // most recent page first
+            paginationForward: false,
+          },
+        )
+      } catch {
+        // Query failed on this shard, try next
+      }
+    }
 
     this.#previousFetchedStartTime = startTime
 
