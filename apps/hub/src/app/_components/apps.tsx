@@ -6,7 +6,7 @@ import { AppCard } from './app-card'
 
 const Apps = () => {
   return (
-    <section className="rounded-32 bg-neutral-2.5 lg:p-8">
+    <section className="rounded-32 lg:bg-neutral-2.5 lg:p-8">
       <div className="mb-6 flex items-start justify-between">
         <div className="max-w-2xl">
           <h3 className="mb-2 text-19 font-600 text-neutral-90 lg:text-27">
@@ -20,7 +20,8 @@ const Apps = () => {
         <ButtonLink
           href="/discover"
           variant="outline"
-          className="!h-10 bg-white-100 px-[12px]"
+          className="bg-white-100"
+          size="32"
         >
           Explore all apps
         </ButtonLink>
