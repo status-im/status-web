@@ -165,7 +165,7 @@ export function useActionStatusContent(
       // compound flow
       .with({ type: 'compound', step: 'initialize' }, () => ({
         state: 'pending',
-        showCloseButton: true,
+        showCloseButton: false,
         content: <CompoundStatusContent />,
       }))
       .with({ type: 'compound', step: 'processing' }, state => ({

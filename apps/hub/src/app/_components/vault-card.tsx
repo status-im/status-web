@@ -89,7 +89,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
         </div>
       </div>
 
-      <div className="absolute right-4 top-4 size-4">
+      <div className="absolute right-4 top-4 hidden size-4 md:block">
         <Tooltip
           delayDuration={TOOLTIP_CONFIG.DELAY_DURATION}
           side="top"
