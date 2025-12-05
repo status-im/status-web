@@ -1,5 +1,13 @@
 # wallet
 
+## 0.1.1
+
+### Patch Changes
+
+- Updated dependencies [f50d31d]
+- Updated dependencies [d92da0c]
+  - @status-im/wallet@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes
