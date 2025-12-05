@@ -166,19 +166,19 @@ export function useWeightedBoost(
   const { isConnected } = useAccount()
 
   return useMemo(() => {
-    if (!vaults || vaults.length === 0) {
+    if (!isConnected) {
       return {
-        value: BASE_BOOST,
-        formatted: `x${BASE_BOOST.toFixed(DEFAULT_DECIMALS)}`,
+        value: Number(0),
+        formatted: Number(0).toFixed(BOOST_DECIMALS).toString(),
         totalStaked: 0,
         hasStake: false,
       }
     }
 
-    if (!isConnected) {
+    if (!vaults || vaults.length === 0) {
       return {
-        value: Number(0),
-        formatted: Number(0).toFixed(BOOST_DECIMALS).toString(),
+        value: BASE_BOOST,
+        formatted: `x${BASE_BOOST.toFixed(DEFAULT_DECIMALS)}`,
         totalStaked: 0,
         hasStake: false,
       }
