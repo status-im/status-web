@@ -17,7 +17,11 @@ const Apps = () => {
             Explore curated Apps and services built on Status Network
           </p>
         </div>
-        <ButtonLink href="/discover" variant="outline" size="32">
+        <ButtonLink
+          href="/discover"
+          variant="outline"
+          className="!h-10 bg-white-100 px-[12px]"
+        >
           Explore all apps
         </ButtonLink>
       </div>

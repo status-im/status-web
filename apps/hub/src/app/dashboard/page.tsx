@@ -60,6 +60,9 @@ export default function DashboardPage() {
                 variant="outline"
                 size="24"
                 href="https://status-im.gitbook.io/status-network/user-guides/hub"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="!h-8 bg-white-100 px-[8px] py-[5px] pl-[12px]"
               >
                 Learn more
                 <ExternalIcon className="text-neutral-50" />
@@ -107,6 +110,9 @@ export default function DashboardPage() {
                   href="https://docs.status.network"
                   variant="primary"
                   size="32"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="!h-10 px-[12px] text-white-100"
                 >
                   Read docs
                   <ExternalIcon className="text-blur-white/70" />
@@ -115,7 +121,9 @@ export default function DashboardPage() {
                 <ButtonLink
                   href="https://statusnetwork.typeform.com/partner"
                   variant="grey"
-                  size="32"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="!h-10 bg-neutral-10 px-[12px] text-neutral-100"
                 >
                   Submit an app
                   <ExternalIcon className="text-neutral-50" />
