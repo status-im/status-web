@@ -219,6 +219,7 @@ const StakeForm = () => {
           register={form.register}
           isConnected={status === 'connected'}
           isLoading={isLoading}
+          isDisabled={vaults?.length === 0}
         />
 
         <div
@@ -239,6 +240,7 @@ const StakeForm = () => {
                 vaults={vaults ?? []}
                 value={form.watch('vault')}
                 onChange={value => form.setValue('vault', value)}
+                disabled={vaults?.length === 0}
               />
             ))
             .otherwise(() => (

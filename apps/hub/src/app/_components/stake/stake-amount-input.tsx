@@ -11,6 +11,7 @@ type StakeAmountInputProps = {
   register: UseFormRegister<any>
   isConnected: boolean
   isLoading?: boolean
+  isDisabled?: boolean
 }
 
 const StakeAmountInput = ({
@@ -20,9 +21,11 @@ const StakeAmountInput = ({
   register,
   isConnected,
   isLoading = false,
+  isDisabled = false,
 }: StakeAmountInputProps) => {
   const showBottomRow = isLoading || isConnected
-  const containerClassName = !isConnected && !isLoading ? 'opacity-[40%]' : ''
+  const containerClassName =
+    (!isConnected && !isLoading) || isDisabled ? 'opacity-[40%]' : ''
 
   return (
     <div className={`space-y-2 ${containerClassName}`}>
@@ -41,6 +44,7 @@ const StakeAmountInput = ({
               inputMode="decimal"
               {...register('amount')}
               placeholder="0"
+              disabled={isDisabled}
               className="h-[38px] w-full border-none bg-transparent text-27 font-semibold text-neutral-100 outline-none placeholder:text-neutral-40"
             />
           ) : (
