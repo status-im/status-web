@@ -16,41 +16,34 @@ const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
     return formatter.format(karma)
   }
 
-  // Find current level
-  const currentLevelData =
-    KARMA_LEVELS.find(
-      level => currentKarma >= level.minKarma && currentKarma < level.maxKarma
-    ) || KARMA_LEVELS[KARMA_LEVELS.length - 1]
+  const { level, minKarma, maxKarma } = getCurrentLevelData(
+    currentKarma,
+    KARMA_LEVELS
+  )
 
-  const currentLevel = currentLevelData.level
-
-  // Calculate progress within current level
   let levelProgress = 0
 
-  if (currentLevel != 0) {
+  if (level != 0) {
     levelProgress =
-      currentLevelData.maxKarma === Infinity
+      maxKarma === Infinity
         ? 100
-        : ((currentKarma - currentLevelData.minKarma) /
-            (currentLevelData.maxKarma - currentLevelData.minKarma)) *
-          100
+        : ((currentKarma - minKarma) / Math.max(maxKarma - minKarma, 1)) * 100
   }
 
-  const oneLevelPercentage = 100 / KARMA_LEVELS.length
+  const oneLevelPercentage = 100 / (KARMA_LEVELS.length - 1)
   const desktopLevelProgress = Math.min(
     100,
-    oneLevelPercentage * currentLevel +
-      oneLevelPercentage * (levelProgress / 100)
+    oneLevelPercentage * level + oneLevelPercentage * (levelProgress / 100)
   )
 
   // For mobile: show only previous and current level
-  const mobileStartLevel = Math.max(1, currentLevel - 1)
-  const mobileEndLevel = Math.min(KARMA_LEVELS.length, currentLevel)
+  const mobileStartLevel = Math.max(0, level)
+  const mobileEndLevel = Math.min(KARMA_LEVELS.length, level + 1)
 
   // Mobile: only show current and next milestone
   const mobileMilestones = [
-    KARMA_LEVELS[mobileStartLevel - 1]?.minKarma ?? 0,
-    KARMA_LEVELS[mobileEndLevel - 1]?.maxKarma ?? 0,
+    KARMA_LEVELS[mobileStartLevel]?.minKarma ?? 0,
+    KARMA_LEVELS[mobileEndLevel]?.minKarma ?? 0,
   ]
 
   return (
@@ -201,10 +194,15 @@ const getCurrentLevelData = (
   karma: number,
   levels: KarmaLevel[] = []
 ): KarmaLevel => {
-  return (
-    levels.find(level => karma >= level.minKarma && karma < level.maxKarma) ||
-    levels[levels.length - 1]
-  )
+  if (karma === 0) {
+    return levels[0]
+  } else {
+    return (
+      levels.find(
+        level => karma >= level.minKarma && karma <= level.maxKarma
+      ) || levels[levels.length - 1]
+    )
+  }
 }
 
 export { getCurrentLevelData, ProgressBar }
