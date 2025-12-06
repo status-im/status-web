@@ -660,13 +660,13 @@ const Token = (props: Props) => {
                 label: 'Fully diluted',
                 value: (
                   <CurrencyAmount
-                    value={metadata.fully_dilluted}
+                    value={metadata.fully_diluted}
                     format="compact"
                   />
                 ),
                 tooltip: (
                   <CurrencyAmount
-                    value={metadata.fully_dilluted}
+                    value={metadata.fully_diluted}
                     format="standard"
                   />
                 ),
