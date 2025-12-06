@@ -4,6 +4,7 @@ import { handleError } from './env.base.mjs'
 export const envSchema = z.object({
   NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID: z.string(),
   NEXT_PUBLIC_STATUS_NETWORK_API_URL: z.string(),
+  NEXT_PUBLIC_STATUS_API_URL: z.string(),
 })
 
 export const result = envSchema.strip().safeParse({
@@ -11,6 +12,7 @@ export const result = envSchema.strip().safeParse({
     process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID,
   NEXT_PUBLIC_STATUS_NETWORK_API_URL:
     process.env.NEXT_PUBLIC_STATUS_NETWORK_API_URL,
+  NEXT_PUBLIC_STATUS_API_URL: process.env.NEXT_PUBLIC_STATUS_API_URL,
 })
 
 if (!result.success) {

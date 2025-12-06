@@ -23,4 +23,15 @@ export const featuredApps: App[] = [
     icon: '/apps/status-network-bridge-avatar.png',
     cover: '/apps/status-network-bridge-cover.png',
   },
+  {
+    id: 3,
+    name: 'Ponzi Hero',
+    category: 'Gaming',
+    status: 'Live',
+    description: 'Earn NFTs, have some fun!!',
+    website: 'https://www.ponzihero.xyz',
+    twitter: 'Splalabs',
+    icon: '/apps/ponzi-hero-avatar.png',
+    cover: '/apps/ponzi-hero-cover.png',
+  },
 ]

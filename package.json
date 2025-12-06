@@ -75,6 +75,12 @@
     ]
   },
   "pnpm": {
+    "overrides": {
+      "react": "19.1.2",
+      "react-dom": "19.1.2",
+      "@types/react": "19.1.2",
+      "@types/react-dom": "19.1.2"
+    },
     "patchedDependencies": {
       "it-length-prefixed@9.0.3": "patches/it-length-prefixed@9.0.3.patch",
       "arctic@1.2.0": "patches/arctic@1.2.0.patch",

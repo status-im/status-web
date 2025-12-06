@@ -200,15 +200,17 @@ export function UnstakeVaultModal(props: UnstakeVaultModalProps) {
           >
             Cancel
           </Button>
-          <Button
-            size="40"
-            variant="primary"
-            onClick={handleUnstake}
-            className="flex-1 justify-center"
-            disabled={!form.formState.isValid || isPending || !amountValue}
-          >
-            {isPending ? 'Unstaking...' : 'Unstake'}
-          </Button>
+          {amountValue && Number(amountValue) > 0 && (
+            <Button
+              size="40"
+              variant="primary"
+              onClick={handleUnstake}
+              className="flex-1 justify-center"
+              disabled={!form.formState.isValid || isPending}
+            >
+              {isPending ? 'Unstaking...' : 'Unstake'}
+            </Button>
+          )}
         </div>
       </div>
     </BaseVaultModal>

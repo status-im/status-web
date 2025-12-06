@@ -114,7 +114,7 @@ export function VaultSelect({
     <button
       type="button"
       disabled={disabled}
-      className="flex w-full items-center justify-between rounded-12 border border-neutral-20 bg-white-100 px-3 py-[9px] text-left text-15 text-neutral-100 transition data-[state=open]:border-neutral-30 hover:border-neutral-30"
+      className="flex w-full items-center justify-between rounded-12 border border-neutral-20 bg-white-100 px-3 py-[9px] text-left text-15 text-neutral-100 transition data-[state=open]:border-neutral-30 hover:border-neutral-30 disabled:cursor-not-allowed disabled:opacity-[.4]"
     >
       <div className="flex min-w-0 items-center gap-2">
         {selectedVault ? (
@@ -178,7 +178,13 @@ export function VaultSelect({
   )
 
   return (
-    <DropdownMenu.Root open={open} onOpenChange={setOpen}>
+    <DropdownMenu.Root
+      open={open}
+      onOpenChange={newOpen => {
+        if (disabled) return
+        setOpen(newOpen)
+      }}
+    >
       {trigger}
       {content}
     </DropdownMenu.Root>

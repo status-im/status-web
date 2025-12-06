@@ -20,7 +20,7 @@ function AppCard(props: Props) {
   return (
     <div className="flex h-full flex-col rounded-28 border border-neutral-20 bg-white-100 p-2 shadow-2 transition-colors hover:border-neutral-30">
       <div className="relative mb-4">
-        <div className="flex aspect-[12/5] w-full items-center justify-center overflow-hidden rounded-24 bg-neutral-20">
+        <div className="flex aspect-[2/1] w-full items-center justify-center overflow-hidden rounded-24 bg-neutral-20 md:aspect-[12/5]">
           <Image
             src={cover}
             alt={name}
@@ -28,14 +28,16 @@ function AppCard(props: Props) {
             className="overflow-hidden rounded-24 object-cover"
           />
         </div>
-        <div className="absolute bottom-[-15px] left-2 flex size-20 items-center justify-center overflow-hidden rounded-24 bg-neutral-40 text-11 text-neutral-60">
+        <div className="absolute bottom-[-15px] left-2 hidden size-20 items-center justify-center overflow-hidden rounded-24 bg-neutral-40 text-11 text-neutral-60 lg:flex">
           <Image src={icon} alt={name} fill className="object-cover" />
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col gap-1 px-2 pb-2 pt-[10px]">
-        <h3 className="mb-1 text-27 font-semibold text-neutral-90">{name}</h3>
-        <p className="mb-auto text-15 font-400 text-neutral-100">
+      <div className="flex flex-1 flex-col gap-0 px-2 pb-2 pt-0 md:gap-1 md:pt-[10px]">
+        <h3 className="mb-1 text-19 font-semibold text-neutral-90 lg:text-27">
+          {name}
+        </h3>
+        <p className="mb-4 text-13 font-400 text-neutral-100 lg:mb-auto lg:text-15">
           {description}
         </p>
         <div className="mt-1 flex items-start gap-2">

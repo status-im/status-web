@@ -1,73 +1,185 @@
 'use client'
 
-import { ExternalIcon } from '@status-im/icons/20'
-import { Button } from '@status-im/status-network/components'
-import Image from 'next/image'
+import { type FC, useEffect, useRef } from 'react'
 
-import { PercentIcon, PlusIcon } from './icons'
+import { Tooltip } from '@status-im/components'
+import { InfoIcon } from '@status-im/icons/16'
+import { Button } from '@status-im/status-network/components'
+import { ConnectKitButton } from 'connectkit'
+import { cva } from 'cva'
+
+import { formatCurrency, formatTokenAmount } from '~/utils/currency'
+import { TOOLTIP_CONFIG, type Vault } from '~constants/index'
+import { usePreDepositTVLInUSD } from '~hooks/usePreDepositTVLInUSD'
+import { useVaultsAPY } from '~hooks/useVaultsAPY'
+
+import { DollarIcon, GusdIcon, PercentIcon, PlusIcon } from './icons'
+import { VaultImage } from './vault-image'
 
 type Props = {
-  name: string
-  apy: string
-  rewards: Array<string>
-  icon: string
+  vault: Vault
   onDeposit: () => void
+  /** User's deposited balance in wei (optional - shows deposit info when provided) */
+  depositedBalance?: bigint
 }
 
-const VaultCard = (props: Props) => {
-  const { name, apy, rewards, icon, onDeposit } = props
-  const apyValue = apy.endsWith('%') ? apy.slice(0, -1) : apy
-  const rewardsLine = rewards.join(', ')
+const vaultCardStyles = cva({
+  base: 'relative flex size-full flex-col rounded-32 border border-neutral-20 bg-white-100 p-4 shadow-1 lg:p-8',
+  variants: {
+    disabled: {
+      true: 'pointer-events-none opacity-[.40]',
+    },
+  },
+  defaultVariants: {
+    disabled: false,
+  },
+})
+
+type VaultCardContentProps = Props & {
+  show?: () => void
+  isConnected: boolean
+  pendingDepositRef: React.MutableRefObject<boolean>
+}
+
+const VaultCardContent: FC<VaultCardContentProps> = ({
+  vault,
+  onDeposit,
+  depositedBalance,
+  show,
+  isConnected,
+  pendingDepositRef,
+}) => {
+  const { rewards, icon, token } = vault
+  const { data: tvlData } = usePreDepositTVLInUSD({ vault })
+  const { data: apyMap } = useVaultsAPY()
+
+  // Get APY from API, fallback to static vault config
+  const dynamicApy = apyMap?.[vault.address.toLowerCase()]
+  const apyValue = dynamicApy !== undefined ? String(dynamicApy) : null
+  const rewardsLine = rewards.join(', ') + ' points'
+
+  const formattedTVL = !vault.soon
+    ? formatCurrency(tvlData?.tvlUSD ?? 0, { compact: true }).replace('$', '')
+    : null
+
+  const showDepositSection = !vault.soon
+
+  useEffect(() => {
+    if (isConnected && pendingDepositRef.current) {
+      pendingDepositRef.current = false
+      onDeposit()
+    }
+  }, [isConnected, onDeposit, pendingDepositRef])
+
+  const handleClick = () => {
+    if (isConnected) {
+      onDeposit()
+    } else {
+      pendingDepositRef.current = true
+      show?.()
+    }
+  }
 
   return (
-    <div className="size-full rounded-32 border border-neutral-20 bg-white-100 p-8 shadow-1">
+    <div className={vaultCardStyles({ disabled: !!vault.soon })}>
       {/* header */}
       <div className="mb-6 flex items-start justify-between">
         <div className="flex items-center gap-4">
-          <div className="relative">
-            <Image
-              className="flex size-10 items-center justify-center rounded-full bg-purple"
-              src={`/vaults/${icon}.png`}
-              alt={icon}
-              width="56"
-              height="56"
-            />
-
-            <div className="absolute -bottom-1 -right-1 flex size-5 items-center justify-center rounded-full border-2 border-neutral-5 bg-white-100">
-              <Image
-                src="/tokens/KARMA.png"
-                alt="KARMA"
-                width="16"
-                height="16"
-              />
-            </div>
-          </div>
+          <VaultImage vault={icon} network={vault.network} size="56" />
         </div>
       </div>
 
+      <div className="absolute right-4 top-4 hidden size-4 md:block">
+        <Tooltip
+          delayDuration={TOOLTIP_CONFIG.DELAY_DURATION}
+          side="top"
+          content={
+            <div className="flex w-[286px] flex-col gap-4 rounded-8 bg-white-100 p-4">
+              <span className="text-13 text-neutral-100">
+                Estimated APY based on TVL and total available liquid token
+                rewards across all vaults: 20M SNT + 20M LINEA
+              </span>
+            </div>
+          }
+        >
+          <InfoIcon className="absolute right-4 top-3 size-4 text-neutral-50 hover:text-neutral-100" />
+        </Tooltip>
+      </div>
+
+      <h3 className="mb-2 text-19 font-600 lg:text-27">{vault.name}</h3>
+
+      {showDepositSection && isConnected && (
+        <div className="mb-4">
+          <p className="text-15 font-400 text-neutral-50">Deposited</p>
+          <p className="text-27 font-600">
+            {formatTokenAmount(depositedBalance ?? 0n, token.symbol, {
+              tokenDecimals: token.decimals,
+              decimals: 0,
+              includeSymbol: true,
+            })}
+          </p>
+        </div>
+      )}
+
       {/* meta */}
-      <ul className="my-6 space-y-4">
-        <li className="text-27 font-600">{name}</li>
-        <li className="flex items-center gap-2 text-[15px]">
+      <ul className="my-4 space-y-2">
+        <li className="flex items-center gap-2 text-15">
           <span className="text-neutral-50">
             <PercentIcon />
           </span>
-          <span>{apyValue} APY</span>
+          <span>{apyValue ? `${apyValue}% liquid APY` : 'Liquid APY TBD'}</span>
         </li>
-        <li className="flex items-center gap-2 text-[15px]">
+        <li className="flex items-center gap-2 text-15">
           <span className="text-neutral-50">
             <PlusIcon />
           </span>
           <span>{rewardsLine}</span>
         </li>
+        {formattedTVL && (
+          <li className="flex items-center gap-2 text-15">
+            <span className="text-neutral-50">
+              <DollarIcon />
+            </span>
+            <span>{formattedTVL} TVL</span>
+          </li>
+        )}
+        {vault.id === 'GUSD' && (
+          <li className="flex items-center gap-2 text-15">
+            <span className="text-neutral-50">
+              <GusdIcon />
+            </span>
+            <span>Generic Protocol points</span>
+          </li>
+        )}
       </ul>
 
       {/* cta */}
-      <Button size="32" onClick={onDeposit}>
-        Deposit
-        <ExternalIcon className="text-blur-white/70" />
+      <Button
+        size="40"
+        onClick={handleClick}
+        disabled={vault.soon}
+        className="mt-auto w-full justify-center lg:w-fit"
+      >
+        {vault.soon ? 'Coming soon' : 'Deposit'}
       </Button>
     </div>
+  )
+}
+
+const VaultCard: FC<Props> = props => {
+  const pendingDepositRef = useRef(false)
+
+  return (
+    <ConnectKitButton.Custom>
+      {({ show, isConnected }: { show?: () => void; isConnected: boolean }) => (
+        <VaultCardContent
+          {...props}
+          show={show}
+          isConnected={isConnected}
+          pendingDepositRef={pendingDepositRef}
+        />
+      )}
+    </ConnectKitButton.Custom>
   )
 }
 

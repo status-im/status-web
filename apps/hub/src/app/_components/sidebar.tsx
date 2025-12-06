@@ -2,11 +2,12 @@
 
 import {
   BridgeIcon,
-  // DepositIcon,
+  DepositIcon,
   DiscoverIcon,
   DocsIcon,
   ExplorerIcon,
-  GovernanceIcon,
+  HandIcon,
+  // GovernanceIcon,
   HomeIcon,
   KarmaIcon,
   StakeIcon,
@@ -16,13 +17,13 @@ import { LinkItem } from './link-item'
 
 const NAV_LINKS = [
   { id: 'dashboard', label: 'Home', icon: HomeIcon, href: '/dashboard' },
-  // {
-  //   id: 'deposit',
-  //   label: 'Deposit',
-  //   icon: DepositIcon,
-  //   href: '/deposit',
-  //   tag: 'Mainnet',
-  // },
+  {
+    id: 'deposit',
+    label: 'Pre-Deposits',
+    icon: DepositIcon,
+    href: '/pre-deposits',
+    tag: 'Mainnet',
+  },
   { id: 'discover', label: 'Discover', icon: DiscoverIcon, href: '/discover' },
   { id: 'stake', label: 'Stake', icon: StakeIcon, href: '/stake' },
   { id: 'karma', label: 'Karma', icon: KarmaIcon, href: '/karma' },
@@ -39,17 +40,23 @@ const TOKENS_LINKS = [
 
 const OTHER_LINKS = [
   {
+    id: 'snt-vote',
+    label: 'SNT Vote',
+    icon: HandIcon,
+    href: 'https://snapshot.org/#/s:status.eth/proposals',
+  },
+  {
     id: 'explorer',
     label: 'Explorer',
     icon: ExplorerIcon,
     href: 'https://sepoliascan.status.network/',
   },
-  {
-    id: 'governance',
-    label: 'Governance',
-    icon: GovernanceIcon,
-    href: '/governance',
-  },
+  // {
+  //   id: 'governance',
+  //   label: 'Governance',
+  //   icon: GovernanceIcon,
+  //   href: '/governance',
+  // },
   {
     id: 'submit-app',
     label: 'Submit an app',
@@ -78,7 +85,7 @@ const Sidebar = (props: Props) => {
       {isOpen && (
         <button
           type="button"
-          className="fixed inset-0 z-50 bg-neutral-80/50 lg:hidden"
+          className="fixed inset-0 z-[70] bg-neutral-80/50 lg:hidden"
           onClick={onClose}
           onKeyDown={e => e.key === 'Escape' && onClose()}
           aria-label="Close sidebar"
@@ -87,17 +94,17 @@ const Sidebar = (props: Props) => {
 
       {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 z-50 w-60 transform border-r border-neutral-10 bg-white-100 transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-[70] w-72 transform bg-white-100 transition-transform duration-300 ease-in-out lg:static lg:z-auto lg:w-60 lg:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="flex h-full flex-col overflow-auto py-8">
           {/* Main Navigation */}
-          <nav className="flex-1 px-6">
+          <nav className="flex-1 px-6 lg:px-0">
             <ul className="space-y-1">
-              {NAV_LINKS.map(item => {
-                return <LinkItem key={item.id} {...item} />
-              })}
+              {NAV_LINKS.map(item => (
+                <LinkItem key={item.id} {...item} />
+              ))}
             </ul>
 
             {/* Separator with Title */}

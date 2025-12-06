@@ -49,9 +49,8 @@ const ActionStatusDialog = (props: Props) => {
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-40 bg-neutral-80/60 backdrop-blur-sm" />
 
-        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 min-h-[198px] w-full max-w-[440px] -translate-x-1/2 -translate-y-1/2 px-4 focus:outline-none">
-          <div className="relative mx-auto min-h-[198px] w-[440px] overflow-hidden rounded-20 shadow-3">
-            <div className="absolute inset-0 h-full rounded-20 bg-white-100" />
+        <Dialog.Content className="fixed inset-x-0 top-0 z-50 flex size-full flex-col items-center justify-center p-4 focus:outline-none md:left-1/2 md:top-1/2 md:h-auto md:max-w-[440px] md:-translate-x-1/2 md:-translate-y-1/2 md:py-0">
+          <div className="relative mx-auto min-h-[198px] w-full overflow-y-auto rounded-20 bg-white-100 shadow-3 max-md:max-h-full md:w-[440px]">
             {showCloseButton && (
               <Dialog.Close asChild>
                 <button
@@ -63,9 +62,9 @@ const ActionStatusDialog = (props: Props) => {
               </Dialog.Close>
             )}
             {content ? (
-              <div className="relative z-10">{content}</div>
+              <div>{content}</div>
             ) : (
-              <div className="relative z-10 flex min-h-[198px] flex-col items-center justify-center gap-2 p-8">
+              <div className="flex min-h-[198px] flex-col items-center justify-center gap-2 p-8">
                 {mapIconToState(state)}
                 <Dialog.Title asChild>
                   <h2 className="text-center text-19 font-semibold text-neutral-100">
