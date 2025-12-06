@@ -68,7 +68,7 @@ export default function DashboardPage() {
             </div>
 
             <section className="relative w-full">
-              <div className="-mx-4 flex gap-4 overflow-x-auto px-4 pb-4 lg:mx-0 lg:grid lg:grid-cols-2 lg:items-stretch lg:gap-6 lg:overflow-visible lg:px-0 lg:pb-0">
+              <div className="-mx-4 flex gap-4 overflow-x-auto px-4 pb-4 lg:mx-0 lg:ml-40 lg:grid lg:grid-cols-2 lg:items-stretch lg:gap-6 lg:overflow-visible lg:px-0 lg:pb-0">
                 {VAULTS.map(vault => (
                   <div
                     key={vault.id}
@@ -86,7 +86,7 @@ export default function DashboardPage() {
                 alt="Dragon"
                 width="354"
                 height="320"
-                className="relative lg:absolute lg:left-[-290px] lg:top-[120px]"
+                className="relative m-auto lg:absolute lg:left-[-127px] lg:top-[120px]"
               />
             </section>
           </div>
