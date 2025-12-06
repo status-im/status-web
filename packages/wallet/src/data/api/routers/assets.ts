@@ -39,7 +39,7 @@ type Asset = {
   decimals?: number
   metadata: {
     market_cap: number
-    fully_dilluted: number
+    fully_diluted: number
     circulation: number
     total_supply: number
     all_time_high: number
@@ -955,7 +955,7 @@ function map(data: {
     decimals: token.decimals,
     metadata: {
       market_cap: marketCap,
-      fully_dilluted: fullyDiluted,
+      fully_diluted: fullyDiluted,
       circulation: finalCirculation,
       total_supply: finalTotalSupply,
       all_time_high: prices.length ? Math.max(...prices) : priceUsd,
