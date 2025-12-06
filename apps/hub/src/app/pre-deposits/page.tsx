@@ -111,6 +111,13 @@ export default function PreDepositPage() {
             />
           ))}
         </div>
+        <Image
+          src="/dragon.png"
+          alt="Dragon"
+          width="354"
+          height="320"
+          className="relative m-auto"
+        />
       </div>
       <PreDepositModal
         open={selectedVault !== null}
