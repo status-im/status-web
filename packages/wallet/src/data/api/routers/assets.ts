@@ -510,7 +510,10 @@ async function nativeToken({
         'all',
         COINGECKO_REVALIDATION_TIMES.PRICE_HISTORY,
       )
-      const tokenMarkets = await fetchTokenMarkets(token.symbol)
+      const tokenMarkets = await fetchTokenMarkets(
+        token.symbol,
+        COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE,
+      )
       const tokenMetadata = await fetchTokenMetadata(
         token.symbol,
         COINGECKO_REVALIDATION_TIMES.TOKEN_METADATA,
@@ -601,7 +604,10 @@ async function token({
         'all',
         COINGECKO_REVALIDATION_TIMES.PRICE_HISTORY,
       )
-      const tokenMarkets = await fetchTokenMarkets(token.symbol)
+      const tokenMarkets = await fetchTokenMarkets(
+        token.symbol,
+        COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE,
+      )
       const tokenMetadata = await fetchTokenMetadata(
         token.symbol,
         COINGECKO_REVALIDATION_TIMES.TOKEN_METADATA,
@@ -869,7 +875,9 @@ function map(data: {
   const totalSupply = tokenMarkets?.total_supply ?? null
   const circulation = tokenMarkets?.circulating_supply ?? null
   const volume24 = tokenMarkets?.total_volume ?? null
-  const marketCap = tokenMarkets?.market_cap ?? price.usd_market_cap ?? 0
+  // Use /simple/price market_cap first (updated every 60s) as it's more real-time
+  // Fallback to /coins/markets market_cap if not available
+  const marketCap = price.usd_market_cap ?? tokenMarkets?.market_cap ?? 0
   const rankByMarketCap = tokenMarkets?.market_cap_rank ?? null
 
   // Use markets data or fallback to calculated values
