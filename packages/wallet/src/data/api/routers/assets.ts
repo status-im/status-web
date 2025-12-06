@@ -925,10 +925,10 @@ function map(data: {
 
   // Use markets data or fallback to calculated values
   const finalTotalSupply =
-    totalSupply ?? (marketCap && priceUsd > 0 ? marketCap / priceUsd : 0)
+    totalSupply ?? (marketCap > 0 && priceUsd > 0 ? marketCap / priceUsd : 0)
 
   const finalCirculation =
-    circulation ?? (marketCap && priceUsd > 0 ? marketCap / priceUsd : 0)
+    circulation ?? (marketCap > 0 && priceUsd > 0 ? marketCap / priceUsd : 0)
 
   const finalVolume24 = volume24 ?? price.usd_24h_vol ?? 0
 
