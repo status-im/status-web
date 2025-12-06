@@ -1,8 +1,8 @@
 'use client'
 
-import { type FC, useEffect, useRef } from 'react'
+import { type FC, useEffect, useRef, useState } from 'react'
 
-import { Tooltip } from '@status-im/components'
+import { Skeleton, Tooltip } from '@status-im/components'
 import { InfoIcon } from '@status-im/icons/16'
 import { Button } from '@status-im/status-network/components'
 import { ConnectKitButton } from 'connectkit'
@@ -35,6 +35,41 @@ const vaultCardStyles = cva({
   },
 })
 
+const VaultCardSkeleton: FC = () => {
+  return (
+    <div className={vaultCardStyles()}>
+      {/* header */}
+      <div className="mb-6 flex items-start justify-between">
+        <div className="flex items-center gap-4">
+          <Skeleton width={56} height={56} className="rounded-full" />
+        </div>
+      </div>
+
+      {/* title */}
+      <Skeleton width={180} height={28} className="mb-2 rounded-8" />
+
+      {/* meta */}
+      <ul className="my-4 space-y-2">
+        <li className="flex items-center gap-2">
+          <Skeleton width={20} height={20} className="rounded-full" />
+          <Skeleton width={120} height={20} className="rounded-6" />
+        </li>
+        <li className="flex items-center gap-2">
+          <Skeleton width={20} height={20} className="rounded-full" />
+          <Skeleton width={140} height={20} className="rounded-6" />
+        </li>
+        <li className="flex items-center gap-2">
+          <Skeleton width={20} height={20} className="rounded-full" />
+          <Skeleton width={100} height={20} className="rounded-6" />
+        </li>
+      </ul>
+
+      {/* cta */}
+      <Skeleton width={100} height={40} className="mt-auto rounded-12" />
+    </div>
+  )
+}
+
 type VaultCardContentProps = Props & {
   show?: () => void
   isConnected: boolean
@@ -50,8 +85,17 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
   pendingDepositRef,
 }) => {
   const { rewards, icon, token } = vault
-  const { data: tvlData } = usePreDepositTVLInUSD({ vault })
-  const { data: apyMap } = useVaultsAPY()
+  const { data: tvlData, isLoading: isTvlLoading } = usePreDepositTVLInUSD({
+    vault,
+  })
+  const { data: apyMap, isLoading: isApyLoading } = useVaultsAPY()
+
+  useEffect(() => {
+    if (isConnected && pendingDepositRef.current) {
+      pendingDepositRef.current = false
+      onDeposit()
+    }
+  }, [isConnected, onDeposit, pendingDepositRef])
 
   // Get APY from API, fallback to static vault config
   const dynamicApy = apyMap?.[vault.address.toLowerCase()]
@@ -63,13 +107,6 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
     : null
 
   const showDepositSection = !vault.soon
-
-  useEffect(() => {
-    if (isConnected && pendingDepositRef.current) {
-      pendingDepositRef.current = false
-      onDeposit()
-    }
-  }, [isConnected, onDeposit, pendingDepositRef])
 
   const handleClick = () => {
     if (isConnected) {
@@ -127,7 +164,13 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
           <span className="text-neutral-50">
             <PercentIcon />
           </span>
-          <span>{apyValue ? `${apyValue}% liquid APY` : 'Liquid APY TBD'}</span>
+          {isApyLoading ? (
+            <Skeleton width={120} height={20} className="rounded-6" />
+          ) : (
+            <span>
+              {apyValue ? `${apyValue}% liquid APY` : 'Liquid APY TBD'}
+            </span>
+          )}
         </li>
         <li className="flex items-center gap-2 text-15">
           <span className="text-neutral-50">
@@ -135,14 +178,16 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
           </span>
           <span>{rewardsLine}</span>
         </li>
-        {formattedTVL && (
-          <li className="flex items-center gap-2 text-15">
-            <span className="text-neutral-50">
-              <DollarIcon />
-            </span>
-            <span>{formattedTVL} TVL</span>
-          </li>
-        )}
+        <li className="flex items-center gap-2 text-15">
+          <span className="text-neutral-50">
+            <DollarIcon />
+          </span>
+          {isTvlLoading ? (
+            <Skeleton width={80} height={20} className="rounded-6" />
+          ) : (
+            <span>{formattedTVL ? `${formattedTVL} TVL` : 'TVL TBD'}</span>
+          )}
+        </li>
         {vault.id === 'GUSD' && (
           <li className="flex items-center gap-2 text-15">
             <span className="text-neutral-50">
@@ -168,6 +213,15 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
 
 const VaultCard: FC<Props> = props => {
   const pendingDepositRef = useRef(false)
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  if (!isMounted) {
+    return <VaultCardSkeleton />
+  }
 
   return (
     <ConnectKitButton.Custom>
@@ -183,4 +237,4 @@ const VaultCard: FC<Props> = props => {
   )
 }
 
-export { VaultCard }
+export { VaultCard, VaultCardSkeleton }
