@@ -187,14 +187,10 @@ function VaultsTableSkeleton() {
 // Main Component
 // ============================================================================
 
-type VaultsTableProps = {
-  isLoading?: boolean
-}
-
-export function VaultsTable({ isLoading }: VaultsTableProps) {
+export function VaultsTable() {
   const [openModalVaultId, setOpenModalVaultId] = useState<string | null>(null)
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null)
-  const { data: vaultDataList } = useStakingVaults()
+  const { data: vaultDataList, isLoading: isLoadingVaults } = useStakingVaults()
   const { isConnected } = useAccount()
   const { isSignedIn, isLoading: isLoadingSIWE } = useSIWE()
   const chainId = useChainId()
@@ -238,13 +234,24 @@ export function VaultsTable({ isLoading }: VaultsTableProps) {
     getCoreRowModel: getCoreRowModel(),
   })
 
+  if (isLoadingSIWE || !isSignedIn) {
+    return null
+  }
+
+  const hasNoVaults = vaultDataList && vaultDataList.length === 0
+  if (hasNoVaults) {
+    return null
+  }
+
+  const showSkeleton = isLoadingVaults || !vaultDataList
+
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center gap-3 lg:justify-between">
         <h2 className="text-19 font-semibold leading-none text-neutral-100">
           My vaults
         </h2>
-        {isConnected && isSignedIn && (
+        {isConnected && isSignedIn && !showSkeleton && (
           <Button
             variant="outline"
             size="32"
@@ -258,25 +265,8 @@ export function VaultsTable({ isLoading }: VaultsTableProps) {
       </div>
 
       <div className="relative mb-4 w-full overflow-hidden rounded-16 border border-solid border-neutral-10 bg-white-100">
-        {isLoading || isLoadingSIWE ? (
+        {showSkeleton ? (
           <VaultsTableSkeleton />
-        ) : !isConnected ? (
-          <div className="flex items-center justify-center p-12 text-center">
-            <div>
-              <p className="text-neutral-50">
-                Connect your wallet to view your vaults
-              </p>
-            </div>
-          </div>
-        ) : vaultDataList && vaultDataList.length === 0 ? (
-          <div className="flex items-center justify-center p-12 text-center">
-            <div>
-              <p className="text-neutral-50">No vaults found</p>
-              <p className="mt-2 text-13 text-neutral-40">
-                Click "Add vault" to create your first vault
-              </p>
-            </div>
-          </div>
         ) : (
           <div className="max-h-[600px] overflow-auto">
             <div className="min-w-[800px]">
