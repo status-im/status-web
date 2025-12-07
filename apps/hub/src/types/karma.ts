@@ -1,7 +1,7 @@
 export interface KarmaLevel {
   level: number
-  minKarma: number
-  maxKarma: number
+  minKarma: bigint
+  maxKarma: bigint
 }
 
 export type AchievementBadgeType =
@@ -15,7 +15,7 @@ export type AchievementBadgeType =
  */
 export interface KarmaOverviewData {
   isLoading?: boolean
-  currentKarma: number
+  currentKarma: bigint
   achievements: AchievementBadgeType[]
 }
 

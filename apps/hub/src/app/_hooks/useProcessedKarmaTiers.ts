@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { KARMA_LEVELS } from '~constants/karma'
+import { useKarmaTier } from '~hooks/useKarmaTier'
 
 import type { KarmaLevel } from '~types/karma'
 
@@ -27,9 +27,7 @@ export interface UseProcessedKarmaTiersReturn {
  *
  * This hook fetches karma tiers from the contract using useKarmaTier and transforms
  * them into the KarmaLevel format used throughout the application. It handles:
- * - Validation of tier data (checking for NaN values, negative karma, etc.)
  * - Transformation from contract format to application format
- * - Fallback to KARMA_LEVELS constant when contract data is unavailable
  * - Memoization to prevent unnecessary recalculation
  *
  * @returns Processed karma levels and loading state
@@ -70,14 +68,22 @@ export interface UseProcessedKarmaTiersReturn {
  * ```
  */
 export function useProcessedKarmaTiers(): UseProcessedKarmaTiersReturn {
+  const { data: tiersData, isLoading } = useKarmaTier()
+
   const karmaLevels = useMemo<KarmaLevel[]>(() => {
-    const processedTiers = KARMA_LEVELS
-    // Only use processed tiers if we got valid results
-    return processedTiers
-  }, [])
+    if (!tiersData?.tiers || tiersData.tiers.length === 0) {
+      return []
+    }
+
+    return tiersData.tiers.map((tier, index) => ({
+      level: index,
+      minKarma: BigInt(tier.minKarma),
+      maxKarma: BigInt(tier.maxKarma),
+    }))
+  }, [tiersData])
 
   return {
     karmaLevels,
-    isLoading: false,
+    isLoading,
   }
 }
