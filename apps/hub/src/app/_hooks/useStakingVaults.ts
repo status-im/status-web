@@ -5,7 +5,7 @@ import { useAccount, useChainId, useConfig } from 'wagmi'
 import { readContract, readContracts } from 'wagmi/actions'
 
 import { vaultAbi } from '~constants/contracts'
-import { CACHE_CONFIG, SNT_TOKEN, STAKING_MANAGER } from '~constants/index'
+import { CACHE_CONFIG, STAKING_MANAGER, STT_TOKEN } from '~constants/index'
 
 // ============================================================================
 // Types
@@ -117,8 +117,8 @@ async function fetchVaultData(
         },
         {
           chainId,
-          address: SNT_TOKEN.address,
-          abi: SNT_TOKEN.abi,
+          address: STT_TOKEN.address,
+          abi: STT_TOKEN.abi,
           functionName: 'balanceOf',
           args: [vaultAddress],
         },

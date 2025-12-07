@@ -5,7 +5,7 @@ import { Button } from '@status-im/status-network/components'
 import { createColumnHelper } from '@tanstack/react-table'
 import { formatUnits } from 'viem'
 
-import { EXTEND_LOCK_PERIOD, SNT_TOKEN } from '~constants/index'
+import { EXTEND_LOCK_PERIOD, STT_TOKEN } from '~constants/index'
 import { type StakingVault } from '~hooks/useStakingVaults'
 import { shortenAddress } from '~utils/address'
 import { formatSNT } from '~utils/currency'
@@ -210,8 +210,8 @@ export const createVaultTableColumns = ({
         // Boost = (mpAccrued / stakedBalance) + 1 (base multiplier)
         const currentBoost =
           stakedBalance > 0n
-            ? Number(formatUnits(mpAccrued, SNT_TOKEN.decimals)) /
-                Number(formatUnits(stakedBalance, SNT_TOKEN.decimals)) +
+            ? Number(formatUnits(mpAccrued, STT_TOKEN.decimals)) /
+                Number(formatUnits(stakedBalance, STT_TOKEN.decimals)) +
               1
             : 1
 
@@ -222,7 +222,7 @@ export const createVaultTableColumns = ({
             </span>
             {potentialBoost && (
               <span className="text-13 font-medium text-purple">
-                x{formatSNT(formatUnits(potentialBoost, SNT_TOKEN.decimals))} if
+                x{formatSNT(formatUnits(potentialBoost, STT_TOKEN.decimals))} if
                 locked
               </span>
             )}

@@ -11,7 +11,7 @@ import { LaunchIcon } from '~components/icons'
 import {
   DEFAULT_MP_VALUE,
   MAX_BOOST,
-  SNT_TOKEN,
+  STT_TOKEN,
   TOOLTIP_CONFIG,
 } from '~constants/index'
 import { useCompoundMultiplierPoints } from '~hooks/useCompoundMultiplierPoints'
@@ -39,9 +39,9 @@ const WeightedBoostCard = () => {
       multiplierPointsData?.totalUncompounded ?? DEFAULT_MP_VALUE
     const hasUncompoundedPoints = totalUncompounded > DEFAULT_MP_VALUE
     const formattedAmount = formatSNT(
-      formatUnits(totalUncompounded, SNT_TOKEN.decimals),
+      formatUnits(totalUncompounded, STT_TOKEN.decimals),
       {
-        decimals: SNT_TOKEN.decimals,
+        decimals: STT_TOKEN.decimals,
       }
     )
 

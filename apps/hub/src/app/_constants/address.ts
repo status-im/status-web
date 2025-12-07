@@ -78,6 +78,15 @@ export const SNT_TOKEN: Token = {
   abi: tokenAbi,
 } as const
 
+// Testnet token for staking on Status Sepolia
+export const STT_TOKEN: Token = {
+  address: '0x1C3Ac2a186c6149Ae7Cb4D716eBbD0766E4f898a',
+  name: 'Status Test Token',
+  symbol: 'STT',
+  decimals: 18,
+  abi: tokenAbi,
+} as const
+
 export const LINEA_TOKEN: Token = {
   address: '0x1789e0043623282D5DCc7F213d703C6D8BAfBB04',
   name: 'Linea',

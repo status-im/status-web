@@ -7,7 +7,7 @@ import {
   BASE_BOOST,
   BOOST_DECIMALS,
   DEFAULT_DECIMALS,
-  SNT_TOKEN,
+  STT_TOKEN,
 } from '~constants/index'
 import { type StakingVault } from '~hooks/useStakingVaults'
 
@@ -184,6 +184,6 @@ export function useWeightedBoost(
       }
     }
 
-    return calculateWeightedBoost(vaults, SNT_TOKEN.decimals)
+    return calculateWeightedBoost(vaults, STT_TOKEN.decimals)
   }, [vaults, isConnected])
 }

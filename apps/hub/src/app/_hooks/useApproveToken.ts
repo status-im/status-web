@@ -4,7 +4,7 @@ import { type Address, parseUnits, zeroAddress } from 'viem'
 import { useAccount, useConfig, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 
-import { SNT_TOKEN } from '~constants/index'
+import { STT_TOKEN } from '~constants/index'
 import { useVaultStateContext } from '~hooks/useVaultStateContext'
 
 // ============================================================================
@@ -130,7 +130,7 @@ export function useApproveToken(): UseApproveTokenReturn {
       }
 
       // Convert amount to wei
-      const amountWei = parseUnits(amount, SNT_TOKEN.decimals)
+      const amountWei = parseUnits(amount, STT_TOKEN.decimals)
 
       // Notify state machine of approval start
       sendVaultEvent({
@@ -141,8 +141,8 @@ export function useApproveToken(): UseApproveTokenReturn {
       try {
         // Execute approval transaction
         const hash = await writeContractAsync({
-          address: SNT_TOKEN.address,
-          abi: SNT_TOKEN.abi,
+          address: STT_TOKEN.address,
+          abi: STT_TOKEN.abi,
           functionName: 'approve',
           args: [spenderAddress, amountWei],
         })

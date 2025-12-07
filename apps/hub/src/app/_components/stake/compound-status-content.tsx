@@ -3,7 +3,7 @@ import { InfoIcon } from '@status-im/icons/16'
 import { formatUnits } from 'viem'
 
 import { LaunchIcon } from '~components/icons'
-import { SNT_TOKEN } from '~constants/index'
+import { STT_TOKEN } from '~constants/index'
 import { useMultiplierPointsBalance } from '~hooks/useMultiplierPoints'
 import { useStakingVaults } from '~hooks/useStakingVaults'
 import { useWeightedBoost } from '~hooks/useWeightedBoost'
@@ -30,7 +30,7 @@ export const CompoundStatusContent = () => {
               {`Ready to compound ${formatSNT(
                 formatUnits(
                   multiplierPointsData?.totalUncompounded ?? 0n,
-                  SNT_TOKEN.decimals
+                  STT_TOKEN.decimals
                 )
               )} points`}
             </h2>
@@ -51,7 +51,7 @@ export const CompoundStatusContent = () => {
               {`${formatSNT(
                 formatUnits(
                   multiplierPointsData?.totalMpRedeemed ?? 0n,
-                  SNT_TOKEN.decimals
+                  STT_TOKEN.decimals
                 )
               )} points`}
             </p>

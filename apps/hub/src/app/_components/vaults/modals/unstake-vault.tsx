@@ -11,7 +11,7 @@ import { z } from 'zod'
 
 import { SNTIcon } from '~components/icons'
 import { vaultAbi } from '~constants/contracts'
-import { SNT_TOKEN } from '~constants/index'
+import { STT_TOKEN } from '~constants/index'
 import { useVaultStateContext } from '~hooks/useVaultStateContext'
 import { useVaultTokenUnStake } from '~hooks/useVaultTokenUnStake'
 import { formatSNT } from '~utils/currency'
@@ -77,7 +77,7 @@ export function UnstakeVaultModal(props: UnstakeVaultModalProps) {
   })
 
   const maxBalance = stakedBalance
-    ? Number(formatUnits(stakedBalance as bigint, SNT_TOKEN.decimals))
+    ? Number(formatUnits(stakedBalance as bigint, STT_TOKEN.decimals))
     : 0
 
   const form = useForm<FormValues>({
@@ -113,7 +113,7 @@ export function UnstakeVaultModal(props: UnstakeVaultModalProps) {
 
   const handleUnstake = form.handleSubmit(data => {
     try {
-      const amountWei = parseUnits(data.amount, SNT_TOKEN.decimals)
+      const amountWei = parseUnits(data.amount, STT_TOKEN.decimals)
       unstake({
         amountWei,
         vaultAddress,

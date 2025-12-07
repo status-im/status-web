@@ -15,7 +15,7 @@ import { z } from 'zod'
 import { SNTIcon } from '~components/icons'
 import { PromoModal } from '~components/stake/promo-modal'
 import { VaultSelect } from '~components/vault-select'
-import { SNT_TOKEN, STAKE_PAGE_CONSTANTS } from '~constants/index'
+import { STAKE_PAGE_CONSTANTS, STT_TOKEN } from '~constants/index'
 import { useApproveToken } from '~hooks/useApproveToken'
 import { useCreateVault } from '~hooks/useCreateVault'
 import { useExchangeRate } from '~hooks/useExchangeRate'
@@ -73,7 +73,7 @@ const StakeForm = () => {
   } = useBalance({
     scopeKey: 'balance',
     address,
-    token: SNT_TOKEN.address,
+    token: STT_TOKEN.address,
     query: {
       enabled: isConnected,
     },
@@ -108,12 +108,12 @@ const StakeForm = () => {
     if (!data.amount || !data.vault || !address) return
 
     try {
-      const amountWei = parseUnits(data.amount, SNT_TOKEN.decimals)
+      const amountWei = parseUnits(data.amount, STT_TOKEN.decimals)
 
       // Check current allowance
       const currentAllowance = (await readContract(config, {
-        address: SNT_TOKEN.address,
-        abi: SNT_TOKEN.abi,
+        address: STT_TOKEN.address,
+        abi: STT_TOKEN.abi,
         functionName: 'allowance',
         args: [address, data.vault as Address],
       })) as bigint

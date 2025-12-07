@@ -8,7 +8,7 @@ import { useAccount, useConfig, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 
 import { vaultAbi } from '~constants/contracts'
-import { SNT_TOKEN } from '~constants/index'
+import { STT_TOKEN } from '~constants/index'
 import { useVaultStateContext } from '~hooks/useVaultStateContext'
 
 // ============================================================================
@@ -117,7 +117,7 @@ export function useVaultEmergencyExit(): UseVaultEmergencyExitReturn {
       // Send START_WITHDRAW event first to transition state machine to processing
       sendVaultEvent({
         type: 'START_WITHDRAW',
-        amount: formatUnits(amountWei, SNT_TOKEN.decimals),
+        amount: formatUnits(amountWei, STT_TOKEN.decimals),
       })
 
       // Close the modal immediately so the status dialog can show

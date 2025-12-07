@@ -8,7 +8,7 @@ import { useSIWE } from 'connectkit'
 import Image from 'next/image'
 import { useAccount, useBalance } from 'wagmi'
 
-import { SNT_TOKEN } from '~constants/index'
+import { STT_TOKEN } from '~constants/index'
 import { TIME_CONSTANTS } from '~constants/staking'
 import { useFaucetMutation, useFaucetQuery } from '~hooks/useFaucet'
 import { formatSNT } from '~utils/currency'
@@ -26,7 +26,7 @@ const FaucetCard = () => {
   const { refetch: refetchBalance } = useBalance({
     scopeKey: 'balance',
     address,
-    token: SNT_TOKEN.address,
+    token: STT_TOKEN.address,
     query: {
       enabled: isConnected,
     },
