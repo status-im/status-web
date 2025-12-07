@@ -15,6 +15,7 @@ import { z } from 'zod'
 import { SNTIcon } from '~components/icons'
 import { PromoModal } from '~components/stake/promo-modal'
 import { VaultSelect } from '~components/vault-select'
+import { LockVaultModal } from '~components/vaults/modals/lock-vault-modal'
 import { STAKE_PAGE_CONSTANTS, STT_TOKEN } from '~constants/index'
 import { useApproveToken } from '~hooks/useApproveToken'
 import { useCreateVault } from '~hooks/useCreateVault'
@@ -28,6 +29,8 @@ import { useEmergencyModeEnabled } from '../../_hooks/useEmergencyModeEnabled'
 import { StakeAmountInput } from './stake-amount-input'
 
 import type { Address } from 'viem'
+
+const LOCK_VAULT_ACTIONS = [{ label: "Don't lock" }, { label: 'Lock' }] as const
 
 type ConnectionStatus =
   | 'uninstalled'
@@ -47,8 +50,8 @@ type FormValues = z.infer<ReturnType<typeof createStakeFormSchema>>
 const StakeForm = () => {
   const { mutate: createVault } = useCreateVault()
   const { address, isConnected, isConnecting } = useAccount()
-  const { mutate: approveToken } = useApproveToken()
-  const { mutate: stakeVault } = useVaultTokenStake()
+  const { mutateAsync: approveToken } = useApproveToken()
+  const { mutateAsync: stakeVault } = useVaultTokenStake()
   const { isSignedIn, isLoading: isLoadingSIWE, signIn } = useSIWE()
   const { data: vaults, refetch: refetchStakingVaults } = useStakingVaults()
   // State machine for vault operations
@@ -58,6 +61,8 @@ const StakeForm = () => {
     useStatusWallet()
   const { data: emergencyModeEnabled } = useEmergencyModeEnabled()
   const [isPromoModalOpen, setIsPromoModalOpen] = useState(false)
+  const [lockModalVaultAddress, setLockModalVaultAddress] =
+    useState<Address | null>(null)
 
   const status: ConnectionStatus = useMemo(() => {
     if (isConnected && !isSignedIn) return 'signInRequired'
@@ -104,39 +109,53 @@ const StakeForm = () => {
     return 0
   }, [amountValue, exchangeRate])
 
+  const executeStake = async (vaultAddress: Address, amountWei: bigint) => {
+    await stakeVault({
+      amountWei,
+      lockPeriod: STAKE_PAGE_CONSTANTS.DEFAULT_STAKE_LOCK_PERIOD,
+      vaultAddress,
+    })
+
+    // Only reset and refetch after successful staking
+    form.reset()
+    await Promise.all([refetchStakingVaults(), refetchBalance()])
+
+    setLockModalVaultAddress(vaultAddress)
+  }
+
   const handleSubmit = async (data: FormValues) => {
     if (!data.amount || !data.vault || !address) return
 
-    try {
-      const amountWei = parseUnits(data.amount, STT_TOKEN.decimals)
+    const vaultAddress = data.vault as Address
+    const amountWei = parseUnits(data.amount, STT_TOKEN.decimals)
 
+    try {
       // Check current allowance
       const currentAllowance = (await readContract(config, {
         address: STT_TOKEN.address,
         abi: STT_TOKEN.abi,
         functionName: 'allowance',
-        args: [address, data.vault as Address],
+        args: [address, vaultAddress],
       })) as bigint
 
-      // Transition to increase allowance if not enough allowance
-      if (amountWei >= currentAllowance) {
-        // Await the approval
-        await approveToken({
-          amount: data.amount,
-          spenderAddress: data.vault as Address,
-        })
+      // If not enough allowance, approve first, then stake in onSuccess
+      if (amountWei > currentAllowance) {
+        await approveToken(
+          {
+            amount: data.amount,
+            spenderAddress: vaultAddress,
+          },
+          {
+            onSuccess: () => {
+              executeStake(vaultAddress, amountWei)
+            },
+          }
+        )
+        return
       }
 
-      // Now stake (after approval if needed)
-      await stakeVault({
-        amountWei,
-        lockPeriod: STAKE_PAGE_CONSTANTS.DEFAULT_STAKE_LOCK_PERIOD,
-        vaultAddress: data.vault as Address,
-      })
-
-      // Only reset and refetch after successful staking
-      form.reset()
-      await Promise.all([refetchStakingVaults(), refetchBalance()])
+      // Allowance is sufficient, stake directly
+      await executeStake(vaultAddress, amountWei)
     } catch (error) {
       sendVaultEvent({ type: 'REJECT' })
       console.error('Staking failed:', error)
@@ -201,120 +220,136 @@ const StakeForm = () => {
   }
 
   return (
-    <form
-      onSubmit={form.handleSubmit(handleSubmit)}
-      className="flex flex-col gap-4 rounded-16 border border-neutral-10 bg-white-100 p-4 shadow-2 md:rounded-32 md:p-8"
-    >
-      <div className="flex flex-1 flex-col gap-4">
-        <StakeAmountInput
-          balance={balance?.value}
-          amountInUSD={amountInUSDValue}
-          onMaxClick={() => {
-            const maxValue = balance?.toString() ?? '0'
-            const formatted = (Number(maxValue) / 1e18)
-              .toFixed(18)
-              .replace(/\.?0+$/, '')
-            form.setValue('amount', formatted)
-          }}
-          register={form.register}
-          isConnected={status === 'connected'}
-          isLoading={isLoading}
-          isDisabled={vaults?.length === 0}
-        />
+    <>
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="flex flex-col gap-4 rounded-16 border border-neutral-10 bg-white-100 p-4 shadow-2 md:rounded-32 md:p-8"
+      >
+        <div className="flex flex-1 flex-col gap-4">
+          <StakeAmountInput
+            balance={balance?.value}
+            amountInUSD={amountInUSDValue}
+            onMaxClick={() => {
+              const maxValue = balance?.toString() ?? '0'
+              const formatted = (Number(maxValue) / 1e18)
+                .toFixed(18)
+                .replace(/\.?0+$/, '')
+              form.setValue('amount', formatted)
+            }}
+            register={form.register}
+            isConnected={status === 'connected'}
+            isLoading={isLoading}
+            isDisabled={vaults?.length === 0}
+          />
 
-        <div
-          className={match(status)
-            .with('connected', () => 'space-y-2')
-            .with('signInRequired', () => 'space-y-2 opacity-[40%]')
-            .otherwise(() => 'space-y-2 opacity-[40%]')}
-        >
-          <label
-            htmlFor="vault-select"
-            className="block text-13 font-medium text-neutral-50"
+          <div
+            className={match(status)
+              .with('connected', () => 'space-y-2')
+              .with('signInRequired', () => 'space-y-2 opacity-[40%]')
+              .otherwise(() => 'space-y-2 opacity-[40%]')}
           >
-            Select vault
-          </label>
-          {match(status)
-            .with('connected', () => (
-              <VaultSelect
-                vaults={vaults ?? []}
-                value={form.watch('vault')}
-                onChange={value => form.setValue('vault', value)}
-                disabled={vaults?.length === 0}
-              />
-            ))
-            .otherwise(() => (
-              <div className="rounded-12 border border-neutral-20 bg-white-100 py-[9px] pl-4 pr-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-15">Add new vault</span>
-                  <DropdownIcon className="text-neutral-40" />
-                </div>
-              </div>
-            ))}
-        </div>
-      </div>
-
-      {match(status)
-        .with('uninstalled', () => (
-          <PromoModal
-            open={isPromoModalOpen}
-            onClose={() => setIsPromoModalOpen(false)}
-          >
-            <Button
-              className="w-full justify-center"
-              onClick={() => setIsPromoModalOpen(true)}
+            <label
+              htmlFor="vault-select"
+              className="block text-13 font-medium text-neutral-50"
             >
-              Connect Wallet
-            </Button>
-          </PromoModal>
-        ))
-        .with('disconnected', () => (
-          <ConnectKitButton.Custom>
-            {({ show }) => (
+              Select vault
+            </label>
+            {match(status)
+              .with('connected', () => (
+                <VaultSelect
+                  vaults={vaults ?? []}
+                  value={form.watch('vault')}
+                  onChange={value => form.setValue('vault', value)}
+                  disabled={vaults?.length === 0}
+                />
+              ))
+              .otherwise(() => (
+                <div className="rounded-12 border border-neutral-20 bg-white-100 py-[9px] pl-4 pr-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-15">Add new vault</span>
+                    <DropdownIcon className="text-neutral-40" />
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+
+        {match(status)
+          .with('uninstalled', () => (
+            <PromoModal
+              open={isPromoModalOpen}
+              onClose={() => setIsPromoModalOpen(false)}
+            >
               <Button
                 className="w-full justify-center"
-                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                  e.preventDefault()
-                  show?.()
-                }}
+                onClick={() => setIsPromoModalOpen(true)}
               >
                 Connect Wallet
               </Button>
-            )}
-          </ConnectKitButton.Custom>
-        ))
-        .with('signInRequired', () => (
-          <Button
-            className="w-full justify-center"
-            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-              e.preventDefault()
-              signIn?.()
-            }}
-          >
-            Sign in to continue
-          </Button>
-        ))
-        .with('connected', () => {
-          return form.watch('vault') && form.watch('amount') ? (
+            </PromoModal>
+          ))
+          .with('disconnected', () => (
+            <ConnectKitButton.Custom>
+              {({ show }) => (
+                <Button
+                  className="w-full justify-center"
+                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                    e.preventDefault()
+                    show?.()
+                  }}
+                >
+                  Connect Wallet
+                </Button>
+              )}
+            </ConnectKitButton.Custom>
+          ))
+          .with('signInRequired', () => (
             <Button
               className="w-full justify-center"
-              type="submit"
-              disabled={Boolean(emergencyModeEnabled)}
+              onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                e.preventDefault()
+                signIn?.()
+              }}
             >
-              Stake SNT
+              Sign in to continue
             </Button>
-          ) : (
-            <Button
-              className="w-full justify-center"
-              onClick={() => createVault()}
-              disabled={Boolean(emergencyModeEnabled)}
-            >
-              Create new vault
-            </Button>
-          )
-        })
-        .exhaustive()}
-    </form>
+          ))
+          .with('connected', () => {
+            return form.watch('vault') && form.watch('amount') ? (
+              <Button
+                className="w-full justify-center"
+                type="submit"
+                disabled={Boolean(emergencyModeEnabled)}
+              >
+                Stake SNT
+              </Button>
+            ) : (
+              <Button
+                className="w-full justify-center"
+                onClick={() => createVault()}
+                disabled={Boolean(emergencyModeEnabled)}
+              >
+                Create new vault
+              </Button>
+            )
+          })
+          .exhaustive()}
+      </form>
+
+      {lockModalVaultAddress && (
+        <LockVaultModal
+          open={!!lockModalVaultAddress}
+          onOpenChange={open => {
+            if (!open) setLockModalVaultAddress(null)
+          }}
+          onClose={() => setLockModalVaultAddress(null)}
+          vaultAddress={lockModalVaultAddress}
+          title="Do you want to lock the vault?"
+          description="Lock this vault to receive more Karma"
+          actions={[...LOCK_VAULT_ACTIONS]}
+        />
+      )}
+    </>
   )
 }
 
