@@ -1,4 +1,3 @@
-import { useToast } from '@status-im/components'
 import {
   useQuery,
   useQueryClient,
@@ -101,7 +100,6 @@ export function useCurrentUser(
   options?: UseCurrentUserOptions
 ): UseQueryResult<CurrentUser, Error> {
   const queryClient = useQueryClient()
-  const toast = useToast()
   // Store query client instance for invalidation outside of React components
   if (!queryClientInstance) {
     queryClientInstance = queryClient
@@ -128,9 +126,7 @@ export function useCurrentUser(
         const data: CurrentUserResponse = await response.json()
         return data.result
       } catch (error) {
-        toast.negative(
-          `Failed to fetch current user: ${error instanceof Error ? error.message : 'Unknown error'}`
-        )
+        console.error('Failed to fetch current user:', error)
         throw error
       }
     },
