@@ -118,13 +118,13 @@ const FaucetCard = () => {
             <div className="flex flex-col gap-1.5 text-13 font-500">
               <p className="text-neutral-50">Used today</p>
               <span className="text-15 font-500">
-                {formatSNT(faucetData?.accountDailyRequests ?? 0)} SNT
+                {formatSNT(faucetData?.actualUsedToday ?? 0)} SNT
               </span>
             </div>
             <div className="flex flex-col gap-1.5 text-13 font-500">
               <p className="text-neutral-50">Available</p>
               <span className="text-15 font-500">
-                {formatSNT(faucetData?.remainingRequests ?? 0)} SNT
+                {formatSNT(faucetData?.remainingAmount ?? 0)} SNT
               </span>
             </div>
           </div>
