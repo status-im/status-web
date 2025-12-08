@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import { Skeleton } from '@status-im/components'
 import { useSIWE } from 'connectkit'
 import { formatEther } from 'viem'
+import { useAccount } from 'wagmi'
 
 import { useKarmaBalance } from '~hooks/useKarmaBalance'
 import { useProcessedKarmaTiers } from '~hooks/useProcessedKarmaTiers'
@@ -12,11 +13,13 @@ import { formatSNT } from '~utils/currency'
 import { getCurrentLevelData, ProgressBar } from './progress-tracker'
 
 const KarmaOverviewCard = () => {
+  const { isConnected } = useAccount()
   const { data: karmaBalance, isLoading: karmaLoading } = useKarmaBalance()
   const { karmaLevels, isLoading: tiersLoading } = useProcessedKarmaTiers()
   const { isLoading: isSIWELoading } = useSIWE()
 
-  const isLoading = karmaLoading || tiersLoading || isSIWELoading
+  const isLoading =
+    tiersLoading || (isConnected && (karmaLoading || isSIWELoading))
 
   const currentKarma = karmaBalance?.balance ?? 0n
 
