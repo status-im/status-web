@@ -18,6 +18,7 @@ import type {
   CoinGeckoCoinHistoryResponse,
   CoinGeckoCoinListResponse,
   CoinGeckoMarketChartResponse,
+  CoinGeckoMarketsResponse,
   CoinGeckoNFTFloorPriceResponse,
   CoinGeckoSimplePriceResponse,
 } from './types'
@@ -432,6 +433,42 @@ export async function fetchTokensPrice(
   } catch (error: unknown) {
     console.error('Failed to fetch prices:', error)
     return {}
+  }
+}
+
+/**
+ * @see https://docs.coingecko.com/reference/coins-markets
+ *
+ * Fetches market data for tokens using CoinGecko API.
+ */
+export async function fetchTokenMarkets(
+  symbol: string,
+  revalidate: Revalidation = COINGECKO_REVALIDATION_TIMES.TOKEN_METADATA,
+): Promise<CoinGeckoMarketsResponse[number] | null> {
+  try {
+    const coinId = await getCoinIdFromSymbol(symbol)
+    if (!coinId) {
+      throw new Error(`Coin not found for symbol: ${symbol}`)
+    }
+
+    const url = new URL(`${PROXY_BASE_URL}/v1/coins/markets`)
+    url.searchParams.set('ids', coinId)
+    url.searchParams.set('vs_currency', 'usd')
+    url.searchParams.set('order', 'market_cap_desc')
+    url.searchParams.set('per_page', '1')
+    url.searchParams.set('page', '1')
+    url.searchParams.set('sparkline', 'false')
+
+    const marketsData = await _fetchWithAuth<CoinGeckoMarketsResponse>(
+      url,
+      revalidate,
+      'fetchTokenMarkets',
+    )
+
+    return marketsData[0] || null
+  } catch (error: unknown) {
+    console.error(`Failed to fetch markets data for ${symbol}:`, error)
+    return null
   }
 }
 
