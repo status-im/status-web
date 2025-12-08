@@ -139,30 +139,39 @@ async function fetchTokenData(
 ) {
   const { skipMetadata = false } = options ?? {}
 
+  const pricePromise = fetchTokensPrice(
+    [symbol],
+    COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE,
+  ).then(prices => prices[symbol])
+
+  const priceHistoryPromise = skipMetadata
+    ? Promise.resolve({
+        prices: [],
+        market_caps: [],
+        total_volumes: [],
+      } as Awaited<ReturnType<typeof fetchTokenPriceHistory>>)
+    : fetchTokenPriceHistory(
+        symbol,
+        'all',
+        COINGECKO_REVALIDATION_TIMES.PRICE_HISTORY,
+      )
+
+  const tokenMarketsPromise = skipMetadata
+    ? Promise.resolve(null)
+    : fetchTokenMarkets(symbol, COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE)
+
+  const tokenMetadataPromise = skipMetadata
+    ? Promise.resolve(null)
+    : fetchTokenMetadata(
+        symbol,
+        COINGECKO_REVALIDATION_TIMES.TOKEN_METADATA,
+      ).catch(() => null)
+
   const [price, priceHistory, tokenMarkets, tokenMetadata] = await Promise.all([
-    fetchTokensPrice([symbol], COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE).then(
-      prices => prices[symbol],
-    ),
-    skipMetadata
-      ? Promise.resolve({
-          prices: [],
-          market_caps: [],
-          total_volumes: [],
-        } as Awaited<ReturnType<typeof fetchTokenPriceHistory>>)
-      : fetchTokenPriceHistory(
-          symbol,
-          'all',
-          COINGECKO_REVALIDATION_TIMES.PRICE_HISTORY,
-        ),
-    skipMetadata
-      ? Promise.resolve(null)
-      : fetchTokenMarkets(symbol, COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE),
-    skipMetadata
-      ? Promise.resolve(null)
-      : fetchTokenMetadata(
-          symbol,
-          COINGECKO_REVALIDATION_TIMES.TOKEN_METADATA,
-        ).catch(() => null),
+    pricePromise,
+    priceHistoryPromise,
+    tokenMarketsPromise,
+    tokenMetadataPromise,
   ])
 
   return {
