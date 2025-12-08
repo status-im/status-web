@@ -100,7 +100,11 @@ const KarmaSourceCard = ({
     }
   }
 
-  if (isLoading || isConnecting || isLoadingSIWE) {
+  if (
+    isConnecting ||
+    isLoadingSIWE ||
+    (isConnected && isSignedIn && isLoading)
+  ) {
     return (
       <div className="w-full overflow-hidden rounded-20 border border-neutral-20 bg-white-100">
         <div className="flex flex-col">
