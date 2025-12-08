@@ -52,6 +52,9 @@ type TokenData =
   | ApiOutput['assets']['nativeToken']
 type AssetsResponse = ApiOutput['assets']['all']
 type AssetData = ApiOutput['assets']['all']['assets'][number]
+type TokenMetadata = NonNullable<
+  NonNullable<TokenData['assets']>[NetworkType]
+>['metadata']
 
 type Props = {
   address: string
@@ -59,6 +62,12 @@ type Props = {
 }
 
 const NETWORKS = ['ethereum'] as const
+
+// Query cache time constants
+const TOKEN_DETAIL_STALE_TIME = 15 * 1000 // 15 seconds
+const TOKEN_DETAIL_GC_TIME = 60 * 60 * 1000 // 1 hour
+const OPTIMIZED_TOKEN_STALE_TIME = 5 * 1000 // 5 seconds
+const OPTIMIZED_TOKEN_REFETCH_INTERVAL = 30 * 1000 // 30 seconds
 
 const erc20 = new Interface(['function transfer(address to, uint256 amount)'])
 
@@ -72,6 +81,27 @@ function matchesAsset(asset: AssetData, ticker: string): boolean {
   } else {
     return asset.symbol?.toLowerCase() === ticker.toLowerCase()
   }
+}
+
+function matchesTokenSummary(
+  summary: TokenData['summary'],
+  ticker: string,
+): boolean {
+  if (ticker.startsWith('0x')) {
+    return summary.contracts?.ethereum?.toLowerCase() === ticker.toLowerCase()
+  } else {
+    return summary.symbol?.toUpperCase() === ticker.toUpperCase()
+  }
+}
+
+function getTokenMetadata(
+  tokenDetail: TokenData | undefined,
+  shouldUse: boolean,
+): TokenMetadata | undefined {
+  if (!tokenDetail?.assets || !shouldUse) {
+    return undefined
+  }
+  return Object.values(tokenDetail.assets)[0]?.metadata
 }
 
 const Token = (props: Props) => {
@@ -129,8 +159,8 @@ const Token = (props: Props) => {
       return body.result.data.json
     },
     enabled: !!address,
-    staleTime: 15 * 1000,
-    gcTime: 60 * 60 * 1000,
+    staleTime: TOKEN_DETAIL_STALE_TIME,
+    gcTime: TOKEN_DETAIL_GC_TIME,
   })
 
   // Show error toast if fetching assets fails
@@ -147,7 +177,7 @@ const Token = (props: Props) => {
     isLoading: isTokenLoading,
     isError: hasErrorFetchingToken,
   } = useQuery<TokenData>({
-    queryKey: ['token', ticker],
+    queryKey: ['token', ticker, address],
     queryFn: async () => {
       const endpoint = ticker.startsWith('0x')
         ? 'assets.token'
@@ -183,8 +213,71 @@ const Token = (props: Props) => {
       return body.result.data.json
     },
     enabled: !!asset,
-    staleTime: 15 * 1000,
-    gcTime: 60 * 60 * 1000,
+    staleTime: TOKEN_DETAIL_STALE_TIME,
+    gcTime: TOKEN_DETAIL_GC_TIME,
+    placeholderData: previousData => previousData,
+  })
+
+  // Check if tokenDetail is for the current token and fully loaded
+  const isTokenDetailForCurrentToken =
+    tokenDetail?.summary &&
+    !isTokenLoading &&
+    matchesTokenSummary(tokenDetail.summary, ticker)
+
+  // Optimized query for price and balance updates only
+  // Only use this for the same token after full data is loaded to avoid metadata conflicts
+  const { data: optimizedTokenDetail } = useQuery<TokenData>({
+    queryKey: ['token-optimized', ticker, address],
+    queryFn: async () => {
+      const endpoint = ticker.startsWith('0x')
+        ? 'assets.token'
+        : 'assets.nativeToken'
+
+      // Get previous metadata to preserve it - only use if tokenDetail is for current token
+      const previousMetadata = getTokenMetadata(
+        tokenDetail,
+        !!isTokenDetailForCurrentToken,
+      )
+
+      const url = new URL(
+        `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/${endpoint}`,
+      )
+
+      url.searchParams.set(
+        'input',
+        JSON.stringify({
+          json: {
+            address,
+            networks: NETWORKS,
+            skipMetadata: true,
+            ...(previousMetadata ? { previousMetadata } : {}),
+            ...(ticker.startsWith('0x')
+              ? { contract: ticker }
+              : { symbol: ticker }),
+          },
+        }),
+      )
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch token detail.')
+      }
+
+      const body = await response.json()
+      return body.result.data.json
+    },
+    // Only enable when tokenDetail is fully loaded and for the current token
+    enabled: !!tokenDetail && !!asset && isTokenDetailForCurrentToken,
+    staleTime: OPTIMIZED_TOKEN_STALE_TIME,
+    gcTime: TOKEN_DETAIL_GC_TIME,
+    refetchInterval: OPTIMIZED_TOKEN_REFETCH_INTERVAL,
+    placeholderData: tokenDetail,
   })
 
   // Show error toast if fetching token detail fails
@@ -194,21 +287,35 @@ const Token = (props: Props) => {
     }
   }, [hasErrorFetchingToken, toast])
 
-  const isLoading = !data?.assets || isTokenLoading || !tokenDetail
+  const isOptimizedForCurrentToken =
+    optimizedTokenDetail?.summary &&
+    matchesTokenSummary(optimizedTokenDetail.summary, ticker)
 
-  const needsEthBalance = tokenDetail?.summary.symbol !== 'ETH'
+  const shouldUseOptimizedData =
+    optimizedTokenDetail &&
+    isOptimizedForCurrentToken &&
+    isTokenDetailForCurrentToken
+
+  const finalTokenDetail = shouldUseOptimizedData
+    ? optimizedTokenDetail
+    : tokenDetail
+
+  const isLoading =
+    !data?.assets || (isTokenLoading && !tokenDetail) || !finalTokenDetail
+
+  const needsEthBalance = finalTokenDetail?.summary.symbol !== 'ETH'
 
   const ethBalanceQuery = useEthBalance(address, needsEthBalance)
 
   const ethBalance = needsEthBalance
     ? ethBalanceQuery.data?.summary.total_balance || 0
-    : tokenDetail.summary.total_balance
+    : finalTokenDetail?.summary.total_balance || 0
 
   // Get gas fees for the current network
   const gasFeeQuery = useQuery({
     queryKey: ['gas-fees', address, gasInput?.to, gasInput?.value],
     queryFn: async ({ queryKey }) => {
-      const isNative = tokenDetail?.summary.symbol === 'ETH'
+      const isNative = finalTokenDetail?.summary.symbol === 'ETH'
       const [, from, to, value] = queryKey as [string, string, string, string]
 
       let params
@@ -220,7 +327,7 @@ const Token = (props: Props) => {
           value,
         }
       } else {
-        const contract = tokenDetail?.summary.contracts.ethereum
+        const contract = finalTokenDetail?.summary.contracts.ethereum
         if (!contract) {
           throw new Error('Contract address not found')
         }
@@ -261,7 +368,8 @@ const Token = (props: Props) => {
       const body = await response.json()
       return body.result.data.json
     },
-    enabled: !!gasInput?.to && !!gasInput?.value && !!address && !!tokenDetail,
+    enabled:
+      !!gasInput?.to && !!gasInput?.value && !!address && !!finalTokenDetail,
   })
 
   // Show error toast if fetching gas fees fails
@@ -278,6 +386,7 @@ const Token = (props: Props) => {
       }
     }
   }, [])
+
   const prepareGasEstimate = (to: string, value: string) => {
     if (gasEstimateTimeoutRef.current) {
       clearTimeout(gasEstimateTimeoutRef.current)
@@ -298,8 +407,8 @@ const Token = (props: Props) => {
 
   useEffect(() => {
     const processMarkdown = async () => {
-      if (tokenDetail?.assets) {
-        const tokenAssets = Object.values(tokenDetail.assets)
+      if (finalTokenDetail?.assets) {
+        const tokenAssets = Object.values(finalTokenDetail.assets)
         if (tokenAssets.length > 0 && tokenAssets[0]) {
           const metadata = tokenAssets[0].metadata
 
@@ -311,15 +420,16 @@ const Token = (props: Props) => {
       }
     }
     processMarkdown()
-  }, [tokenDetail])
+  }, [finalTokenDetail])
 
   if (isLoading || !asset) {
     return <TokenSkeleton />
   }
 
-  const tokenAssets = tokenDetail?.assets
-    ? Object.values(tokenDetail.assets)
+  const tokenAssets = finalTokenDetail?.assets
+    ? Object.values(finalTokenDetail.assets)
     : []
+
   const metadata = tokenAssets[0]?.metadata || {}
 
   const summary = {
@@ -338,14 +448,15 @@ const Token = (props: Props) => {
   const name = asset.name || ticker
 
   const sendAsset = {
-    name: tokenDetail.summary.name,
+    name: finalTokenDetail.summary.name,
     icon,
-    totalBalance: tokenDetail.summary.total_balance,
-    totalBalanceEur: tokenDetail.summary.total_eur,
+    totalBalance: finalTokenDetail.summary.total_balance,
+    totalBalanceEur: finalTokenDetail.summary.total_eur,
     contractAddress: ticker.startsWith('0x') ? ticker : undefined,
-    symbol: tokenDetail.summary.symbol,
+    symbol: finalTokenDetail.summary.symbol,
     ethBalance,
-    network: (Object.keys(tokenDetail.assets)[0] ?? 'ethereum') as NetworkType,
+    network: (Object.keys(finalTokenDetail.assets)[0] ??
+      'ethereum') as NetworkType,
     decimals: asset.decimals ?? 18,
   }
 
@@ -360,7 +471,7 @@ const Token = (props: Props) => {
   const signTransaction = async (
     formData: SendAssetsFormData & { password: string },
   ) => {
-    const isNative = tokenDetail?.summary.symbol === 'ETH'
+    const isNative = finalTokenDetail?.summary.symbol === 'ETH'
 
     if (isNative) {
       const amountHex = parseUnits(formData.amount, 18).toString(16)
@@ -394,7 +505,7 @@ const Token = (props: Props) => {
         from: address,
         to: formData.to,
         value: parseFloat(formData.amount),
-        asset: tokenDetail.summary.symbol,
+        asset: finalTokenDetail.summary.symbol,
         network: 'ethereum',
         status: 'pending',
         category: 'external',
@@ -413,7 +524,7 @@ const Token = (props: Props) => {
       const tokenDecimals = asset.decimals ?? 18
       const amount = parseUnits(formData.amount, tokenDecimals)
       const amountHex = amount.toString(16)
-      const contractAddress = tokenDetail?.summary.contracts.ethereum
+      const contractAddress = finalTokenDetail?.summary.contracts.ethereum
 
       if (!contractAddress) {
         throw new Error('Token contract address not found')
@@ -454,7 +565,7 @@ const Token = (props: Props) => {
         from: address,
         to: formData.to,
         value: parseFloat(formData.amount),
-        asset: tokenDetail.summary.symbol,
+        asset: finalTokenDetail.summary.symbol,
         network: 'ethereum',
         status: 'pending',
         category: 'external',
@@ -503,7 +614,7 @@ const Token = (props: Props) => {
           <BuyCryptoDrawer
             account={account}
             onOpenTab={handleOpenTab}
-            symbol={tokenDetail.summary.symbol}
+            symbol={finalTokenDetail.summary.symbol}
           >
             <Button size="32" iconBefore={<BuyIcon />}>
               <span className="block max-w-20 truncate">Buy</span>
@@ -556,7 +667,7 @@ const Token = (props: Props) => {
             <BuyCryptoDrawer
               account={account}
               onOpenTab={handleOpenTab}
-              symbol={tokenDetail.summary.symbol}
+              symbol={finalTokenDetail.summary.symbol}
             >
               <Button size="32" iconBefore={<BuyIcon />} variant="primary">
                 Buy
