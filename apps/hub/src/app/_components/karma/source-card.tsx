@@ -40,7 +40,7 @@ const KarmaSourceCard = ({
   const [capToken, setCapToken] = useState<string | null>(null)
   const [capError, setCapError] = useState<string | null>(null)
   const { isConnected, isConnecting } = useAccount()
-  const { isSignedIn, isLoading: isLoadingSIWE } = useSIWE()
+  const { isSignedIn, isLoading: isLoadingSIWE, signIn } = useSIWE()
   const { mutateAsync: claimKarma, isPending: isClaimingKarma } =
     useClaimKarma()
   const [isClaiming, setIsClaiming] = useState<boolean>(false)
@@ -204,22 +204,32 @@ const KarmaSourceCard = ({
               </span>
             )}
 
-            <Button
-              variant="primary"
-              size="40"
-              onClick={handleClaim}
-              disabled={
-                !capToken ||
-                isComplete ||
-                !isConnected ||
-                !isSignedIn ||
-                isClaimingKarma ||
-                isClaiming
-              }
-              className="w-full items-center justify-center"
-            >
-              {isClaimingKarma ? 'Claiming...' : 'Claim'}
-            </Button>
+            {isConnected && !isSignedIn ? (
+              <Button
+                variant="primary"
+                size="40"
+                onClick={() => signIn?.()}
+                className="w-full items-center justify-center"
+              >
+                Sign in to continue
+              </Button>
+            ) : (
+              <Button
+                variant="primary"
+                size="40"
+                onClick={handleClaim}
+                disabled={
+                  !capToken ||
+                  isComplete ||
+                  !isConnected ||
+                  isClaimingKarma ||
+                  isClaiming
+                }
+                className="w-full items-center justify-center"
+              >
+                {isClaimingKarma ? 'Claiming...' : 'Claim'}
+              </Button>
+            )}
           </div>
         </div>
       </div>
