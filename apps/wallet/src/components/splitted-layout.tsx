@@ -1,3 +1,5 @@
+import { Suspense } from 'react'
+
 import { Avatar, Skeleton } from '@status-im/components'
 import { Balance, StickyHeaderContainer } from '@status-im/wallet/components'
 
@@ -63,7 +65,9 @@ const SplittedLayout = (props: Props) => {
         </div>
 
         <div className="relative hidden basis-1/2 flex-col bg-white-100 2xl:flex">
-          <div className="relative z-20 size-full">{detail}</div>
+          <Suspense fallback={detail}>
+            <div className="relative z-20 size-full">{detail}</div>
+          </Suspense>
 
           <div
             className="absolute z-10 size-full"
