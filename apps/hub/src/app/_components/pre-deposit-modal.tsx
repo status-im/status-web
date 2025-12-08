@@ -4,6 +4,7 @@ import { type Dispatch, type SetStateAction, useMemo } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
+import { useToast } from '@status-im/components'
 import { CloseIcon, DropdownIcon } from '@status-im/icons/20'
 import { Button, DropdownMenu } from '@status-im/status-network/components'
 import { cva } from 'cva'
@@ -75,6 +76,7 @@ const PreDepositModal = ({
   setActiveVault,
   onDepositSuccess,
 }: PreDepositModalProps) => {
+  const toast = useToast()
   const { address } = useAccount()
   const chainId = useChainId()
   const { switchChain, isPending: isSwitchingChain } = useSwitchChain()
@@ -157,6 +159,10 @@ const PreDepositModal = ({
                     onDepositSuccess?.()
                     onOpenChange(false)
                   },
+                  onError: () => {
+                    toast.negative('Deposit failed. Please try again.')
+                    form.reset()
+                  },
                 }
               )
             },
@@ -170,6 +176,10 @@ const PreDepositModal = ({
             onSuccess: () => {
               onDepositSuccess?.()
               onOpenChange(false)
+            },
+            onError: () => {
+              toast.negative('Deposit failed. Please try again.')
+              form.reset()
             },
           }
         )

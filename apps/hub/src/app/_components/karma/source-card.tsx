@@ -85,7 +85,6 @@ const KarmaSourceCard = ({
                 setCapError(errorMessage)
                 toast.negative(errorMessage)
               }
-              setIsClaiming(false)
             },
           }
         )
@@ -96,6 +95,8 @@ const KarmaSourceCard = ({
             : 'An unexpected error occurred'
         setCapError(errorMessage)
         toast.negative(errorMessage)
+      } finally {
+        setIsClaiming(false)
       }
     }
   }
