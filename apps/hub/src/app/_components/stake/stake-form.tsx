@@ -57,8 +57,7 @@ const StakeForm = () => {
   // State machine for vault operations
   const { send: sendVaultEvent } = useVaultStateContext()
   const { data: exchangeRate } = useExchangeRate()
-  const { isInstalled: isStatusWalletInstalled, isChecking: isCheckingWallet } =
-    useStatusWallet()
+  const { isInstalled: isStatusWalletInstalled } = useStatusWallet()
   const { data: emergencyModeEnabled } = useEmergencyModeEnabled()
   const [isPromoModalOpen, setIsPromoModalOpen] = useState(false)
   const [lockModalVaultAddress, setLockModalVaultAddress] =
@@ -162,7 +161,10 @@ const StakeForm = () => {
     }
   }
 
-  if (isLoading || isConnecting || isLoadingSIWE || isCheckingWallet) {
+  const showLoadingSkeleton =
+    isConnecting || (isConnected && (isLoading || isLoadingSIWE))
+
+  if (showLoadingSkeleton) {
     return (
       <div className="flex flex-col gap-4 rounded-16 border border-neutral-10 bg-white-100 p-4 shadow-2 md:rounded-32 md:p-8">
         <div className="flex flex-1 flex-col gap-4">
