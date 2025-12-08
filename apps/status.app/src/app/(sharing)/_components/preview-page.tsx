@@ -629,7 +629,7 @@ const getAvatarURL = (data: Data): string | undefined => {
   }
 
   const url = URL.createObjectURL(
-    new Blob([avatar], {
+    new Blob([new Uint8Array(avatar)], {
       type: 'image/jpeg',
     })
   )

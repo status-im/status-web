@@ -24,7 +24,7 @@
         default = pkgsFor.${system}.mkShellNoCC {
           packages = with pkgsFor.${system}.buildPackages; [
             git # 2.47.2
-            nodejs_20 # v20.19.1
+            nodejs_22 # v22.20.0
             pnpm # 9.15.9
           ];
         };

@@ -1,4 +1,3 @@
-import { type Plugin } from 'unified'
 import { visit } from 'unist-util-visit'
 import { matter } from 'vfile-matter'
 
@@ -6,8 +5,11 @@ import { METADATA } from '../../../../../config/specs/metadata'
 import { resolvePathname } from '../../../../_utils/resolve-pathname'
 import { slugify } from '../../../../_utils/slugify'
 
+import type { Plugin } from 'unified'
+import type { VFile } from 'vfile'
+
 export function remarkRewriteLinks(): Plugin {
-  return function (root, file) {
+  return function (root: any, file: VFile) {
     visit(root, 'yaml', () => {
       // todo?: use unified
       // unified().use(remarkFrontmatter)
@@ -76,5 +78,5 @@ export function remarkRewriteLinks(): Plugin {
         }
       }
     })
-  }
+  } as Plugin
 }

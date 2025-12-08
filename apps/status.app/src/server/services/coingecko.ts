@@ -49,26 +49,56 @@ export type Coin = {
 }
 
 export const getCoins = async (): Promise<Coin[]> => {
-  const response = await fetch('https://api.coingecko.com/api/v3/coins/list', {
-    next: {
-      revalidate: 3600, // 1 hour
-    },
-  })
-  const coins = await response.json()
+  try {
+    const response = await fetch(
+      'https://api.coingecko.com/api/v3/coins/list',
+      {
+        next: {
+          revalidate: 3600, // 1 hour
+        },
+      }
+    )
 
-  return coins
+    if (!response.ok) {
+      return []
+    }
+
+    const coins = await response.json()
+
+    return Array.isArray(coins) ? coins : []
+  } catch {
+    return []
+  }
 }
 
 export const getMarket = async (): Promise<Market> => {
-  const response = await fetch(
-    'https://api.coingecko.com/api/v3/coins/status/tickers?include_exchange_logo=true&order=volume_desc&depth=true',
-    {
-      next: {
-        revalidate: 3600, // 1 hour
-      },
-    }
-  )
-  const market = await response.json()
+  try {
+    const response = await fetch(
+      'https://api.coingecko.com/api/v3/coins/status/tickers?include_exchange_logo=true&order=volume_desc&depth=true',
+      {
+        next: {
+          revalidate: 3600, // 1 hour
+        },
+      }
+    )
 
-  return market
+    if (!response.ok) {
+      return {
+        name: '',
+        tickers: [],
+      }
+    }
+
+    const market = await response.json()
+
+    return {
+      name: market.name ?? '',
+      tickers: Array.isArray(market.tickers) ? market.tickers : [],
+    }
+  } catch {
+    return {
+      name: '',
+      tickers: [],
+    }
+  }
 }

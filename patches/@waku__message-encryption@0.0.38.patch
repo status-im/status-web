@@ -1,0 +1,13 @@
+diff --git a/dist/crypto/utils.js b/dist/crypto/utils.js
+index 24fe178c408f7bfec7f99c775b6411ad939efa27..eb47fd218c81e45bb2c351058357be2def4f5471 100644
+--- a/dist/crypto/utils.js
++++ b/dist/crypto/utils.js
+@@ -4,7 +4,7 @@ import { concat } from "@waku/utils/bytes";
+ import sha3 from "js-sha3";
+ import { Asymmetric, Symmetric } from "../misc.js";
+ const crypto = {
+-    node: nodeCrypto,
++    node: typeof require === 'function' && require('crypto'),
+     web: typeof self === "object" && "crypto" in self ? self.crypto : undefined
+ };
+ export function getSubtle() {

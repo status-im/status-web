@@ -1,5 +1,15 @@
 # @status-im/js
 
+## 1.2.0
+
+### Minor Changes
+
+- f41f0e3: chore: update waku dependencies => update to node 22
+
+### Patch Changes
+
+- aca00b0: update test snapshots
+
 ## 1.1.0
 
 ### Minor Changes

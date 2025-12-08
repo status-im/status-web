@@ -31,7 +31,7 @@ Packages for building user interfaces, websites, web applications, dapps, browse
 
 Required:
 
-- **[Node.js](https://nodejs.org/)** v20.x
+- **[Node.js](https://nodejs.org/)** v22.x
 - **[pnpm](https://pnpm.io)** v9.12.x
 
 ## Stack
