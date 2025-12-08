@@ -27,6 +27,18 @@ import type { NetworkType } from '../types'
 
 type ERC20Token = (typeof erc20TokenList)['tokens'][number]
 
+const tokenMetadataSchema = z.object({
+  market_cap: z.number(),
+  fully_diluted: z.number(),
+  circulation: z.number(),
+  total_supply: z.number(),
+  all_time_high: z.number(),
+  all_time_low: z.number(),
+  rank_by_market_cap: z.number().nullable(),
+  about: z.string(),
+  volume_24: z.number(),
+})
+
 type Asset = {
   networks: NetworkType[]
   icon: string
@@ -211,19 +223,7 @@ export const assetsRouter = router({
         networks: z.array(z.enum(['ethereum'])),
         symbol: z.string(),
         skipMetadata: z.boolean().optional(),
-        previousMetadata: z
-          .object({
-            market_cap: z.number(),
-            fully_diluted: z.number(),
-            circulation: z.number(),
-            total_supply: z.number(),
-            all_time_high: z.number(),
-            all_time_low: z.number(),
-            rank_by_market_cap: z.number().nullable(),
-            about: z.string(),
-            volume_24: z.number(),
-          })
-          .optional(),
+        previousMetadata: tokenMetadataSchema.optional(),
       }),
     )
     .query(async ({ input }) => {
@@ -247,19 +247,7 @@ export const assetsRouter = router({
         networks: z.array(z.enum(['ethereum'])),
         contract: z.string(),
         skipMetadata: z.boolean().optional(),
-        previousMetadata: z
-          .object({
-            market_cap: z.number(),
-            fully_diluted: z.number(),
-            circulation: z.number(),
-            total_supply: z.number(),
-            all_time_high: z.number(),
-            all_time_low: z.number(),
-            rank_by_market_cap: z.number().nullable(),
-            about: z.string(),
-            volume_24: z.number(),
-          })
-          .optional(),
+        previousMetadata: tokenMetadataSchema.optional(),
       }),
     )
     .query(async ({ input }) => {
@@ -1029,6 +1017,31 @@ function map(data: {
   const about =
     previousMetadata?.about ?? extractTokenDescription(tokenMetadata)
 
+  // Build base metadata with dynamic fields
+  const baseMetadata = {
+    market_cap: marketCap,
+    volume_24: finalVolume24,
+    rank_by_market_cap:
+      rankByMarketCap ?? previousMetadata?.rank_by_market_cap ?? null,
+  }
+
+  // If previousMetadata exists, merge with base (preserving static fields)
+  // Otherwise, create full metadata with all fields
+  const metadata = previousMetadata
+    ? {
+        ...previousMetadata,
+        ...baseMetadata,
+      }
+    : {
+        ...baseMetadata,
+        fully_diluted: fullyDiluted,
+        circulation: finalCirculation,
+        total_supply: finalTotalSupply,
+        all_time_high: prices.length ? Math.max(...prices) : priceUsd,
+        all_time_low: prices.length ? Math.min(...prices) : priceUsd,
+        about,
+      }
+
   return {
     networks: [STATUS_NETWORKS[token.chainId]],
     ...('address' in token
@@ -1042,26 +1055,7 @@ function map(data: {
     balance: Number(balance) / 10 ** token.decimals,
     total_eur: (Number(balance) / 10 ** token.decimals) * price.usd,
     decimals: token.decimals,
-    metadata: previousMetadata
-      ? {
-          ...previousMetadata,
-          // Update only dynamic fields
-          market_cap: marketCap,
-          volume_24: finalVolume24,
-          rank_by_market_cap:
-            rankByMarketCap ?? previousMetadata.rank_by_market_cap,
-        }
-      : {
-          market_cap: marketCap,
-          fully_diluted: fullyDiluted,
-          circulation: finalCirculation,
-          total_supply: finalTotalSupply,
-          all_time_high: prices.length ? Math.max(...prices) : priceUsd,
-          all_time_low: prices.length ? Math.min(...prices) : priceUsd,
-          volume_24: finalVolume24,
-          rank_by_market_cap: rankByMarketCap,
-          about,
-        },
+    metadata,
   }
 }
 
