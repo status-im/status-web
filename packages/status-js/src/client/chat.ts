@@ -50,6 +50,8 @@ export type ChatMessage = ChatMessageProto & {
 
 type FetchedMessage = { messageId: string; timestamp?: Date }
 
+const MESSAGES_PAGINATION_LIMIT = 50
+
 export class Chat {
   private readonly client: Client
   #clock: bigint
@@ -229,7 +231,7 @@ export class Chat {
           {
             timeStart: startTime,
             timeEnd: endTime,
-            paginationLimit: 50,
+            paginationLimit: MESSAGES_PAGINATION_LIMIT,
             // most recent page first
             paginationForward: false,
           },
