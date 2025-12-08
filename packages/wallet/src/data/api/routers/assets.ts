@@ -12,13 +12,17 @@ import {
 } from '../../services/alchemy'
 import {
   COINGECKO_REVALIDATION_TIMES,
+  fetchTokenMarkets,
   fetchTokenMetadata,
   fetchTokenPriceHistory,
   fetchTokensPrice,
 } from '../../services/coingecko/index'
 import { publicProcedure, router } from '../lib/trpc'
 
-import type { CoinGeckoCoinDetailResponse } from '../../services/coingecko/types'
+import type {
+  CoinGeckoCoinDetailResponse,
+  CoinGeckoMarketsResponse,
+} from '../../services/coingecko/types'
 import type { NetworkType } from '../types'
 
 type ERC20Token = (typeof erc20TokenList)['tokens'][number]
@@ -35,7 +39,7 @@ type Asset = {
   decimals?: number
   metadata: {
     market_cap: number
-    fully_dilluted: number
+    fully_diluted: number
     circulation: number
     total_supply: number
     all_time_high: number
@@ -87,36 +91,6 @@ export const DEFAULT_TOKEN_IDS: Record<string, string> = {
   SHIB: 'shiba-inu',
 }
 
-const DEFAULT_TOKEN_METADATA: Partial<CoinGeckoCoinDetailResponse> = {
-  market_data: {
-    current_price: { usd: 0 },
-    market_cap: { usd: 0 },
-    total_volume: { usd: 0 },
-    price_change_24h: 0,
-    price_change_percentage_24h: 0,
-    circulating_supply: 0,
-    total_supply: 0,
-    max_supply: null,
-  },
-  description: {},
-  links: {
-    homepage: [],
-    blockchain_site: [],
-    whitepaper: null,
-  },
-}
-
-async function fetchTokenMetadataWithFallback(symbol: string) {
-  try {
-    return await fetchTokenMetadata(
-      symbol,
-      COINGECKO_REVALIDATION_TIMES.TOKEN_METADATA,
-    )
-  } catch {
-    return DEFAULT_TOKEN_METADATA
-  }
-}
-
 function buildTokenSummary(
   assets: Asset[],
   defaultIcon: string,
@@ -154,6 +128,34 @@ function filterTokensByNetworks<T extends { chainId: number }>(
       .map(([chainId]) => Number(chainId))
       .includes(token.chainId),
   )
+}
+
+/**
+ * Fetch all CoinGecko data for a token (price, price history, markets, metadata)
+ */
+async function fetchTokenData(symbol: string) {
+  const [price, priceHistory, tokenMarkets, tokenMetadata] = await Promise.all([
+    fetchTokensPrice([symbol], COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE).then(
+      prices => prices[symbol],
+    ),
+    fetchTokenPriceHistory(
+      symbol,
+      'all',
+      COINGECKO_REVALIDATION_TIMES.PRICE_HISTORY,
+    ),
+    fetchTokenMarkets(symbol, COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE),
+    fetchTokenMetadata(
+      symbol,
+      COINGECKO_REVALIDATION_TIMES.TOKEN_METADATA,
+    ).catch(() => null),
+  ])
+
+  return {
+    price,
+    priceHistory,
+    tokenMarkets,
+    tokenMetadata,
+  }
 }
 
 export const assetsRouter = router({
@@ -285,6 +287,7 @@ async function all({
           address,
           STATUS_NETWORKS[token.chainId],
         )
+
         const price = (await fetchTokensPrice([token.symbol]))[token.symbol]
 
         // Skip if price data is not available
@@ -392,6 +395,7 @@ async function all({
 
     const batchSize = 300
     const partialAssetEntries = Array.from(partialERC20Assets.entries())
+
     for (let i = 0; i < partialAssetEntries.length; i += batchSize) {
       const batch = partialAssetEntries.slice(i, i + batchSize)
       const symbols = [...new Set(batch.map(([, asset]) => asset.symbol))]
@@ -424,10 +428,14 @@ async function all({
         }
 
         existingAsset.networks.push(asset.networks[0])
+
         existingAsset.balance += asset.balance
+
         existingAsset.total_eur += asset.total_eur
+
         existingAsset.price_eur =
           (existingAsset.price_eur + asset.price_eur) / 2
+
         existingAsset.price_percentage_24h_change =
           (existingAsset.price_percentage_24h_change +
             asset.price_percentage_24h_change) /
@@ -439,6 +447,7 @@ async function all({
     )
 
     const existingSymbols = aggregatedAssets.map(a => a.symbol)
+
     const missingSymbols = DEFAULT_TOKEN_SYMBOLS.filter(
       s => !existingSymbols.includes(s),
     )
@@ -453,6 +462,7 @@ async function all({
         const token = erc20TokenList.tokens.find(
           t => t.symbol === symbol && t.chainId === 1,
         )
+
         if (token && prices[symbol] && prices[symbol].usd !== undefined) {
           aggregatedAssets.push({
             networks: ['ethereum'],
@@ -525,24 +535,15 @@ async function nativeToken({
         throw new Error('Balance not found')
       }
 
-      const price = (
-        await fetchTokensPrice(
-          [token.symbol],
-          COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE,
-        )
-      )[token.symbol]
-      const priceHistory = await fetchTokenPriceHistory(
-        token.symbol,
-        'all',
-        COINGECKO_REVALIDATION_TIMES.PRICE_HISTORY,
-      )
-      const tokenMetadata = await fetchTokenMetadataWithFallback(token.symbol)
+      const { price, priceHistory, tokenMarkets, tokenMetadata } =
+        await fetchTokenData(token.symbol)
 
       const asset: Asset = map({
         token,
         balance,
         price,
         priceHistory,
+        tokenMarkets,
         tokenMetadata,
       })
       assets[STATUS_NETWORKS[token.chainId]] = asset
@@ -611,24 +612,15 @@ async function token({
         throw new Error(`Balance not found for token ${token.symbol}`)
       }
 
-      const price = (
-        await fetchTokensPrice(
-          [token.symbol],
-          COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE,
-        )
-      )[token.symbol]
-      const priceHistory = await fetchTokenPriceHistory(
-        token.symbol,
-        'all',
-        COINGECKO_REVALIDATION_TIMES.PRICE_HISTORY,
-      )
-      const tokenMetadata = await fetchTokenMetadataWithFallback(token.symbol)
+      const { price, priceHistory, tokenMarkets, tokenMetadata } =
+        await fetchTokenData(token.symbol)
 
       const asset = map({
         token,
         balance: result.tokenBalances[0].tokenBalance,
         price,
         priceHistory,
+        tokenMarkets,
         tokenMetadata,
       })
       assets[STATUS_NETWORKS[token.chainId]] = asset
@@ -691,6 +683,8 @@ async function nativeTokenBalanceChart({
   days?: '1' | '7' | '30' | '90' | '365' | 'all'
 }) {
   const currentTime = Math.floor(Date.now() / 1000)
+  const decimals = 18
+
   const responses = await Promise.all(
     networks.map(async network => {
       const data = await fetchTokenBalanceHistory(
@@ -699,7 +693,7 @@ async function nativeTokenBalanceChart({
         days,
         undefined,
         currentTime,
-        18,
+        decimals,
       )
 
       return { [network]: data } as Record<
@@ -750,6 +744,7 @@ async function tokenBalanceChart({
     : [erc20Token]
 
   const currentTime = Math.floor(Date.now() / 1000)
+
   const responses = await Promise.all(
     filteredERC20Tokens.map(async token => {
       const data = await fetchTokenBalanceHistory(
@@ -859,6 +854,44 @@ function aggregateTokenBalanceHistory(
   )
 }
 
+/**
+ * Calculate fully diluted market cap
+ * Fully diluted = price * maxSupply (or totalSupply if maxSupply is not available)
+ */
+function calculateFullyDiluted(
+  priceUsd: number,
+  maxSupply: number | null,
+  totalSupply: number,
+): number {
+  if (maxSupply && maxSupply > 0) {
+    return priceUsd * maxSupply
+  }
+
+  if (totalSupply > 0) {
+    return priceUsd * totalSupply
+  }
+
+  return 0
+}
+
+/**
+ * Extract token description from CoinGecko metadata
+ * Prefers English description, falls back to any available language
+ */
+function extractTokenDescription(
+  tokenMetadata: CoinGeckoCoinDetailResponse | null,
+): string {
+  if (!tokenMetadata?.description) {
+    return ''
+  }
+
+  return (
+    tokenMetadata.description['en'] ||
+    Object.values(tokenMetadata.description)[0] ||
+    ''
+  )
+}
+
 function map(data: {
   token:
     | (typeof nativeTokenList.tokens)[number]
@@ -866,78 +899,46 @@ function map(data: {
   balance: string
   price: Awaited<ReturnType<typeof fetchTokensPrice>>[string]
   priceHistory: Awaited<ReturnType<typeof fetchTokenPriceHistory>>
-  tokenMetadata:
-    | CoinGeckoCoinDetailResponse
-    | Partial<CoinGeckoCoinDetailResponse>
+  tokenMarkets: CoinGeckoMarketsResponse[number] | null
+  tokenMetadata: CoinGeckoCoinDetailResponse | null
 }): Asset {
-  const { token, balance, price, priceHistory, tokenMetadata } = data
+  const { token, balance, price, priceHistory, tokenMarkets, tokenMetadata } =
+    data
 
   // CoinGecko price history format: prices is [timestamp, price][]
   const prices = priceHistory.prices
     .map(([, price]: [number, number]) => price)
     .filter((p: number) => p > 0)
 
-  // Get supply data from CoinGecko market_data
-  const metadataTotalSupply =
-    tokenMetadata?.market_data?.total_supply &&
-    tokenMetadata.market_data.total_supply > 0
-      ? tokenMetadata.market_data.total_supply
-      : null
+  // Get price from /simple/price
+  const priceUsd = price.usd
 
-  const metadataCirculatingSupply =
-    tokenMetadata?.market_data?.circulating_supply &&
-    tokenMetadata.market_data.circulating_supply > 0
-      ? tokenMetadata.market_data.circulating_supply
-      : null
+  // Get market data from /coins/markets
+  const maxSupply = tokenMarkets?.max_supply ?? null
+  const totalSupply = tokenMarkets?.total_supply ?? null
+  const circulation = tokenMarkets?.circulating_supply ?? null
+  const volume24 = tokenMarkets?.total_volume ?? null
 
-  // Get market cap from CoinGecko market_data
-  const marketCapFromMetadata =
-    tokenMetadata?.market_data?.market_cap?.usd &&
-    tokenMetadata.market_data.market_cap.usd > 0
-      ? tokenMetadata.market_data.market_cap.usd
-      : null
+  // Use /simple/price market_cap first (updated every 60s) as it's more real-time
+  const marketCap = price.usd_market_cap ?? tokenMarkets?.market_cap ?? 0
+  const rankByMarketCap = tokenMarkets?.market_cap_rank ?? null
 
-  const marketCap = marketCapFromMetadata ?? price.usd_market_cap ?? 0
+  // Use markets data or fallback to calculated values
+  const finalTotalSupply =
+    totalSupply ?? (marketCap > 0 && priceUsd > 0 ? marketCap / priceUsd : 0)
 
-  // Try to get supply from market cap and price if metadata supply is not available
-  const supplyFromMarketCap =
-    marketCap && price.usd && price.usd > 0 ? marketCap / price.usd : null
+  const finalCirculation =
+    circulation ?? (marketCap > 0 && priceUsd > 0 ? marketCap / priceUsd : 0)
 
-  const totalSupply = metadataTotalSupply || supplyFromMarketCap || 0
+  const finalVolume24 = volume24 ?? price.usd_24h_vol ?? 0
 
-  const circulation = metadataCirculatingSupply || supplyFromMarketCap || 0
+  const fullyDiluted = calculateFullyDiluted(
+    priceUsd,
+    maxSupply,
+    finalTotalSupply,
+  )
 
-  // Fully diluted = price * total supply (or max supply if available)
-  const maxSupply =
-    tokenMetadata?.market_data?.max_supply &&
-    tokenMetadata.market_data.max_supply > 0
-      ? tokenMetadata.market_data.max_supply
-      : null
-
-  const fullyDiluted =
-    maxSupply && maxSupply > 0
-      ? price.usd * maxSupply
-      : metadataTotalSupply && metadataTotalSupply > 0
-        ? price.usd * metadataTotalSupply
-        : totalSupply > 0
-          ? price.usd * totalSupply
-          : 0
-
-  // market_cap_rank can be 0 (valid rank), so we only use fallback for null/undefined
-  const rankByMarketCap =
-    tokenMetadata?.market_cap_rank ??
-    tokenMetadata?.market_data?.market_cap_rank ??
-    null
-
-  // Get description from CoinGecko description object
-  const description =
-    tokenMetadata?.description?.['en'] ||
-    (tokenMetadata?.description
-      ? Object.values(tokenMetadata.description)[0]
-      : '') ||
-    ''
-
-  const about = description
+  const about = extractTokenDescription(tokenMetadata)
 
   return {
     networks: [STATUS_NETWORKS[token.chainId]],
@@ -954,12 +955,12 @@ function map(data: {
     decimals: token.decimals,
     metadata: {
       market_cap: marketCap,
-      fully_dilluted: fullyDiluted,
-      circulation: circulation,
-      total_supply: totalSupply,
-      all_time_high: prices.length ? Math.max(...prices) : price.usd,
-      all_time_low: prices.length ? Math.min(...prices) : price.usd,
-      volume_24: price.usd_24h_vol ?? 0,
+      fully_diluted: fullyDiluted,
+      circulation: finalCirculation,
+      total_supply: finalTotalSupply,
+      all_time_high: prices.length ? Math.max(...prices) : priceUsd,
+      all_time_low: prices.length ? Math.min(...prices) : priceUsd,
+      volume_24: finalVolume24,
       rank_by_market_cap: rankByMarketCap,
       about: about,
     },
@@ -968,7 +969,9 @@ function map(data: {
 
 function sum(assets: Asset[] | Omit<Asset, 'metadata'>[]) {
   const total_balance = assets.reduce((acc, asset) => acc + asset.balance, 0)
+
   const total_eur = assets.reduce((acc, asset) => acc + asset.total_eur, 0)
+
   const total_eur_24h_change = assets.reduce(
     (acc, asset) =>
       acc + asset.total_eur * (asset.price_percentage_24h_change / 100),
