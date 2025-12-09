@@ -12,6 +12,7 @@ type StakeAmountInputProps = {
   isConnected: boolean
   isLoading?: boolean
   isDisabled?: boolean
+  exceedsBalance?: boolean
 }
 
 const StakeAmountInput = ({
@@ -22,6 +23,7 @@ const StakeAmountInput = ({
   isConnected,
   isLoading = false,
   isDisabled = false,
+  exceedsBalance = false,
 }: StakeAmountInputProps) => {
   const showBottomRow = isLoading || isConnected
   const containerClassName =
@@ -45,7 +47,7 @@ const StakeAmountInput = ({
               {...register('amount')}
               placeholder="0"
               disabled={isDisabled}
-              className="h-[38px] w-full border-none bg-transparent text-27 font-semibold text-neutral-100 outline-none placeholder:text-neutral-40"
+              className={`h-[38px] w-full border-none bg-transparent text-27 font-semibold outline-none placeholder:text-neutral-40 ${exceedsBalance ? 'text-danger-50' : 'text-neutral-100'}`}
             />
           ) : (
             <span className="text-27 font-semibold text-neutral-40">0</span>
@@ -71,7 +73,7 @@ const StakeAmountInput = ({
                   <button
                     type="button"
                     onClick={onMaxClick}
-                    className="uppercase text-neutral-100"
+                    className={`uppercase ${exceedsBalance ? 'text-danger-50' : 'text-neutral-100'}`}
                   >
                     {`MAX ${formatSNT(balance ?? 0)} SNT`}
                   </button>

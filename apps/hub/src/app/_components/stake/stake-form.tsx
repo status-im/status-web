@@ -7,7 +7,7 @@ import { Button } from '@status-im/status-network/components'
 import { ConnectKitButton, useSIWE } from 'connectkit'
 import { useForm, useWatch } from 'react-hook-form'
 import { match } from 'ts-pattern'
-import { parseUnits } from 'viem'
+import { formatUnits, parseUnits } from 'viem'
 import { useAccount, useBalance, useConfig } from 'wagmi'
 import { readContract } from 'wagmi/actions'
 import { z } from 'zod'
@@ -161,6 +161,16 @@ const StakeForm = () => {
     return 0
   }, [amountValue, exchangeRate])
 
+  const exceedsBalance = useMemo(() => {
+    if (!amountValue || !balance?.value) return false
+    try {
+      const amountWei = parseUnits(amountValue, STT_TOKEN.decimals)
+      return amountWei > balance.value
+    } catch {
+      return false
+    }
+  }, [amountValue, balance?.value])
+
   const executeStake = async (vaultAddress: Address, amountWei: bigint) => {
     await stakeVault({
       amountWei,
@@ -231,11 +241,11 @@ const StakeForm = () => {
           <StakeAmountInput
             balance={balance?.value}
             amountInUSD={amountInUSDValue}
+            exceedsBalance={exceedsBalance}
             onMaxClick={() => {
-              const maxValue = balance?.toString() ?? '0'
-              const formatted = (Number(maxValue) / 1e18)
-                .toFixed(18)
-                .replace(/\.?0+$/, '')
+              const formatted = balance?.value
+                ? formatUnits(balance.value, STT_TOKEN.decimals)
+                : '0'
               form.setValue('amount', formatted)
             }}
             register={form.register}
@@ -321,7 +331,7 @@ const StakeForm = () => {
               <Button
                 className="w-full justify-center"
                 type="submit"
-                disabled={Boolean(emergencyModeEnabled)}
+                disabled={Boolean(emergencyModeEnabled) || exceedsBalance}
               >
                 Stake SNT
               </Button>
