@@ -40,4 +40,17 @@ export const apps: App[] = [
     isPopular: true,
     isNew: true,
   },
+  {
+    id: 4,
+    name: 'Canary',
+    category: 'Privacy',
+    status: 'Live',
+    description: 'Secure unlock of messages when silence hits',
+    website: 'https://canaryapp.io',
+    twitter: 'Canarysafe',
+    icon: '/apps/canary-avatar.png',
+    cover: '/apps/canary-cover.jpeg',
+    isPopular: true,
+    isNew: true,
+  },
 ]
