@@ -103,7 +103,7 @@ const TableIssues = (props: Props) => {
       router.push(`/insights/epics/${encodeURIComponent(label)}`)
     } else {
       // Otherwise, send to label page on github repository
-      // example: https://github.com/status-im/status-desktop/labels/messenger-team
+      // example: https://github.com/status-im/status-app/labels/messenger-team
       if (repo) {
         openInNewTab(`https://github.com/${repo}/labels/${label}`)
       }

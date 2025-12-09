@@ -35,7 +35,7 @@ export async function GET(
   if (platform === 'android') {
     const release = await octokit.repos.getLatestRelease({
       owner: 'status-im',
-      repo: 'status-mobile',
+      repo: 'status-legacy',
     })
 
     await track('Download', {
@@ -54,10 +54,10 @@ export async function GET(
   try {
     const release = await octokit.repos.getLatestRelease({
       owner: 'status-im',
-      repo: 'status-desktop',
+      repo: 'status-app',
     })
 
-    // @see https://github.com/status-im/status-desktop/releases
+    // @see https://github.com/status-im/status-app/releases
     const { browser_download_url: downloadUrl } = match(platform)
       .with(
         'macos-silicon',
