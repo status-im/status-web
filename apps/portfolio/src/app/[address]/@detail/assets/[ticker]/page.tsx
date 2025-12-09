@@ -192,13 +192,13 @@ async function Token({
                 label: 'Fully diluted',
                 value: (
                   <CurrencyAmount
-                    value={metadata.fully_dilluted}
+                    value={metadata.fully_diluted}
                     format="compact"
                   />
                 ),
                 tooltip: (
                   <CurrencyAmount
-                    value={metadata.fully_dilluted}
+                    value={metadata.fully_diluted}
                     format="standard"
                   />
                 ),
@@ -265,7 +265,7 @@ async function Token({
               },
               {
                 label: 'Rank by Mcap',
-                value: metadata?.rank_by_market_cap,
+                value: metadata?.rank_by_market_cap ?? 'N/A',
               },
             ].map((item, index) => (
               <div

@@ -302,6 +302,7 @@ const Token = (props: Props) => {
         const tokenAssets = Object.values(tokenDetail.assets)
         if (tokenAssets.length > 0 && tokenAssets[0]) {
           const metadata = tokenAssets[0].metadata
+
           const content = await renderMarkdown(
             metadata?.about || 'No description available.',
           )
@@ -659,13 +660,13 @@ const Token = (props: Props) => {
                 label: 'Fully diluted',
                 value: (
                   <CurrencyAmount
-                    value={metadata.fully_dilluted}
+                    value={metadata.fully_diluted}
                     format="compact"
                   />
                 ),
                 tooltip: (
                   <CurrencyAmount
-                    value={metadata.fully_dilluted}
+                    value={metadata.fully_diluted}
                     format="standard"
                   />
                 ),
@@ -735,7 +736,7 @@ const Token = (props: Props) => {
               },
               {
                 label: 'Rank by Mcap',
-                value: metadata?.rank_by_market_cap,
+                value: metadata?.rank_by_market_cap ?? 'N/A',
               },
             ].map((item, index) => (
               <div
