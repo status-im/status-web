@@ -32,6 +32,59 @@ import type { Address } from 'viem'
 
 const LOCK_VAULT_ACTIONS = [{ label: "Don't lock" }, { label: 'Lock' }] as const
 
+const StakeFormSkeleton = () => {
+  return (
+    <div className="flex flex-col gap-4 rounded-16 border border-neutral-10 bg-white-100 p-4 shadow-2 md:rounded-32 md:p-8">
+      <div className="flex flex-1 flex-col gap-4">
+        <div className="space-y-2">
+          <label
+            htmlFor="stake-amount"
+            className="block text-13 font-medium text-neutral-50"
+          >
+            Amount to stake
+          </label>
+          <div className="rounded-12 border border-neutral-20 bg-white-100 px-4 py-3">
+            <div className="flex items-center justify-between">
+              <span className="text-27 font-semibold text-neutral-40">0</span>
+              <div className="flex items-center gap-1">
+                <SNTIcon />
+                <span className="text-19 font-semibold text-neutral-80">
+                  SNT
+                </span>
+              </div>
+            </div>
+            <div className="-mx-4 my-3 h-px w-[calc(100%+32px)] bg-neutral-10" />
+            <div className="flex items-center justify-between text-13 font-500 text-neutral-50">
+              <Skeleton height={18} width={100} className="rounded-6" />
+              <Skeleton height={18} width={100} className="rounded-6" />
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <label
+            htmlFor="vault-select"
+            className="block text-13 font-medium text-neutral-50"
+          >
+            Select vault
+          </label>
+          <div className="rounded-12 border border-neutral-20 bg-white-100 py-[9px] pl-4 pr-3">
+            <div className="flex items-center gap-2">
+              <UnlockedIcon className="text-neutral-100" />
+              <Skeleton height={22} width="100%" className="flex-1 rounded-6" />
+              <DropdownIcon className="text-neutral-40" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <Button disabled type="button" className="w-full justify-center">
+        Stake SNT
+      </Button>
+    </div>
+  )
+}
+
 type ConnectionStatus =
   | 'uninstalled'
   | 'disconnected'
@@ -165,60 +218,7 @@ const StakeForm = () => {
     isConnecting || (isConnected && (isLoading || isLoadingSIWE))
 
   if (showLoadingSkeleton) {
-    return (
-      <div className="flex flex-col gap-4 rounded-16 border border-neutral-10 bg-white-100 p-4 shadow-2 md:rounded-32 md:p-8">
-        <div className="flex flex-1 flex-col gap-4">
-          <div className="space-y-2">
-            <label
-              htmlFor="stake-amount"
-              className="block text-13 font-medium text-neutral-50"
-            >
-              Amount to stake
-            </label>
-            <div className="rounded-12 border border-neutral-20 bg-white-100 px-4 py-3">
-              <div className="flex items-center justify-between">
-                <span className="text-27 font-semibold text-neutral-40">0</span>
-                <div className="flex items-center gap-1">
-                  <SNTIcon />
-                  <span className="text-19 font-semibold text-neutral-80">
-                    SNT
-                  </span>
-                </div>
-              </div>
-              <div className="-mx-4 my-3 h-px w-[calc(100%+32px)] bg-neutral-10" />
-              <div className="flex items-center justify-between text-13 font-500 text-neutral-50">
-                <Skeleton height={18} width={100} className="rounded-6" />
-                <Skeleton height={18} width={100} className="rounded-6" />
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <label
-              htmlFor="vault-select"
-              className="block text-13 font-medium text-neutral-50"
-            >
-              Select vault
-            </label>
-            <div className="rounded-12 border border-neutral-20 bg-white-100 py-[9px] pl-4 pr-3">
-              <div className="flex items-center gap-2">
-                <UnlockedIcon className="text-neutral-100" />
-                <Skeleton
-                  height={22}
-                  width="100%"
-                  className="flex-1 rounded-6"
-                />
-                <DropdownIcon className="text-neutral-40" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <Button disabled type="button" className="w-full justify-center">
-          Stake SNT
-        </Button>
-      </div>
-    )
+    return <StakeFormSkeleton />
   }
 
   return (
@@ -355,4 +355,4 @@ const StakeForm = () => {
   )
 }
 
-export { StakeForm }
+export { StakeForm, StakeFormSkeleton }

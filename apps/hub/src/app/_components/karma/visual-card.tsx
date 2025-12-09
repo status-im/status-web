@@ -5,6 +5,21 @@ import type { KarmaVisualData } from '~types/karma'
 
 type KarmaVisualCardProps = KarmaVisualData
 
+const KarmaVisualCardSkeleton = () => {
+  return (
+    <div className="aspect-[304/302] w-full max-w-[400px] overflow-hidden rounded-20 border border-neutral-20 bg-white-100 shadow-1 lg:h-[302px] lg:w-[304px]">
+      <div className="p-2">
+        <Skeleton
+          height={286}
+          width={288}
+          className="rounded-16"
+          variant="primary"
+        />
+      </div>
+    </div>
+  )
+}
+
 const KarmaVisualCard = ({
   imageSrc,
   imageAlt = 'Karma Visual',
@@ -13,18 +28,7 @@ const KarmaVisualCard = ({
   isLoading = false,
 }: KarmaVisualCardProps) => {
   if (isLoading) {
-    return (
-      <div className="aspect-[304/302] w-full max-w-[400px] overflow-hidden rounded-20 border border-neutral-20 bg-white-100 shadow-1 lg:h-[302px] lg:w-[304px]">
-        <div className="p-2">
-          <Skeleton
-            height={286}
-            width={288}
-            className="rounded-16"
-            variant="primary"
-          />
-        </div>
-      </div>
-    )
+    return <KarmaVisualCardSkeleton />
   }
   return (
     <div className="flex aspect-[304/302] w-full max-w-[400px] items-center justify-center overflow-hidden rounded-20 border border-neutral-20 bg-white-100 shadow-1 lg:h-[302px] lg:w-[304px]">
@@ -49,4 +53,4 @@ const KarmaVisualCard = ({
   )
 }
 
-export { KarmaVisualCard }
+export { KarmaVisualCard, KarmaVisualCardSkeleton }

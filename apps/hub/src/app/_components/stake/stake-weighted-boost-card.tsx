@@ -22,6 +22,59 @@ import { formatSNT } from '~utils/currency'
 
 import { useEmergencyModeEnabled } from '../../_hooks/useEmergencyModeEnabled'
 
+const InfoTooltip = () => (
+  <Tooltip
+    delayDuration={TOOLTIP_CONFIG.DELAY_DURATION}
+    side="top"
+    className="border-0"
+    content={
+      <div className="flex w-[286px] flex-col gap-4 rounded-8 bg-white-100 p-4">
+        <span className="text-13 text-neutral-100">
+          The longer SNT is staked or locked in vaults, the higher this
+          multiplier goes. This rewards long term believers. The maximum
+          multiplier is x{MAX_BOOST}.
+        </span>
+
+        <ButtonLink
+          href="https://docs.status.network/tokenomics/snt-staking"
+          variant="outline"
+          className="rounded-8 px-2 py-1"
+          size="32"
+          icon={<ExternalIcon className="size-3 text-neutral-50" />}
+        >
+          Learn more
+        </ButtonLink>
+      </div>
+    }
+  >
+    <InfoIcon className="text-neutral-40" />
+  </Tooltip>
+)
+
+const WeightedBoostCardSkeleton = () => {
+  return (
+    <div className="rounded-16 border border-neutral-10 bg-white-100 p-4 shadow-2 md:rounded-32 md:p-8">
+      <div className="mb-2 flex items-start justify-between">
+        <p className="text-13 font-500 text-neutral-60">
+          Weighted aggregated boost
+        </p>
+        <InfoTooltip />
+      </div>
+      <div className="mb-4 flex items-end gap-3">
+        <LaunchIcon className="text-purple" />
+        <Skeleton height={32} width={100} className="rounded-6" />
+      </div>
+      <div className="flex items-center justify-between">
+        <Skeleton height={18} width={200} className="rounded-6" />
+
+        <Button variant="primary" size="40" disabled>
+          Compound
+        </Button>
+      </div>
+    </div>
+  )
+}
+
 const WeightedBoostCard = () => {
   const { isConnecting, isConnected } = useAccount()
   const { data: vaults, isLoading } = useStakingVaults()
@@ -54,27 +107,7 @@ const WeightedBoostCard = () => {
   }, [multiplierPointsData, isConnected, isSignedIn])
 
   if (isLoading || isConnecting || isLoadingSIWE) {
-    return (
-      <div className="rounded-16 border border-neutral-10 bg-white-100 p-4 shadow-2 md:rounded-32 md:p-8">
-        <div className="mb-2 flex items-start justify-between">
-          <p className="text-13 font-500 text-neutral-60">
-            Weighted aggregated boost
-          </p>
-          <InfoTooltip />
-        </div>
-        <div className="mb-4 flex items-end gap-3">
-          <LaunchIcon className="text-purple" />
-          <Skeleton height={32} width={100} className="rounded-6" />
-        </div>
-        <div className="flex items-center justify-between">
-          <Skeleton height={18} width={200} className="rounded-6" />
-
-          <Button variant="primary" size="40" disabled>
-            Compound
-          </Button>
-        </div>
-      </div>
-    )
+    return <WeightedBoostCardSkeleton />
   }
 
   return (
@@ -106,33 +139,4 @@ const WeightedBoostCard = () => {
   )
 }
 
-const InfoTooltip = () => (
-  <Tooltip
-    delayDuration={TOOLTIP_CONFIG.DELAY_DURATION}
-    side="top"
-    className="border-0"
-    content={
-      <div className="flex w-[286px] flex-col gap-4 rounded-8 bg-white-100 p-4">
-        <span className="text-13 text-neutral-100">
-          The longer SNT is staked or locked in vaults, the higher this
-          multiplier goes. This rewards long term believers. The maximum
-          multiplier is x{MAX_BOOST}.
-        </span>
-
-        <ButtonLink
-          href="https://docs.status.network/tokenomics/snt-staking"
-          variant="outline"
-          className="rounded-8 px-2 py-1"
-          size="32"
-          icon={<ExternalIcon className="size-3 text-neutral-50" />}
-        >
-          Learn more
-        </ButtonLink>
-      </div>
-    }
-  >
-    <InfoIcon className="text-neutral-40" />
-  </Tooltip>
-)
-
-export { WeightedBoostCard }
+export { WeightedBoostCard, WeightedBoostCardSkeleton }

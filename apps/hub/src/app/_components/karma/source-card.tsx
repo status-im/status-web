@@ -28,6 +28,33 @@ type KarmaSourceCardProps = {
   isLoading?: boolean
 }
 
+const KarmaSourceCardSkeleton = () => {
+  return (
+    <div className="w-full overflow-hidden rounded-20 border border-neutral-20 bg-white-100">
+      <div className="flex flex-col">
+        <div className="flex flex-col gap-6 p-4">
+          <div className="flex w-full flex-col gap-0.5">
+            <Skeleton height={32} width="100%" className="rounded-6" />
+            <Skeleton height={24} width="100%" className="rounded-6" />
+          </div>
+
+          <Skeleton height={28} width="100%" className="rounded-6" />
+        </div>
+
+        <div className="flex items-center gap-2 border-t border-neutral-20 bg-neutral-2.5 px-4 py-2.5">
+          <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-neutral-10">
+            <div className="size-4 rounded-full bg-neutral-20" />
+          </div>
+          <div className="flex flex-1 flex-col gap-0">
+            <Skeleton height={18} width={209} className="rounded-6" />
+            <Skeleton height={18} width={209} className="rounded-6" />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const KarmaSourceCard = ({
   title,
   amount,
@@ -106,30 +133,7 @@ const KarmaSourceCard = ({
     isLoadingSIWE ||
     (isConnected && isSignedIn && isLoading)
   ) {
-    return (
-      <div className="w-full overflow-hidden rounded-20 border border-neutral-20 bg-white-100">
-        <div className="flex flex-col">
-          <div className="flex flex-col gap-6 p-4">
-            <div className="flex w-full flex-col gap-0.5">
-              <Skeleton height={32} width="100%" className="rounded-6" />
-              <Skeleton height={24} width="100%" className="rounded-6" />
-            </div>
-
-            <Skeleton height={28} width="100%" className="rounded-6" />
-          </div>
-
-          <div className="flex items-center gap-2 border-t border-neutral-20 bg-neutral-2.5 px-4 py-2.5">
-            <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-neutral-10">
-              <div className="size-4 rounded-full bg-neutral-20" />
-            </div>
-            <div className="flex flex-1 flex-col gap-0">
-              <Skeleton height={18} width={209} className="rounded-6" />
-              <Skeleton height={18} width={209} className="rounded-6" />
-            </div>
-          </div>
-        </div>
-      </div>
-    )
+    return <KarmaSourceCardSkeleton />
   }
 
   if (isComplete && isConnected && isSignedIn) {
@@ -238,5 +242,5 @@ const KarmaSourceCard = ({
   )
 }
 
-export { KarmaSourceCard }
+export { KarmaSourceCard, KarmaSourceCardSkeleton }
 export type { KarmaSourceCardProps }

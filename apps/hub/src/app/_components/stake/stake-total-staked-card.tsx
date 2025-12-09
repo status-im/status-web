@@ -7,6 +7,21 @@ import { STAKE_PAGE_CONSTANTS, STAKING_MANAGER } from '~constants/index'
 import { formatSNT } from '../../../utils/currency'
 import { useEmergencyModeEnabled } from '../../_hooks/useEmergencyModeEnabled'
 
+const TotalStakedCardSkeleton = () => {
+  return (
+    <div className="rounded-16 border border-neutral-10 bg-white-100 p-4 shadow-2 md:rounded-32 md:p-8">
+      <div className="mb-2 flex items-start justify-between">
+        <p className="text-13 font-500 text-neutral-60">Total staked</p>
+      </div>
+      <div className="mb-4 flex items-end gap-2">
+        <SNTIcon />
+        <Skeleton height={32} width={180} className="rounded-6" />
+      </div>
+      <Skeleton height={18} width={160} className="rounded-6" />
+    </div>
+  )
+}
+
 const TotalStakedCard = () => {
   const { isConnecting } = useAccount()
   const { data: totalStaked, isLoading } = useReadContract({
@@ -21,18 +36,7 @@ const TotalStakedCard = () => {
   }
 
   if (isLoading || isConnecting) {
-    return (
-      <div className="rounded-16 border border-neutral-10 bg-white-100 p-4 shadow-2 md:rounded-32 md:p-8">
-        <div className="mb-2 flex items-start justify-between">
-          <p className="text-13 font-500 text-neutral-60">Total staked</p>
-        </div>
-        <div className="mb-4 flex items-end gap-2">
-          <SNTIcon />
-          <Skeleton height={32} width={180} className="rounded-6" />
-        </div>
-        <Skeleton height={18} width={160} className="rounded-6" />
-      </div>
-    )
+    return <TotalStakedCardSkeleton />
   }
 
   return (
@@ -53,4 +57,4 @@ const TotalStakedCard = () => {
   )
 }
 
-export { TotalStakedCard }
+export { TotalStakedCard, TotalStakedCardSkeleton }
