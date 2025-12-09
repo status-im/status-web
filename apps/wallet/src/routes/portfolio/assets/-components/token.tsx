@@ -56,6 +56,19 @@ type TokenMetadata = NonNullable<
   NonNullable<TokenData['assets']>[NetworkType]
 >['metadata']
 
+type GasFees = {
+  feeEth: number
+  feeEur: number
+  maxFeeEth: number
+  maxFeeEur: number
+  confirmationTime: string
+  txParams: {
+    gasLimit: string
+    maxFeePerGas: string
+    maxPriorityFeePerGas: string
+  }
+}
+
 type Props = {
   address: string
   ticker: string
@@ -70,6 +83,126 @@ const OPTIMIZED_TOKEN_STALE_TIME = 5 * 1000 // 5 seconds
 const OPTIMIZED_TOKEN_REFETCH_INTERVAL = 30 * 1000 // 30 seconds
 
 const erc20 = new Interface(['function transfer(address to, uint256 amount)'])
+
+// Helper function to build tRPC API URL with query parameters
+function buildTrpcUrl(endpoint: string, params: Record<string, unknown>): URL {
+  const url = new URL(
+    `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/${endpoint}`,
+  )
+  url.searchParams.set(
+    'input',
+    JSON.stringify({
+      json: params,
+    }),
+  )
+  return url
+}
+
+// Helper function to fetch data from tRPC API
+async function fetchTrpcData<T>(
+  endpoint: string,
+  params: Record<string, unknown>,
+  errorMessage: string,
+): Promise<T> {
+  const url = buildTrpcUrl(endpoint, params)
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  if (!response.ok) {
+    throw new Error(errorMessage)
+  }
+
+  const body = await response.json()
+  return body.result.data.json
+}
+
+// Helper function to get token endpoint based on ticker
+function getTokenEndpoint(
+  ticker: string,
+): 'assets.token' | 'assets.nativeToken' {
+  return ticker.startsWith('0x') ? 'assets.token' : 'assets.nativeToken'
+}
+
+// Helper function to build token query parameters
+function buildTokenQueryParams(
+  ticker: string,
+  address: string,
+  options?: {
+    skipMetadata?: boolean
+    previousMetadata?: TokenMetadata
+  },
+): Record<string, unknown> {
+  const baseParams: Record<string, unknown> = {
+    address,
+    networks: NETWORKS,
+    ...(ticker.startsWith('0x') ? { contract: ticker } : { symbol: ticker }),
+  }
+
+  if (options?.skipMetadata) {
+    baseParams.skipMetadata = true
+  }
+
+  if (options?.previousMetadata) {
+    baseParams.previousMetadata = options.previousMetadata
+  }
+
+  return baseParams
+}
+
+// Helper function to build gas fee estimation parameters
+function buildGasFeeParams(
+  isNative: boolean,
+  from: string,
+  to: string,
+  value: string,
+  contractAddress?: string,
+): Record<string, unknown> {
+  if (isNative) {
+    return {
+      from,
+      to,
+      value,
+    }
+  }
+
+  if (!contractAddress) {
+    throw new Error('Contract address not found')
+  }
+
+  const amount = BigInt(value)
+  const data = erc20.encodeFunctionData('transfer', [to, amount])
+
+  return {
+    from,
+    to: contractAddress,
+    value: '0x0',
+    data,
+  }
+}
+
+// Helper function to fetch gas fees
+async function fetchGasFees(
+  from: string,
+  to: string,
+  value: string,
+  isNative: boolean,
+  contractAddress?: string,
+): Promise<GasFees> {
+  const params = buildGasFeeParams(isNative, from, to, value, contractAddress)
+
+  return fetchTrpcData<GasFees>(
+    'nodes.getFeeRate',
+    {
+      network: 'ethereum',
+      params,
+    },
+    'Failed to fetch gas fees',
+  )
+}
 
 function matchesAsset(asset: AssetData, ticker: string): boolean {
   if (ticker.startsWith('0x')) {
@@ -106,19 +239,25 @@ function getTokenMetadata(
 
 const Token = (props: Props) => {
   const { ticker, address } = props
-  const [markdownContent, setMarkdownContent] = useState<React.ReactNode>(null)
+
   const [, copy] = useCopyToClipboard()
+  const toast = useToast()
+  const { currentWallet } = useWallet()
+  const { addPendingTransaction } = usePendingTransactions()
 
   const [activeDataType, setActiveDataType] =
     useState<ChartDataType>(DEFAULT_DATA_TYPE)
+
   const [activeTimeFrame, setActiveTimeFrame] =
     useState<ChartTimeFrame>(DEFAULT_TIME_FRAME)
-  const { currentWallet } = useWallet()
-  const { addPendingTransaction } = usePendingTransactions()
+
   const [gasInput, setGasInput] = useState<{
     to: string
     value: string
   } | null>(null)
+
+  const [markdownContent, setMarkdownContent] = useState<React.ReactNode>(null)
+
   const gasEstimateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
@@ -126,38 +265,14 @@ const Token = (props: Props) => {
     setActiveTimeFrame(DEFAULT_TIME_FRAME)
   }, [ticker])
 
-  const toast = useToast()
-
   const { data, isError: hasErrorFetchingAssets } = useQuery<AssetsResponse>({
     queryKey: ['assets', address],
-    queryFn: async () => {
-      const url = new URL(
-        `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/assets.all`,
-      )
-      url.searchParams.set(
-        'input',
-        JSON.stringify({
-          json: {
-            address,
-            networks: NETWORKS,
-          },
-        }),
-      )
-
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch assets.')
-      }
-
-      const body = await response.json()
-      return body.result.data.json
-    },
+    queryFn: () =>
+      fetchTrpcData<AssetsResponse>(
+        'assets.all',
+        { address, networks: NETWORKS },
+        'Failed to fetch assets.',
+      ),
     enabled: !!address,
     staleTime: TOKEN_DETAIL_STALE_TIME,
     gcTime: TOKEN_DETAIL_GC_TIME,
@@ -178,40 +293,12 @@ const Token = (props: Props) => {
     isError: hasErrorFetchingToken,
   } = useQuery<TokenData>({
     queryKey: ['token', ticker, address],
-    queryFn: async () => {
-      const endpoint = ticker.startsWith('0x')
-        ? 'assets.token'
-        : 'assets.nativeToken'
-      const url = new URL(
-        `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/${endpoint}`,
-      )
-      url.searchParams.set(
-        'input',
-        JSON.stringify({
-          json: {
-            address,
-            networks: NETWORKS,
-            ...(ticker.startsWith('0x')
-              ? { contract: ticker }
-              : { symbol: ticker }),
-          },
-        }),
-      )
-
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch token detail.')
-      }
-
-      const body = await response.json()
-      return body.result.data.json
-    },
+    queryFn: () =>
+      fetchTrpcData<TokenData>(
+        getTokenEndpoint(ticker),
+        buildTokenQueryParams(ticker, address),
+        'Failed to fetch token detail.',
+      ),
     enabled: !!asset,
     staleTime: TOKEN_DETAIL_STALE_TIME,
     gcTime: TOKEN_DETAIL_GC_TIME,
@@ -225,54 +312,23 @@ const Token = (props: Props) => {
     matchesTokenSummary(tokenDetail.summary, ticker)
 
   // Optimized query for price and balance updates only
-  // Only use this for the same token after full data is loaded to avoid metadata conflicts
   const { data: optimizedTokenDetail } = useQuery<TokenData>({
     queryKey: ['token-optimized', ticker, address],
-    queryFn: async () => {
-      const endpoint = ticker.startsWith('0x')
-        ? 'assets.token'
-        : 'assets.nativeToken'
-
-      // Get previous metadata to preserve it - only use if tokenDetail is for current token
+    queryFn: () => {
       const previousMetadata = getTokenMetadata(
         tokenDetail,
         !!isTokenDetailForCurrentToken,
       )
 
-      const url = new URL(
-        `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/${endpoint}`,
-      )
-
-      url.searchParams.set(
-        'input',
-        JSON.stringify({
-          json: {
-            address,
-            networks: NETWORKS,
-            skipMetadata: true,
-            ...(previousMetadata ? { previousMetadata } : {}),
-            ...(ticker.startsWith('0x')
-              ? { contract: ticker }
-              : { symbol: ticker }),
-          },
+      return fetchTrpcData<TokenData>(
+        getTokenEndpoint(ticker),
+        buildTokenQueryParams(ticker, address, {
+          skipMetadata: true,
+          previousMetadata,
         }),
+        'Failed to fetch token detail.',
       )
-
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch token detail.')
-      }
-
-      const body = await response.json()
-      return body.result.data.json
     },
-    // Only enable when tokenDetail is fully loaded and for the current token
     enabled: !!tokenDetail && !!asset && isTokenDetailForCurrentToken,
     staleTime: OPTIMIZED_TOKEN_STALE_TIME,
     gcTime: TOKEN_DETAIL_GC_TIME,
@@ -312,61 +368,14 @@ const Token = (props: Props) => {
     : finalTokenDetail?.summary.total_balance || 0
 
   // Get gas fees for the current network
-  const gasFeeQuery = useQuery({
+  const gasFeeQuery = useQuery<GasFees>({
     queryKey: ['gas-fees', address, gasInput?.to, gasInput?.value],
     queryFn: async ({ queryKey }) => {
-      const isNative = finalTokenDetail?.summary.symbol === 'ETH'
       const [, from, to, value] = queryKey as [string, string, string, string]
+      const isNative = finalTokenDetail?.summary.symbol === 'ETH'
+      const contractAddress = finalTokenDetail?.summary.contracts.ethereum
 
-      let params
-
-      if (isNative) {
-        params = {
-          from,
-          to,
-          value,
-        }
-      } else {
-        const contract = finalTokenDetail?.summary.contracts.ethereum
-        if (!contract) {
-          throw new Error('Contract address not found')
-        }
-
-        const amount = BigInt(value)
-
-        const data = erc20.encodeFunctionData('transfer', [to, amount])
-
-        params = {
-          from,
-          to: contract,
-          value: '0x0',
-          data,
-        }
-      }
-
-      const url = new URL(
-        `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/nodes.getFeeRate`,
-      )
-
-      url.searchParams.set(
-        'input',
-        JSON.stringify({
-          json: {
-            network: 'ethereum',
-            params,
-          },
-        }),
-      )
-
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      })
-
-      if (!response.ok) throw new Error('Failed to fetch gas fees')
-
-      const body = await response.json()
-      return body.result.data.json
+      return fetchGasFees(from, to, value, isNative, contractAddress)
     },
     enabled:
       !!gasInput?.to && !!gasInput?.value && !!address && !!finalTokenDetail,
@@ -471,6 +480,10 @@ const Token = (props: Props) => {
   const signTransaction = async (
     formData: SendAssetsFormData & { password: string },
   ) => {
+    if (!gasFeeQuery.data) {
+      throw new Error('Gas fees not available')
+    }
+
     const isNative = finalTokenDetail?.summary.symbol === 'ETH'
 
     if (isNative) {
