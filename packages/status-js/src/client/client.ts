@@ -10,7 +10,7 @@ import { createLightNode, waitForRemotePeer } from '@waku/sdk'
 import { hexToBytes } from 'ethereum-cryptography/utils'
 
 import { peers } from '../consts/peers'
-import { getRoutingInfo, getShardInfo, SHARDS } from '../consts/waku'
+import { CLUSTER_ID, getRoutingInfo, SHARDS } from '../consts/waku'
 import { ApplicationMetadataMessageSchema } from '../protos/application-metadata-message_pb'
 import { Account } from './account'
 import { ActivityCenter } from './activityCenter'
@@ -154,6 +154,9 @@ class Client {
          * Note: Not supported in light mode.
          */
         relayKeepAlive: 0,
+        networkConfig: {
+          clusterId: CLUSTER_ID,
+        },
         libp2p: {
           peerDiscovery: [
             /**
@@ -170,7 +173,6 @@ class Client {
             }),
           ],
         },
-        shardInfo: getShardInfo(),
       })
       await waku.start()
       await waitForRemotePeer(

@@ -8,12 +8,7 @@ import { bytesToHex, concatBytes } from 'ethereum-cryptography/utils'
 import { contracts } from '../consts/contracts'
 import { peers } from '../consts/peers'
 import { providers } from '../consts/providers'
-import {
-  CLUSTER_ID,
-  getRoutingInfo,
-  getShardInfo,
-  SHARDS,
-} from '../consts/waku'
+import { CLUSTER_ID, getRoutingInfo, SHARDS } from '../consts/waku'
 import { EthereumClient } from '../ethereum-client/ethereum-client'
 import {
   ApplicationMetadataMessage_Type,
@@ -116,7 +111,6 @@ class RequestClient {
             }),
           ],
         },
-        shardInfo: getShardInfo(),
       })
       await waku.start()
       await waitForRemotePeer(waku, [Protocols.Store], 10 * 1000)
