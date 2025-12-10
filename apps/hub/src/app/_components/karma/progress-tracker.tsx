@@ -45,7 +45,7 @@ const ProgressBar = ({ currentKarma = 0n, karmaLevels }: ProgressBarProps) => {
     const range = maxKarma - minKarma
     levelProgress =
       range === 0n
-        ? 100
+        ? 0
         : Number(((currentKarma - minKarma) * 100n) / (range > 0n ? range : 1n))
   }
 
