@@ -162,20 +162,7 @@ jobs:
         env:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_STATUS_NETWORK }}
 
-      - name: Set success status
-        uses: actions/github-script@v7
-        with:
-          script: |
-            await github.rest.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              sha: '${{ steps.pr.outputs.head_sha }}',
-              state: 'success',
-              context: 'Preview Deploy',
-              description: 'Preview deployed successfully'
-            });
-
-      - name: Comment PR with preview URLs
+      - name: Set status and comment PR
         uses: actions/github-script@v7
         with:
           script: |
@@ -198,6 +185,14 @@ jobs:
             }
 
             if (deployments.length === 0) {
+              await github.rest.repos.createCommitStatus({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                sha: '${{ steps.pr.outputs.head_sha }}',
+                state: 'success',
+                context: 'Preview Deploy',
+                description: 'No deployable app changes detected'
+              });
               await github.rest.issues.createComment({
                 issue_number: ${{ steps.pr.outputs.pr_number }},
                 owner: context.repo.owner,
@@ -206,6 +201,15 @@ jobs:
               });
               return;
             }
+
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ steps.pr.outputs.head_sha }}',
+              state: 'success',
+              context: 'Preview Deploy',
+              description: `Deployed ${deployments.length} app(s) successfully`
+            });
 
             let table = '| Project | Deployment | Preview | Comments |\n';
             table += '|---------|------------|---------|----------|\n';
