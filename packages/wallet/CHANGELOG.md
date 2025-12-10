@@ -1,5 +1,14 @@
 # @status-im/wallet
 
+## 0.1.1
+
+### Patch Changes
+
+- f50d31d: Enhance chart tag label text width measurement using canvas measureText() for accurate proportional font rendering
+- d92da0c: Refactor: Replace CRYPTOCOMPARE references with MARKET_PROXY
+- 8500222: Optimize CoinGecko API endpoints for market data by using `/simple/price` and `/coins/markets` instead of `/coins/${id}`. Keep `/coins/${id}` only for token descriptions. Improve market cap data freshness and fix fully diluted calculation.
+- 9c3823b: upgrade next
+
 ## 0.1.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # status.network
 
+## 0.1.1
+
+### Patch Changes
+
+- 9c3823b: upgrade next
+
 ## 0.1.0
 
 ### Minor Changes
