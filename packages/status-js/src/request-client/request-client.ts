@@ -216,98 +216,94 @@ class RequestClient {
     const symmetricKey = await generateKeyFromPassword(communityPublicKey)
 
     for (const shardId of SHARDS) {
-      try {
-        const decoder = createDecoder(
-          contentTopic,
-          getRoutingInfo(shardId),
-          symmetricKey,
-        )
-        const wakuMessageGenerator = this.waku.store.queryGenerator([decoder])
-        for await (const wakuMessages of wakuMessageGenerator) {
-          for await (const wakuMessage of wakuMessages) {
-            if (!wakuMessage) {
-              continue
-            }
-
-            // handle
-            const message = this.handleWakuMessage(wakuMessage)
-            if (!message) {
-              continue
-            }
-
-            if (
-              message.type !==
-              ApplicationMetadataMessage_Type.COMMUNITY_DESCRIPTION
-            ) {
-              continue
-            }
-
-            // decode
-            const decodedCommunityDescription = fromBinary(
-              CommunityDescriptionSchema,
-              message.payload,
-            )
-
-            // validate
-            if (
-              !isClockValid(
-                BigInt(decodedCommunityDescription.clock),
-                message.timestamp,
-              )
-            ) {
-              continue
-            }
-
-            const ownerTokenPermission = Object.values(
-              decodedCommunityDescription.tokenPermissions,
-            ).find(
-              permission =>
-                permission.type ===
-                CommunityTokenPermission_Type.BECOME_TOKEN_OWNER,
-            )
-            if (ownerTokenPermission) {
-              const criteria = ownerTokenPermission.tokenCriteria[0]
-              const contracts = criteria?.contractAddresses
-              const chainId = Object.keys(contracts)[0]
-
-              if (!chainId) {
-                continue
-              }
-
-              const providerUrl = this.#ethProviderURLs[Number(chainId)]
-
-              if (!providerUrl) {
-                continue
-              }
-
-              const ethereumClient = this.getEthereumClient(Number(chainId))
-
-              if (!ethereumClient) {
-                continue
-              }
-
-              const ownerPublicKey = await ethereumClient.resolveOwner(
-                this.#contractAddresses[Number(chainId)]
-                  .CommunityOwnerTokenRegistry,
-                communityPublicKey,
-              )
-
-              if (ownerPublicKey !== message.signerPublicKey) {
-                continue
-              }
-            } else if (
-              communityPublicKey !==
-              `0x${compressPublicKey(message.signerPublicKey)}`
-            ) {
-              continue
-            }
-
-            // stop
-            return decodedCommunityDescription
+      const decoder = createDecoder(
+        contentTopic,
+        getRoutingInfo(shardId),
+        symmetricKey,
+      )
+      const wakuMessageGenerator = this.waku.store.queryGenerator([decoder])
+      for await (const wakuMessages of wakuMessageGenerator) {
+        for await (const wakuMessage of wakuMessages) {
+          if (!wakuMessage) {
+            continue
           }
+
+          // handle
+          const message = this.handleWakuMessage(wakuMessage)
+          if (!message) {
+            continue
+          }
+
+          if (
+            message.type !==
+            ApplicationMetadataMessage_Type.COMMUNITY_DESCRIPTION
+          ) {
+            continue
+          }
+
+          // decode
+          const decodedCommunityDescription = fromBinary(
+            CommunityDescriptionSchema,
+            message.payload,
+          )
+
+          // validate
+          if (
+            !isClockValid(
+              BigInt(decodedCommunityDescription.clock),
+              message.timestamp,
+            )
+          ) {
+            continue
+          }
+
+          const ownerTokenPermission = Object.values(
+            decodedCommunityDescription.tokenPermissions,
+          ).find(
+            permission =>
+              permission.type ===
+              CommunityTokenPermission_Type.BECOME_TOKEN_OWNER,
+          )
+          if (ownerTokenPermission) {
+            const criteria = ownerTokenPermission.tokenCriteria[0]
+            const contracts = criteria?.contractAddresses
+            const chainId = Object.keys(contracts)[0]
+
+            if (!chainId) {
+              continue
+            }
+
+            const providerUrl = this.#ethProviderURLs[Number(chainId)]
+
+            if (!providerUrl) {
+              continue
+            }
+
+            const ethereumClient = this.getEthereumClient(Number(chainId))
+
+            if (!ethereumClient) {
+              continue
+            }
+
+            const ownerPublicKey = await ethereumClient.resolveOwner(
+              this.#contractAddresses[Number(chainId)]
+                .CommunityOwnerTokenRegistry,
+              communityPublicKey,
+            )
+
+            if (ownerPublicKey !== message.signerPublicKey) {
+              continue
+            }
+          } else if (
+            communityPublicKey !==
+            `0x${compressPublicKey(message.signerPublicKey)}`
+          ) {
+            continue
+          }
+
+          // stop
+          return decodedCommunityDescription
         }
-      } catch {
-        // Query failed on this shard, try next
       }
     }
   }

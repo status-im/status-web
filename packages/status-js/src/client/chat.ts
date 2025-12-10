@@ -215,30 +215,26 @@ export class Chat {
     }
 
     for (const shardId of SHARDS) {
-      try {
-        const decoder = createDecoder(
-          this.contentTopic,
-          getRoutingInfo(shardId),
-          this.symmetricKey,
-        )
-        await this.client.waku.store.queryWithOrderedCallback(
-          [decoder],
-          wakuMessage => {
-            this.#fetchingMessages = true
-            this.client.handleWakuMessage(wakuMessage)
-            this.#fetchingMessages = false
-          },
-          {
-            timeStart: startTime,
-            timeEnd: endTime,
-            paginationLimit: MESSAGES_PAGINATION_LIMIT,
-            // most recent page first
-            paginationForward: false,
-          },
-        )
-      } catch {
-        // Query failed on this shard, try next
-      }
+      const decoder = createDecoder(
+        this.contentTopic,
+        getRoutingInfo(shardId),
+        this.symmetricKey,
+      )
+      await this.client.waku.store.queryWithOrderedCallback(
+        [decoder],
+        wakuMessage => {
+          this.#fetchingMessages = true
+          this.client.handleWakuMessage(wakuMessage)
+          this.#fetchingMessages = false
+        },
+        {
+          timeStart: startTime,
+          timeEnd: endTime,
+          paginationLimit: MESSAGES_PAGINATION_LIMIT,
+          // most recent page first
+          paginationForward: false,
+        },
+      )
     }
 
     this.#previousFetchedStartTime = startTime

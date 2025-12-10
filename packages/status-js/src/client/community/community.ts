@@ -94,29 +94,25 @@ export class Community {
 
   public fetch = async () => {
     for (const shardId of SHARDS) {
-      try {
-        const decoder = createDecoder(
-          this.contentTopic,
-          getRoutingInfo(shardId),
-          this.symmetricKey,
-        )
-        // most recent page first
-        await this.client.waku.store.queryWithOrderedCallback(
-          [decoder],
-          wakuMessage => {
-            this.client.handleWakuMessage(wakuMessage)
+      const decoder = createDecoder(
+        this.contentTopic,
+        getRoutingInfo(shardId),
+        this.symmetricKey,
+      )
+      // most recent page first
+      await this.client.waku.store.queryWithOrderedCallback(
+        [decoder],
+        wakuMessage => {
+          this.client.handleWakuMessage(wakuMessage)
 
-            if (this.description) {
-              return true
-            }
-          },
-        )
+          if (this.description) {
+            return true
+          }
+        },
+      )
 
-        if (this.description) {
-          break
-        }
-      } catch {
-        // Query failed on this shard, try next
+      if (this.description) {
+        break
       }
     }
 
