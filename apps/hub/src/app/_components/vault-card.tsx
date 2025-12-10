@@ -100,7 +100,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
   // Get APY from API, fallback to static vault config
   const dynamicApy = apyMap?.[vault.address.toLowerCase()]
   const apyValue = dynamicApy !== undefined ? String(dynamicApy) : null
-  const rewardsLine = rewards.join(', ') + ' points'
+  const rewardsLine = rewards.join(', ')
 
   const formattedTVL = !vault.soon
     ? formatCurrency(tvlData?.tvlUSD ?? 0, { compact: true }).replace('$', '')
