@@ -24,6 +24,7 @@ export const getDefaultWagmiConfig = () =>
     appDescription: 'Status Network',
     appUrl: 'https://status.app',
     appIcon: 'https://status.app/icon.png',
+    enableFamily: false,
   }) as CreateConfigParameters<
     readonly [Chain, ...Chain[]],
     Record<number, Transport>,
