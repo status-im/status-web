@@ -10,6 +10,7 @@ import { createLightNode, waitForRemotePeer } from '@waku/sdk'
 import { hexToBytes } from 'ethereum-cryptography/utils'
 
 import { peers } from '../consts/peers'
+import { CLUSTER_ID, getRoutingInfo, SHARDS } from '../consts/waku'
 import { ApplicationMetadataMessageSchema } from '../protos/application-metadata-message_pb'
 import { Account } from './account'
 import { ActivityCenter } from './activityCenter'
@@ -153,6 +154,9 @@ class Client {
          * Note: Not supported in light mode.
          */
         relayKeepAlive: 0,
+        networkConfig: {
+          clusterId: CLUSTER_ID,
+        },
         libp2p: {
           peerDiscovery: [
             /**
@@ -168,10 +172,6 @@ class Client {
               // tagTTL: Infinity,
             }),
           ],
-        },
-        shardInfo: {
-          clusterId: 16,
-          shards: [32],
         },
       })
       await waku.start()
@@ -272,18 +272,18 @@ class Client {
       }),
     )
 
-    await this.waku.lightPush.send(
-      createEncoder({
-        contentTopic,
-        symKey,
-        sigPrivKey: hexToBytes(this.#account.privateKey),
-        routingInfo: {
-          clusterId: 16,
-          shardId: 32,
-          pubsubTopic: '/waku/2/rs/16/32',
-        },
-      }),
-      { payload: message },
+    await Promise.all(
+      SHARDS.map(shardId =>
+        this.waku.lightPush.send(
+          createEncoder({
+            contentTopic,
+            symKey,
+            sigPrivKey: hexToBytes(this.#account!.privateKey),
+            routingInfo: getRoutingInfo(shardId),
+          }),
+          { payload: message },
+        ),
+      ),
     )
   }
 
