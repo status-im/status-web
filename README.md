@@ -91,7 +91,7 @@ This will start the Storybook server, allowing you to browse and test components
 
 ## Publishing
 
-To publish packages to npm registry merge PR named Release, which is automatically created and updated by Chnageset on merge of any other PR containing changesets files.
+To publish packages to npm registry merge PR named Release, which is automatically created and updated by Changeset on merge of any other PR containing changesets files.
 
 ## Sponsors
 
