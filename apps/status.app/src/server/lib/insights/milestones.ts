@@ -47,7 +47,7 @@ export async function getMilestones() {
       _or: [
         {
           repository: {
-            _eq: 'status-im/status-legacy',
+            _eq: 'status-im/status-mobile',
           },
         },
         {
