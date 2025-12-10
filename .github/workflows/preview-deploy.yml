@@ -181,19 +181,19 @@ jobs:
           script: |
             const deployments = [];
 
-            if ('${{ steps.deploy-status-app.outputs.url }}') {
+            if ('${{ steps.deploy-status-app.outputs.url }}'.trim()) {
               deployments.push({ name: 'status.app', url: '${{ steps.deploy-status-app.outputs.url }}' });
             }
-            if ('${{ steps.deploy-hub.outputs.url }}') {
+            if ('${{ steps.deploy-hub.outputs.url }}'.trim()) {
               deployments.push({ name: 'hub', url: '${{ steps.deploy-hub.outputs.url }}' });
             }
-            if ('${{ steps.deploy-portfolio.outputs.url }}') {
+            if ('${{ steps.deploy-portfolio.outputs.url }}'.trim()) {
               deployments.push({ name: 'portfolio', url: '${{ steps.deploy-portfolio.outputs.url }}' });
             }
-            if ('${{ steps.deploy-api.outputs.url }}') {
+            if ('${{ steps.deploy-api.outputs.url }}'.trim()) {
               deployments.push({ name: 'api', url: '${{ steps.deploy-api.outputs.url }}' });
             }
-            if ('${{ steps.deploy-status-network.outputs.url }}') {
+            if ('${{ steps.deploy-status-network.outputs.url }}'.trim()) {
               deployments.push({ name: 'status.network', url: '${{ steps.deploy-status-network.outputs.url }}' });
             }
 
