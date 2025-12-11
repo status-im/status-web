@@ -70,8 +70,8 @@ export default function StakePage() {
             Stake STT, receive good Karma
           </h1>
           <p className="text-13 md:text-19">
-            Stake STT to increase your Karma, unlock more gasless transactions
-            and increase your power over the network
+            Stake STT to increase your Karma on Status Network testnet. Unlock
+            more gasless transactions and increase your power over the network
           </p>
         </header>
 
