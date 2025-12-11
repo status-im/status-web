@@ -22,8 +22,8 @@ export const getDefaultWagmiConfig = () =>
       clientEnv.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID as string,
     appName: 'Status Hub',
     appDescription: 'Status Network',
-    appUrl: 'https://status.app',
-    appIcon: 'https://status.app/icon.png',
+    appUrl: 'https://hub.status.network',
+    appIcon: '/logo.svg',
     enableFamily: false,
   }) as CreateConfigParameters<
     readonly [Chain, ...Chain[]],
