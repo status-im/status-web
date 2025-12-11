@@ -193,7 +193,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
           {isTvlLoading ? (
             <Skeleton width={80} height={20} className="rounded-6" />
           ) : (
-            <span>{formattedTVL ? `${formattedTVL} TVL` : 'TVL TBD'}</span>
+            <span>{formattedTVL ? `$${formattedTVL} TVL` : 'TVL TBD'}</span>
           )}
         </li>
         <li className="flex items-center gap-2 text-15">
