@@ -106,6 +106,14 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
     ? formatCurrency(tvlData?.tvlUSD ?? 0, { compact: true }).replace('$', '')
     : null
 
+  const formattedTokenAmount = !vault.soon
+    ? formatTokenAmount(tvlData?.totalAssets ?? 0, token.symbol, {
+        tokenDecimals: token.decimals,
+        decimals: 0,
+        includeSymbol: true,
+      })
+    : null
+
   const showDepositSection = !vault.soon
 
   const handleClick = () => {
@@ -187,6 +195,12 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
           ) : (
             <span>{formattedTVL ? `${formattedTVL} TVL` : 'TVL TBD'}</span>
           )}
+        </li>
+        <li className="flex items-center gap-2 text-15">
+          <span className="flex size-5 items-center justify-center rounded-full border border-neutral-50 text-neutral-50">
+            &Delta;
+          </span>
+          <span>{formattedTokenAmount ?? '0'}</span>
         </li>
         {vault.id === 'GUSD' && (
           <li className="flex items-center gap-2 text-15">
