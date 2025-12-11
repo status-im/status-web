@@ -1,0 +1,97 @@
+#!/usr/bin/env groovy
+library 'status-jenkins-lib@v1.8.28'
+
+pipeline {
+  agent {
+    docker {
+      label 'linuxcontainer'
+      image 'harbor.status.im/infra/ci-build-containers:linux-base-1.0.0'
+      args '--volume=/var/run/docker.sock:/var/run/docker.sock ' +
+           '--user jenkins'
+    }
+  }
+
+  options {
+    timestamps()
+    disableRestartFromStage()
+    timeout(time: 20, unit: 'MINUTES')
+    buildDiscarder(logRotator(
+      numToKeepStr: '10',
+      daysToKeepStr: '30',
+    ))
+  }
+
+  parameters {
+    choice(
+      name: "APP",
+      choices: ['hub', 'api', 'connector', 'portfolio', 'status.app', 'status.network', 'wallet'],
+      defaultValue: 'hub',
+      description: "Choice of the app to build",
+    )
+    string(
+      name: 'IMAGE_TAG',
+      description: 'Name of Docker tag to push. Optional Parameter.',
+      defaultValue: env.GIT_COMMIT.take(8)
+    )
+    string(
+      name: 'IMAGE_NAME',
+      description: 'Name of Docker image to push.',
+      defaultValue: params.IMAGE_NAME ?: "harbor.status.im/status-im/status-web/${params.APP}",
+    )
+    string(
+      name: 'DOCKER_CRED',
+      description: 'Name of Docker Registry credential.',
+      defaultValue: params.DOCKER_CRED ?: 'harbor-wakuorg-robot',
+    )
+    string(
+      name: 'DOCKER_REGISTRY_URL',
+      description: 'URL of the Docker Registry',
+      defaultValue: params.DOCKER_REGISTRY_URL ?: 'https://harbor.status.im'
+    )
+  }
+
+  stages {
+    stage('Build') {
+        steps { 
+            script {
+                image = docker.build(
+                    "${params.IMAGE_NAME}:${params.IMAGE_TAG}",
+                    "--label=build='${env.BUILD_URL}' " +
+                    "--label=commit='${git.commit()}' " +
+                    "--label=version='${git.describe('--tags')}' " +
+                    "--build-arg=APP='${params.APP}' "
+                )
+            } 
+        }
+    }
+
+    stage('Push') {
+      when { expression { params.IMAGE_TAG != '' } }
+      steps { script {
+        withDockerRegistry([
+          credentialsId: params.DOCKER_CRED, url: params.DOCKER_REGISTRY_URL
+        ]) {
+          image.push()
+          /* If Git ref is a tag push it as Docker tag too. */
+          if (params.GIT_REF ==~ /v\d+\.\d+\.\d+.*/) {
+            image.push(params.GIT_REF)
+            image.push('latest-release')
+          }
+        }
+      } }
+    }
+  } // stages
+
+  post {
+    cleanup { cleanWs() }
+    always { sh 'docker image prune -f' }
+  }
+}
+
+def getDefaultImageTag() {
+  switch (env.JOB_BASE_NAME) {
+    case 'docker-latest':      return 'latest'
+    case 'docker-release':     return 'stable'
+    default:                   return env.JOB_BASE_NAME
+  }
+}
