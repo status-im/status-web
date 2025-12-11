@@ -11,13 +11,18 @@ import {
   getNativeTokenBalance,
 } from '../../services/alchemy'
 import {
-  CRYPTOCOMPARE_REVALIDATION_TIMES,
+  COINGECKO_REVALIDATION_TIMES,
+  fetchTokenMarkets,
   fetchTokenMetadata,
-  legacy_fetchTokenPriceHistory,
-  legacy_fetchTokensPrice,
-} from '../../services/cryptocompare'
+  fetchTokenPriceHistory,
+  fetchTokensPrice,
+} from '../../services/coingecko/index'
 import { publicProcedure, router } from '../lib/trpc'
 
+import type {
+  CoinGeckoCoinDetailResponse,
+  CoinGeckoMarketsResponse,
+} from '../../services/coingecko/types'
 import type { NetworkType } from '../types'
 
 type ERC20Token = (typeof erc20TokenList)['tokens'][number]
@@ -34,12 +39,12 @@ type Asset = {
   decimals?: number
   metadata: {
     market_cap: number
-    fully_dilluted: number
+    fully_diluted: number
     circulation: number
     total_supply: number
     all_time_high: number
     all_time_low: number
-    rank_by_market_cap: number
+    rank_by_market_cap: number | null
     about: string
     volume_24: number
     // links: Record<
@@ -62,7 +67,7 @@ const STATUS_NETWORKS: Record<number, NetworkType> = {
   1: 'ethereum',
 }
 
-const DEFAULT_TOKEN_SYMBOLS = [
+export const DEFAULT_TOKEN_SYMBOLS = [
   'ETH',
   'SNT',
   'USDC',
@@ -71,7 +76,87 @@ const DEFAULT_TOKEN_SYMBOLS = [
   'PEPE',
   'UNI',
   'SHIB',
-]
+] as const
+
+export type DefaultTokenSymbol = (typeof DEFAULT_TOKEN_SYMBOLS)[number]
+
+export const DEFAULT_TOKEN_IDS: Record<string, string> = {
+  ETH: 'ethereum',
+  SNT: 'status',
+  USDC: 'usd-coin',
+  USDT: 'tether',
+  LINK: 'chainlink',
+  PEPE: 'pepe',
+  UNI: 'uniswap',
+  SHIB: 'shiba-inu',
+}
+
+function buildTokenSummary(
+  assets: Asset[],
+  defaultIcon: string,
+  defaultName: string,
+  defaultSymbol: string,
+) {
+  const summary = sum(assets)
+  const firstAsset = assets[0]
+
+  return {
+    ...summary,
+    icon: defaultIcon,
+    name: defaultName,
+    symbol: defaultSymbol,
+    about: firstAsset?.metadata.about ?? '',
+    contracts: assets.reduce(
+      (acc, asset) => {
+        if (asset.contract) {
+          acc[asset.networks[0]] = asset.contract
+        }
+        return acc
+      },
+      {} as Record<NetworkType, string>,
+    ),
+  }
+}
+
+function filterTokensByNetworks<T extends { chainId: number }>(
+  tokens: T[],
+  networks: NetworkType[],
+): T[] {
+  return tokens.filter(token =>
+    Object.entries(STATUS_NETWORKS)
+      .filter(([, network]) => networks.includes(network))
+      .map(([chainId]) => Number(chainId))
+      .includes(token.chainId),
+  )
+}
+
+/**
+ * Fetch all CoinGecko data for a token (price, price history, markets, metadata)
+ */
+async function fetchTokenData(symbol: string) {
+  const [price, priceHistory, tokenMarkets, tokenMetadata] = await Promise.all([
+    fetchTokensPrice([symbol], COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE).then(
+      prices => prices[symbol],
+    ),
+    fetchTokenPriceHistory(
+      symbol,
+      'all',
+      COINGECKO_REVALIDATION_TIMES.PRICE_HISTORY,
+    ),
+    fetchTokenMarkets(symbol, COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE),
+    fetchTokenMetadata(
+      symbol,
+      COINGECKO_REVALIDATION_TIMES.TOKEN_METADATA,
+    ).catch(() => null),
+  ])
+
+  return {
+    price,
+    priceHistory,
+    tokenMarkets,
+    tokenMetadata,
+  }
+}
 
 export const assetsRouter = router({
   all: publicProcedure
@@ -174,14 +259,6 @@ export const assetsRouter = router({
     }),
 })
 
-// const cachedAll = cache(async (address: string, networks: NetworkType[]) => {
-//   return await all({ address, networks })
-// })
-
-// const cachedAll = cache((address: string, networks: NetworkType[]) => {
-//   return all({ address, networks })
-// })
-
 const cachedAll = cache(async (key: string) => {
   const { address, networks } = JSON.parse(key)
 
@@ -195,30 +272,31 @@ async function all({
   address: string
   networks: NetworkType[]
 }) {
-  // await cachedDelay()
-  // console.log(' DELAY all()')
-  // await delay()
-
   try {
     const assets: Omit<Asset, 'metadata'>[] = []
 
-    // note: https://docs.alchemy.com/reference/alchemy-gettokenbalances can now return native tokens together with ERC20 tokens
     // Native tokens
-    const filteredNativeTokens = nativeTokenList.tokens.filter(token =>
-      Object.entries(STATUS_NETWORKS)
-        .filter(([, network]) => networks.includes(network))
-        .map(([chainId]) => Number(chainId))
-        .includes(token.chainId),
+    const filteredNativeTokens = filterTokensByNetworks(
+      nativeTokenList.tokens,
+      networks,
     )
+
     await Promise.all(
       filteredNativeTokens.map(async token => {
         const balance = await getNativeTokenBalance(
           address,
           STATUS_NETWORKS[token.chainId],
         )
-        const price = (await legacy_fetchTokensPrice([token.symbol]))[
-          token.symbol
-        ]
+
+        const price = (await fetchTokensPrice([token.symbol]))[token.symbol]
+
+        // Skip if price data is not available
+        if (!price || price.usd === undefined) {
+          console.warn(
+            `Price data not available for token ${token.symbol}, skipping`,
+          )
+          return
+        }
 
         const asset: Omit<Asset, 'metadata'> = {
           networks: [STATUS_NETWORKS[token.chainId]],
@@ -227,11 +305,10 @@ async function all({
           icon: token.logoURI,
           name: token.name,
           symbol: token.symbol,
-          price_eur: price.USD['PRICE'],
-          price_percentage_24h_change: price.USD['CHANGEPCT24HOUR'],
+          price_eur: price.usd,
+          price_percentage_24h_change: price.usd_24h_change ?? 0,
           balance: Number(balance) / 10 ** token.decimals,
-          total_eur:
-            (Number(balance) / 10 ** token.decimals) * price.USD['PRICE'],
+          total_eur: (Number(balance) / 10 ** token.decimals) * price.usd,
           decimals: token.decimals,
         }
 
@@ -241,14 +318,10 @@ async function all({
 
     // ERC20 tokens
     const filteredERC20Tokens = new Map(
-      erc20TokenList.tokens
-        .filter(token =>
-          Object.entries(STATUS_NETWORKS)
-            .filter(([, network]) => networks.includes(network))
-            .map(([chainId]) => Number(chainId))
-            .includes(token.chainId),
-        )
-        .map(token => [toChecksumAddress(token.address), token]),
+      filterTokensByNetworks(erc20TokenList.tokens, networks).map(token => [
+        toChecksumAddress(token.address),
+        token,
+      ]),
     )
 
     const ERC20TokensByNetwork = Array.from(
@@ -276,61 +349,69 @@ async function all({
     >) {
       let pageKey: string | undefined
 
-      do {
-        const result = await getERC20TokensBalance(
-          address,
-          network as NetworkType,
-          undefined,
-          pageKey,
-        )
+      try {
+        do {
+          const result = await getERC20TokensBalance(
+            address,
+            network as NetworkType,
+            undefined,
+            pageKey,
+          )
 
-        for (const balance of result.tokenBalances) {
-          const tokenBalance = Number(balance.tokenBalance)
+          for (const balance of result.tokenBalances) {
+            const tokenBalance = Number(balance.tokenBalance)
 
-          if (tokenBalance > 0) {
-            const token = filteredERC20Tokens.get(
-              toChecksumAddress(balance.contractAddress),
-            )
-            if (token) {
-              const checksummedAddress = toChecksumAddress(
-                balance.contractAddress,
+            if (tokenBalance > 0) {
+              const token = filteredERC20Tokens.get(
+                toChecksumAddress(balance.contractAddress),
               )
-              partialERC20Assets.set(checksummedAddress, {
-                networks: [network as NetworkType],
-                native: false,
-                contract: checksummedAddress,
-                icon: token.logoURI,
-                name: token.name,
-                symbol: token.symbol,
-                balance: tokenBalance / 10 ** token.decimals,
-                decimals: token.decimals,
-              })
+              if (token) {
+                const checksummedAddress = toChecksumAddress(
+                  balance.contractAddress,
+                )
+                partialERC20Assets.set(checksummedAddress, {
+                  networks: [network as NetworkType],
+                  native: false,
+                  contract: checksummedAddress,
+                  icon: token.logoURI,
+                  name: token.name,
+                  symbol: token.symbol,
+                  balance: tokenBalance / 10 ** token.decimals,
+                  decimals: token.decimals,
+                })
+              }
             }
           }
-        }
 
-        pageKey = result.pageKey
-      } while (pageKey)
+          pageKey = result.pageKey
+        } while (pageKey)
+      } catch (error) {
+        console.error(
+          `[assets.all] Failed to fetch ERC20 token balances for ${network}:`,
+          error,
+        )
+      }
     }
 
     const batchSize = 300
     const partialAssetEntries = Array.from(partialERC20Assets.entries())
+
     for (let i = 0; i < partialAssetEntries.length; i += batchSize) {
       const batch = partialAssetEntries.slice(i, i + batchSize)
       const symbols = [...new Set(batch.map(([, asset]) => asset.symbol))]
 
-      const prices = await legacy_fetchTokensPrice(symbols)
+      const prices = await fetchTokensPrice(symbols)
 
       for (const [, partialAsset] of batch) {
         const price = prices[partialAsset.symbol]
 
-        if (price) {
+        if (price && price.usd !== undefined) {
           const asset: Omit<Asset, 'metadata'> = {
             ...partialAsset,
-            price_eur: price['USD']['PRICE'] ?? 0,
-            price_percentage_24h_change: price['USD']['CHANGEPCT24HOUR'] ?? 0,
-            total_eur: partialAsset.balance * (price['USD']['PRICE'] ?? 0),
-            decimals: partialAsset.decimals, // <-- Mantém decimals
+            price_eur: price.usd,
+            price_percentage_24h_change: price.usd_24h_change ?? 0,
+            total_eur: partialAsset.balance * price.usd,
+            decimals: partialAsset.decimals,
           }
 
           assets.push(asset)
@@ -347,10 +428,14 @@ async function all({
         }
 
         existingAsset.networks.push(asset.networks[0])
+
         existingAsset.balance += asset.balance
+
         existingAsset.total_eur += asset.total_eur
+
         existingAsset.price_eur =
           (existingAsset.price_eur + asset.price_eur) / 2
+
         existingAsset.price_percentage_24h_change =
           (existingAsset.price_percentage_24h_change +
             asset.price_percentage_24h_change) /
@@ -362,21 +447,23 @@ async function all({
     )
 
     const existingSymbols = aggregatedAssets.map(a => a.symbol)
+
     const missingSymbols = DEFAULT_TOKEN_SYMBOLS.filter(
       s => !existingSymbols.includes(s),
     )
 
     if (missingSymbols.length > 0) {
-      const prices = await legacy_fetchTokensPrice(
+      const prices = await fetchTokensPrice(
         missingSymbols,
-        CRYPTOCOMPARE_REVALIDATION_TIMES.CURRENT_PRICE,
+        COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE,
       )
 
       for (const symbol of missingSymbols) {
         const token = erc20TokenList.tokens.find(
           t => t.symbol === symbol && t.chainId === 1,
         )
-        if (token && prices[symbol]) {
+
+        if (token && prices[symbol] && prices[symbol].usd !== undefined) {
           aggregatedAssets.push({
             networks: ['ethereum'],
             native: false,
@@ -384,8 +471,8 @@ async function all({
             icon: token.logoURI,
             name: token.name,
             symbol: token.symbol,
-            price_eur: prices[symbol].USD.PRICE,
-            price_percentage_24h_change: prices[symbol].USD.CHANGEPCT24HOUR,
+            price_eur: prices[symbol].usd,
+            price_percentage_24h_change: prices[symbol].usd_24h_change ?? 0,
             balance: 0,
             total_eur: 0,
             decimals: token.decimals,
@@ -425,19 +512,10 @@ async function nativeToken({
   networks: NetworkType[]
   symbol: string
 }) {
-  // console.log(' DELAY nativeToken()')
-  // await delay()
-
-  const filteredNativeTokens = nativeTokenList.tokens.filter(token => {
-    if (token.symbol !== symbol) {
-      return false
-    }
-
-    return Object.entries(STATUS_NETWORKS)
-      .filter(([, network]) => networks.includes(network))
-      .map(([chainId]) => Number(chainId))
-      .includes(token.chainId)
-  })
+  const filteredNativeTokens = filterTokensByNetworks(
+    nativeTokenList.tokens,
+    networks,
+  ).filter(token => token.symbol === symbol)
 
   if (!filteredNativeTokens.length) {
     throw new Error('Token not found')
@@ -457,52 +535,30 @@ async function nativeToken({
         throw new Error('Balance not found')
       }
 
-      const price = (
-        await legacy_fetchTokensPrice(
-          [token.symbol],
-          CRYPTOCOMPARE_REVALIDATION_TIMES.CURRENT_PRICE,
-        )
-      )[token.symbol]
-      const priceHistory = await legacy_fetchTokenPriceHistory(
-        token.symbol,
-        'all',
-        CRYPTOCOMPARE_REVALIDATION_TIMES.PRICE_HISTORY,
-      )
-      const tokenMetadata = await fetchTokenMetadata(
-        token.symbol,
-        CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA,
-      )
+      const { price, priceHistory, tokenMarkets, tokenMetadata } =
+        await fetchTokenData(token.symbol)
 
       const asset: Asset = map({
         token,
         balance,
         price,
         priceHistory,
+        tokenMarkets,
         tokenMetadata,
       })
       assets[STATUS_NETWORKS[token.chainId]] = asset
     }),
   )
 
-  const summary = sum(Object.values(assets).flat())
+  const assetsArray = Object.values(assets).flat()
 
   return {
-    summary: {
-      ...summary,
-      icon: filteredNativeTokens[0].logoURI,
-      name: filteredNativeTokens[0].name,
-      symbol: filteredNativeTokens[0].symbol,
-      about: Object.values(assets)[0]?.metadata.about ?? '',
-      contracts: Object.values(assets).reduce(
-        (acc, asset) => {
-          if (asset.contract) {
-            acc[asset.networks[0]] = asset.contract
-          }
-          return acc
-        },
-        {} as Record<NetworkType, string>,
-      ),
-    },
+    summary: buildTokenSummary(
+      assetsArray,
+      filteredNativeTokens[0].logoURI,
+      filteredNativeTokens[0].name,
+      filteredNativeTokens[0].symbol,
+    ),
     assets,
   }
 }
@@ -522,9 +578,6 @@ async function token({
   networks: NetworkType[]
   contract: string
 }) {
-  // console.log(' DELAY token()')
-  // await delay()
-
   const erc20Token = erc20TokenList.tokens.find(
     token =>
       token.address === contract &&
@@ -559,52 +612,30 @@ async function token({
         throw new Error(`Balance not found for token ${token.symbol}`)
       }
 
-      const price = (
-        await legacy_fetchTokensPrice(
-          [token.symbol],
-          CRYPTOCOMPARE_REVALIDATION_TIMES.CURRENT_PRICE,
-        )
-      )[token.symbol]
-      const priceHistory = await legacy_fetchTokenPriceHistory(
-        token.symbol,
-        'all',
-        CRYPTOCOMPARE_REVALIDATION_TIMES.PRICE_HISTORY,
-      )
-      const tokenMetadata = await fetchTokenMetadata(
-        token.symbol,
-        CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA,
-      )
+      const { price, priceHistory, tokenMarkets, tokenMetadata } =
+        await fetchTokenData(token.symbol)
 
       const asset = map({
         token,
         balance: result.tokenBalances[0].tokenBalance,
         price,
         priceHistory,
+        tokenMarkets,
         tokenMetadata,
       })
       assets[STATUS_NETWORKS[token.chainId]] = asset
     }),
   )
 
-  const summary = sum(Object.values(assets).flat())
+  const assetsArray = Object.values(assets).flat()
 
   return {
-    summary: {
-      ...summary,
-      icon: erc20Token.logoURI,
-      name: erc20Token.name,
-      symbol: erc20Token.symbol,
-      about: Object.values(assets)[0]?.metadata.about ?? '',
-      contracts: Object.values(assets).reduce(
-        (acc, asset) => {
-          if (asset.contract) {
-            acc[asset.networks[0]] = asset.contract
-          }
-          return acc
-        },
-        {} as Record<NetworkType, string>,
-      ),
-    },
+    summary: buildTokenSummary(
+      assetsArray,
+      erc20Token.logoURI,
+      erc20Token.name,
+      erc20Token.symbol,
+    ),
     assets,
   }
 }
@@ -622,44 +653,19 @@ async function tokenPriceChart({
   symbol: string
   days?: '1' | '7' | '30' | '90' | '365' | 'all'
 }) {
-  // console.log(' DELAY tokenPriceChart()')
-  // await delay()
+  const data = await fetchTokenPriceHistory(symbol, days)
 
-  const data = await legacy_fetchTokenPriceHistory(symbol, days)
-
-  const mappedData = data.map(({ time, close }) => ({
-    date: new Date(time * 1000).toISOString(),
-    price: close,
+  return data.prices.map(([timestamp, price]: [number, number]) => ({
+    date: new Date(timestamp).toISOString(),
+    price: price,
   }))
-
-  return mappedData
 }
 
 const cachedNativeTokenPriceChart = cache(async (key: string) => {
   const { symbol, days } = JSON.parse(key)
 
-  return await nativeTokenPriceChart({ symbol, days })
+  return await tokenPriceChart({ symbol, days })
 })
-
-async function nativeTokenPriceChart({
-  symbol,
-  days,
-}: {
-  symbol: string
-  days?: '1' | '7' | '30' | '90' | '365' | 'all'
-}) {
-  // console.log(' DELAY nativeTokenPriceChart()')
-  // await delay()
-
-  const data = await legacy_fetchTokenPriceHistory(symbol, days)
-
-  const mappedData = data.map(({ time, close }) => ({
-    date: new Date(time * 1000).toISOString(),
-    price: close,
-  }))
-
-  return mappedData
-}
 
 const cachedNativeTokenBalanceChart = cache(async (key: string) => {
   const { address, networks, days } = JSON.parse(key)
@@ -676,10 +682,9 @@ async function nativeTokenBalanceChart({
   networks: NetworkType[]
   days?: '1' | '7' | '30' | '90' | '365' | 'all'
 }) {
-  // console.log(' DELAY nativeTokenBalanceChart()')
-  // await delay()
-
   const currentTime = Math.floor(Date.now() / 1000)
+  const decimals = 18
+
   const responses = await Promise.all(
     networks.map(async network => {
       const data = await fetchTokenBalanceHistory(
@@ -688,7 +693,7 @@ async function nativeTokenBalanceChart({
         days,
         undefined,
         currentTime,
-        18,
+        decimals,
       )
 
       return { [network]: data } as Record<
@@ -722,9 +727,6 @@ async function tokenBalanceChart({
   contract: string
   days?: '1' | '7' | '30' | '90' | '365' | 'all'
 }) {
-  // console.log(' DELAY tokenBalanceChart()')
-  // await delay()
-
   const erc20Token = erc20TokenList.tokens.find(
     token =>
       token.address === contract &&
@@ -742,6 +744,7 @@ async function tokenBalanceChart({
     : [erc20Token]
 
   const currentTime = Math.floor(Date.now() / 1000)
+
   const responses = await Promise.all(
     filteredERC20Tokens.map(async token => {
       const data = await fetchTokenBalanceHistory(
@@ -851,19 +854,91 @@ function aggregateTokenBalanceHistory(
   )
 }
 
+/**
+ * Calculate fully diluted market cap
+ * Fully diluted = price * maxSupply (or totalSupply if maxSupply is not available)
+ */
+function calculateFullyDiluted(
+  priceUsd: number,
+  maxSupply: number | null,
+  totalSupply: number,
+): number {
+  if (maxSupply && maxSupply > 0) {
+    return priceUsd * maxSupply
+  }
+
+  if (totalSupply > 0) {
+    return priceUsd * totalSupply
+  }
+
+  return 0
+}
+
+/**
+ * Extract token description from CoinGecko metadata
+ * Prefers English description, falls back to any available language
+ */
+function extractTokenDescription(
+  tokenMetadata: CoinGeckoCoinDetailResponse | null,
+): string {
+  if (!tokenMetadata?.description) {
+    return ''
+  }
+
+  return (
+    tokenMetadata.description['en'] ||
+    Object.values(tokenMetadata.description)[0] ||
+    ''
+  )
+}
+
 function map(data: {
   token:
     | (typeof nativeTokenList.tokens)[number]
     | (typeof erc20TokenList.tokens)[number]
   balance: string
-  price: Awaited<ReturnType<typeof legacy_fetchTokensPrice>>[string]
-  priceHistory: Awaited<ReturnType<typeof legacy_fetchTokenPriceHistory>>
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  tokenMetadata: any
+  price: Awaited<ReturnType<typeof fetchTokensPrice>>[string]
+  priceHistory: Awaited<ReturnType<typeof fetchTokenPriceHistory>>
+  tokenMarkets: CoinGeckoMarketsResponse[number] | null
+  tokenMetadata: CoinGeckoCoinDetailResponse | null
 }): Asset {
-  const { token, balance, price, priceHistory, tokenMetadata } = data
+  const { token, balance, price, priceHistory, tokenMarkets, tokenMetadata } =
+    data
 
-  const lows = priceHistory.map(({ low }) => low).filter(low => low > 0)
+  // CoinGecko price history format: prices is [timestamp, price][]
+  const prices = priceHistory.prices
+    .map(([, price]: [number, number]) => price)
+    .filter((p: number) => p > 0)
+
+  // Get price from /simple/price
+  const priceUsd = price.usd
+
+  // Get market data from /coins/markets
+  const maxSupply = tokenMarkets?.max_supply ?? null
+  const totalSupply = tokenMarkets?.total_supply ?? null
+  const circulation = tokenMarkets?.circulating_supply ?? null
+  const volume24 = tokenMarkets?.total_volume ?? null
+
+  // Use /simple/price market_cap first (updated every 60s) as it's more real-time
+  const marketCap = price.usd_market_cap ?? tokenMarkets?.market_cap ?? 0
+  const rankByMarketCap = tokenMarkets?.market_cap_rank ?? null
+
+  // Use markets data or fallback to calculated values
+  const finalTotalSupply =
+    totalSupply ?? (marketCap > 0 && priceUsd > 0 ? marketCap / priceUsd : 0)
+
+  const finalCirculation =
+    circulation ?? (marketCap > 0 && priceUsd > 0 ? marketCap / priceUsd : 0)
+
+  const finalVolume24 = volume24 ?? price.usd_24h_vol ?? 0
+
+  const fullyDiluted = calculateFullyDiluted(
+    priceUsd,
+    maxSupply,
+    finalTotalSupply,
+  )
+
+  const about = extractTokenDescription(tokenMetadata)
 
   return {
     networks: [STATUS_NETWORKS[token.chainId]],
@@ -873,29 +948,30 @@ function map(data: {
     icon: token.logoURI,
     name: token.name,
     symbol: token.symbol,
-    price_eur: price.USD['PRICE'],
-    price_percentage_24h_change: price.USD['CHANGEPCT24HOUR'],
+    price_eur: price.usd,
+    price_percentage_24h_change: price.usd_24h_change ?? 0,
     balance: Number(balance) / 10 ** token.decimals,
-    total_eur: (Number(balance) / 10 ** token.decimals) * price.USD['PRICE'],
+    total_eur: (Number(balance) / 10 ** token.decimals) * price.usd,
     decimals: token.decimals,
     metadata: {
-      market_cap: price.USD['MKTCAP'],
-      fully_dilluted: price.USD['PRICE'] * tokenMetadata['SUPPLY_TOTAL'],
-      circulation: price.USD['CIRCULATINGSUPPLY'],
-      total_supply: tokenMetadata['SUPPLY_TOTAL'],
-      all_time_high: Math.max(...priceHistory.map(({ high }) => high)),
-      all_time_low: lows.length ? Math.min(...lows) : price.USD['PRICE'],
-      volume_24: price.USD['TOTALVOLUME24HTO'],
-      rank_by_market_cap:
-        tokenMetadata['TOPLIST_BASE_RANK']['TOTAL_MKT_CAP_USD'],
-      about: tokenMetadata['ASSET_DESCRIPTION'],
+      market_cap: marketCap,
+      fully_diluted: fullyDiluted,
+      circulation: finalCirculation,
+      total_supply: finalTotalSupply,
+      all_time_high: prices.length ? Math.max(...prices) : priceUsd,
+      all_time_low: prices.length ? Math.min(...prices) : priceUsd,
+      volume_24: finalVolume24,
+      rank_by_market_cap: rankByMarketCap,
+      about: about,
     },
   }
 }
 
 function sum(assets: Asset[] | Omit<Asset, 'metadata'>[]) {
   const total_balance = assets.reduce((acc, asset) => acc + asset.balance, 0)
+
   const total_eur = assets.reduce((acc, asset) => acc + asset.total_eur, 0)
+
   const total_eur_24h_change = assets.reduce(
     (acc, asset) =>
       acc + asset.total_eur * (asset.price_percentage_24h_change / 100),
@@ -912,9 +988,3 @@ function sum(assets: Asset[] | Omit<Asset, 'metadata'>[]) {
     total_percentage_24h_change,
   }
 }
-
-// async function delay() {
-//   await new Promise(resolve => setTimeout(resolve, 3 * 1000))
-// }
-
-// const cachedDelay = cache(wait)

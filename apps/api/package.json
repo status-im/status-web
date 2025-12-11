@@ -1,6 +1,6 @@
 {
   "name": "api",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "scripts": {
     "preinstall": "npx only-allow pnpm",
@@ -19,9 +19,9 @@
     "@trpc/client": "10.45.2",
     "@trpc/next": "10.45.2",
     "@trpc/server": "10.45.2",
-    "next": "15.3.0",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
+    "next": "15.3.6",
+    "react": "19.1.2",
+    "react-dom": "19.1.2",
     "zod": "^3.23.8"
   },
   "devDependencies": {

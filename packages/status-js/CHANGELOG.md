@@ -1,5 +1,11 @@
 # @status-im/js
 
+## 1.2.1
+
+### Patch Changes
+
+- 808b782: feat: publish & listen to shards 32, 128 and 256
+
 ## 1.2.0
 
 ### Minor Changes
