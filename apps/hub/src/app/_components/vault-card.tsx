@@ -13,7 +13,7 @@ import { TOOLTIP_CONFIG, type Vault } from '~constants/index'
 import { usePreDepositTVLInUSD } from '~hooks/usePreDepositTVLInUSD'
 import { useVaultsAPY } from '~hooks/useVaultsAPY'
 
-import { DollarIcon, GusdIcon, PercentIcon, PlusIcon } from './icons'
+import { DollarIcon, GusdIcon, PercentIcon, PlusIcon, SumIcon } from './icons'
 import { VaultImage } from './vault-image'
 
 type Props = {
@@ -186,6 +186,14 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
           </span>
           <span>{rewardsLine}</span>
         </li>
+        {vault.id === 'GUSD' && (
+          <li className="flex items-center gap-2 text-15">
+            <span className="text-neutral-50">
+              <GusdIcon />
+            </span>
+            <span>Generic Protocol points</span>
+          </li>
+        )}
         <li className="flex items-center gap-2 text-15">
           <span className="text-neutral-50">
             <DollarIcon />
@@ -196,18 +204,12 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
             <span>{formattedTVL ? `$${formattedTVL} TVL` : 'TVL TBD'}</span>
           )}
         </li>
-        <li className="flex items-center gap-2 text-15">
-          <span className="flex size-5 items-center justify-center rounded-full border border-neutral-50 text-neutral-50">
-            &Sigma;
-          </span>
-          <span>{formattedTokenAmount ?? '0'}</span>
-        </li>
-        {vault.id === 'GUSD' && (
+        {!vault.soon && (
           <li className="flex items-center gap-2 text-15">
             <span className="text-neutral-50">
-              <GusdIcon />
+              <SumIcon />
             </span>
-            <span>Generic Protocol points</span>
+            <span>{formattedTokenAmount}</span>
           </li>
         )}
       </ul>
