@@ -114,7 +114,7 @@ export default function PreDepositPage() {
             </ButtonLink>
           </div>
         </div>
-        <div className="flex w-full flex-col gap-2 rounded-32 bg-white-100 px-6 py-[13px] shadow-1">
+        <div className="flex w-full flex-col gap-2 rounded-32 bg-white-100 px-8 py-4 shadow-1">
           <p className="text-13 font-500 text-neutral-50">Total Value Locked</p>
           <InfoTooltip />
           <p className="text-27 font-600 text-neutral-100">
