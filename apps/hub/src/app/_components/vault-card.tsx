@@ -155,7 +155,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
 
       {showDepositSection && isConnected && (
         <div className="mb-4">
-          <p className="text-15 font-400 text-neutral-50">Deposited</p>
+          <p className="text-15 font-400 text-neutral-50">Your deposit</p>
           <p className="text-27 font-600">
             {formatTokenAmount(depositedBalance ?? 0n, token.symbol, {
               tokenDecimals: token.decimals,
