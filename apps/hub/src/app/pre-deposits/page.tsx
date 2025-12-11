@@ -3,7 +3,8 @@
 import { useCallback, useRef, useState } from 'react'
 
 import { Tooltip } from '@status-im/components'
-import { InfoIcon } from '@status-im/icons/16'
+import { ExternalIcon, InfoIcon } from '@status-im/icons/16'
+import { ButtonLink, Link } from '@status-im/status-network/components'
 import Image from 'next/image'
 
 import { formatCurrency } from '~/utils/currency'
@@ -86,20 +87,39 @@ export default function PreDepositPage() {
               </div>
               <p className="text-15 text-neutral-60">
                 Rewards in KARMA, SNT, LINEA and points from Generic Protocol
-                and native apps. <br />
-                Funds will be unlocked at mainnet launch.
+                and native apps. Funds will be unlocked at mainnet launch.
+                <br />
+                All contracts have been{' '}
+                <Link
+                  href="https://github.com/aragon/status-predeposit-vaults/blob/development/audit/report-aragon-pre-deposit-vaults.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-purple hover:text-purple-dark"
+                >
+                  audited
+                </Link>
+                .
               </p>
             </div>
           </div>
-          <div className="relative flex w-full flex-col gap-2 rounded-32 bg-white-100 px-5 py-3 shadow-1 lg:max-w-[208px] lg:self-end">
-            <p className="text-13 font-500 text-neutral-50">
-              Total Value Locked
-            </p>
-            <InfoTooltip />
-            <p className="text-27 font-600 text-neutral-100">
-              {isLoadingTVL ? '...' : formattedTVL}
-            </p>
+          <div className="self-start">
+            <ButtonLink
+              variant="outline"
+              href="https://status-im.notion.site/status-network-pre-deposit"
+              className="self-start bg-white-100"
+              size="32"
+              icon={<ExternalIcon className="text-neutral-50" />}
+            >
+              Learn more
+            </ButtonLink>
           </div>
+        </div>
+        <div className="flex w-full flex-col gap-2 rounded-32 bg-white-100 px-6 py-[13px] shadow-1">
+          <p className="text-13 font-500 text-neutral-50">Total Value Locked</p>
+          <InfoTooltip />
+          <p className="text-27 font-600 text-neutral-100">
+            {isLoadingTVL ? '...' : formattedTVL}
+          </p>
         </div>
         <div className="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2">
           {VAULTS.map(vault => (

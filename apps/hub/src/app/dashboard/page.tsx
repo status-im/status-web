@@ -3,7 +3,7 @@
 import { useState } from 'react'
 
 import { ExternalIcon } from '@status-im/icons/20'
-import { ButtonLink } from '@status-im/status-network/components'
+import { ButtonLink, Link } from '@status-im/status-network/components'
 import Image from 'next/image'
 
 import { HubLayout } from '~components/hub-layout'
@@ -32,8 +32,8 @@ export default function DashboardPage() {
         {/* Main Content Card */}
         <div className="mx-auto mt-7 w-full max-w-[1176px]">
           <div className="mb-8 rounded-32 p-0 lg:bg-neutral-2.5 lg:p-8">
-            <div className="mb-6 flex items-start justify-between">
-              <div className="max-w-2xl">
+            <div className="mb-8 flex items-start justify-between">
+              <div className="flex flex-col gap-4">
                 <h3 className="text-19 font-600 text-neutral-90 lg:text-27">
                   Deposit funds for yield and rewards
                 </h3>
@@ -51,8 +51,20 @@ export default function DashboardPage() {
                     ))}
                   </div>
                   <p className="text-15 text-neutral-60">
-                    Rewards in KARMA, SNT, LINEA, MetaFi and points from native
-                    apps
+                    Rewards in KARMA, SNT, LINEA and points from Generic
+                    Protocol and native apps. Funds will be unlocked at mainnet
+                    launch.
+                    <br />
+                    All contracts have been{' '}
+                    <Link
+                      href="https://github.com/aragon/status-predeposit-vaults/blob/development/audit/report-aragon-pre-deposit-vaults.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-purple hover:text-purple-dark"
+                    >
+                      audited
+                    </Link>
+                    .
                   </p>
                 </div>
               </div>
