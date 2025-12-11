@@ -198,7 +198,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
         </li>
         <li className="flex items-center gap-2 text-15">
           <span className="flex size-5 items-center justify-center rounded-full border border-neutral-50 text-neutral-50">
-            &Delta;
+            &Sigma;
           </span>
           <span>{formattedTokenAmount ?? '0'}</span>
         </li>
