@@ -8,7 +8,7 @@ import { formatUnits } from 'viem'
 import { EXTEND_LOCK_PERIOD, STT_TOKEN } from '~constants/index'
 import { type StakingVault } from '~hooks/useStakingVaults'
 import { shortenAddress } from '~utils/address'
-import { formatSNT } from '~utils/currency'
+import { formatSNT, formatSTT } from '~utils/currency'
 import { calculateDaysUntilUnlock, isVaultLocked } from '~utils/vault'
 
 import { LockVaultModal } from './modals/lock-vault-modal'
@@ -84,7 +84,7 @@ const EXTEND_LOCK_ACTIONS = [
 const LOCK_VAULT_ACTIONS = [{ label: "Don't lock" }, { label: 'Lock' }] as const
 
 const LOCK_INFO_MESSAGE =
-  'Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more SNT at any time, but withdrawing your SNT is only possible once the vault unlocks.' as const
+  'Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more STT at any time, but withdrawing your STT is only possible once the vault unlocks.' as const
 
 export const createVaultTableColumns = ({
   vaults = [],
@@ -149,8 +149,7 @@ export const createVaultTableColumns = ({
         return (
           <div className="flex items-center gap-1">
             <span className="text-13 font-medium text-neutral-100">
-              {formatSNT(balance || 0n)}
-              <span className="ml-0.5 text-neutral-50">SNT</span>
+              {formatSTT(balance || 0n, { includeSymbol: true })}
             </span>
           </div>
         )
@@ -158,8 +157,7 @@ export const createVaultTableColumns = ({
       footer: () => {
         return (
           <span className="text-13 font-medium text-neutral-100">
-            {formatSNT(totalStaked)}
-            <span className="ml-0.5 text-neutral-50">SNT</span>
+            {formatSTT(totalStaked, { includeSymbol: true })}
           </span>
         )
       },

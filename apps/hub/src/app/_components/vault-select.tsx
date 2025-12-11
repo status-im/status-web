@@ -10,7 +10,7 @@ import {
   UnlockedIcon,
 } from '@status-im/icons/20'
 
-import { formatSNT } from '~utils/currency'
+import { formatSTT } from '~utils/currency'
 import { isVaultLocked } from '~utils/vault'
 
 import type { StakingVault } from '~hooks/useStakingVaults'
@@ -53,12 +53,12 @@ interface VaultSelectProps {
  */
 function getVaultLabel(vault: StakingVault, index: number): string {
   const stakedAmount = vault.data?.stakedBalance
-    ? formatSNT(vault.data.stakedBalance)
-    : '0'
+    ? formatSTT(vault.data.stakedBalance, { includeSymbol: true })
+    : '0 STT'
 
-  // Format: #1 - 0xd233...34c4, 100,000,000 SNT
+  // Format: #1 - 0xd233...34c4, 100,000,000 STT
   const shortAddress = `${vault.address.slice(0, 6)}...${vault.address.slice(-4)}`
-  return `#${index + 1} - ${shortAddress}, ${stakedAmount} SNT`
+  return `#${index + 1} - ${shortAddress}, ${stakedAmount}`
 }
 
 // ============================================================================

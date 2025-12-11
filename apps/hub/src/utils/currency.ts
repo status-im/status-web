@@ -195,6 +195,16 @@ export function formatSNT(
   })
 }
 
+export function formatSTT(
+  amount: number | bigint | string,
+  options: Omit<FormatTokenOptions, 'tokenDecimals'> = {}
+): string {
+  return formatTokenAmount(amount, 'STT', {
+    ...options,
+    tokenDecimals: DEFAULT_TOKEN_DECIMALS, // STT has 18 decimals
+  })
+}
+
 /**
  * Format KARMA token amount
  *

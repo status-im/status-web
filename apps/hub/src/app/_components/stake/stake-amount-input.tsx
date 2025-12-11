@@ -2,7 +2,7 @@ import { Skeleton } from '@status-im/components'
 import { type UseFormRegister } from 'react-hook-form'
 
 import { SNTIcon } from '~components/icons'
-import { formatCurrency, formatSNT } from '~utils/currency'
+import { formatCurrency, formatSTT } from '~utils/currency'
 
 type StakeAmountInputProps = {
   balance?: bigint
@@ -54,7 +54,7 @@ const StakeAmountInput = ({
           )}
           <div className="flex items-center gap-1">
             <SNTIcon />
-            <span className="text-19 font-semibold text-neutral-80">SNT</span>
+            <span className="text-19 font-semibold text-neutral-80">STT</span>
           </div>
         </div>
 
@@ -75,7 +75,7 @@ const StakeAmountInput = ({
                     onClick={onMaxClick}
                     className={`uppercase ${exceedsBalance ? 'text-danger-50' : 'text-neutral-100'}`}
                   >
-                    {`MAX ${formatSNT(balance ?? 0)} SNT`}
+                    {`MAX ${formatSTT(balance ?? 0, { includeSymbol: true })}`}
                   </button>
                 </>
               )}

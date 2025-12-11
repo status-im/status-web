@@ -67,10 +67,10 @@ export default function StakePage() {
       <div className="mx-auto flex size-full flex-col gap-8 p-4 md:p-8">
         <header className="flex flex-col gap-2">
           <h1 className="text-27 font-bold md:text-40">
-            Stake SNT, receive good Karma
+            Stake STT, receive good Karma
           </h1>
           <p className="text-13 md:text-19">
-            Stake SNT to increase your Karma, unlock more gasless transactions
+            Stake STT to increase your Karma, unlock more gasless transactions
             and increase your power over the network
           </p>
         </header>

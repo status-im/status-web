@@ -49,7 +49,7 @@ const StakeFormSkeleton = () => {
               <div className="flex items-center gap-1">
                 <SNTIcon />
                 <span className="text-19 font-semibold text-neutral-80">
-                  SNT
+                  STT
                 </span>
               </div>
             </div>
@@ -79,7 +79,7 @@ const StakeFormSkeleton = () => {
       </div>
 
       <Button disabled type="button" className="w-full justify-center">
-        Stake SNT
+        Stake STT
       </Button>
     </div>
   )
@@ -333,7 +333,7 @@ const StakeForm = () => {
                 type="submit"
                 disabled={Boolean(emergencyModeEnabled) || exceedsBalance}
               >
-                Stake SNT
+                Stake STT
               </Button>
             ) : (
               <Button

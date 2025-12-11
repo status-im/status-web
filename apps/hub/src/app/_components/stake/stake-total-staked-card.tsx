@@ -4,7 +4,7 @@ import { useAccount, useReadContract } from 'wagmi'
 import { SNTIcon } from '~components/icons'
 import { STAKE_PAGE_CONSTANTS, STAKING_MANAGER } from '~constants/index'
 
-import { formatSNT } from '../../../utils/currency'
+import { formatSTT } from '../../../utils/currency'
 import { useEmergencyModeEnabled } from '../../_hooks/useEmergencyModeEnabled'
 
 const TotalStakedCardSkeleton = () => {
@@ -47,7 +47,7 @@ const TotalStakedCard = () => {
       <div className="mb-4 flex items-end gap-2">
         <SNTIcon />
         <span className="text-27 font-600">
-          {formatSNT((totalStaked as bigint) ?? 0n, { includeSymbol: true })}
+          {formatSTT((totalStaked as bigint) ?? 0n, { includeSymbol: true })}
         </span>
       </div>
       <p className="text-13 font-500 text-neutral-40">

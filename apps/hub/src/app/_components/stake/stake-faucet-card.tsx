@@ -11,14 +11,16 @@ import { useAccount, useBalance } from 'wagmi'
 import { STT_TOKEN } from '~constants/index'
 import { TIME_CONSTANTS } from '~constants/staking'
 import { useFaucetMutation, useFaucetQuery } from '~hooks/useFaucet'
-import { formatSNT } from '~utils/currency'
+import { formatSTT } from '~utils/currency'
 
 import { useEmergencyModeEnabled } from '../../_hooks/useEmergencyModeEnabled'
 
 const FaucetCardSkeleton = () => {
   return (
     <div className="flex flex-col gap-6 rounded-16 border border-neutral-10 bg-white-100 p-6 shadow-2 md:flex-row md:items-center md:justify-between md:gap-8 md:rounded-32 md:py-4 md:pl-4 md:pr-8">
-      <h3 className="text-19 font-500 md:hidden">Free Testnet SNT faucet</h3>
+      <h3 className="text-19 font-500 md:hidden">
+        Free Testnet SNT (STT) faucet
+      </h3>
 
       <div className="flex items-end gap-4 md:items-center md:gap-6">
         <Image
@@ -31,7 +33,7 @@ const FaucetCardSkeleton = () => {
 
         <div className="flex flex-col gap-4">
           <h3 className="hidden text-19 font-500 md:block">
-            Free Testnet SNT faucet
+            Free Testnet SNT (STT) faucet
           </h3>
           <div className="flex flex-col flex-wrap gap-x-14 gap-y-2 lg:flex-row">
             <div className="flex flex-col gap-1.5 text-13 font-500">
@@ -51,7 +53,7 @@ const FaucetCardSkeleton = () => {
       </div>
 
       <Button className="self-end" disabled>
-        Claim testnet SNT
+        Claim testnet SNT (STT)
       </Button>
     </div>
   )
@@ -93,7 +95,9 @@ const FaucetCard = () => {
 
   return (
     <div className="flex flex-col gap-6 rounded-16 border border-neutral-10 bg-white-100 p-6 shadow-2 md:flex-row md:items-center md:justify-between md:gap-8 md:rounded-32 md:py-4 md:pl-4 md:pr-8">
-      <h3 className="text-19 font-500 md:hidden">Free Testnet SNT faucet</h3>
+      <h3 className="text-19 font-500 md:hidden">
+        Free Testnet SNT (STT) faucet
+      </h3>
 
       <div className="flex items-end gap-4 md:items-center md:gap-6">
         <Image
@@ -106,25 +110,31 @@ const FaucetCard = () => {
 
         <div className="flex flex-col gap-4">
           <h3 className="hidden text-19 font-500 md:block">
-            Free Testnet SNT faucet
+            Free Testnet SNT (STT) faucet
           </h3>
           <div className="flex flex-col flex-wrap gap-x-14 gap-y-2 lg:flex-row">
             <div className="flex flex-col gap-1.5 text-13 font-500">
               <p className="text-neutral-50">Daily limit</p>
               <span className="text-15 font-500">
-                {formatSNT(faucetData?.dailyLimit ?? 0)} SNT
+                {formatSTT(faucetData?.dailyLimit ?? 0, {
+                  includeSymbol: true,
+                })}
               </span>
             </div>
             <div className="flex flex-col gap-1.5 text-13 font-500">
               <p className="text-neutral-50">Used today</p>
               <span className="text-15 font-500">
-                {formatSNT(faucetData?.actualUsedToday ?? 0)} SNT
+                {formatSTT(faucetData?.actualUsedToday ?? 0, {
+                  includeSymbol: true,
+                })}
               </span>
             </div>
             <div className="flex flex-col gap-1.5 text-13 font-500">
               <p className="text-neutral-50">Available</p>
               <span className="text-15 font-500">
-                {formatSNT(faucetData?.remainingAmount ?? 0)} SNT
+                {formatSTT(faucetData?.remainingAmount ?? 0, {
+                  includeSymbol: true,
+                })}
               </span>
             </div>
           </div>
@@ -151,7 +161,7 @@ const FaucetCard = () => {
           )
         }
       >
-        {isClaimingTokens ? 'Claiming...' : 'Claim testnet SNT'}
+        {isClaimingTokens ? 'Claiming...' : 'Claim testnet SNT (STT)'}
       </Button>
     </div>
   )

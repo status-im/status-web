@@ -18,7 +18,7 @@ import { useCompoundMultiplierPoints } from '~hooks/useCompoundMultiplierPoints'
 import { useMultiplierPointsBalance } from '~hooks/useMultiplierPoints'
 import { useStakingVaults } from '~hooks/useStakingVaults'
 import { useWeightedBoost } from '~hooks/useWeightedBoost'
-import { formatSNT } from '~utils/currency'
+import { formatSTT } from '~utils/currency'
 
 import { useEmergencyModeEnabled } from '../../_hooks/useEmergencyModeEnabled'
 
@@ -30,7 +30,7 @@ const InfoTooltip = () => (
     content={
       <div className="flex w-[286px] flex-col gap-4 rounded-8 bg-white-100 p-4">
         <span className="text-13 text-neutral-100">
-          The longer SNT is staked or locked in vaults, the higher this
+          The longer STT is staked or locked in vaults, the higher this
           multiplier goes. This rewards long term believers. The maximum
           multiplier is x{MAX_BOOST}.
         </span>
@@ -91,7 +91,7 @@ const WeightedBoostCard = () => {
     const totalUncompounded =
       multiplierPointsData?.totalUncompounded ?? DEFAULT_MP_VALUE
     const hasUncompoundedPoints = totalUncompounded > DEFAULT_MP_VALUE
-    const formattedAmount = formatSNT(
+    const formattedAmount = formatSTT(
       formatUnits(totalUncompounded, STT_TOKEN.decimals),
       {
         decimals: STT_TOKEN.decimals,
