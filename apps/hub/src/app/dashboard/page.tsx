@@ -58,7 +58,7 @@ export default function DashboardPage() {
               </div>
               <ButtonLink
                 variant="outline"
-                href="https://status-im.gitbook.io/status-network/user-guides/hub"
+                href="https://status-im.notion.site/status-network-pre-deposit"
                 className="bg-white-100"
                 size="32"
                 icon={<ExternalIcon className="text-neutral-50" />}
