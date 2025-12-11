@@ -11,10 +11,10 @@ export default function SNTIcon() {
         quality="100"
       />
       <Image
-        src="/tokens/karma.png"
+        src="/networks/ethereum.png"
         width="24"
         height="24"
-        alt="Karma"
+        alt="Ethereum"
         className="absolute -bottom-0.5 -right-1 size-[14px] rounded-full border-2 border-white-100"
       />
     </div>
