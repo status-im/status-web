@@ -35,7 +35,7 @@ export async function GET(
   if (platform === 'android') {
     const release = await octokit.repos.getLatestRelease({
       owner: 'status-im',
-      repo: 'status-mobile',
+      repo: 'status-legacy',
     })
 
     await track('Download', {
