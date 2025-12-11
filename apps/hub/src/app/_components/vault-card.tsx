@@ -142,7 +142,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
             <div className="flex w-[286px] flex-col gap-4 rounded-8 bg-white-100 p-4">
               <span className="text-13 text-neutral-100">
                 Estimated APY based on TVL and total available liquid token
-                rewards across all vaults: 20M SNT + 20M LINEA
+                rewards across all vaults: 15M SNT + 20M LINEA
               </span>
             </div>
           }
