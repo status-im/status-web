@@ -10,7 +10,7 @@ const octokit = new Octokit({
 
 export type GitHubRelease = Awaited<ReturnType<typeof getLatestRelease>>
 
-type Repo = 'status-mobile' | 'status-desktop'
+type Repo = 'status-mobile' | 'status-app'
 
 export async function getLatestRelease({ repo }: { repo: Repo }) {
   const release = await octokit.rest.repos.getLatestRelease({

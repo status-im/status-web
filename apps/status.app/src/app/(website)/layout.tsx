@@ -19,7 +19,7 @@ export default async function WebsiteLayout(props: Props) {
 
   const [mobileRelease, desktopRelease] = await Promise.all([
     getLatestRelease({ repo: 'status-mobile' }),
-    getLatestRelease({ repo: 'status-desktop' }),
+    getLatestRelease({ repo: 'status-app' }),
   ]).catch(error => {
     console.error('Failed to fetch GitHub releases', error)
     return [null, null]

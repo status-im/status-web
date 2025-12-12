@@ -52,7 +52,7 @@ export async function getMilestones() {
         },
         {
           repository: {
-            _eq: 'status-im/status-desktop',
+            _eq: 'status-im/status-app',
           },
         },
       ],

@@ -1,5 +1,11 @@
 # connector
 
+## 0.0.6
+
+### Patch Changes
+
+- 8d4b40e: Change status-desktop to status-app and status-mobile to status-legacy
+
 ## 0.0.5
 
 ### Patch Changes

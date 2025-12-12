@@ -1,5 +1,14 @@
 # status.app
 
+## 0.1.1
+
+### Patch Changes
+
+- 9c3823b: upgrade next
+- 8d4b40e: Change status-desktop to status-app and status-mobile to status-legacy
+- Updated dependencies [808b782]
+  - @status-im/js@1.2.1
+
 ## 0.1.0
 
 ### Minor Changes

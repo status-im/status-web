@@ -2,6 +2,7 @@ import { create, toBinary } from '@bufbuild/protobuf'
 import { createDecoder } from '@waku/message-encryption/symmetric'
 import { hexToBytes } from 'ethereum-cryptography/utils'
 
+import { getRoutingInfo, SHARDS } from '../../consts/waku'
 import { getDifferenceByKeys } from '../../helpers/get-difference-by-keys'
 import { getObjectsDifference } from '../../helpers/get-objects-difference'
 import { ApplicationMetadataMessage_Type } from '../../protos/application-metadata-message_pb'
@@ -92,44 +93,42 @@ export class Community {
   }
 
   public fetch = async () => {
-    // most recent page first
-    await this.client.waku.store.queryWithOrderedCallback(
-      [
-        createDecoder(
-          this.contentTopic,
-          {
-            clusterId: 16,
-            shardId: 32,
-            pubsubTopic: '/waku/2/rs/16/32',
-          },
-          this.symmetricKey,
-        ),
-      ],
-      wakuMessage => {
-        this.client.handleWakuMessage(wakuMessage)
+    for (const shardId of SHARDS) {
+      const decoder = createDecoder(
+        this.contentTopic,
+        getRoutingInfo(shardId),
+        this.symmetricKey,
+      )
+      // most recent page first
+      await this.client.waku.store.queryWithOrderedCallback(
+        [decoder],
+        wakuMessage => {
+          this.client.handleWakuMessage(wakuMessage)
 
-        if (this.description) {
-          return true
-        }
-      },
-    )
+          if (this.description) {
+            return true
+          }
+        },
+      )
+
+      if (this.description) {
+        break
+      }
+    }
 
     return this.description
   }
 
   private observe = async () => {
+    const decoders = SHARDS.map(shardId =>
+      createDecoder(
+        this.contentTopic,
+        getRoutingInfo(shardId),
+        this.symmetricKey,
+      ),
+    )
     await this.client.waku.filter.subscribe(
-      [
-        createDecoder(
-          this.contentTopic,
-          {
-            clusterId: 16,
-            shardId: 32,
-            pubsubTopic: '/waku/2/rs/16/32',
-          },
-          this.symmetricKey,
-        ),
-      ],
+      decoders,
       this.client.handleWakuMessage,
     )
   }
@@ -149,23 +148,21 @@ export class Community {
 
         this.chats.set(chatUuid, chat)
 
-        const decoder = createDecoder(
-          chat.contentTopic,
-          {
-            clusterId: 16,
-            shardId: 32,
-            pubsubTopic: '/waku/2/rs/16/32',
-          },
-          chat.symmetricKey,
+        const decoders = SHARDS.map(shardId =>
+          createDecoder(
+            chat.contentTopic,
+            getRoutingInfo(shardId),
+            chat.symmetricKey,
+          ),
         )
 
         await this.client.waku.filter.subscribe(
-          [decoder],
+          decoders,
           this.client.handleWakuMessage,
         )
 
         const unobserveFn = () => {
-          this.client.waku.filter.unsubscribe([decoder])
+          this.client.waku.filter.unsubscribe(decoders)
         }
 
         this.#chatUnobserveFns.set(chat.contentTopic, unobserveFn)
