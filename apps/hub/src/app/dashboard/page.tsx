@@ -1,38 +1,48 @@
 'use client'
 
+import { useState } from 'react'
+
 import { ExternalIcon } from '@status-im/icons/20'
 import { ButtonLink, Link } from '@status-im/status-network/components'
 import Image from 'next/image'
 
 import { HubLayout } from '~components/hub-layout'
+import { PreDepositModal } from '~components/pre-deposit-modal'
 import { VaultCard } from '~components/vault-card'
+import { type Vault, VAULTS } from '~constants/index'
 
 import { Apps } from '../_components/apps'
 import { Hero } from '../_components/hero'
 
-const REWARDS = ['karma', 'linea', 'snt']
+export const REWARDS = ['KARMA', 'SNT', 'LINEA']
 
 export default function DashboardPage() {
+  const [selectedVault, setSelectedVault] = useState<Vault | null>(null)
+
+  const defaultVault = VAULTS.find(v => v.id === 'SNT') ?? VAULTS[0]
+
+  const activeVaults = VAULTS.filter(v => !v.soon)
+
   return (
     <HubLayout>
-      <div className="flex flex-col px-6 py-8">
+      <div className="flex flex-col p-4 lg:px-6 lg:py-8">
         {/* Hero Section */}
         <Hero />
 
         {/* Main Content Card */}
         <div className="mx-auto mt-7 w-full max-w-[1176px]">
-          <div className="mb-8 rounded-32 bg-neutral-2.5 p-8">
-            <div className="mb-6 flex items-start justify-between">
-              <div className="max-w-2xl">
-                <h3 className="mb-2 text-27 font-600 text-neutral-90">
+          <div className="mb-8 rounded-32 p-0 lg:bg-neutral-2.5 lg:p-8">
+            <div className="mb-8 flex items-start justify-between">
+              <div className="flex flex-col gap-4">
+                <h3 className="text-19 font-600 text-neutral-90 lg:text-27">
                   Deposit funds for yield and rewards
                 </h3>
-                <div className="flex items-center">
+                <div className="flex flex-col gap-2 lg:flex-row lg:items-start">
                   <div className="flex -space-x-2">
                     {REWARDS.map((reward, index) => (
                       <Image
                         key={index}
-                        src={`/tokens/${reward}.png`}
+                        src={`/tokens/${reward.toLowerCase()}.png`}
                         alt={reward}
                         width="22"
                         height="22"
@@ -40,96 +50,95 @@ export default function DashboardPage() {
                       />
                     ))}
                   </div>
-                  <p className="ml-1 text-15 text-neutral-60">
-                    Rewards in KARMA, SNT, LINEA, MetaFi and points from native
-                    apps
+                  <p className="text-15 text-neutral-60">
+                    Rewards in KARMA, SNT, LINEA and points from Generic
+                    Protocol and native apps. Funds will be unlocked at mainnet
+                    launch.
+                    <br />
+                    All contracts have been{' '}
+                    <Link
+                      href="https://github.com/aragon/status-predeposit-vaults/blob/development/audit/report-aragon-pre-deposit-vaults.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-purple hover:text-purple-dark"
+                    >
+                      audited
+                    </Link>
+                    .
                   </p>
                 </div>
               </div>
               <ButtonLink
                 variant="outline"
+                href="https://status-im.notion.site/status-network-pre-deposit"
+                className="bg-white-100"
                 size="32"
-                href="https://status-im.gitbook.io/status-network/user-guides/hub"
+                icon={<ExternalIcon className="text-neutral-50" />}
               >
                 Learn more
-                <ExternalIcon className="text-neutral-50" />
               </ButtonLink>
             </div>
 
-            {/* Vault Cards Grid */}
-            <section className="relative ml-auto w-full max-w-[906px]">
+            <section className="relative w-full">
+              <div className="-mx-4 flex gap-4 overflow-x-auto px-4 pb-4 lg:mx-0 lg:ml-40 lg:grid lg:grid-cols-2 lg:items-stretch lg:gap-6 lg:overflow-visible lg:px-0 lg:pb-0">
+                {VAULTS.map(vault => (
+                  <div
+                    key={vault.id}
+                    className="w-[200px] shrink-0 lg:h-full lg:w-auto"
+                  >
+                    <VaultCard
+                      vault={vault}
+                      onDeposit={() => setSelectedVault(vault)}
+                    />
+                  </div>
+                ))}
+              </div>
               <Image
                 src="/dragon.png"
                 alt="Dragon"
                 width="354"
                 height="320"
-                className="absolute left-[-290px] top-[120px]"
+                className="relative m-auto lg:absolute lg:left-[-127px] lg:top-[120px]"
               />
-              <div className="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2">
-                <VaultCard
-                  name="ETH vault"
-                  apy="5.2%"
-                  rewards={['KARMA', 'SNT', 'LINEA']}
-                  icon="ETH"
-                  onDeposit={() => console.log('Deposit to ETH vault')}
-                />
-                <VaultCard
-                  name="SNT vault"
-                  apy="8.7%"
-                  rewards={['KARMA', 'MetaFi', 'Points']}
-                  icon="SNT"
-                  onDeposit={() => console.log('Deposit to SNT vault')}
-                />
-                <VaultCard
-                  name="USDC vault"
-                  apy="3.9%"
-                  rewards={['KARMA', 'SNT', 'Points']}
-                  icon="USDC"
-                  onDeposit={() => console.log('Deposit to USDC vault')}
-                />
-                <VaultCard
-                  name="LINEA vault"
-                  apy="6.1%"
-                  rewards={['KARMA', 'MetaFi', 'LINEA']}
-                  icon="LINEA"
-                  onDeposit={() => console.log('Deposit to LINEA vault')}
-                />
-              </div>
             </section>
           </div>
           <Apps />
         </div>
 
-        <div className="py-12">
-          <div className="flex flex-col items-center gap-8 lg:flex-row lg:items-center lg:justify-center">
-            <div className="max-w-2xl">
-              <h3 className="mb-3 text-64 font-bold text-neutral-90">
+        <div className="pb-8 pt-4 lg:py-12">
+          <div className="flex flex-col items-center justify-center gap-8 text-center lg:flex-row lg:items-center lg:justify-center lg:text-left">
+            <div className="order-2 max-w-2xl lg:order-1">
+              <h3 className="mb-2 text-27 font-medium text-neutral-90 lg:mb-3 lg:text-64 lg:font-bold">
                 Build with us
               </h3>
-              <p className="mb-8 text-27 font-medium text-neutral-60">
+              <p className="mb-4 text-13 font-medium text-neutral-60 lg:mb-8 lg:text-27">
                 Launch your app on the free network
               </p>
 
-              <div className="flex flex-wrap gap-3">
-                <Link
-                  href="/"
-                  className="inline-flex items-center gap-2 rounded-12 bg-purple px-5 py-3 text-15 font-600 text-white-100 transition-colors hover:bg-purple-dark"
+              <div className="flex flex-wrap justify-center gap-3 lg:justify-start">
+                <ButtonLink
+                  href="https://docs.status.network"
+                  variant="primary"
+                  size="32"
+                  className="text-white-100"
+                  icon={<ExternalIcon className="text-blur-white/70" />}
                 >
-                  Explore documentation
-                  <ExternalIcon className="text-blur-white/70" />
-                </Link>
+                  Read docs
+                </ButtonLink>
 
-                <Link
-                  href="/"
-                  className="inline-flex items-center gap-2 rounded-12 bg-neutral-10 px-5 py-3 text-15 font-600 text-neutral-90 ring-1 ring-inset ring-neutral-20 transition-colors hover:bg-neutral-80/20"
+                <ButtonLink
+                  href="https://statusnetwork.typeform.com/partner"
+                  variant="grey"
+                  size="32"
+                  className="bg-neutral-10 text-neutral-100"
+                  icon={<ExternalIcon className="text-neutral-50" />}
                 >
                   Submit an app
-                  <ExternalIcon className="text-neutral-50" />
-                </Link>
+                </ButtonLink>
               </div>
             </div>
 
-            <div className="relative w-full max-w-[420px]">
+            <div className="relative order-1 w-full max-w-[420px] lg:order-2">
               <Image
                 src="/build-unicorn.png"
                 alt="Unicorn"
@@ -141,6 +150,13 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+      <PreDepositModal
+        open={selectedVault !== null}
+        onOpenChange={open => !open && setSelectedVault(null)}
+        vault={selectedVault ?? defaultVault}
+        vaults={activeVaults}
+        setActiveVault={setSelectedVault}
+      />
     </HubLayout>
   )
 }

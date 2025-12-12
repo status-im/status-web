@@ -5,7 +5,7 @@ import {
   BOOST_DECIMALS,
   DEFAULT_MP_VALUE,
   DEFAULT_VAULT_BOOST,
-  SNT_TOKEN,
+  STT_TOKEN,
   TIME_CONSTANTS,
 } from '~constants/index'
 
@@ -28,11 +28,11 @@ export function calculateVaultBoost(
   const vaultStaked = Number(
     formatUnits(
       account.data?.stakedBalance || DEFAULT_MP_VALUE,
-      SNT_TOKEN.decimals
+      STT_TOKEN.decimals
     )
   )
   const vaultMp = Number(
-    formatUnits(account.data?.mpAccrued || DEFAULT_MP_VALUE, SNT_TOKEN.decimals)
+    formatUnits(account.data?.mpAccrued || DEFAULT_MP_VALUE, STT_TOKEN.decimals)
   )
   // Add BASE_BOOST to reflect the boost (base multiplier is 1x)
   const boost = vaultMp / vaultStaked + BASE_BOOST

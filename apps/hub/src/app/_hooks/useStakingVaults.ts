@@ -1,10 +1,11 @@
+import { useToast } from '@status-im/components'
 import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { type Address } from 'viem'
 import { useAccount, useChainId, useConfig } from 'wagmi'
 import { readContract, readContracts } from 'wagmi/actions'
 
 import { vaultAbi } from '~constants/contracts'
-import { CACHE_CONFIG, STAKING_MANAGER } from '~constants/index'
+import { CACHE_CONFIG, STAKING_MANAGER, STT_TOKEN } from '~constants/index'
 
 // ============================================================================
 // Types
@@ -29,6 +30,8 @@ export interface StakingVaultData {
   lockUntil: bigint
   /** Total rewards accrued and available for claiming */
   rewardsAccrued: bigint
+  /** Actual token balance in the vault (from balanceOf) - reliable in emergency mode */
+  depositedBalance: bigint
 }
 
 /**
@@ -112,32 +115,45 @@ async function fetchVaultData(
           functionName: 'lockUntil',
           args: [],
         },
+        {
+          chainId,
+          address: STT_TOKEN.address,
+          abi: STT_TOKEN.abi,
+          functionName: 'balanceOf',
+          args: [vaultAddress],
+        },
       ],
     })
 
-    // Check if both contract calls succeeded
-    const [vaultResult, lockUntilResult] = results
+    // Check if all contract calls succeeded
+    const [vaultResult, lockUntilResult, depositedBalanceResult] = results
 
     if (
       vaultResult.status !== 'success' ||
-      lockUntilResult.status !== 'success'
+      lockUntilResult.status !== 'success' ||
+      depositedBalanceResult.status !== 'success'
     ) {
       console.error(
         `Failed to fetch vault data for ${vaultAddress}:`,
         vaultResult.status !== 'success'
           ? vaultResult.error
-          : lockUntilResult.error
+          : lockUntilResult.status !== 'success'
+            ? lockUntilResult.error
+            : depositedBalanceResult.error
       )
-      return null
     }
-
     // Extract the actual data from successful results
-    const vaultData = vaultResult.result as Omit<StakingVaultData, 'lockUntil'>
+    const vaultData = vaultResult.result as Omit<
+      StakingVaultData,
+      'lockUntil' | 'depositedBalance'
+    >
     const lockUntil = lockUntilResult.result as bigint
+    const depositedBalance = depositedBalanceResult.result as bigint
 
     return {
       ...vaultData,
       lockUntil,
+      depositedBalance,
     }
   } catch (error) {
     // Log error for debugging but don't throw - allows partial results
@@ -229,6 +245,7 @@ export function useStakingVaults(
   const { address } = useAccount()
   const config = useConfig()
   const chainId = useChainId()
+  const toast = useToast()
 
   return useQuery<StakingVault[], Error>({
     queryKey: [QUERY_KEY, address, chainId],
@@ -238,21 +255,28 @@ export function useStakingVaults(
         return []
       }
 
-      // Step 1: Fetch all vault addresses for the account
-      const vaultAddresses = await fetchAccountVaultAddresses(
-        config,
-        chainId,
-        address
-      )
-
-      // Step 2: Fetch detailed data for each vault in parallel
-      const vaults = await Promise.all(
-        vaultAddresses.map(vaultAddress =>
-          enrichVaultWithData(config, chainId, vaultAddress)
+      try {
+        // Step 1: Fetch all vault addresses for the account
+        const vaultAddresses = await fetchAccountVaultAddresses(
+          config,
+          chainId,
+          address
         )
-      )
 
-      return vaults
+        // Step 2: Fetch detailed data for each vault in parallel
+        const vaults = await Promise.all(
+          vaultAddresses.map(vaultAddress =>
+            enrichVaultWithData(config, chainId, vaultAddress)
+          )
+        )
+
+        return vaults
+      } catch (error) {
+        toast.negative(
+          `Failed to fetch staking vaults: ${error instanceof Error ? error.message : 'Unknown error'}`
+        )
+        throw error
+      }
     },
     enabled: options?.enabled ?? !!address,
     staleTime: options?.staleTime ?? CACHE_CONFIG.DEFAULT_STALE_TIME,
