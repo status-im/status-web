@@ -21,6 +21,7 @@ import { useApproveToken } from '~hooks/useApprovePreDepositToken'
 import { useDepositFlow } from '~hooks/useDepositFlow'
 import { useExchangeRate } from '~hooks/useExchangeRate'
 import { usePreDepositVault } from '~hooks/usePreDepositVault'
+import { useVaultsAPY } from '~hooks/useVaultsAPY'
 import { formatCurrency, formatTokenAmount } from '~utils/currency'
 
 import { VaultImage } from './vault-image'
@@ -104,6 +105,10 @@ const PreDepositModal = ({
   const { data: exchangeRate } = useExchangeRate({
     token: vault.token.priceKey || vault.token.symbol,
   })
+
+  const { data: apyMap } = useVaultsAPY()
+  const dynamicApy = apyMap?.[vault.address.toLowerCase()]
+  const apyValue = dynamicApy !== undefined ? String(dynamicApy) : null
 
   const amountInUSD = useMemo(() => {
     const amountInputNumber = parseFloat(amountValue || '0')
@@ -377,7 +382,11 @@ const PreDepositModal = ({
                       <span className="text-neutral-50">
                         <PercentIcon />
                       </span>
-                      <span className="text-neutral-100">{vault.apy} APY</span>
+                      <span className="text-neutral-100">
+                        {apyValue
+                          ? `${apyValue}% liquid APY`
+                          : 'Liquid APY TBD'}
+                      </span>
                     </div>
                     <div className="flex items-center gap-2 text-15">
                       <span className="text-neutral-50">
