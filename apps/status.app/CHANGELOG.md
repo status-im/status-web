@@ -1,5 +1,12 @@
 # status.app
 
+## 0.1.2
+
+### Patch Changes
+
+- 06ceddc: Fix React Server Components CVE vulnerabilities
+- f79c133: revert status-mobile rename to status-legacy
+
 ## 0.1.1
 
 ### Patch Changes
