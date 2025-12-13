@@ -34,6 +34,10 @@ Required:
 - **[Node.js](https://nodejs.org/)** v22.x
 - **[pnpm](https://pnpm.io)** v9.12.x
 
+Optional:
+
+- **[Nix](https://nixos.org/download.html)** 2.32.x
+
 ## Stack
 
 - **Turborepo**: Manages our monorepo and speeds up builds
@@ -54,6 +58,13 @@ Required:
           git clone https://github.com/status-im/status-web.git
           cd status-web
 
+> [!NOTE]
+> If using Nix, enter development shell:
+>
+> ```bash
+> nix develop
+> ```
+
 2.  Install dependencies:
 
          pnpm install
@@ -67,24 +78,8 @@ Required:
          pnpm test
 
 5.  Start development mode:
-    pnpm dev
 
-## Development Environment Using Nix
-
-This project includes a Nix flake that provides a reproducible development environment with all required dependencies (Node.js, pnpm, etc.) pre-configured.
-
-### Prerequisites
-
-- [Nix package manager](https://nixos.org/download.html) installed with flakes enabled
-
-### Setup
-
-After cloning the repository:
-
-```bash
-# Enter the Nix development shell
-nix develop
-```
+        pnpm dev
 
 ## Storybook
 
@@ -93,6 +88,10 @@ To view and interact with the components, you can run Storybook:
     pnpm storybook
 
 This will start the Storybook server, allowing you to browse and test components in isolation.
+
+## Publishing
+
+To publish packages to npm registry merge PR named Release, which is automatically created and updated by Changeset on merge of any other PR containing changesets files.
 
 ## Sponsors
 
