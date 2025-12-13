@@ -10,7 +10,7 @@ import {
   UnlockedIcon,
 } from '@status-im/icons/20'
 
-import { formatSNT } from '~utils/currency'
+import { formatSTT } from '~utils/currency'
 import { isVaultLocked } from '~utils/vault'
 
 import type { StakingVault } from '~hooks/useStakingVaults'
@@ -53,12 +53,12 @@ interface VaultSelectProps {
  */
 function getVaultLabel(vault: StakingVault, index: number): string {
   const stakedAmount = vault.data?.stakedBalance
-    ? formatSNT(vault.data.stakedBalance)
-    : '0'
+    ? formatSTT(vault.data.stakedBalance, { includeSymbol: true })
+    : '0 STT'
 
-  // Format: #1 - 0xd233...34c4, 100,000,000 SNT
+  // Format: #1 - 0xd233...34c4, 100,000,000 STT
   const shortAddress = `${vault.address.slice(0, 6)}...${vault.address.slice(-4)}`
-  return `#${index + 1} - ${shortAddress}, ${stakedAmount} SNT`
+  return `#${index + 1} - ${shortAddress}, ${stakedAmount}`
 }
 
 // ============================================================================
@@ -114,7 +114,7 @@ export function VaultSelect({
     <button
       type="button"
       disabled={disabled}
-      className="flex w-full items-center justify-between rounded-12 border border-neutral-20 bg-white-100 px-3 py-[9px] text-left text-15 text-neutral-100 transition data-[state=open]:border-neutral-30 hover:border-neutral-30"
+      className="flex w-full items-center justify-between rounded-12 border border-neutral-20 bg-white-100 px-3 py-[9px] text-left text-15 text-neutral-100 transition data-[state=open]:border-neutral-30 hover:border-neutral-30 disabled:cursor-not-allowed disabled:opacity-[.4]"
     >
       <div className="flex min-w-0 items-center gap-2">
         {selectedVault ? (
@@ -178,7 +178,13 @@ export function VaultSelect({
   )
 
   return (
-    <DropdownMenu.Root open={open} onOpenChange={setOpen}>
+    <DropdownMenu.Root
+      open={open}
+      onOpenChange={newOpen => {
+        if (disabled) return
+        setOpen(newOpen)
+      }}
+    >
       {trigger}
       {content}
     </DropdownMenu.Root>

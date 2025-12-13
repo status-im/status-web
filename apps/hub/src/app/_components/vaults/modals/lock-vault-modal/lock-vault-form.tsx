@@ -53,7 +53,7 @@ export function LockVaultForm(props: LockVaultFormProps) {
   const {
     initialYears,
     initialDays,
-    infoMessage = 'Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more SNT at any time, but withdrawing your SNT is only possible once the vault unlocks.',
+    infoMessage = 'Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more STT at any time, but withdrawing your STT is only possible once the vault unlocks.',
     errorMessage: externalErrorMessage,
     onValidate,
     onSubmit,

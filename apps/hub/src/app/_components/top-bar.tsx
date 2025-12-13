@@ -1,7 +1,5 @@
 'use client'
 
-import { IconButton } from '@status-im/components'
-import { SettingsIcon } from '@status-im/icons/20'
 import { FeedbackPopover, Link } from '@status-im/status-network/components'
 import Image from 'next/image'
 
@@ -17,12 +15,12 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
       data-theme="dark"
       className="sticky inset-x-0 top-0 z-40 flex h-[56px] items-center bg-neutral-100"
     >
-      <div className="flex w-full items-center justify-between px-6 pl-4">
+      <div className="flex w-full items-center justify-between px-3 lg:pr-5">
         {/* Left side - Menu button and branding */}
         <div className="flex items-center gap-2">
           <button
             onClick={onMenuToggle}
-            className="rounded mr-3 p-1 text-white-80 hover:bg-white-10 lg:hidden"
+            className="rounded p-1 text-white-80 hover:bg-white-10 lg:mr-3 lg:hidden"
             aria-label="Toggle menu"
           >
             <svg
@@ -40,7 +38,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
             </svg>
           </button>
 
-          <div className="hidden items-center gap-2 md:flex">
+          <div className="hidden items-center md:flex">
             {/* Status Network Logo */}
             <Link href="/">
               <Image
@@ -50,7 +48,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
                 height={32}
               />
             </Link>
-            <div className="h-[18px] rounded-full bg-white-10 px-[6px] py-px text-13 font-medium text-white-100">
+            <div className="h-5 rounded-full bg-white-10 px-[6px] py-px text-13 font-medium text-white-100">
               Testnet
             </div>
           </div>
@@ -71,7 +69,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
                 height={15}
                 className="min-w-[145px]"
               />
-              <div className="h-[18px] rounded-full bg-white-10 px-[6px] py-px text-13 text-white-100">
+              <div className="h-5 rounded-full bg-white-10 px-[6px] py-px text-13 text-white-100">
                 Testnet
               </div>
             </div>
@@ -86,12 +84,16 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
           </div>
 
           {/* Connect Wallet Button */}
-          <ConnectButton />
-
-          {/* Settings Button */}
-          <div className="hidden md:block">
-            <IconButton variant="ghost" icon={<SettingsIcon />} />
-          </div>
+          <ConnectButton
+            label="Connect wallet"
+            size="32"
+            className="hidden md:block"
+          />
+          <ConnectButton
+            label="Connect"
+            size="24"
+            className="block md:hidden"
+          />
         </div>
       </div>
     </div>

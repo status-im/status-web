@@ -7,7 +7,7 @@ import { vaultAbi } from '~constants/contracts'
 import {
   CONFIRMATION_BLOCKS,
   MIN_STAKE_AMOUNT,
-  SNT_TOKEN,
+  STT_TOKEN,
 } from '~constants/index'
 import { useStakingVaults } from '~hooks/useStakingVaults'
 import { useVaultStateContext } from '~hooks/useVaultStateContext'
@@ -129,7 +129,7 @@ export function useVaultTokenUnStake(): UseVaultUnstakeReturn {
       // Send state machine event to start unstaking
       sendVaultEvent({
         type: 'START_UNSTAKING',
-        amount: formatUnits(amountWei, SNT_TOKEN.decimals),
+        amount: formatUnits(amountWei, STT_TOKEN.decimals),
       })
 
       try {

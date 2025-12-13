@@ -1,7 +1,7 @@
 import { match } from 'ts-pattern'
 
 import { type VaultState } from '~hooks/useVaultStateMachine'
-import { formatSNT } from '~utils/currency'
+import { formatSNT, formatSTT } from '~utils/currency'
 
 import { CompoundStatusContent } from '../compound-status-content'
 import { type ActionStatusContent } from '../types/action-status'
@@ -20,13 +20,13 @@ export function useActionStatusContent(
         title: 'Sign in',
         description: 'Please sign the message in your wallet.',
         state: 'pending',
-        showCloseButton: true,
+        showCloseButton: false,
       }))
       .with({ type: 'siwe', step: 'processing' }, () => ({
         title: 'Signing in',
         description: 'Wait a moment.',
         state: 'processing',
-        showCloseButton: true,
+        showCloseButton: false,
       }))
       .with({ type: 'siwe', step: 'rejected' }, () => ({
         title: 'Request was rejected',
@@ -40,13 +40,13 @@ export function useActionStatusContent(
         title: 'Ready to create new vault',
         description: 'Please sign the message in your wallet.',
         state: 'pending',
-        showCloseButton: true,
+        showCloseButton: false,
       }))
       .with({ type: 'createVault', step: 'processing' }, () => ({
         title: 'Creating new vault',
         description: 'Wait a moment.',
         state: 'processing',
-        showCloseButton: true,
+        showCloseButton: false,
       }))
       .with({ type: 'createVault', step: 'rejected' }, () => ({
         title: 'Request was rejected',
@@ -82,15 +82,15 @@ export function useActionStatusContent(
           step: 'initialize',
         },
         state => ({
-          title: `Ready to stake ${formatSNT(state.amount ?? 0, { includeSymbol: true })}`,
+          title: `Ready to stake ${formatSTT(state.amount ?? 0, { includeSymbol: true })}`,
           description: 'Please sign the message in your wallet.',
           state: 'pending',
-          showCloseButton: true,
+          showCloseButton: false,
         })
       )
 
       .with({ type: 'staking', step: 'processing' }, state => ({
-        title: `Staking ${formatSNT(state.amount ?? 0, { includeSymbol: true })}`,
+        title: `Staking ${formatSTT(state.amount ?? 0, { includeSymbol: true })}`,
         description: 'Wait a moment...',
         state: 'processing',
         showCloseButton: false,
@@ -109,14 +109,14 @@ export function useActionStatusContent(
           step: 'initialize',
         },
         state => ({
-          title: `Ready to unstake ${formatSNT(state.amount ?? 0, { includeSymbol: true })}`,
+          title: `Ready to unstake ${formatSTT(state.amount ?? 0, { includeSymbol: true })}`,
           description: 'Please sign the message in your wallet.',
           state: 'pending',
-          showCloseButton: true,
+          showCloseButton: false,
         })
       )
       .with({ type: 'unstaking', step: 'processing' }, state => ({
-        title: `Unstaking ${formatSNT(state.amount ?? 0, { includeSymbol: true })}`,
+        title: `Unstaking ${formatSTT(state.amount ?? 0, { includeSymbol: true })}`,
         description: 'Wait a moment...',
         state: 'processing',
         showCloseButton: false,
@@ -130,7 +130,7 @@ export function useActionStatusContent(
 
       // Withdraw flow (goes directly to processing, no initialize step)
       .with({ type: 'withdraw', step: 'processing' }, state => ({
-        title: `Withdrawing ${formatSNT(state.amount ?? 0, { includeSymbol: true })}`,
+        title: `Withdrawing ${formatSTT(state.amount ?? 0, { includeSymbol: true })}`,
         description: 'Wait a moment...',
         state: 'processing',
         showCloseButton: false,
@@ -147,7 +147,7 @@ export function useActionStatusContent(
         title: 'Ready to lock vault',
         description: 'Please sign the message in your wallet.',
         state: 'pending',
-        showCloseButton: true,
+        showCloseButton: false,
       }))
       .with({ type: 'lock', step: 'processing' }, () => ({
         title: 'Locking vault',
@@ -165,7 +165,7 @@ export function useActionStatusContent(
       // compound flow
       .with({ type: 'compound', step: 'initialize' }, () => ({
         state: 'pending',
-        showCloseButton: true,
+        showCloseButton: false,
         content: <CompoundStatusContent />,
       }))
       .with({ type: 'compound', step: 'processing' }, state => ({

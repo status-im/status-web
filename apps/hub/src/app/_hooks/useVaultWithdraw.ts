@@ -7,7 +7,7 @@ import { vaultAbi } from '~constants/contracts'
 import {
   CONFIRMATION_BLOCKS,
   MIN_STAKE_AMOUNT,
-  SNT_TOKEN,
+  STT_TOKEN,
 } from '~constants/index'
 import { useMultiplierPointsBalance } from '~hooks/useMultiplierPoints'
 import { useStakingVaults } from '~hooks/useStakingVaults'
@@ -125,13 +125,13 @@ export function useVaultWithdraw(): UseVaultWithdrawReturn {
           address: vaultAddress,
           abi: vaultAbi,
           functionName: 'withdraw',
-          args: [SNT_TOKEN.address, amountWei],
+          args: [STT_TOKEN.address, amountWei],
         })
 
         // Transaction submitted successfully, send START_WITHDRAW event to show processing state
         sendVaultEvent({
           type: 'START_WITHDRAW',
-          amount: formatUnits(amountWei, SNT_TOKEN.decimals),
+          amount: formatUnits(amountWei, STT_TOKEN.decimals),
         })
 
         // Call onSigned callback to close the modal

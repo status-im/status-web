@@ -4,7 +4,7 @@
 
 @layer base {
   html {
-    background-color: #ffffff;
+    background-color: #09101c;
   }
 
   body {
@@ -16,6 +16,11 @@
 @layer components {
   .bg-neutral-100 {
     background-color: #09101c !important;
+  }
+
+  /* Cap.js widget full width styling */
+  cap-widget {
+    --cap-widget-width: 100% !important;
   }
 }
 
