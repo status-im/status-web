@@ -1,6 +1,6 @@
 {
   "name": "@status-im/status-network",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MPL-2.0",
   "private": true,
   "main": "./dist/src/index.cjs.js",

@@ -1,5 +1,13 @@
 # @status-im/status-network
 
+## 0.1.2
+
+### Patch Changes
+
+- 06ceddc: Fix React Server Components CVE vulnerabilities
+- e77bed6: withdraw
+- e77bed6: add app
+
 ## 0.1.1
 
 ### Patch Changes
