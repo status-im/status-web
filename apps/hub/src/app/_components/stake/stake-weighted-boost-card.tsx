@@ -1,19 +1,13 @@
 import { useMemo } from 'react'
 
-import { Skeleton, Tooltip } from '@status-im/components'
-import { ExternalIcon, InfoIcon } from '@status-im/icons/20'
-import { Button, ButtonLink } from '@status-im/status-network/components'
+import { Skeleton } from '@status-im/components'
+import { Button } from '@status-im/status-network/components'
 import { useSIWE } from 'connectkit'
 import { formatUnits } from 'viem'
 import { useAccount } from 'wagmi'
 
 import { LaunchIcon } from '~components/icons'
-import {
-  DEFAULT_MP_VALUE,
-  MAX_BOOST,
-  STT_TOKEN,
-  TOOLTIP_CONFIG,
-} from '~constants/index'
+import { DEFAULT_MP_VALUE, MAX_BOOST, STT_TOKEN } from '~constants/index'
 import { useCompoundMultiplierPoints } from '~hooks/useCompoundMultiplierPoints'
 import { useMultiplierPointsBalance } from '~hooks/useMultiplierPoints'
 import { useStakingVaults } from '~hooks/useStakingVaults'
@@ -21,35 +15,7 @@ import { useWeightedBoost } from '~hooks/useWeightedBoost'
 import { formatSTT } from '~utils/currency'
 
 import { useEmergencyModeEnabled } from '../../_hooks/useEmergencyModeEnabled'
-
-const InfoTooltip = () => (
-  <Tooltip
-    delayDuration={TOOLTIP_CONFIG.DELAY_DURATION}
-    side="top"
-    className="border-0"
-    content={
-      <div className="flex w-[286px] flex-col gap-4 rounded-8 bg-white-100 p-4">
-        <span className="text-13 text-neutral-100">
-          The longer STT is staked or locked in vaults, the higher this
-          multiplier goes. This rewards long term believers. The maximum
-          multiplier is x{MAX_BOOST}.
-        </span>
-
-        <ButtonLink
-          href="https://docs.status.network/tokenomics/snt-staking"
-          variant="outline"
-          className="rounded-8 px-2 py-1"
-          size="32"
-          icon={<ExternalIcon className="size-3 text-neutral-50" />}
-        >
-          Learn more
-        </ButtonLink>
-      </div>
-    }
-  >
-    <InfoIcon className="text-neutral-40" />
-  </Tooltip>
-)
+import { InfoTooltip } from '../info-tooltip'
 
 const WeightedBoostCardSkeleton = () => {
   return (
@@ -58,7 +24,10 @@ const WeightedBoostCardSkeleton = () => {
         <p className="text-13 font-500 text-neutral-60">
           Weighted aggregated boost
         </p>
-        <InfoTooltip />
+        <InfoTooltip
+          content={`The longer STT is staked or locked in vaults, the higher this multiplier goes. This rewards long term believers. The maximum multiplier is x${MAX_BOOST}.`}
+          link="https://docs.status.network/tokenomics/snt-staking"
+        />
       </div>
       <div className="mb-4 flex items-end gap-3">
         <LaunchIcon className="text-purple" />
@@ -116,7 +85,10 @@ const WeightedBoostCard = () => {
         <p className="text-13 font-500 text-neutral-60">
           Weighted aggregated boost
         </p>
-        <InfoTooltip />
+        <InfoTooltip
+          content={`The longer STT is staked or locked in vaults, the higher this multiplier goes. This rewards long term believers. The maximum multiplier is x${MAX_BOOST}.`}
+          link="https://docs.status.network/tokenomics/snt-staking"
+        />
       </div>
       <div className="mb-4 flex items-end gap-3">
         <LaunchIcon className="text-purple" />
