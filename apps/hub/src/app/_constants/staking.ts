@@ -46,6 +46,8 @@ export const CACHE_CONFIG = {
   MP_STALE_TIME: 30_000,
   /** Refetch interval for multiplier points (60 seconds) */
   MP_REFETCH_INTERVAL: 60_000,
+  /** Refetch interval for emergency mode status (30 seconds) */
+  EMERGENCY_MODE_REFETCH_INTERVAL: 30_000,
 } as const
 
 // ============================================================================
@@ -106,6 +108,16 @@ export const DEFAULT_LOCK_PERIOD = {
   INITIAL_YEARS: '0.25',
   /** Initial lock period in days as a string */
   INITIAL_DAYS: '90',
+} as const
+
+/**
+ * Default lock period extension values for extending an existing lock
+ */
+export const EXTEND_LOCK_PERIOD = {
+  /** Extension period in years as a string (2 years) */
+  INITIAL_YEARS: '2',
+  /** Extension period in days as a string (732 days = 2 years) */
+  INITIAL_DAYS: '732',
 } as const
 
 // ============================================================================

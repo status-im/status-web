@@ -3,6 +3,7 @@ import { activitiesRouter as activities } from './routers/activity'
 import { assetsRouter as assets } from './routers/assets'
 import { collectiblesRouter as collectibles } from './routers/collectibles'
 import { configRouter as config } from './routers/config'
+import { marketRouter as market } from './routers/market'
 import { nodesRouter as nodes } from './routers/nodes'
 
 export const apiRouter = router({
@@ -11,6 +12,7 @@ export const apiRouter = router({
   nodes,
   activities,
   config,
+  market,
 })
 
 export type ApiRouter = typeof apiRouter

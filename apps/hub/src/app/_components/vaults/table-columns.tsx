@@ -5,10 +5,10 @@ import { Button } from '@status-im/status-network/components'
 import { createColumnHelper } from '@tanstack/react-table'
 import { formatUnits } from 'viem'
 
-import { SNT_TOKEN } from '~constants/index'
+import { EXTEND_LOCK_PERIOD, STT_TOKEN } from '~constants/index'
 import { type StakingVault } from '~hooks/useStakingVaults'
 import { shortenAddress } from '~utils/address'
-import { formatSNT } from '~utils/currency'
+import { formatSNT, formatSTT } from '~utils/currency'
 import { calculateDaysUntilUnlock, isVaultLocked } from '~utils/vault'
 
 import { LockVaultModal } from './modals/lock-vault-modal'
@@ -29,9 +29,16 @@ interface TableColumnsProps {
 }
 
 // Calculate total staked across all vaults
-const calculateTotalStaked = (vaults: StakingVault[]): bigint => {
+const calculateTotalStaked = (
+  vaults: StakingVault[],
+  emergencyMode: boolean
+): bigint => {
   return vaults.reduce(
-    (acc, vault) => acc + (vault.data?.stakedBalance || 0n),
+    (acc, vault) =>
+      acc +
+      (emergencyMode
+        ? vault.data?.depositedBalance || 0n
+        : vault.data?.stakedBalance || 0n),
     BigInt(0)
   )
 }
@@ -77,7 +84,7 @@ const EXTEND_LOCK_ACTIONS = [
 const LOCK_VAULT_ACTIONS = [{ label: "Don't lock" }, { label: 'Lock' }] as const
 
 const LOCK_INFO_MESSAGE =
-  'Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more SNT at any time, but withdrawing your SNT is only possible once the vault unlocks.' as const
+  'Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more STT at any time, but withdrawing your STT is only possible once the vault unlocks.' as const
 
 export const createVaultTableColumns = ({
   vaults = [],
@@ -90,7 +97,10 @@ export const createVaultTableColumns = ({
   chainId,
 }: TableColumnsProps) => {
   // Calculate totals and current time once per column creation
-  const totalStaked = calculateTotalStaked(vaults)
+  const totalStaked = calculateTotalStaked(
+    vaults,
+    Boolean(emergencyModeEnabled)
+  )
   const totalKarma = calculateTotalKarma(vaults)
   const currentTimestamp = getCurrentTimestamp()
   const columnHelper = createColumnHelper<StakingVault>()
@@ -131,13 +141,15 @@ export const createVaultTableColumns = ({
       },
     }),
     columnHelper.accessor('data.stakedBalance', {
-      header: 'Staked',
+      header: emergencyModeEnabled ? 'Vault balance' : 'Staked',
       cell: ({ row }) => {
+        const balance = emergencyModeEnabled
+          ? row.original.data?.depositedBalance
+          : row.original.data?.stakedBalance
         return (
           <div className="flex items-center gap-1">
             <span className="text-13 font-medium text-neutral-100">
-              {formatSNT(row.original.data?.stakedBalance || 0n)}
-              <span className="ml-0.5 text-neutral-50">SNT</span>
+              {formatSTT(balance || 0n, { includeSymbol: true })}
             </span>
           </div>
         )
@@ -145,8 +157,7 @@ export const createVaultTableColumns = ({
       footer: () => {
         return (
           <span className="text-13 font-medium text-neutral-100">
-            {formatSNT(totalStaked)}
-            <span className="ml-0.5 text-neutral-50">SNT</span>
+            {formatSTT(totalStaked, { includeSymbol: true })}
           </span>
         )
       },
@@ -197,8 +208,8 @@ export const createVaultTableColumns = ({
         // Boost = (mpAccrued / stakedBalance) + 1 (base multiplier)
         const currentBoost =
           stakedBalance > 0n
-            ? Number(formatUnits(mpAccrued, SNT_TOKEN.decimals)) /
-                Number(formatUnits(stakedBalance, SNT_TOKEN.decimals)) +
+            ? Number(formatUnits(mpAccrued, STT_TOKEN.decimals)) /
+                Number(formatUnits(stakedBalance, STT_TOKEN.decimals)) +
               1
             : 1
 
@@ -209,7 +220,7 @@ export const createVaultTableColumns = ({
             </span>
             {potentialBoost && (
               <span className="text-13 font-medium text-purple">
-                x{formatSNT(formatUnits(potentialBoost, SNT_TOKEN.decimals))} if
+                x{formatSNT(formatUnits(potentialBoost, STT_TOKEN.decimals))} if
                 locked
               </span>
             )}
@@ -290,86 +301,83 @@ export const createVaultTableColumns = ({
           : false
 
         return (
-          <div className="flex items-end justify-end gap-2">
-            {isLocked ? (
-              <div className="flex items-center gap-2">
-                {!emergencyModeEnabled && (
-                  <WithdrawVaultModal
-                    open={isWithdrawModalOpen}
-                    onOpenChange={open =>
-                      setOpenModalVaultId(open ? withdrawModalId : null)
-                    }
-                    onClose={() => setOpenModalVaultId(null)}
-                    vaultAddress={row.original.address}
-                  >
-                    <Button
-                      variant="danger"
-                      size="32"
-                      disabled={!isConnected}
-                      className="min-w-fit bg-danger-50 text-13 text-white-100 hover:bg-danger-60"
-                    >
-                      <AlertIcon className="shrink-0" />
-                      <span className="hidden whitespace-nowrap xl:inline">
-                        Withdraw funds
-                      </span>
-                      <span className="whitespace-nowrap xl:hidden">
-                        Withdraw
-                      </span>
-                    </Button>
-                  </WithdrawVaultModal>
-                )}
-                <LockVaultModal
-                  open={isLockModalOpen}
-                  onOpenChange={open =>
-                    setOpenModalVaultId(open ? lockModalId : null)
-                  }
-                  vaultAddress={row.original.address}
-                  title="Extend lock time"
-                  initialYears="2"
-                  initialDays="732"
-                  description="Extending lock time increasing Karma boost"
-                  actions={[...EXTEND_LOCK_ACTIONS]}
-                  onClose={() => setOpenModalVaultId(null)}
-                  infoMessage={LOCK_INFO_MESSAGE}
-                >
-                  <Button
-                    variant="primary"
-                    size="32"
-                    disabled={!isConnected}
-                    className="min-w-fit text-13"
-                  >
-                    <TimeIcon className="shrink-0" />
-                    <span className="hidden whitespace-nowrap xl:inline">
-                      Extend lock time
-                    </span>
-                    <span className="whitespace-nowrap xl:hidden">Extend</span>
-                  </Button>
-                </LockVaultModal>
-              </div>
-            ) : (
-              <LockVaultModal
-                open={isLockModalOpen}
+          <div className="flex items-end justify-end gap-2 lg:gap-4">
+            {emergencyModeEnabled ? (
+              <WithdrawVaultModal
+                open={isWithdrawModalOpen}
                 onOpenChange={open =>
-                  setOpenModalVaultId(open ? lockModalId : null)
+                  setOpenModalVaultId(open ? withdrawModalId : null)
                 }
-                vaultAddress={row.original.address}
-                title="Do you want to lock the vault?"
-                description="Lock this vault to receive more Karma"
-                actions={[...LOCK_VAULT_ACTIONS]}
                 onClose={() => setOpenModalVaultId(null)}
-                infoMessage={LOCK_INFO_MESSAGE}
-                onValidate={validateLockTime}
+                vaultAddress={row.original.address}
+                amountWei={row.original.data?.depositedBalance || 0n}
               >
                 <Button
-                  variant="primary"
-                  size="32"
-                  disabled={!isConnected}
-                  className="min-w-fit text-13"
+                  variant="danger"
+                  size="24"
+                  iconBefore={<AlertIcon />}
+                  disabled={
+                    !row.original.data?.depositedBalance ||
+                    row.original.data.depositedBalance === 0n
+                  }
                 >
-                  <LockedIcon fill="white" className="shrink-0" />
-                  <span className="whitespace-nowrap">Lock</span>
+                  Withdraw funds
                 </Button>
-              </LockVaultModal>
+              </WithdrawVaultModal>
+            ) : (
+              <>
+                {isLocked ? (
+                  <div className="flex items-center gap-2">
+                    <LockVaultModal
+                      open={isLockModalOpen}
+                      onOpenChange={open =>
+                        setOpenModalVaultId(open ? lockModalId : null)
+                      }
+                      vaultAddress={row.original.address}
+                      title="Extend lock time"
+                      initialYears={EXTEND_LOCK_PERIOD.INITIAL_YEARS}
+                      initialDays={EXTEND_LOCK_PERIOD.INITIAL_DAYS}
+                      description="Extending lock time increasing Karma boost"
+                      actions={[...EXTEND_LOCK_ACTIONS]}
+                      onClose={() => setOpenModalVaultId(null)}
+                      infoMessage={LOCK_INFO_MESSAGE}
+                    >
+                      <Button
+                        variant="primary"
+                        size="24"
+                        disabled={!isConnected}
+                      >
+                        <TimeIcon className="shrink-0" />
+                        <span className="hidden whitespace-nowrap xl:inline">
+                          Extend lock time
+                        </span>
+                        <span className="whitespace-nowrap xl:hidden">
+                          Extend
+                        </span>
+                      </Button>
+                    </LockVaultModal>
+                  </div>
+                ) : (
+                  <LockVaultModal
+                    open={isLockModalOpen}
+                    onOpenChange={open =>
+                      setOpenModalVaultId(open ? lockModalId : null)
+                    }
+                    vaultAddress={row.original.address}
+                    title="Do you want to lock the vault?"
+                    description="Lock this vault to receive more Karma"
+                    actions={[...LOCK_VAULT_ACTIONS]}
+                    onClose={() => setOpenModalVaultId(null)}
+                    infoMessage={LOCK_INFO_MESSAGE}
+                    onValidate={validateLockTime}
+                  >
+                    <Button variant="primary" size="24" disabled={!isConnected}>
+                      <LockedIcon fill="white" className="shrink-0" />
+                      <span className="whitespace-nowrap">Lock</span>
+                    </Button>
+                  </LockVaultModal>
+                )}
+              </>
             )}
             <DropdownMenu.Root
               onOpenChange={open => setOpenDropdownId(open ? dropdownId : null)}

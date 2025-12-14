@@ -1,6 +1,6 @@
 import { getDefaultConfig } from 'connectkit'
 import { createConfig, http } from 'wagmi'
-import { type Chain, mainnet, statusSepolia } from 'wagmi/chains'
+import { type Chain, linea, mainnet, statusSepolia } from 'wagmi/chains'
 
 import { clientEnv } from './env.client.mjs'
 
@@ -12,17 +12,19 @@ import type {
 
 export const getDefaultWagmiConfig = () =>
   getDefaultConfig({
-    chains: [mainnet, statusSepolia],
+    chains: [statusSepolia, mainnet, linea],
     transports: {
-      [mainnet.id]: http(mainnet.rpcUrls.default.http[0]),
       [statusSepolia.id]: http(statusSepolia.rpcUrls.default.http[0]),
+      [mainnet.id]: http(mainnet.rpcUrls.default.http[0]),
+      [linea.id]: http(linea.rpcUrls.default.http[0]),
     },
     walletConnectProjectId:
       clientEnv.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID as string,
     appName: 'Status Hub',
-    appDescription: 'Status Network DeFi Dashboard',
-    appUrl: 'https://status.app',
-    appIcon: 'https://status.app/icon.png',
+    appDescription: 'Status Network',
+    appUrl: 'https://hub.status.network',
+    appIcon: '/logo.svg',
+    enableFamily: false,
   }) as CreateConfigParameters<
     readonly [Chain, ...Chain[]],
     Record<number, Transport>,

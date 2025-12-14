@@ -1,4 +1,5 @@
 export * from './address'
 export * from './chain'
+export * from './karma'
 export * from './siwe'
 export * from './staking'

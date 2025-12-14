@@ -1,12 +1,13 @@
 import { useMemo } from 'react'
 
 import { formatUnits } from 'viem'
+import { useAccount } from 'wagmi'
 
 import {
   BASE_BOOST,
   BOOST_DECIMALS,
   DEFAULT_DECIMALS,
-  SNT_TOKEN,
+  STT_TOKEN,
 } from '~constants/index'
 import { type StakingVault } from '~hooks/useStakingVaults'
 
@@ -162,16 +163,27 @@ function calculateWeightedBoost(
 export function useWeightedBoost(
   vaults: StakingVault[] | undefined
 ): WeightedBoost {
+  const { isConnected } = useAccount()
+
   return useMemo(() => {
-    if (!vaults || vaults.length === 0) {
+    if (!isConnected) {
       return {
-        value: BASE_BOOST,
-        formatted: BASE_BOOST.toFixed(DEFAULT_DECIMALS),
+        value: Number(0),
+        formatted: Number(0).toFixed(BOOST_DECIMALS).toString(),
         totalStaked: 0,
         hasStake: false,
       }
     }
 
-    return calculateWeightedBoost(vaults, SNT_TOKEN.decimals)
-  }, [vaults])
+    if (!vaults || vaults.length === 0) {
+      return {
+        value: BASE_BOOST,
+        formatted: `x${BASE_BOOST.toFixed(DEFAULT_DECIMALS)}`,
+        totalStaked: 0,
+        hasStake: false,
+      }
+    }
+
+    return calculateWeightedBoost(vaults, STT_TOKEN.decimals)
+  }, [vaults, isConnected])
 }
