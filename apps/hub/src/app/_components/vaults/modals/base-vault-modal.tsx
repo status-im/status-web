@@ -22,15 +22,8 @@ interface BaseVaultModalProps {
  * Provides consistent dialog wrapper with close button, overlay, and styling.
  */
 export function BaseVaultModal(props: BaseVaultModalProps) {
-  const {
-    open = false,
-    onOpenChange,
-    onClose,
-    title,
-    description,
-    children,
-    trigger,
-  } = props
+  const { open, onOpenChange, onClose, title, description, children, trigger } =
+    props
 
   const handleOpenChange = (nextOpen: boolean) => {
     onOpenChange?.(nextOpen)

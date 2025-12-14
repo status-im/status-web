@@ -17,6 +17,15 @@ import { formatSTT } from '~utils/currency'
 import { useEmergencyModeEnabled } from '../../_hooks/useEmergencyModeEnabled'
 import { InfoTooltip } from '../info-tooltip'
 
+const WeightedBoostInfoTooltip = () => {
+  return (
+    <InfoTooltip
+      content={`The longer STT is staked or locked in vaults, the higher this multiplier goes. This rewards long term believers. The maximum multiplier is x${MAX_BOOST}.`}
+      link="https://docs.status.network/tokenomics/snt-staking"
+    />
+  )
+}
+
 const WeightedBoostCardSkeleton = () => {
   return (
     <div className="rounded-16 border border-neutral-10 bg-white-100 p-4 shadow-2 md:rounded-32 md:p-8">
@@ -24,10 +33,7 @@ const WeightedBoostCardSkeleton = () => {
         <p className="text-13 font-500 text-neutral-60">
           Weighted aggregated boost
         </p>
-        <InfoTooltip
-          content={`The longer STT is staked or locked in vaults, the higher this multiplier goes. This rewards long term believers. The maximum multiplier is x${MAX_BOOST}.`}
-          link="https://docs.status.network/tokenomics/snt-staking"
-        />
+        <WeightedBoostInfoTooltip />
       </div>
       <div className="mb-4 flex items-end gap-3">
         <LaunchIcon className="text-purple" />
@@ -85,10 +91,7 @@ const WeightedBoostCard = () => {
         <p className="text-13 font-500 text-neutral-60">
           Weighted aggregated boost
         </p>
-        <InfoTooltip
-          content={`The longer STT is staked or locked in vaults, the higher this multiplier goes. This rewards long term believers. The maximum multiplier is x${MAX_BOOST}.`}
-          link="https://docs.status.network/tokenomics/snt-staking"
-        />
+        <WeightedBoostInfoTooltip />
       </div>
       <div className="mb-4 flex items-end gap-3">
         <LaunchIcon className="text-purple" />
