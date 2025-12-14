@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useRef, useState } from 'react'
+import { useState } from 'react'
 
 import { Tooltip } from '@status-im/components'
 import { ExternalIcon, InfoIcon } from '@status-im/icons/16'
@@ -15,49 +15,13 @@ import { VaultCard } from '../_components/vault-card'
 import { type Vault, VAULTS } from '../_constants/address'
 import { TOOLTIP_CONFIG } from '../_constants/staking'
 import { useTotalTVL } from '../_hooks/useTotalTVL'
-import { useUserVaultDeposit } from '../_hooks/useUserVaultDeposit'
+import { useVaultRefetch } from '../_hooks/useVaultRefetch'
 import { REWARDS } from '../dashboard/page'
-
-function VaultCardWithDeposit({
-  vault,
-  onDeposit,
-  registerRefetch,
-}: {
-  vault: Vault
-  onDeposit: () => void
-  registerRefetch: (vaultId: string, refetch: () => void) => void
-}) {
-  const { data: depositedBalance, refetch } = useUserVaultDeposit({ vault })
-
-  registerRefetch(vault.id, refetch)
-
-  return (
-    <VaultCard
-      vault={vault}
-      onDeposit={onDeposit}
-      depositedBalance={depositedBalance}
-    />
-  )
-}
 
 export default function PreDepositPage() {
   const [selectedVault, setSelectedVault] = useState<Vault | null>(null)
   const { data: totalTVL, isLoading: isLoadingTVL } = useTotalTVL()
-
-  const refetchFunctionsRef = useRef<Record<string, () => void>>({})
-
-  const registerRefetch = useCallback(
-    (vaultId: string, refetch: () => void) => {
-      refetchFunctionsRef.current[vaultId] = refetch
-    },
-    []
-  )
-
-  const handleDepositSuccess = useCallback(() => {
-    if (selectedVault) {
-      refetchFunctionsRef.current[selectedVault.id]?.()
-    }
-  }, [selectedVault])
+  const { registerRefetch, refetchVault } = useVaultRefetch()
 
   const defaultVault = VAULTS.find(v => v.id === 'SNT') ?? VAULTS[0]
   const activeVaults = VAULTS.filter(v => !v.soon)
@@ -123,7 +87,7 @@ export default function PreDepositPage() {
         </div>
         <div className="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2">
           {VAULTS.map(vault => (
-            <VaultCardWithDeposit
+            <VaultCard
               key={vault.id}
               vault={vault}
               onDeposit={() => setSelectedVault(vault)}
@@ -145,7 +109,7 @@ export default function PreDepositPage() {
         vault={selectedVault ?? defaultVault}
         vaults={activeVaults}
         setActiveVault={setSelectedVault}
-        onDepositSuccess={handleDepositSuccess}
+        onDepositSuccess={() => refetchVault(selectedVault)}
       />
     </HubLayout>
   )

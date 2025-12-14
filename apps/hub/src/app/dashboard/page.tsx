@@ -10,6 +10,7 @@ import { HubLayout } from '~components/hub-layout'
 import { PreDepositModal } from '~components/pre-deposit-modal'
 import { VaultCard } from '~components/vault-card'
 import { type Vault, VAULTS } from '~constants/index'
+import { useVaultRefetch } from '~hooks/useVaultRefetch'
 
 import { Apps } from '../_components/apps'
 import { Hero } from '../_components/hero'
@@ -18,9 +19,9 @@ export const REWARDS = ['KARMA', 'SNT', 'LINEA']
 
 export default function DashboardPage() {
   const [selectedVault, setSelectedVault] = useState<Vault | null>(null)
+  const { registerRefetch, refetchVault } = useVaultRefetch()
 
   const defaultVault = VAULTS.find(v => v.id === 'SNT') ?? VAULTS[0]
-
   const activeVaults = VAULTS.filter(v => !v.soon)
 
   return (
@@ -89,6 +90,7 @@ export default function DashboardPage() {
                     <VaultCard
                       vault={vault}
                       onDeposit={() => setSelectedVault(vault)}
+                      registerRefetch={registerRefetch}
                     />
                   </div>
                 ))}
@@ -156,6 +158,7 @@ export default function DashboardPage() {
         vault={selectedVault ?? defaultVault}
         vaults={activeVaults}
         setActiveVault={setSelectedVault}
+        onDepositSuccess={() => refetchVault(selectedVault)}
       />
     </HubLayout>
   )

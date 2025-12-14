@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import { useAccount, useReadContract } from 'wagmi'
 
 import type { Vault } from '~constants/index'
@@ -13,6 +15,8 @@ export interface UserVaultDepositParams {
   vault: Vault
   /** Optional: override the user address (defaults to connected wallet) */
   userAddress?: `0x${string}`
+  /** Optional: callback to register refetch function for external triggering */
+  registerRefetch?: (vaultId: string, refetch: () => void) => void
 }
 
 // ============================================================================
@@ -35,6 +39,7 @@ export interface UserVaultDepositParams {
 export function useUserVaultDeposit({
   vault,
   userAddress,
+  registerRefetch,
 }: UserVaultDepositParams) {
   const { address: connectedAddress } = useAccount()
   const ownerAddress = userAddress ?? connectedAddress
@@ -71,13 +76,19 @@ export function useUserVaultDeposit({
 
   const data = shares === 0n ? 0n : assets
 
+  const refetch = () => {
+    refetchShares()
+    refetchAssets()
+  }
+
+  useEffect(() => {
+    registerRefetch?.(vault.id, refetch)
+  }, [vault.id, registerRefetch]) // eslint-disable-line react-hooks/exhaustive-deps
+
   return {
     data,
     shares,
     isLoading: isLoadingShares || isLoadingAssets,
-    refetch: () => {
-      refetchShares()
-      refetchAssets()
-    },
+    refetch,
   }
 }

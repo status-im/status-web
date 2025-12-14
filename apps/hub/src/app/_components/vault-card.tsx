@@ -11,6 +11,7 @@ import { cva } from 'cva'
 import { formatCurrency, formatTokenAmount } from '~/utils/currency'
 import { TOOLTIP_CONFIG, type Vault } from '~constants/index'
 import { usePreDepositTVLInUSD } from '~hooks/usePreDepositTVLInUSD'
+import { useUserVaultDeposit } from '~hooks/useUserVaultDeposit'
 import { useVaultsAPY } from '~hooks/useVaultsAPY'
 
 import { DollarIcon, GusdIcon, PercentIcon, PlusIcon, SumIcon } from './icons'
@@ -19,8 +20,7 @@ import { VaultImage } from './vault-image'
 type Props = {
   vault: Vault
   onDeposit: () => void
-  /** User's deposited balance in wei (optional - shows deposit info when provided) */
-  depositedBalance?: bigint
+  registerRefetch?: (vaultId: string, refetch: () => void) => void
 }
 
 const vaultCardStyles = cva({
@@ -79,7 +79,7 @@ type VaultCardContentProps = Props & {
 const VaultCardContent: FC<VaultCardContentProps> = ({
   vault,
   onDeposit,
-  depositedBalance,
+  registerRefetch,
   show,
   isConnected,
   pendingDepositRef,
@@ -89,6 +89,10 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
     vault,
   })
   const { data: apyMap, isLoading: isApyLoading } = useVaultsAPY()
+  const { data: depositedBalance } = useUserVaultDeposit({
+    vault,
+    registerRefetch,
+  })
 
   useEffect(() => {
     if (isConnected && pendingDepositRef.current) {
