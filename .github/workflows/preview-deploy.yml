@@ -44,6 +44,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Fetch base commit
         run: |
@@ -62,7 +63,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Detect changed apps with Turbo
         id: changes
@@ -74,10 +75,20 @@ jobs:
           echo "Detecting changes between $BASE_REF and HEAD..."
 
           # Use turbo to find affected packages with build task
-          affected=$(pnpm turbo build --filter="...[$BASE_REF]" --dry-run=json 2>/dev/null || echo '{"packages":[]}')
+          # Capture stderr separately to avoid hiding real errors
+          set +e
+          affected=$(pnpm turbo build --filter="...[$BASE_REF]" --dry-run=json 2>&1)
+          turbo_exit=$?
+          set -e
 
           echo "Turbo output:"
           echo "$affected" | head -50
+
+          # Check if turbo failed
+          if [ $turbo_exit -ne 0 ]; then
+            echo "::error::Turbo failed with exit code $turbo_exit"
+            exit 1
+          fi
 
           # Extract package names from turbo output
           packages=$(echo "$affected" | jq -r '.packages[]' 2>/dev/null || echo "")
@@ -163,6 +174,7 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_STATUS_NETWORK }}
 
       - name: Set status and comment PR
+        if: success()
         uses: actions/github-script@v7
         with:
           script: |
@@ -211,10 +223,10 @@ jobs:
               description: `Deployed ${deployments.length} app(s) successfully`
             });
 
-            let table = '| Project | Deployment | Preview | Comments |\n';
-            table += '|---------|------------|---------|----------|\n';
+            let table = '| Project | Status | Preview |\n';
+            table += '|---------|--------|----------|\n';
             for (const dep of deployments) {
-              table += `| ${dep.name} | ✅ Ready | [Preview](${dep.url}) | [Comment](${dep.url}) |\n`;
+              table += `| ${dep.name} | ✅ Ready | [Preview](${dep.url}) |\n`;
             }
 
             const body = `**Preview deployments are ready!**\n\n${table}\n\n---\n*Deployed via GitHub Actions*`;
