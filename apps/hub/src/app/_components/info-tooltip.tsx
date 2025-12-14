@@ -1,7 +1,5 @@
 import { Tooltip } from '@status-im/components'
-import { ExternalIcon } from '@status-im/icons/16'
-// Use 20px InfoIcon to match existing usage patterns
-import { InfoIcon } from '@status-im/icons/20'
+import { ExternalIcon, InfoIcon } from '@status-im/icons/16'
 import { ButtonLink } from '@status-im/status-network/components'
 
 import { TOOLTIP_CONFIG } from '~constants/staking'

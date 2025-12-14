@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 
 import { useAccount, useReadContract } from 'wagmi'
 
@@ -76,14 +76,14 @@ export function useUserVaultDeposit({
 
   const data = shares === 0n ? 0n : assets
 
-  const refetch = () => {
+  const refetch = useCallback(() => {
     refetchShares()
     refetchAssets()
-  }
+  }, [refetchShares, refetchAssets])
 
   useEffect(() => {
     registerRefetch?.(vault.id, refetch)
-  }, [vault.id, registerRefetch]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [vault.id, registerRefetch, refetch])
 
   return {
     data,
