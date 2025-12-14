@@ -1,7 +1,5 @@
 'use client'
 
-import { useState } from 'react'
-
 import { ExternalIcon } from '@status-im/icons/16'
 import { ButtonLink, Link } from '@status-im/status-network/components'
 import Image from 'next/image'
@@ -12,18 +10,22 @@ import { HubLayout } from '../_components/hub-layout'
 import { InfoTooltip } from '../_components/info-tooltip'
 import { PreDepositModal } from '../_components/pre-deposit-modal'
 import { VaultCard } from '../_components/vault-card'
-import { type Vault, VAULTS } from '../_constants/address'
+import { VAULTS } from '../_constants/address'
 import { useTotalTVL } from '../_hooks/useTotalTVL'
-import { useVaultRefetch } from '../_hooks/useVaultRefetch'
+import { useVaultSelection } from '../_hooks/useVaultSelection'
 import { REWARDS } from '../dashboard/page'
 
 export default function PreDepositPage() {
-  const [selectedVault, setSelectedVault] = useState<Vault | null>(null)
   const { data: totalTVL, isLoading: isLoadingTVL } = useTotalTVL()
-  const { registerRefetch, refetchVault } = useVaultRefetch()
-
-  const defaultVault = VAULTS.find(v => v.id === 'SNT') ?? VAULTS[0]
-  const activeVaults = VAULTS.filter(v => !v.soon)
+  const {
+    selectedVault,
+    setSelectedVault,
+    defaultVault,
+    activeVaults,
+    registerRefetch,
+    handleDepositSuccess,
+    isModalOpen,
+  } = useVaultSelection()
 
   const formattedTVL = totalTVL ? formatCurrency(totalTVL) : '$0'
 
@@ -107,12 +109,12 @@ export default function PreDepositPage() {
         />
       </div>
       <PreDepositModal
-        open={selectedVault !== null}
+        open={isModalOpen}
         onOpenChange={open => !open && setSelectedVault(null)}
         vault={selectedVault ?? defaultVault}
         vaults={activeVaults}
         setActiveVault={setSelectedVault}
-        onDepositSuccess={() => refetchVault(selectedVault)}
+        onDepositSuccess={handleDepositSuccess}
       />
     </HubLayout>
   )
