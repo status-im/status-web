@@ -37,7 +37,7 @@ export default function PreDepositPage() {
             <h1 className="text-27 font-bold text-neutral-100">
               Pre-Deposit Vaults
             </h1>
-            <div className="flex flex-col gap-2 lg:flex-row lg:items-start">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
               <div className="flex -space-x-2">
                 {REWARDS.map((reward, index) => (
                   <Image
@@ -70,7 +70,7 @@ export default function PreDepositPage() {
           <div className="self-start">
             <ButtonLink
               variant="outline"
-              href="https://status-im.notion.site/status-network-pre-deposit"
+              href="https://status.app/blog/status-network-pre-deposit-vaults-be-early-to-the-gasless-l2"
               className="self-start bg-white-100"
               size="32"
               icon={<ExternalIcon className="text-neutral-50" />}
@@ -101,10 +101,10 @@ export default function PreDepositPage() {
           ))}
         </div>
         <Image
-          src="/dragon.png"
-          alt="Dragon"
-          width="354"
-          height="320"
+          src="/dragon-key.png"
+          alt="Dragon with key"
+          width="325"
+          height="360"
           className="relative m-auto"
         />
       </div>

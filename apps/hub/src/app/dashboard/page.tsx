@@ -13,7 +13,7 @@ import { useVaultSelection } from '~hooks/useVaultSelection'
 import { Apps } from '../_components/apps'
 import { Hero } from '../_components/hero'
 
-export const REWARDS = ['KARMA', 'SNT', 'LINEA']
+export const REWARDS = ['GUSD', 'KARMA', 'SNT', 'LINEA']
 
 export default function DashboardPage() {
   const {
@@ -40,15 +40,15 @@ export default function DashboardPage() {
                 <h3 className="text-19 font-600 text-neutral-90 lg:text-27">
                   Deposit funds for yield and rewards
                 </h3>
-                <div className="flex flex-col gap-2 lg:flex-row lg:items-start">
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
                   <div className="flex -space-x-2">
                     {REWARDS.map((reward, index) => (
                       <Image
                         key={index}
                         src={`/tokens/${reward.toLowerCase()}.png`}
                         alt={reward}
-                        width="22"
-                        height="22"
+                        width="20"
+                        height="20"
                         className="size-5 rounded-full border border-neutral-10"
                       />
                     ))}
@@ -73,7 +73,7 @@ export default function DashboardPage() {
               </div>
               <ButtonLink
                 variant="outline"
-                href="https://status-im.notion.site/status-network-pre-deposit"
+                href="https://status.app/blog/status-network-pre-deposit-vaults-be-early-to-the-gasless-l2"
                 className="bg-white-100"
                 size="32"
                 icon={<ExternalIcon className="text-neutral-50" />}
