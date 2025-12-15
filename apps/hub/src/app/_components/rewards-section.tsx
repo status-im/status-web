@@ -1,20 +1,19 @@
 import { Link } from '@status-im/status-network/components'
 import Image from 'next/image'
 
-const REWARDS = ['GUSD', 'KARMA', 'SNT', 'LINEA']
+const REWARDS = ['KARMA', 'LINEA', 'SNT', 'GUSD']
 
 const RewardsSection = () => {
   return (
     <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
-      <div className="flex -space-x-2">
+      <div className="flex size-[22px] min-w-[50px] items-center -space-x-1.5">
         {REWARDS.map(reward => (
           <Image
             key={reward}
             src={`/tokens/${reward.toLowerCase()}.png`}
             alt={reward}
-            width="22"
-            height="22"
-            className="size-5 rounded-full border border-neutral-10"
+            width="20"
+            height="20"
           />
         ))}
       </div>
