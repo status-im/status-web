@@ -1,7 +1,7 @@
 'use client'
 
 import { ExternalIcon } from '@status-im/icons/20'
-import { ButtonLink, Link } from '@status-im/status-network/components'
+import { ButtonLink } from '@status-im/status-network/components'
 import Image from 'next/image'
 
 import { HubLayout } from '~components/hub-layout'
@@ -12,8 +12,7 @@ import { useVaultSelection } from '~hooks/useVaultSelection'
 
 import { Apps } from '../_components/apps'
 import { Hero } from '../_components/hero'
-
-export const REWARDS = ['GUSD', 'KARMA', 'SNT', 'LINEA']
+import { RewardsSection } from '../_components/rewards-section'
 
 export default function DashboardPage() {
   const {
@@ -40,36 +39,7 @@ export default function DashboardPage() {
                 <h3 className="text-19 font-600 text-neutral-90 lg:text-27">
                   Deposit funds for yield and rewards
                 </h3>
-                <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
-                  <div className="flex -space-x-2">
-                    {REWARDS.map((reward, index) => (
-                      <Image
-                        key={index}
-                        src={`/tokens/${reward.toLowerCase()}.png`}
-                        alt={reward}
-                        width="20"
-                        height="20"
-                        className="size-5 rounded-full border border-neutral-10"
-                      />
-                    ))}
-                  </div>
-                  <p className="text-15 text-neutral-60">
-                    Rewards in KARMA, SNT, LINEA and points from Generic
-                    Protocol and native apps. Funds will be unlocked at mainnet
-                    launch.
-                    <br />
-                    All contracts have been{' '}
-                    <Link
-                      href="https://github.com/aragon/status-predeposit-vaults/blob/development/audit/report-aragon-pre-deposit-vaults.pdf"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-purple hover:text-purple-dark"
-                    >
-                      audited
-                    </Link>
-                    .
-                  </p>
-                </div>
+                <RewardsSection />
               </div>
               <ButtonLink
                 variant="outline"
