@@ -1,66 +1,31 @@
 'use client'
 
-import { useCallback, useRef, useState } from 'react'
-
-import { Tooltip } from '@status-im/components'
-import { ExternalIcon, InfoIcon } from '@status-im/icons/16'
+import { ExternalIcon } from '@status-im/icons/16'
 import { ButtonLink, Link } from '@status-im/status-network/components'
 import Image from 'next/image'
 
 import { formatCurrency } from '~/utils/currency'
 
 import { HubLayout } from '../_components/hub-layout'
+import { InfoTooltip } from '../_components/info-tooltip'
 import { PreDepositModal } from '../_components/pre-deposit-modal'
 import { VaultCard } from '../_components/vault-card'
-import { type Vault, VAULTS } from '../_constants/address'
-import { TOOLTIP_CONFIG } from '../_constants/staking'
+import { VAULTS } from '../_constants/address'
 import { useTotalTVL } from '../_hooks/useTotalTVL'
-import { useUserVaultDeposit } from '../_hooks/useUserVaultDeposit'
+import { useVaultSelection } from '../_hooks/useVaultSelection'
 import { REWARDS } from '../dashboard/page'
 
-function VaultCardWithDeposit({
-  vault,
-  onDeposit,
-  registerRefetch,
-}: {
-  vault: Vault
-  onDeposit: () => void
-  registerRefetch: (vaultId: string, refetch: () => void) => void
-}) {
-  const { data: depositedBalance, refetch } = useUserVaultDeposit({ vault })
-
-  registerRefetch(vault.id, refetch)
-
-  return (
-    <VaultCard
-      vault={vault}
-      onDeposit={onDeposit}
-      depositedBalance={depositedBalance}
-    />
-  )
-}
-
 export default function PreDepositPage() {
-  const [selectedVault, setSelectedVault] = useState<Vault | null>(null)
   const { data: totalTVL, isLoading: isLoadingTVL } = useTotalTVL()
-
-  const refetchFunctionsRef = useRef<Record<string, () => void>>({})
-
-  const registerRefetch = useCallback(
-    (vaultId: string, refetch: () => void) => {
-      refetchFunctionsRef.current[vaultId] = refetch
-    },
-    []
-  )
-
-  const handleDepositSuccess = useCallback(() => {
-    if (selectedVault) {
-      refetchFunctionsRef.current[selectedVault.id]?.()
-    }
-  }, [selectedVault])
-
-  const defaultVault = VAULTS.find(v => v.id === 'SNT') ?? VAULTS[0]
-  const activeVaults = VAULTS.filter(v => !v.soon)
+  const {
+    selectedVault,
+    setSelectedVault,
+    defaultVault,
+    activeVaults,
+    registerRefetch,
+    handleDepositSuccess,
+    isModalOpen,
+  } = useVaultSelection()
 
   const formattedTVL = totalTVL ? formatCurrency(totalTVL) : '$0'
 
@@ -114,16 +79,20 @@ export default function PreDepositPage() {
             </ButtonLink>
           </div>
         </div>
-        <div className="flex w-full flex-col gap-2 rounded-32 bg-white-100 px-8 py-4 shadow-1">
-          <p className="text-13 font-500 text-neutral-50">Total Value Locked</p>
-          <InfoTooltip />
+        <div className="relative flex w-full flex-col gap-2 rounded-32 bg-white-100 px-8 py-4 shadow-1">
+          <div className="flex items-start justify-between">
+            <p className="text-13 font-500 text-neutral-50">
+              Total Value Locked
+            </p>
+            <InfoTooltip content="Sum of token value locked across all vaults" />
+          </div>
           <p className="text-27 font-600 text-neutral-100">
             {isLoadingTVL ? '...' : formattedTVL}
           </p>
         </div>
         <div className="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2">
           {VAULTS.map(vault => (
-            <VaultCardWithDeposit
+            <VaultCard
               key={vault.id}
               vault={vault}
               onDeposit={() => setSelectedVault(vault)}
@@ -140,7 +109,7 @@ export default function PreDepositPage() {
         />
       </div>
       <PreDepositModal
-        open={selectedVault !== null}
+        open={isModalOpen}
         onOpenChange={open => !open && setSelectedVault(null)}
         vault={selectedVault ?? defaultVault}
         vaults={activeVaults}
@@ -150,19 +119,3 @@ export default function PreDepositPage() {
     </HubLayout>
   )
 }
-
-const InfoTooltip = () => (
-  <Tooltip
-    delayDuration={TOOLTIP_CONFIG.DELAY_DURATION}
-    side="top"
-    content={
-      <div className="flex w-[286px] flex-col gap-4 rounded-8 bg-white-100 p-4">
-        <span className="text-13 text-neutral-100">
-          Sum of token value locked across all vaults
-        </span>
-      </div>
-    }
-  >
-    <InfoIcon className="absolute right-4 top-3 size-4 text-neutral-50 hover:text-neutral-100" />
-  </Tooltip>
-)

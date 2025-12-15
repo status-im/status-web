@@ -2,25 +2,25 @@
 
 import { type FC, useEffect, useRef, useState } from 'react'
 
-import { Skeleton, Tooltip } from '@status-im/components'
-import { InfoIcon } from '@status-im/icons/16'
+import { Skeleton } from '@status-im/components'
 import { Button } from '@status-im/status-network/components'
 import { ConnectKitButton } from 'connectkit'
 import { cva } from 'cva'
 
 import { formatCurrency, formatTokenAmount } from '~/utils/currency'
-import { TOOLTIP_CONFIG, type Vault } from '~constants/index'
+import { type Vault } from '~constants/index'
 import { usePreDepositTVLInUSD } from '~hooks/usePreDepositTVLInUSD'
+import { useUserVaultDeposit } from '~hooks/useUserVaultDeposit'
 import { useVaultsAPY } from '~hooks/useVaultsAPY'
 
 import { DollarIcon, GusdIcon, PercentIcon, PlusIcon, SumIcon } from './icons'
+import { InfoTooltip } from './info-tooltip'
 import { VaultImage } from './vault-image'
 
 type Props = {
   vault: Vault
   onDeposit: () => void
-  /** User's deposited balance in wei (optional - shows deposit info when provided) */
-  depositedBalance?: bigint
+  registerRefetch?: (vaultId: string, refetch: () => void) => void
 }
 
 const vaultCardStyles = cva({
@@ -79,7 +79,7 @@ type VaultCardContentProps = Props & {
 const VaultCardContent: FC<VaultCardContentProps> = ({
   vault,
   onDeposit,
-  depositedBalance,
+  registerRefetch,
   show,
   isConnected,
   pendingDepositRef,
@@ -89,6 +89,10 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
     vault,
   })
   const { data: apyMap, isLoading: isApyLoading } = useVaultsAPY()
+  const { data: depositedBalance } = useUserVaultDeposit({
+    vault,
+    registerRefetch,
+  })
 
   useEffect(() => {
     if (isConnected && pendingDepositRef.current) {
@@ -132,23 +136,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
         <div className="flex items-center gap-4">
           <VaultImage vault={icon} network={vault.network} size="56" />
         </div>
-      </div>
-
-      <div className="absolute right-4 top-4 hidden size-4 md:block">
-        <Tooltip
-          delayDuration={TOOLTIP_CONFIG.DELAY_DURATION}
-          side="top"
-          content={
-            <div className="flex w-[286px] flex-col gap-4 rounded-8 bg-white-100 p-4">
-              <span className="text-13 text-neutral-100">
-                Estimated APY based on TVL and total available liquid token
-                rewards across all vaults: 15M SNT + 20M LINEA
-              </span>
-            </div>
-          }
-        >
-          <InfoIcon className="absolute right-4 top-3 size-4 text-neutral-50 hover:text-neutral-100" />
-        </Tooltip>
+        <InfoTooltip content="Estimated APY based on TVL and total available liquid token rewards across all vaults: 15M SNT + 20M LINEA" />
       </div>
 
       <h3 className="mb-2 text-19 font-600 lg:text-27">{vault.name}</h3>

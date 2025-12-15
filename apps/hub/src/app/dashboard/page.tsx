@@ -1,7 +1,5 @@
 'use client'
 
-import { useState } from 'react'
-
 import { ExternalIcon } from '@status-im/icons/20'
 import { ButtonLink, Link } from '@status-im/status-network/components'
 import Image from 'next/image'
@@ -9,7 +7,8 @@ import Image from 'next/image'
 import { HubLayout } from '~components/hub-layout'
 import { PreDepositModal } from '~components/pre-deposit-modal'
 import { VaultCard } from '~components/vault-card'
-import { type Vault, VAULTS } from '~constants/index'
+import { VAULTS } from '~constants/index'
+import { useVaultSelection } from '~hooks/useVaultSelection'
 
 import { Apps } from '../_components/apps'
 import { Hero } from '../_components/hero'
@@ -17,11 +16,15 @@ import { Hero } from '../_components/hero'
 export const REWARDS = ['KARMA', 'SNT', 'LINEA']
 
 export default function DashboardPage() {
-  const [selectedVault, setSelectedVault] = useState<Vault | null>(null)
-
-  const defaultVault = VAULTS.find(v => v.id === 'SNT') ?? VAULTS[0]
-
-  const activeVaults = VAULTS.filter(v => !v.soon)
+  const {
+    selectedVault,
+    setSelectedVault,
+    defaultVault,
+    activeVaults,
+    registerRefetch,
+    handleDepositSuccess,
+    isModalOpen,
+  } = useVaultSelection()
 
   return (
     <HubLayout>
@@ -89,6 +92,7 @@ export default function DashboardPage() {
                     <VaultCard
                       vault={vault}
                       onDeposit={() => setSelectedVault(vault)}
+                      registerRefetch={registerRefetch}
                     />
                   </div>
                 ))}
@@ -151,11 +155,12 @@ export default function DashboardPage() {
         </div>
       </div>
       <PreDepositModal
-        open={selectedVault !== null}
+        open={isModalOpen}
         onOpenChange={open => !open && setSelectedVault(null)}
         vault={selectedVault ?? defaultVault}
         vaults={activeVaults}
         setActiveVault={setSelectedVault}
+        onDepositSuccess={handleDepositSuccess}
       />
     </HubLayout>
   )
