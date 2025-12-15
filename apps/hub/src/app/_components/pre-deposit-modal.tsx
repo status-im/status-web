@@ -14,7 +14,7 @@ import { formatUnits, parseUnits } from 'viem'
 import { useAccount, useChainId, useSwitchChain } from 'wagmi'
 import { z } from 'zod'
 
-import { PercentIcon, PlusIcon } from '~components/icons/index'
+import { KarmaCircleIcon, PercentIcon, PlusIcon } from '~components/icons/index'
 import { type Vault } from '~constants/index'
 import { useApproveToken } from '~hooks/useApprovePreDepositToken'
 import { useDepositFlow } from '~hooks/useDepositFlow'
@@ -344,6 +344,12 @@ const PreDepositModal = ({
           <div>
             <p className="mb-2 text-13 font-500 text-neutral-50">Rewards</p>
             <div className="flex flex-col flex-wrap gap-4">
+              <div className="flex items-center gap-2 text-15">
+                <span className="text-purple">
+                  <KarmaCircleIcon />
+                </span>
+                <span className="text-neutral-100">KARMA</span>
+              </div>
               <div className="flex items-center gap-2 text-15">
                 <span className="text-neutral-50">
                   <PercentIcon />

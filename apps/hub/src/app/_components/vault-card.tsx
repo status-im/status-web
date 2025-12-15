@@ -13,7 +13,14 @@ import { usePreDepositTVLInUSD } from '~hooks/usePreDepositTVLInUSD'
 import { useUserVaultDeposit } from '~hooks/useUserVaultDeposit'
 import { useVaultsAPY } from '~hooks/useVaultsAPY'
 
-import { DollarIcon, GusdIcon, PercentIcon, PlusIcon, SumIcon } from './icons'
+import {
+  DollarIcon,
+  GusdIcon,
+  KarmaCircleIcon,
+  PercentIcon,
+  PlusIcon,
+  SumIcon,
+} from './icons'
 import { InfoTooltip } from './info-tooltip'
 import { VaultImage } from './vault-image'
 
@@ -156,6 +163,12 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
 
       {/* meta */}
       <ul className="my-4 space-y-2">
+        <li className="flex items-center gap-2 text-15">
+          <span className="text-purple">
+            <KarmaCircleIcon />
+          </span>
+          <span className="text-neutral-100">KARMA</span>
+        </li>
         <li className="flex items-center gap-2 text-15">
           <span className="text-neutral-50">
             <PercentIcon />
