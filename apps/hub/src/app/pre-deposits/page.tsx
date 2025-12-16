@@ -9,6 +9,7 @@ import { formatCurrency } from '~/utils/currency'
 
 import { HubLayout } from '../_components/hub-layout'
 import { InfoTooltip } from '../_components/info-tooltip'
+import { PreDepositFaq } from '../_components/pre-deposit-faq'
 import { PreDepositModal } from '../_components/pre-deposit-modal'
 import { RewardsSection } from '../_components/rewards-section'
 import { VaultCard } from '../_components/vault-card'
@@ -77,6 +78,9 @@ export default function PreDepositPage() {
             />
           ))}
         </div>
+
+        <PreDepositFaq />
+
         <Image
           src="/dragon-key.png"
           alt="Dragon with key"
