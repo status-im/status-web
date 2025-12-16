@@ -1,6 +1,7 @@
 import gitHubIcon from '~public/social/github.svg'
 import statusIcon from '~public/social/status.svg'
 import twitterIcon from '~public/social/twitter.svg'
+import type { getTranslations } from 'next-intl/server'
 
 export const STATUS_URL = 'https://status.im'
 export const KEYCARD_URL = 'https://keycard.tech'
@@ -13,7 +14,27 @@ export const GATEWAY_URL = 'https://gateway.fm'
 export const CATS_FISHING_URL = 'https://cats.fishing'
 export const SPLA_LABS_URL = 'https://splalabs.xyz'
 export const PONZI_HERO_URL = 'https://www.ponzihero.xyz'
+export const HASHVEGAS_URL = 'https://hash.vegas'
 export const DIN_URL = 'https://infura.io'
+
+// Function to create localized routes
+export function getLocalizedRoutes(
+  t: Awaited<ReturnType<typeof getTranslations>>,
+) {
+  return {
+    Navigation: [
+      { name: t('navigation.about.translation'), href: '#about' },
+      { name: t('navigation.features.translation'), href: '#features' },
+      { name: t('navigation.partners.translation'), href: '#partners' },
+      { name: t('navigation.network.translation'), href: '#network' },
+      { name: t('navigation.tokenomics.translation'), href: '#tokenomics' },
+      { name: t('navigation.blog.translation'), href: '#blog' },
+    ],
+    Docs: 'https://docs.status.network/',
+    Bridge: 'https://bridge.status.network/ ',
+    Partner: 'https://statusnetwork.typeform.com/partner',
+  } as const
+}
 
 export const ROUTES = {
   Navigation: [

@@ -1,50 +1,57 @@
+'use client'
+
 import { InfoIcon } from '@status-im/icons/20'
+import { useTranslations } from 'next-intl'
 import { Divider } from './divider'
 import { LevitatingGirl } from './levitating-girl'
 
-const STEPS = [
-  { number: '1', text: 'Ship code' },
-  { number: '2', text: 'Get traction' },
-  { number: '3', text: 'Receive Karma' },
-  { number: '🎉', text: 'Earn funding' },
-]
-
 const Tokenomics = () => {
+  const t = useTranslations()
+
+  const STEPS = [
+    { number: '1', text: t('tokenomics.app_developer.step_1.translation') },
+    { number: '2', text: t('tokenomics.app_developer.step_2.translation') },
+    { number: '3', text: t('tokenomics.app_developer.step_3.translation') },
+    { number: '🎉', text: t('tokenomics.app_developer.step_4.translation') },
+  ]
+
   return (
     <section className="w-full" id="tokenomics">
       <div className="relative px-4 pb-[290px] pt-20 lg:px-[120px] lg:py-40">
         <div className="space-y-20">
           <div className="space-y-5">
             <p className="mb-3 inline-block text-13 font-500 text-purple">
-              05{' '}
+              {t('tokenomics.section_number.translation')}{' '}
               <span className="inline-block h-2 w-px bg-purple-transparent" />{' '}
-              TOKENOMICS
+              {t('tokenomics.section_title.translation')}
             </p>
             <h2 className="max-w-[936px] text-40 font-600 lg:text-64">
-              Earn voting power through
-              <br />
-              positive network engagement
+              {t('tokenomics.title.translation')}
             </h2>
             <p className="max-w-[746px] text-27">
-              The more you contribute to the network, the more influence you
-              gain over funding allocation and the network&apos;s roadmap
-              priorities.
+              {t('tokenomics.description.translation')}
             </p>
             <p className="mt-4 flex items-center gap-1 text-19 text-neutral-50">
-              <InfoIcon className="shrink-0 text-neutral-50" /> This is
-              coordinated by Karma, a non-transferable governance token.
+              <InfoIcon className="shrink-0 text-neutral-50" />{' '}
+              {t('tokenomics.karma_note.translation')}
             </p>
           </div>
 
           <div className="space-y-2">
-            <RoleCard title="App developer" description="" steps={STEPS} />
             <RoleCard
-              title="Liquidity provider"
-              description="Earn Karma for staking SNT and get LP rewards boosted by native yield."
+              title={t('tokenomics.app_developer.title.translation')}
+              description=""
+              steps={STEPS}
             />
             <RoleCard
-              title="Onchain user"
-              description="Get rewarded with Karma for bridging to the network and using apps. A higher Karma means more gasless transactions."
+              title={t('tokenomics.liquidity_provider.title.translation')}
+              description={t(
+                'tokenomics.liquidity_provider.description.translation',
+              )}
+            />
+            <RoleCard
+              title={t('tokenomics.onchain_user.title.translation')}
+              description={t('tokenomics.onchain_user.description.translation')}
             />
           </div>
         </div>

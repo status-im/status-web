@@ -1,52 +1,57 @@
+'use client'
+
+import { useLocale, useTranslations } from 'next-intl'
 import Image from 'next/image'
+import { formatDate } from '../_utils/format-date'
 import { ButtonLink } from './button-link'
 import { Link } from './link'
 
-const POSTS: BlogPost[] = [
-  {
-    category: 'Updates',
-    title: 'Status Steps Up as Founding Member of Linea Consortium',
-    author: {
-      name: 'Us',
-      avatar: '/blog/avatar.webp',
-    },
-    date: 'Jul 29, 2025',
-    image: '/blog/consortium.png',
-    link: 'https://status.app/blog/status-steps-up-as-founding-member-of-linea-consortium',
-  },
-  {
-    category: 'Updates',
-    title: 'Status Launches First Gasless Layer 2 on Linea',
-    author: {
-      name: 'Us',
-      avatar: '/blog/avatar.webp',
-    },
-    date: 'Jul 09, 2025',
-    image: '/blog/gasless.png',
-    link: 'https://status.app/blog/status-network-first-gasless-l2',
-  },
-  {
-    category: 'Updates',
-    title:
-      'Embracing Community Choices: Status to Develop SNT Staking and Status L2',
-    author: {
-      name: 'Us',
-      avatar: '/blog/avatar.webp',
-    },
-    date: 'Jul 30, 2024',
-    image: '/blog/staking.jpg',
-    link: 'https://status.app/blog/snt-staking-and-status-network',
-  },
-]
-
 const Blog = () => {
+  const t = useTranslations()
+
+  const POSTS: BlogPost[] = [
+    {
+      category: t('blog.category.translation'),
+      title: t('blog.post_1.title.translation'),
+      author: {
+        name: t('blog.author.translation'),
+        avatar: '/blog/avatar.webp',
+      },
+      date: '2025-07-29',
+      image: '/blog/consortium.png',
+      link: 'https://status.app/blog/status-steps-up-as-founding-member-of-linea-consortium',
+    },
+    {
+      category: t('blog.category.translation'),
+      title: t('blog.post_2.title.translation'),
+      author: {
+        name: t('blog.author.translation'),
+        avatar: '/blog/avatar.webp',
+      },
+      date: '2025-07-09',
+      image: '/blog/gasless.png',
+      link: 'https://status.app/blog/status-network-first-gasless-l2',
+    },
+    {
+      category: t('blog.category.translation'),
+      title: t('blog.post_3.title.translation'),
+      author: {
+        name: t('blog.author.translation'),
+        avatar: '/blog/avatar.webp',
+      },
+      date: '2024-07-30',
+      image: '/blog/staking.jpg',
+      link: 'https://status.app/blog/snt-staking-and-status-network',
+    },
+  ]
+
   return (
     <section className="w-full" id="blog">
       <div className="px-5 py-[120px] lg:px-[120px] lg:py-[168px]">
         <div className="mb-6 flex items-center justify-between lg:mb-12">
-          <h2 className="text-27 font-600">Stay up to date</h2>
+          <h2 className="text-27 font-600">{t('blog.title.translation')}</h2>
           <ButtonLink variant="white" size="32" href="https://status.app/blog">
-            View blog
+            {t('blog.view_blog_button.translation')}
           </ButtonLink>
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -68,13 +73,14 @@ type BlogPost = {
     name: string
     avatar: string
   }
-  date: string
+  date: Date | string
   image: string
   link: string
 }
 
 const BlogCard = (props: BlogPost) => {
   const { author, category, date, image, link, title } = props
+  const locale = useLocale()
 
   return (
     <Link
@@ -88,7 +94,7 @@ const BlogCard = (props: BlogPost) => {
 
         <p className="text-19 font-600">{title}</p>
 
-        <div className="mt-auto flex h-5 gap-1">
+        <div className="mt-auto flex h-5 items-center gap-1">
           <Image
             src={author.avatar}
             alt={author.name}
@@ -97,7 +103,19 @@ const BlogCard = (props: BlogPost) => {
             className="rounded-full"
           />
           <p className="text-15 font-600">{author.name}</p>
-          <p className="text-15 text-neutral-50">on {date}</p>
+          {/* svg dot separator */}
+          <svg
+            width="4"
+            height="4"
+            viewBox="0 0 4 4"
+            className="mx-1 text-neutral-40"
+            aria-hidden="true"
+          >
+            <circle cx="2" cy="2" r="2" fill="currentColor" />
+          </svg>
+          <p className="text-15 text-neutral-50">
+            {formatDate(date, 'medium', locale)}
+          </p>
         </div>
       </div>
 
