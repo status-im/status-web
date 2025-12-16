@@ -3,6 +3,8 @@ import { Inter } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
 import { cx } from 'cva'
+import { NextIntlClientProvider } from 'next-intl'
+import { getMessages } from 'next-intl/server'
 import { Divider } from './_components/divider'
 import { Footer } from './_components/footer'
 import { NavBar } from './_components/navbar'
@@ -29,6 +31,10 @@ export const metadata = Metadata({
 
   alternates: {
     canonical: './',
+    languages: {
+      'en-GB': '/',
+      'ko-KR': '/ko',
+    },
   },
 
   twitter: {
@@ -41,9 +47,11 @@ type Props = {
   children: React.ReactNode
 }
 
-export default function RootLayout({ children }: Props) {
+export default async function RootLayout({ children }: Props) {
+  const messages = await getMessages()
+
   return (
-    <html lang="en">
+    <html>
       <body
         className={cx(
           inter.variable,
@@ -52,17 +60,19 @@ export default function RootLayout({ children }: Props) {
         )}
         suppressHydrationWarning
       >
-        <div className="relative flex min-h-screen justify-center overflow-clip px-2 pt-[65px] lg:pt-0 2xl:px-0">
-          <div className="relative w-full max-w-[1418px] border-x border-neutral-20">
-            <div className="absolute -left-2 top-0 z-50 h-full w-2 bg-gradient-to-r from-white-100 to-[transparent] 2xl:-left-12 2xl:w-12" />
-            <div className="absolute -right-2 top-0 z-50 h-full w-2 bg-gradient-to-l from-white-100 to-[transparent] 2xl:-right-12 2xl:w-12" />
-            <NavBar />
-            <NavBarMobile />
-            {children}
-            <Divider />
-            <Footer />
+        <NextIntlClientProvider messages={messages}>
+          <div className="relative flex min-h-screen justify-center overflow-clip px-2 pt-[65px] lg:pt-0 2xl:px-0">
+            <div className="relative w-full max-w-[1418px] border-x border-neutral-20">
+              <div className="absolute -left-2 top-0 z-50 h-full w-2 bg-gradient-to-r from-white-100 to-[transparent] 2xl:-left-12 2xl:w-12" />
+              <div className="absolute -right-2 top-0 z-50 h-full w-2 bg-gradient-to-l from-white-100 to-[transparent] 2xl:-right-12 2xl:w-12" />
+              <NavBar />
+              <NavBarMobile />
+              {children}
+              <Divider />
+              <Footer />
+            </div>
           </div>
-        </div>
+        </NextIntlClientProvider>
         <Analytics />
         <Script
           strategy="afterInteractive"

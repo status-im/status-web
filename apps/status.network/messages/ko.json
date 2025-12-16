@@ -1,0 +1,603 @@
+{
+  "meta": {
+    "locale": {
+      "translation": "ko",
+      "notes": "meta::locale"
+    },
+    "name": {
+      "translation": "한국어",
+      "notes": "meta::name"
+    },
+    "direction": {
+      "translation": "ltr",
+      "notes": "meta::direction"
+    },
+    "completion": 50,
+    "description": {
+      "translation": "Status Network 웹사이트 번역",
+      "notes": "meta::description"
+    }
+  },
+  "common": {
+    "loading": {
+      "translation": "로딩 중...",
+      "notes": "common::loading"
+    },
+    "learn_more": {
+      "translation": "더 알아보기",
+      "notes": "common::learn_more"
+    },
+    "get_started": {
+      "translation": "시작하기",
+      "notes": "common::get_started"
+    },
+    "read_more": {
+      "translation": "더 읽기",
+      "notes": "common::read_more"
+    },
+    "read_docs": {
+      "translation": "문서 읽기",
+      "notes": "common::read_docs"
+    },
+    "view_blog": {
+      "translation": "블로그 보기",
+      "notes": "common::view_blog"
+    },
+    "new": {
+      "translation": "신규",
+      "notes": "common::new"
+    },
+    "testnet_live": {
+      "translation": "테스트넷이 활성화되었습니다!",
+      "notes": "common::testnet_live"
+    }
+  },
+  "navigation": {
+    "home": {
+      "translation": "홈",
+      "notes": "navigation::home"
+    },
+    "about": {
+      "translation": "소개",
+      "notes": "navigation::about"
+    },
+    "features": {
+      "translation": "기능",
+      "notes": "navigation::features"
+    },
+    "network": {
+      "translation": "네트워크",
+      "notes": "navigation::network"
+    },
+    "partners": {
+      "translation": "파트너",
+      "notes": "navigation::partners"
+    },
+    "tokenomics": {
+      "translation": "토크노믹스",
+      "notes": "navigation::tokenomics"
+    },
+    "blog": {
+      "translation": "블로그",
+      "notes": "navigation::blog"
+    },
+    "brand": {
+      "translation": "브랜드",
+      "notes": "navigation::brand"
+    }
+  },
+  "hero": {
+    "title": {
+      "translation": "가스 없는 네트워크",
+      "notes": "hero::title"
+    },
+    "subtitle": {
+      "translation": "앱 개발자를 위한 지속 가능한 자금 조달",
+      "notes": "hero::subtitle"
+    },
+    "description": {
+      "translation": "진정으로 무료한 거래로 소셜 앱과 게임을 출시하고 확장하세요.",
+      "notes": "hero::description"
+    }
+  },
+  "about": {
+    "section_number": {
+      "translation": "01",
+      "notes": "about::section_number"
+    },
+    "section_title": {
+      "translation": "STATUS NETWORK이란 무엇인가요?",
+      "notes": "about::section_title"
+    },
+    "title": {
+      "translation": "네이티브 수익률과 수수료로 자금을 조달받는 대규모 가스 없는 거래가 가능한 최초의 이더리움 L2입니다.",
+      "notes": "about::title"
+    },
+    "description": {
+      "translation": "공개 앱, 게임 및 프로토콜을 위한 지속 가능한 자금 조달이 있는 무료 네트워크입니다.",
+      "notes": "about::description"
+    },
+    "build_button": {
+      "translation": "Status Network에서 구축하기",
+      "notes": "about::build_button"
+    },
+    "learn_more_button": {
+      "translation": "더 알아보기",
+      "notes": "about::learn_more_button"
+    }
+  },
+  "features": {
+    "section_number": {
+      "translation": "02",
+      "notes": "features::section_number"
+    },
+    "section_title": {
+      "translation": "왜 STATUS NETWORK인가요?",
+      "notes": "features::section_title"
+    },
+    "title": {
+      "translation": "커뮤니티에 힘을",
+      "notes": "features::title"
+    },
+    "sustainable_funding": {
+      "title": {
+        "translation": "지속 가능한 공공 자금 조달",
+        "notes": "features::sustainable_funding::title"
+      },
+      "description": {
+        "translation": "Status Network는 단기적 인센티브를 넘어서는 급진적인 한 걸음을 내딛습니다. 네이티브 수익률과 수수료로 구동되며, 공개 앱 자금 풀은 커뮤니티가 관리하여 온체인 개발자들을 위한 자본의 지속적인 할당을 보장합니다.",
+        "notes": "features::sustainable_funding::description"
+      },
+      "step_1": {
+        "translation": "사용자들이 수익률 자산을 Status Network에 브리지하여 자금 풀로 리디렉션되는 수익률을 증가시킵니다.",
+        "notes": "features::sustainable_funding::step_1"
+      },
+      "step_2": {
+        "translation": "앱과 게임이 풀에서 할당을 신청합니다. 커뮤니티는 네트워크에 긍정적으로 기여함으로써 획득한 비전송 가능한 거버넌스 토큰인 Karma를 사용하여 할당에 투표합니다:",
+        "notes": "features::sustainable_funding::step_2"
+      },
+      "step_2_staking": {
+        "translation": "SNT 스테이킹",
+        "notes": "features::sustainable_funding::step_2_staking"
+      },
+      "step_2_bridging": {
+        "translation": "수익률 자산 브리징",
+        "notes": "features::sustainable_funding::step_2_bridging"
+      },
+      "step_2_using": {
+        "translation": "앱 사용",
+        "notes": "features::sustainable_funding::step_2_using"
+      },
+      "step_2_premium": {
+        "translation": "프리미엄 가스 지불",
+        "notes": "features::sustainable_funding::step_2_premium"
+      },
+      "step_2_donations": {
+        "translation": "자금 풀에 직접 기부",
+        "notes": "features::sustainable_funding::step_2_donations"
+      },
+      "step_3": {
+        "translation": "모든 자금 지원 프로젝트는 새로운 사용자를 유입시켜 추가 자산 예치와 토큰 스왑을 촉진하여 자금 풀에 할당될 더 많은 수익률과 수수료를 생성합니다.",
+        "notes": "features::sustainable_funding::step_3"
+      },
+      "button": {
+        "translation": "카르믹 토크노믹스 알아보기",
+        "notes": "features::sustainable_funding::button"
+      }
+    },
+    "gasless_transactions": {
+      "title": {
+        "translation": "가스 없는 거래",
+        "notes": "features::gasless_transactions::title"
+      },
+      "description_1": {
+        "translation": "Status Network에서는 누구나 무료 거래를 경험할 수 있습니다! L2 운영 비용이 네이티브 수익률과 수수료로 충당되므로 앱을 사용하기 위해 가스를 브리지할 필요가 없습니다.",
+        "notes": "features::gasless_transactions::description_1"
+      },
+      "description_2": {
+        "translation": "앱과 게임 개발자들은 대규모로 사용자들에게 마찰 없는 온보딩을 제공할 수 있습니다.",
+        "notes": "features::gasless_transactions::description_2"
+      },
+      "button": {
+        "translation": "작동 방식 알아보기",
+        "notes": "features::gasless_transactions::button"
+      }
+    },
+    "performance": {
+      "title": {
+        "translation": "성능을 위해 구축되고 이더리움으로 보안됨",
+        "notes": "features::performance::title"
+      },
+      "description": {
+        "translation": "고속 거래를 위해 Linea의 최첨단 zkEVM 롤업 기술과 함께 이더리움의 보안을 활용하세요. 게임, 소셜, iGaming 및 고처리량 애플리케이션에 완벽합니다.",
+        "notes": "features::performance::description"
+      },
+      "button": {
+        "translation": "Linea에 대해 더 알아보기",
+        "notes": "features::performance::button"
+      }
+    },
+    "decentralization": {
+      "title": {
+        "translation": "탈중앙화를 위해 설계됨",
+        "notes": "features::decentralization::title"
+      },
+      "description": {
+        "translation": "Status와 IFT 생태계의 핵심 가치를 바탕으로 구축된 Status Network는 진정한 탈중앙화 L2가 되도록 설계되었습니다. 궁극적인 목표는 중앙 집중식 통제 지점 없이 커뮤니티가 번영할 수 있는 검열 저항 환경을 제공하는 것입니다.",
+        "notes": "features::decentralization::description"
+      },
+      "button": {
+        "translation": "더 알아보기",
+        "notes": "features::decentralization::button"
+      }
+    }
+  },
+  "partners": {
+    "section_number": {
+      "translation": "03",
+      "notes": "partners::section_number"
+    },
+    "section_title": {
+      "translation": "생태계 및 파트너",
+      "notes": "partners::section_title"
+    },
+    "title": {
+      "translation": "대담한 크리에이터와 개발자들에게 힘을",
+      "notes": "partners::title"
+    },
+    "subtitle": {
+      "translation": "최고의 파트너들과 함께 구축",
+      "notes": "partners::subtitle"
+    },
+    "cats_fishing": {
+      "title": {
+        "translation": "Cats Fishing",
+        "notes": "partners::cats_fishing::title"
+      },
+      "description": {
+        "translation": "최초의 오픈소스, 플레이 증명 모바일 낚시 게임",
+        "notes": "partners::cats_fishing::description"
+      }
+    },
+    "spla_labs": {
+      "title": {
+        "translation": "Spla Labs",
+        "notes": "partners::spla_labs::title"
+      },
+      "description": {
+        "translation": "TODL & Ponzi Hero 게임의 개발자",
+        "notes": "partners::spla_labs::description"
+      }
+    },
+    "hash_vegas": {
+      "title": {
+        "translation": "Hash Vegas",
+        "notes": "partners::hash_vegas::title"
+      },
+      "description": {
+        "translation": "공정하고 투명한 온체인 게임",
+        "notes": "partners::hash_vegas::description"
+      }
+    },
+    "linea": {
+      "title": {
+        "translation": "Linea",
+        "notes": "partners::linea::title"
+      },
+      "description": {
+        "translation": "보안 zkEVM L2 스택",
+        "notes": "partners::linea::description"
+      }
+    },
+    "gateway": {
+      "title": {
+        "translation": "Gateway",
+        "notes": "partners::gateway::title"
+      },
+      "description": {
+        "translation": "롤업 인프라 및 운영",
+        "notes": "partners::gateway::description"
+      }
+    },
+    "din": {
+      "title": {
+        "translation": "DIN",
+        "notes": "partners::din::title"
+      },
+      "description": {
+        "translation": "탈중앙화 인프라 네트워크",
+        "notes": "partners::din::description"
+      }
+    }
+  },
+  "network": {
+    "section_number": {
+      "translation": "04",
+      "notes": "network::section_number"
+    },
+    "section_title": {
+      "translation": "네트워크",
+      "notes": "network::section_title"
+    },
+    "title": {
+      "translation": "가장 고급 탈중앙화 스택 활용",
+      "notes": "network::title"
+    },
+    "description": {
+      "translation": "개발자들은 자유 기술 연구소 솔루션으로부터 우선 지원을 받습니다:",
+      "notes": "network::description"
+    },
+    "status": {
+      "title": {
+        "translation": "Status",
+        "notes": "network::status::title"
+      },
+      "description": {
+        "translation": "400만+ 다운로드를 기록한 이더리움 슈퍼 앱",
+        "notes": "network::status::description"
+      }
+    },
+    "waku": {
+      "title": {
+        "translation": "Waku",
+        "notes": "network::waku::title"
+      },
+      "description": {
+        "translation": "P2P 암호화 메시징 프로토콜",
+        "notes": "network::waku::description"
+      }
+    },
+    "codex": {
+      "title": {
+        "translation": "Codex",
+        "notes": "network::codex::title"
+      },
+      "description": {
+        "translation": "탈중앙화 데이터 저장 계층",
+        "notes": "network::codex::description"
+      }
+    },
+    "nimbus": {
+      "title": {
+        "translation": "Nimbus",
+        "notes": "network::nimbus::title"
+      },
+      "description": {
+        "translation": "이더리움 코어 개발자. 이더리움 합의를 구동",
+        "notes": "network::nimbus::description"
+      }
+    },
+    "keycard": {
+      "title": {
+        "translation": "Keycard",
+        "notes": "network::keycard::title"
+      },
+      "description": {
+        "translation": "보안 오픈소스 하드웨어 지갑",
+        "notes": "network::keycard::description"
+      }
+    }
+  },
+  "tokenomics": {
+    "section_number": {
+      "translation": "05",
+      "notes": "tokenomics::section_number"
+    },
+    "section_title": {
+      "translation": "토크노믹스",
+      "notes": "tokenomics::section_title"
+    },
+    "title": {
+      "translation": "긍정적인 네트워크 참여를 통한 투표권 획득",
+      "notes": "tokenomics::title"
+    },
+    "description": {
+      "translation": "네트워크에 더 많이 기여할수록 자금 할당과 네트워크 로드맵 우선순위에 대한 영향력을 더 많이 얻습니다.",
+      "notes": "tokenomics::description"
+    },
+    "karma_note": {
+      "translation": "이는 비전송 가능한 거버넌스 토큰인 Karma에 의해 조정됩니다.",
+      "notes": "tokenomics::karma_note"
+    },
+    "app_developer": {
+      "title": {
+        "translation": "앱 개발자",
+        "notes": "tokenomics::app_developer::title"
+      },
+      "step_1": {
+        "translation": "코드 배포",
+        "notes": "tokenomics::app_developer::step_1"
+      },
+      "step_2": {
+        "translation": "트랙션 확보",
+        "notes": "tokenomics::app_developer::step_2"
+      },
+      "step_3": {
+        "translation": "Karma 획득",
+        "notes": "tokenomics::app_developer::step_3"
+      },
+      "step_4": {
+        "translation": "자금 획득",
+        "notes": "tokenomics::app_developer::step_4"
+      }
+    },
+    "liquidity_provider": {
+      "title": {
+        "translation": "유동성 공급자",
+        "notes": "tokenomics::liquidity_provider::title"
+      },
+      "description": {
+        "translation": "SNT 스테이킹으로 Karma를 획득하고 네이티브 수익률로 부스트된 LP 보상을 받으세요.",
+        "notes": "tokenomics::liquidity_provider::description"
+      }
+    },
+    "onchain_user": {
+      "title": {
+        "translation": "온체인 사용자",
+        "notes": "tokenomics::onchain_user::title"
+      },
+      "description": {
+        "translation": "네트워크에 브리지하고 앱을 사용하여 Karma로 보상을 받으세요. 더 높은 Karma는 더 많은 가스 없는 거래를 의미합니다.",
+        "notes": "tokenomics::onchain_user::description"
+      }
+    }
+  },
+  "blog": {
+    "title": {
+      "translation": "최신 소식 확인",
+      "notes": "blog::title"
+    },
+    "view_blog_button": {
+      "translation": "블로그 보기",
+      "notes": "blog::view_blog_button"
+    },
+    "category": {
+      "translation": "업데이트",
+      "notes": "blog::category"
+    },
+    "author": {
+      "translation": "우리",
+      "notes": "blog::author"
+    },
+    "post_1": {
+      "title": {
+        "translation": "Status, Linea 컨소시엄 창립 멤버로 참여",
+        "notes": "blog::post_1::title"
+      }
+    },
+    "post_2": {
+      "title": {
+        "translation": "Status, Linea에서 최초의 가스 없는 Layer 2 출시",
+        "notes": "blog::post_2::title"
+      }
+    },
+    "post_3": {
+      "title": {
+        "translation": "커뮤니티 선택 수용: Status, SNT 스테이킹 및 Status L2 개발",
+        "notes": "blog::post_3::title"
+      }
+    }
+  },
+  "footer": {
+    "copyright": {
+      "translation": "© Status Research & Development GmbH",
+      "notes": "footer::copyright"
+    },
+    "privacy_policy": {
+      "translation": "개인정보 보호정책",
+      "notes": "footer::privacy_policy"
+    },
+    "terms_of_use": {
+      "translation": "이용약관",
+      "notes": "footer::terms_of_use"
+    },
+    "brand": {
+      "translation": "브랜드 자산",
+      "notes": "footer::brand"
+    }
+  },
+  "pre_footer": {
+    "title": {
+      "translation": "무료 네트워크에서 구축할 준비가 되셨나요?",
+      "notes": "pre_footer::title"
+    },
+    "partner_button": {
+      "translation": "파트너십",
+      "notes": "pre_footer::partner_button"
+    },
+    "read_docs_button": {
+      "translation": "문서 읽기",
+      "notes": "pre_footer::read_docs_button"
+    }
+  },
+  "brand": {
+    "page_title": {
+      "translation": "브랜드",
+      "notes": "brand::page_title"
+    },
+    "page_description": {
+      "translation": "Status Network 브랜드 자산을 받아보세요.",
+      "notes": "brand::page_description"
+    },
+    "main_title": {
+      "translation": "브랜드 자산",
+      "notes": "brand::main_title"
+    },
+    "last_updated": {
+      "translation": "마지막 업데이트: 2025년 2월 10일",
+      "notes": "brand::last_updated"
+    },
+    "download_all": {
+      "translation": "모든 자산 다운로드",
+      "notes": "brand::download_all"
+    },
+    "logo_title": {
+      "translation": "로고",
+      "notes": "brand::logo_title"
+    },
+    "logo_description": {
+      "translation": "메인 로고",
+      "notes": "brand::logo_description"
+    },
+    "logo_variation_title": {
+      "translation": "로고 변형",
+      "notes": "brand::logo_variation_title"
+    },
+    "logo_variation_description": {
+      "translation": "창의적인 인쇄 레이아웃용",
+      "notes": "brand::logo_variation_description"
+    },
+    "mark_only_title": {
+      "translation": "마크만",
+      "notes": "brand::mark_only_title"
+    },
+    "mark_only_description": {
+      "translation": "워드마크 포함",
+      "notes": "brand::mark_only_description"
+    },
+    "main_colors_title": {
+      "translation": "메인 컬러",
+      "notes": "brand::main_colors_title"
+    },
+    "main_colors_description": {
+      "translation": "메인 컬러 팔레트",
+      "notes": "brand::main_colors_description"
+    },
+    "artwork_title": {
+      "translation": "아트워크",
+      "notes": "brand::artwork_title"
+    },
+    "artwork_description": {
+      "translation": "메인 캐릭터들",
+      "notes": "brand::artwork_description"
+    },
+    "download_button": {
+      "translation": "다운로드",
+      "notes": "brand::download_button"
+    },
+    "alt_text": {
+      "main_logo": {
+        "translation": "메인 로고",
+        "notes": "brand::alt_text::main_logo"
+      },
+      "mark_only": {
+        "translation": "마크만",
+        "notes": "brand::alt_text::mark_only"
+      },
+      "artwork": {
+        "translation": "아트워크",
+        "notes": "brand::alt_text::artwork"
+      }
+    }
+  },
+  "not_found": {
+    "title": {
+      "translation": "찾고 계신 페이지가 아닙니다",
+      "notes": "not_found::title"
+    },
+    "take_me_home": {
+      "translation": "홈으로 가기",
+      "notes": "not_found::take_me_home"
+    }
+  }
+}
