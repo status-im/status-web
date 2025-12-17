@@ -35,7 +35,7 @@ import { useCopyToClipboard } from '@status-im/wallet/hooks'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { cx } from 'class-variance-authority'
-import { Interface, parseUnits } from 'ethers'
+import { parseUnits } from 'ethers'
 
 import { useEthBalance } from '@/hooks/use-eth-balance'
 import { renderMarkdown } from '@/lib/markdown'
@@ -44,198 +44,34 @@ import { usePendingTransactions } from '@/providers/pending-transactions-context
 import { useWallet } from '@/providers/wallet-context'
 
 import { AssetChart } from './asset-chart'
+import {
+  type AssetData,
+  type AssetsResponse,
+  buildTokenQueryParams,
+  erc20,
+  fetchGasFees,
+  fetchTrpcData,
+  type GasFees,
+  getTokenEndpoint,
+  getTokenMetadata,
+  matchesAsset,
+  matchesTokenSummary,
+  NETWORKS,
+  type TokenData,
+} from './token-helpers'
 
-import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
-
-type TokenData =
-  | ApiOutput['assets']['token']
-  | ApiOutput['assets']['nativeToken']
-type AssetsResponse = ApiOutput['assets']['all']
-type AssetData = ApiOutput['assets']['all']['assets'][number]
-type TokenMetadata = NonNullable<
-  NonNullable<TokenData['assets']>[NetworkType]
->['metadata']
-
-type GasFees = {
-  feeEth: number
-  feeEur: number
-  maxFeeEth: number
-  maxFeeEur: number
-  confirmationTime: string
-  txParams: {
-    gasLimit: string
-    maxFeePerGas: string
-    maxPriorityFeePerGas: string
-  }
-}
+import type { NetworkType } from '@status-im/wallet/data'
 
 type Props = {
   address: string
   ticker: string
 }
 
-const NETWORKS = ['ethereum'] as const
-
 // Query cache time constants
 const TOKEN_DETAIL_STALE_TIME = 15 * 1000 // 15 seconds
 const TOKEN_DETAIL_GC_TIME = 60 * 60 * 1000 // 1 hour
 const OPTIMIZED_TOKEN_STALE_TIME = 5 * 1000 // 5 seconds
 const OPTIMIZED_TOKEN_REFETCH_INTERVAL = 30 * 1000 // 30 seconds
-
-const erc20 = new Interface(['function transfer(address to, uint256 amount)'])
-
-// Helper function to build tRPC API URL with query parameters
-function buildTrpcUrl(endpoint: string, params: Record<string, unknown>): URL {
-  const url = new URL(
-    `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/${endpoint}`,
-  )
-  url.searchParams.set(
-    'input',
-    JSON.stringify({
-      json: params,
-    }),
-  )
-  return url
-}
-
-// Helper function to fetch data from tRPC API
-async function fetchTrpcData<T>(
-  endpoint: string,
-  params: Record<string, unknown>,
-  errorMessage: string,
-): Promise<T> {
-  const url = buildTrpcUrl(endpoint, params)
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-
-  if (!response.ok) {
-    throw new Error(errorMessage)
-  }
-
-  const body = await response.json()
-  return body.result.data.json
-}
-
-// Helper function to get token endpoint based on ticker
-function getTokenEndpoint(
-  ticker: string,
-): 'assets.token' | 'assets.nativeToken' {
-  return ticker.startsWith('0x') ? 'assets.token' : 'assets.nativeToken'
-}
-
-// Helper function to build token query parameters
-function buildTokenQueryParams(
-  ticker: string,
-  address: string,
-  options?: {
-    skipMetadata?: boolean
-    previousMetadata?: TokenMetadata
-  },
-): Record<string, unknown> {
-  const baseParams: Record<string, unknown> = {
-    address,
-    networks: NETWORKS,
-    ...(ticker.startsWith('0x') ? { contract: ticker } : { symbol: ticker }),
-  }
-
-  if (options?.skipMetadata) {
-    baseParams.skipMetadata = true
-  }
-
-  if (options?.previousMetadata) {
-    baseParams.previousMetadata = options.previousMetadata
-  }
-
-  return baseParams
-}
-
-// Helper function to build gas fee estimation parameters
-function buildGasFeeParams(
-  isNative: boolean,
-  from: string,
-  to: string,
-  value: string,
-  contractAddress?: string,
-): Record<string, unknown> {
-  if (isNative) {
-    return {
-      from,
-      to,
-      value,
-    }
-  }
-
-  if (!contractAddress) {
-    throw new Error('Contract address not found')
-  }
-
-  const amount = BigInt(value)
-  const data = erc20.encodeFunctionData('transfer', [to, amount])
-
-  return {
-    from,
-    to: contractAddress,
-    value: '0x0',
-    data,
-  }
-}
-
-// Helper function to fetch gas fees
-async function fetchGasFees(
-  from: string,
-  to: string,
-  value: string,
-  isNative: boolean,
-  contractAddress?: string,
-): Promise<GasFees> {
-  const params = buildGasFeeParams(isNative, from, to, value, contractAddress)
-
-  return fetchTrpcData<GasFees>(
-    'nodes.getFeeRate',
-    {
-      network: 'ethereum',
-      params,
-    },
-    'Failed to fetch gas fees',
-  )
-}
-
-function matchesAsset(asset: AssetData, ticker: string): boolean {
-  if (ticker.startsWith('0x')) {
-    return (
-      ('contract' in asset &&
-        asset.contract?.toLowerCase() === ticker.toLowerCase()) ||
-      false
-    )
-  } else {
-    return asset.symbol?.toLowerCase() === ticker.toLowerCase()
-  }
-}
-
-function matchesTokenSummary(
-  summary: TokenData['summary'],
-  ticker: string,
-): boolean {
-  if (ticker.startsWith('0x')) {
-    return summary.contracts?.ethereum?.toLowerCase() === ticker.toLowerCase()
-  } else {
-    return summary.symbol?.toUpperCase() === ticker.toUpperCase()
-  }
-}
-
-function getTokenMetadata(
-  tokenDetail: TokenData | undefined,
-  shouldUse: boolean,
-): TokenMetadata | undefined {
-  if (!tokenDetail?.assets || !shouldUse) {
-    return undefined
-  }
-  return Object.values(tokenDetail.assets)[0]?.metadata
-}
 
 const Token = (props: Props) => {
   const { ticker, address } = props
