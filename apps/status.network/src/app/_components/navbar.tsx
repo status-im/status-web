@@ -36,7 +36,7 @@ const NavBar = () => {
           >
             Read docs
           </ButtonLink>
-          <ButtonLink href={ROUTES.Bridge} size="32">
+          <ButtonLink href={ROUTES.Hub} size="32">
             Get started
           </ButtonLink>
         </div>

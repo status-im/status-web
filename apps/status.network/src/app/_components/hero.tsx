@@ -46,7 +46,7 @@ const Hero = () => {
             </p>
 
             <div className="flex space-x-3">
-              <ButtonLink href={ROUTES.Bridge} variant="primary">
+              <ButtonLink href={ROUTES.Hub} variant="primary">
                 Get started
               </ButtonLink>
               <ButtonLink href={ROUTES.Docs} variant="secondary">
