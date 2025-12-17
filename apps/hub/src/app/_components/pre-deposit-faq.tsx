@@ -20,10 +20,7 @@ const ITEMS: AccordionItem[] = [
 
 const PreDepositFaq = () => {
   return (
-    <div className="w-full rounded-32 bg-white-100 p-6 shadow-1 lg:p-8">
-      <h2 className="mb-6 text-19 font-600 text-neutral-100 lg:text-27">
-        Frequently Asked Questions
-      </h2>
+    <div className="w-full">
       <Accordion items={ITEMS} />
     </div>
   )
