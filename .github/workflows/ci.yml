@@ -22,6 +22,7 @@ jobs:
         with:
           # https://github.com/changesets/changesets/issues/1055
           fetch-depth: 0
+          submodules: true
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
