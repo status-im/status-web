@@ -27,6 +27,18 @@ import type { NetworkType } from '../types'
 
 type ERC20Token = (typeof erc20TokenList)['tokens'][number]
 
+const tokenMetadataSchema = z.object({
+  market_cap: z.number(),
+  fully_diluted: z.number(),
+  circulation: z.number(),
+  total_supply: z.number(),
+  all_time_high: z.number(),
+  all_time_low: z.number(),
+  rank_by_market_cap: z.number().nullable(),
+  about: z.string(),
+  volume_24: z.number(),
+})
+
 type Asset = {
   networks: NetworkType[]
   icon: string
@@ -133,21 +145,45 @@ function filterTokensByNetworks<T extends { chainId: number }>(
 /**
  * Fetch all CoinGecko data for a token (price, price history, markets, metadata)
  */
-async function fetchTokenData(symbol: string) {
+async function fetchTokenData(
+  symbol: string,
+  options?: { skipMetadata?: boolean },
+) {
+  const { skipMetadata = false } = options ?? {}
+
+  const pricePromise = fetchTokensPrice(
+    [symbol],
+    COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE,
+  ).then(prices => prices[symbol])
+
+  const priceHistoryPromise = skipMetadata
+    ? Promise.resolve({
+        prices: [],
+        market_caps: [],
+        total_volumes: [],
+      } as Awaited<ReturnType<typeof fetchTokenPriceHistory>>)
+    : fetchTokenPriceHistory(
+        symbol,
+        'all',
+        COINGECKO_REVALIDATION_TIMES.PRICE_HISTORY,
+      )
+
+  const tokenMarketsPromise = skipMetadata
+    ? Promise.resolve(null)
+    : fetchTokenMarkets(symbol, COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE)
+
+  const tokenMetadataPromise = skipMetadata
+    ? Promise.resolve(null)
+    : fetchTokenMetadata(
+        symbol,
+        COINGECKO_REVALIDATION_TIMES.TOKEN_METADATA,
+      ).catch(() => null)
+
   const [price, priceHistory, tokenMarkets, tokenMetadata] = await Promise.all([
-    fetchTokensPrice([symbol], COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE).then(
-      prices => prices[symbol],
-    ),
-    fetchTokenPriceHistory(
-      symbol,
-      'all',
-      COINGECKO_REVALIDATION_TIMES.PRICE_HISTORY,
-    ),
-    fetchTokenMarkets(symbol, COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE),
-    fetchTokenMetadata(
-      symbol,
-      COINGECKO_REVALIDATION_TIMES.TOKEN_METADATA,
-    ).catch(() => null),
+    pricePromise,
+    priceHistoryPromise,
+    tokenMarketsPromise,
+    tokenMetadataPromise,
   ])
 
   return {
@@ -186,10 +222,21 @@ export const assetsRouter = router({
         address: z.string(),
         networks: z.array(z.enum(['ethereum'])),
         symbol: z.string(),
+        skipMetadata: z.boolean().optional(),
+        previousMetadata: tokenMetadataSchema.optional(),
       }),
     )
     .query(async ({ input }) => {
-      const inputHash = JSON.stringify(input)
+      const { skipMetadata, previousMetadata, ...rest } = input
+      const inputHash = JSON.stringify(rest)
+
+      if (skipMetadata) {
+        return await nativeToken({
+          ...rest,
+          skipMetadata: true,
+          previousMetadata,
+        })
+      }
 
       return await cachedNativeToken(inputHash)
     }),
@@ -199,10 +246,21 @@ export const assetsRouter = router({
         address: z.string(),
         networks: z.array(z.enum(['ethereum'])),
         contract: z.string(),
+        skipMetadata: z.boolean().optional(),
+        previousMetadata: tokenMetadataSchema.optional(),
       }),
     )
     .query(async ({ input }) => {
-      const inputHash = JSON.stringify(input)
+      const { skipMetadata, previousMetadata, ...rest } = input
+      const inputHash = JSON.stringify(rest)
+
+      if (skipMetadata) {
+        return await token({
+          ...rest,
+          skipMetadata: true,
+          previousMetadata,
+        })
+      }
 
       return await cachedToken(inputHash)
     }),
@@ -507,10 +565,14 @@ async function nativeToken({
   address,
   networks,
   symbol,
+  skipMetadata = false,
+  previousMetadata,
 }: {
   address: string
   networks: NetworkType[]
   symbol: string
+  skipMetadata?: boolean
+  previousMetadata?: Asset['metadata']
 }) {
   const filteredNativeTokens = filterTokensByNetworks(
     nativeTokenList.tokens,
@@ -536,7 +598,7 @@ async function nativeToken({
       }
 
       const { price, priceHistory, tokenMarkets, tokenMetadata } =
-        await fetchTokenData(token.symbol)
+        await fetchTokenData(token.symbol, { skipMetadata })
 
       const asset: Asset = map({
         token,
@@ -545,6 +607,7 @@ async function nativeToken({
         priceHistory,
         tokenMarkets,
         tokenMetadata,
+        previousMetadata: skipMetadata ? previousMetadata : undefined,
       })
       assets[STATUS_NETWORKS[token.chainId]] = asset
     }),
@@ -573,10 +636,14 @@ async function token({
   address,
   networks,
   contract,
+  skipMetadata = false,
+  previousMetadata,
 }: {
   address: string
   networks: NetworkType[]
   contract: string
+  skipMetadata?: boolean
+  previousMetadata?: Asset['metadata']
 }) {
   const erc20Token = erc20TokenList.tokens.find(
     token =>
@@ -613,7 +680,7 @@ async function token({
       }
 
       const { price, priceHistory, tokenMarkets, tokenMetadata } =
-        await fetchTokenData(token.symbol)
+        await fetchTokenData(token.symbol, { skipMetadata })
 
       const asset = map({
         token,
@@ -622,6 +689,7 @@ async function token({
         priceHistory,
         tokenMarkets,
         tokenMetadata,
+        previousMetadata: skipMetadata ? previousMetadata : undefined,
       })
       assets[STATUS_NETWORKS[token.chainId]] = asset
     }),
@@ -901,9 +969,17 @@ function map(data: {
   priceHistory: Awaited<ReturnType<typeof fetchTokenPriceHistory>>
   tokenMarkets: CoinGeckoMarketsResponse[number] | null
   tokenMetadata: CoinGeckoCoinDetailResponse | null
+  previousMetadata?: Asset['metadata']
 }): Asset {
-  const { token, balance, price, priceHistory, tokenMarkets, tokenMetadata } =
-    data
+  const {
+    token,
+    balance,
+    price,
+    priceHistory,
+    tokenMarkets,
+    tokenMetadata,
+    previousMetadata,
+  } = data
 
   // CoinGecko price history format: prices is [timestamp, price][]
   const prices = priceHistory.prices
@@ -938,7 +1014,33 @@ function map(data: {
     finalTotalSupply,
   )
 
-  const about = extractTokenDescription(tokenMetadata)
+  const about =
+    previousMetadata?.about ?? extractTokenDescription(tokenMetadata)
+
+  // Build base metadata with dynamic fields
+  const baseMetadata = {
+    market_cap: marketCap,
+    volume_24: finalVolume24,
+    rank_by_market_cap:
+      rankByMarketCap ?? previousMetadata?.rank_by_market_cap ?? null,
+  }
+
+  // If previousMetadata exists, merge with base (preserving static fields)
+  // Otherwise, create full metadata with all fields
+  const metadata = previousMetadata
+    ? {
+        ...previousMetadata,
+        ...baseMetadata,
+      }
+    : {
+        ...baseMetadata,
+        fully_diluted: fullyDiluted,
+        circulation: finalCirculation,
+        total_supply: finalTotalSupply,
+        all_time_high: prices.length ? Math.max(...prices) : priceUsd,
+        all_time_low: prices.length ? Math.min(...prices) : priceUsd,
+        about,
+      }
 
   return {
     networks: [STATUS_NETWORKS[token.chainId]],
@@ -953,17 +1055,7 @@ function map(data: {
     balance: Number(balance) / 10 ** token.decimals,
     total_eur: (Number(balance) / 10 ** token.decimals) * price.usd,
     decimals: token.decimals,
-    metadata: {
-      market_cap: marketCap,
-      fully_diluted: fullyDiluted,
-      circulation: finalCirculation,
-      total_supply: finalTotalSupply,
-      all_time_high: prices.length ? Math.max(...prices) : priceUsd,
-      all_time_low: prices.length ? Math.min(...prices) : priceUsd,
-      volume_24: finalVolume24,
-      rank_by_market_cap: rankByMarketCap,
-      about: about,
-    },
+    metadata,
   }
 }
 
