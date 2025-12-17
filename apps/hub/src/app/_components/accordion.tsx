@@ -15,14 +15,14 @@ type Props = {
 const Accordion = ({ items }: Props) => {
   return (
     <AccordionPrimitive.Root type="multiple" className="flex flex-col gap-2">
-      {items.map((item, index) => (
+      {items.map(item => (
         <AccordionPrimitive.Item
-          key={index}
-          value={`item-${index}`}
-          className="rounded-20 border border-neutral-10 bg-white-100 p-3 shadow-1 lg:rounded-32 lg:px-8 lg:py-6"
+          key={item.title}
+          value={item.title}
+          className="rounded-20 border border-neutral-10 bg-white-100 shadow-1 lg:rounded-32"
         >
           <AccordionPrimitive.Header>
-            <AccordionPrimitive.Trigger className="group flex w-full items-center justify-start gap-3 text-left text-15 font-500 text-neutral-100 lg:text-19">
+            <AccordionPrimitive.Trigger className="group flex w-full items-center justify-start gap-3 p-3 text-left text-15 font-500 text-neutral-100 lg:px-8 lg:py-6 lg:text-19">
               <div className="flex size-8 items-center justify-center rounded-full bg-customisation-purple-50/5 text-19 text-purple transition-colors duration-200 group-active:bg-customisation-purple-50/30 group-hover:bg-customisation-purple-50/20 lg:size-12">
                 <ChevronDownIcon className="size-5 shrink-0 text-purple transition-transform duration-200 group-data-[state=open]:rotate-180" />
               </div>
