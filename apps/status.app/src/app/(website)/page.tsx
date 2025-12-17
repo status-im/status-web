@@ -2,6 +2,7 @@ import { Button, Text } from '@status-im/components'
 import { cx } from 'class-variance-authority'
 
 import { ROUTES } from '~/config/routes'
+import { jsonLD, JSONLDScript } from '~/utils/json-ld'
 import { Image, Video } from '~components/assets'
 import { Body } from '~components/body'
 import { ColorTheme } from '~website/_components/color-theme'
@@ -24,8 +25,23 @@ export const revalidate = 3600 // 1 hour
 export default async function HomePage() {
   const { posts } = await getPosts({ limit: 3 })
 
+  const organizationSchema = jsonLD.organization({
+    name: 'Status',
+    url: 'https://status.app',
+    description:
+      'The open-source, decentralised wallet and messenger. Make the jump to web3.',
+  })
+
+  const websiteSchema = jsonLD.website({
+    name: 'Status',
+    url: 'https://status.app',
+    description:
+      'The open-source, decentralised wallet and messenger. Make the jump to web3.',
+  })
+
   return (
     <>
+      <JSONLDScript schema={[organizationSchema, websiteSchema]} />
       <div className="relative flex w-full justify-center">
         <Image
           id="Non Beta Release/Illustrations/hero-1:930:1424"
@@ -164,7 +180,7 @@ export default async function HomePage() {
                   </div>
                   <Image
                     id="Non Beta Release/Icons/Payment_Icons:648:96"
-                    alt=""
+                    alt="Payment method icons including credit card and Apple Pay"
                     width={216}
                     height={32}
                     className="mb-4 ml-4"
@@ -310,7 +326,7 @@ export default async function HomePage() {
                 width={1063}
                 height={1195}
                 id="Homepage/Screens/Extension Section/Extension_01:2127:2390"
-                alt=""
+                alt="Status Portfolio Wallet browser extension interface showing portfolio tracking features"
               />
             </div>
           </div>
@@ -421,7 +437,8 @@ export default async function HomePage() {
             <div className="absolute left-[150px] top-[-65px] 2md:left-[423px]">
               <Image
                 id="Non Beta Release/Stickers/01:455:455"
-                alt=""
+                alt="A sticker showing the Status logo"
+                aria-hidden
                 className="!aspect-square"
                 width={152}
                 height={152}

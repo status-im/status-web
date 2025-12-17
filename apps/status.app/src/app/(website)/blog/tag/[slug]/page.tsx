@@ -3,6 +3,7 @@ import { cloneElement } from 'react'
 import { Text } from '@status-im/components'
 import { notFound } from 'next/navigation'
 
+import { Metadata } from '~app/_metadata'
 import { Body } from '~components/body'
 import { Breadcrumbs } from '~components/breadcrumbs'
 import { getPostsByTagSlug, getTagSlugs } from '~website/_lib/ghost'
@@ -22,6 +23,18 @@ export async function generateStaticParams() {
 
 type Props = {
   params: Promise<{ slug: string }>
+}
+
+export async function generateMetadata({ params }: Props) {
+  const slug = (await params).slug
+
+  return Metadata({
+    title: `Tag: ${slug}`,
+    description: `Blog posts tagged with ${slug}`,
+    alternates: {
+      canonical: `/blog/tag/${slug}`,
+    },
+  })
 }
 
 export default async function BlogTagPage(props: Props) {

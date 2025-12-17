@@ -3,6 +3,7 @@ import { Text } from '@status-im/components'
 import { DownloadIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
 
+import { jsonLD, JSONLDScript } from '~/utils/json-ld'
 import { Metadata } from '~app/_metadata'
 import { rgbToHex } from '~app/_utils/rgb-to-hex'
 import { Image as AssetImage } from '~components/assets'
@@ -19,6 +20,9 @@ import type { ImageType, ZipFileId } from '~components/assets'
 export const metadata = Metadata({
   title: 'Brand',
   description: 'Get Status brand assets.',
+  alternates: {
+    canonical: '/brand',
+  },
 })
 
 const transformColor = (name: string, rgba: string, invert = false) => {
@@ -32,35 +36,203 @@ const transformColor = (name: string, rgba: string, invert = false) => {
 }
 
 export default function BrandPage() {
-  return (
-    <Body className="relative">
-      <ParallaxCircle
-        color="purple"
-        className="left-[-338px] top-[-338px] xl:left-[-270px] xl:top-[-56px]"
-      />
-      <ParallaxCircle
-        color="sky"
-        className="left-[-382px] top-[192px] xl:left-[240px] xl:top-[-454px]"
-      />
-      <ParallaxCircle
-        color="orange"
-        className="left-[82px] top-[136px] xl:left-[250px] xl:top-[178px]"
-      />
-      <ParallaxCircle
-        color="yellow"
-        className="left-[49px] right-auto top-[1300px] xl:left-auto xl:right-[100px] xl:top-[560px]"
-      />
-      <HeroSection
-        tag="Brand"
-        title="Get Status brand assets"
-        className="relative z-20 pb-12 xl:pb-30"
-        action={
-          <div className="flex w-full flex-col gap-3 rounded-16 border border-dashed border-neutral-80/20 bg-white-20 p-2 pl-3 sm:max-w-[462px] sm:flex-row sm:items-center sm:gap-10">
-            <Text size={13}>
-              This ZIP file contains Status logos, partnership badges, and
-              product assets.
-            </Text>
+  const organizationSchema = jsonLD.organization({
+    name: 'Status',
+    url: 'https://status.app',
+    description: 'Get Status brand assets.',
+  })
 
+  return (
+    <>
+      <JSONLDScript schema={organizationSchema} />
+      <Body className="relative">
+        <ParallaxCircle
+          color="purple"
+          className="left-[-338px] top-[-338px] xl:left-[-270px] xl:top-[-56px]"
+        />
+        <ParallaxCircle
+          color="sky"
+          className="left-[-382px] top-[192px] xl:left-[240px] xl:top-[-454px]"
+        />
+        <ParallaxCircle
+          color="orange"
+          className="left-[82px] top-[136px] xl:left-[250px] xl:top-[178px]"
+        />
+        <ParallaxCircle
+          color="yellow"
+          className="left-[49px] right-auto top-[1300px] xl:left-auto xl:right-[100px] xl:top-[560px]"
+        />
+        <HeroSection
+          tag="Brand"
+          title="Get Status brand assets"
+          className="relative z-20 pb-12 xl:pb-30"
+          action={
+            <div className="flex w-full flex-col gap-3 rounded-16 border border-dashed border-neutral-80/20 bg-white-20 p-2 pl-3 sm:max-w-[462px] sm:flex-row sm:items-center sm:gap-10">
+              <Text size={13}>
+                This ZIP file contains Status logos, partnership badges, and
+                product assets.
+              </Text>
+
+              <DownloadZipButton
+                iconBefore={<DownloadIcon />}
+                zipFileId="Brand/brand-assets.zip"
+              >
+                Download
+              </DownloadZipButton>
+            </div>
+          }
+        />
+
+        <div className="relative border-b border-dashed border-neutral-80/20 pb-12 xl:pb-20">
+          <LogoSection
+            title="Our logo"
+            description="With typo in multiple versions"
+            assetName="Brand/logo-assets.zip"
+            logos={[
+              {
+                id: 'Brand/Logo Section/Logo/Logo_01:1640:480',
+                alt: '',
+              },
+              {
+                id: 'Brand/Logo Section/Logo/Logo_02:1640:480',
+                alt: '',
+              },
+              {
+                id: 'Brand/Logo Section/Logo/Logo_03:1640:480',
+                alt: '',
+              },
+              {
+                id: 'Brand/Logo Section/Logo/Logo_04:1640:480',
+                alt: '',
+                gradient: true,
+              },
+            ]}
+          />
+          <LogoSection
+            title="Mark only"
+            description="Without typo in multiple versions"
+            assetName="Brand/mark-assets.zip"
+            logos={[
+              {
+                id: 'Brand/Logo Section/Mark/Mark_01:480:480',
+                alt: 'Status logo mark',
+              },
+              { id: 'Brand/Logo Section/Mark/Mark_02:480:480', alt: '' },
+              { id: 'Brand/Logo Section/Mark/Mark_03:480:480', alt: '' },
+              {
+                id: 'Brand/Logo Section/Mark/Mark_04:480:480',
+                alt: '',
+                gradient: true,
+              },
+            ]}
+          />
+          <LogoSection
+            title="Other variants"
+            description="With and without typo"
+            assetName="Brand/variant-assets.zip"
+            logos={[
+              {
+                id: 'Brand/Logo Section/Variants/Logo/Logo_01:1640:480',
+                alt: 'Status logo variant 1',
+              },
+              {
+                id: 'Brand/Logo Section/Variants/Mark/Mark_01:480:480',
+                alt: 'Status logo mark variant 1',
+              },
+              {
+                id: 'Brand/Logo Section/Variants/Logo/Logo_02:1640:480',
+                alt: 'Status logo variant 2',
+              },
+              {
+                id: 'Brand/Logo Section/Variants/Mark/Mark_02:480:480',
+                alt: 'Status logo mark variant 2',
+              },
+              {
+                id: 'Brand/Logo Section/Variants/Logo/Logo_03:1640:480',
+                alt: 'Status logo variant 3',
+              },
+              {
+                id: 'Brand/Logo Section/Variants/Mark/Mark_03:480:480',
+                alt: 'Status logo mark variant 3',
+              },
+            ]}
+          />
+          <ParallaxCircle
+            color="blue"
+            className="bottom-[-317px] left-[-311px] xl:bottom-[-48px] xl:left-[358px]"
+          />
+        </div>
+
+        <div className="relative border-b border-dashed border-neutral-80/20 bg-white-100 py-12 xl:py-20">
+          <ColorSection
+            title="Main colors"
+            description="Our main colors palette"
+            colors={[
+              transformColor('Dark', neutral['100']),
+              transformColor('White', white['100'], true),
+              transformColor('Blue', customisation.blue['50']),
+            ]}
+          />
+          <ColorSection
+            title="Custom colors"
+            description="Our accent colors"
+            colors={[
+              transformColor('Purple', customisation.purple['50']),
+              transformColor('Orange', customisation.orange['50']),
+              transformColor('Army', customisation.army['50']),
+              transformColor('Turquoise', customisation.turquoise['50']),
+              transformColor('Sky', customisation.sky['50']),
+              transformColor('Yellow', customisation.yellow['50']),
+              transformColor('Pink', customisation.pink['50']),
+              transformColor('Copper', customisation.copper['50']),
+              transformColor('Camel', customisation.camel['50']),
+              transformColor('Magenta', customisation.magenta['50']),
+            ]}
+          />
+          <ParallaxCircle
+            color="purple"
+            className="left-[-250px] top-[538px] xl:top-[257px]"
+          />
+          <ParallaxCircle
+            color="pink"
+            className="bottom-[-240px] right-[-46px] xl:bottom-[-270px] xl:right-[48px]"
+          />
+        </div>
+
+        <div className="relative border-b border-dashed border-neutral-80/20 bg-white-100 py-12 xl:py-20">
+          <AssetSection
+            title="Product assets"
+            description="Screenshots of our product"
+            assetName="Brand/product-assets.zip"
+            assets={[
+              {
+                id: 'Brand/Product Assets/Other/Asset_Other_04:750:1624',
+                alt: 'Mobile app screenshot showing the profile assets in the Status app',
+              },
+              {
+                id: 'Brand/Product Assets/Communities/Asset_Communities_02:750:1624',
+                alt: 'Mobile app screenshot showing the community feature assets in the Status app',
+              },
+              {
+                id: 'Brand/Product Assets/Wallet/Asset_Wallet_05:750:1624',
+                alt: 'Mobile app screenshot showing the wallet feature assets in the Status app',
+              },
+            ]}
+          />
+          <div className="absolute left-1/2 top-0 size-full -translate-x-1/2 bg-gradient-to-t from-customisation-blue-50/5 to-transparent" />
+        </div>
+
+        <div className="container py-24 xl:py-40">
+          <div className="mx-auto flex max-w-[606px] flex-col items-center">
+            <h3 className="mb-4 text-center text-40 font-bold xl:text-64">
+              Download assets
+            </h3>
+            <div className="mb-8 max-w-[484px] text-center">
+              <Text size={27}>
+                This ZIP file contains Status logo, variants, and product
+                assets.
+              </Text>
+            </div>
             <DownloadZipButton
               iconBefore={<DownloadIcon />}
               zipFileId="Brand/brand-assets.zip"
@@ -68,155 +240,9 @@ export default function BrandPage() {
               Download
             </DownloadZipButton>
           </div>
-        }
-      />
-
-      <div className="relative border-b border-dashed border-neutral-80/20 pb-12 xl:pb-20">
-        <LogoSection
-          title="Our logo"
-          description="With typo in multiple versions"
-          assetName="Brand/logo-assets.zip"
-          logos={[
-            {
-              id: 'Brand/Logo Section/Logo/Logo_01:1640:480',
-              alt: '',
-            },
-            {
-              id: 'Brand/Logo Section/Logo/Logo_02:1640:480',
-              alt: '',
-            },
-            {
-              id: 'Brand/Logo Section/Logo/Logo_03:1640:480',
-              alt: '',
-            },
-            {
-              id: 'Brand/Logo Section/Logo/Logo_04:1640:480',
-              alt: '',
-              gradient: true,
-            },
-          ]}
-        />
-        <LogoSection
-          title="Mark only"
-          description="Without typo in multiple versions"
-          assetName="Brand/mark-assets.zip"
-          logos={[
-            { id: 'Brand/Logo Section/Mark/Mark_01:480:480', alt: '' },
-            { id: 'Brand/Logo Section/Mark/Mark_02:480:480', alt: '' },
-            { id: 'Brand/Logo Section/Mark/Mark_03:480:480', alt: '' },
-            {
-              id: 'Brand/Logo Section/Mark/Mark_04:480:480',
-              alt: '',
-              gradient: true,
-            },
-          ]}
-        />
-        <LogoSection
-          title="Other variants"
-          description="With and without typo"
-          assetName="Brand/variant-assets.zip"
-          logos={[
-            {
-              id: 'Brand/Logo Section/Variants/Logo/Logo_01:1640:480',
-              alt: '',
-            },
-            { id: 'Brand/Logo Section/Variants/Mark/Mark_01:480:480', alt: '' },
-            {
-              id: 'Brand/Logo Section/Variants/Logo/Logo_02:1640:480',
-              alt: '',
-            },
-            { id: 'Brand/Logo Section/Variants/Mark/Mark_02:480:480', alt: '' },
-            {
-              id: 'Brand/Logo Section/Variants/Logo/Logo_03:1640:480',
-              alt: '',
-            },
-            { id: 'Brand/Logo Section/Variants/Mark/Mark_03:480:480', alt: '' },
-          ]}
-        />
-        <ParallaxCircle
-          color="blue"
-          className="bottom-[-317px] left-[-311px] xl:bottom-[-48px] xl:left-[358px]"
-        />
-      </div>
-
-      <div className="relative border-b border-dashed border-neutral-80/20 bg-white-100 py-12 xl:py-20">
-        <ColorSection
-          title="Main colors"
-          description="Our main colors palette"
-          colors={[
-            transformColor('Dark', neutral['100']),
-            transformColor('White', white['100'], true),
-            transformColor('Blue', customisation.blue['50']),
-          ]}
-        />
-        <ColorSection
-          title="Custom colors"
-          description="Our accent colors"
-          colors={[
-            transformColor('Purple', customisation.purple['50']),
-            transformColor('Orange', customisation.orange['50']),
-            transformColor('Army', customisation.army['50']),
-            transformColor('Turquoise', customisation.turquoise['50']),
-            transformColor('Sky', customisation.sky['50']),
-            transformColor('Yellow', customisation.yellow['50']),
-            transformColor('Pink', customisation.pink['50']),
-            transformColor('Copper', customisation.copper['50']),
-            transformColor('Camel', customisation.camel['50']),
-            transformColor('Magenta', customisation.magenta['50']),
-          ]}
-        />
-        <ParallaxCircle
-          color="purple"
-          className="left-[-250px] top-[538px] xl:top-[257px]"
-        />
-        <ParallaxCircle
-          color="pink"
-          className="bottom-[-240px] right-[-46px] xl:bottom-[-270px] xl:right-[48px]"
-        />
-      </div>
-
-      <div className="relative border-b border-dashed border-neutral-80/20 bg-white-100 py-12 xl:py-20">
-        <AssetSection
-          title="Product assets"
-          description="Screenshots of our product"
-          assetName="Brand/product-assets.zip"
-          assets={[
-            {
-              id: 'Brand/Product Assets/Other/Asset_Other_04:750:1624',
-              alt: 'Mobile app screenshot showing the profile assets in the Status app',
-            },
-            {
-              id: 'Brand/Product Assets/Communities/Asset_Communities_02:750:1624',
-              alt: 'Mobile app screenshot showing the community feature assets in the Status app',
-            },
-            {
-              id: 'Brand/Product Assets/Wallet/Asset_Wallet_05:750:1624',
-              alt: 'Mobile app screenshot showing the wallet feature assets in the Status app',
-            },
-          ]}
-        />
-        <div className="absolute left-1/2 top-0 size-full -translate-x-1/2 bg-gradient-to-t from-customisation-blue-50/5 to-transparent" />
-      </div>
-
-      <div className="container py-24 xl:py-40">
-        <div className="mx-auto flex max-w-[606px] flex-col items-center">
-          <h3 className="mb-4 text-center text-40 font-bold xl:text-64">
-            Download assets
-          </h3>
-          <div className="mb-8 max-w-[484px] text-center">
-            <Text size={27}>
-              This ZIP file contains Status logo, variants, and product assets.
-            </Text>
-          </div>
-          <DownloadZipButton
-            iconBefore={<DownloadIcon />}
-            zipFileId="Brand/brand-assets.zip"
-          >
-            Download
-          </DownloadZipButton>
         </div>
-      </div>
-    </Body>
+      </Body>
+    </>
   )
 }
 
