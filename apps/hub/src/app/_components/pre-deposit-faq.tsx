@@ -19,11 +19,7 @@ const ITEMS: AccordionItem[] = [
 ]
 
 const PreDepositFaq = () => {
-  return (
-    <div className="w-full">
-      <Accordion items={ITEMS} />
-    </div>
-  )
+  return <Accordion items={ITEMS} />
 }
 
 export { PreDepositFaq }
