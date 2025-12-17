@@ -10,11 +10,15 @@ const frontmatterSchema = z.object({
   title: z.string().optional(),
 })
 
+const EXTERNAL_DOCUMENTS = ['status-network-pre-deposit-disclaimer'] as const
+
+type ExternalDocument = (typeof EXTERNAL_DOCUMENTS)[number]
+
 type LocalDocument = 'privacy-policy' | 'terms-of-use'
 
-type ExternalDocument = 'status-network-pre-deposit-disclaimer'
-
 type DocumentName = LocalDocument | ExternalDocument
+
+const externalDocumentSet = new Set<string>(EXTERNAL_DOCUMENTS)
 
 function extractTitleFromHeadline(content: string): {
   title: string | undefined
@@ -32,7 +36,7 @@ function extractTitleFromHeadline(content: string): {
 }
 
 export async function getLegalDocumentContent(documentName: DocumentName) {
-  const isExternal = documentName === 'status-network-pre-deposit-disclaimer'
+  const isExternal = externalDocumentSet.has(documentName)
   const filePath = isExternal
     ? path.resolve(`content/legal-external/${documentName}.md`)
     : path.resolve(`content/legal/${documentName}.md`)
