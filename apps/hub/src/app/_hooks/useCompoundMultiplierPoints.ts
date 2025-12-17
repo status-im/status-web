@@ -6,8 +6,8 @@ import { waitForTransactionReceipt } from 'wagmi/actions'
 import {
   CONFIRMATION_BLOCKS,
   DEFAULT_MP_VALUE,
-  SNT_TOKEN,
   STAKING_MANAGER,
+  STT_TOKEN,
 } from '~constants/index'
 import { useMultiplierPointsBalance } from '~hooks/useMultiplierPoints'
 
@@ -122,7 +122,7 @@ export function useCompoundMultiplierPoints(): UseCompoundMultiplierPointsReturn
       // Get the current MP balance to show in the dialog
       const formattedAmount = formatUnits(
         mpBalance?.totalUncompounded || DEFAULT_MP_VALUE,
-        SNT_TOKEN.decimals
+        STT_TOKEN.decimals
       )
 
       sendVaultEvent({

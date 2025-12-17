@@ -26,9 +26,7 @@ export function BaseVaultModal(props: BaseVaultModalProps) {
     props
 
   const handleOpenChange = (nextOpen: boolean) => {
-    if (onOpenChange) {
-      onOpenChange(nextOpen)
-    }
+    onOpenChange?.(nextOpen)
     if (!nextOpen) {
       onClose()
     }
@@ -64,8 +62,8 @@ export function BaseVaultModal(props: BaseVaultModalProps) {
       {trigger && <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>}
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-40 bg-neutral-80/60 backdrop-blur-sm" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-full max-w-[480px] -translate-x-1/2 -translate-y-1/2 px-4 focus:outline-none">
-          <div className="relative mx-auto w-full max-w-[480px] overflow-hidden rounded-20 bg-white-100 shadow-3">
+        <Dialog.Content className="fixed inset-x-0 top-0 z-50 flex size-full max-w-[480px] flex-col items-center justify-center p-4 focus:outline-none md:left-1/2 md:top-1/2 md:h-auto md:-translate-x-1/2 md:-translate-y-1/2 md:py-0">
+          <div className="relative mx-auto w-full max-w-[480px] overflow-y-auto rounded-20 bg-white-100 shadow-3 max-md:max-h-full">
             <Dialog.Close asChild>
               <button
                 aria-label="Close"

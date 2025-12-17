@@ -11,10 +11,10 @@ import { z } from 'zod'
 
 import { SNTIcon } from '~components/icons'
 import { vaultAbi } from '~constants/contracts'
-import { SNT_TOKEN } from '~constants/index'
+import { STT_TOKEN } from '~constants/index'
 import { useVaultStateContext } from '~hooks/useVaultStateContext'
 import { useVaultTokenUnStake } from '~hooks/useVaultTokenUnStake'
-import { formatSNT } from '~utils/currency'
+import { formatSTT } from '~utils/currency'
 import { validateVaultAmount } from '~utils/vault'
 
 import { BaseVaultModal } from './base-vault-modal'
@@ -46,7 +46,7 @@ const createUnstakeFormSchema = (maxBalance: number) => {
           const num = Number(val)
           return !isNaN(num) && num <= maxBalance
         },
-        { message: `Amount exceeds maximum balance of ${maxBalance} SNT` }
+        { message: `Amount exceeds maximum balance of ${maxBalance} STT` }
       ),
   })
 }
@@ -77,7 +77,7 @@ export function UnstakeVaultModal(props: UnstakeVaultModalProps) {
   })
 
   const maxBalance = stakedBalance
-    ? Number(formatUnits(stakedBalance as bigint, SNT_TOKEN.decimals))
+    ? Number(formatUnits(stakedBalance as bigint, STT_TOKEN.decimals))
     : 0
 
   const form = useForm<FormValues>({
@@ -113,7 +113,7 @@ export function UnstakeVaultModal(props: UnstakeVaultModalProps) {
 
   const handleUnstake = form.handleSubmit(data => {
     try {
-      const amountWei = parseUnits(data.amount, SNT_TOKEN.decimals)
+      const amountWei = parseUnits(data.amount, STT_TOKEN.decimals)
       unstake({
         amountWei,
         vaultAddress,
@@ -162,7 +162,7 @@ export function UnstakeVaultModal(props: UnstakeVaultModalProps) {
                 <div className="flex items-center gap-1">
                   <SNTIcon />
                   <span className="text-19 font-semibold text-neutral-80">
-                    SNT
+                    STT
                   </span>
                 </div>
               </div>
@@ -173,7 +173,7 @@ export function UnstakeVaultModal(props: UnstakeVaultModalProps) {
                   onClick={handleMaxClick}
                   className={`uppercase ${hasError ? 'text-danger-50' : 'text-neutral-100'}`}
                 >
-                  {`MAX ${formatSNT(maxBalance ?? 0)} SNT`}
+                  {`MAX ${formatSTT(maxBalance ?? 0, { includeSymbol: true })}`}
                 </button>
               </div>
             </div>
@@ -200,15 +200,17 @@ export function UnstakeVaultModal(props: UnstakeVaultModalProps) {
           >
             Cancel
           </Button>
-          <Button
-            size="40"
-            variant="primary"
-            onClick={handleUnstake}
-            className="flex-1 justify-center"
-            disabled={!form.formState.isValid || isPending || !amountValue}
-          >
-            {isPending ? 'Unstaking...' : 'Unstake'}
-          </Button>
+          {amountValue && Number(amountValue) > 0 && (
+            <Button
+              size="40"
+              variant="primary"
+              onClick={handleUnstake}
+              className="flex-1 justify-center"
+              disabled={!form.formState.isValid || isPending}
+            >
+              {isPending ? 'Unstaking...' : 'Unstake'}
+            </Button>
+          )}
         </div>
       </div>
     </BaseVaultModal>
