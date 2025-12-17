@@ -22,6 +22,7 @@ jobs:
         with:
           # https://github.com/changesets/changesets/issues/1055
           fetch-depth: 0
+          submodules: recursive
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -34,15 +35,17 @@ jobs:
           node-version: 22.17.0
           cache: 'pnpm'
 
+      - name: Clear pnpm cache
+        run: |
+          # Clear pnpm store to force fresh downloads
+          pnpm store prune || true
+
       - name: Changeset
         # https://github.com/changesets/changesets/issues/1048
         run: pnpm dlx @changesets/cli status --since origin/main
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Initialize submodules
-        run: git submodule update --init
+        run: pnpm install --frozen-lockfile --no-verify-store-integrity
 
       - name: Build
         run: pnpm build

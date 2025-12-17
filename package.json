@@ -23,6 +23,7 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
+    "prebuild": "git submodule update --init --recursive",
     "test": "turbo run test --filter=@status-im/* --filter=./apps/* -- --run",
     "dev": "turbo run dev dev:next dev:content --filter=@status-im/* --filter=./apps/*",
     "build": "turbo run build --filter=@status-im/* --filter=./apps/*",
