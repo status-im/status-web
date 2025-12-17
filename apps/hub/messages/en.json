@@ -158,7 +158,7 @@
       "notes": "apps::explore_apps_title"
     },
     "explore_apps_description": {
-      "translation": "Explore curated Apps and services built on Status Network",
+      "translation": "Explore curated apps and services built on Status Network",
       "notes": "apps::explore_apps_description"
     },
     "explore_all_apps": {
@@ -172,7 +172,7 @@
       "notes": "discover::title"
     },
     "description": {
-      "translation": "Explore curated dApps and services built on Status Network",
+      "translation": "Explore curated apps and services built on Status Network",
       "notes": "discover::description"
     },
     "featured": {
@@ -804,7 +804,7 @@
       "notes": "emergency::withdraw_to"
     },
     "funds_sent_to_wallet": {
-      "translation": "Your funds will sent directly to your connected wallet.",
+      "translation": "Your funds will be sent directly to your connected wallet.",
       "notes": "emergency::funds_sent_to_wallet"
     },
     "emergency_exit_successful": {
