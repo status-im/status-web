@@ -4,19 +4,27 @@ import { DropdownMenu } from '@status-im/components'
 
 import { DropdownIcon } from './dropdown-icon'
 
-const FEEDBACK_LINKS = [
-  {
-    label: 'Contact us',
-    href: 'https://statusnetwork.typeform.com/contact-us',
-  },
-  {
-    label: 'Submit bug',
-    href: 'https://github.com/status-im/status-web/issues/new?template=bug_report.md',
-  },
-]
+type FeedbackPopoverProps = {
+  labels?: {
+    shareFeedback?: string
+    contactUs?: string
+    submitBug?: string
+  }
+}
 
-const FeedbackPopover = () => {
+const FeedbackPopover = ({ labels }: FeedbackPopoverProps) => {
   const [isOpen, setIsOpen] = useState(false)
+
+  const feedbackLinks = [
+    {
+      label: labels?.contactUs ?? 'Contact us',
+      href: 'https://statusnetwork.typeform.com/contact-us',
+    },
+    {
+      label: labels?.submitBug ?? 'Submit bug',
+      href: 'https://github.com/status-im/status-web/issues/new?template=bug_report.md',
+    },
+  ]
 
   return (
     <DropdownMenu.Root onOpenChange={setIsOpen} open={isOpen}>
@@ -25,7 +33,7 @@ const FeedbackPopover = () => {
         className="flex cursor-pointer select-none items-center rounded-10 border border-neutral-70 hover:border-neutral-60"
       >
         <div className="flex items-center gap-1 px-2 py-[5px] text-15 font-500 text-white-100 transition">
-          Share feedback
+          {labels?.shareFeedback ?? 'Share feedback'}
           <span className="text-neutral-50">
             <DropdownIcon />
           </span>
@@ -38,7 +46,7 @@ const FeedbackPopover = () => {
         className="w-[256px]"
         style={{ zIndex: 100 }}
       >
-        {FEEDBACK_LINKS.map(({ label, href }) => (
+        {feedbackLinks.map(({ label, href }) => (
           <DropdownMenu.Item
             key={label}
             label={label}
@@ -54,3 +62,4 @@ const FeedbackPopover = () => {
 }
 
 export { FeedbackPopover }
+export type { FeedbackPopoverProps }

@@ -1,15 +1,21 @@
 'use client'
 
-import { FeedbackPopover, Link } from '@status-im/status-network/components'
+import { FeedbackPopover } from '@status-im/status-network/components'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
+
+import { Link } from '~/i18n/navigation'
 
 import { ConnectButton } from './connect-button'
+import { LanguageSelector } from './language-selector'
 
 interface TopBarProps {
   onMenuToggle: () => void
 }
 
 export function TopBar({ onMenuToggle }: TopBarProps) {
+  const t = useTranslations()
+
   return (
     <div
       data-theme="dark"
@@ -21,7 +27,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
           <button
             onClick={onMenuToggle}
             className="rounded p-1 text-white-80 hover:bg-white-10 lg:mr-3 lg:hidden"
-            aria-label="Toggle menu"
+            aria-label={t('navigation.toggle_menu')}
           >
             <svg
               className="size-6"
@@ -40,7 +46,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
 
           <div className="hidden items-center md:flex">
             {/* Status Network Logo */}
-            <Link href="/">
+            <Link href="/dashboard">
               <Image
                 src="/logo-long.svg"
                 alt="Status Network Logo"
@@ -49,7 +55,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
               />
             </Link>
             <div className="h-5 rounded-full bg-white-10 px-[6px] py-px text-13 font-medium text-white-100">
-              Testnet
+              {t('common.testnet')}
             </div>
           </div>
 
@@ -70,7 +76,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
                 className="min-w-[145px]"
               />
               <div className="h-5 rounded-full bg-white-10 px-[6px] py-px text-13 text-white-100">
-                Testnet
+                {t('common.testnet')}
               </div>
             </div>
           </div>
@@ -78,19 +84,30 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
 
         {/* Right side - Actions */}
         <div className="flex items-center gap-2">
+          {/* Language Selector */}
+          <div className="hidden md:block">
+            <LanguageSelector />
+          </div>
+
           {/* Share Feedback */}
           <div className="hidden md:block">
-            <FeedbackPopover />
+            <FeedbackPopover
+              labels={{
+                shareFeedback: t('footer.share_feedback'),
+                contactUs: t('footer.contact_us'),
+                submitBug: t('footer.submit_bug'),
+              }}
+            />
           </div>
 
           {/* Connect Wallet Button */}
           <ConnectButton
-            label="Connect wallet"
+            label={t('top_bar.connect_wallet')}
             size="32"
             className="hidden md:block"
           />
           <ConnectButton
-            label="Connect"
+            label={t('top_bar.connect')}
             size="24"
             className="block md:hidden"
           />

@@ -7,6 +7,7 @@ import { ContextTag, Input } from '@status-im/components'
 import { InfoIcon } from '@status-im/icons/16'
 import { IncorrectIcon } from '@status-im/icons/20'
 import { Button } from '@status-im/status-network/components'
+import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -50,10 +51,11 @@ interface LockVaultFormProps {
  * Form component for vault lock configuration
  */
 export function LockVaultForm(props: LockVaultFormProps) {
+  const t = useTranslations()
   const {
     initialYears,
     initialDays,
-    infoMessage = 'Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more STT at any time, but withdrawing your STT is only possible once the vault unlocks.',
+    infoMessage = t('stake.lock_info_message'),
     errorMessage: externalErrorMessage,
     onValidate,
     onSubmit,
@@ -257,7 +259,7 @@ export function LockVaultForm(props: LockVaultFormProps) {
       <div className="flex items-center justify-center gap-[2px] px-8 pb-2 pt-4">
         <div className="flex shrink-0 grow basis-0 gap-2">
           <Input
-            label="Years"
+            label={t('vault.years')}
             value={years}
             onChange={handleYearsChange}
             size="40"
@@ -267,7 +269,7 @@ export function LockVaultForm(props: LockVaultFormProps) {
             <span className="text-13 font-medium text-neutral-50">or</span>
           </div>
           <Input
-            label="Days"
+            label={t('vault.days')}
             value={days}
             onChange={handleDaysChange}
             size="40"
@@ -297,7 +299,7 @@ export function LockVaultForm(props: LockVaultFormProps) {
       <div className="flex items-center gap-6 px-8 py-4">
         <div className="flex items-center gap-2">
           <div className="flex flex-col justify-center text-15 text-neutral-100">
-            <span>Boost:</span>
+            <span>{t('vault.boost_label')}:</span>
           </div>
           <ContextTag type="label" size="32">
             {/* TODO: calculate boost */}
@@ -306,7 +308,7 @@ export function LockVaultForm(props: LockVaultFormProps) {
         </div>
         <div className="flex items-center gap-2">
           <div className="flex flex-col justify-center text-15 text-neutral-100">
-            <span>Unlock:</span>
+            <span>{t('vault.unlock_label')}:</span>
           </div>
           <ContextTag type="label" size="32">
             {calculatedUnlockDate}
@@ -334,7 +336,7 @@ export function LockVaultForm(props: LockVaultFormProps) {
             variant="outline"
             type="button"
             onClick={onClose}
-            aria-label="Close"
+            aria-label={t('vault.close_aria')}
             className="flex-1 justify-center"
           >
             {closeAction.label}

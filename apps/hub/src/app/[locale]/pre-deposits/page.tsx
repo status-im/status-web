@@ -4,19 +4,21 @@ import { Skeleton } from '@status-im/components'
 import { ExternalIcon } from '@status-im/icons/16'
 import { ButtonLink } from '@status-im/status-network/components'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 
 import { formatCurrency } from '~/utils/currency'
 
-import { HubLayout } from '../_components/hub-layout'
-import { InfoTooltip } from '../_components/info-tooltip'
-import { PreDepositModal } from '../_components/pre-deposit-modal'
-import { RewardsSection } from '../_components/rewards-section'
-import { VaultCard } from '../_components/vault-card'
-import { VAULTS } from '../_constants/address'
-import { useTotalTVL } from '../_hooks/useTotalTVL'
-import { useVaultSelection } from '../_hooks/useVaultSelection'
+import { HubLayout } from '../../_components/hub-layout'
+import { InfoTooltip } from '../../_components/info-tooltip'
+import { PreDepositModal } from '../../_components/pre-deposit-modal'
+import { RewardsSection } from '../../_components/rewards-section'
+import { VaultCard } from '../../_components/vault-card'
+import { VAULTS } from '../../_constants/address'
+import { useTotalTVL } from '../../_hooks/useTotalTVL'
+import { useVaultSelection } from '../../_hooks/useVaultSelection'
 
 export default function PreDepositPage() {
+  const t = useTranslations()
   const { data: totalTVL, isLoading: isLoadingTVL } = useTotalTVL()
   const {
     selectedVault,
@@ -36,7 +38,7 @@ export default function PreDepositPage() {
         <div className="flex flex-col justify-between gap-4 lg:flex-row">
           <div className="flex flex-col gap-4">
             <h1 className="text-27 font-bold text-neutral-100">
-              Pre-Deposit Vaults
+              {t('pre_deposits.title')}
             </h1>
             <RewardsSection />
           </div>
@@ -48,16 +50,16 @@ export default function PreDepositPage() {
               size="32"
               icon={<ExternalIcon className="text-neutral-50" />}
             >
-              Learn more
+              {t('common.learn_more')}
             </ButtonLink>
           </div>
         </div>
         <div className="relative flex w-full flex-col gap-2 rounded-32 bg-white-100 px-8 py-4 shadow-1">
           <div className="flex items-start justify-between">
             <p className="text-13 font-500 text-neutral-50">
-              Total Value Locked
+              {t('pre_deposits.total_value_locked')}
             </p>
-            <InfoTooltip content="Sum of token value locked across all vaults" />
+            <InfoTooltip content={t('pre_deposits.tvl_tooltip')} />
           </div>
           <p className="text-27 font-600 text-neutral-100">
             {isLoadingTVL ? (
@@ -79,7 +81,7 @@ export default function PreDepositPage() {
         </div>
         <Image
           src="/dragon-key.png"
-          alt="Dragon with key"
+          alt={t('pre_deposits.dragon_key_alt')}
           width="325"
           height="360"
           className="relative m-auto"

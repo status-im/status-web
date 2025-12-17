@@ -1,0 +1,937 @@
+{
+  "meta": {
+    "locale": {
+      "translation": "en",
+      "notes": "meta::locale"
+    },
+    "name": {
+      "translation": "English",
+      "notes": "meta::name"
+    },
+    "direction": {
+      "translation": "ltr",
+      "notes": "meta::direction"
+    },
+    "completion": 100,
+    "description": {
+      "translation": "Complete Status Hub translations",
+      "notes": "meta::description"
+    }
+  },
+  "common": {
+    "loading": {
+      "translation": "Loading...",
+      "notes": "common::loading"
+    },
+    "cancel": {
+      "translation": "Cancel",
+      "notes": "common::cancel"
+    },
+    "close": {
+      "translation": "Close",
+      "notes": "common::close"
+    },
+    "learn_more": {
+      "translation": "Learn more",
+      "notes": "common::learn_more"
+    },
+    "testnet": {
+      "translation": "Testnet",
+      "notes": "common::testnet"
+    },
+    "mainnet": {
+      "translation": "Mainnet",
+      "notes": "common::mainnet"
+    }
+  },
+  "navigation": {
+    "home": {
+      "translation": "Home",
+      "notes": "navigation::home"
+    },
+    "pre_deposits": {
+      "translation": "Pre-Deposits",
+      "notes": "navigation::pre_deposits"
+    },
+    "discover": {
+      "translation": "Discover",
+      "notes": "navigation::discover"
+    },
+    "stake": {
+      "translation": "Stake",
+      "notes": "navigation::stake"
+    },
+    "karma": {
+      "translation": "Karma",
+      "notes": "navigation::karma"
+    },
+    "tokens": {
+      "translation": "Tokens",
+      "notes": "navigation::tokens"
+    },
+    "bridge": {
+      "translation": "Bridge",
+      "notes": "navigation::bridge"
+    },
+    "snt_vote": {
+      "translation": "SNT Vote",
+      "notes": "navigation::snt_vote"
+    },
+    "explorer": {
+      "translation": "Explorer",
+      "notes": "navigation::explorer"
+    },
+    "submit_app": {
+      "translation": "Submit an app",
+      "notes": "navigation::submit_app"
+    },
+    "docs": {
+      "translation": "Docs",
+      "notes": "navigation::docs"
+    },
+    "close_sidebar": {
+      "translation": "Close sidebar",
+      "notes": "navigation::close_sidebar"
+    },
+    "toggle_menu": {
+      "translation": "Toggle menu",
+      "notes": "navigation::toggle_menu"
+    }
+  },
+  "top_bar": {
+    "connect_wallet": {
+      "translation": "Connect wallet",
+      "notes": "top_bar::connect_wallet"
+    },
+    "connect": {
+      "translation": "Connect",
+      "notes": "top_bar::connect"
+    }
+  },
+  "hero": {
+    "title": {
+      "translation": "Get started on the free network",
+      "notes": "hero::title"
+    },
+    "description": {
+      "translation": "Try apps and deposit assets to earn Karma",
+      "notes": "hero::description"
+    },
+    "landscape_alt": {
+      "translation": "Landscape",
+      "notes": "hero::landscape_alt"
+    }
+  },
+  "dashboard": {
+    "deposit_funds_title": {
+      "translation": "Deposit funds for yield and rewards",
+      "notes": "dashboard::deposit_funds_title"
+    },
+    "build_with_us_title": {
+      "translation": "Build with us",
+      "notes": "dashboard::build_with_us_title"
+    },
+    "build_with_us_description": {
+      "translation": "Launch your app on the free network",
+      "notes": "dashboard::build_with_us_description"
+    },
+    "read_docs": {
+      "translation": "Read docs",
+      "notes": "dashboard::read_docs"
+    },
+    "submit_app": {
+      "translation": "Submit an app",
+      "notes": "dashboard::submit_app"
+    },
+    "dragon_alt": {
+      "translation": "Dragon",
+      "notes": "dashboard::dragon_alt"
+    },
+    "unicorn_alt": {
+      "translation": "Unicorn",
+      "notes": "dashboard::unicorn_alt"
+    }
+  },
+  "apps": {
+    "explore_apps_title": {
+      "translation": "Explore apps",
+      "notes": "apps::explore_apps_title"
+    },
+    "explore_apps_description": {
+      "translation": "Explore curated Apps and services built on Status Network",
+      "notes": "apps::explore_apps_description"
+    },
+    "explore_all_apps": {
+      "translation": "Explore all apps",
+      "notes": "apps::explore_all_apps"
+    }
+  },
+  "discover": {
+    "title": {
+      "translation": "Gasless apps FTW",
+      "notes": "discover::title"
+    },
+    "description": {
+      "translation": "Explore curated dApps and services built on Status Network",
+      "notes": "discover::description"
+    },
+    "featured": {
+      "translation": "Featured",
+      "notes": "discover::featured"
+    },
+    "get_featured": {
+      "translation": "Get your app featured",
+      "notes": "discover::get_featured"
+    },
+    "popular_apps": {
+      "translation": "Popular Apps",
+      "notes": "discover::popular_apps"
+    },
+    "new_apps": {
+      "translation": "New Apps",
+      "notes": "discover::new_apps"
+    },
+    "all_apps": {
+      "translation": "All Apps",
+      "notes": "discover::all_apps"
+    },
+    "categories": {
+      "translation": "Categories",
+      "notes": "discover::categories"
+    },
+    "no_apps_found": {
+      "translation": "No apps found",
+      "notes": "discover::no_apps_found"
+    },
+    "no_apps_found_description": {
+      "translation": "Try adjusting your filters to see more apps",
+      "notes": "discover::no_apps_found_description"
+    },
+    "tabs": {
+      "popular": {
+        "translation": "Popular",
+        "notes": "discover::tabs::popular"
+      },
+      "new": {
+        "translation": "New",
+        "notes": "discover::tabs::new"
+      },
+      "all": {
+        "translation": "All",
+        "notes": "discover::tabs::all"
+      }
+    }
+  },
+  "stake": {
+    "title": {
+      "translation": "Stake STT, receive good Karma",
+      "notes": "stake::title"
+    },
+    "description": {
+      "translation": "Stake STT to increase your Karma on Status Network testnet. Unlock more gasless transactions and increase your power over the network",
+      "notes": "stake::description"
+    },
+    "faucet_title": {
+      "translation": "Free Testnet SNT (STT) faucet",
+      "notes": "stake::faucet_title"
+    },
+    "daily_limit": {
+      "translation": "Daily limit",
+      "notes": "stake::daily_limit"
+    },
+    "used_today": {
+      "translation": "Used today",
+      "notes": "stake::used_today"
+    },
+    "available": {
+      "translation": "Available",
+      "notes": "stake::available"
+    },
+    "claim_testnet_snt": {
+      "translation": "Claim testnet SNT (STT)",
+      "notes": "stake::claim_testnet_snt"
+    },
+    "claiming": {
+      "translation": "Claiming...",
+      "notes": "stake::claiming"
+    },
+    "piggy_bank_alt": {
+      "translation": "Piggy Bank",
+      "notes": "stake::piggy_bank_alt"
+    },
+    "amount_to_stake": {
+      "translation": "Amount to stake",
+      "notes": "stake::amount_to_stake"
+    },
+    "select_vault": {
+      "translation": "Select vault",
+      "notes": "stake::select_vault"
+    },
+    "add_new_vault": {
+      "translation": "Add new vault",
+      "notes": "stake::add_new_vault"
+    },
+    "stake_stt": {
+      "translation": "Stake STT",
+      "notes": "stake::stake_stt"
+    },
+    "connect_wallet": {
+      "translation": "Connect Wallet",
+      "notes": "stake::connect_wallet"
+    },
+    "sign_in_to_continue": {
+      "translation": "Sign in to continue",
+      "notes": "stake::sign_in_to_continue"
+    },
+    "create_new_vault": {
+      "translation": "Create new vault",
+      "notes": "stake::create_new_vault"
+    },
+    "dont_lock": {
+      "translation": "Don't lock",
+      "notes": "stake::dont_lock"
+    },
+    "lock": {
+      "translation": "Lock",
+      "notes": "stake::lock"
+    },
+    "do_you_want_to_lock": {
+      "translation": "Do you want to lock the vault?",
+      "notes": "stake::do_you_want_to_lock"
+    },
+    "lock_description": {
+      "translation": "Lock this vault to receive more Karma",
+      "notes": "stake::lock_description"
+    },
+    "total_staked": {
+      "translation": "Total staked",
+      "notes": "stake::total_staked"
+    },
+    "next_unlock_in": {
+      "translation": "Next unlock in {days} days",
+      "notes": "stake::next_unlock_in"
+    },
+    "weighted_boost": {
+      "translation": "Weighted boost",
+      "notes": "stake::weighted_boost"
+    },
+    "compound_points": {
+      "translation": "Compound points",
+      "notes": "stake::compound_points"
+    },
+    "no_points_ready": {
+      "translation": "No points are ready to compound",
+      "notes": "stake::no_points_ready"
+    },
+    "my_vaults": {
+      "translation": "My vaults",
+      "notes": "stake::my_vaults"
+    },
+    "add_vault": {
+      "translation": "Add vault",
+      "notes": "stake::add_vault"
+    },
+    "vault_name": {
+      "translation": "Vault name",
+      "notes": "stake::vault_name"
+    },
+    "staked": {
+      "translation": "Staked",
+      "notes": "stake::staked"
+    },
+    "vault_balance": {
+      "translation": "Vault balance",
+      "notes": "stake::vault_balance"
+    },
+    "unlocks_in": {
+      "translation": "Unlocks in",
+      "notes": "stake::unlocks_in"
+    },
+    "boost": {
+      "translation": "Boost",
+      "notes": "stake::boost"
+    },
+    "if_locked": {
+      "translation": "if locked",
+      "notes": "stake::if_locked"
+    },
+    "multiplier_points": {
+      "translation": "Multiplier points",
+      "notes": "stake::multiplier_points"
+    },
+    "state": {
+      "translation": "State",
+      "notes": "stake::state"
+    },
+    "locked": {
+      "translation": "Locked",
+      "notes": "stake::locked"
+    },
+    "open": {
+      "translation": "Open",
+      "notes": "stake::open"
+    },
+    "actions": {
+      "translation": "Actions",
+      "notes": "stake::actions"
+    },
+    "unstake": {
+      "translation": "Unstake",
+      "notes": "stake::unstake"
+    },
+    "open_in_explorer": {
+      "translation": "Open in blockchain explorer",
+      "notes": "stake::open_in_explorer"
+    },
+    "extend_lock_time": {
+      "translation": "Extend lock time",
+      "notes": "stake::extend_lock_time"
+    },
+    "extend": {
+      "translation": "Extend",
+      "notes": "stake::extend"
+    },
+    "extend_lock_title": {
+      "translation": "Extend lock time",
+      "notes": "stake::extend_lock_title"
+    },
+    "extend_lock_description": {
+      "translation": "Extending lock time increasing Karma boost",
+      "notes": "stake::extend_lock_description"
+    },
+    "extend_lock": {
+      "translation": "Extend lock",
+      "notes": "stake::extend_lock"
+    },
+    "total": {
+      "translation": "Total",
+      "notes": "stake::total"
+    },
+    "address": {
+      "translation": "Address",
+      "notes": "stake::address"
+    },
+    "vault": {
+      "translation": "Vault",
+      "notes": "stake::vault"
+    },
+    "unstake_funds": {
+      "translation": "Unstake funds",
+      "notes": "stake::unstake_funds"
+    },
+    "unstake_description": {
+      "translation": "Your tokens will be unstaked and automatically returned to your connected wallet",
+      "notes": "stake::unstake_description"
+    },
+    "amount": {
+      "translation": "Amount",
+      "notes": "stake::amount"
+    },
+    "unstake_to": {
+      "translation": "Unstake to",
+      "notes": "stake::unstake_to"
+    },
+    "unstaking": {
+      "translation": "Unstaking...",
+      "notes": "stake::unstaking"
+    },
+    "max_lock_time": {
+      "translation": "Maximum lock time is 4 years",
+      "notes": "stake::max_lock_time"
+    },
+    "lock_info_message": {
+      "translation": "Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more STT at any time, but withdrawing your STT is only possible once the vault unlocks.",
+      "notes": "stake::lock_info_message"
+    },
+    "ready_to_compound": {
+      "translation": "Ready to compound {points} points",
+      "notes": "stake::ready_to_compound"
+    },
+    "sign_message": {
+      "translation": "Please sign the message in your wallet.",
+      "notes": "stake::sign_message"
+    },
+    "total_compounded": {
+      "translation": "Total compounded",
+      "notes": "stake::total_compounded"
+    },
+    "points": {
+      "translation": "points",
+      "notes": "stake::points"
+    },
+    "your_earn_rate": {
+      "translation": "Your earn rate at {boost} boost",
+      "notes": "stake::your_earn_rate"
+    },
+    "karma_per_day": {
+      "translation": "Karma / day",
+      "notes": "stake::karma_per_day"
+    },
+    "equivalent_at_boost": {
+      "translation": "Equivalent at x0.00 boost",
+      "notes": "stake::equivalent_at_boost"
+    },
+    "compound_info": {
+      "translation": "Boost the rate at which you receive Karma. More points you compound, the higher your rate. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma.",
+      "notes": "stake::compound_info"
+    }
+  },
+  "karma": {
+    "title": {
+      "translation": "Karma",
+      "notes": "karma::title"
+    },
+    "description": {
+      "translation": "Increase your Karma, unlock more free transactions, gain power over the network",
+      "notes": "karma::description"
+    },
+    "level": {
+      "translation": "Level {level}",
+      "notes": "karma::level"
+    },
+    "receive_karma": {
+      "translation": "Receive Karma",
+      "notes": "karma::receive_karma"
+    },
+    "welcome_karma": {
+      "translation": "Welcome Karma",
+      "notes": "karma::welcome_karma"
+    },
+    "just_arrived": {
+      "translation": "Just arrived",
+      "notes": "karma::just_arrived"
+    },
+    "just_arrived_description": {
+      "translation": "Karma received for joining the network",
+      "notes": "karma::just_arrived_description"
+    },
+    "claim": {
+      "translation": "Claim",
+      "notes": "karma::claim"
+    },
+    "claiming": {
+      "translation": "Claiming...",
+      "notes": "karma::claiming"
+    },
+    "action": {
+      "translation": "Action",
+      "notes": "karma::action"
+    },
+    "karma_visual_alt": {
+      "translation": "Karma Visual",
+      "notes": "karma::karma_visual_alt"
+    },
+    "captcha_error": {
+      "translation": "Failed to verify captcha. Please try again.",
+      "notes": "karma::captcha_error"
+    },
+    "claim_failed": {
+      "translation": "Failed to claim. Please try again",
+      "notes": "karma::claim_failed"
+    },
+    "claim_unsuccessful": {
+      "translation": "Claim was unsuccessful. Please try again",
+      "notes": "karma::claim_unsuccessful"
+    },
+    "unexpected_error": {
+      "translation": "An unexpected error occurred",
+      "notes": "karma::unexpected_error"
+    }
+  },
+  "rewards": {
+    "description": {
+      "translation": "Rewards in KARMA, SNT, LINEA and points from Generic Protocol and native apps. Funds will be unlocked at mainnet launch.",
+      "notes": "rewards::description"
+    },
+    "audited_prefix": {
+      "translation": "All contracts have been",
+      "notes": "rewards::audited_prefix"
+    },
+    "audited_link": {
+      "translation": "audited",
+      "notes": "rewards::audited_link"
+    }
+  },
+  "pre_deposits": {
+    "title": {
+      "translation": "Pre-Deposit Vaults",
+      "notes": "pre_deposits::title"
+    },
+    "total_value_locked": {
+      "translation": "Total Value Locked",
+      "notes": "pre_deposits::total_value_locked"
+    },
+    "tvl_tooltip": {
+      "translation": "Sum of token value locked across all vaults",
+      "notes": "pre_deposits::tvl_tooltip"
+    },
+    "dragon_key_alt": {
+      "translation": "Dragon with key",
+      "notes": "pre_deposits::dragon_key_alt"
+    }
+  },
+  "vault": {
+    "your_deposit": {
+      "translation": "Your deposit",
+      "notes": "vault::your_deposit"
+    },
+    "liquid_apy": {
+      "translation": "Liquid APY",
+      "notes": "vault::liquid_apy"
+    },
+    "liquid_apy_tbd": {
+      "translation": "Liquid APY TBD",
+      "notes": "vault::liquid_apy_tbd"
+    },
+    "apy_tooltip": {
+      "translation": "Estimated APY based on TVL and total available liquid token rewards across all vaults: 15M SNT + 20M LINEA",
+      "notes": "vault::apy_tooltip"
+    },
+    "tvl": {
+      "translation": "TVL",
+      "notes": "vault::tvl"
+    },
+    "tvl_tbd": {
+      "translation": "TVL TBD",
+      "notes": "vault::tvl_tbd"
+    },
+    "deposit": {
+      "translation": "Deposit",
+      "notes": "vault::deposit"
+    },
+    "coming_soon": {
+      "translation": "Coming soon",
+      "notes": "vault::coming_soon"
+    },
+    "deposit_funds": {
+      "translation": "Deposit funds",
+      "notes": "vault::deposit_funds"
+    },
+    "deposit_description": {
+      "translation": "Deposit funds for yield and rewards",
+      "notes": "vault::deposit_description"
+    },
+    "select_token": {
+      "translation": "Select token",
+      "notes": "vault::select_token"
+    },
+    "amount_required": {
+      "translation": "Amount is required",
+      "notes": "vault::amount_required"
+    },
+    "amount_greater_than_zero": {
+      "translation": "Amount must be greater than 0",
+      "notes": "vault::amount_greater_than_zero"
+    },
+    "amount_exceeds_max": {
+      "translation": "Amount exceeds maximum balance of {max} STT",
+      "notes": "vault::amount_exceeds_max"
+    },
+    "deposit_failed": {
+      "translation": "Deposit failed. Please try again.",
+      "notes": "vault::deposit_failed"
+    },
+    "max": {
+      "translation": "MAX",
+      "notes": "vault::max"
+    },
+    "amount_to_deposit": {
+      "translation": "Amount to deposit",
+      "notes": "vault::amount_to_deposit"
+    },
+    "rewards": {
+      "translation": "Rewards",
+      "notes": "vault::rewards"
+    },
+    "switching": {
+      "translation": "Switching...",
+      "notes": "vault::switching"
+    },
+    "switch_network_to_deposit": {
+      "translation": "Switch Network to Deposit",
+      "notes": "vault::switch_network_to_deposit"
+    },
+    "approving": {
+      "translation": "Approving...",
+      "notes": "vault::approving"
+    },
+    "depositing": {
+      "translation": "Depositing...",
+      "notes": "vault::depositing"
+    },
+    "approve_deposit": {
+      "translation": "Approve Deposit",
+      "notes": "vault::approve_deposit"
+    },
+    "enter_amount": {
+      "translation": "Enter amount",
+      "notes": "vault::enter_amount"
+    },
+    "generic_protocol_points": {
+      "translation": "Generic Protocol points",
+      "notes": "vault::generic_protocol_points"
+    },
+    "years": {
+      "translation": "Years",
+      "notes": "vault::years"
+    },
+    "days": {
+      "translation": "Days",
+      "notes": "vault::days"
+    },
+    "close_aria": {
+      "translation": "Close",
+      "notes": "vault::close_aria"
+    },
+    "boost_label": {
+      "translation": "Boost",
+      "notes": "vault::boost_label"
+    },
+    "unlock_label": {
+      "translation": "Unlock",
+      "notes": "vault::unlock_label"
+    },
+    "native_apps_points": {
+      "translation": "native apps points",
+      "notes": "vault::native_apps_points"
+    }
+  },
+  "action_status": {
+    "sign_in": {
+      "translation": "Sign in",
+      "notes": "action_status::sign_in"
+    },
+    "sign_message": {
+      "translation": "Please sign the message in your wallet.",
+      "notes": "action_status::sign_message"
+    },
+    "signing_in": {
+      "translation": "Signing in",
+      "notes": "action_status::signing_in"
+    },
+    "request_rejected": {
+      "translation": "Request was rejected",
+      "notes": "action_status::request_rejected"
+    },
+    "rejected_by_user": {
+      "translation": "Request was rejected by user",
+      "notes": "action_status::rejected_by_user"
+    },
+    "ready_to_create_vault": {
+      "translation": "Ready to create new vault",
+      "notes": "action_status::ready_to_create_vault"
+    },
+    "creating_vault": {
+      "translation": "Creating new vault",
+      "notes": "action_status::creating_vault"
+    },
+    "increase_token_allowance": {
+      "translation": "Increase token allowance",
+      "notes": "action_status::increase_token_allowance"
+    },
+    "increasing_allowance": {
+      "translation": "Increasing token allowance",
+      "notes": "action_status::increasing_allowance"
+    },
+    "ready_to_stake": {
+      "translation": "Ready to stake {amount}",
+      "notes": "action_status::ready_to_stake"
+    },
+    "staking": {
+      "translation": "Staking {amount}",
+      "notes": "action_status::staking"
+    },
+    "ready_to_unstake": {
+      "translation": "Ready to unstake {amount}",
+      "notes": "action_status::ready_to_unstake"
+    },
+    "unstaking": {
+      "translation": "Unstaking {amount}",
+      "notes": "action_status::unstaking"
+    },
+    "withdrawing": {
+      "translation": "Withdrawing {amount}",
+      "notes": "action_status::withdrawing"
+    },
+    "ready_to_lock": {
+      "translation": "Ready to lock vault",
+      "notes": "action_status::ready_to_lock"
+    },
+    "locking_vault": {
+      "translation": "Locking vault",
+      "notes": "action_status::locking_vault"
+    },
+    "compounding": {
+      "translation": "Compounding {amount} points",
+      "notes": "action_status::compounding"
+    },
+    "success": {
+      "translation": "Success!",
+      "notes": "action_status::success"
+    },
+    "transaction_completed": {
+      "translation": "Your transaction completed successfully",
+      "notes": "action_status::transaction_completed"
+    },
+    "wait_moment": {
+      "translation": "Wait a moment.",
+      "notes": "action_status::wait_moment"
+    },
+    "wait_moment_ellipsis": {
+      "translation": "Wait a moment...",
+      "notes": "action_status::wait_moment_ellipsis"
+    }
+  },
+  "emergency": {
+    "contracts_compromised": {
+      "translation": "Contracts have been compromised.",
+      "notes": "emergency::contracts_compromised"
+    },
+    "withdraw_funds": {
+      "translation": "Withdraw funds",
+      "notes": "emergency::withdraw_funds"
+    },
+    "emergency_withdrawal": {
+      "translation": "Emergency withdrawal",
+      "notes": "emergency::emergency_withdrawal"
+    },
+    "emergency_description": {
+      "translation": "In the event of a hack or contract compromise, you can use this feature to immediately withdraw your funds from the vault.",
+      "notes": "emergency::emergency_description"
+    },
+    "withdraw_to": {
+      "translation": "Withdraw to",
+      "notes": "emergency::withdraw_to"
+    },
+    "funds_sent_to_wallet": {
+      "translation": "Your funds will sent directly to your connected wallet.",
+      "notes": "emergency::funds_sent_to_wallet"
+    },
+    "emergency_exit_successful": {
+      "translation": "Emergency exit successful",
+      "notes": "emergency::emergency_exit_successful"
+    },
+    "error_calling_emergency": {
+      "translation": "Error calling emergencyExit: {error}",
+      "notes": "emergency::error_calling_emergency"
+    }
+  },
+  "categories": {
+    "all_apps": {
+      "translation": "🧩 All apps",
+      "notes": "categories::all_apps"
+    },
+    "all-apps": {
+      "translation": "🧩 All apps",
+      "notes": "categories::all-apps"
+    },
+    "ai": {
+      "translation": "✨ AI",
+      "notes": "categories::ai"
+    },
+    "bridge": {
+      "translation": "🚗 Bridge",
+      "notes": "categories::bridge"
+    },
+    "community": {
+      "translation": "🐕 Community",
+      "notes": "categories::community"
+    },
+    "defi": {
+      "translation": "📈 DeFi",
+      "notes": "categories::defi"
+    },
+    "gaming": {
+      "translation": "🎮 Gaming",
+      "notes": "categories::gaming"
+    },
+    "infra": {
+      "translation": "💻 Infra",
+      "notes": "categories::infra"
+    },
+    "nft": {
+      "translation": "🖼️ NFT",
+      "notes": "categories::nft"
+    },
+    "payment": {
+      "translation": "💰 Payment",
+      "notes": "categories::payment"
+    },
+    "privacy": {
+      "translation": "🕵️ Privacy",
+      "notes": "categories::privacy"
+    },
+    "social": {
+      "translation": "☕ Social",
+      "notes": "categories::social"
+    },
+    "spending": {
+      "translation": "🐷 Spending",
+      "notes": "categories::spending"
+    },
+    "tooling": {
+      "translation": "☂️ Tooling",
+      "notes": "categories::tooling"
+    },
+    "wallet": {
+      "translation": "💎 Wallet",
+      "notes": "categories::wallet"
+    }
+  },
+  "footer": {
+    "share_feedback": {
+      "translation": "Share feedback",
+      "notes": "footer::share_feedback"
+    },
+    "contact_us": {
+      "translation": "Contact us",
+      "notes": "footer::contact_us"
+    },
+    "submit_bug": {
+      "translation": "Submit bug",
+      "notes": "footer::submit_bug"
+    },
+    "terms_of_use": {
+      "translation": "Terms of Use",
+      "notes": "footer::terms_of_use"
+    },
+    "privacy_policy": {
+      "translation": "Privacy Policy",
+      "notes": "footer::privacy_policy"
+    },
+    "brand_assets": {
+      "translation": "Brand assets",
+      "notes": "footer::brand_assets"
+    }
+  },
+  "errors": {
+    "wallet_not_connected": {
+      "translation": "Wallet not connected. Please connect your wallet first.",
+      "notes": "errors::wallet_not_connected"
+    },
+    "amount_greater_than_zero": {
+      "translation": "Amount must be greater than 0",
+      "notes": "errors::amount_greater_than_zero"
+    },
+    "transaction_reverted": {
+      "translation": "Transaction was reverted",
+      "notes": "errors::transaction_reverted"
+    },
+    "failed_fetch_vaults": {
+      "translation": "Failed to fetch staking vaults: {error}",
+      "notes": "errors::failed_fetch_vaults"
+    },
+    "error_calculating_shares": {
+      "translation": "Error calculating your pre-deposit shares.",
+      "notes": "errors::error_calculating_shares"
+    },
+    "zero_shares": {
+      "translation": "This pre-deposit would result in 0 shares. Try to increase the amount.",
+      "notes": "errors::zero_shares"
+    },
+    "transaction_failed": {
+      "translation": "Transaction failed",
+      "notes": "errors::transaction_failed"
+    }
+  }
+}

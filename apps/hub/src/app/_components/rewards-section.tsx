@@ -1,9 +1,14 @@
+'use client'
+
 import { Link } from '@status-im/status-network/components'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 
 const REWARDS = ['KARMA', 'LINEA', 'SNT', 'GUSD']
 
 const RewardsSection = () => {
+  const t = useTranslations()
+
   return (
     <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
       <div className="flex size-[22px] min-w-[50px] items-center -space-x-1.5">
@@ -18,17 +23,16 @@ const RewardsSection = () => {
         ))}
       </div>
       <p className="text-15 text-neutral-60">
-        Rewards in KARMA, SNT, LINEA and points from Generic Protocol and native
-        apps. Funds will be unlocked at mainnet launch.
+        {t('rewards.description')}
         <br />
-        All contracts have been{' '}
+        {t('rewards.audited_prefix')}{' '}
         <Link
           href="https://github.com/aragon/status-predeposit-vaults/blob/development/audit/report-aragon-pre-deposit-vaults.pdf"
           target="_blank"
           rel="noopener noreferrer"
           className="text-purple hover:text-purple-dark"
         >
-          audited
+          {t('rewards.audited_link')}
         </Link>
         .
       </p>
