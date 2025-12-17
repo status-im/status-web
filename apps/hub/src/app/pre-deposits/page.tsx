@@ -80,9 +80,7 @@ export default function PreDepositPage() {
         </div>
       </div>
       <div className="mx-auto flex flex-col gap-4 rounded-32 p-4 lg:mb-14 lg:gap-8 lg:bg-neutral-2.5 lg:p-8">
-        <h2 className="text-19 font-600 text-neutral-100 lg:text-27">
-          Pre-deposit FAQ
-        </h2>
+        <h2 className="text-19 font-600 text-neutral-100 lg:text-27">FAQ</h2>
         <PreDepositFaq />
 
         <Image
