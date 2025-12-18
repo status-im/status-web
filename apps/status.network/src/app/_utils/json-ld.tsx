@@ -1,8 +1,7 @@
 import {
-  createJSONLD,
   JSONLDScript as BaseJSONLDScript,
+  createJSONLD,
 } from '@status-im/components'
-
 import type {
   ArticleSchema,
   BreadcrumbListSchema,
@@ -12,20 +11,19 @@ import type {
 } from '@status-im/components'
 
 /**
- * Status organization social media links
+ * Status Network social media links
  */
-const STATUS_SOCIAL_LINKS: string[] = [
-  'https://x.com/ethstatus',
+const STATUS_NETWORK_SOCIAL_LINKS: string[] = [
+  'https://x.com/StatusL2',
   'https://github.com/status-im',
-  'https://www.youtube.com/@Statusim',
 ]
 
 /**
- * Create JSON-LD schema generators with Status.app defaults
+ * Create JSON-LD schema generators with Status Network defaults
  */
 export const jsonLD = createJSONLD({
-  defaultSiteUrl: 'https://status.app',
-  defaultSocialLinks: STATUS_SOCIAL_LINKS,
+  defaultSiteUrl: 'https://status.network',
+  defaultSocialLinks: STATUS_NETWORK_SOCIAL_LINKS,
 })
 
 /**

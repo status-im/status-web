@@ -6,18 +6,37 @@ import { Network } from './_components/network'
 import { Partners } from './_components/partners'
 import { PreFooter } from './_components/pre-footer'
 import { Tokenomics } from './_components/tokenomics'
+import { jsonLD, JSONLDScript } from './_utils/json-ld'
+
+const organizationSchema = jsonLD.organization({
+  name: 'Status Network',
+  url: 'https://status.network',
+  description:
+    'The first natively gasless Ethereum L2 with sustainable yield and integrated public funding 🐉',
+  logo: 'https://status.network/logo.svg',
+})
+
+const websiteSchema = jsonLD.website({
+  name: 'Status Network',
+  url: 'https://status.network',
+  description:
+    'The first natively gasless Ethereum L2 with sustainable yield and integrated public funding 🐉',
+})
 
 export default function Homepage() {
   return (
-    <main className="flex w-full flex-col items-center">
-      <Hero />
-      <About />
-      <Features />
-      <Partners />
-      <Network />
-      <Tokenomics />
-      <Blog />
-      <PreFooter />
-    </main>
+    <>
+      <JSONLDScript schema={[organizationSchema, websiteSchema]} />
+      <main className="flex w-full flex-col items-center">
+        <Hero />
+        <About />
+        <Features />
+        <Partners />
+        <Network />
+        <Tokenomics />
+        <Blog />
+        <PreFooter />
+      </main>
+    </>
   )
 }
