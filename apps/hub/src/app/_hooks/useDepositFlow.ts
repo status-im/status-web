@@ -33,14 +33,14 @@ export function useDepositFlow({
 }: UseDepositFlowParams) {
   const isWETHVault = vault.id === WETH_VAULT.id
 
-  const { data: balance } = useBalance({
+  const { data: balance, refetch: refetchWETHBalance } = useBalance({
     address,
     token: vault.token.address,
     query: { enabled: !!address },
     chainId: vault.chainId,
   })
 
-  const { data: ethBalance } = useBalance({
+  const { data: ethBalance, refetch: refetchETHBalance } = useBalance({
     address,
     query: { enabled: !!address && isWETHVault },
     chainId: vault.chainId,
@@ -130,6 +130,13 @@ export function useDepositFlow({
     isWETHVault,
   ])
 
+  const refetchBalances = async () => {
+    await Promise.all([
+      refetchWETHBalance(),
+      isWETHVault ? refetchETHBalance() : Promise.resolve(),
+    ])
+  }
+
   return {
     actionState,
     balance: balance?.value ?? 0n,
@@ -138,6 +145,7 @@ export function useDepositFlow({
     minDeposit,
     sharesValidation,
     refetchAllowance,
+    refetchBalances,
     isLoadingAllowance,
   }
 }
