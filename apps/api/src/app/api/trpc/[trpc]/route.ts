@@ -25,8 +25,23 @@ const corsHeaders = {
 }
 
 async function handler(request: NextRequest) {
+  const origin = request.headers.get('origin')
+  const method = request.method
+  const url = request.url
+
+  console.log('[CORS] Request received:', {
+    method,
+    origin,
+    url,
+    path: new URL(url).pathname,
+  })
+
   // Handle OPTIONS preflight requests
   if (request.method === 'OPTIONS') {
+    console.log(
+      '[CORS] Handling OPTIONS preflight request from origin:',
+      origin
+    )
     return new Response(null, {
       status: 204,
       headers: corsHeaders,
@@ -58,6 +73,15 @@ async function handler(request: NextRequest) {
         // note!: status code is inferred from TRPCError.code (TOO_MANY_REQUESTS, INTERNAL_SERVER_ERROR, etc.)
         // const error = opts.errors?.[0]
 
+        console.log('[CORS] responseMeta called:', {
+          paths: opts?.paths,
+          type: opts?.type,
+          errors: opts?.errors?.map(e => ({
+            code: e.code,
+            message: e.message,
+          })),
+        })
+
         // todo?: unset cache and revalidate and revalidate based on tag
         // @see https://github.com/vercel/next.js/discussions/57792 for vercel caching error response
         let cacheControl = 'public, max-age=3600'
@@ -83,12 +107,16 @@ async function handler(request: NextRequest) {
           cacheControl = 'private, no-store'
         }
 
+        const metaHeaders = {
+          'cache-control': cacheControl,
+          ...corsHeaders,
+        }
+
+        console.log('[CORS] responseMeta returning headers:', metaHeaders)
+
         return {
           // status: 429,
-          headers: {
-            'cache-control': cacheControl,
-            ...corsHeaders,
-          },
+          headers: metaHeaders,
         }
       },
       // unstable_onChunk: undefined,
@@ -96,13 +124,32 @@ async function handler(request: NextRequest) {
 
     // Read response body and status
     const status = response.status
+    const originalHeaders = Object.fromEntries(response.headers.entries())
+
+    console.log('[CORS] tRPC response received:', {
+      status,
+      originalHeaders,
+      hasCorsHeaders: {
+        'Access-Control-Allow-Origin': response.headers.get(
+          'Access-Control-Allow-Origin'
+        ),
+        'Access-Control-Allow-Methods': response.headers.get(
+          'Access-Control-Allow-Methods'
+        ),
+      },
+    })
+
     const bodyText = await response.text()
 
     // Parse JSON if possible, otherwise use text
     let result: unknown
     try {
       result = bodyText ? JSON.parse(bodyText) : {}
-    } catch {
+    } catch (parseError) {
+      console.log('[CORS] Failed to parse response as JSON, using text:', {
+        bodyTextLength: bodyText.length,
+        parseError,
+      })
       result = bodyText
     }
 
@@ -113,13 +160,28 @@ async function handler(request: NextRequest) {
       responseHeaders.set(key, value)
     })
 
+    const finalHeaders = Object.fromEntries(responseHeaders.entries())
+
+    console.log('[CORS] Final response being sent:', {
+      status,
+      headers: finalHeaders,
+      origin,
+    })
+
     // Return response with CORS headers always included
     return new Response(JSON.stringify(result), {
       status: status,
       headers: responseHeaders,
     })
   } catch (error) {
-    console.error(error)
+    console.error('[CORS] Error in handler:', {
+      error,
+      errorMessage: error instanceof Error ? error.message : String(error),
+      errorStack: error instanceof Error ? error.stack : undefined,
+      origin,
+      method,
+      url,
+    })
 
     const status = 500
     // @see https://github.com/trpc/trpc/discussions/3640#discussioncomment-5511435 for returning explicit trpc error in superjson construct as result and preventing possible timeouts due to additional parsing
@@ -139,6 +201,12 @@ async function handler(request: NextRequest) {
 
     // @see https://vercel.com/docs/errors/FUNCTION_INVOCATION_TIMEOUT for ensuring response is always returned
     // Ensure CORS headers are included even in error responses
+    console.log('[CORS] Returning error response with CORS headers:', {
+      status,
+      headers: corsHeaders,
+      origin,
+    })
+
     return Response.json(result, {
       status: status,
       headers: corsHeaders,
