@@ -9,6 +9,7 @@ import { formatCurrency } from '~/utils/currency'
 
 import { HubLayout } from '../_components/hub-layout'
 import { InfoTooltip } from '../_components/info-tooltip'
+import { PreDepositFaq } from '../_components/pre-deposit-faq'
 import { PreDepositModal } from '../_components/pre-deposit-modal'
 import { RewardsSection } from '../_components/rewards-section'
 import { VaultCard } from '../_components/vault-card'
@@ -32,7 +33,7 @@ export default function PreDepositPage() {
 
   return (
     <HubLayout>
-      <div className="mx-auto flex flex-col gap-4 rounded-32 p-4 lg:my-14 lg:gap-8 lg:bg-neutral-2.5 lg:p-8">
+      <div className="mx-auto mb-8 flex flex-col gap-4 rounded-32 p-4 lg:mt-14 lg:gap-8 lg:bg-neutral-2.5 lg:p-8">
         <div className="flex flex-col justify-between gap-4 lg:flex-row">
           <div className="flex flex-col gap-4">
             <h1 className="text-27 font-bold text-neutral-100">
@@ -77,6 +78,11 @@ export default function PreDepositPage() {
             />
           ))}
         </div>
+      </div>
+      <div className="mx-auto flex flex-col gap-4 rounded-32 p-4 lg:mb-14 lg:gap-8 lg:bg-neutral-2.5 lg:p-8">
+        <h2 className="text-19 font-600 text-neutral-100 lg:text-27">FAQ</h2>
+        <PreDepositFaq />
+
         <Image
           src="/dragon-key.png"
           alt="Dragon with key"
