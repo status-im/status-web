@@ -4,6 +4,7 @@
 // @see https://github.com/trpc/trpc/blob/8cef54eaf95d8abc8484fe1d454b6620eeb57f2f/www/versioned_docs/version-10.x/further/rpc.md for http rpc spec
 // @see https://stackoverflow.com/questions/78800979/trpc-giving-error-when-trying-to-test-with-postman for calling via postman
 // @see https://github.com/trpc/trpc/issues/752 for use of superjson
+// @see https://blog.logrocket.com/using-cors-next-js-handle-cross-origin-requests/ for CORS configuration
 
 import { type ApiRouter, apiRouter } from '@status-im/wallet/data'
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
@@ -16,12 +17,24 @@ export type { ApiRouter }
 
 export const dynamic = 'force-dynamic'
 
-// CORS headers helper
+// Layer 3: Application-level CORS headers
+// Multi-layer CORS protection strategy:
+// 1. Middleware (src/middleware.ts) - First line of defense, handles OPTIONS preflight
+// 2. next.config.mjs headers() - Framework-level headers applied to all API routes
+// 3. Route handler explicit headers (this file) - Application-level headers for tRPC responses
+// 4. crossOrigin config in next.config.mjs - Next.js resource loading configuration
+//
+// Note: nextjs-cors package is installed but primarily designed for Pages Router.
+// For App Router with tRPC, our multi-layer approach provides better control.
+
+// CORS headers helper - ensures consistency across all layers
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-  'Access-Control-Max-Age': '86400', // 24 hours
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+  'Access-Control-Allow-Headers':
+    'Content-Type, Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version',
+  'Access-Control-Max-Age': '86400', // 24 hours - cache preflight responses
+  'Access-Control-Allow-Credentials': 'true',
 }
 
 async function handler(request: NextRequest) {
