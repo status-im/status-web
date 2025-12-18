@@ -7,6 +7,15 @@ export { DropdownButton } from './dropdown-button'
 export { DropdownMenu } from './dropdown-menu'
 export { IconButton } from './icon-button'
 export { Input } from './input'
+export {
+  type ArticleSchema,
+  type BreadcrumbListSchema,
+  createJSONLD,
+  type JSONLDSchema,
+  JSONLDScript,
+  type OrganizationSchema,
+  type WebSiteSchema,
+} from './json-ld'
 export { Popover } from './popover'
 export { StatusProvider } from './provider'
 export { SegmentedControl } from './segmented-control'
