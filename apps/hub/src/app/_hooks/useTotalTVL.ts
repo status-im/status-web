@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 
 import { formatUnits } from 'viem'
 
-import { LIDO_VAULT, LINEA_VAULT, SNT_VAULT } from '~constants/address'
+import { LINEA_VAULT, SNT_VAULT, WETH_VAULT } from '~constants/address'
 
 import { useExchangeRate } from './useExchangeRate'
 import { usePreDepositTVL } from './usePreDepositTVL'
@@ -10,7 +10,7 @@ import { usePreDepositTVL } from './usePreDepositTVL'
 export function useTotalTVL() {
   const sntTvl = usePreDepositTVL({ vault: SNT_VAULT })
   const lineaTvl = usePreDepositTVL({ vault: LINEA_VAULT })
-  const lidoTvl = usePreDepositTVL({ vault: LIDO_VAULT })
+  const wethTvl = usePreDepositTVL({ vault: WETH_VAULT })
 
   const sntRate = useExchangeRate({
     token: SNT_VAULT.token.priceKey || SNT_VAULT.token.symbol,
@@ -18,8 +18,8 @@ export function useTotalTVL() {
   const lineaRate = useExchangeRate({
     token: LINEA_VAULT.token.priceKey || LINEA_VAULT.token.symbol,
   })
-  const lidoRate = useExchangeRate({
-    token: LIDO_VAULT.token.priceKey || LIDO_VAULT.token.symbol,
+  const wethRate = useExchangeRate({
+    token: WETH_VAULT.token.priceKey || WETH_VAULT.token.symbol,
   })
 
   const totalTVL = useMemo(() => {
@@ -37,30 +37,30 @@ export function useTotalTVL() {
       total += amount * lineaRate.data.price
     }
 
-    if (lidoTvl.data && lidoRate.data) {
+    if (wethTvl.data && wethRate.data) {
       const amount = Number(
-        formatUnits(lidoTvl.data, LIDO_VAULT.token.decimals)
+        formatUnits(wethTvl.data, WETH_VAULT.token.decimals)
       )
-      total += amount * lidoRate.data.price
+      total += amount * wethRate.data.price
     }
 
     return total
   }, [
     sntTvl.data,
     lineaTvl.data,
-    lidoTvl.data,
+    wethTvl.data,
     sntRate.data,
     lineaRate.data,
-    lidoRate.data,
+    wethRate.data,
   ])
 
   const isLoading =
     sntTvl.isLoading ||
     lineaTvl.isLoading ||
-    lidoTvl.isLoading ||
+    wethTvl.isLoading ||
     sntRate.isLoading ||
     lineaRate.isLoading ||
-    lidoRate.isLoading
+    wethRate.isLoading
 
   return {
     data: totalTVL,

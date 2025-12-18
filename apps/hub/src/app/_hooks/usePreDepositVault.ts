@@ -38,7 +38,7 @@ export type UsePreDepositVaultReturn = UseMutationResult<
 
 const MUTATION_KEY = 'pre-deposit-vault' as const
 
-const TRANSACTION_CONFIG = {
+export const TRANSACTION_CONFIG = {
   CONFIRMATION_BLOCKS: 1,
 } as const
 
