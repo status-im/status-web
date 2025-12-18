@@ -9,6 +9,25 @@ let config = {
   // @see https://blog.logrocket.com/using-cors-next-js-handle-cross-origin-requests/
   crossOrigin: 'anonymous', // or 'use-credentials' if credentials are needed
 
+  // Allow additional origins in development mode
+  // @see https://nextjs.org/docs/app/api-reference/next-config-js/allowedDevOrigins
+  // This prevents Next.js from blocking cross-origin requests from local network IPs
+  // and other development origins in development mode
+  // Note: This is separate from CORS headers - it's Next.js's internal origin checking
+  // Add your local network IPs here as needed (e.g., '192.168.1.30:3002')
+  allowedDevOrigins: [
+    'localhost',
+    'localhost:3000',
+    'localhost:3001',
+    'localhost:3002',
+    // Local network IPs (for development on different devices/VPN)
+    // Add specific IPs you're using, e.g.:
+    '192.168.1.30:3002',
+    // You can add more IPs as needed:
+    // '192.168.1.31:3002',
+    // '10.0.0.5:3002',
+  ],
+
   logging: {
     fetches: {
       fullUrl: true,
