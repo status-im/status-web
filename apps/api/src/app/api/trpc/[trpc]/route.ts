@@ -16,7 +16,34 @@ export type { ApiRouter }
 
 export const dynamic = 'force-dynamic'
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+}
+
 async function handler(request: NextRequest) {
+  const origin = request.headers.get('origin')
+  const method = request.method
+  const url = request.url
+
+  console.log('[CORS] Request received:', {
+    method,
+    origin,
+    url,
+    path: new URL(url).pathname,
+  })
+
+  if (request.method === 'OPTIONS') {
+    console.log(
+      '[CORS] Handling OPTIONS preflight request from origin:',
+      origin
+    )
+    return new Response(null, {
+      status: 204,
+      headers: corsHeaders,
+    })
+  }
   // let error: Error | undefined
 
   try {
@@ -41,6 +68,15 @@ async function handler(request: NextRequest) {
         // note: opts.error does not have original cause (status code), contrary to onError
         // note!: status code is inferred from TRPCError.code (TOO_MANY_REQUESTS, INTERNAL_SERVER_ERROR, etc.)
         // const error = opts.errors?.[0]
+
+        console.log('[CORS] responseMeta called:', {
+          paths: opts?.paths,
+          type: opts?.type,
+          errors: opts?.errors?.map(e => ({
+            code: e.code,
+            message: e.message,
+          })),
+        })
 
         // todo?: unset cache and revalidate and revalidate based on tag
         // @see https://github.com/vercel/next.js/discussions/57792 for vercel caching error response
@@ -67,30 +103,75 @@ async function handler(request: NextRequest) {
           cacheControl = 'private, no-store'
         }
 
+        const metaHeaders = {
+          'cache-control': cacheControl,
+          ...corsHeaders,
+        }
+
+        console.log('[CORS] responseMeta returning headers:', metaHeaders)
+
         return {
-          // status: 429,
-          headers: {
-            'cache-control': cacheControl,
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-          },
+          headers: metaHeaders,
         }
       },
       // unstable_onChunk: undefined,
     })
 
     const status = response.status
-    const result = await response.json()
+    const originalHeaders = Object.fromEntries(response.headers.entries())
 
-    return Response.json(
-      result,
-      // { status: result.httpStatus }
-      // { status: 429 }
-      { status: status }
-    )
+    console.log('[CORS] tRPC response received:', {
+      status,
+      originalHeaders,
+      hasCorsHeaders: {
+        'Access-Control-Allow-Origin': response.headers.get(
+          'Access-Control-Allow-Origin'
+        ),
+        'Access-Control-Allow-Methods': response.headers.get(
+          'Access-Control-Allow-Methods'
+        ),
+      },
+    })
+
+    const bodyText = await response.text()
+
+    let result: unknown
+    try {
+      result = bodyText ? JSON.parse(bodyText) : {}
+    } catch (parseError) {
+      console.log('[CORS] Failed to parse response as JSON, using text:', {
+        bodyTextLength: bodyText.length,
+        parseError,
+      })
+      result = bodyText
+    }
+
+    const responseHeaders = new Headers(response.headers)
+    Object.entries(corsHeaders).forEach(([key, value]) => {
+      responseHeaders.set(key, value)
+    })
+
+    const finalHeaders = Object.fromEntries(responseHeaders.entries())
+
+    console.log('[CORS] Final response being sent:', {
+      status,
+      headers: finalHeaders,
+      origin,
+    })
+
+    return new Response(JSON.stringify(result), {
+      status: status,
+      headers: responseHeaders,
+    })
   } catch (error) {
-    console.error(error)
+    console.error('[CORS] Error in handler:', {
+      error,
+      errorMessage: error instanceof Error ? error.message : String(error),
+      errorStack: error instanceof Error ? error.stack : undefined,
+      origin,
+      method,
+      url,
+    })
 
     const status = 500
     // @see https://github.com/trpc/trpc/discussions/3640#discussioncomment-5511435 for returning explicit trpc error in superjson construct as result and preventing possible timeouts due to additional parsing
@@ -109,7 +190,16 @@ async function handler(request: NextRequest) {
     }
 
     // @see https://vercel.com/docs/errors/FUNCTION_INVOCATION_TIMEOUT for ensuring response is always returned
-    return Response.json(result, { status: status })
+    console.log('[CORS] Returning error response with CORS headers:', {
+      status,
+      headers: corsHeaders,
+      origin,
+    })
+
+    return Response.json(result, {
+      status: status,
+      headers: corsHeaders,
+    })
   }
 }
 
