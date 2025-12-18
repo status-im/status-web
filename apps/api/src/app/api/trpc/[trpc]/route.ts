@@ -10,8 +10,11 @@ import { type ApiRouter, apiRouter } from '@status-im/wallet/data'
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
 import { headers as nextHeaders } from 'next/headers'
 
-// import superjson from 'superjson'
+import { getCorsHeaders } from '../../../../config/cors'
+
 import type { NextRequest } from 'next/server'
+
+// import superjson from 'superjson'
 
 export type { ApiRouter }
 
@@ -27,16 +30,6 @@ export const dynamic = 'force-dynamic'
 // Note: nextjs-cors package is installed but primarily designed for Pages Router.
 // For App Router with tRPC, our multi-layer approach provides better control.
 
-// CORS headers helper - ensures consistency across all layers
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-  'Access-Control-Allow-Headers':
-    'Content-Type, Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version',
-  'Access-Control-Max-Age': '86400', // 24 hours - cache preflight responses
-  'Access-Control-Allow-Credentials': 'true',
-}
-
 async function handler(request: NextRequest) {
   const origin = request.headers.get('origin')
   const method = request.method
@@ -50,6 +43,14 @@ async function handler(request: NextRequest) {
     pathname,
     // Check if middleware headers might be present (they would be in response headers, not request)
     userAgent: request.headers.get('user-agent'),
+  })
+
+  // Get CORS headers based on origin
+  const corsHeaders = getCorsHeaders(origin)
+
+  console.log('[CORS] CORS headers determined:', {
+    origin,
+    allowedOrigin: corsHeaders['Access-Control-Allow-Origin'],
   })
 
   // Handle OPTIONS preflight requests
@@ -173,7 +174,7 @@ async function handler(request: NextRequest) {
     const responseHeaders = new Headers(response.headers)
     // Always ensure CORS headers are present (override any existing ones)
     Object.entries(corsHeaders).forEach(([key, value]) => {
-      responseHeaders.set(key, value)
+      responseHeaders.set(key, String(value))
     })
 
     const finalHeaders = Object.fromEntries(responseHeaders.entries())

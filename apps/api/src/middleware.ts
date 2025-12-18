@@ -9,6 +9,8 @@
 
 import { NextResponse } from 'next/server'
 
+import { getCorsHeaders } from './config/cors'
+
 import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
@@ -22,22 +24,25 @@ export function middleware(request: NextRequest) {
     pathname,
   })
 
+  // Get CORS headers based on origin
+  const corsHeaders = getCorsHeaders(origin)
+
+  console.log('[CORS Middleware] CORS headers determined:', {
+    origin,
+    allowedOrigin: corsHeaders['Access-Control-Allow-Origin'],
+  })
+
   // Handle preflight OPTIONS requests
   // This is critical for CORS - browsers send OPTIONS before actual requests
+  // @see https://www.geeksforgeeks.org/reactjs/how-to-use-cors-in-next-js-to-handle-cross-origin-requests/
+  // Some legacy browsers (IE11, various SmartTVs) choke on 204, but 204 is the standard
+  // If you need to support legacy browsers, you can use status 200 instead
   if (method === 'OPTIONS') {
     console.log('[CORS Middleware] Handling OPTIONS preflight request')
 
-    const corsHeaders = {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-      'Access-Control-Allow-Headers':
-        'Content-Type, Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version',
-      'Access-Control-Max-Age': '86400', // 24 hours - cache preflight responses
-      'Access-Control-Allow-Credentials': 'true',
-    }
-
     return new NextResponse(null, {
       status: 204, // No Content - standard for OPTIONS responses
+      // Use status: 200 if you need to support legacy browsers that choke on 204
       headers: corsHeaders,
     })
   }
@@ -55,20 +60,13 @@ export function middleware(request: NextRequest) {
 
   // Add CORS headers to all API responses
   // These headers will be present even if route handler doesn't set them
-  response.headers.set('Access-Control-Allow-Origin', '*')
-  response.headers.set(
-    'Access-Control-Allow-Methods',
-    'GET, POST, PUT, DELETE, PATCH, OPTIONS'
-  )
-  response.headers.set(
-    'Access-Control-Allow-Headers',
-    'Content-Type, Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version'
-  )
-  response.headers.set('Access-Control-Max-Age', '86400')
-  response.headers.set('Access-Control-Allow-Credentials', 'true')
+  Object.entries(corsHeaders).forEach(([key, value]) => {
+    response.headers.set(key, value)
+  })
 
   console.log('[CORS Middleware] Added CORS headers to response:', {
     origin,
+    allowedOrigin: corsHeaders['Access-Control-Allow-Origin'],
     pathname,
     method,
   })
