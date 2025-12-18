@@ -279,6 +279,16 @@
         "notes": "partners::hash_vegas::description"
       }
     },
+    "ponzi_hero": {
+      "title": {
+        "translation": "Ponzi Hero",
+        "notes": "partners::ponzi_hero::title"
+      },
+      "description": {
+        "translation": "Earn NFTs, have some fun!",
+        "notes": "partners::ponzi_hero::description"
+      }
+    },
     "linea": {
       "title": {
         "translation": "Linea",
@@ -335,6 +345,16 @@
       "description": {
         "translation": "Ethereum super-app with 4M+ downloads",
         "notes": "network::status::description"
+      }
+    },
+    "logos": {
+      "title": {
+        "translation": "Logos",
+        "notes": "network::logos::title"
+      },
+      "description": {
+        "translation": "Open tech to restore civil society",
+        "notes": "network::logos::description"
       }
     },
     "waku": {
