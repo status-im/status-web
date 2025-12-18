@@ -132,6 +132,7 @@ const PreDepositModal = ({
     minDeposit,
     sharesValidation,
     refetchAllowance,
+    refetchBalances,
   } = useDepositFlow({ vault, amountWei, address })
 
   const isWrongChain = useMemo(() => {
@@ -152,7 +153,8 @@ const PreDepositModal = ({
         wrapETH(
           { amountWei: ethToWrap },
           {
-            onSuccess: () => {
+            onSuccess: async () => {
+              await refetchBalances()
               toast.positive(
                 'ETH wrapped successfully. You can now proceed with deposit.'
               )
@@ -209,11 +211,7 @@ const PreDepositModal = ({
   }
 
   const handleSetMax = () => {
-    const totalBalance =
-      vault.id === 'WETH'
-        ? (balance ?? 0n) + (ethBalance ?? 0n)
-        : (balance ?? 0n)
-    let maxAmount = totalBalance
+    let maxAmount = balance ?? 0n
     if (maxDeposit && maxAmount > maxDeposit) maxAmount = maxDeposit
     form.setValue('amount', formatUnits(maxAmount, vault.token.decimals))
   }
@@ -350,17 +348,9 @@ const PreDepositModal = ({
                   className="uppercase text-neutral-100 hover:text-neutral-80"
                 >
                   MAX{' '}
-                  {vault.id === 'WETH'
-                    ? formatTokenAmount(
-                        (balance ?? 0n) + (ethBalance ?? 0n),
-                        vault.token.symbol,
-                        {
-                          includeSymbol: true,
-                        }
-                      )
-                    : formatTokenAmount(balance, vault.token.symbol, {
-                        includeSymbol: true,
-                      })}
+                  {formatTokenAmount(balance, vault.token.symbol, {
+                    includeSymbol: true,
+                  })}
                 </button>
               </div>
             </div>
