@@ -41,12 +41,15 @@ async function handler(request: NextRequest) {
   const origin = request.headers.get('origin')
   const method = request.method
   const url = request.url
+  const pathname = new URL(url).pathname
 
   console.log('[CORS] Request received:', {
     method,
     origin,
     url,
-    path: new URL(url).pathname,
+    pathname,
+    // Check if middleware headers might be present (they would be in response headers, not request)
+    userAgent: request.headers.get('user-agent'),
   })
 
   if (request.method === 'OPTIONS') {

@@ -78,7 +78,8 @@ export function middleware(request: NextRequest) {
 
 // Apply middleware only to API routes
 // @see https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
-// The matcher uses a regex pattern to match API routes
+// The matcher uses a regex pattern to match API routes including dynamic routes
+// This pattern matches all routes starting with /api/
 export const config = {
   matcher: '/api/:path*',
 }
