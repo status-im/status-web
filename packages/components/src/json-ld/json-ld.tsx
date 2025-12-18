@@ -8,6 +8,7 @@ export type JSONLDSchema =
   | WebSiteSchema
   | ArticleSchema
   | BreadcrumbListSchema
+  | FAQPageSchema
 
 export type OrganizationSchema = {
   '@context': 'https://schema.org'
@@ -72,6 +73,19 @@ export type BreadcrumbListSchema = {
     position: number
     name: string
     item?: string
+  }>
+}
+
+export type FAQPageSchema = {
+  '@context': 'https://schema.org'
+  '@type': 'FAQPage'
+  mainEntity: Array<{
+    '@type': 'Question'
+    name: string
+    acceptedAnswer: {
+      '@type': 'Answer'
+      text: string
+    }
   }>
 }
 
@@ -196,6 +210,21 @@ export function createJSONLD(config: CreateJSONLDConfig) {
             ? item.url
             : `${defaultSiteUrl}${item.url}`,
         }),
+      })),
+    }),
+
+    faqPage: (faqConfig: {
+      questions: Array<{ question: string; answer: string }>
+    }): FAQPageSchema => ({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqConfig.questions.map(q => ({
+        '@type': 'Question',
+        name: q.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: q.answer,
+        },
       })),
     }),
   }
