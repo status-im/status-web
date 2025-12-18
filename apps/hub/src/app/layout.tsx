@@ -3,8 +3,6 @@ import './globals.css'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
 
-import { Providers } from './_providers'
-
 import type { Metadata } from 'next'
 
 const inter = Inter({
@@ -16,17 +14,23 @@ export const metadata: Metadata = {
   title: 'Status Hub',
   description:
     'Manage your Status Network assets, discover applications, and navigate to various services.',
+  alternates: {
+    languages: {
+      'en-GB': '/',
+      'ko-KR': '/ko',
+    },
+  },
 }
 
-export default function RootLayout({
-  children,
-}: {
+type Props = {
   children: React.ReactNode
-}) {
+}
+
+export default function RootLayout({ children }: Props) {
   return (
     <html lang="en" className={inter.variable}>
       <body className="font-inter antialiased">
-        <Providers>{children}</Providers>
+        {children}
         <Script
           strategy="afterInteractive"
           src="https://umami.bi.status.im/script.js"

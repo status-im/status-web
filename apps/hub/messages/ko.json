@@ -1,0 +1,937 @@
+{
+  "meta": {
+    "locale": {
+      "translation": "ko",
+      "notes": "meta::locale"
+    },
+    "name": {
+      "translation": "한국어",
+      "notes": "meta::name"
+    },
+    "direction": {
+      "translation": "ltr",
+      "notes": "meta::direction"
+    },
+    "completion": 0,
+    "description": {
+      "translation": "Status Hub 번역",
+      "notes": "meta::description"
+    }
+  },
+  "common": {
+    "loading": {
+      "translation": "로딩 중...",
+      "notes": "common::loading"
+    },
+    "cancel": {
+      "translation": "취소",
+      "notes": "common::cancel"
+    },
+    "close": {
+      "translation": "닫기",
+      "notes": "common::close"
+    },
+    "learn_more": {
+      "translation": "더 알아보기",
+      "notes": "common::learn_more"
+    },
+    "testnet": {
+      "translation": "테스트넷",
+      "notes": "common::testnet"
+    },
+    "mainnet": {
+      "translation": "메인넷",
+      "notes": "common::mainnet"
+    }
+  },
+  "navigation": {
+    "home": {
+      "translation": "홈",
+      "notes": "navigation::home"
+    },
+    "pre_deposits": {
+      "translation": "사전예치",
+      "notes": "navigation::pre_deposits"
+    },
+    "discover": {
+      "translation": "알아보기",
+      "notes": "navigation::discover"
+    },
+    "stake": {
+      "translation": "스테이킹",
+      "notes": "navigation::stake"
+    },
+    "karma": {
+      "translation": "카르마",
+      "notes": "navigation::karma"
+    },
+    "tokens": {
+      "translation": "토큰",
+      "notes": "navigation::tokens"
+    },
+    "bridge": {
+      "translation": "브릿지",
+      "notes": "navigation::bridge"
+    },
+    "snt_vote": {
+      "translation": "SNT 투표",
+      "notes": "navigation::snt_vote"
+    },
+    "explorer": {
+      "translation": "익스플로러",
+      "notes": "navigation::explorer"
+    },
+    "submit_app": {
+      "translation": "앱 제출",
+      "notes": "navigation::submit_app"
+    },
+    "docs": {
+      "translation": "문서",
+      "notes": "navigation::docs"
+    },
+    "close_sidebar": {
+      "translation": "사이드바 닫기",
+      "notes": "navigation::close_sidebar"
+    },
+    "toggle_menu": {
+      "translation": "메뉴",
+      "notes": "navigation::toggle_menu"
+    }
+  },
+  "top_bar": {
+    "connect_wallet": {
+      "translation": "지갑 연결",
+      "notes": "top_bar::connect_wallet"
+    },
+    "connect": {
+      "translation": "연결",
+      "notes": "top_bar::connect"
+    }
+  },
+  "hero": {
+    "title": {
+      "translation": "무료 네트워크 시작하기",
+      "notes": "hero::title"
+    },
+    "description": {
+      "translation": "앱을 사용하고 자산을 예치하여 카르마를 획득하세요",
+      "notes": "hero::description"
+    },
+    "landscape_alt": {
+      "translation": "가로 모드",
+      "notes": "hero::landscape_alt"
+    }
+  },
+  "dashboard": {
+    "deposit_funds_title": {
+      "translation": "수익과 보상을 위해 자금 예치하기",
+      "notes": "dashboard::deposit_funds_title"
+    },
+    "build_with_us_title": {
+      "translation": "함께 개발해요",
+      "notes": "dashboard::build_with_us_title"
+    },
+    "build_with_us_description": {
+      "translation": "무료 네트워크에서 당신의 앱을 출시하세요",
+      "notes": "dashboard::build_with_us_description"
+    },
+    "read_docs": {
+      "translation": "문서 읽기",
+      "notes": "dashboard::read_docs"
+    },
+    "submit_app": {
+      "translation": "앱 제출",
+      "notes": "dashboard::submit_app"
+    },
+    "dragon_alt": {
+      "translation": "드래곤",
+      "notes": "dashboard::dragon_alt"
+    },
+    "unicorn_alt": {
+      "translation": "유니콘",
+      "notes": "dashboard::unicorn_alt"
+    }
+  },
+  "apps": {
+    "explore_apps_title": {
+      "translation": "앱 탐색",
+      "notes": "apps::explore_apps_title"
+    },
+    "explore_apps_description": {
+      "translation": "스테이터스 네트워크에 구축된 선별된 앱 및 서비스 탐색",
+      "notes": "apps::explore_apps_description"
+    },
+    "explore_all_apps": {
+      "translation": "모든 앱 알아보기",
+      "notes": "apps::explore_all_apps"
+    }
+  },
+  "discover": {
+    "title": {
+      "translation": "가스리스 앱",
+      "notes": "discover::title"
+    },
+    "description": {
+      "translation": "스테이터스 네트워크에 구축된 선별된 앱 및 서비스 탐색",
+      "notes": "discover::description"
+    },
+    "featured": {
+      "translation": "추천 앱",
+      "notes": "discover::featured"
+    },
+    "get_featured": {
+      "translation": "추천 앱으로 선정되기",
+      "notes": "discover::get_featured"
+    },
+    "popular_apps": {
+      "translation": "인기 앱",
+      "notes": "discover::popular_apps"
+    },
+    "new_apps": {
+      "translation": "신규 앱",
+      "notes": "discover::new_apps"
+    },
+    "all_apps": {
+      "translation": "모든 앱",
+      "notes": "discover::all_apps"
+    },
+    "categories": {
+      "translation": "카테고리",
+      "notes": "discover::categories"
+    },
+    "no_apps_found": {
+      "translation": "앱을 찾을 수 없습니다",
+      "notes": "discover::no_apps_found"
+    },
+    "no_apps_found_description": {
+      "translation": "필터를 조정하여 더 많은 앱을 확인하세요",
+      "notes": "discover::no_apps_found_description"
+    },
+    "tabs": {
+      "popular": {
+        "translation": "인기",
+        "notes": "discover::tabs::popular"
+      },
+      "new": {
+        "translation": "신규",
+        "notes": "discover::tabs::new"
+      },
+      "all": {
+        "translation": "전체",
+        "notes": "discover::tabs::all"
+      }
+    }
+  },
+  "stake": {
+    "title": {
+      "translation": "STT를 스테이킹하고, 카르마를 쌓으세요",
+      "notes": "stake::title"
+    },
+    "description": {
+      "translation": "스테이터스 네트워크 테스트넷에서 STT를 스테이킹하고 카르마를 받으세요. 더 많은 가스리스 트랜잭션을 잠금 해제하고 네트워크에서의 권한을 높이세요.",
+      "notes": "stake::description"
+    },
+    "faucet_title": {
+      "translation": "무료 테스트넷 SNT (STT) 파우셋",
+      "notes": "stake::faucet_title"
+    },
+    "daily_limit": {
+      "translation": "일일 한도",
+      "notes": "stake::daily_limit"
+    },
+    "used_today": {
+      "translation": "오늘 사용됨",
+      "notes": "stake::used_today"
+    },
+    "available": {
+      "translation": "사용 가능",
+      "notes": "stake::available"
+    },
+    "claim_testnet_snt": {
+      "translation": "테스트넷 SNT (STT) 받기",
+      "notes": "stake::claim_testnet_snt"
+    },
+    "claiming": {
+      "translation": "받는 중...",
+      "notes": "stake::claiming"
+    },
+    "piggy_bank_alt": {
+      "translation": "저금통",
+      "notes": "stake::piggy_bank_alt"
+    },
+    "amount_to_stake": {
+      "translation": "스테이킹할 금액",
+      "notes": "stake::amount_to_stake"
+    },
+    "select_vault": {
+      "translation": "금고 선택",
+      "notes": "stake::select_vault"
+    },
+    "add_new_vault": {
+      "translation": "새 금고 추가",
+      "notes": "stake::add_new_vault"
+    },
+    "stake_stt": {
+      "translation": "STT 스테이킹",
+      "notes": "stake::stake_stt"
+    },
+    "connect_wallet": {
+      "translation": "지갑 연결",
+      "notes": "stake::connect_wallet"
+    },
+    "sign_in_to_continue": {
+      "translation": "계속하려면 로그인하세요",
+      "notes": "stake::sign_in_to_continue"
+    },
+    "create_new_vault": {
+      "translation": "새 금고 만들기",
+      "notes": "stake::create_new_vault"
+    },
+    "dont_lock": {
+      "translation": "잠그지 않기",
+      "notes": "stake::dont_lock"
+    },
+    "lock": {
+      "translation": "잠그기",
+      "notes": "stake::lock"
+    },
+    "do_you_want_to_lock": {
+      "translation": "금고를 잠그시겠습니까?",
+      "notes": "stake::do_you_want_to_lock"
+    },
+    "lock_description": {
+      "translation": "이 금고를 잠그면 더 많은 카르마를 받을 수 있습니다",
+      "notes": "stake::lock_description"
+    },
+    "total_staked": {
+      "translation": "총 스테이킹",
+      "notes": "stake::total_staked"
+    },
+    "next_unlock_in": {
+      "translation": "{days}일 후 잠금 해제",
+      "notes": "stake::next_unlock_in"
+    },
+    "weighted_boost": {
+      "translation": "가중 부스트",
+      "notes": "stake::weighted_boost"
+    },
+    "compound_points": {
+      "translation": "복리 포인트",
+      "notes": "stake::compound_points"
+    },
+    "no_points_ready": {
+      "translation": "복리를 적용할 포인트가 없습니다",
+      "notes": "stake::no_points_ready"
+    },
+    "my_vaults": {
+      "translation": "내 금고",
+      "notes": "stake::my_vaults"
+    },
+    "add_vault": {
+      "translation": "금고 추가",
+      "notes": "stake::add_vault"
+    },
+    "vault_name": {
+      "translation": "금고 이름",
+      "notes": "stake::vault_name"
+    },
+    "staked": {
+      "translation": "스테이킹됨",
+      "notes": "stake::staked"
+    },
+    "vault_balance": {
+      "translation": "금고 잔액",
+      "notes": "stake::vault_balance"
+    },
+    "unlocks_in": {
+      "translation": "잠금 해제까지",
+      "notes": "stake::unlocks_in"
+    },
+    "boost": {
+      "translation": "부스트",
+      "notes": "stake::boost"
+    },
+    "if_locked": {
+      "translation": "잠긴 경우",
+      "notes": "stake::if_locked"
+    },
+    "multiplier_points": {
+      "translation": "배수 포인트",
+      "notes": "stake::multiplier_points"
+    },
+    "state": {
+      "translation": "상태",
+      "notes": "stake::state"
+    },
+    "locked": {
+      "translation": "잠김",
+      "notes": "stake::locked"
+    },
+    "open": {
+      "translation": "열림",
+      "notes": "stake::open"
+    },
+    "actions": {
+      "translation": "작업",
+      "notes": "stake::actions"
+    },
+    "unstake": {
+      "translation": "언스테이킹",
+      "notes": "stake::unstake"
+    },
+    "open_in_explorer": {
+      "translation": "블록체인 익스플로러에서 확인하기",
+      "notes": "stake::open_in_explorer"
+    },
+    "extend_lock_time": {
+      "translation": "잠금 시간 연장하기",
+      "notes": "stake::extend_lock_time"
+    },
+    "extend": {
+      "translation": "연장",
+      "notes": "stake::extend"
+    },
+    "extend_lock_title": {
+      "translation": "잠금 시간 연장",
+      "notes": "stake::extend_lock_title"
+    },
+    "extend_lock_description": {
+      "translation": "잠금 시간을 연장하여 카르마 부스트 증가시킵니다",
+      "notes": "stake::extend_lock_description"
+    },
+    "extend_lock": {
+      "translation": "잠금 연장",
+      "notes": "stake::extend_lock"
+    },
+    "total": {
+      "translation": "총계",
+      "notes": "stake::total"
+    },
+    "address": {
+      "translation": "주소",
+      "notes": "stake::address"
+    },
+    "vault": {
+      "translation": "금고",
+      "notes": "stake::vault"
+    },
+    "unstake_funds": {
+      "translation": "자금 언스테이킹",
+      "notes": "stake::unstake_funds"
+    },
+    "unstake_description": {
+      "translation": "토큰이 언스테이킹되어 연결된 지갑으로 자동 반환됩니다",
+      "notes": "stake::unstake_description"
+    },
+    "amount": {
+      "translation": "금액",
+      "notes": "stake::amount"
+    },
+    "unstake_to": {
+      "translation": "언스테이킹 대상",
+      "notes": "stake::unstake_to"
+    },
+    "unstaking": {
+      "translation": "언스테이킹 중...",
+      "notes": "stake::unstaking"
+    },
+    "max_lock_time": {
+      "translation": "최대 잠금 기간은 4년입니다",
+      "notes": "stake::max_lock_time"
+    },
+    "lock_info_message": {
+      "translation": "카르마를 받는 속도를 높입니다. 금고를 더 오래 잠글수록 부스트가 높아지고 카르마가 더 빨리 누적됩니다. 언제든지 더 많은 STT를 추가할 수 있지만 STT를 인출하는 것은 금고가 잠금 해제된 후에만 가능합니다.",
+      "notes": "stake::lock_info_message"
+    },
+    "ready_to_compound": {
+      "translation": "{points} 포인트 복리 적용 준비 완료",
+      "notes": "stake::ready_to_compound"
+    },
+    "sign_message": {
+      "translation": "지갑에서 메시지에 서명하세요.",
+      "notes": "stake::sign_message"
+    },
+    "total_compounded": {
+      "translation": "총 복리",
+      "notes": "stake::total_compounded"
+    },
+    "points": {
+      "translation": "포인트",
+      "notes": "stake::points"
+    },
+    "your_earn_rate": {
+      "translation": "{boost} 부스트에서의 수익률",
+      "notes": "stake::your_earn_rate"
+    },
+    "karma_per_day": {
+      "translation": "카르마 / 일",
+      "notes": "stake::karma_per_day"
+    },
+    "equivalent_at_boost": {
+      "translation": "동일 포인트의 x0.00 부스트 수익률",
+      "notes": "stake::equivalent_at_boost"
+    },
+    "compound_info": {
+      "translation": "카르마를 받는 속도를 높입니다. 복리를 적용하는 포인트가 많을수록 속도가 높아집니다. 금고를 더 오래 잠글수록 부스트가 높아지고 카르마가 더 빨리 누적됩니다.",
+      "notes": "stake::compound_info"
+    }
+  },
+  "karma": {
+    "title": {
+      "translation": "카르마",
+      "notes": "karma::title"
+    },
+    "description": {
+      "translation": "카르마를 늘리고 더 많은 무료 트랜잭션을 잠금 해제하며 네트워크에 대한 권한을 얻으세요",
+      "notes": "karma::description"
+    },
+    "level": {
+      "translation": "레벨 {level}",
+      "notes": "karma::level"
+    },
+    "receive_karma": {
+      "translation": "카르마 받기",
+      "notes": "karma::receive_karma"
+    },
+    "welcome_karma": {
+      "translation": "환영 카르마",
+      "notes": "karma::welcome_karma"
+    },
+    "just_arrived": {
+      "translation": "방금 도착",
+      "notes": "karma::just_arrived"
+    },
+    "just_arrived_description": {
+      "translation": "네트워크에 가입하여 카르마를 받았습니다",
+      "notes": "karma::just_arrived_description"
+    },
+    "claim": {
+      "translation": "받기",
+      "notes": "karma::claim"
+    },
+    "claiming": {
+      "translation": "받는 중...",
+      "notes": "karma::claiming"
+    },
+    "action": {
+      "translation": "작업",
+      "notes": "karma::action"
+    },
+    "karma_visual_alt": {
+      "translation": "카르마 시각화",
+      "notes": "karma::karma_visual_alt"
+    },
+    "captcha_error": {
+      "translation": "캡차 검증에 실패했습니다. 다시 시도하세요.",
+      "notes": "karma::captcha_error"
+    },
+    "claim_failed": {
+      "translation": "수령이 실패했습니다. 다시 시도하세요",
+      "notes": "karma::claim_failed"
+    },
+    "claim_unsuccessful": {
+      "translation": "수령이 성공하지 못했습니다. 다시 시도하세요",
+      "notes": "karma::claim_unsuccessful"
+    },
+    "unexpected_error": {
+      "translation": "예기치 않은 오류가 발생했습니다",
+      "notes": "karma::unexpected_error"
+    }
+  },
+  "rewards": {
+    "description": {
+      "translation": "KARMA, SNT, LINEA 토큰 및 Generic Protocol 등의 네이티브 앱 포인트를 보상으로 받으세요. 자금은 메인넷 출시 시 잠금 해제됩니다.",
+      "notes": "rewards::description"
+    },
+    "audited_prefix": {
+      "translation": "모든 컨트랙트는",
+      "notes": "rewards::audited_prefix"
+    },
+    "audited_link": {
+      "translation": "감사 완료되었습니다",
+      "notes": "rewards::audited_link"
+    }
+  },
+  "pre_deposits": {
+    "title": {
+      "translation": "사전예치 금고",
+      "notes": "pre_deposits::title"
+    },
+    "total_value_locked": {
+      "translation": "총 예치 가치",
+      "notes": "pre_deposits::total_value_locked"
+    },
+    "tvl_tooltip": {
+      "translation": "모든 금고에 걸쳐 예치된 토큰 가치의 합계",
+      "notes": "pre_deposits::tvl_tooltip"
+    },
+    "dragon_key_alt": {
+      "translation": "열쇠를 든 드래곤",
+      "notes": "pre_deposits::dragon_key_alt"
+    }
+  },
+  "vault": {
+    "your_deposit": {
+      "translation": "예치금",
+      "notes": "vault::your_deposit"
+    },
+    "liquid_apy": {
+      "translation": "유동 APY",
+      "notes": "vault::liquid_apy"
+    },
+    "liquid_apy_tbd": {
+      "translation": "유동 APY 추후 공지",
+      "notes": "vault::liquid_apy_tbd"
+    },
+    "apy_tooltip": {
+      "translation": "TVL을 기반으로 한 추정 APY 및 모든 금고의 총 유동 토큰 보상: 15M SNT + 20M LINEA",
+      "notes": "vault::apy_tooltip"
+    },
+    "tvl": {
+      "translation": "TVL",
+      "notes": "vault::tvl"
+    },
+    "tvl_tbd": {
+      "translation": "TVL 추후 공지",
+      "notes": "vault::tvl_tbd"
+    },
+    "deposit": {
+      "translation": "예치하기",
+      "notes": "vault::deposit"
+    },
+    "coming_soon": {
+      "translation": "곧 출시 예정",
+      "notes": "vault::coming_soon"
+    },
+    "deposit_funds": {
+      "translation": "자금 예치하기",
+      "notes": "vault::deposit_funds"
+    },
+    "deposit_description": {
+      "translation": "자금 예치하고 수익과 보상 받기",
+      "notes": "vault::deposit_description"
+    },
+    "select_token": {
+      "translation": "토큰 선택",
+      "notes": "vault::select_token"
+    },
+    "amount_required": {
+      "translation": "금액을 입력하세요",
+      "notes": "vault::amount_required"
+    },
+    "amount_greater_than_zero": {
+      "translation": "금액은 0보다 커야 합니다",
+      "notes": "vault::amount_greater_than_zero"
+    },
+    "amount_exceeds_max": {
+      "translation": "금액이 최대 잔액 {max} STT를 초과합니다",
+      "notes": "vault::amount_exceeds_max"
+    },
+    "deposit_failed": {
+      "translation": "예치에 실패했습니다. 다시 시도하세요.",
+      "notes": "vault::deposit_failed"
+    },
+    "max": {
+      "translation": "최대",
+      "notes": "vault::max"
+    },
+    "amount_to_deposit": {
+      "translation": "예치 금액",
+      "notes": "vault::amount_to_deposit"
+    },
+    "rewards": {
+      "translation": "보상",
+      "notes": "vault::rewards"
+    },
+    "switching": {
+      "translation": "전환 중...",
+      "notes": "vault::switching"
+    },
+    "switch_network_to_deposit": {
+      "translation": "예치를 위해 네트워크 전환",
+      "notes": "vault::switch_network_to_deposit"
+    },
+    "approving": {
+      "translation": "승인 중...",
+      "notes": "vault::approving"
+    },
+    "depositing": {
+      "translation": "예치 중...",
+      "notes": "vault::depositing"
+    },
+    "approve_deposit": {
+      "translation": "예치를 승인하세요",
+      "notes": "vault::approve_deposit"
+    },
+    "enter_amount": {
+      "translation": "금액을 입력하세요",
+      "notes": "vault::enter_amount"
+    },
+    "generic_protocol_points": {
+      "translation": "Generic Protocol 포인트",
+      "notes": "vault::generic_protocol_points"
+    },
+    "years": {
+      "translation": "년",
+      "notes": "vault::years"
+    },
+    "days": {
+      "translation": "일",
+      "notes": "vault::days"
+    },
+    "close_aria": {
+      "translation": "닫기",
+      "notes": "vault::close_aria"
+    },
+    "boost_label": {
+      "translation": "부스트",
+      "notes": "vault::boost_label"
+    },
+    "unlock_label": {
+      "translation": "잠금 해제",
+      "notes": "vault::unlock_label"
+    },
+    "native_apps_points": {
+      "translation": "네이티브 앱 포인트",
+      "notes": "vault::native_apps_points"
+    }
+  },
+  "action_status": {
+    "sign_in": {
+      "translation": "로그인",
+      "notes": "action_status::sign_in"
+    },
+    "sign_message": {
+      "translation": "지갑에서 메시지를 서명하세요.",
+      "notes": "action_status::sign_message"
+    },
+    "signing_in": {
+      "translation": "로그인 중",
+      "notes": "action_status::signing_in"
+    },
+    "request_rejected": {
+      "translation": "요청이 거절되었습니다",
+      "notes": "action_status::request_rejected"
+    },
+    "rejected_by_user": {
+      "translation": "요청이 사용자에 의해 거절되었습니다",
+      "notes": "action_status::rejected_by_user"
+    },
+    "ready_to_create_vault": {
+      "translation": "새 금고 생성 준비 완료",
+      "notes": "action_status::ready_to_create_vault"
+    },
+    "creating_vault": {
+      "translation": "새 금고 생성 중",
+      "notes": "action_status::creating_vault"
+    },
+    "increase_token_allowance": {
+      "translation": "토큰 허용량 증가",
+      "notes": "action_status::increase_token_allowance"
+    },
+    "increasing_allowance": {
+      "translation": "토큰 허용량 증가 중",
+      "notes": "action_status::increasing_allowance"
+    },
+    "ready_to_stake": {
+      "translation": "스테이킹 준비 완료 - {amount}",
+      "notes": "action_status::ready_to_stake"
+    },
+    "staking": {
+      "translation": "스테이킹 중 - {amount}",
+      "notes": "action_status::staking"
+    },
+    "ready_to_unstake": {
+      "translation": "언스테이킹 준비 완료 - {amount}",
+      "notes": "action_status::ready_to_unstake"
+    },
+    "unstaking": {
+      "translation": "언스테이킹 중 - {amount}",
+      "notes": "action_status::unstaking"
+    },
+    "withdrawing": {
+      "translation": "인출 중 - {amount}",
+      "notes": "action_status::withdrawing"
+    },
+    "ready_to_lock": {
+      "translation": "금고 잠글 준비 완료",
+      "notes": "action_status::ready_to_lock"
+    },
+    "locking_vault": {
+      "translation": "금고 잠그는 중",
+      "notes": "action_status::locking_vault"
+    },
+    "compounding": {
+      "translation": "{amount} 포인트 복리 적용 중",
+      "notes": "action_status::compounding"
+    },
+    "success": {
+      "translation": "성공!",
+      "notes": "action_status::success"
+    },
+    "transaction_completed": {
+      "translation": "트랜잭션이 성공적으로 처리되었습니다",
+      "notes": "action_status::transaction_completed"
+    },
+    "wait_moment": {
+      "translation": "잠시만 기다려주세요.",
+      "notes": "action_status::wait_moment"
+    },
+    "wait_moment_ellipsis": {
+      "translation": "잠시만 기다려주세요...",
+      "notes": "action_status::wait_moment_ellipsis"
+    }
+  },
+  "emergency": {
+    "contracts_compromised": {
+      "translation": "컨트랙트가 손상되었습니다.",
+      "notes": "emergency::contracts_compromised"
+    },
+    "withdraw_funds": {
+      "translation": "자금 인출",
+      "notes": "emergency::withdraw_funds"
+    },
+    "emergency_withdrawal": {
+      "translation": "긴급 인출",
+      "notes": "emergency::emergency_withdrawal"
+    },
+    "emergency_description": {
+      "translation": "해킹이나 컨트랙트 손상이 발생한 경우 이 기능을 사용하여 금고에서 즉시 자금을 인출할 수 있습니다.",
+      "notes": "emergency::emergency_description"
+    },
+    "withdraw_to": {
+      "translation": "출금 주소",
+      "notes": "emergency::withdraw_to"
+    },
+    "funds_sent_to_wallet": {
+      "translation": "자금이 연결된 지갑으로 직접 전송됩니다.",
+      "notes": "emergency::funds_sent_to_wallet"
+    },
+    "emergency_exit_successful": {
+      "translation": "긴급 인출 성공",
+      "notes": "emergency::emergency_exit_successful"
+    },
+    "error_calling_emergency": {
+      "translation": "긴급 인출 (emergencyExit) 호출 오류: {error}",
+      "notes": "emergency::error_calling_emergency"
+    }
+  },
+  "categories": {
+    "all_apps": {
+      "translation": "🧩 모든 앱",
+      "notes": "categories::all_apps"
+    },
+    "all-apps": {
+      "translation": "🧩 모든 앱",
+      "notes": "categories::all-apps"
+    },
+    "ai": {
+      "translation": "✨ AI",
+      "notes": "categories::ai"
+    },
+    "bridge": {
+      "translation": "🚗 브릿지",
+      "notes": "categories::bridge"
+    },
+    "community": {
+      "translation": "🐕 커뮤니티",
+      "notes": "categories::community"
+    },
+    "defi": {
+      "translation": "📈 디파이",
+      "notes": "categories::defi"
+    },
+    "gaming": {
+      "translation": "🎮 게임",
+      "notes": "categories::gaming"
+    },
+    "infra": {
+      "translation": "💻 인프라",
+      "notes": "categories::infra"
+    },
+    "nft": {
+      "translation": "🖼️ NFT",
+      "notes": "categories::nft"
+    },
+    "payment": {
+      "translation": "💰 결제",
+      "notes": "categories::payment"
+    },
+    "privacy": {
+      "translation": "🕵️ 프라이버시",
+      "notes": "categories::privacy"
+    },
+    "social": {
+      "translation": "☕ 소셜",
+      "notes": "categories::social"
+    },
+    "spending": {
+      "translation": "🐷 지출",
+      "notes": "categories::spending"
+    },
+    "tooling": {
+      "translation": "☂️ 도구",
+      "notes": "categories::tooling"
+    },
+    "wallet": {
+      "translation": "💎 지갑",
+      "notes": "categories::wallet"
+    }
+  },
+  "footer": {
+    "share_feedback": {
+      "translation": "피드백 공유",
+      "notes": "footer::share_feedback"
+    },
+    "contact_us": {
+      "translation": "문의",
+      "notes": "footer::contact_us"
+    },
+    "submit_bug": {
+      "translation": "버그 제보",
+      "notes": "footer::submit_bug"
+    },
+    "terms_of_use": {
+      "translation": "이용약관",
+      "notes": "footer::terms_of_use"
+    },
+    "privacy_policy": {
+      "translation": "개인정보 처리방침",
+      "notes": "footer::privacy_policy"
+    },
+    "brand_assets": {
+      "translation": "브랜드 자산",
+      "notes": "footer::brand_assets"
+    }
+  },
+  "errors": {
+    "wallet_not_connected": {
+      "translation": "지갑이 연결되지 않았습니다. 먼저 지갑을 연결해주세요.",
+      "notes": "errors::wallet_not_connected"
+    },
+    "amount_greater_than_zero": {
+      "translation": "금액은 0보다 커야 합니다",
+      "notes": "errors::amount_greater_than_zero"
+    },
+    "transaction_reverted": {
+      "translation": "트랜잭션이 되돌려졌습니다",
+      "notes": "errors::transaction_reverted"
+    },
+    "failed_fetch_vaults": {
+      "translation": "스테이킹 금고 정보를 불러오지 못했습니다: {error}",
+      "notes": "errors::failed_fetch_vaults"
+    },
+    "error_calculating_shares": {
+      "translation": "사전 예치 지분 계산 중 오류가 발생했습니다.",
+      "notes": "errors::error_calculating_shares"
+    },
+    "zero_shares": {
+      "translation": "이 사전 예치는 지분을 생성하지 못합니다. 금액을 늘려보세요.",
+      "notes": "errors::zero_shares"
+    },
+    "transaction_failed": {
+      "translation": "트랜잭션 실패",
+      "notes": "errors::transaction_failed"
+    }
+  }
+}

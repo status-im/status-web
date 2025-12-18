@@ -1,5 +1,6 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { InfoIcon } from '@status-im/icons/16'
+import { useTranslations } from 'next-intl'
 import { formatUnits } from 'viem'
 
 import { LaunchIcon } from '~components/icons'
@@ -10,6 +11,7 @@ import { useWeightedBoost } from '~hooks/useWeightedBoost'
 import { formatSNT } from '~utils/currency'
 
 export const CompoundStatusContent = () => {
+  const t = useTranslations()
   const { data: vaults } = useStakingVaults()
   const weightedBoost = useWeightedBoost(vaults)
   const { data: multiplierPointsData } = useMultiplierPointsBalance()
@@ -27,17 +29,19 @@ export const CompoundStatusContent = () => {
         <div className="flex flex-col gap-1">
           <Dialog.Title asChild>
             <h2 className="text-center text-19 font-semibold text-neutral-100">
-              {`Ready to compound ${formatSNT(
-                formatUnits(
-                  multiplierPointsData?.totalUncompounded ?? 0n,
-                  STT_TOKEN.decimals
-                )
-              )} points`}
+              {t('stake.ready_to_compound', {
+                points: formatSNT(
+                  formatUnits(
+                    multiplierPointsData?.totalUncompounded ?? 0n,
+                    STT_TOKEN.decimals
+                  )
+                ),
+              })}
             </h2>
           </Dialog.Title>
           <Dialog.Description asChild>
             <p className="text-center text-15 font-regular text-neutral-100">
-              Please sign the message in your wallet.
+              {t('stake.sign_message')}
             </p>
           </Dialog.Description>
         </div>
@@ -45,7 +49,7 @@ export const CompoundStatusContent = () => {
         <div className="flex flex-col gap-[27px] rounded-16 bg-neutral-5 py-4">
           <div className="flex flex-col items-center gap-2 text-center">
             <p className="text-13 font-medium text-neutral-50">
-              Total compounded
+              {t('stake.total_compounded')}
             </p>
             <p className="text-27 font-semibold text-neutral-100">
               {`${formatSNT(
@@ -53,25 +57,25 @@ export const CompoundStatusContent = () => {
                   multiplierPointsData?.totalMpRedeemed ?? 0n,
                   STT_TOKEN.decimals
                 )
-              )} points`}
+              )} ${t('stake.points')}`}
             </p>
           </div>
 
           <div className="flex flex-col items-center gap-2 text-center">
             <p className="text-13 font-medium text-neutral-50">
-              Your earn rate at {weightedBoost.formatted} boost
+              {t('stake.your_earn_rate', { boost: weightedBoost.formatted })}
             </p>
             <p className="text-27 font-semibold text-neutral-100">
-              {earnRateWithBoost} Karma / day
+              {earnRateWithBoost} {t('stake.karma_per_day')}
             </p>
           </div>
 
           <div className="flex flex-col items-center gap-2 text-center">
             <p className="text-13 font-medium text-neutral-50">
-              Equivalent at x0.00 boost
+              {t('stake.equivalent_at_boost')}
             </p>
             <p className="text-27 font-semibold text-neutral-100">
-              {earnRateWithoutBoost} Karma / day
+              {earnRateWithoutBoost} {t('stake.karma_per_day')}
             </p>
           </div>
         </div>
@@ -81,9 +85,7 @@ export const CompoundStatusContent = () => {
             <InfoIcon />
           </div>
           <p className="flex-1 text-13 font-regular text-neutral-100">
-            Boost the rate at which you receive Karma. More points you compound,
-            the higher your rate. The longer you lock your vault, the higher
-            your boost, and the faster you accumulate Karma.
+            {t('stake.compound_info')}
           </p>
         </div>
       </div>

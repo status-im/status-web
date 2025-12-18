@@ -6,6 +6,7 @@ import { Tag } from '@status-im/components'
 import { ChevronDownIcon } from '@status-im/icons/20'
 import { Button, ButtonLink } from '@status-im/status-network/components'
 import { cx } from 'cva'
+import { useTranslations } from 'next-intl'
 
 import { categories } from '~/constants/categories'
 import { tabs } from '~/constants/tabs'
@@ -15,6 +16,7 @@ import { AppCard } from '~components/app-card'
 import { HubLayout } from '~components/hub-layout'
 
 export default function DiscoverPage() {
+  const t = useTranslations()
   const [activeTab, setActiveTab] = useState('all')
   const [selectedTag, setSelectedTag] = useState('all-apps')
   const [openCategories, setOpenCategories] = useState(false)
@@ -41,10 +43,10 @@ export default function DiscoverPage() {
           {/* Hero Section */}
           <div className="flex flex-col gap-2">
             <h1 className="text-27 font-bold text-neutral-90 lg:text-40">
-              Gasless apps FTW
+              {t('discover.title')}
             </h1>
             <p className="text-13 text-neutral-60 lg:text-19">
-              Explore curated dApps and services built on Status Network
+              {t('discover.description')}
             </p>
           </div>
 
@@ -52,14 +54,14 @@ export default function DiscoverPage() {
           <div className="flex flex-col gap-6">
             <div className="flex items-center justify-between">
               <h2 className="text-19 font-600 text-neutral-100 lg:text-27">
-                Featured
+                {t('discover.featured')}
               </h2>
               <ButtonLink
                 variant="white"
                 size="32"
                 href="https://statusnetwork.typeform.com/getfeatured"
               >
-                Get your app featured
+                {t('discover.get_featured')}
               </ButtonLink>
             </div>
 
@@ -76,10 +78,10 @@ export default function DiscoverPage() {
             <div className="mb-6 flex flex-col items-start justify-between gap-5 md:flex-row md:items-center md:gap-0">
               <h2 className="text-19 font-600 text-neutral-100 lg:text-27">
                 {activeTab === 'popular'
-                  ? 'Popular Apps'
+                  ? t('discover.popular_apps')
                   : activeTab === 'new'
-                    ? 'New Apps'
-                    : 'All Apps'}
+                    ? t('discover.new_apps')
+                    : t('discover.all_apps')}
               </h2>
 
               <div className="flex items-center gap-3">
@@ -93,7 +95,7 @@ export default function DiscoverPage() {
                       active={activeTab === tab.id}
                       onClick={() => setActiveTab(tab.id)}
                     >
-                      {tab.label}
+                      {t(`discover.tabs.${tab.id}`)}
                     </Button>
                   ))}
                 </div>
@@ -114,7 +116,7 @@ export default function DiscoverPage() {
                     />
                   }
                 >
-                  Categories
+                  {t('discover.categories')}
                 </Button>
               </div>
             </div>
@@ -127,7 +129,7 @@ export default function DiscoverPage() {
                     key={category.id}
                     onPress={() => setSelectedTag(category.id)}
                     selected={selectedTag === category.id}
-                    label={category.label}
+                    label={t(`categories.${category.id}`)}
                     size="32"
                   />
                 ))}
@@ -145,10 +147,10 @@ export default function DiscoverPage() {
               <div className="mb-6 flex items-center justify-center py-20">
                 <div className="flex flex-col items-center gap-2 text-center">
                   <p className="text-19 font-500 text-neutral-100">
-                    No apps found
+                    {t('discover.no_apps_found')}
                   </p>
                   <p className="text-15 text-neutral-40">
-                    Try adjusting your filters to see more apps
+                    {t('discover.no_apps_found_description')}
                   </p>
                 </div>
               </div>

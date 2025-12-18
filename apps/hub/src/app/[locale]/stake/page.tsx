@@ -1,5 +1,7 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+
 import { HubLayout } from '~components/hub-layout'
 import { VaultsTable } from '~components/vaults/vaults-table'
 import { useRequireStatusNetwork } from '~hooks/useRequireStatusNetwork'
@@ -7,16 +9,19 @@ import { useRequireStatusNetwork } from '~hooks/useRequireStatusNetwork'
 import {
   FaucetCard,
   FaucetCardSkeleton,
-} from '../_components/stake/stake-faucet-card'
-import { StakeForm, StakeFormSkeleton } from '../_components/stake/stake-form'
+} from '../../_components/stake/stake-faucet-card'
+import {
+  StakeForm,
+  StakeFormSkeleton,
+} from '../../_components/stake/stake-form'
 import {
   TotalStakedCard,
   TotalStakedCardSkeleton,
-} from '../_components/stake/stake-total-staked-card'
+} from '../../_components/stake/stake-total-staked-card'
 import {
   WeightedBoostCard,
   WeightedBoostCardSkeleton,
-} from '../_components/stake/stake-weighted-boost-card'
+} from '../../_components/stake/stake-weighted-boost-card'
 
 function StakeCardsSkeleton() {
   return (
@@ -58,6 +63,7 @@ function StakeCards() {
 }
 
 export default function StakePage() {
+  const t = useTranslations()
   const { isCorrectChain, isConnected, isSwitching } = useRequireStatusNetwork()
 
   const showSkeleton = isConnected && (!isCorrectChain || isSwitching)
@@ -66,13 +72,8 @@ export default function StakePage() {
     <HubLayout>
       <div className="mx-auto flex size-full flex-col gap-8 p-4 md:p-8">
         <header className="flex flex-col gap-2">
-          <h1 className="text-27 font-bold md:text-40">
-            Stake STT, receive good Karma
-          </h1>
-          <p className="text-13 md:text-19">
-            Stake STT to increase your Karma on Status Network testnet. Unlock
-            more gasless transactions and increase your power over the network
-          </p>
+          <h1 className="text-27 font-bold md:text-40">{t('stake.title')}</h1>
+          <p className="text-13 md:text-19">{t('stake.description')}</p>
         </header>
 
         {showSkeleton ? <StakeCardsSkeleton /> : <StakeCards />}

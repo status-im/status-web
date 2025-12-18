@@ -6,6 +6,7 @@ import { Skeleton, useToast } from '@status-im/components'
 import { Button } from '@status-im/status-network/components'
 import { useSIWE } from 'connectkit'
 import dynamic from 'next/dynamic'
+import { useTranslations } from 'next-intl'
 import { useAccount } from 'wagmi'
 
 import { clientEnv } from '~constants/env.client.mjs'
@@ -60,10 +61,11 @@ const KarmaSourceCard = ({
   amount,
   onComplete,
   isComplete = false,
-  badgeTitle = 'Just arrived',
-  badgeDescription = 'Karma received for joining the network',
+  badgeTitle,
+  badgeDescription,
   isLoading = false,
 }: KarmaSourceCardProps) => {
+  const t = useTranslations()
   const [capToken, setCapToken] = useState<string | null>(null)
   const [capError, setCapError] = useState<string | null>(null)
   const { isConnected, isConnecting } = useAccount()
@@ -73,6 +75,10 @@ const KarmaSourceCard = ({
   const [isClaiming, setIsClaiming] = useState<boolean>(false)
   const toast = useToast()
   const capApiEndpoint = `${clientEnv.NEXT_PUBLIC_STATUS_NETWORK_API_URL}/captcha/cap/`
+
+  const defaultBadgeTitle = badgeTitle ?? t('karma.just_arrived')
+  const defaultBadgeDescription =
+    badgeDescription ?? t('karma.just_arrived_description')
 
   const formatAmount = (value: number) => {
     return value.toLocaleString('en-US', {
@@ -87,7 +93,7 @@ const KarmaSourceCard = ({
   }
 
   const handleError = (error?: Error) => {
-    setCapError(error?.message || 'Failed to verify captcha. Please try again.')
+    setCapError(error?.message || t('karma.captcha_error'))
     setCapToken(null)
   }
 
@@ -99,7 +105,7 @@ const KarmaSourceCard = ({
           { token: capToken },
           {
             onError: () => {
-              const errorMessage = 'Failed to claim. Please try again'
+              const errorMessage = t('karma.claim_failed')
               setCapError(errorMessage)
               toast.negative(errorMessage)
             },
@@ -108,7 +114,7 @@ const KarmaSourceCard = ({
                 setCapError(null)
                 onComplete(capToken)
               } else {
-                const errorMessage = 'Claim was unsuccessful. Please try again'
+                const errorMessage = t('karma.claim_unsuccessful')
                 setCapError(errorMessage)
                 toast.negative(errorMessage)
               }
@@ -117,9 +123,7 @@ const KarmaSourceCard = ({
         )
       } catch (error) {
         const errorMessage =
-          error instanceof Error
-            ? error.message
-            : 'An unexpected error occurred'
+          error instanceof Error ? error.message : t('karma.unexpected_error')
         setCapError(errorMessage)
         toast.negative(errorMessage)
       } finally {
@@ -160,7 +164,7 @@ const KarmaSourceCard = ({
                 disabled
                 className="w-full items-center justify-center"
               >
-                Action
+                {t('karma.action')}
               </Button>
             </div>
           </div>
@@ -171,10 +175,10 @@ const KarmaSourceCard = ({
             </div>
             <div className="flex flex-1 flex-col">
               <p className="text-13 font-semibold text-neutral-100">
-                {badgeTitle}
+                {defaultBadgeTitle}
               </p>
               <p className="text-13 font-regular text-neutral-100">
-                {badgeDescription}
+                {defaultBadgeDescription}
               </p>
             </div>
           </div>
@@ -232,7 +236,7 @@ const KarmaSourceCard = ({
                 }
                 className="w-full items-center justify-center"
               >
-                {isClaimingKarma ? 'Claiming...' : 'Claim'}
+                {isClaimingKarma ? t('karma.claiming') : t('karma.claim')}
               </Button>
             )}
           </div>

@@ -5,6 +5,7 @@ import { Skeleton } from '@status-im/components'
 import { DropdownIcon, UnlockedIcon } from '@status-im/icons/20'
 import { Button } from '@status-im/status-network/components'
 import { ConnectKitButton, useSIWE } from 'connectkit'
+import { useTranslations } from 'next-intl'
 import { useForm, useWatch } from 'react-hook-form'
 import { match } from 'ts-pattern'
 import { formatUnits, parseUnits } from 'viem'
@@ -30,9 +31,12 @@ import { StakeAmountInput } from './stake-amount-input'
 
 import type { Address } from 'viem'
 
-const LOCK_VAULT_ACTIONS = [{ label: "Don't lock" }, { label: 'Lock' }] as const
+const createLockVaultActions = (t: ReturnType<typeof useTranslations>) =>
+  [{ label: t('stake.dont_lock') }, { label: t('stake.lock') }] as const
 
 const StakeFormSkeleton = () => {
+  const t = useTranslations()
+
   return (
     <div className="flex flex-col gap-4 rounded-16 border border-neutral-10 bg-white-100 p-4 shadow-2 md:rounded-32 md:p-8">
       <div className="flex flex-1 flex-col gap-4">
@@ -41,7 +45,7 @@ const StakeFormSkeleton = () => {
             htmlFor="stake-amount"
             className="block text-13 font-medium text-neutral-50"
           >
-            Amount to stake
+            {t('stake.amount_to_stake')}
           </label>
           <div className="rounded-12 border border-neutral-20 bg-white-100 px-4 py-3">
             <div className="flex items-center justify-between">
@@ -66,7 +70,7 @@ const StakeFormSkeleton = () => {
             htmlFor="vault-select"
             className="block text-13 font-medium text-neutral-50"
           >
-            Select vault
+            {t('stake.select_vault')}
           </label>
           <div className="rounded-12 border border-neutral-20 bg-white-100 py-[9px] pl-4 pr-3">
             <div className="flex items-center gap-2">
@@ -79,7 +83,7 @@ const StakeFormSkeleton = () => {
       </div>
 
       <Button disabled type="button" className="w-full justify-center">
-        Stake STT
+        {t('stake.stake_stt')}
       </Button>
     </div>
   )
@@ -101,6 +105,7 @@ const createStakeFormSchema = () => {
 type FormValues = z.infer<ReturnType<typeof createStakeFormSchema>>
 
 const StakeForm = () => {
+  const t = useTranslations()
   const { mutate: createVault } = useCreateVault()
   const { address, isConnected, isConnecting } = useAccount()
   const { mutateAsync: approveToken } = useApproveToken()
@@ -115,6 +120,7 @@ const StakeForm = () => {
   const [isPromoModalOpen, setIsPromoModalOpen] = useState(false)
   const [lockModalVaultAddress, setLockModalVaultAddress] =
     useState<Address | null>(null)
+  const LOCK_VAULT_ACTIONS = createLockVaultActions(t)
 
   const status: ConnectionStatus = useMemo(() => {
     if (isConnected && !isSignedIn) return 'signInRequired'
@@ -264,7 +270,7 @@ const StakeForm = () => {
               htmlFor="vault-select"
               className="block text-13 font-medium text-neutral-50"
             >
-              Select vault
+              {t('stake.select_vault')}
             </label>
             {match(status)
               .with('connected', () => (
@@ -278,7 +284,7 @@ const StakeForm = () => {
               .otherwise(() => (
                 <div className="rounded-12 border border-neutral-20 bg-white-100 py-[9px] pl-4 pr-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-15">Add new vault</span>
+                    <span className="text-15">{t('stake.add_new_vault')}</span>
                     <DropdownIcon className="text-neutral-40" />
                   </div>
                 </div>
@@ -296,7 +302,7 @@ const StakeForm = () => {
                 className="w-full justify-center"
                 onClick={() => setIsPromoModalOpen(true)}
               >
-                Connect Wallet
+                {t('stake.connect_wallet')}
               </Button>
             </PromoModal>
           ))
@@ -310,7 +316,7 @@ const StakeForm = () => {
                     show?.()
                   }}
                 >
-                  Connect Wallet
+                  {t('stake.connect_wallet')}
                 </Button>
               )}
             </ConnectKitButton.Custom>
@@ -323,7 +329,7 @@ const StakeForm = () => {
                 signIn?.()
               }}
             >
-              Sign in to continue
+              {t('stake.sign_in_to_continue')}
             </Button>
           ))
           .with('connected', () => {
@@ -333,7 +339,7 @@ const StakeForm = () => {
                 type="submit"
                 disabled={Boolean(emergencyModeEnabled) || exceedsBalance}
               >
-                Stake STT
+                {t('stake.stake_stt')}
               </Button>
             ) : (
               <Button
@@ -341,7 +347,7 @@ const StakeForm = () => {
                 onClick={() => createVault()}
                 disabled={Boolean(emergencyModeEnabled)}
               >
-                Create new vault
+                {t('stake.create_new_vault')}
               </Button>
             )
           })
@@ -356,8 +362,8 @@ const StakeForm = () => {
           }}
           onClose={() => setLockModalVaultAddress(null)}
           vaultAddress={lockModalVaultAddress}
-          title="Do you want to lock the vault?"
-          description="Lock this vault to receive more Karma"
+          title={t('stake.do_you_want_to_lock')}
+          description={t('stake.lock_description')}
           actions={[...LOCK_VAULT_ACTIONS]}
         />
       )}

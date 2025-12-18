@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import { Skeleton } from '@status-im/components'
 import { Button } from '@status-im/status-network/components'
 import { useSIWE } from 'connectkit'
+import { useTranslations } from 'next-intl'
 import { formatUnits } from 'viem'
 import { useAccount } from 'wagmi'
 
@@ -27,11 +28,13 @@ const WeightedBoostInfoTooltip = () => {
 }
 
 const WeightedBoostCardSkeleton = () => {
+  const t = useTranslations()
+
   return (
     <div className="rounded-16 border border-neutral-10 bg-white-100 p-4 shadow-2 md:rounded-32 md:p-8">
       <div className="mb-2 flex items-start justify-between">
         <p className="text-13 font-500 text-neutral-60">
-          Weighted aggregated boost
+          {t('stake.weighted_boost')}
         </p>
         <WeightedBoostInfoTooltip />
       </div>
@@ -43,7 +46,7 @@ const WeightedBoostCardSkeleton = () => {
         <Skeleton height={18} width={200} className="rounded-6" />
 
         <Button variant="primary" size="40" disabled>
-          Compound
+          {t('stake.compound_points')}
         </Button>
       </div>
     </div>
@@ -51,6 +54,7 @@ const WeightedBoostCardSkeleton = () => {
 }
 
 const WeightedBoostCard = () => {
+  const t = useTranslations()
   const { isConnecting, isConnected } = useAccount()
   const { data: vaults, isLoading } = useStakingVaults()
   const { isSignedIn, isLoading: isLoadingSIWE } = useSIWE()
@@ -76,10 +80,15 @@ const WeightedBoostCard = () => {
     return {
       isDisabled: !hasUncompoundedPoints || !isConnected || !isSignedIn,
       message: hasUncompoundedPoints
-        ? `${Number(formattedAmount) > 0 ? formattedAmount : parseFloat(formattedAmount).toFixed(2)} points are ready to compound`
-        : 'No points are ready to compound',
+        ? t('stake.ready_to_compound', {
+            points:
+              Number(formattedAmount) > 0
+                ? formattedAmount
+                : parseFloat(formattedAmount).toFixed(2),
+          })
+        : t('stake.no_points_ready'),
     }
-  }, [multiplierPointsData, isConnected, isSignedIn])
+  }, [multiplierPointsData, isConnected, isSignedIn, t])
 
   if (isLoading || isConnecting || isLoadingSIWE) {
     return <WeightedBoostCardSkeleton />
@@ -89,7 +98,7 @@ const WeightedBoostCard = () => {
     <div className="rounded-16 border border-neutral-10 bg-white-100 p-4 shadow-2 md:rounded-32 md:p-8">
       <div className="mb-2 flex items-start justify-between">
         <p className="text-13 font-500 text-neutral-60">
-          Weighted aggregated boost
+          {t('stake.weighted_boost')}
         </p>
         <WeightedBoostInfoTooltip />
       </div>
@@ -107,7 +116,7 @@ const WeightedBoostCard = () => {
           size="40"
           onClick={() => compoundMultiplierPoints()}
         >
-          Compound
+          {t('stake.compound_points')}
         </Button>
       </div>
     </div>

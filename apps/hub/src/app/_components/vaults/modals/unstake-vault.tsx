@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@status-im/status-network/components'
+import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 import { formatUnits, parseUnits } from 'viem'
 import { useAccount, useReadContract } from 'wagmi'
@@ -29,24 +30,27 @@ interface UnstakeVaultModalProps {
   children?: React.ReactNode
 }
 
-const createUnstakeFormSchema = (maxBalance: number) => {
+const createUnstakeFormSchema = (
+  maxBalance: number,
+  t: ReturnType<typeof useTranslations>
+) => {
   return z.object({
     amount: z
       .string()
-      .min(1, 'Amount is required')
+      .min(1, t('vault.amount_required'))
       .refine(
         val => {
           const num = Number(val)
           return !isNaN(num) && num > 0
         },
-        { message: 'Amount must be greater than 0' }
+        { message: t('vault.amount_greater_than_zero') }
       )
       .refine(
         val => {
           const num = Number(val)
           return !isNaN(num) && num <= maxBalance
         },
-        { message: `Amount exceeds maximum balance of ${maxBalance} STT` }
+        { message: t('vault.amount_exceeds_max', { max: maxBalance }) }
       ),
   })
 }
@@ -58,6 +62,7 @@ type FormValues = z.infer<ReturnType<typeof createUnstakeFormSchema>>
  */
 export function UnstakeVaultModal(props: UnstakeVaultModalProps) {
   const { onClose, vaultAddress, open, onOpenChange, children } = props
+  const t = useTranslations()
 
   const { address } = useAccount()
   const { mutate: unstake, isPending } = useVaultTokenUnStake()
@@ -81,7 +86,7 @@ export function UnstakeVaultModal(props: UnstakeVaultModalProps) {
     : 0
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(createUnstakeFormSchema(maxBalance)),
+    resolver: zodResolver(createUnstakeFormSchema(maxBalance, t)),
     mode: 'onChange',
     defaultValues: {
       amount: '',
@@ -137,13 +142,15 @@ export function UnstakeVaultModal(props: UnstakeVaultModalProps) {
       open={open}
       onOpenChange={onOpenChange}
       onClose={onClose}
-      title="Unstake funds"
-      description="Your tokens will be unstaked and automatically returned to your connected wallet"
+      title={t('stake.unstake_funds')}
+      description={t('stake.unstake_description')}
       trigger={children}
     >
       <div className="flex flex-col gap-4">
         <div className="flex w-full flex-col gap-2 px-4 pb-0">
-          <p className="text-13 font-medium text-neutral-50">Amount</p>
+          <p className="text-13 font-medium text-neutral-50">
+            {t('stake.amount')}
+          </p>
 
           <div className="space-y-2">
             <div className="rounded-16 border border-neutral-20 px-4 py-3">
@@ -182,7 +189,9 @@ export function UnstakeVaultModal(props: UnstakeVaultModalProps) {
 
         {address && (
           <div className="flex w-full flex-col items-start gap-1 px-4 py-0">
-            <p className="text-13 font-medium text-neutral-50">Unstake to</p>
+            <p className="text-13 font-medium text-neutral-50">
+              {t('stake.unstake_to')}
+            </p>
             <div className="relative w-full rounded-12 border border-neutral-10 bg-white-100 px-[12px] py-[9px] opacity-[40%]">
               <p className="text-15 text-neutral-100">{address}</p>
             </div>
@@ -208,7 +217,7 @@ export function UnstakeVaultModal(props: UnstakeVaultModalProps) {
               className="flex-1 justify-center"
               disabled={!form.formState.isValid || isPending}
             >
-              {isPending ? 'Unstaking...' : 'Unstake'}
+              {isPending ? t('stake.unstaking') : t('stake.unstake')}
             </Button>
           )}
         </div>

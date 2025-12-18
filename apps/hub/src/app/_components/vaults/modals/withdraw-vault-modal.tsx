@@ -6,6 +6,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { useToast } from '@status-im/components'
 import { InfoIcon } from '@status-im/icons/12'
 import { Button } from '@status-im/status-network/components'
+import { useTranslations } from 'next-intl'
 import { useAccount } from 'wagmi'
 
 import { useVaultEmergencyExit } from '~hooks/useVaultEmergencyExit'
@@ -27,6 +28,7 @@ interface WithdrawVaultModalProps {
  * Modal for emergency withdrawal from vault
  */
 export function WithdrawVaultModal(props: WithdrawVaultModalProps) {
+  const t = useTranslations()
   const toast = useToast()
   const { onClose, vaultAddress, amountWei, open, onOpenChange, children } =
     props
@@ -46,23 +48,25 @@ export function WithdrawVaultModal(props: WithdrawVaultModalProps) {
         vaultAddress,
         onSigned: () => {
           onClose()
-          toast.positive('Emergency exit successful')
+          toast.positive(t('emergency.emergency_exit_successful'))
         },
       })
     } catch (error) {
       toast.negative(
-        `Error calling emergencyExit: ${error instanceof Error ? error.message : 'Unknown error'}`
+        t('emergency.error_calling_emergency', {
+          error: error instanceof Error ? error.message : 'Unknown error',
+        })
       )
     }
-  }, [address, amountWei, onClose, vaultAddress, emergencyExit, toast])
+  }, [address, amountWei, onClose, vaultAddress, emergencyExit, toast, t])
 
   return (
     <BaseVaultModal
       open={open}
       onOpenChange={onOpenChange}
       onClose={onClose}
-      title="Emergency withdrawal"
-      description="In the event of a hack or contract compromise, you can use this feature to immediately withdraw your funds from the vault."
+      title={t('emergency.emergency_withdrawal')}
+      description={t('emergency.emergency_description')}
       trigger={children}
     >
       <div className="flex w-full flex-col items-center justify-center gap-1 p-4">
@@ -70,7 +74,7 @@ export function WithdrawVaultModal(props: WithdrawVaultModalProps) {
           <div className="flex shrink-0 grow basis-0 flex-col items-start gap-2">
             <div className="flex w-full items-start">
               <p className="shrink-0 grow basis-0 text-13 font-medium text-neutral-50">
-                Withdraw to
+                {t('emergency.withdraw_to')}
               </p>
             </div>
             <div className="w-full rounded-12 border border-neutral-10 bg-white-100 opacity-[0.4]">
@@ -94,10 +98,10 @@ export function WithdrawVaultModal(props: WithdrawVaultModalProps) {
             </div>
             <div className="flex shrink-0 grow basis-0 flex-col items-start gap-2">
               <div className="flex w-full flex-col justify-center text-13 text-neutral-100">
-                <p>Your funds will sent directly to your connected wallet.</p>
+                <p>{t('emergency.funds_sent_to_wallet')}</p>
               </div>
               <Button variant="outline" size="24">
-                Learn more
+                {t('common.learn_more')}
               </Button>
             </div>
           </div>
@@ -113,7 +117,7 @@ export function WithdrawVaultModal(props: WithdrawVaultModalProps) {
               onClick={onClose}
               className="flex-1 justify-center"
             >
-              Cancel
+              {t('common.cancel')}
             </Button>
           </Dialog.Close>
           <Button
@@ -123,7 +127,7 @@ export function WithdrawVaultModal(props: WithdrawVaultModalProps) {
             onClick={() => handleVaultWithdrawal()}
             className="flex-1 justify-center"
           >
-            Withdraw funds
+            {t('emergency.withdraw_funds')}
           </Button>
         </div>
       </div>

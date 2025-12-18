@@ -1,4 +1,5 @@
 import { Skeleton } from '@status-im/components'
+import { useTranslations } from 'next-intl'
 import { useAccount, useReadContract } from 'wagmi'
 
 import { SNTIcon } from '~components/icons'
@@ -8,10 +9,14 @@ import { formatSTT } from '../../../utils/currency'
 import { useEmergencyModeEnabled } from '../../_hooks/useEmergencyModeEnabled'
 
 const TotalStakedCardSkeleton = () => {
+  const t = useTranslations()
+
   return (
     <div className="rounded-16 border border-neutral-10 bg-white-100 p-4 shadow-2 md:rounded-32 md:p-8">
       <div className="mb-2 flex items-start justify-between">
-        <p className="text-13 font-500 text-neutral-60">Total staked</p>
+        <p className="text-13 font-500 text-neutral-60">
+          {t('stake.total_staked')}
+        </p>
       </div>
       <div className="mb-4 flex items-end gap-2">
         <SNTIcon />
@@ -23,6 +28,7 @@ const TotalStakedCardSkeleton = () => {
 }
 
 const TotalStakedCard = () => {
+  const t = useTranslations()
   const { isConnecting } = useAccount()
   const { data: totalStaked, isLoading } = useReadContract({
     address: STAKING_MANAGER.address,
@@ -42,7 +48,9 @@ const TotalStakedCard = () => {
   return (
     <div className="rounded-16 border border-neutral-10 bg-white-100 p-4 shadow-2 md:rounded-32 md:p-8">
       <div className="mb-2 flex items-start justify-between">
-        <p className="text-13 font-500 text-neutral-60">Total staked</p>
+        <p className="text-13 font-500 text-neutral-60">
+          {t('stake.total_staked')}
+        </p>
       </div>
       <div className="mb-4 flex items-end gap-2">
         <SNTIcon />
@@ -51,7 +59,9 @@ const TotalStakedCard = () => {
         </span>
       </div>
       <p className="text-13 font-500 text-neutral-40">
-        Next unlock in {STAKE_PAGE_CONSTANTS.NEXT_UNLOCK_DAYS} days
+        {t('stake.next_unlock_in', {
+          days: STAKE_PAGE_CONSTANTS.NEXT_UNLOCK_DAYS,
+        })}
       </p>
     </div>
   )
