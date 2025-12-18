@@ -17,12 +17,6 @@ const Footer = () => {
         <div className="flex flex-col items-start justify-center gap-3 lg:flex-row lg:items-center lg:justify-end">
           <div className="flex items-start justify-center gap-4 md:gap-3 lg:items-center lg:justify-end">
             <Link
-              href={LEGAL.preDepositDisclaimer.href}
-              className="text-13 text-neutral-50 transition-colors hover:text-neutral-100"
-            >
-              Pre-Deposits Disclaimer
-            </Link>
-            <Link
               href={LEGAL.termsOfUse.href}
               className="text-13 text-neutral-50 transition-colors hover:text-neutral-100"
             >
@@ -39,6 +33,12 @@ const Footer = () => {
               className="text-13 text-neutral-50 transition-colors hover:text-neutral-100"
             >
               {BRAND.name}
+            </Link>
+            <Link
+              href={LEGAL.preDepositDisclaimer.href}
+              className="text-13 text-neutral-50 transition-colors hover:text-neutral-100"
+            >
+              Pre-deposits disclaimer
             </Link>
           </div>
           <Dot className="2md:hidden text-neutral-50" />
