@@ -94,13 +94,22 @@ async function handler(request: NextRequest) {
       // unstable_onChunk: undefined,
     })
 
+    // Clone response to read body while preserving headers
+    const clonedResponse = response.clone()
     const status = response.status
     const result = await response.json()
+
+    // Preserve original response headers and merge CORS headers
+    const responseHeaders = new Headers(clonedResponse.headers)
+    // Merge CORS headers (they will override any existing CORS headers)
+    Object.entries(corsHeaders).forEach(([key, value]) => {
+      responseHeaders.set(key, value)
+    })
 
     // Ensure CORS headers are included in the response
     return Response.json(result, {
       status: status,
-      headers: corsHeaders,
+      headers: responseHeaders,
     })
   } catch (error) {
     console.error(error)
