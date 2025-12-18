@@ -82,36 +82,48 @@ async function fetchExchangeRate(token: string): Promise<ExchangeRateData> {
   const url = new URL(`${API_BASE_URL}/api/trpc/market.tokenPrice`)
   url.searchParams.set('input', JSON.stringify({ json: { symbols: [token] } }))
 
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      mode: 'cors', // Explicitly enable CORS
+      // Note: Content-Type header removed for GET requests to avoid unnecessary preflight
+    })
 
-  if (!response.ok) {
-    throw new Error(
-      `Failed to fetch exchange rate for ${token}: ${response.status} ${response.statusText}`
-    )
-  }
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch exchange rate for ${token}: ${response.status} ${response.statusText}`
+      )
+    }
 
-  const body = await response.json()
+    const body = await response.json()
 
-  const tokenPrice = body?.result?.data?.json?.[token]
+    const tokenPrice = body?.result?.data?.json?.[token]
 
-  if (tokenPrice?.usd === undefined || tokenPrice?.usd === null) {
-    throw new Error(`Invalid response from market API: missing ${token} price`)
-  }
+    if (tokenPrice?.usd === undefined || tokenPrice?.usd === null) {
+      throw new Error(
+        `Invalid response from market API: missing ${token} price`
+      )
+    }
 
-  if (isNaN(tokenPrice.usd)) {
-    throw new Error(`Invalid price value for ${token}: ${tokenPrice.usd}`)
-  }
+    if (isNaN(tokenPrice.usd)) {
+      throw new Error(`Invalid price value for ${token}: ${tokenPrice.usd}`)
+    }
 
-  return {
-    price: tokenPrice.usd,
-    priceChange24h: tokenPrice.usd_24h_change,
-    timestamp: Date.now(),
-    token,
+    return {
+      price: tokenPrice.usd,
+      priceChange24h: tokenPrice.usd_24h_change,
+      timestamp: Date.now(),
+      token,
+    }
+  } catch (error) {
+    console.error('Failed to fetch exchange rate:', error)
+
+    return {
+      price: 0,
+      priceChange24h: 0,
+      timestamp: Date.now(),
+      token,
+    }
   }
 }
 

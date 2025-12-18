@@ -67,9 +67,8 @@ async function fetchMultipleExchangeRates(
 
   const response = await fetch(url, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    mode: 'cors', // Explicitly enable CORS
+    // Note: Content-Type header removed for GET requests to avoid unnecessary preflight
   })
 
   if (!response.ok) {

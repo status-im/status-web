@@ -16,7 +16,23 @@ export type { ApiRouter }
 
 export const dynamic = 'force-dynamic'
 
+// CORS headers helper
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  'Access-Control-Max-Age': '86400', // 24 hours
+}
+
 async function handler(request: NextRequest) {
+  // Handle OPTIONS preflight requests
+  if (request.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 204,
+      headers: corsHeaders,
+    })
+  }
+
   // let error: Error | undefined
 
   try {
@@ -71,9 +87,7 @@ async function handler(request: NextRequest) {
           // status: 429,
           headers: {
             'cache-control': cacheControl,
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            ...corsHeaders,
           },
         }
       },
@@ -83,12 +97,11 @@ async function handler(request: NextRequest) {
     const status = response.status
     const result = await response.json()
 
-    return Response.json(
-      result,
-      // { status: result.httpStatus }
-      // { status: 429 }
-      { status: status }
-    )
+    // Ensure CORS headers are included in the response
+    return Response.json(result, {
+      status: status,
+      headers: corsHeaders,
+    })
   } catch (error) {
     console.error(error)
 
@@ -109,8 +122,12 @@ async function handler(request: NextRequest) {
     }
 
     // @see https://vercel.com/docs/errors/FUNCTION_INVOCATION_TIMEOUT for ensuring response is always returned
-    return Response.json(result, { status: status })
+    // Ensure CORS headers are included even in error responses
+    return Response.json(result, {
+      status: status,
+      headers: corsHeaders,
+    })
   }
 }
 
-export { handler as GET, handler as POST }
+export { handler as GET, handler as OPTIONS, handler as POST }
