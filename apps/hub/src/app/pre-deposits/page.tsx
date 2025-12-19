@@ -1,6 +1,6 @@
 'use client'
 
-import { createJSONLD, JSONLDScript, Skeleton } from '@status-im/components'
+import { Skeleton } from '@status-im/components'
 import { ExternalIcon } from '@status-im/icons/16'
 import { ButtonLink } from '@status-im/status-network/components'
 import Image from 'next/image'
@@ -16,10 +16,7 @@ import { VaultCard } from '../_components/vault-card'
 import { VAULTS } from '../_constants/address'
 import { useTotalTVL } from '../_hooks/useTotalTVL'
 import { useVaultSelection } from '../_hooks/useVaultSelection'
-
-const jsonLD = createJSONLD({
-  defaultSiteUrl: 'https://hub.status.network',
-})
+import { jsonLD, JSONLDScript } from '../_utils/json-ld'
 
 export default function PreDepositPage() {
   const { data: totalTVL, isLoading: isLoadingTVL } = useTotalTVL()
