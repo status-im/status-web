@@ -14,16 +14,12 @@ const inter = Inter({
 })
 
 const organizationSchema = jsonLD.organization({
-  name: 'Status Hub',
-  url: 'https://hub.status.network',
   description:
     'Manage your Status Network assets, discover applications, and navigate to various services.',
   logo: 'https://hub.status.network/logo.svg',
 })
 
 const websiteSchema = jsonLD.website({
-  name: 'Status Hub',
-  url: 'https://hub.status.network',
   description:
     'Manage your Status Network assets, discover applications, and navigate to various services.',
 })

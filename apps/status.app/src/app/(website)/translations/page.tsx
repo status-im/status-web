@@ -21,8 +21,6 @@ export const metadata = Metadata({
 
 export default function TranslationsPage() {
   const organizationSchema = jsonLD.organization({
-    name: 'Status',
-    url: 'https://status.app',
     description:
       'We need your help to translate Status, so that together we can bring privacy and free speech to the people everywhere, including those who need it most.',
   })

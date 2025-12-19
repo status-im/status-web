@@ -15,8 +15,6 @@ export const metadata = Metadata({
 
 export default function ReleaseSchedule() {
   const organizationSchema = jsonLD.organization({
-    name: 'Status',
-    url: 'https://status.app',
     description: 'SNT token release schedule and allocation information.',
   })
 

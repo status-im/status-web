@@ -31,8 +31,6 @@ export const metadata = Metadata({
 
 export default function KeycardPage() {
   const organizationSchema = jsonLD.organization({
-    name: 'Status',
-    url: 'https://status.app',
     description: 'A secure contactless hardware wallet for Status.',
   })
 

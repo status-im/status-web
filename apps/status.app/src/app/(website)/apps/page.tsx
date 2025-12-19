@@ -30,8 +30,6 @@ export const metadata = Metadata({
 
 export default function AppsPage() {
   const organizationSchema = jsonLD.organization({
-    name: 'Status',
-    url: 'https://status.app',
     description:
       'Use Status on the go with our mobile app or enjoy the full suite of features in our desktop version.',
   })

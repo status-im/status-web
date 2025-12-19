@@ -18,8 +18,6 @@ export const metadata = Metadata({
 })
 
 const organizationSchema = jsonLD.organization({
-  name: 'Status Network',
-  url: 'https://status.network',
   description: 'Get Status Network brand assets.',
 })
 

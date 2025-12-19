@@ -24,8 +24,6 @@ export const metadata = Metadata({
 
 export default function TeamPage() {
   const organizationSchema = jsonLD.organization({
-    name: 'Status',
-    url: 'https://status.app',
     description:
       'Founded in 2017, Status has grown to over 90 core contributors building the open-source, decentralised wallet and messenger.',
   })
