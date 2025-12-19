@@ -68,8 +68,6 @@ export default async function ExchangesPage() {
   const tickers = await getExchangeData()
 
   const organizationSchema = jsonLD.organization({
-    name: 'Status',
-    url: 'https://status.app',
     description: 'List of exchanges where you can find SNT',
   })
 

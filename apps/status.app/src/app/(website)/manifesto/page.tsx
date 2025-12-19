@@ -34,8 +34,6 @@ export default async function ManifestoPage() {
   const jobsCount = meta?.total ?? 0
 
   const organizationSchema = jsonLD.organization({
-    name: 'Status',
-    url: 'https://status.app',
     description:
       'Create an open decentralised platform that defends human rights, enables free speech, protects privacy and promotes sovereignty.',
   })

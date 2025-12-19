@@ -18,8 +18,6 @@ export const metadata = Metadata({
 
 export default function TokenPage() {
   const organizationSchema = jsonLD.organization({
-    name: 'Status',
-    url: 'https://status.app',
     description:
       "SNT is Status' community token. Curate the Status Community Directory, vote on future development priorities and reserve your ENS name, all with SNT.",
   })

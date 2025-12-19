@@ -37,8 +37,6 @@ const transformColor = (name: string, rgba: string, invert = false) => {
 
 export default function BrandPage() {
   const organizationSchema = jsonLD.organization({
-    name: 'Status',
-    url: 'https://status.app',
     description: 'Get Status brand assets.',
   })
 

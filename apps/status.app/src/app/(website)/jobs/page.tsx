@@ -45,8 +45,6 @@ export default async function JobsPage() {
   const total = statusJobs.meta?.total ?? 0
 
   const organizationSchema = jsonLD.organization({
-    name: 'Status',
-    url: 'https://status.app',
     description:
       'Join us in our mission to build the open-source, decentralised wallet and messenger.',
   })

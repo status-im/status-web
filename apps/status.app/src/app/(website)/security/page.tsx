@@ -15,8 +15,6 @@ export const metadata = Metadata({
 
 export default function SecurityPage() {
   const organizationSchema = jsonLD.organization({
-    name: 'Status',
-    url: 'https://status.app',
     description:
       'Status takes security seriously. Please report any security incidents via security@status.im.',
   })

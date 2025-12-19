@@ -26,15 +26,11 @@ export default async function HomePage() {
   const { posts } = await getPosts({ limit: 3 })
 
   const organizationSchema = jsonLD.organization({
-    name: 'Status',
-    url: 'https://status.app',
     description:
       'The open-source, decentralised wallet and messenger. Make the jump to web3.',
   })
 
   const websiteSchema = jsonLD.website({
-    name: 'Status',
-    url: 'https://status.app',
     description:
       'The open-source, decentralised wallet and messenger. Make the jump to web3.',
   })

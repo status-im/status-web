@@ -21,10 +21,39 @@ const STATUS_NETWORK_SOCIAL_LINKS: string[] = [
 /**
  * Create JSON-LD schema generators with Status Network defaults
  */
-export const jsonLD = createJSONLD({
+const baseJsonLD = createJSONLD({
   defaultSiteUrl: 'https://status.network',
   defaultSocialLinks: STATUS_NETWORK_SOCIAL_LINKS,
 })
+
+/**
+ * JSON-LD schema generators with app-specific defaults
+ */
+export const jsonLD = {
+  ...baseJsonLD,
+  organization: (config?: {
+    description?: string
+    logo?: string
+    sameAs?: string[]
+  }) =>
+    baseJsonLD.organization({
+      name: 'Status Network',
+      url: 'https://status.network',
+      ...config,
+    }),
+  website: (config?: {
+    description?: string
+    searchUrl?: string
+    name?: string
+    url?: string
+  }) =>
+    baseJsonLD.website({
+      name: config?.name ?? 'Status Network',
+      url: config?.url ?? 'https://status.network',
+      description: config?.description,
+      searchUrl: config?.searchUrl,
+    }),
+}
 
 /**
  * Re-export types for convenience
