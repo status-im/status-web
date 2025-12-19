@@ -108,24 +108,24 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
     }
   }, [isConnected, onDeposit, pendingDepositRef])
 
-  // Get APY from API, fallback to static vault config
-  const dynamicApy = apyMap?.[vault.address.toLowerCase()]
+  const vaultAddressLower = vault.address.toLowerCase()
+  const isVaultInApi = apyMap !== undefined && vaultAddressLower in apyMap
+  const isDisabled = !isVaultInApi
+  const dynamicApy = apyMap?.[vaultAddressLower]
   const apyValue = dynamicApy !== undefined ? String(dynamicApy) : null
   const rewardsLine = rewards.join(', ')
 
-  const formattedTVL = !vault.soon
+  const formattedTVL = !isDisabled
     ? formatCurrency(tvlData?.tvlUSD ?? 0, { compact: true }).replace('$', '')
     : null
 
-  const formattedTokenAmount = !vault.soon
+  const formattedTokenAmount = !isDisabled
     ? formatTokenAmount(tvlData?.totalAssets ?? 0, token.symbol, {
         tokenDecimals: token.decimals,
         decimals: 0,
         includeSymbol: true,
       })
     : null
-
-  const showDepositSection = !vault.soon
 
   const handleClick = () => {
     if (isConnected) {
@@ -137,7 +137,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
   }
 
   return (
-    <div className={vaultCardStyles({ disabled: !!vault.soon })}>
+    <div className={vaultCardStyles({ disabled: isDisabled })}>
       {/* header */}
       <div className="mb-6 flex items-start justify-between">
         <div className="flex items-center gap-4">
@@ -148,7 +148,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
 
       <h3 className="mb-2 text-19 font-600 lg:text-27">{vault.name}</h3>
 
-      {showDepositSection && isConnected && (
+      {!isDisabled && isConnected && (
         <div className="mb-4">
           <p className="text-15 font-400 text-neutral-50">Your deposit</p>
           <p className="text-27 font-600">
@@ -205,7 +205,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
             <span>{formattedTVL ? `$${formattedTVL} TVL` : 'TVL TBD'}</span>
           )}
         </li>
-        {!vault.soon && (
+        {!isDisabled && (
           <li className="flex items-center gap-2 text-15">
             <span className="text-neutral-50">
               <SumIcon />
@@ -219,10 +219,10 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
       <Button
         size="40"
         onClick={handleClick}
-        disabled={vault.soon}
+        disabled={isDisabled}
         className="mt-auto w-full justify-center lg:w-fit"
       >
-        {vault.soon ? 'Coming soon' : 'Deposit'}
+        {isDisabled ? 'Coming soon' : 'Deposit'}
       </Button>
     </div>
   )
@@ -231,12 +231,13 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
 const VaultCard: FC<Props> = props => {
   const pendingDepositRef = useRef(false)
   const [isMounted, setIsMounted] = useState(false)
+  const { isLoading: isApyLoading } = useVaultsAPY()
 
   useEffect(() => {
     setIsMounted(true)
   }, [])
 
-  if (!isMounted) {
+  if (!isMounted || isApyLoading) {
     return <VaultCardSkeleton />
   }
 
