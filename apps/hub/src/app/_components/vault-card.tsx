@@ -119,10 +119,12 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
     ? formatCurrency(tvlData?.tvlUSD ?? 0, { compact: true }).replace('$', '')
     : null
 
+  const displayDecimals = token.symbol === 'WETH' ? 4 : 0
+
   const formattedTokenAmount = !vault.soon
     ? formatTokenAmount(totalAssets ?? 0n, token.symbol, {
         tokenDecimals: token.decimals,
-        decimals: 0,
+        decimals: displayDecimals,
         includeSymbol: true,
       })
     : null
@@ -156,7 +158,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
           <p className="text-27 font-600">
             {formatTokenAmount(depositedBalance ?? 0n, token.symbol, {
               tokenDecimals: token.decimals,
-              decimals: 0,
+              decimals: displayDecimals,
               includeSymbol: true,
             })}
           </p>
