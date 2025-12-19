@@ -65,7 +65,7 @@ const VaultCardSkeleton: FC<VaultCardSkeletonProps> = ({
       {isConnected && (
         <div className="mb-4">
           <Skeleton width={80} height={20} className="mb-1 rounded-6" />
-          <Skeleton width={160} height={32} className="rounded-8" />
+          <Skeleton width={120} height={32} className="rounded-8" />
         </div>
       )}
 
@@ -118,10 +118,11 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
     vault,
   })
   const { data: apyMap, isLoading: isApyLoading } = useVaultsAPY()
-  const { data: depositedBalance } = useUserVaultDeposit({
-    vault,
-    registerRefetch,
-  })
+  const { data: depositedBalance, isLoading: isDepositedBalanceLoading } =
+    useUserVaultDeposit({
+      vault,
+      registerRefetch,
+    })
 
   useEffect(() => {
     if (isConnected && pendingDepositRef.current) {
@@ -173,13 +174,17 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
       {!isDisabled && isConnected && (
         <div className="mb-4">
           <p className="text-15 font-400 text-neutral-50">Your deposit</p>
-          <p className="text-27 font-600">
-            {formatTokenAmount(depositedBalance ?? 0n, token.symbol, {
-              tokenDecimals: token.decimals,
-              decimals: 0,
-              includeSymbol: true,
-            })}
-          </p>
+          <div className="text-27 font-600">
+            {isDepositedBalanceLoading ? (
+              <Skeleton width={120} height={32} className="rounded-8" />
+            ) : (
+              formatTokenAmount(depositedBalance ?? 0n, token.symbol, {
+                tokenDecimals: token.decimals,
+                decimals: 0,
+                includeSymbol: true,
+              })
+            )}
+          </div>
         </div>
       )}
 
