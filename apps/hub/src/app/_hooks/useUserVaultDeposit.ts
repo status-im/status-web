@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from 'react'
 
+import { keepPreviousData } from '@tanstack/react-query'
 import { useAccount, useReadContract } from 'wagmi'
 
 import type { Vault } from '~constants/index'
@@ -56,6 +57,7 @@ export function useUserVaultDeposit({
     args: ownerAddress ? [ownerAddress] : undefined,
     query: {
       enabled: !!ownerAddress,
+      placeholderData: keepPreviousData,
     },
   })
 
@@ -71,6 +73,7 @@ export function useUserVaultDeposit({
     args: shares !== undefined ? [shares] : undefined,
     query: {
       enabled: shares !== undefined && shares > 0n,
+      placeholderData: keepPreviousData,
     },
   })
 

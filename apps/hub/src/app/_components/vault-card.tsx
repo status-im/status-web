@@ -9,6 +9,7 @@ import { cva } from 'cva'
 
 import { formatCurrency, formatTokenAmount } from '~/utils/currency'
 import { type Vault } from '~constants/index'
+import { usePreDepositTVL } from '~hooks/usePreDepositTVL'
 import { usePreDepositTVLInUSD } from '~hooks/usePreDepositTVLInUSD'
 import { useUserVaultDeposit } from '~hooks/useUserVaultDeposit'
 import { useVaultsAPY } from '~hooks/useVaultsAPY'
@@ -95,6 +96,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
   const { data: tvlData, isLoading: isTvlLoading } = usePreDepositTVLInUSD({
     vault,
   })
+  const { data: totalAssets } = usePreDepositTVL({ vault })
   const { data: apyMap, isLoading: isApyLoading } = useVaultsAPY()
   const { data: depositedBalance } = useUserVaultDeposit({
     vault,
@@ -118,7 +120,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
     : null
 
   const formattedTokenAmount = !vault.soon
-    ? formatTokenAmount(tvlData?.totalAssets ?? 0, token.symbol, {
+    ? formatTokenAmount(totalAssets ?? 0n, token.symbol, {
         tokenDecimals: token.decimals,
         decimals: 0,
         includeSymbol: true,
