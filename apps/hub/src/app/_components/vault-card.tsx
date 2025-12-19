@@ -6,6 +6,7 @@ import { Skeleton } from '@status-im/components'
 import { Button } from '@status-im/status-network/components'
 import { ConnectKitButton } from 'connectkit'
 import { cva } from 'cva'
+import { useAccount } from 'wagmi'
 
 import { formatCurrency, formatTokenAmount } from '~/utils/currency'
 import { type Vault } from '~constants/index'
@@ -42,7 +43,13 @@ const vaultCardStyles = cva({
   },
 })
 
-const VaultCardSkeleton: FC = () => {
+type VaultCardSkeletonProps = {
+  isConnected?: boolean
+}
+
+const VaultCardSkeleton: FC<VaultCardSkeletonProps> = ({
+  isConnected = false,
+}) => {
   return (
     <div className={vaultCardStyles()}>
       {/* header */}
@@ -55,8 +62,19 @@ const VaultCardSkeleton: FC = () => {
       {/* title */}
       <Skeleton width={180} height={28} className="mb-2 rounded-8" />
 
+      {isConnected && (
+        <div className="mb-4">
+          <Skeleton width={80} height={20} className="mb-1 rounded-6" />
+          <Skeleton width={160} height={32} className="rounded-8" />
+        </div>
+      )}
+
       {/* meta */}
       <ul className="my-4 space-y-2">
+        <li className="flex items-center gap-2">
+          <Skeleton width={20} height={20} className="rounded-full" />
+          <Skeleton width={50} height={20} className="rounded-6" />
+        </li>
         <li className="flex items-center gap-2">
           <Skeleton width={20} height={20} className="rounded-full" />
           <Skeleton width={120} height={20} className="rounded-6" />
@@ -69,10 +87,14 @@ const VaultCardSkeleton: FC = () => {
           <Skeleton width={20} height={20} className="rounded-full" />
           <Skeleton width={100} height={20} className="rounded-6" />
         </li>
+        <li className="flex items-center gap-2">
+          <Skeleton width={20} height={20} className="rounded-full" />
+          <Skeleton width={100} height={20} className="rounded-6" />
+        </li>
       </ul>
 
       {/* cta */}
-      <Skeleton width={100} height={40} className="mt-auto rounded-12" />
+      <Skeleton width={90} height={40} className="mt-auto rounded-12" />
     </div>
   )
 }
@@ -232,13 +254,14 @@ const VaultCard: FC<Props> = props => {
   const pendingDepositRef = useRef(false)
   const [isMounted, setIsMounted] = useState(false)
   const { isLoading: isApyLoading } = useVaultsAPY()
+  const { isConnected } = useAccount()
 
   useEffect(() => {
     setIsMounted(true)
   }, [])
 
   if (!isMounted || isApyLoading) {
-    return <VaultCardSkeleton />
+    return <VaultCardSkeleton isConnected={isConnected} />
   }
 
   return (
