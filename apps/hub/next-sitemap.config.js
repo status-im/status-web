@@ -7,6 +7,12 @@ module.exports = {
   exclude: ['/api/*'],
   generateIndexSitemap: false,
   changefreq: 'monthly',
-  priority: 0.7,
+  transform: async (config, path) => {
+    return {
+      loc: path,
+      changefreq: config.changefreq,
+      lastmod: config.autoLastmod ? new Date().toISOString() : undefined,
+    }
+  },
   // Note: robots.txt is handled by src/app/robots.ts (Next.js App Router)
 }
