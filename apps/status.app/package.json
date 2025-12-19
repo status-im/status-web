@@ -14,7 +14,7 @@
     "watch:content": "node --watch-path=./content --watch-preserve-output ./scripts/trigger-content-compilation.cjs",
     "build": "pnpm lint && next build",
     "build:content": "contentlayer2 build && :",
-    "postbuild": "if [ \"$VERCEL_ENV\" = \"production\" ]; then next-sitemap; fi",
+    "postbuild": "next-sitemap",
     "start": "next start",
     "prelint": "contentlayer2 build",
     "lint": "pnpm lint:remark && pnpm lint:next",

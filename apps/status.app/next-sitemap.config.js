@@ -9,8 +9,13 @@ module.exports = {
   generateIndexSitemap: false,
   // Frequency of how often sitemap.xml is updated
   changefreq: 'monthly',
-  // Priority for different page types
-  priority: 0.7,
+  transform: async (config, path) => {
+    return {
+      loc: path,
+      changefreq: config.changefreq,
+      lastmod: config.autoLastmod ? new Date().toISOString() : undefined,
+    }
+  },
   // Additional paths configuration
   additionalPaths: async () => {
     const result = []

@@ -7,7 +7,7 @@
     "predev": "pnpm install",
     "dev": "next dev",
     "build": "next build",
-    "postbuild": "if [ \"$VERCEL_ENV\" = \"production\" ]; then next-sitemap; fi",
+    "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "eslint src",
     "format": "prettier --write . --ignore-path .gitignore",
