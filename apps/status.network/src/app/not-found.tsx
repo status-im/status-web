@@ -7,23 +7,6 @@ export const metadata = Metadata({
     'The page you were looking for could not be found. Return to the Status Network homepage.',
   robots: {
     index: false,
-    follow: true,
-    googleBot: {
-      index: false,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  alternates: {
-    canonical: '/404',
-  },
-  openGraph: {
-    title: '404 — Page Not Found | Status Network',
-    description:
-      'The page you were looking for could not be found. Return to the Status Network homepage.',
-    url: '/404',
   },
 })
 
