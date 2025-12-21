@@ -100,7 +100,7 @@ jobs:
           apps_to_deploy=""
           while IFS= read -r pkg; do
             case "$pkg" in
-              "status.app"|"hub"|"portfolio"|"api"|"status.network")
+              "status.app"|"hub"|"portfolio"|"api"|"status.network"|"@status-im/components")
                 apps_to_deploy="$apps_to_deploy $pkg"
                 ;;
             esac
@@ -173,6 +173,18 @@ jobs:
         env:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_STATUS_NETWORK }}
 
+      - name: Deploy components (Storybook)
+        id: deploy-components
+        if: contains(steps.changes.outputs.apps, '@status-im/components')
+        run: |
+          vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build --token=${{ secrets.VERCEL_TOKEN }}
+          url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$url" >> $GITHUB_OUTPUT
+        working-directory: packages/components
+        env:
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_COMPONENTS }}
+
       - name: Set status and comment PR
         if: success()
         uses: actions/github-script@v7
@@ -194,6 +206,9 @@ jobs:
             }
             if ('${{ steps.deploy-status-network.outputs.url }}'.trim()) {
               deployments.push({ name: 'status.network', url: '${{ steps.deploy-status-network.outputs.url }}' });
+            }
+            if ('${{ steps.deploy-components.outputs.url }}'.trim()) {
+              deployments.push({ name: 'components', url: '${{ steps.deploy-components.outputs.url }}' });
             }
 
             if (deployments.length === 0) {
