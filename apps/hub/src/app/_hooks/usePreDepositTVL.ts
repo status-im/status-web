@@ -1,4 +1,3 @@
-import { keepPreviousData } from '@tanstack/react-query'
 import { useReadContract } from 'wagmi'
 
 import type { UseQueryResult } from '@tanstack/react-query'
@@ -91,7 +90,6 @@ export function usePreDepositTVL({
     functionName: 'totalAssets',
     query: {
       enabled: vault !== null,
-      placeholderData: keepPreviousData,
     },
   })
 }
