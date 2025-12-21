@@ -6,7 +6,7 @@ import { Link } from './link'
 
 const NavBar = () => {
   return (
-    <header className="sticky left-0 top-0 z-40 hidden w-full bg-white-90 backdrop-blur supports-[backdrop-filter]:bg-white-80 lg:block">
+    <header className="sticky top-0 z-[60] hidden w-full bg-white-90 backdrop-blur supports-[backdrop-filter]:bg-white-80 lg:block">
       <nav className="mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center space-x-2">
           <Image
