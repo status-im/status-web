@@ -265,8 +265,10 @@ const VaultCard: FC<Props> = props => {
     setIsMounted(true)
   }, [])
 
+  const stableIsConnected = isMounted ? isConnected : false
+
   if (!isMounted || isApyLoading) {
-    return <VaultCardSkeleton isConnected={isConnected} />
+    return <VaultCardSkeleton isConnected={stableIsConnected} />
   }
 
   return (

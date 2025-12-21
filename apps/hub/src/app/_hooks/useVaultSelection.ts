@@ -13,7 +13,7 @@ export function useVaultSelection() {
   const defaultVault = VAULTS.find(v => v.id === 'SNT') ?? VAULTS[0]
 
   const activeVaults = useMemo(() => {
-    if (!apyMap) return []
+    if (!apyMap) return VAULTS
     return VAULTS.filter(v => v.address.toLowerCase() in apyMap)
   }, [apyMap])
 
