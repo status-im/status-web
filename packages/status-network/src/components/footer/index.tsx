@@ -22,7 +22,6 @@ const Footer = () => {
             >
               {LEGAL.termsOfUse.name}
             </Link>
-
             <Link
               href={LEGAL.privacyPolicy.href}
               className="text-13 text-neutral-50 transition-colors hover:text-neutral-100"
@@ -34,6 +33,12 @@ const Footer = () => {
               className="text-13 text-neutral-50 transition-colors hover:text-neutral-100"
             >
               {BRAND.name}
+            </Link>
+            <Link
+              href={LEGAL.preDepositDisclaimer.href}
+              className="text-13 text-neutral-50 transition-colors hover:text-neutral-100"
+            >
+              Pre-deposits disclaimer
             </Link>
           </div>
           <Dot className="2md:hidden text-neutral-50" />

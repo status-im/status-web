@@ -26,9 +26,7 @@ export function BaseVaultModal(props: BaseVaultModalProps) {
     props
 
   const handleOpenChange = (nextOpen: boolean) => {
-    if (onOpenChange) {
-      onOpenChange(nextOpen)
-    }
+    onOpenChange?.(nextOpen)
     if (!nextOpen) {
       onClose()
     }

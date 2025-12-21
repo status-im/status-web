@@ -159,7 +159,7 @@ const NavBarMobile = () => {
                   </ButtonLink>
                   <ButtonLink
                     className="w-full justify-center"
-                    href={ROUTES.Bridge}
+                    href={ROUTES.Hub}
                     onClick={() => setIsOpen(false)}
                   >
                     Get started

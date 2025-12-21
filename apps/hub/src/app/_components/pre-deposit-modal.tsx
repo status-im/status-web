@@ -3,9 +3,8 @@
 import { type Dispatch, type SetStateAction, useMemo } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import * as Dialog from '@radix-ui/react-dialog'
 import { useToast } from '@status-im/components'
-import { CloseIcon, DropdownIcon } from '@status-im/icons/20'
+import { DropdownIcon } from '@status-im/icons/20'
 import { Button, DropdownMenu } from '@status-im/status-network/components'
 import { cva } from 'cva'
 import Image from 'next/image'
@@ -15,15 +14,17 @@ import { formatUnits, parseUnits } from 'viem'
 import { useAccount, useChainId, useSwitchChain } from 'wagmi'
 import { z } from 'zod'
 
-import { PercentIcon, PlusIcon } from '~components/icons/index'
+import { KarmaCircleIcon, PercentIcon, PlusIcon } from '~components/icons/index'
 import { type Vault } from '~constants/index'
 import { useApproveToken } from '~hooks/useApprovePreDepositToken'
 import { useDepositFlow } from '~hooks/useDepositFlow'
 import { useExchangeRate } from '~hooks/useExchangeRate'
 import { usePreDepositVault } from '~hooks/usePreDepositVault'
+import { useVaultsAPY } from '~hooks/useVaultsAPY'
 import { formatCurrency, formatTokenAmount } from '~utils/currency'
 
 import { VaultImage } from './vault-image'
+import { BaseVaultModal } from './vaults/modals/base-vault-modal'
 
 const MAX_USD_VALUE = 1_000_000_000_000
 
@@ -105,6 +106,10 @@ const PreDepositModal = ({
     token: vault.token.priceKey || vault.token.symbol,
   })
 
+  const { data: apyMap } = useVaultsAPY()
+  const dynamicApy = apyMap?.[vault.address.toLowerCase()]
+  const apyValue = dynamicApy !== undefined ? String(dynamicApy) : null
+
   const amountInUSD = useMemo(() => {
     const amountInputNumber = parseFloat(amountValue || '0')
     const calculatedUSD = amountInputNumber * (exchangeRate?.price ?? 0)
@@ -132,11 +137,6 @@ const PreDepositModal = ({
   }, [vault, chainId])
 
   if (!vault) return null
-
-  const handleOpenChange = (nextOpen: boolean) => {
-    if (!nextOpen) form.reset()
-    onOpenChange(nextOpen)
-  }
 
   const handleSubmit = (data: FormValues) => {
     if (!vault || !address || isWrongChain) return
@@ -227,205 +227,179 @@ const PreDepositModal = ({
       : null
 
   return (
-    <Dialog.Root open={open} onOpenChange={handleOpenChange}>
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-neutral-80/60 backdrop-blur-sm" />
-        <Dialog.Content className="fixed inset-x-0 top-0 z-50 flex size-full max-w-[480px] flex-col items-center justify-center p-4 focus:outline-none md:left-1/2 md:top-1/2 md:h-auto md:-translate-x-1/2 md:-translate-y-1/2 md:py-0">
-          <div className="relative mx-auto w-full max-w-[480px] overflow-y-auto rounded-20 bg-white-100 shadow-3 max-md:max-h-full">
-            <Dialog.Close asChild>
+    <BaseVaultModal
+      open={open}
+      onOpenChange={onOpenChange}
+      onClose={() => form.reset()}
+      title="Deposit funds"
+      description="Deposit funds for yield and rewards"
+    >
+      <form onSubmit={form.handleSubmit(handleSubmit)}>
+        <div className="space-y-4 px-4 pb-4">
+          {/* Vault info */}
+          <div className="">
+            <div className="text-13 font-500 text-neutral-50">Select token</div>
+            <DropdownMenu.Root modal>
               <button
-                aria-label="Close"
-                className="absolute right-3 top-3 z-50 flex size-8 items-center justify-center rounded-10 border border-[rgba(27,39,61,0.1)] backdrop-blur-[20px] transition-colors hover:bg-neutral-10 focus:outline-none"
+                type="button"
+                className="flex w-full items-center justify-between gap-2 rounded-12 border border-neutral-20 bg-white-100 px-3 py-[9px]"
               >
-                <CloseIcon className="text-neutral-100" />
-              </button>
-            </Dialog.Close>
-
-            <div className="box-border flex flex-col items-center px-4 pb-4 pt-8">
-              <Dialog.Title asChild>
-                <div className="flex w-full items-center gap-[6px]">
-                  <span className="min-h-px min-w-px shrink-0 grow basis-0 text-19 font-600 text-neutral-100">
-                    Deposit funds
+                <div className="flex items-center justify-center gap-2">
+                  <Image
+                    src={`/vaults/${vault?.icon.toLowerCase()}.png`}
+                    alt={vault?.icon}
+                    width="20"
+                    height="20"
+                    className="size-5 shrink-0"
+                  />
+                  <span className="text-15 font-400 text-neutral-100">
+                    {vault.token.name}, {vault.token.symbol}
                   </span>
                 </div>
-              </Dialog.Title>
+                <DropdownIcon className="shrink-0 text-neutral-40 transition-transform" />
+              </button>
 
-              <Dialog.Description asChild>
-                <div className="flex w-full flex-col justify-center text-15 text-neutral-100">
-                  Deposit funds for yield and rewards
-                </div>
-              </Dialog.Description>
-            </div>
+              <DropdownMenu.Content>
+                {vaults.map(v => (
+                  <DropdownMenu.Item
+                    key={v.id}
+                    label={`${v.token.name}, ${v.token.symbol}`}
+                    selected={v.id === vault.id}
+                    onSelect={() => setActiveVault(v)}
+                    icon={v.icon.toLowerCase()}
+                  />
+                ))}
+              </DropdownMenu.Content>
+            </DropdownMenu.Root>
+          </div>
 
-            <form onSubmit={form.handleSubmit(handleSubmit)}>
-              <div className="space-y-4 px-4 pb-4">
-                {/* Vault info */}
-                <div className="">
-                  <div className="text-13 font-500 text-neutral-50">
-                    Select token
-                  </div>
-                  <DropdownMenu.Root modal>
-                    <button
-                      type="button"
-                      className="flex w-full items-center justify-between gap-2 rounded-12 border border-neutral-20 bg-white-100 px-3 py-[9px]"
-                    >
-                      <div className="flex items-center justify-center gap-2">
-                        <Image
-                          src={`/vaults/${vault?.icon.toLowerCase()}.png`}
-                          alt={vault?.icon}
-                          width="20"
-                          height="20"
-                          className="size-5 shrink-0"
-                        />
-                        <span className="text-15 font-400 text-neutral-100">
-                          {vault.token.name}, {vault.token.symbol}
-                        </span>
-                      </div>
-                      <DropdownIcon className="shrink-0 text-neutral-40 transition-transform" />
-                    </button>
+          {/* Amount input */}
+          <div className="space-y-2">
+            <label
+              htmlFor="deposit-amount"
+              className="block text-13 font-500 text-neutral-50"
+            >
+              Amount to deposit
+            </label>
 
-                    <DropdownMenu.Content>
-                      {vaults.map(v => (
-                        <DropdownMenu.Item
-                          key={v.id}
-                          label={`${v.token.name}, ${v.token.symbol}`}
-                          selected={v.id === vault.id}
-                          onSelect={() => setActiveVault(v)}
-                          icon={v.icon.toLowerCase()}
-                        />
-                      ))}
-                    </DropdownMenu.Content>
-                  </DropdownMenu.Root>
-                </div>
-
-                {/* Amount input */}
-                <div className="space-y-2">
-                  <label
-                    htmlFor="deposit-amount"
-                    className="block text-13 font-500 text-neutral-50"
-                  >
-                    Amount to deposit
-                  </label>
-
-                  <div
-                    className={inputContainerStyles({
-                      state: isInputError ? 'error' : 'default',
-                    })}
-                  >
-                    <div className="flex items-center justify-between">
-                      <input
-                        id="deposit-amount"
-                        inputMode="decimal"
-                        {...form.register('amount')}
-                        placeholder="0"
-                        disabled={isPending}
-                        className="w-full border-none bg-transparent text-27 font-600 text-neutral-100 outline-none placeholder:text-neutral-40"
-                      />
-                      <div className="flex items-center gap-1">
-                        <VaultImage
-                          vault={vault.icon}
-                          network={vault.network}
-                          size="32"
-                        />
-                        <span className="text-19 font-600 text-neutral-80">
-                          {vault.token.symbol}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div
-                      className={dividerStyles({
-                        state: isInputError ? 'error' : 'default',
-                      })}
-                    />
-
-                    <div className="flex items-center justify-between text-13 font-500 text-neutral-50">
-                      <span>
-                        {amountInUSD ? formatCurrency(amountInUSD) : '—'}
-                      </span>
-                      <button
-                        type="button"
-                        disabled={isPending}
-                        onClick={handleSetMax}
-                        className="uppercase text-neutral-100 hover:text-neutral-80"
-                      >
-                        MAX{' '}
-                        {formatTokenAmount(balance, vault.token.symbol, {
-                          includeSymbol: true,
-                        })}
-                      </button>
-                    </div>
-                  </div>
-
-                  {errorMessage && (
-                    <p className="text-13 text-danger-50">{errorMessage}</p>
-                  )}
-                  {warningMessage && (
-                    <p className="text-13 text-customisation-yellow-50">
-                      {warningMessage}
-                    </p>
-                  )}
-                </div>
-
-                {/* Rewards */}
-                <div>
-                  <p className="mb-2 text-13 font-500 text-neutral-50">
-                    Rewards
-                  </p>
-                  <div className="flex flex-col flex-wrap gap-4">
-                    <div className="flex items-center gap-2 text-15">
-                      <span className="text-neutral-50">
-                        <PercentIcon />
-                      </span>
-                      <span className="text-neutral-100">{vault.apy} APY</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-15">
-                      <span className="text-neutral-50">
-                        <PlusIcon />
-                      </span>
-                      <span className="text-neutral-100">
-                        {vault.rewards.join(', ')}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Actions */}
-                <div className="flex w-full gap-3 pt-4">
-                  {isWrongChain ? (
-                    <Button
-                      type="button"
-                      className="w-full justify-center"
-                      onClick={() => switchChain({ chainId: vault.chainId })}
-                      disabled={isSwitchingChain}
-                    >
-                      {isSwitchingChain
-                        ? 'Switching...'
-                        : 'Switch Network to Deposit'}
-                    </Button>
-                  ) : (
-                    <Button
-                      type="submit"
-                      className="w-full justify-center"
-                      disabled={
-                        isPending || isInputError || actionState === 'idle'
-                      }
-                    >
-                      {match({ action: actionState, isApproving, isDepositing })
-                        .with({ isApproving: true }, () => 'Approving...')
-                        .with({ isDepositing: true }, () => 'Depositing...')
-                        .with({ action: 'approve' }, () => 'Approve Deposit')
-                        .with({ action: 'deposit' }, () => 'Deposit')
-                        .otherwise(() => 'Enter amount')}
-                    </Button>
-                  )}
+            <div
+              className={inputContainerStyles({
+                state: isInputError ? 'error' : 'default',
+              })}
+            >
+              <div className="flex items-center justify-between">
+                <input
+                  id="deposit-amount"
+                  inputMode="decimal"
+                  {...form.register('amount')}
+                  placeholder="0"
+                  disabled={isPending}
+                  className="w-full border-none bg-transparent text-27 font-600 text-neutral-100 outline-none placeholder:text-neutral-40"
+                />
+                <div className="flex items-center gap-1">
+                  <VaultImage
+                    vault={vault.icon}
+                    network={vault.network}
+                    size="32"
+                  />
+                  <span className="text-19 font-600 text-neutral-80">
+                    {vault.token.symbol}
+                  </span>
                 </div>
               </div>
-            </form>
+
+              <div
+                className={dividerStyles({
+                  state: isInputError ? 'error' : 'default',
+                })}
+              />
+
+              <div className="flex items-center justify-between text-13 font-500 text-neutral-50">
+                <span>{amountInUSD ? formatCurrency(amountInUSD) : '—'}</span>
+                <button
+                  type="button"
+                  disabled={isPending}
+                  onClick={handleSetMax}
+                  className="uppercase text-neutral-100 hover:text-neutral-80"
+                >
+                  MAX{' '}
+                  {formatTokenAmount(balance, vault.token.symbol, {
+                    includeSymbol: true,
+                  })}
+                </button>
+              </div>
+            </div>
+
+            {errorMessage && (
+              <p className="text-13 text-danger-50">{errorMessage}</p>
+            )}
+            {warningMessage && (
+              <p className="text-13 text-customisation-yellow-50">
+                {warningMessage}
+              </p>
+            )}
           </div>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+
+          {/* Rewards */}
+          <div>
+            <p className="mb-2 text-13 font-500 text-neutral-50">Rewards</p>
+            <div className="flex flex-col flex-wrap gap-4">
+              <div className="flex items-center gap-2 text-15">
+                <span className="text-purple">
+                  <KarmaCircleIcon />
+                </span>
+                <span className="text-neutral-100">KARMA</span>
+              </div>
+              <div className="flex items-center gap-2 text-15">
+                <span className="text-neutral-50">
+                  <PercentIcon />
+                </span>
+                <span className="text-neutral-100">
+                  {apyValue ? `${apyValue}% liquid APY` : 'Liquid APY TBD'}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 text-15">
+                <span className="text-neutral-50">
+                  <PlusIcon />
+                </span>
+                <span className="text-neutral-100">
+                  {vault.rewards.join(', ')}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="flex w-full gap-3 pt-4">
+            {isWrongChain ? (
+              <Button
+                type="button"
+                className="w-full justify-center"
+                onClick={() => switchChain({ chainId: vault.chainId })}
+                disabled={isSwitchingChain}
+              >
+                {isSwitchingChain
+                  ? 'Switching...'
+                  : 'Switch Network to Deposit'}
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                className="w-full justify-center"
+                disabled={isPending || isInputError || actionState === 'idle'}
+              >
+                {match({ action: actionState, isApproving, isDepositing })
+                  .with({ isApproving: true }, () => 'Approving...')
+                  .with({ isDepositing: true }, () => 'Depositing...')
+                  .with({ action: 'approve' }, () => 'Approve Deposit')
+                  .with({ action: 'deposit' }, () => 'Deposit')
+                  .otherwise(() => 'Enter amount')}
+              </Button>
+            )}
+          </div>
+        </div>
+      </form>
+    </BaseVaultModal>
   )
 }
 
