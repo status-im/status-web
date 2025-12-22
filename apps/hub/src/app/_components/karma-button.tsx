@@ -24,9 +24,15 @@ const KarmaButton = (props: Props) => {
     <Button
       variant="secondary"
       size={size}
-      className={cx('flex', className)}
+      className={cx('flex items-center gap-2', className)}
       iconBefore={
-        <Image src={'/tokens/karma.png'} alt={'Karma'} width="18" height="18" />
+        <Image
+          src={'/tokens/karma.png'}
+          alt={'Karma'}
+          width="18"
+          height="18"
+          className="shrink-0"
+        />
       }
       {...rest}
     >
