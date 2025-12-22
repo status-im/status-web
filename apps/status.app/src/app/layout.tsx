@@ -8,6 +8,8 @@ import Script from 'next/script'
 import { Metadata } from './_metadata'
 import { Providers } from './_providers'
 
+// Test
+
 export const metadata = Metadata({
   metadataBase: new URL('https://status.app/'),
 

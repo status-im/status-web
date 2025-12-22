@@ -17,6 +17,8 @@ import { StatusProvider } from './providers/status'
 //   document.body.append(script)
 // }
 
+// Test
+
 const rootElement = document.getElementById('root')!
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)

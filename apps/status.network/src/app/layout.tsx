@@ -16,6 +16,8 @@ const inter = Inter({
   preload: true,
 })
 
+// Test
+
 export const metadata = Metadata({
   metadataBase: new URL('https://status.network/'),
 

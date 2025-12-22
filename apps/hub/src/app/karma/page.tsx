@@ -17,6 +17,8 @@ import { useCurrentUser } from '~hooks/useCurrentUser'
 import { useKarmaRewardsDistributor } from '~hooks/useKarmaRewardsDistributor'
 import { useRequireStatusNetwork } from '~hooks/useRequireStatusNetwork'
 
+// Test
+
 function KarmaCardsSkeleton() {
   return (
     <>
