@@ -62,7 +62,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
               height={41}
             />
 
-            <div className="hidden flex-col items-start gap-[6px] md:flex">
+            <div className="flex flex-col items-start gap-[6px]">
               <Image
                 src="/logo-text.svg"
                 alt="Status Network Logo"
@@ -84,7 +84,9 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
             <FeedbackPopover />
           </div>
 
-          <KarmaButton />
+          {/* Karma Button */}
+          <KarmaButton size="24" className="md:hidden" />
+          <KarmaButton size="32" className="hidden md:block" />
 
           {/* Connect Wallet Button */}
           <ConnectButton
