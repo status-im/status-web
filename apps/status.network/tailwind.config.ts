@@ -16,8 +16,9 @@ export default {
       xl: '1280px',
       '2xl': '1512px',
     },
+
     fontFamily: {
-      inter: ['var(--font-inter)', ...fontFamily.sans],
+      inter: ['var(--font-inter)', 'Inter', 'sans-serif'],
     },
 
     fontWeight: {
