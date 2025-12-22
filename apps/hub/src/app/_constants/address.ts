@@ -130,7 +130,7 @@ export const WETH_VAULT: Vault = {
   name: 'WETH vault',
   apy: '',
   rewards: ['SNT, LINEA', 'native apps points'],
-  icon: 'ETH',
+  icon: 'WETH',
   address: '0xc71Ec84Ee70a54000dB3370807bfAF4309a67a1f',
   token: WETH_TOKEN,
   abi: PreDepositVaultAbi,
