@@ -4,7 +4,7 @@ import { ButtonLink } from './button-link'
 const PromoBar = () => {
   return (
     <div
-      className="flex max-h-16 min-h-8 w-full items-center bg-purple px-2 py-2 md:justify-center md:py-0 lg:h-8"
+      className="flex max-h-16 min-h-8 w-full items-center bg-purple px-2 py-2 md:justify-center"
       data-theme="dark"
     >
       <div className="mx-2 flex w-fit items-center gap-2 lg:mx-auto lg:w-auto lg:justify-center">
