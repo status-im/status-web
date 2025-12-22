@@ -21,7 +21,7 @@ export default async function StatusNetworkPreDepositDisclaimerPage() {
           Last update: {formatDate(meta.lastEdited, 'long')}
         </p>
       </div>
-      <article className="font-300">{content}</article>
+      <article className="font-400">{content}</article>
     </>
   )
 }

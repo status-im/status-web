@@ -3,20 +3,49 @@ import './globals.css'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
 
+import { Metadata } from './_metadata'
 import { Providers } from './_providers'
-
-import type { Metadata } from 'next'
 
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
 })
 
-export const metadata: Metadata = {
-  title: 'Status Hub',
+export const metadata = Metadata({
+  metadataBase: new URL('https://hub.status.network/'),
+
+  title: 'Status Network Hub',
   description:
-    'Manage your Status Network assets, discover applications, and navigate to various services.',
-}
+    'Get started on the gasless L2 with native yield and composable privacy! Try apps and deposit assets to earn Karma',
+
+  alternates: {
+    canonical: './',
+  },
+
+  openGraph: {
+    title: 'Status Network Hub',
+    description:
+      'Get started on the gasless L2 with native yield and composable privacy! Try apps and deposit assets to earn Karma',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+
+  twitter: {
+    card: 'summary_large_image',
+    site: '@StatusL2',
+    // title: 'Status Network Hub',
+    // description:
+    //   'Get started on the gasless L2 with native yield and composable privacy! Try apps and deposit assets to earn Karma',
+    // images: [
+    // ],
+    // creator: '@StatusL2',
+  },
+})
 
 export default function RootLayout({
   children,
