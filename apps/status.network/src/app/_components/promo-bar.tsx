@@ -9,7 +9,7 @@ const PromoBar = () => {
     >
       <div className="mx-2 flex w-fit items-center gap-2 lg:mx-auto lg:w-auto lg:justify-center">
         <p className="line-clamp-2 min-w-0 flex-1 overflow-hidden text-15 font-500 text-white-100 lg:line-clamp-1 lg:flex-none lg:truncate">
-          Pre-deposit SNT ahead of Status Network mainnet launch!
+          Pre-deposit ETH and SNT ahead of Status Network mainnet launch!
         </p>
         <ButtonLink
           variant="outline"
