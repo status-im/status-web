@@ -49,9 +49,6 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
                 height={32}
               />
             </Link>
-            <div className="h-5 rounded-full bg-white-10 px-[6px] py-px text-13 font-medium text-white-100">
-              Testnet
-            </div>
           </div>
 
           <div className="flex items-center gap-2 md:hidden">
@@ -70,9 +67,6 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
                 height={15}
                 className="min-w-[145px]"
               />
-              <div className="h-5 rounded-full bg-white-10 px-[6px] py-px text-13 text-white-100">
-                Testnet
-              </div>
             </div>
           </div>
         </div>
