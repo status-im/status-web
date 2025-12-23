@@ -18,7 +18,10 @@ type Props = {
 const KarmaButton = (props: Props) => {
   const { size = '32', className, ...rest } = props
   const { data } = useKarmaRewardsDistributor()
-  const amount = formatKarma(data?.balance ?? BigInt(0))
+
+  const amount = formatKarma(data?.balance ?? BigInt(0), {
+    compact: size === '32' ? false : true,
+  })
 
   return (
     <Button
