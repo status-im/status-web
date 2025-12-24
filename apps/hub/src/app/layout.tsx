@@ -2,11 +2,12 @@ import './globals.css'
 
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
-import type { Metadata } from 'next'
 
 import { Metadata as MetadataFn } from './_metadata'
 import { Providers } from './_providers'
 import { jsonLD, JSONLDScript } from './_utils/json-ld'
+
+import type { Metadata } from 'next'
 
 const inter = Inter({
   subsets: ['latin'],
