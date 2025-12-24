@@ -34,7 +34,7 @@ export function Metadata(input: Input): Metadata {
       title: ogTitle,
       description: input.description,
       siteName: DEFAULT_SITE_NAME,
-      locale: 'en_US',
+      locale: 'en',
       ...input.openGraph,
     },
     twitter: {
@@ -110,7 +110,7 @@ export function BlogMetadata(config: BlogMetadataConfig): Metadata {
     description,
     images: image ? [{ url: image, width: 1200, height: 630 }] : undefined,
     siteName: DEFAULT_SITE_NAME,
-    locale: 'en_US',
+    locale: 'en',
   }
 
   if (canonical) {
