@@ -36,7 +36,7 @@ export function Metadata(input: Input): Metadata {
       title: ogTitle,
       description: input.description,
       siteName: DEFAULT_SITE_NAME,
-      locale: 'en_US',
+      locale: 'en',
       ...input.openGraph,
     },
     twitter: {
