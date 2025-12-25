@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 const DEFAULT_SITE_NAME = 'Status Hub'
 const DEFAULT_SITE_URL = 'https://hub.status.network'
 const DEFAULT_TWITTER_SITE = '@StatusL2'
-const DEFAULT_OG_IMAGE = `${DEFAULT_SITE_URL}/opengraph-image.png`
+const DEFAULT_OG_IMAGE = `${DEFAULT_SITE_URL}/og-image.png`
 
 type Input = Metadata & {
   title: NonNullable<Metadata['title']>
