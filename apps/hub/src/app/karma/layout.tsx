@@ -1,9 +1,9 @@
 import { Metadata as MetadataFn } from '../_metadata'
 
 export const metadata = MetadataFn({
-  title: 'Karma',
-  description:
-    'Increase your Karma, unlock more free transactions, gain power over the network on Status Network.',
+  // title: 'Karma',
+  // description:
+  //   'Increase your Karma, unlock more free transactions, gain power over the network on Status Network.',
   alternates: {
     canonical: '/karma',
   },

@@ -3,9 +3,9 @@ import Link from 'next/link'
 import { Metadata } from './_metadata'
 
 export const metadata = Metadata({
-  title: '404 — Page Not Found',
-  description:
-    'The page you were looking for could not be found. Return to the Status Hub homepage.',
+  // title: '404 — Page Not Found',
+  // description:
+  //   'The page you were looking for could not be found. Return to the Status Hub homepage.',
   robots: {
     index: false,
   },
