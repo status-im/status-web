@@ -26,9 +26,9 @@ const websiteSchema = jsonLD.website({
 })
 
 export const metadata: Metadata = MetadataFn({
-  title: 'Status Hub',
-  description:
-    'Manage your Status Network assets, discover applications, and navigate to various services.',
+  // title: 'Status Hub',
+  // description:
+  // 'Manage your Status Network assets, discover applications, and navigate to various services.',
   alternates: {
     canonical: '/',
   },
