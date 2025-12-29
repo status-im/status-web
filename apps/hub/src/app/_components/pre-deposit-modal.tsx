@@ -339,19 +339,29 @@ const PreDepositModal = ({
                 })}
               />
 
-              <div className="flex items-center justify-between text-13 font-500 text-neutral-50">
-                <span>{amountInUSD ? formatCurrency(amountInUSD) : '—'}</span>
-                <button
-                  type="button"
-                  disabled={isPending}
-                  onClick={handleSetMax}
-                  className="uppercase text-neutral-100 hover:text-neutral-80"
-                >
-                  MAX{' '}
-                  {formatTokenAmount(balance, vault.token.symbol, {
-                    includeSymbol: true,
-                  })}
-                </button>
+              <div className="space-y-0.5 text-13 font-500 text-neutral-50">
+                <div className="flex items-center justify-between">
+                  <span>{amountInUSD ? formatCurrency(amountInUSD) : '—'}</span>
+                  <button
+                    type="button"
+                    disabled={isPending}
+                    onClick={handleSetMax}
+                    className="uppercase hover:text-neutral-80"
+                  >
+                    MAX{' '}
+                    {formatTokenAmount(balance, vault.token.symbol, {
+                      includeSymbol: true,
+                    })}
+                  </button>
+                </div>
+                {vault.id === 'WETH' && (
+                  <div className="text-right">
+                    <span>
+                      Available ETH to wrap:{' '}
+                      {formatTokenAmount(ethBalance, 'ETH')}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
 
