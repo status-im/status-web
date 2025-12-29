@@ -71,6 +71,7 @@ export default function RootLayout({ children }: Props) {
           src="https://umami.bi.status.im/script.js"
           data-website-id="0746c5dc-8cd3-45a4-9606-6bcf9adf248e"
           data-domains="status.network"
+          async
         />
       </body>
     </html>
