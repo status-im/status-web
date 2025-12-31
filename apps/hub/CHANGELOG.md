@@ -1,5 +1,25 @@
 # hub
 
+## 1.0.2
+
+### Patch Changes
+
+- 3779226: Post release updates in SN hub
+- e77bed6: fix: Karma tier progress fixed on point when tiers boundaries are equal
+- 06ceddc: Fix React Server Components CVE vulnerabilities
+- e77bed6: withdraw
+- e77bed6: add app
+- e77bed6: implement karma
+- e77bed6: feat: Add UI and hooks for pre-deposit functionality
+- 0e24ca7: add dynamic APY to pre-deposit modal
+- e77bed6: Only show close button on rejected dialog and Compound initialize
+- Updated dependencies [e0179d3]
+- Updated dependencies [06ceddc]
+- Updated dependencies [e77bed6]
+- Updated dependencies [e77bed6]
+  - @status-im/wallet@0.1.2
+  - @status-im/status-network@0.1.2
+
 ## 1.0.1
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "status.network",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "scripts": {
     "preinstall": "npx only-allow pnpm",
