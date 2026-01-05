@@ -1,3 +1,7 @@
+'use client'
+
+import { useState } from 'react'
+
 import * as Tooltip from '@radix-ui/react-tooltip'
 import { cx } from 'cva'
 
@@ -16,10 +20,20 @@ const _Tooltip = (props: Props) => {
     ...contentProps
   } = props
 
+  // note: https://github.com/radix-ui/primitives/issues/1573#issuecomment-1698975904
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [open, setOpen] = useState(false)
+
   return (
     <Tooltip.Provider>
-      <Tooltip.Root delayDuration={delayDuration}>
-        <Tooltip.Trigger asChild>{children}</Tooltip.Trigger>
+      <Tooltip.Root
+        open={open}
+        onOpenChange={setOpen}
+        delayDuration={delayDuration}
+      >
+        <Tooltip.Trigger asChild>
+          <button onClick={() => setOpen(true)}>{children}</button>
+        </Tooltip.Trigger>
         <Tooltip.Portal>
           <Tooltip.Content
             sideOffset={sideOffset}
