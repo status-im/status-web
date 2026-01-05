@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@status-im/status-network/components'
+import { ButtonLink } from '@status-im/status-network/components'
 import { cx } from 'cva'
 import Image from 'next/image'
 
@@ -11,7 +11,7 @@ import { useKarmaRewardsDistributor } from '../_hooks/useKarmaRewardsDistributor
 import type { ComponentProps } from 'react'
 
 type Props = {
-  size?: ComponentProps<typeof Button>['size']
+  size?: ComponentProps<typeof ButtonLink>['size']
   className?: string
 }
 
@@ -24,9 +24,10 @@ const KarmaButton = (props: Props) => {
   })
 
   return (
-    <Button
+    <ButtonLink
       variant="secondary"
       size={size}
+      href="/karma"
       className={cx('flex items-center gap-2', className)}
       iconBefore={
         <Image
@@ -40,7 +41,7 @@ const KarmaButton = (props: Props) => {
       {...rest}
     >
       {amount}
-    </Button>
+    </ButtonLink>
   )
 }
 
