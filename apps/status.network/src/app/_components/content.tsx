@@ -284,7 +284,7 @@ export const baseComponents = {
   },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   img: (props: any) => {
-    return <img {...props} className="rounded-28" />
+    return <img {...props} alt={props.alt || ''} className="rounded-28" />
   },
   pre: (props: ComponentProps<'pre'>) => (
     <pre

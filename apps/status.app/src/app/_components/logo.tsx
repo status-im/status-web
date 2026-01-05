@@ -24,7 +24,7 @@ export const Logo = (props: Props) => {
           () => (
             <Image
               id="Brand/Logo Section/Variants/Mark/Mark_02:480:480"
-              alt=""
+              alt="Status logo mark variant 2"
               width={32}
               height={32}
             />
@@ -35,7 +35,7 @@ export const Logo = (props: Props) => {
           () => (
             <Image
               id="Brand/Logo Section/Variants/Mark/Mark_02:480:480"
-              alt=""
+              alt="Status logo mark variant 2"
               width={32}
               height={32}
             />
@@ -46,7 +46,7 @@ export const Logo = (props: Props) => {
           () => (
             <Image
               id="Brand/Logo Section/Variants/Mark/Mark_01:480:480"
-              alt=""
+              alt="Status logo mark variant 1"
               width={32}
               height={32}
             />
@@ -57,7 +57,7 @@ export const Logo = (props: Props) => {
           () => (
             <Image
               id="Brand/Logo Section/Variants/Mark/Mark_03:480:480"
-              alt=""
+              alt="Status logo mark variant 3"
               width={32}
               height={32}
             />
@@ -66,7 +66,7 @@ export const Logo = (props: Props) => {
         .otherwise(() => (
           <Image
             id="Brand/Logo Section/Mark/Mark_01:480:480"
-            alt=""
+            alt="Status logo mark"
             width={32}
             height={32}
           />

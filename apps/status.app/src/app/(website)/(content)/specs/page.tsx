@@ -13,6 +13,9 @@ export const metadata = Metadata({
   title: 'Specs',
   description:
     'Technical deep dives into the inner workings of the Status apps.',
+  alternates: {
+    canonical: '/specs',
+  },
 })
 
 export default function SpecsPage() {

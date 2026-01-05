@@ -9,13 +9,14 @@ import { formatCurrency } from '~/utils/currency'
 
 import { HubLayout } from '../_components/hub-layout'
 import { InfoTooltip } from '../_components/info-tooltip'
-import { PreDepositFaq } from '../_components/pre-deposit-faq'
+import { ITEMS, PreDepositFaq } from '../_components/pre-deposit-faq'
 import { PreDepositModal } from '../_components/pre-deposit-modal'
 import { RewardsSection } from '../_components/rewards-section'
 import { VaultCard } from '../_components/vault-card'
 import { VAULTS } from '../_constants/address'
 import { useTotalTVL } from '../_hooks/useTotalTVL'
 import { useVaultSelection } from '../_hooks/useVaultSelection'
+import { jsonLD, JSONLDScript } from '../_utils/json-ld'
 
 export default function PreDepositPage() {
   const { data: totalTVL, isLoading: isLoadingTVL } = useTotalTVL()
@@ -31,8 +32,16 @@ export default function PreDepositPage() {
 
   const formattedTVL = totalTVL ? formatCurrency(totalTVL) : '$0'
 
+  const faqSchema = jsonLD.faqPage({
+    questions: ITEMS.map(item => ({
+      question: item.title,
+      answer: item.content,
+    })),
+  })
+
   return (
     <HubLayout>
+      <JSONLDScript schema={faqSchema} />
       <div className="mx-auto mb-8 flex flex-col gap-4 rounded-32 p-4 lg:mt-14 lg:gap-8 lg:bg-neutral-2.5 lg:p-8">
         <div className="flex flex-col justify-between gap-4 lg:flex-row">
           <div className="flex flex-col gap-4">
