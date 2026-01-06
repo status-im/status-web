@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import { match, P } from 'ts-pattern'
 import { useBalance, useReadContract } from 'wagmi'
 
+import { WETH_VAULT } from '~constants/address'
 import { allowanceAbi } from '~constants/contracts/AllowanceAbi'
 import { usePreDepositLimits } from '~hooks/usePreDepositLimits'
 import { useVaultSharesValidation } from '~hooks/useVaultSharesValidation'
@@ -19,6 +20,7 @@ export type DepositAction =
   | 'idle'
   | 'approve'
   | 'deposit'
+  | 'needs-wrap'
   | 'invalid-balance'
   | 'exceeds-max'
   | 'below-min'
@@ -29,10 +31,18 @@ export function useDepositFlow({
   amountWei,
   address,
 }: UseDepositFlowParams) {
-  const { data: balance } = useBalance({
+  const isWETHVault = vault.id === WETH_VAULT.id
+
+  const { data: balance, refetch: refetchWETHBalance } = useBalance({
     address,
     token: vault.token.address,
     query: { enabled: !!address },
+    chainId: vault.chainId,
+  })
+
+  const { data: ethBalance, refetch: refetchETHBalance } = useBalance({
+    address,
+    query: { enabled: !!address && isWETHVault },
     chainId: vault.chainId,
   })
 
@@ -64,17 +74,22 @@ export function useDepositFlow({
     if (!sharesValidation.isValid) return 'invalid-shares'
 
     const currentBal = balance?.value ?? 0n
+    const currentEthBal = ethBalance?.value ?? 0n
     const currentAllow = allowance ?? 0n
+    const totalAvailable = isWETHVault ? currentBal + currentEthBal : currentBal
 
     return match({
       amountWei,
       currentBal,
+      currentEthBal,
+      totalAvailable,
       currentAllow,
       maxDeposit,
       minDeposit,
+      isWETHVault,
     })
       .with(
-        { amountWei: P.when(a => a > currentBal) },
+        { amountWei: P.when(a => a > totalAvailable) },
         () => 'invalid-balance' as const
       )
       .with(
@@ -92,6 +107,14 @@ export function useDepositFlow({
         () => 'below-min' as const
       )
       .with(
+        {
+          isWETHVault: true,
+          amountWei: P.when(a => a > currentBal),
+          currentEthBal: P.when(b => b > 0n),
+        },
+        () => 'needs-wrap' as const
+      )
+      .with(
         { amountWei: P.when(a => a > currentAllow) },
         () => 'approve' as const
       )
@@ -99,19 +122,30 @@ export function useDepositFlow({
   }, [
     amountWei,
     balance,
+    ethBalance,
     allowance,
     maxDeposit,
     minDeposit,
     sharesValidation.isValid,
+    isWETHVault,
   ])
+
+  const refetchBalances = async () => {
+    await Promise.all([
+      refetchWETHBalance(),
+      isWETHVault ? refetchETHBalance() : Promise.resolve(),
+    ])
+  }
 
   return {
     actionState,
     balance: balance?.value ?? 0n,
+    ethBalance: ethBalance?.value ?? 0n,
     maxDeposit,
     minDeposit,
     sharesValidation,
     refetchAllowance,
+    refetchBalances,
     isLoadingAllowance,
   }
 }

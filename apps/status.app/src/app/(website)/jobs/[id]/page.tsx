@@ -33,11 +33,15 @@ type Props = {
 }
 
 export async function generateMetadata({ params }: Props) {
-  const job = await getStatusJob((await params).id)
+  const id = (await params).id
+  const job = await getStatusJob(id)
 
   return Metadata({
     title: `${job.title}, ${job.location.name}`,
     description: 'Join us in our mission.',
+    alternates: {
+      canonical: `/jobs/${id}`,
+    },
   })
 }
 

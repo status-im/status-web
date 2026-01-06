@@ -41,11 +41,15 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props) {
-  const post = (await getPostBySlug((await params).slug))!
+  const slug = (await params).slug
+  const post = (await getPostBySlug(slug))!
 
   return Metadata({
     title: post.title!,
     description: post.excerpt,
+    alternates: {
+      canonical: `/blog/${slug}`,
+    },
     openGraph: {
       type: 'article',
       title: post.og_title ?? undefined,

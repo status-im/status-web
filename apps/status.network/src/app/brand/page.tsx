@@ -3,6 +3,7 @@ import { DownloadIcon } from '@status-im/icons/20'
 import { Divider } from '~app/_components/divider'
 import { Metadata } from '~app/_metadata'
 import { transformColor } from '~app/_utils/colors'
+import { jsonLD, JSONLDScript } from '~app/_utils/json-ld'
 import Image from 'next/image'
 import { ColorSection } from './_components/color-section'
 import { DownloadZipButton } from './_components/download-zip-button'
@@ -11,11 +12,19 @@ import { LogoSection } from './_components/logo-section'
 export const metadata = Metadata({
   title: 'Brand',
   description: 'Get Status Network brand assets.',
+  alternates: {
+    canonical: '/brand',
+  },
+})
+
+const organizationSchema = jsonLD.organization({
+  description: 'Get Status Network brand assets.',
 })
 
 export default function BrandPage() {
   return (
     <>
+      <JSONLDScript schema={organizationSchema} />
       <div className="flex flex-col gap-3 px-4 pb-10 pt-24 lg:p-[120px]">
         <h1 className="text-40 font-700 lg:text-64">Brand assets</h1>
         <p className="mb-5 text-19 font-400 text-neutral-50">
