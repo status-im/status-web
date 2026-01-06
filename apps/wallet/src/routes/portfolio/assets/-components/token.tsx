@@ -11,6 +11,7 @@ import {
   BuyIcon,
   ReceiveBlurIcon,
   SendBlurIcon,
+  SwapIcon,
 } from '@status-im/icons/20'
 import {
   type Account,
@@ -41,7 +42,9 @@ import { useEthBalance } from '@/hooks/use-eth-balance'
 import { renderMarkdown } from '@/lib/markdown'
 import { apiClient } from '@/providers/api-client'
 import { usePendingTransactions } from '@/providers/pending-transactions-context'
+import { useWalletSigner } from '@/providers/signer-context'
 import { useWallet } from '@/providers/wallet-context'
+import { ExchangeDrawer } from '~/components/exchange-drawer'
 
 import { AssetChart } from './asset-chart'
 import {
@@ -80,6 +83,7 @@ const Token = (props: Props) => {
   const toast = useToast()
   const { currentWallet } = useWallet()
   const { addPendingTransaction } = usePendingTransactions()
+  const { isUnlocked, unlock } = useWalletSigner()
 
   const [activeDataType, setActiveDataType] =
     useState<ChartDataType>(DEFAULT_DATA_TYPE)
@@ -305,6 +309,12 @@ const Token = (props: Props) => {
     decimals: asset.decimals ?? 18,
   }
 
+  const isNativeETH = finalTokenDetail.summary.symbol === 'ETH'
+  const fromTokenAddress = isNativeETH
+    ? '0x0000000000000000000000000000000000000000'
+    : finalTokenDetail.summary.contracts?.ethereum ||
+      (ticker.startsWith('0x') ? ticker : undefined)
+
   // Mock wallet data. Replace with actual wallet data from the user's account.
   const account: Account = {
     address,
@@ -469,6 +479,19 @@ const Token = (props: Props) => {
               <span className="block max-w-20 truncate">Buy</span>
             </Button>
           </BuyCryptoDrawer>
+          {fromTokenAddress && (
+            <ExchangeDrawer
+              account={account}
+              fromChain={1}
+              fromToken={fromTokenAddress}
+              isUnlocked={isUnlocked}
+              onUnlock={unlock}
+            >
+              <Button size="32" iconBefore={<SwapIcon />} variant="outline">
+                <span className="block max-w-20 truncate">Exchange</span>
+              </Button>
+            </ExchangeDrawer>
+          )}
           <ReceiveCryptoDrawer account={account} onCopy={copy}>
             <Button
               size="32"
@@ -522,6 +545,20 @@ const Token = (props: Props) => {
                 Buy
               </Button>
             </BuyCryptoDrawer>
+
+            {fromTokenAddress && (
+              <ExchangeDrawer
+                account={account}
+                fromChain={1}
+                fromToken={fromTokenAddress}
+                isUnlocked={isUnlocked}
+                onUnlock={unlock}
+              >
+                <Button size="32" iconBefore={<SwapIcon />} variant="outline">
+                  Exchange
+                </Button>
+              </ExchangeDrawer>
+            )}
 
             <ReceiveCryptoDrawer account={account} onCopy={copy}>
               <Button
