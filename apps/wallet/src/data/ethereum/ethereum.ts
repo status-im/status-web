@@ -92,6 +92,81 @@ export async function send({
   }
 }
 
+export async function sendContractCall({
+  walletCore,
+  walletPrivateKey,
+  chainID,
+  toAddress,
+  fromAddress,
+  network = 'ethereum',
+  gasLimit,
+  maxFeePerGas,
+  maxInclusionFeePerGas,
+  data,
+  value = '0',
+}: {
+  walletCore: WalletCore
+  walletPrivateKey: InstanceType<WalletCore['PrivateKey']>
+  chainID: string
+  toAddress: string
+  fromAddress: string
+  network?: string
+  gasLimit: string
+  maxFeePerGas: string
+  maxInclusionFeePerGas: string
+  data: string
+  value?: string
+}) {
+  const nonceHex = await getNonceHex(fromAddress, network)
+  const chainIdHex = getChainIdHex(chainID)
+  const cleanData = data.replace(/^0x/, '')
+  const cleanValue = padHex(value)
+
+  const txInput = encoder.Ethereum.Proto.SigningInput.create({
+    chainId: Uint8Array.from(Buffer.from(chainIdHex, 'hex')),
+    nonce: Uint8Array.from(Buffer.from(nonceHex, 'hex')),
+    gasLimit: Uint8Array.from(Buffer.from(padHex(gasLimit), 'hex')),
+    maxFeePerGas: Uint8Array.from(Buffer.from(padHex(maxFeePerGas), 'hex')),
+    maxInclusionFeePerGas: Uint8Array.from(
+      Buffer.from(padHex(maxInclusionFeePerGas), 'hex'),
+    ),
+    toAddress,
+    transaction: {
+      contractGeneric: {
+        amount: Uint8Array.from(Buffer.from(cleanValue, 'hex')),
+        data: Uint8Array.from(Buffer.from(cleanData, 'hex')),
+      },
+    },
+    privateKey: walletPrivateKey.data(),
+    txMode: encoder.Ethereum.Proto.TransactionMode.Enveloped,
+  })
+
+  const inputEncoded =
+    encoder.Ethereum.Proto.SigningInput.encode(txInput).finish()
+  const outputData = walletCore.AnySigner.sign(
+    inputEncoded,
+    walletCore.CoinType.ethereum,
+  )
+  const output = encoder.Ethereum.Proto.SigningOutput.decode(outputData)
+  const rawTx = walletCore.HexCoding.encode(output.encoded)
+
+  const response = await fetch(BROADCAST_TRANSACTION_URL.toString(), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ json: { txHex: rawTx, network } }),
+    cache: 'no-store',
+  })
+
+  if (!response.ok) {
+    throw new Error('Failed to broadcast transaction')
+  }
+
+  const body = await response.json()
+  const txid = body.result.data.json
+
+  return { txid }
+}
+
 export async function sendErc20({
   walletCore,
   walletPrivateKey,
