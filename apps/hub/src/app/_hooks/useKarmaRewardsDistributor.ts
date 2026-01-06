@@ -183,7 +183,7 @@ export function useKarmaRewardsDistributor(
   const isStatusNetworkSepolia = chainId === statusSepolia.id
 
   return useQuery<KarmaRewardsBalanceData>({
-    queryKey: [QUERY_KEY_PREFIX, targetAddress, chainId] as const,
+    queryKey: [QUERY_KEY_PREFIX, targetAddress, statusSepolia.id] as const,
     queryFn: async (): Promise<KarmaRewardsBalanceData> => {
       if (!targetAddress) {
         return {
@@ -195,7 +195,7 @@ export function useKarmaRewardsDistributor(
       try {
         const balance = await fetchKarmaRewardsBalance(
           config,
-          chainId,
+          statusSepolia.id,
           targetAddress
         )
 
