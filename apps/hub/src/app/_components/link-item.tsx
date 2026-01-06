@@ -17,9 +17,6 @@ const LinkItem = (props: LinkItemProps) => {
   const pathname = usePathname()
 
   const isActiveRoute = (href: string) => {
-    if (href === '/dashboard') {
-      return pathname === '/dashboard' || pathname === '/'
-    }
     return pathname === href
   }
 

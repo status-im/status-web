@@ -5,7 +5,7 @@ export const metadata = MetadataFn({
   // description:
   // 'Manage your Status Network assets, discover applications, and navigate to various services. Deposit funds for yield and rewards.',
   alternates: {
-    canonical: '/dashboard',
+    canonical: '/',
   },
 })
 
