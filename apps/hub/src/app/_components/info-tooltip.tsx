@@ -33,8 +33,6 @@ export const InfoTooltip = ({ content, link }: Props) => (
       </div>
     }
   >
-    <InfoIcon
-      className={`hidden size-4 text-neutral-40 hover:text-neutral-100 md:block`}
-    />
+    <InfoIcon className={`size-4 text-neutral-40 hover:text-neutral-100`} />
   </Tooltip>
 )
