@@ -73,6 +73,14 @@ export const ExchangeDrawer = (props: ExchangeDrawerProps) => {
       chains: {
         allow: [1],
       },
+      hiddenUI: ['appearance'],
+      theme: {
+        container: {
+          display: 'flex',
+          height: '100%',
+          borderRadius: '16px',
+        },
+      },
     }),
     [isConnected, connectedAddress, account?.address, fromChain, fromToken],
   )
