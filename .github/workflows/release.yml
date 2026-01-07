@@ -26,6 +26,7 @@ jobs:
         with:
           node-version: 22.17.0
       - run: pnpm install --frozen-lockfile
+      - run: git submodule update --init
       - run: pnpm build
       - uses: changesets/action@v1
         id: changesets

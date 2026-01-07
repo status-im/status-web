@@ -4,6 +4,10 @@ import { getLegalDocumentContent } from '../_utils/get-legal-document-content'
 
 export const metadata = Metadata({
   title: 'Terms of Use',
+  description: 'Status Network Terms of Use',
+  alternates: {
+    canonical: '/legal/terms-of-use',
+  },
 })
 
 export default async function TermsOfUsePage() {

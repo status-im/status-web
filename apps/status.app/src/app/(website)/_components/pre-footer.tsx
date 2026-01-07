@@ -20,7 +20,7 @@ const Prefooter = () => {
         <div className="flex flex-col items-center justify-center text-center">
           <Image
             id="Brand/Logo Section/Mark/Mark_01:480:480"
-            alt=""
+            alt="Status logo mark"
             className="size-20"
           />
           <h1 className="py-4 pb-3 pt-5 text-40 font-bold text-white-100 lg:pb-5 lg:text-88">

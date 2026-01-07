@@ -13,6 +13,9 @@ import { SearchButton } from '../_components/search-button'
 export const metadata = Metadata({
   title: 'Help',
   description: 'Short-form guides on how to set up and use the app.',
+  alternates: {
+    canonical: '/help',
+  },
 })
 
 export default function HelpPage() {

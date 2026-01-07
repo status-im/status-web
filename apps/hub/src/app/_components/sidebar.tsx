@@ -16,7 +16,7 @@ import {
 import { LinkItem } from './link-item'
 
 const NAV_LINKS = [
-  { id: 'dashboard', label: 'Home', icon: HomeIcon, href: '/dashboard' },
+  { id: 'dashboard', label: 'Home', icon: HomeIcon, href: '/' },
   {
     id: 'deposit',
     label: 'Pre-Deposits',

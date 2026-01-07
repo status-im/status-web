@@ -5,6 +5,9 @@ import { getLegalDocumentContent } from '../_utils/get-legal-document-content'
 
 export const metadata = Metadata({
   title: 'Privacy Policy',
+  alternates: {
+    canonical: '/legal/privacy-policy',
+  },
 })
 
 export default async function PrivacyPolicyPage() {

@@ -1,6 +1,6 @@
 import { Accordion, type AccordionItem } from './accordion'
 
-const ITEMS: AccordionItem[] = [
+export const ITEMS: AccordionItem[] = [
   {
     title: 'When will deposits be unlocked?',
     content:
@@ -9,7 +9,7 @@ const ITEMS: AccordionItem[] = [
   {
     title: 'Why am I receiving a wallet warning when trying to deposit?',
     content:
-      'This warning may indicate insufficient ETH on your source chain to pay for gas fees. Ensure you have enough Linea L2 ETH available when depositing LINEA tokens, or Ethereum L1 ETH for other deposit types. It’s to solve this gas friction that we’re launching Status Network - the first natively gasless L2.',
+      "This warning may indicate insufficient ETH on your source chain to pay for gas fees. Ensure you have enough Linea L2 ETH available when depositing LINEA tokens, or Ethereum L1 ETH for other deposit types. It’s to solve this gas friction that we're launching Status Network - the first natively gasless L2.",
   },
   {
     title: 'What are the total incentive rewards for pre-depositors?',
