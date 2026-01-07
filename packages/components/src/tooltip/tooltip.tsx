@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 import * as Tooltip from '@radix-ui/react-tooltip'
 import { cx } from 'cva'
@@ -20,7 +20,7 @@ const _Tooltip = (props: Props) => {
     ...contentProps
   } = props
 
-  // note: https://github.com/radix-ui/primitives/issues/1573#issuecomment-1698975904
+  // note: for keeping "_" in component's name
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [open, setOpen] = useState(false)
 
@@ -32,7 +32,22 @@ const _Tooltip = (props: Props) => {
         delayDuration={delayDuration}
       >
         <Tooltip.Trigger asChild>
-          <button onClick={() => setOpen(true)}>{children}</button>
+          {/* note: https://github.com/radix-ui/primitives/issues/1573#issuecomment-1698975904 */}
+          {React.cloneElement(children, {
+            onClick: (e: React.MouseEvent<HTMLElement>) => {
+              const originalOnClick = (
+                children.props as {
+                  onClick?: (e: React.MouseEvent<HTMLElement>) => void
+                }
+              ).onClick
+
+              if (originalOnClick) {
+                originalOnClick(e)
+              }
+
+              setOpen(true)
+            },
+          } as Partial<React.HTMLAttributes<HTMLElement>>)}
         </Tooltip.Trigger>
         <Tooltip.Portal>
           <Tooltip.Content
