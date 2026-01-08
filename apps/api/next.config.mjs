@@ -5,6 +5,10 @@ import './src/config/env.server.mjs'
 
 /** @type {import('next').NextConfig} */
 let config = {
+  // CORS configuration - allows resources to be fetched with CORS requests
+  // @see https://blog.logrocket.com/using-cors-next-js-handle-cross-origin-requests/
+  crossOrigin: 'anonymous', // or 'use-credentials' if credentials are needed
+
   logging: {
     fetches: {
       fullUrl: true,
@@ -80,6 +84,9 @@ let config = {
     return config
   },
   transpilePackages: ['@status-im/wallet'],
+  // Layer 2: Framework-level CORS headers via next.config.mjs
+  // @see https://blog.logrocket.com/using-cors-next-js-handle-cross-origin-requests/
+  // These headers are applied at the Next.js framework level before route handlers
   async headers() {
     return [
       {
@@ -92,15 +99,20 @@ let config = {
           },
           {
             key: 'Access-Control-Allow-Methods',
-            value: 'GET, POST, OPTIONS',
+            value: 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
           },
           {
             key: 'Access-Control-Allow-Headers',
-            value: 'Content-Type, Authorization',
+            value:
+              'Content-Type, Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version',
           },
           {
             key: 'Access-Control-Max-Age',
-            value: '86400',
+            value: '86400', // 24 hours
+          },
+          {
+            key: 'Access-Control-Allow-Credentials',
+            value: 'true',
           },
         ],
       },
