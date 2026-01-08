@@ -75,9 +75,8 @@ jobs:
           echo "Detecting changes between $BASE_REF and HEAD..."
 
           # Use turbo to find affected packages with build task
-          # Capture stderr separately to avoid hiding real errors
           set +e
-          affected=$(pnpm turbo build --filter="...[$BASE_REF]" --dry-run=json 2>&1)
+          affected=$(TURBO_TELEMETRY_DISABLED=1 pnpm turbo build --filter="...[$BASE_REF]" --dry-run=json 2>&1)
           turbo_exit=$?
           set -e
 
