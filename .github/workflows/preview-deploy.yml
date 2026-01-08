@@ -1,0 +1,268 @@
+name: Preview Deploy (External Contributors)
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+  statuses: write
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+
+jobs:
+  deploy-preview:
+    name: Deploy Preview
+    if: github.event.pull_request.head.repo.fork == true
+    runs-on: ubuntu-latest
+    environment: preview-deploy-approval
+
+    steps:
+      - name: Set PR info
+        id: pr
+        run: |
+          echo "head_sha=${{ github.event.pull_request.head.sha }}" >> $GITHUB_OUTPUT
+          echo "pr_number=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+
+      - name: Set pending status
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ steps.pr.outputs.head_sha }}',
+              state: 'pending',
+              context: 'Preview Deploy',
+              description: 'Detecting changes and deploying...'
+            });
+
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Fetch base commit
+        run: |
+          git fetch origin ${{ github.event.pull_request.base.sha }}
+          git branch base-sha FETCH_HEAD
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.17.0
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Detect changed apps with Turbo
+        id: changes
+        run: |
+          # Get affected packages using turbo's change detection
+          # Use immutable base SHA reference instead of mutable branch name
+          BASE_REF="base-sha"
+
+          echo "Detecting changes between $BASE_REF and HEAD..."
+
+          # Use turbo to find affected packages with build task
+          # Capture stderr separately to avoid hiding real errors
+          set +e
+          affected=$(pnpm turbo build --filter="...[$BASE_REF]" --dry-run=json 2>&1)
+          turbo_exit=$?
+          set -e
+
+          echo "Turbo output:"
+          echo "$affected" | head -50
+
+          # Check if turbo failed
+          if [ $turbo_exit -ne 0 ]; then
+            echo "::error::Turbo failed with exit code $turbo_exit"
+            exit 1
+          fi
+
+          # Extract package names from turbo output
+          packages=$(echo "$affected" | jq -r '.packages[]' 2>/dev/null || echo "")
+
+          echo "Affected packages:"
+          echo "$packages"
+
+          # Filter to only deployable apps
+          apps_to_deploy=""
+          while IFS= read -r pkg; do
+            case "$pkg" in
+              "status.app"|"hub"|"portfolio"|"api"|"status.network"|"@status-im/components")
+                apps_to_deploy="$apps_to_deploy $pkg"
+                ;;
+            esac
+          done <<< "$packages"
+
+          apps_to_deploy=$(echo "$apps_to_deploy" | xargs)
+          echo "Apps to deploy: $apps_to_deploy"
+          echo "apps=$apps_to_deploy" >> $GITHUB_OUTPUT
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Deploy status.app
+        id: deploy-status-app
+        if: contains(steps.changes.outputs.apps, 'status.app')
+        run: |
+          vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build --token=${{ secrets.VERCEL_TOKEN }}
+          url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$url" >> $GITHUB_OUTPUT
+        working-directory: apps/status.app
+        env:
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_STATUS_APP }}
+
+      - name: Deploy hub
+        id: deploy-hub
+        if: contains(steps.changes.outputs.apps, 'hub')
+        run: |
+          vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build --token=${{ secrets.VERCEL_TOKEN }}
+          url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$url" >> $GITHUB_OUTPUT
+        working-directory: apps/hub
+        env:
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_HUB }}
+
+      - name: Deploy portfolio
+        id: deploy-portfolio
+        if: contains(steps.changes.outputs.apps, 'portfolio')
+        run: |
+          vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build --token=${{ secrets.VERCEL_TOKEN }}
+          url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$url" >> $GITHUB_OUTPUT
+        working-directory: apps/portfolio
+        env:
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_PORTFOLIO }}
+
+      - name: Deploy api
+        id: deploy-api
+        if: contains(steps.changes.outputs.apps, 'api')
+        run: |
+          vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build --token=${{ secrets.VERCEL_TOKEN }}
+          url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$url" >> $GITHUB_OUTPUT
+        working-directory: apps/api
+        env:
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_API }}
+
+      - name: Deploy status.network
+        id: deploy-status-network
+        if: contains(steps.changes.outputs.apps, 'status.network')
+        run: |
+          vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build --token=${{ secrets.VERCEL_TOKEN }}
+          url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$url" >> $GITHUB_OUTPUT
+        working-directory: apps/status.network
+        env:
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_STATUS_NETWORK }}
+
+      - name: Deploy components (Storybook)
+        id: deploy-components
+        if: contains(steps.changes.outputs.apps, '@status-im/components')
+        run: |
+          vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build --token=${{ secrets.VERCEL_TOKEN }}
+          url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$url" >> $GITHUB_OUTPUT
+        working-directory: packages/components
+        env:
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_COMPONENTS }}
+
+      - name: Set status and comment PR
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const deployments = [];
+
+            if ('${{ steps.deploy-status-app.outputs.url }}'.trim()) {
+              deployments.push({ name: 'status.app', url: '${{ steps.deploy-status-app.outputs.url }}' });
+            }
+            if ('${{ steps.deploy-hub.outputs.url }}'.trim()) {
+              deployments.push({ name: 'hub', url: '${{ steps.deploy-hub.outputs.url }}' });
+            }
+            if ('${{ steps.deploy-portfolio.outputs.url }}'.trim()) {
+              deployments.push({ name: 'portfolio', url: '${{ steps.deploy-portfolio.outputs.url }}' });
+            }
+            if ('${{ steps.deploy-api.outputs.url }}'.trim()) {
+              deployments.push({ name: 'api', url: '${{ steps.deploy-api.outputs.url }}' });
+            }
+            if ('${{ steps.deploy-status-network.outputs.url }}'.trim()) {
+              deployments.push({ name: 'status.network', url: '${{ steps.deploy-status-network.outputs.url }}' });
+            }
+            if ('${{ steps.deploy-components.outputs.url }}'.trim()) {
+              deployments.push({ name: 'components', url: '${{ steps.deploy-components.outputs.url }}' });
+            }
+
+            if (deployments.length === 0) {
+              await github.rest.repos.createCommitStatus({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                sha: '${{ steps.pr.outputs.head_sha }}',
+                state: 'success',
+                context: 'Preview Deploy',
+                description: 'No deployable app changes detected'
+              });
+              await github.rest.issues.createComment({
+                issue_number: ${{ steps.pr.outputs.pr_number }},
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `⚠️ **No apps to deploy**\n\nNo changes detected in deployable apps.`
+              });
+              return;
+            }
+
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ steps.pr.outputs.head_sha }}',
+              state: 'success',
+              context: 'Preview Deploy',
+              description: `Deployed ${deployments.length} app(s) successfully`
+            });
+
+            let table = '| Project | Status | Preview |\n';
+            table += '|---------|--------|----------|\n';
+            for (const dep of deployments) {
+              table += `| ${dep.name} | ✅ Ready | [Preview](${dep.url}) |\n`;
+            }
+
+            const body = `**Preview deployments are ready!**\n\n${table}\n\n---\n*Deployed via GitHub Actions*`;
+
+            await github.rest.issues.createComment({
+              issue_number: ${{ steps.pr.outputs.pr_number }},
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+      - name: Set failure status
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ steps.pr.outputs.head_sha }}',
+              state: 'failure',
+              context: 'Preview Deploy',
+              description: 'Deployment failed - check Actions logs'
+            });
