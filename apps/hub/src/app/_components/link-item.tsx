@@ -16,15 +16,8 @@ const LinkItem = (props: LinkItemProps) => {
   const { id, label, icon: Icon, href, tag } = props
   const pathname = usePathname()
 
-  const isActiveRoute = (href: string) => {
-    if (href === '/dashboard') {
-      return pathname === '/dashboard' || pathname === '/'
-    }
-    return pathname === href
-  }
-
   const isExternal = href.startsWith('http')
-  const isActive = isActiveRoute(href)
+  const isActive = pathname === href
 
   const handleClick = (e: React.MouseEvent) => {
     if (props.onClick) {
