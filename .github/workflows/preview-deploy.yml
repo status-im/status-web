@@ -120,7 +120,6 @@ jobs:
           vercel build --token=${{ secrets.VERCEL_TOKEN }}
           url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
           echo "url=$url" >> $GITHUB_OUTPUT
-        working-directory: apps/status.app
         env:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_STATUS_APP }}
 
@@ -132,7 +131,6 @@ jobs:
           vercel build --token=${{ secrets.VERCEL_TOKEN }}
           url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
           echo "url=$url" >> $GITHUB_OUTPUT
-        working-directory: apps/hub
         env:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_HUB }}
 
@@ -144,7 +142,6 @@ jobs:
           vercel build --token=${{ secrets.VERCEL_TOKEN }}
           url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
           echo "url=$url" >> $GITHUB_OUTPUT
-        working-directory: apps/portfolio
         env:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_PORTFOLIO }}
 
@@ -156,7 +153,6 @@ jobs:
           vercel build --token=${{ secrets.VERCEL_TOKEN }}
           url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
           echo "url=$url" >> $GITHUB_OUTPUT
-        working-directory: apps/api
         env:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_API }}
 
@@ -168,7 +164,6 @@ jobs:
           vercel build --token=${{ secrets.VERCEL_TOKEN }}
           url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
           echo "url=$url" >> $GITHUB_OUTPUT
-        working-directory: apps/status.network
         env:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_STATUS_NETWORK }}
 
@@ -180,7 +175,6 @@ jobs:
           vercel build --token=${{ secrets.VERCEL_TOKEN }}
           url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
           echo "url=$url" >> $GITHUB_OUTPUT
-        working-directory: packages/components
         env:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_COMPONENTS }}
 
