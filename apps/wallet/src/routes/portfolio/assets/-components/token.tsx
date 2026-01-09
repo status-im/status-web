@@ -41,8 +41,8 @@ import { parseUnits } from 'ethers'
 import { useEthBalance } from '@/hooks/use-eth-balance'
 import { renderMarkdown } from '@/lib/markdown'
 import { apiClient } from '@/providers/api-client'
+import { usePasswordSession } from '@/providers/password-context'
 import { usePendingTransactions } from '@/providers/pending-transactions-context'
-import { useWalletSigner } from '@/providers/signer-context'
 import { useWallet } from '@/providers/wallet-context'
 import { ExchangeDrawer } from '~/components/exchange-drawer'
 
@@ -83,7 +83,8 @@ const Token = (props: Props) => {
   const toast = useToast()
   const { currentWallet } = useWallet()
   const { addPendingTransaction } = usePendingTransactions()
-  const { isUnlocked, unlock } = useWalletSigner()
+  const { hasActiveSession, getPassword, requestPassword } =
+    usePasswordSession()
 
   const [activeDataType, setActiveDataType] =
     useState<ChartDataType>(DEFAULT_DATA_TYPE)
@@ -443,20 +444,6 @@ const Token = (props: Props) => {
     }
   }
 
-  const verifyPassword = async (inputPassword: string): Promise<boolean> => {
-    if (!currentWallet?.id) return false
-    try {
-      await apiClient.wallet.get.query({
-        walletId: currentWallet.id,
-        password: inputPassword,
-      })
-
-      return true
-    } catch {
-      return false
-    }
-  }
-
   return (
     <StickyHeaderContainer
       className="-translate-x-0 !py-3 !pl-3 pr-[50px] 2xl:w-auto 2xl:!px-12 2xl:!py-4"
@@ -484,8 +471,6 @@ const Token = (props: Props) => {
               account={account}
               fromChain={1}
               fromToken={fromTokenAddress}
-              isUnlocked={isUnlocked}
-              onUnlock={unlock}
             >
               <Button size="32" iconBefore={<SwapIcon />} variant="outline">
                 <span className="block max-w-20 truncate">Exchange</span>
@@ -508,7 +493,9 @@ const Token = (props: Props) => {
               ethBalance: sendAsset.ethBalance,
             }}
             signTransaction={signTransaction}
-            verifyPassword={verifyPassword}
+            hasActiveSession={hasActiveSession}
+            getPassword={getPassword}
+            requestPassword={requestPassword}
             gasFees={gasFeeQuery.data}
             isLoadingFees={gasFeeQuery.isFetching}
             onEstimateGas={prepareGasEstimate}
@@ -551,8 +538,6 @@ const Token = (props: Props) => {
                 account={account}
                 fromChain={1}
                 fromToken={fromTokenAddress}
-                isUnlocked={isUnlocked}
-                onUnlock={unlock}
               >
                 <Button size="32" iconBefore={<SwapIcon />} variant="outline">
                   Exchange
@@ -576,7 +561,9 @@ const Token = (props: Props) => {
                 ethBalance: sendAsset.ethBalance,
               }}
               signTransaction={signTransaction}
-              verifyPassword={verifyPassword}
+              hasActiveSession={hasActiveSession}
+              getPassword={getPassword}
+              requestPassword={requestPassword}
               gasFees={gasFeeQuery.data}
               isLoadingFees={gasFeeQuery.isFetching}
               onEstimateGas={prepareGasEstimate}
