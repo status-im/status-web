@@ -29,7 +29,6 @@ export default function HomePage() {
     <HubLayout>
       <div className="flex flex-col p-4 lg:px-6 lg:py-8">
         {/* Hero Section */}
-        <Hero />
 
         {/* Main Content Card */}
         <div className="mx-auto mt-7 w-full max-w-[1176px]">
