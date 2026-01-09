@@ -6,9 +6,10 @@ import { LiFiWidget, type WidgetConfig } from '@lifi/widget'
 import {
   type Account,
   ExchangeDrawer as ExchangeDrawerUI,
-  PasswordModal,
 } from '@status-im/wallet/components'
 import { useAccount } from 'wagmi'
+
+import { usePasswordSession } from '../providers/password-context'
 
 const NATIVE_ETH_ADDRESS = '0x0000000000000000000000000000000000000000'
 const ETHEREUM_MAINNET_CHAIN_ID = 1
@@ -18,8 +19,6 @@ export type ExchangeDrawerProps = {
   account?: Account
   fromChain?: number
   fromToken?: string
-  isUnlocked?: boolean
-  onUnlock?: (password: string) => Promise<boolean>
 }
 
 export const ExchangeDrawer = (props: ExchangeDrawerProps) => {
@@ -28,45 +27,42 @@ export const ExchangeDrawer = (props: ExchangeDrawerProps) => {
     account,
     fromChain = ETHEREUM_MAINNET_CHAIN_ID,
     fromToken,
-    isUnlocked = false,
-    onUnlock,
   } = props
 
   const [open, setOpen] = useState(false)
-  const [showPasswordModal, setShowPasswordModal] = useState(false)
-
+  const { hasActiveSession, requestPassword } = usePasswordSession()
   const { isConnected, address: connectedAddress } = useAccount()
 
   const handleOpenChange = useCallback(
     async (isOpen: boolean) => {
-      if (isOpen && !isUnlocked) {
-        setShowPasswordModal(true)
+      if (!isOpen) {
+        setOpen(false)
         return
       }
-      setOpen(isOpen)
-    },
-    [isUnlocked],
-  )
 
-  const handlePasswordConfirm = useCallback(
-    async (password: string) => {
-      if (!onUnlock) return
-
-      const success = await onUnlock(password)
-      if (success) {
-        setShowPasswordModal(false)
+      if (hasActiveSession) {
         setOpen(true)
-      } else {
-        throw new Error('Invalid password')
+        return
+      }
+
+      const password = await requestPassword({
+        title: 'Enter password',
+        description: 'To complete exchange',
+        buttonLabel: 'Unlock & Exchange',
+      })
+
+      if (password) {
+        setOpen(true)
       }
     },
-    [onUnlock],
+    [hasActiveSession, requestPassword],
   )
 
   const widgetConfig: WidgetConfig = useMemo(
     () => ({
       integrator: 'StatusWallet',
       variant: 'compact',
+      appearance: 'light',
       fromChain,
       fromToken: fromToken || NATIVE_ETH_ADDRESS,
       fromAddress: isConnected ? connectedAddress : account?.address,
@@ -89,33 +85,21 @@ export const ExchangeDrawer = (props: ExchangeDrawerProps) => {
     return null
   }
 
-  const widgetContent =
-    isUnlocked && open ? (
-      <LiFiWidget
-        key={connectedAddress}
-        integrator={widgetConfig.integrator}
-        config={widgetConfig}
-      />
-    ) : null
+  const widgetContent = open ? (
+    <LiFiWidget
+      key={connectedAddress}
+      integrator={widgetConfig.integrator}
+      config={widgetConfig}
+    />
+  ) : null
 
   return (
-    <>
-      <ExchangeDrawerUI
-        open={open}
-        onOpenChange={handleOpenChange}
-        trigger={children}
-      >
-        {widgetContent}
-      </ExchangeDrawerUI>
-
-      {onUnlock && (
-        <PasswordModal
-          open={showPasswordModal}
-          onOpenChange={setShowPasswordModal}
-          onConfirm={handlePasswordConfirm}
-          buttonLabel="Unlock & Exchange"
-        />
-      )}
-    </>
+    <ExchangeDrawerUI
+      open={open}
+      onOpenChange={handleOpenChange}
+      trigger={children}
+    >
+      {widgetContent}
+    </ExchangeDrawerUI>
   )
 }
