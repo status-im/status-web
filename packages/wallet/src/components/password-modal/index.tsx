@@ -22,6 +22,8 @@ type PasswordModalProps = {
   onConfirm: (password: string) => Promise<void>
   isLoading?: boolean
   buttonLabel?: string
+  title?: string
+  description?: string
 }
 
 const PasswordModal = (props: PasswordModalProps) => {
@@ -44,6 +46,8 @@ const PasswordModal = (props: PasswordModalProps) => {
     onConfirm,
     isLoading = false,
     buttonLabel = 'Confirm',
+    title = 'Enter password',
+    description = 'To sign transaction',
   } = props
 
   const [showPassword, setShowPassword] = useState(false)
@@ -93,7 +97,7 @@ const PasswordModal = (props: PasswordModalProps) => {
           <div className="flex min-h-[251px] w-screen max-w-[436px] flex-col rounded-16 border border-neutral-10 bg-white-100 p-4 shadow-3">
             <div className="mb-1 flex items-center justify-between">
               <Dialog.Title className="text-27 font-semibold">
-                Enter password
+                {title}
               </Dialog.Title>
               <Dialog.Close asChild>
                 <Button
@@ -107,7 +111,7 @@ const PasswordModal = (props: PasswordModalProps) => {
             </div>
 
             <Dialog.Description className="mb-5 text-13 text-neutral-50">
-              To sign transaction
+              {description}
             </Dialog.Description>
 
             <form
