@@ -25,7 +25,7 @@ const Hero = () => {
             </h1>
 
             <p className="mb-8 max-w-[180px] text-13 text-white-90 md:max-w-[558px] md:text-19 lg:text-27">
-              testing pipeline
+              testing pipeline 2
             </p>
           </div>
         </div>
