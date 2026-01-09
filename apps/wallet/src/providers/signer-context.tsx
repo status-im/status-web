@@ -1,21 +1,16 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from 'react'
+import { createContext, useCallback, useContext, useMemo } from 'react'
 
 import { type Address, createPublicClient, type Hex, http } from 'viem'
 import { mainnet } from 'viem/chains'
 
 import { apiClient } from './api-client'
+import { usePasswordSession } from './password-context'
 import { useWallet } from './wallet-context'
 
 type SignerContextValue = {
   address: Address | undefined
   isUnlocked: boolean
-  unlock: (password: string) => Promise<boolean>
+  unlock: () => Promise<boolean>
   lock: () => void
   signAndSendTransaction: (tx: {
     to: Address
@@ -43,58 +38,78 @@ export function useWalletSigner() {
 
 export function SignerProvider({ children }: { children: React.ReactNode }) {
   const { currentWallet } = useWallet()
-  const [sessionPassword, setSessionPassword] = useState<string | null>(null)
-  const [unlockHandler, setUnlockHandler] = useState<
-    (() => Promise<string | null>) | null
-  >(null)
+  const {
+    hasActiveSession,
+    getPassword,
+    requestPassword,
+    establishSession,
+    clearSession,
+  } = usePasswordSession()
 
   const address = useMemo(() => {
     return currentWallet?.activeAccounts[0]?.address as Address | undefined
   }, [currentWallet])
 
-  const unlock = useCallback(
-    async (password: string): Promise<boolean> => {
-      if (!currentWallet?.id) return false
+  const unlock = useCallback(async (): Promise<boolean> => {
+    if (!currentWallet?.id) return false
+
+    let password: string | null = null
+
+    if (hasActiveSession) {
+      password = getPassword()
+      if (!password) {
+        return false
+      }
       try {
         await apiClient.wallet.get.query({
           walletId: currentWallet.id,
           password,
         })
-        setSessionPassword(password)
+        await establishSession(password)
         return true
       } catch {
         return false
       }
-    },
-    [currentWallet?.id],
-  )
+    }
+
+    password = await requestPassword({
+      title: 'Enter password',
+      description: 'To allow for signing transactions',
+    })
+
+    return password !== null
+  }, [
+    currentWallet?.id,
+    hasActiveSession,
+    getPassword,
+    requestPassword,
+    establishSession,
+  ])
 
   const lock = useCallback(() => {
-    setSessionPassword(null)
-  }, [])
+    clearSession()
+  }, [clearSession])
 
   const requestUnlock = useCallback(async (): Promise<string | null> => {
-    if (sessionPassword) return sessionPassword
-    if (unlockHandler) {
-      const password = await unlockHandler()
-      if (password) {
-        setSessionPassword(password)
-      }
-      return password
+    if (hasActiveSession) {
+      return getPassword()
     }
-    return null
-  }, [sessionPassword, unlockHandler])
+    return await requestPassword()
+  }, [hasActiveSession, getPassword, requestPassword])
 
   const ensurePassword = useCallback(async (): Promise<string> => {
-    let password = sessionPassword
-    if (!password) {
-      password = await requestUnlock()
-      if (!password) {
-        throw new Error('Wallet not unlocked')
+    if (hasActiveSession) {
+      const password = getPassword()
+      if (password) {
+        return password
       }
     }
+    const password = await requestPassword()
+    if (!password) {
+      throw new Error('Wallet not unlocked')
+    }
     return password
-  }, [sessionPassword, requestUnlock])
+  }, [hasActiveSession, getPassword, requestPassword])
 
   const signAndSendTransaction = useCallback(
     async (tx: {
@@ -279,8 +294,9 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
   )
 
   const handleSetUnlockHandler = useCallback(
-    (handler: () => Promise<string | null>) => {
-      setUnlockHandler(() => handler)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (_handler: () => Promise<string | null>) => {
+      // No-op: PasswordContext handles password requests via requestPassword()
     },
     [],
   )
@@ -288,7 +304,7 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
   const value: SignerContextValue = useMemo(
     () => ({
       address,
-      isUnlocked: !!sessionPassword,
+      isUnlocked: hasActiveSession,
       unlock,
       lock,
       signAndSendTransaction,
@@ -299,7 +315,7 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
     }),
     [
       address,
-      sessionPassword,
+      hasActiveSession,
       unlock,
       lock,
       signAndSendTransaction,
