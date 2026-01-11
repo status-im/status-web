@@ -4,22 +4,40 @@ import { PROGRESS_BAR_DOT_INSET } from '~constants/karma'
 
 import type { KarmaLevel } from '~types/karma'
 
-const VISIBLE_LEVELS_COUNT = 6
-
 type ProgressBarProps = {
   currentKarma?: bigint
   karmaLevels: KarmaLevel[]
 }
 
 const ProgressBar = ({ currentKarma = 0n, karmaLevels }: ProgressBarProps) => {
-  const formatKarmaLabel = (karma: bigint) => {
+  const formatKarmaLabel = (karma: bigint, level: number) => {
+    const karmaNum = Number(formatEther(karma))
+
+    if (level < 4) {
+      if (level === 0) return '0'
+      if (level === 1) return '1'
+      if (level === 2) return '1+'
+      if (level === 3) return '50+'
+      if (level === 4) return '500+'
+    } else if (level >= 4 && level < 8) {
+      if (level === 4) return '500+'
+      if (level === 5) return '5K+'
+      if (level === 6) return '20K+'
+      if (level === 7) return '100K+'
+      if (level === 8) return '500K+'
+    } else if (level >= 8 && level <= 10) {
+      if (level === 8) return '500K+'
+      if (level === 9) return '5M+'
+      if (level === 10) return '10M+'
+    }
+
     const formatter = new Intl.NumberFormat('en-US', {
       notation: 'compact',
       compactDisplay: 'short',
       maximumFractionDigits: 1,
     })
 
-    return formatter.format(Number(formatEther(karma)))
+    return formatter.format(karmaNum)
   }
 
   if (karmaLevels.length === 0) {
@@ -29,11 +47,7 @@ const ProgressBar = ({ currentKarma = 0n, karmaLevels }: ProgressBarProps) => {
   const currentLevelData = getCurrentLevelData(currentKarma, karmaLevels)
   const { level, minKarma, maxKarma } = currentLevelData
 
-  const visibleLevels = getVisibleLevels(
-    karmaLevels,
-    level,
-    VISIBLE_LEVELS_COUNT
-  )
+  const visibleLevels = getVisibleLevelsByStage(karmaLevels, level)
 
   const currentLevelIndexInVisible = Math.max(
     0,
@@ -50,11 +64,17 @@ const ProgressBar = ({ currentKarma = 0n, karmaLevels }: ProgressBarProps) => {
   }
 
   const oneLevelPercentage = 100 / Math.max(visibleLevels.length - 1, 1)
-  const desktopLevelProgress = Math.min(
-    100,
-    oneLevelPercentage * currentLevelIndexInVisible +
-      oneLevelPercentage * (levelProgress / 100)
-  )
+
+  let desktopLevelProgress: number
+  if (level >= 10) {
+    desktopLevelProgress = 50
+  } else {
+    desktopLevelProgress = Math.min(
+      100,
+      oneLevelPercentage * currentLevelIndexInVisible +
+        oneLevelPercentage * (levelProgress / 100)
+    )
+  }
 
   const mobileStartLevel = Math.max(0, level)
   const mobileEndLevel = Math.min(karmaLevels.length - 1, level + 1)
@@ -126,15 +146,43 @@ const ProgressBar = ({ currentKarma = 0n, karmaLevels }: ProgressBarProps) => {
 
       {/* Level Labels - Mobile */}
       <div className="flex w-full justify-between md:hidden">
-        <div className="flex items-center gap-0.5 rounded-6 bg-neutral-5 px-1.5">
-          <span className="text-13 font-medium text-neutral-50">lv</span>
-          <span className="text-15 font-medium text-neutral-100">
+        <div
+          className={`flex items-center gap-0.5 rounded-6 px-1.5 ${
+            mobileStartLevel === level ? 'bg-purple' : 'bg-neutral-5'
+          }`}
+        >
+          <span
+            className={`text-13 font-medium ${
+              mobileStartLevel === level ? 'text-white-100' : 'text-neutral-50'
+            }`}
+          >
+            lv
+          </span>
+          <span
+            className={`text-15 font-medium ${
+              mobileStartLevel === level ? 'text-white-100' : 'text-neutral-100'
+            }`}
+          >
             {mobileStartLevel}
           </span>
         </div>
-        <div className="flex items-center gap-0.5 rounded-6 bg-neutral-5 px-1.5">
-          <span className="text-13 font-medium text-neutral-50">lv</span>
-          <span className="text-15 font-medium text-neutral-100">
+        <div
+          className={`flex items-center gap-0.5 rounded-6 px-1.5 ${
+            mobileEndLevel === level ? 'bg-purple' : 'bg-neutral-5'
+          }`}
+        >
+          <span
+            className={`text-13 font-medium ${
+              mobileEndLevel === level ? 'text-white-100' : 'text-neutral-50'
+            }`}
+          >
+            lv
+          </span>
+          <span
+            className={`text-15 font-medium ${
+              mobileEndLevel === level ? 'text-white-100' : 'text-neutral-100'
+            }`}
+          >
             {mobileEndLevel}
           </span>
         </div>
@@ -179,16 +227,30 @@ const ProgressBar = ({ currentKarma = 0n, karmaLevels }: ProgressBarProps) => {
               }}
             >
               <div className="flex flex-col justify-center gap-0.5">
-                <div className="flex items-center gap-1 rounded-6 bg-neutral-5 px-3">
-                  <span className="text-13 font-medium text-neutral-50">
+                <div
+                  className={`flex items-center gap-1 rounded-6 px-3 ${
+                    lvl.level === level ? 'bg-purple' : 'bg-neutral-5'
+                  }`}
+                >
+                  <span
+                    className={`text-13 font-medium ${
+                      lvl.level === level ? 'text-white-100' : 'text-neutral-50'
+                    }`}
+                  >
                     lv
-                    <span className="text-15 font-medium text-neutral-100">
+                    <span
+                      className={`text-15 font-medium ${
+                        lvl.level === level
+                          ? 'text-white-100'
+                          : 'text-neutral-100'
+                      }`}
+                    >
                       {lvl.level}
                     </span>
                   </span>
                 </div>
                 <span className="text-center text-13 font-medium text-neutral-50">
-                  {formatKarmaLabel(lvl.minKarma)}
+                  {formatKarmaLabel(lvl.minKarma, lvl.level)}
                 </span>
               </div>
             </div>
@@ -199,39 +261,38 @@ const ProgressBar = ({ currentKarma = 0n, karmaLevels }: ProgressBarProps) => {
       {/* Karma Labels - Mobile */}
       <div className="flex w-full justify-between md:hidden">
         <span className="text-13 font-medium text-neutral-50">
-          {formatKarmaLabel(mobileMilestones[0])}
+          {formatKarmaLabel(mobileMilestones[0], mobileStartLevel)}
         </span>
         <span className="text-13 font-medium text-neutral-50">
-          {formatKarmaLabel(mobileMilestones[1])}
+          {formatKarmaLabel(mobileMilestones[1], mobileEndLevel)}
         </span>
       </div>
     </div>
   )
 }
 
-const getVisibleLevels = (
+const getVisibleLevelsByStage = (
   allLevels: KarmaLevel[],
-  currentLevel: number,
-  visibleCount: number
+  currentLevel: number
 ): KarmaLevel[] => {
-  if (allLevels.length <= visibleCount) {
-    return allLevels
+  if (allLevels.length === 0) {
+    return []
   }
 
-  const halfWindow = Math.floor(visibleCount / 2)
-  const maxStartIndex = allLevels.length - visibleCount
-
-  let startIndex: number
-
-  if (currentLevel < halfWindow) {
-    startIndex = 0
-  } else if (currentLevel >= allLevels.length - halfWindow) {
-    startIndex = maxStartIndex
+  if (currentLevel < 4) {
+    return allLevels.slice(0, Math.min(5, allLevels.length))
+  } else if (currentLevel >= 4 && currentLevel < 8) {
+    const startIndex = Math.min(4, allLevels.length - 1)
+    const endIndex = Math.min(9, allLevels.length)
+    return allLevels.slice(startIndex, endIndex)
+  } else if (currentLevel >= 8 && currentLevel <= 10) {
+    const startIndex = Math.min(8, allLevels.length - 1)
+    const endIndex = Math.min(11, allLevels.length)
+    return allLevels.slice(startIndex, endIndex)
   } else {
-    startIndex = currentLevel - halfWindow
+    const level10Index = Math.min(10, allLevels.length - 1)
+    return [allLevels[level10Index]]
   }
-
-  return allLevels.slice(startIndex, startIndex + visibleCount)
 }
 
 const getCurrentLevelData = (
