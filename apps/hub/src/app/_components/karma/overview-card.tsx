@@ -99,6 +99,13 @@ const OverviewCard = () => {
               {t('karma.level', { level: levelData?.level ?? 0 })}
             </span>
           </div>
+          {currentKarma > 0n && (
+            <span className="text-15 font-semibold text-neutral-100">
+              {/* TODO: Replace with actual rank from API */}
+              <span className="text-neutral-50">#</span>{' '}
+              {Math.floor(Math.random() * 5000) + 1}
+            </span>
+          )}
         </div>
         <ProgressBar currentKarma={currentKarma} karmaLevels={karmaLevels} />
 
@@ -109,7 +116,7 @@ const OverviewCard = () => {
               <span className="text-neutral-100">
                 {txAllowance.used.toLocaleString()}
               </span>
-              <span className="text-[#A1ABBD]">
+              <span className="text-neutral-40">
                 /
                 {txAllowance.total >= 1000
                   ? `${txAllowance.total / 1000}K`
