@@ -15,7 +15,6 @@ import {
   StakeIcon,
   SubmitAppIcon,
 } from './icons'
-import { LanguageSelector } from './language-selector'
 import { LinkItem } from './link-item'
 
 type Props = {
@@ -157,11 +156,6 @@ const Sidebar = (props: Props) => {
                 return <LinkItem key={item.id} {...item} />
               })}
             </ul>
-
-            {/* Language Selector - Mobile */}
-            <div className="mt-4 px-4 md:hidden">
-              <LanguageSelector />
-            </div>
           </nav>
         </div>
       </div>

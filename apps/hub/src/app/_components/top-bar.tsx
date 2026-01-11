@@ -84,11 +84,6 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
 
         {/* Right side - Actions */}
         <div className="flex items-center gap-2">
-          {/* Language Selector */}
-          <div className="hidden md:block">
-            <LanguageSelector />
-          </div>
-
           {/* Share Feedback */}
           <div className="hidden md:block">
             <FeedbackPopover
@@ -111,6 +106,14 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
             size="24"
             className="block md:hidden"
           />
+
+          {/* Language Selector */}
+          <div className="hidden md:block">
+            <LanguageSelector size="32" />
+          </div>
+          <div className="block md:hidden">
+            <LanguageSelector size="24" />
+          </div>
         </div>
       </div>
     </div>
