@@ -7,13 +7,13 @@ import { ContextTag, Input } from '@status-im/components'
 import { InfoIcon } from '@status-im/icons/16'
 import { IncorrectIcon } from '@status-im/icons/20'
 import { Button } from '@status-im/status-network/components'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { useSliderConfig } from '~hooks/useSliderConfig'
 
-import { DATE_FORMAT, DEFAULT_LOCK_PERIOD, SECONDS_PER_DAY } from './constants'
+import { DEFAULT_LOCK_PERIOD, SECONDS_PER_DAY } from './constants'
 import { LockDurationSlider } from './lock-duration-slider'
 
 import type { HTMLAttributes } from 'react'
@@ -52,6 +52,7 @@ interface LockVaultFormProps {
  */
 export function LockVaultForm(props: LockVaultFormProps) {
   const t = useTranslations()
+  const locale = useLocale()
   const {
     initialYears,
     initialDays,
@@ -87,9 +88,13 @@ export function LockVaultForm(props: LockVaultFormProps) {
     const maxYears = maxDays / DAYS_PER_YEAR
 
     const minLabel =
-      minYears < 1 ? `${minDays} days` : `${minYears.toFixed(1)} years`
+      minYears < 1
+        ? t('vault.days_label', { count: minDays })
+        : t('vault.years_label', { count: minYears.toFixed(1) })
     const maxLabel =
-      maxYears < 1 ? `${maxDays} days` : `${Math.round(maxYears)} years`
+      maxYears < 1
+        ? t('vault.days_label', { count: maxDays })
+        : t('vault.years_label', { count: Math.round(maxYears) })
 
     return {
       minLabel,
@@ -98,7 +103,7 @@ export function LockVaultForm(props: LockVaultFormProps) {
       maxDays,
       initialPosition: 50,
     }
-  }, [sliderConfigQuery])
+  }, [sliderConfigQuery, t])
 
   const years = watch('years')
   const days = watch('days')
@@ -118,17 +123,14 @@ export function LockVaultForm(props: LockVaultFormProps) {
     // Convert to Date for display (multiply by 1000 for milliseconds)
     const unlockDate = new Date(unlockTimestamp * 1000)
 
-    const day = String(unlockDate.getDate()).padStart(
-      DATE_FORMAT.PAD_LENGTH,
-      DATE_FORMAT.PAD_CHAR
-    )
-    const month = String(unlockDate.getMonth() + 1).padStart(
-      DATE_FORMAT.PAD_LENGTH,
-      DATE_FORMAT.PAD_CHAR
-    )
     const year = unlockDate.getFullYear()
+    const month = String(unlockDate.getMonth() + 1).padStart(2, '0')
+    const day = String(unlockDate.getDate()).padStart(2, '0')
 
-    return `${day}${DATE_FORMAT.SEPARATOR}${month}${DATE_FORMAT.SEPARATOR}${year}`
+    if (locale === 'ko') {
+      return `${year}-${month}-${day}`
+    }
+    return `${day}/${month}/${year}`
   }
 
   const calculatedUnlockDate = useMemo(() => {
@@ -222,21 +224,21 @@ export function LockVaultForm(props: LockVaultFormProps) {
     const daysValue = parseInt(days || DEFAULT_LOCK_PERIOD.INITIAL_DAYS)
 
     if (daysValue > 0 && daysValue < sliderConfig.minDays) {
-      return `Minimum lock time is ${sliderConfig.minLabel}`
+      return t('vault.min_lock_time', { time: sliderConfig.minLabel })
     }
 
     if (daysValue > sliderConfig.maxDays) {
-      return `Maximum lock time is ${sliderConfig.maxLabel}`
+      return t('vault.max_lock_time', { time: sliderConfig.maxLabel })
     }
 
     const minYears = sliderConfig.minDays / DAYS_PER_YEAR
     if (yearsValue > 0 && yearsValue < minYears) {
-      return `Minimum lock time is ${sliderConfig.minLabel}`
+      return t('vault.min_lock_time', { time: sliderConfig.minLabel })
     }
 
     const maxYears = sliderConfig.maxDays / DAYS_PER_YEAR
     if (yearsValue > maxYears) {
-      return `Maximum lock time is ${sliderConfig.maxLabel}`
+      return t('vault.max_lock_time', { time: sliderConfig.maxLabel })
     }
 
     return null
@@ -266,7 +268,9 @@ export function LockVaultForm(props: LockVaultFormProps) {
             className={hasError ? 'border-danger-50/40' : ''}
           />
           <div className="flex flex-col items-center justify-center px-0 pb-0 pt-[23px]">
-            <span className="text-13 font-medium text-neutral-50">or</span>
+            <span className="text-13 font-medium text-neutral-50">
+              {t('vault.or')}
+            </span>
           </div>
           <Input
             label={t('vault.days')}

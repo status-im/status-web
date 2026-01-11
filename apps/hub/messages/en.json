@@ -694,6 +694,26 @@
     "native_apps_points": {
       "translation": "native apps points",
       "notes": "vault::native_apps_points"
+    },
+    "or": {
+      "translation": "or",
+      "notes": "vault::or"
+    },
+    "min_lock_time": {
+      "translation": "Minimum lock time is {time}",
+      "notes": "vault::min_lock_time"
+    },
+    "max_lock_time": {
+      "translation": "Maximum lock time is {time}",
+      "notes": "vault::max_lock_time"
+    },
+    "days_label": {
+      "translation": "{count} days",
+      "notes": "vault::days_label"
+    },
+    "years_label": {
+      "translation": "{count} years",
+      "notes": "vault::years_label"
     }
   },
   "action_status": {

@@ -694,6 +694,26 @@
     "native_apps_points": {
       "translation": "네이티브 앱 포인트",
       "notes": "vault::native_apps_points"
+    },
+    "or": {
+      "translation": "또는",
+      "notes": "vault::or"
+    },
+    "min_lock_time": {
+      "translation": "최소 잠금 기간은 {time}입니다",
+      "notes": "vault::min_lock_time"
+    },
+    "max_lock_time": {
+      "translation": "최대 잠금 기간은 {time}입니다",
+      "notes": "vault::max_lock_time"
+    },
+    "days_label": {
+      "translation": "{count}일",
+      "notes": "vault::days_label"
+    },
+    "years_label": {
+      "translation": "{count}년",
+      "notes": "vault::years_label"
     }
   },
   "action_status": {

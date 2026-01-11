@@ -6,9 +6,10 @@ import { Skeleton, useToast } from '@status-im/components'
 import { Button } from '@status-im/status-network/components'
 import { useSIWE } from 'connectkit'
 import dynamic from 'next/dynamic'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useAccount } from 'wagmi'
 
+import { localeMap } from '~/i18n/locale-map'
 import { clientEnv } from '~constants/env.client.mjs'
 import { useClaimKarma } from '~hooks/useClaimKarma'
 
@@ -66,6 +67,7 @@ const KarmaSourceCard = ({
   isLoading = false,
 }: KarmaSourceCardProps) => {
   const t = useTranslations()
+  const locale = useLocale()
   const [capToken, setCapToken] = useState<string | null>(null)
   const [capError, setCapError] = useState<string | null>(null)
   const { isConnected, isConnecting } = useAccount()
@@ -81,7 +83,8 @@ const KarmaSourceCard = ({
     badgeDescription ?? t('karma.just_arrived_description')
 
   const formatAmount = (value: number) => {
-    return value.toLocaleString('en-US', {
+    const numberLocale = localeMap[locale] || 'en-US'
+    return value.toLocaleString(numberLocale, {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     })
@@ -220,7 +223,7 @@ const KarmaSourceCard = ({
                 onClick={() => signIn?.()}
                 className="w-full items-center justify-center"
               >
-                Sign in to continue
+                {t('stake.sign_in_to_continue')}
               </Button>
             ) : (
               <Button
