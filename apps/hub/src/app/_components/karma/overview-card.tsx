@@ -13,7 +13,7 @@ import { formatSNT } from '~utils/currency'
 // import { AchievementBadges } from './achievement-badges'
 import { getCurrentLevelData, ProgressBar } from './progress-tracker'
 
-const KarmaOverviewCardSkeleton = () => {
+const OverviewCardSkeleton = () => {
   return (
     <div className="flex h-[302px] flex-1 flex-col rounded-20 border border-neutral-20 bg-white-100 shadow-1">
       <div className="flex flex-col gap-3 p-4 pb-2">
@@ -39,7 +39,7 @@ const KarmaOverviewCardSkeleton = () => {
   )
 }
 
-const KarmaOverviewCard = () => {
+const OverviewCard = () => {
   const { isConnected } = useAccount()
   const { data: karmaBalance, isLoading: karmaLoading } = useKarmaBalance()
   const { karmaLevels, isLoading: tiersLoading } = useProcessedKarmaTiers()
@@ -60,13 +60,31 @@ const KarmaOverviewCard = () => {
     [currentKarma, karmaLevels]
   )
 
+  // TODO: Replace with actual API data
+  const txAllowance = {
+    used: 5040,
+    total: 10000,
+  }
+
+  const txPercentage = (txAllowance.used / txAllowance.total) * 100
+
+  const progressBarColor = useMemo(() => {
+    if (txPercentage <= 33) {
+      return 'bg-[#E95460]'
+    }
+    if (txPercentage <= 66) {
+      return 'bg-yellow'
+    }
+    return 'bg-[#23ADA0]'
+  }, [txPercentage])
+
   if (isLoading) {
-    return <KarmaOverviewCardSkeleton />
+    return <OverviewCardSkeleton />
   }
 
   return (
-    <div className="flex flex-1 flex-col rounded-20 border border-neutral-20 bg-white-100 shadow-1">
-      <div className="flex flex-col gap-3 p-4 pb-2">
+    <div className="flex flex-1 flex-col justify-between rounded-20 border border-neutral-20 bg-white-100 shadow-1">
+      <div className="flex flex-col gap-3 px-4 pb-3 pt-4">
         <div className="flex items-start justify-between gap-4">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2">
@@ -83,16 +101,43 @@ const KarmaOverviewCard = () => {
           </div>
         </div>
         <ProgressBar currentKarma={currentKarma} karmaLevels={karmaLevels} />
-        <div className="flex h-14 items-center gap-1 border-t border-dashed border-neutral-20 pt-3">
-          {/* <span className="text-15 font-medium text-neutral-50">#</span> */}
-          {/* <span className="text-19 font-semibold text-neutral-100">{rank}</span> */}
+
+        {/* TXAllowance Section */}
+        <div className="flex flex-col gap-6 pt-3">
+          <div className="flex flex-col items-baseline gap-1.5 sm:flex-row">
+            <div className="text-27 font-semibold">
+              <span className="text-neutral-100">
+                {txAllowance.used.toLocaleString()}
+              </span>
+              <span className="text-[#A1ABBD]">
+                /
+                {txAllowance.total >= 1000
+                  ? `${txAllowance.total / 1000}K`
+                  : txAllowance.total}
+              </span>
+            </div>
+            <span className="text-15 font-regular text-neutral-50">
+              free transactions left today
+            </span>
+          </div>
+
+          {/* Progress Bar */}
+          <div className="relative h-2 w-full overflow-hidden rounded-full bg-neutral-10">
+            <div
+              className={`h-full rounded-full transition-all duration-300 ${progressBarColor}`}
+              style={{
+                width: `${txPercentage}%`,
+              }}
+            />
+          </div>
         </div>
       </div>
       {/* <div className="size-full rounded-b-20 bg-neutral-2.5 p-4">
         <AchievementBadges />
       </div> */}
+      <div className="mt-0 h-12 rounded-b-20 bg-neutral-2.5" />
     </div>
   )
 }
 
-export { KarmaOverviewCard, KarmaOverviewCardSkeleton }
+export { OverviewCard, OverviewCardSkeleton }

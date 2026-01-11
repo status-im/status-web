@@ -7,12 +7,12 @@ import { formatEther } from 'viem/utils'
 
 import { HubLayout } from '~components/hub-layout'
 import {
-  KarmaOverviewCard,
-  KarmaOverviewCardSkeleton,
   KarmaSourceCard,
   KarmaSourceCardSkeleton,
   KarmaVisualCard,
   KarmaVisualCardSkeleton,
+  OverviewCard,
+  OverviewCardSkeleton,
 } from '~components/karma'
 import { useCurrentUser } from '~hooks/useCurrentUser'
 import { useKarmaRewardsDistributor } from '~hooks/useKarmaRewardsDistributor'
@@ -27,7 +27,7 @@ function KarmaCardsSkeleton() {
     <>
       <div className="flex flex-col gap-6 md:flex-row">
         <KarmaVisualCardSkeleton />
-        <KarmaOverviewCardSkeleton />
+        <OverviewCardSkeleton />
       </div>
       <div className="flex flex-col gap-6">
         <h2 className="text-19 font-semibold text-neutral-100">
@@ -87,7 +87,7 @@ function KarmaCards() {
     <>
       <div className="flex flex-col gap-6 md:flex-row">
         <KarmaVisualCard {...visualData} />
-        <KarmaOverviewCard />
+        <OverviewCard />
       </div>
       <div className="flex flex-col gap-6">
         <h2 className="text-19 font-semibold text-neutral-100">
