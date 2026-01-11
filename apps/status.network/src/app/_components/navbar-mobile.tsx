@@ -169,7 +169,7 @@ const NavBarMobile = () => {
                   >
                     {t('common.get_started.translation')}
                   </ButtonLink>
-                  <LanguageSelector />
+                  <LanguageSelector size="32" />
                 </motion.div>
                 <div className="z-40 ml-0 w-[calc(100vw-18px)]">
                   <Divider />
