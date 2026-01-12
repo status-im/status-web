@@ -6,6 +6,7 @@ import { NavDesktop } from './_components/navigation/nav-desktop'
 import { NavMobile } from './_components/navigation/nav-mobile'
 import { ParallaxProvider } from './_components/parallax'
 import { Prefooter } from './_components/pre-footer'
+import { PromoBar } from './_components/promo-bar'
 import { WebsiteProvider } from './_provider'
 
 type Props = {
@@ -30,6 +31,7 @@ export default async function WebsiteLayout(props: Props) {
       mobileRelease={mobileRelease}
       desktopRelease={desktopRelease}
     >
+      <PromoBar />
       <FloatingMenu />
       <NavDesktop />
       <NavMobile />

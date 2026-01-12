@@ -21,6 +21,7 @@ import { useDepositFlow } from '~hooks/useDepositFlow'
 import { useExchangeRate } from '~hooks/useExchangeRate'
 import { usePreDepositVault } from '~hooks/usePreDepositVault'
 import { useVaultsAPY } from '~hooks/useVaultsAPY'
+import { useWrapETH } from '~hooks/useWrapETH'
 import { formatCurrency, formatTokenAmount } from '~utils/currency'
 
 import { VaultImage } from './vault-image'
@@ -92,6 +93,7 @@ const PreDepositModal = ({
 
   const { mutate: approveToken, isPending: isApproving } = useApproveToken()
   const { mutate: preDeposit, isPending: isDepositing } = usePreDepositVault()
+  const { mutate: wrapETH, isPending: isWrapping } = useWrapETH()
 
   const amountWei = useMemo(() => {
     if (!vault || !amountValue) return 0n
@@ -125,10 +127,12 @@ const PreDepositModal = ({
   const {
     actionState,
     balance,
+    ethBalance,
     maxDeposit,
     minDeposit,
     sharesValidation,
     refetchAllowance,
+    refetchBalances,
   } = useDepositFlow({ vault, amountWei, address })
 
   const isWrongChain = useMemo(() => {
@@ -142,6 +146,25 @@ const PreDepositModal = ({
     if (!vault || !address || isWrongChain) return
 
     match(actionState)
+      .with('needs-wrap', () => {
+        const wethNeeded = amountWei > balance ? amountWei - balance : 0n
+        const ethToWrap = ethBalance > wethNeeded ? wethNeeded : ethBalance
+
+        wrapETH(
+          { amountWei: ethToWrap },
+          {
+            onSuccess: async () => {
+              await refetchBalances()
+              toast.positive(
+                'ETH wrapped successfully. You can now proceed with deposit.'
+              )
+            },
+            onError: () => {
+              toast.negative('Failed to wrap ETH. Please try again.')
+            },
+          }
+        )
+      })
       .with('approve', () => {
         approveToken(
           {
@@ -193,7 +216,7 @@ const PreDepositModal = ({
     form.setValue('amount', formatUnits(maxAmount, vault.token.decimals))
   }
 
-  const isPending = isApproving || isDepositing
+  const isPending = isApproving || isDepositing || isWrapping
 
   const isInputError = match(actionState)
     .with(
@@ -203,11 +226,13 @@ const PreDepositModal = ({
     .otherwise(() => false)
 
   const errorMessage = match(actionState)
-    .with(
-      'invalid-balance',
-      () =>
-        `Insufficient balance. Max: ${formatTokenAmount(balance, vault.token.symbol)}`
-    )
+    .with('invalid-balance', () => {
+      const totalBalance =
+        vault.id === 'WETH'
+          ? (balance ?? 0n) + (ethBalance ?? 0n)
+          : (balance ?? 0n)
+      return `Insufficient balance. Max: ${formatTokenAmount(totalBalance, vault.token.symbol)}`
+    })
     .with(
       'exceeds-max',
       () =>
@@ -314,19 +339,29 @@ const PreDepositModal = ({
                 })}
               />
 
-              <div className="flex items-center justify-between text-13 font-500 text-neutral-50">
-                <span>{amountInUSD ? formatCurrency(amountInUSD) : '—'}</span>
-                <button
-                  type="button"
-                  disabled={isPending}
-                  onClick={handleSetMax}
-                  className="uppercase text-neutral-100 hover:text-neutral-80"
-                >
-                  MAX{' '}
-                  {formatTokenAmount(balance, vault.token.symbol, {
-                    includeSymbol: true,
-                  })}
-                </button>
+              <div className="space-y-0.5 text-13 font-500 text-neutral-50">
+                <div className="flex items-center justify-between">
+                  <span>{amountInUSD ? formatCurrency(amountInUSD) : '—'}</span>
+                  <button
+                    type="button"
+                    disabled={isPending}
+                    onClick={handleSetMax}
+                    className="uppercase hover:text-neutral-80"
+                  >
+                    MAX{' '}
+                    {formatTokenAmount(balance, vault.token.symbol, {
+                      includeSymbol: true,
+                    })}
+                  </button>
+                </div>
+                {vault.id === 'WETH' && (
+                  <div className="text-right">
+                    <span>
+                      Available ETH to wrap:{' '}
+                      {formatTokenAmount(ethBalance, 'ETH')}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -388,9 +423,16 @@ const PreDepositModal = ({
                 className="w-full justify-center"
                 disabled={isPending || isInputError || actionState === 'idle'}
               >
-                {match({ action: actionState, isApproving, isDepositing })
+                {match({
+                  action: actionState,
+                  isApproving,
+                  isDepositing,
+                  isWrapping,
+                })
+                  .with({ isWrapping: true }, () => 'Wrapping ETH...')
                   .with({ isApproving: true }, () => 'Approving...')
                   .with({ isDepositing: true }, () => 'Depositing...')
+                  .with({ action: 'needs-wrap' }, () => 'Wrap ETH to WETH')
                   .with({ action: 'approve' }, () => 'Approve Deposit')
                   .with({ action: 'deposit' }, () => 'Deposit')
                   .otherwise(() => 'Enter amount')}

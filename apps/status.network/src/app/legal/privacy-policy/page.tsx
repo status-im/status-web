@@ -4,6 +4,10 @@ import { getLegalDocumentContent } from '../_utils/get-legal-document-content'
 
 export const metadata = Metadata({
   title: 'Privacy Policy',
+  description: 'Status Network Privacy Policy',
+  alternates: {
+    canonical: '/legal/privacy-policy',
+  },
 })
 
 export default async function PrivacyPolicyPage() {
@@ -19,7 +23,7 @@ export default async function PrivacyPolicyPage() {
           Last update: {formatDate(meta.lastEdited, 'long')}
         </p>
       </div>
-      <article className="font-300">{content}</article>
+      <article className="font-400">{content}</article>
     </>
   )
 }

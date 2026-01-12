@@ -30,6 +30,16 @@ const RewardsSection = () => {
         >
           audited
         </Link>
+        . By depositing assets into the vaults, you confirm that you have read
+        and accepted this{' '}
+        <Link
+          href="https://status.network/legal/status-network-pre-deposit-disclaimer"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-purple hover:text-purple-dark"
+        >
+          disclaimer
+        </Link>
         .
       </p>
     </div>

@@ -41,6 +41,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Initialize submodules
+        run: git submodule update --init
+
       - name: Build
         run: pnpm build
 

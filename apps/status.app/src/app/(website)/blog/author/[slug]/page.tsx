@@ -1,6 +1,7 @@
 import { Avatar } from '@status-im/components'
 import { notFound } from 'next/navigation'
 
+import { Metadata } from '~app/_metadata'
 import { Body } from '~components/body'
 import { Breadcrumbs } from '~components/breadcrumbs'
 import { getAuthorSlugs, getPostsByAuthorSlug } from '~website/_lib/ghost'
@@ -17,6 +18,31 @@ export async function generateStaticParams() {
 
 type Props = {
   params: Promise<{ slug: string }>
+}
+
+export async function generateMetadata({ params }: Props) {
+  const slug = (await params).slug
+  const response = await getPostsByAuthorSlug(slug)
+
+  if (!response) {
+    return Metadata({
+      title: 'Author not found',
+      alternates: {
+        canonical: `/blog/author/${slug}`,
+      },
+    })
+  }
+
+  const { author } = response
+  const authorName = author.name ?? author.slug ?? 'Unknown Author'
+
+  return Metadata({
+    title: authorName,
+    description: author.meta_description ?? `Blog posts by ${authorName}`,
+    alternates: {
+      canonical: `/blog/author/${slug}`,
+    },
+  })
 }
 
 export default async function BlogAuthorPage(props: Props) {

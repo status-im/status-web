@@ -10,7 +10,10 @@ export type ImageType =
   | { id: 'Wallet/Icons/Logos/moonpay-bigger:144:144'; alt: '' }
   | { id: 'Wallet/Icons/Logos/mercuryo:64:64'; alt: '' }
   | { id: 'Wallet/Icons/Logos/moonpay:64:64'; alt: '' }
-  | { id: 'Homepage/Screens/Extension Section/Extension_01:2127:2390'; alt: '' }
+  | {
+      id: 'Homepage/Screens/Extension Section/Extension_01:2127:2390'
+      alt: 'Status Portfolio Wallet browser extension interface showing portfolio tracking features'
+    }
   | {
       id: 'Help/Documentation Screens/Wallet/1532/1532_1_Screen_Light:1872:1208'
       alt: 'A diagram showing the relationship between wallet accounts, keys, and derivation paths'
@@ -356,7 +359,10 @@ export type ImageType =
       id: 'Platforms/Screens/Mobile Screens/Messenger/Messenger_02:750:1624'
       alt: 'Mobile app screenshot showing the messenger feature included in the Status app'
     }
-  | { id: 'Non Beta Release/Icons/Payment_Icons:648:96'; alt: '' }
+  | {
+      id: 'Non Beta Release/Icons/Payment_Icons:648:96'
+      alt: 'Payment method icons including credit card and Apple Pay'
+    }
   | {
       id: 'Non Beta Release/Illustrations/Hero_Non_Beta_Release_Mobile_Long:4662:2579'
       alt: ''
@@ -447,7 +453,10 @@ export type ImageType =
       id: 'Non Beta Release/Scribbles and Notes/Communities_05:440:111'
       alt: ''
     }
-  | { id: 'Non Beta Release/Stickers/01:455:455'; alt: '' }
+  | {
+      id: 'Non Beta Release/Stickers/01:455:455'
+      alt: 'A sticker showing the Status logo'
+    }
   | { id: 'Non Beta Release/Scribbles and Notes/01_Beta:154:41'; alt: '' }
   | { id: 'Non Beta Release/Icons/09:144:144'; alt: '' }
   | { id: 'Non Beta Release/Icons/08:144:144'; alt: '' }
@@ -714,12 +723,24 @@ export type ImageType =
     }
   | { id: 'Brand/Logo Section/Variants/Mark/Mark_02_SVG:240:240'; alt: '' }
   | { id: 'Brand/Logo Section/Variants/Mark/Mark_03_SVG:240:240'; alt: '' }
-  | { id: 'Brand/Logo Section/Variants/Mark/Mark_02:480:480'; alt: '' }
-  | { id: 'Brand/Logo Section/Variants/Mark/Mark_03:480:480'; alt: '' }
+  | {
+      id: 'Brand/Logo Section/Variants/Mark/Mark_02:480:480'
+      alt: 'Status logo mark variant 2'
+    }
+  | {
+      id: 'Brand/Logo Section/Variants/Mark/Mark_03:480:480'
+      alt: 'Status logo mark variant 3'
+    }
   | { id: 'Brand/Logo Section/Variants/Logo/Logo_03_SVG:820:240'; alt: '' }
-  | { id: 'Brand/Logo Section/Variants/Logo/Logo_03:1640:480'; alt: '' }
+  | {
+      id: 'Brand/Logo Section/Variants/Logo/Logo_03:1640:480'
+      alt: 'Status logo variant 3'
+    }
   | { id: 'Brand/Logo Section/Variants/Logo/Logo_02_SVG:820:240'; alt: '' }
-  | { id: 'Brand/Logo Section/Variants/Logo/Logo_02:1640:480'; alt: '' }
+  | {
+      id: 'Brand/Logo Section/Variants/Logo/Logo_02:1640:480'
+      alt: 'Status logo variant 2'
+    }
   | {
       id: 'Platforms/Screens/Desktop Screens/Browser/Browser:2880:1800'
       alt: 'Desktop screenshot showing the browser feature included in the Status app'
@@ -759,7 +780,10 @@ export type ImageType =
     }
   | { id: 'Jobs/Top Section/Jobs_01_Mobile:1745:1867'; alt: '' }
   | { id: 'Jobs/Top Section/Jobs_01:5113:2971'; alt: '' }
-  | { id: 'Team/Photos/Team_01:6400:2501'; alt: '' }
+  | {
+      id: 'Team/Photos/Team_01:6400:2501'
+      alt: 'Status team photo showing core contributors'
+    }
   | { id: 'Team/Scribbles and Notes/Scribble_02:772:196'; alt: '' }
   | {
       id: 'Help/Documentation Screens/Communities/108/108_2_Screen_Dark:1480:1280'
@@ -1132,15 +1156,24 @@ export type ImageType =
       id: 'Brand/Product Assets/Communities/Asset_Communities_01:750:1624'
       alt: 'Mobile app screenshot showing the community feature assets in the Status app'
     }
-  | { id: 'Brand/Logo Section/Variants/Mark/Mark_01:480:480'; alt: '' }
+  | {
+      id: 'Brand/Logo Section/Variants/Mark/Mark_01:480:480'
+      alt: 'Status logo mark variant 1'
+    }
   | { id: 'Brand/Logo Section/Variants/Mark/Mark_01_SVG:240:240'; alt: '' }
-  | { id: 'Brand/Logo Section/Variants/Logo/Logo_01:1640:480'; alt: '' }
+  | {
+      id: 'Brand/Logo Section/Variants/Logo/Logo_01:1640:480'
+      alt: 'Status logo variant 1'
+    }
   | { id: 'Brand/Logo Section/Variants/Logo/Logo_01_SVG:820:240'; alt: '' }
   | { id: 'Brand/Logo Section/Mark/Mark_04_SVG:240:240'; alt: '' }
   | { id: 'Brand/Logo Section/Mark/Mark_01_SVG:240:240'; alt: '' }
   | { id: 'Brand/Logo Section/Mark/Mark_03_SVG:240:240'; alt: '' }
   | { id: 'Brand/Logo Section/Mark/Mark_02_SVG:240:240'; alt: '' }
-  | { id: 'Brand/Logo Section/Mark/Mark_01:480:480'; alt: '' }
+  | {
+      id: 'Brand/Logo Section/Mark/Mark_01:480:480'
+      alt: 'Status logo mark'
+    }
   | { id: 'Brand/Logo Section/Mark/Mark_04:480:480'; alt: '' }
   | { id: 'Brand/Logo Section/Mark/Mark_03:480:480'; alt: '' }
   | { id: 'Brand/Logo Section/Mark/Mark_02:480:480'; alt: '' }

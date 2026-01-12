@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body {
+  font-family: theme(fontFamily.inter);
+}
+
 html {
   height: -webkit-fill-available;
   scroll-behavior: smooth;

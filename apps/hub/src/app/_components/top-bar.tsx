@@ -4,6 +4,7 @@ import { FeedbackPopover, Link } from '@status-im/status-network/components'
 import Image from 'next/image'
 
 import { ConnectButton } from './connect-button'
+import { KarmaButton } from './karma-button'
 
 interface TopBarProps {
   onMenuToggle: () => void
@@ -48,9 +49,6 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
                 height={32}
               />
             </Link>
-            <div className="h-5 rounded-full bg-white-10 px-[6px] py-px text-13 font-medium text-white-100">
-              Testnet
-            </div>
           </div>
 
           <div className="flex items-center gap-2 md:hidden">
@@ -61,7 +59,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
               height={41}
             />
 
-            <div className="flex flex-col items-start gap-[6px]">
+            <div className="hidden flex-col items-start gap-[6px] md:flex">
               <Image
                 src="/logo-text.svg"
                 alt="Status Network Logo"
@@ -69,9 +67,6 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
                 height={15}
                 className="min-w-[145px]"
               />
-              <div className="h-5 rounded-full bg-white-10 px-[6px] py-px text-13 text-white-100">
-                Testnet
-              </div>
             </div>
           </div>
         </div>
@@ -82,6 +77,10 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
           <div className="hidden md:block">
             <FeedbackPopover />
           </div>
+
+          {/* Karma Button */}
+          <KarmaButton size="24" className="md:hidden" />
+          <KarmaButton size="32" className="hidden md:flex" />
 
           {/* Connect Wallet Button */}
           <ConnectButton

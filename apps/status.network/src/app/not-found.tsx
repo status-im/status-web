@@ -1,4 +1,14 @@
 import { ButtonLink } from './_components/button-link'
+import { Metadata } from './_metadata'
+
+export const metadata = Metadata({
+  title: '404 — Page Not Found',
+  description:
+    'The page you were looking for could not be found. Return to the Status Network homepage.',
+  robots: {
+    index: false,
+  },
+})
 
 export default function NotFound() {
   return (

@@ -2,6 +2,7 @@ import { Tabs, Tag } from '@status-im/components'
 import { DesktopIcon, MobileIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
 
+import { jsonLD, JSONLDScript } from '~/utils/json-ld'
 import { Metadata } from '~app/_metadata'
 import { Image, ScreenImage } from '~components/assets'
 import { Body } from '~components/body'
@@ -22,187 +23,198 @@ export const metadata = Metadata({
   title: 'Apps',
   description:
     'Use Status on the go with our mobile app or enjoy the full suite of features in our desktop version.',
+  alternates: {
+    canonical: '/apps',
+  },
 })
 
 export default function AppsPage() {
+  const organizationSchema = jsonLD.organization({
+    description:
+      'Use Status on the go with our mobile app or enjoy the full suite of features in our desktop version.',
+  })
+
   return (
-    <Body>
-      <div className="relative">
-        <HeroSection
-          tag={
-            <>
-              <Tag
-                size="32"
-                icon={<MobileIcon className="text-neutral-100" />}
-              />
-              <Tag
-                size="32"
-                icon={<DesktopIcon className="text-neutral-100" />}
-              />
-            </>
-          }
-          title="Enjoy the Status apps"
-          description="Use Status on the go with our mobile app or enjoy the full suite of features in our desktop version."
-          action={
-            <>
-              <div
-                className={cx(
-                  'hidden w-full flex-col items-stretch gap-2 rounded-16 border border-dashed border-neutral-80/20 p-2',
-                  'md:w-fit md:flex-row md:items-center',
-                  'ios:flex android:flex unknown:flex xl:unknown:hidden'
-                )}
-              >
-                <DownloadMobileButton />
-                <DownloadDesktopButton variant="outline" />
+    <>
+      <JSONLDScript schema={organizationSchema} />
+      <Body>
+        <div className="relative">
+          <HeroSection
+            tag={
+              <>
+                <Tag
+                  size="32"
+                  icon={<MobileIcon className="text-neutral-100" />}
+                />
+                <Tag
+                  size="32"
+                  icon={<DesktopIcon className="text-neutral-100" />}
+                />
+              </>
+            }
+            title="Enjoy the Status apps"
+            description="Use Status on the go with our mobile app or enjoy the full suite of features in our desktop version."
+            action={
+              <>
+                <div
+                  className={cx(
+                    'hidden w-full flex-col items-stretch gap-2 rounded-16 border border-dashed border-neutral-80/20 p-2',
+                    'md:w-fit md:flex-row md:items-center',
+                    'ios:flex android:flex unknown:flex xl:unknown:hidden'
+                  )}
+                >
+                  <DownloadMobileButton />
+                  <DownloadDesktopButton variant="outline" />
+                </div>
+                <div
+                  className={cx(
+                    'hidden w-full flex-col items-stretch gap-2 rounded-16 border border-dashed border-neutral-80/20 p-2',
+                    'md:w-fit md:flex-row md:items-center',
+                    'macos:flex windows:flex linux:flex xl:unknown:flex'
+                  )}
+                >
+                  <DownloadDesktopButton />
+                  <DownloadMobileButton variant="outline" />
+                </div>
+              </>
+            }
+            video={{
+              id: 'Platforms/Animations/Platforms_Hero:717:572',
+              posterId:
+                'Platforms/Animations/Frames/Platforms_Hero_Frame:717:572',
+            }}
+            circle={
+              <div className="left-[-358px] top-[-274px] z-10 block xl:hidden">
+                <ParallaxCircle color="army" />
               </div>
-              <div
-                className={cx(
-                  'hidden w-full flex-col items-stretch gap-2 rounded-16 border border-dashed border-neutral-80/20 p-2',
-                  'md:w-fit md:flex-row md:items-center',
-                  'macos:flex windows:flex linux:flex xl:unknown:flex'
-                )}
-              >
-                <DownloadDesktopButton />
-                <DownloadMobileButton variant="outline" />
-              </div>
-            </>
-          }
-          video={{
-            id: 'Platforms/Animations/Platforms_Hero:717:572',
-            posterId:
-              'Platforms/Animations/Frames/Platforms_Hero_Frame:717:572',
-          }}
-          circle={
-            <div className="left-[-358px] top-[-274px] z-10 block xl:hidden">
-              <ParallaxCircle color="army" />
-            </div>
-          }
-          reverse
-          className="xl:pb-40"
-        />
-      </div>
+            }
+            reverse
+            className="xl:pb-40"
+          />
+        </div>
 
-      {/* MOBILE */}
-      <div className="relative z-20 mb-24 bg-white-100 2xl:mb-40">
-        <ParallaxCircle
-          color="turquoise"
-          className="top-[184px] hidden xl:left-[70px] xl:block"
-        />
-        <ParallaxCircle
-          color="camel"
-          className="bottom-[-40px] hidden xl:right-[-88px] xl:block"
-        />
-        <PlatformSection
-          platform="mobile"
-          title="Legacy Status mobile"
-          showScribble
-          screenshots={[
-            {
-              label: 'Wallet',
-              images: [
-                {
-                  id: 'Platforms/Screens/Mobile Screens/Wallet/Wallet_01:750:1624',
-                  alt: 'Mobile app screenshot showing the wallet feature included in the Status app',
-                },
-                {
-                  id: 'Platforms/Screens/Mobile Screens/Wallet/Wallet_02:750:1624',
-                  alt: 'Mobile app screenshot showing the wallet feature included in the Status app',
-                },
-                {
-                  id: 'Platforms/Screens/Mobile Screens/Wallet/Wallet_03:750:1624',
-                  alt: 'Mobile app screenshot showing the wallet feature included in the Status app',
-                },
-              ],
-            },
-            {
-              label: 'Messenger',
-              images: [
-                {
-                  id: 'Platforms/Screens/Mobile Screens/Messenger/Messenger_01:750:1624',
-                  alt: 'Mobile app screenshot showing the messenger feature included in the Status app',
-                },
-                {
-                  id: 'Platforms/Screens/Mobile Screens/Messenger/Messenger_02:750:1624',
-                  alt: 'Mobile app screenshot showing the messenger feature included in the Status app',
-                },
-                {
-                  id: 'Platforms/Screens/Mobile Screens/Messenger/Messenger_03:750:1624',
-                  alt: 'Mobile app screenshot showing the messenger feature included in the Status app',
-                },
-              ],
-            },
-            {
-              label: 'Communities',
-              images: [
-                {
-                  id: 'Platforms/Screens/Mobile Screens/Communities/Communities_01:750:1624',
-                  alt: 'Mobile app screenshot showing the community feature included in the Status app',
-                },
-                {
-                  id: 'Platforms/Screens/Mobile Screens/Communities/Communities_02:750:1624',
-                  alt: 'Mobile app screenshot showing the community feature included in the Status app',
-                },
-                {
-                  id: 'Platforms/Screens/Mobile Screens/Communities/Communities_03:750:1624',
-                  alt: 'Mobile app screenshot showing the community feature included in the Status app',
-                },
-              ],
-            },
-          ]}
-          wideScreenshots={false}
-        />
-      </div>
+        {/* MOBILE */}
+        <div className="relative z-20 mb-24 bg-white-100 2xl:mb-40">
+          <ParallaxCircle
+            color="turquoise"
+            className="top-[184px] hidden xl:left-[70px] xl:block"
+          />
+          <ParallaxCircle
+            color="camel"
+            className="bottom-[-40px] hidden xl:right-[-88px] xl:block"
+          />
+          <PlatformSection
+            platform="mobile"
+            title="Legacy Status mobile"
+            showScribble
+            screenshots={[
+              {
+                label: 'Wallet',
+                images: [
+                  {
+                    id: 'Platforms/Screens/Mobile Screens/Wallet/Wallet_01:750:1624',
+                    alt: 'Mobile app screenshot showing the wallet feature included in the Status app',
+                  },
+                  {
+                    id: 'Platforms/Screens/Mobile Screens/Wallet/Wallet_02:750:1624',
+                    alt: 'Mobile app screenshot showing the wallet feature included in the Status app',
+                  },
+                  {
+                    id: 'Platforms/Screens/Mobile Screens/Wallet/Wallet_03:750:1624',
+                    alt: 'Mobile app screenshot showing the wallet feature included in the Status app',
+                  },
+                ],
+              },
+              {
+                label: 'Messenger',
+                images: [
+                  {
+                    id: 'Platforms/Screens/Mobile Screens/Messenger/Messenger_01:750:1624',
+                    alt: 'Mobile app screenshot showing the messenger feature included in the Status app',
+                  },
+                  {
+                    id: 'Platforms/Screens/Mobile Screens/Messenger/Messenger_02:750:1624',
+                    alt: 'Mobile app screenshot showing the messenger feature included in the Status app',
+                  },
+                  {
+                    id: 'Platforms/Screens/Mobile Screens/Messenger/Messenger_03:750:1624',
+                    alt: 'Mobile app screenshot showing the messenger feature included in the Status app',
+                  },
+                ],
+              },
+              {
+                label: 'Communities',
+                images: [
+                  {
+                    id: 'Platforms/Screens/Mobile Screens/Communities/Communities_01:750:1624',
+                    alt: 'Mobile app screenshot showing the community feature included in the Status app',
+                  },
+                  {
+                    id: 'Platforms/Screens/Mobile Screens/Communities/Communities_02:750:1624',
+                    alt: 'Mobile app screenshot showing the community feature included in the Status app',
+                  },
+                  {
+                    id: 'Platforms/Screens/Mobile Screens/Communities/Communities_03:750:1624',
+                    alt: 'Mobile app screenshot showing the community feature included in the Status app',
+                  },
+                ],
+              },
+            ]}
+            wideScreenshots={false}
+          />
+        </div>
 
-      {/* DESKTOP */}
-      <div className="relative z-20 mb-24 bg-white-100 2xl:mb-30">
-        <ParallaxCircle
-          color="sky"
-          className="bottom-[-40px] hidden xl:right-[-88px] xl:block"
-        />
-        <ParallaxCircle
-          color="camel"
-          className="left-[-346px] top-[124px] block xl:hidden"
-        />
-        <PlatformSection
-          platform="desktop"
-          title="Status for desktop"
-          screenshots={[
-            {
-              label: 'Wallet',
-              images: [
-                {
-                  id: 'Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800',
-                  alt: 'Desktop screenshot showing the wallet feature included in the Status app',
-                },
-              ],
-            },
-            {
-              label: 'Messenger',
-              images: [
-                {
-                  id: 'Platforms/Screens/Desktop Screens/Messenger/Messenger:2880:1800',
-                  alt: 'Desktop screenshot showing the messenger feature included in the Status app',
-                },
-              ],
-            },
-            {
-              label: 'Communities',
-              images: [
-                {
-                  id: 'Platforms/Screens/Desktop Screens/Communities/Communities:2880:1800',
-                  alt: 'Desktop screenshot showing the community feature included in the Status app',
-                },
-              ],
-            },
-          ]}
-          featureList={DESKTOP_FEATURE_LIST}
-        />
-      </div>
+        {/* DESKTOP */}
+        <div className="relative z-20 mb-24 bg-white-100 2xl:mb-30">
+          <ParallaxCircle
+            color="sky"
+            className="bottom-[-40px] hidden xl:right-[-88px] xl:block"
+          />
+          <ParallaxCircle
+            color="camel"
+            className="left-[-346px] top-[124px] block xl:hidden"
+          />
+          <PlatformSection
+            platform="desktop"
+            title="Status for desktop"
+            screenshots={[
+              {
+                label: 'Wallet',
+                images: [
+                  {
+                    id: 'Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800',
+                    alt: 'Desktop screenshot showing the wallet feature included in the Status app',
+                  },
+                ],
+              },
+              {
+                label: 'Messenger',
+                images: [
+                  {
+                    id: 'Platforms/Screens/Desktop Screens/Messenger/Messenger:2880:1800',
+                    alt: 'Desktop screenshot showing the messenger feature included in the Status app',
+                  },
+                ],
+              },
+              {
+                label: 'Communities',
+                images: [
+                  {
+                    id: 'Platforms/Screens/Desktop Screens/Communities/Communities:2880:1800',
+                    alt: 'Desktop screenshot showing the community feature included in the Status app',
+                  },
+                ],
+              },
+            ]}
+            featureList={DESKTOP_FEATURE_LIST}
+          />
+        </div>
 
-      <div className="container mb-40">
-        <ConnectorSection />
-      </div>
-    </Body>
+        <div className="container mb-40">
+          <ConnectorSection />
+        </div>
+      </Body>
+    </>
   )
 }
 
