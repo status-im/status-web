@@ -31,7 +31,7 @@ const Sidebar = (props: Props) => {
       id: 'dashboard',
       label: t('navigation.home'),
       icon: HomeIcon,
-      href: '/dashboard',
+      href: '/',
     },
     {
       id: 'deposit',
