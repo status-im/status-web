@@ -44,7 +44,7 @@ const NavBar = () => {
           >
             {t('common.read_docs.translation')}
           </ButtonLink>
-          <ButtonLink href={localizedRoutes.Bridge} size="32">
+          <ButtonLink href={localizedRoutes.Hub} size="32">
             {t('common.get_started.translation')}
           </ButtonLink>
           <LanguageSelector />

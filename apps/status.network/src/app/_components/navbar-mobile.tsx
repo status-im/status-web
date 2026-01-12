@@ -146,7 +146,7 @@ const NavBarMobile = () => {
                   </ButtonLink>
                   <ButtonLink
                     className="w-full justify-center"
-                    href={localizedRoutes.Bridge}
+                    href={localizedRoutes.Hub}
                     onClick={() => setIsOpen(false)}
                   >
                     {t('common.get_started.translation')}

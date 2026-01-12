@@ -52,7 +52,7 @@ const Hero = async () => {
             </p>
 
             <div className="flex space-x-3">
-              <ButtonLink href={routes.Bridge} variant="primary">
+              <ButtonLink href={routes.Hub} variant="primary">
                 {t('common.get_started.translation')}
               </ButtonLink>
               <ButtonLink href={routes.Docs} variant="secondary">

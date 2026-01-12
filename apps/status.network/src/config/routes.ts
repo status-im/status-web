@@ -36,6 +36,7 @@ export function getLocalizedRoutes(
     Docs: `https://docs.status.network${localePrefix}/`,
     Bridge: 'https://bridge.status.network/ ',
     Partner: 'https://statusnetwork.typeform.com/partner',
+    Hub: 'https://hub.status.network/',
   } as const
 }
 
