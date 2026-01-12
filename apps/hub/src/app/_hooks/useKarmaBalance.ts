@@ -3,6 +3,7 @@ import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { type Address } from 'viem'
 import { useAccount, useChainId, useConfig } from 'wagmi'
 import { readContract } from 'wagmi/actions'
+import { statusSepolia } from 'wagmi/chains'
 
 import { CACHE_CONFIG, KARMA } from '~constants/index'
 
@@ -161,16 +162,21 @@ export function useKarmaBalance(
 
   // Use provided address or fall back to connected address
   const targetAddress = queryAddress ?? connectedAddress
+  const isStatusNetworkSepolia = chainId === statusSepolia.id
 
   return useQuery<KarmaBalanceData>({
-    queryKey: [QUERY_KEY_PREFIX, targetAddress, chainId] as const,
+    queryKey: [QUERY_KEY_PREFIX, targetAddress, statusSepolia.id] as const,
     queryFn: async (): Promise<KarmaBalanceData> => {
       if (!targetAddress) {
         throw new Error('No address provided')
       }
 
       try {
-        const balance = await fetchKarmaBalance(config, chainId, targetAddress)
+        const balance = await fetchKarmaBalance(
+          config,
+          statusSepolia.id,
+          targetAddress
+        )
 
         return {
           balance,
@@ -183,7 +189,7 @@ export function useKarmaBalance(
         throw error
       }
     },
-    enabled: enabled && !!targetAddress,
+    enabled: enabled && !!targetAddress && isStatusNetworkSepolia,
     staleTime,
     refetchInterval,
     retry: 3,
