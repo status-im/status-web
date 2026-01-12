@@ -166,36 +166,60 @@
       "notes": "apps::explore_all_apps"
     },
     "status_mines": {
+      "name": {
+        "translation": "Status Mines",
+        "notes": "apps::status_mines::name"
+      },
       "description": {
         "translation": "Provably Fair Mines Game on Status Network",
         "notes": "apps::status_mines::description"
       }
     },
     "karma_climber": {
+      "name": {
+        "translation": "Karma Climber",
+        "notes": "apps::karma_climber::name"
+      },
       "description": {
         "translation": "Endless arcade game featuring Pumpii!",
         "notes": "apps::karma_climber::description"
       }
     },
     "canary": {
+      "name": {
+        "translation": "Canary",
+        "notes": "apps::canary::name"
+      },
       "description": {
         "translation": "Secure unlock of messages when silence hits",
         "notes": "apps::canary::description"
       }
     },
     "ponzi_hero": {
+      "name": {
+        "translation": "Ponzi Hero",
+        "notes": "apps::ponzi_hero::name"
+      },
       "description": {
         "translation": "Earn NFTs, have some fun!",
         "notes": "apps::ponzi_hero::description"
       }
     },
     "cats_fishing": {
+      "name": {
+        "translation": "Cat Fishing",
+        "notes": "apps::cats_fishing::name"
+      },
       "description": {
         "translation": "You love cats, cats love fish.",
         "notes": "apps::cats_fishing::description"
       }
     },
     "status_network_bridge": {
+      "name": {
+        "translation": "Status Network Bridge",
+        "notes": "apps::status_network_bridge::name"
+      },
       "description": {
         "translation": "Saving for gas? We've got you covered!",
         "notes": "apps::status_network_bridge::description"

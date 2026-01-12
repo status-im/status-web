@@ -166,36 +166,60 @@
       "notes": "apps::explore_all_apps"
     },
     "status_mines": {
+      "name": {
+        "translation": "Status Mines",
+        "notes": "apps::status_mines::name"
+      },
       "description": {
         "translation": "스테이터스 네트워크의 검증 가능한 공정한 지뢰 찾기 게임",
         "notes": "apps::status_mines::description"
       }
     },
     "karma_climber": {
+      "name": {
+        "translation": "Karma Climber",
+        "notes": "apps::karma_climber::name"
+      },
       "description": {
         "translation": "Pumpii가 등장하는 무한 아케이드 게임!",
         "notes": "apps::karma_climber::description"
       }
     },
     "canary": {
+      "name": {
+        "translation": "Canary",
+        "notes": "apps::canary::name"
+      },
       "description": {
         "translation": "침묵이 닥쳤을 때 메시지를 안전하게 잠금 해제",
         "notes": "apps::canary::description"
       }
     },
     "ponzi_hero": {
+      "name": {
+        "translation": "Ponzi Hero",
+        "notes": "apps::ponzi_hero::name"
+      },
       "description": {
         "translation": "NFT를 획득하고 즐거운 시간을 보내세요!",
         "notes": "apps::ponzi_hero::description"
       }
     },
     "cats_fishing": {
+      "name": {
+        "translation": "고양이 낚시",
+        "notes": "apps::cats_fishing::name"
+      },
       "description": {
         "translation": "당신은 고양이를 사랑하고, 고양이는 물고기를 사랑합니다.",
         "notes": "apps::cats_fishing::description"
       }
     },
     "status_network_bridge": {
+      "name": {
+        "translation": "Status Network Bridge",
+        "notes": "apps::status_network_bridge::name"
+      },
       "description": {
         "translation": "가스비를 절약하고 싶으신가요? 저희가 도와드립니다!",
         "notes": "apps::status_network_bridge::description"

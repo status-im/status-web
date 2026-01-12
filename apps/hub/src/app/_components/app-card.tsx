@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl'
 
 type Props = {
   name: string
+  nameKey?: string
   description: string
   descriptionKey?: string
   website: string
@@ -17,9 +18,18 @@ type Props = {
 }
 
 function AppCard(props: Props) {
-  const { name, description, descriptionKey, website, twitter, cover, icon } =
-    props
+  const {
+    name,
+    nameKey,
+    description,
+    descriptionKey,
+    website,
+    twitter,
+    cover,
+    icon,
+  } = props
   const t = useTranslations()
+  const displayName = nameKey ? t(nameKey) : name
   const displayDescription = descriptionKey ? t(descriptionKey) : description
 
   return (
@@ -28,19 +38,19 @@ function AppCard(props: Props) {
         <div className="flex aspect-[2/1] w-full items-center justify-center overflow-hidden rounded-24 bg-neutral-20 md:aspect-[12/5]">
           <Image
             src={cover}
-            alt={name}
+            alt={displayName}
             fill
             className="overflow-hidden rounded-24 object-cover"
           />
         </div>
         <div className="absolute bottom-[-15px] left-2 hidden size-20 items-center justify-center overflow-hidden rounded-24 bg-neutral-40 text-11 text-neutral-60 lg:flex">
-          <Image src={icon} alt={name} fill className="object-cover" />
+          <Image src={icon} alt={displayName} fill className="object-cover" />
         </div>
       </div>
 
       <div className="flex flex-1 flex-col gap-0 px-2 pb-2 pt-0 md:gap-1 md:pt-[10px]">
         <h3 className="mb-1 text-19 font-semibold text-neutral-90 lg:text-27">
-          {name}
+          {displayName}
         </h3>
         <p className="mb-4 text-13 font-400 text-neutral-100 lg:mb-auto lg:text-15">
           {displayDescription}

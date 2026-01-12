@@ -4,6 +4,7 @@ export const apps: App[] = [
   {
     id: 1,
     name: 'Status Mines',
+    nameKey: 'apps.status_mines.name',
     category: 'Gaming',
     status: 'Live',
     description: 'Provably Fair Mines Game on Status Network',
@@ -18,6 +19,7 @@ export const apps: App[] = [
   {
     id: 2,
     name: 'Karma Climber',
+    nameKey: 'apps.karma_climber.name',
     category: 'Gaming',
     status: 'Live',
     description: 'Endless arcade game featuring Pumpii!',
@@ -32,6 +34,7 @@ export const apps: App[] = [
   {
     id: 3,
     name: 'Canary',
+    nameKey: 'apps.canary.name',
     category: 'Privacy',
     status: 'Live',
     description: 'Secure unlock of messages when silence hits',
@@ -46,6 +49,7 @@ export const apps: App[] = [
   {
     id: 4,
     name: 'Ponzi Hero',
+    nameKey: 'apps.ponzi_hero.name',
     category: 'Gaming',
     status: 'Live',
     description: 'Earn NFTs, have some fun!',
@@ -60,6 +64,7 @@ export const apps: App[] = [
   {
     id: 5,
     name: 'Cat Fishing',
+    nameKey: 'apps.cats_fishing.name',
     category: 'Community',
     status: 'Live',
     description: 'You love cats, cats love fish.',
@@ -74,6 +79,7 @@ export const apps: App[] = [
   {
     id: 6,
     name: 'Status Network Bridge',
+    nameKey: 'apps.status_network_bridge.name',
     category: 'Bridge',
     status: 'Live',
     description: "Saving for gas? We've got you covered!",

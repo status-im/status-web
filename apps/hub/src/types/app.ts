@@ -1,6 +1,7 @@
 export type App = {
   id: number
   name: string
+  nameKey?: string
   category: string
   status: string
   description: string
