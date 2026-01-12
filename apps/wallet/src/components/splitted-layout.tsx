@@ -1,5 +1,11 @@
+import { Suspense } from 'react'
+
 import { Avatar, Skeleton } from '@status-im/components'
-import { Balance, StickyHeaderContainer } from '@status-im/wallet/components'
+import {
+  Balance,
+  StickyHeaderContainer,
+  TokenSkeleton,
+} from '@status-im/wallet/components'
 
 import { usePortfolio } from '@/hooks/use-portfolio'
 import { useWallet } from '@/providers/wallet-context'
@@ -63,7 +69,9 @@ const SplittedLayout = (props: Props) => {
         </div>
 
         <div className="relative hidden basis-1/2 flex-col bg-white-100 2xl:flex">
-          <div className="relative z-20 size-full">{detail}</div>
+          <Suspense fallback={<TokenSkeleton />}>
+            <div className="relative z-20 size-full">{detail}</div>
+          </Suspense>
 
           <div
             className="absolute z-10 size-full"

@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl'
 import { Link } from '~/i18n/navigation'
 
 import { ConnectButton } from './connect-button'
+import { KarmaButton } from './karma-button'
 import { LanguageSelector } from './language-selector'
 
 interface TopBarProps {
@@ -54,9 +55,6 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
                 height={32}
               />
             </Link>
-            <div className="h-5 rounded-full bg-white-10 px-[6px] py-px text-13 font-medium text-white-100">
-              {t('common.testnet')}
-            </div>
           </div>
 
           <div className="flex items-center gap-2 md:hidden">
@@ -67,7 +65,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
               height={41}
             />
 
-            <div className="flex flex-col items-start gap-[6px]">
+            <div className="hidden flex-col items-start gap-[6px] md:flex">
               <Image
                 src="/logo-text.svg"
                 alt="Status Network Logo"
@@ -75,9 +73,6 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
                 height={15}
                 className="min-w-[145px]"
               />
-              <div className="h-5 rounded-full bg-white-10 px-[6px] py-px text-13 text-white-100">
-                {t('common.testnet')}
-              </div>
             </div>
           </div>
         </div>
@@ -94,6 +89,10 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
               }}
             />
           </div>
+
+          {/* Karma Button */}
+          <KarmaButton size="24" className="md:hidden" />
+          <KarmaButton size="32" className="hidden md:flex" />
 
           {/* Connect Wallet Button */}
           <ConnectButton

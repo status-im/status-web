@@ -4,6 +4,10 @@ import { getLegalDocumentContent } from '../_utils/get-legal-document-content'
 
 export const metadata = Metadata({
   title: 'Terms of Use',
+  description: 'Status Network Terms of Use',
+  alternates: {
+    canonical: '/legal/terms-of-use',
+  },
 })
 
 export default async function TermsOfUsePage() {
@@ -19,7 +23,7 @@ export default async function TermsOfUsePage() {
           Last update: {formatDate(meta.lastEdited, 'long')}
         </p>
       </div>
-      <article className="font-300">{content}</article>
+      <article className="font-400">{content}</article>
     </>
   )
 }

@@ -4,7 +4,7 @@ import { DropdownMenu } from '@status-im/components'
 
 import { DropdownIcon } from './dropdown-icon'
 
-type FeedbackPopoverProps = {
+export type FeedbackPopoverProps = {
   labels?: {
     shareFeedback?: string
     contactUs?: string
@@ -12,7 +12,7 @@ type FeedbackPopoverProps = {
   }
 }
 
-const FeedbackPopover = ({ labels }: FeedbackPopoverProps) => {
+function FeedbackPopover({ labels }: FeedbackPopoverProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   const feedbackLinks = [
@@ -62,4 +62,3 @@ const FeedbackPopover = ({ labels }: FeedbackPopoverProps) => {
 }
 
 export { FeedbackPopover }
-export type { FeedbackPopoverProps }

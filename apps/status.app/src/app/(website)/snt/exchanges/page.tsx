@@ -2,6 +2,7 @@ import Link from 'next/link'
 
 import { LEGAL } from '~/config/routes'
 import { getCoins, getMarket } from '~/server/services/coingecko'
+import { jsonLD, JSONLDScript } from '~/utils/json-ld'
 import { Metadata } from '~app/_metadata'
 import { Body } from '~components/body'
 
@@ -58,53 +59,66 @@ export const revalidate = 3600 // 1 hour
 export const metadata = Metadata({
   title: 'Exchanges',
   description: 'List of exchanges where you can find SNT',
+  alternates: {
+    canonical: '/snt/exchanges',
+  },
 })
 
 export default async function ExchangesPage() {
   const tickers = await getExchangeData()
 
-  return (
-    <Body>
-      <div className="relative">
-        <HeroSection
-          tag="Exchanges"
-          title="Where you can find SNT"
-          description={
-            <>
-              SNT is available on a number of exchanges. The list below is for
-              informational purposes only and should not be considered an
-              endorsement by Status, investment advice, or solicitation to buy
-              or sell SNT or any other token.
-              <span className="block pt-5 text-15 text-neutral-50">
-                For more details, please refer to disclaimers in our{' '}
-                <Link
-                  className="underline decoration-1 underline-offset-4"
-                  href={LEGAL.termsOfUse.href}
-                >
-                  {LEGAL.termsOfUse.name}
-                </Link>
-                .
-              </span>
-            </>
-          }
-          video={{
-            id: 'Exchanges/Animations/Exchanges_Hero:1133:904',
-            posterId: 'Exchanges/Frames/Exchanges_Hero_Frame:1133:904',
-          }}
-        />
-      </div>
+  const organizationSchema = jsonLD.organization({
+    description: 'List of exchanges where you can find SNT',
+  })
 
-      <div className="container px-5 pb-40 pt-10 xl:pt-0">
-        <ExchangesTable tickers={tickers} />
-        <p className="mt-6 flex flex-row items-center gap-[6px] text-13 font-medium text-neutral-50">
-          Powered by
-          <a href="https://www.coingecko.com/en/coins/status" rel="noreferrer">
-            <span className="sr-only">CoinGecko</span>
-            <CoinGeckoIcon aria-hidden />
-          </a>
-        </p>
-      </div>
-    </Body>
+  return (
+    <>
+      <JSONLDScript schema={organizationSchema} />
+      <Body>
+        <div className="relative">
+          <HeroSection
+            tag="Exchanges"
+            title="Where you can find SNT"
+            description={
+              <>
+                SNT is available on a number of exchanges. The list below is for
+                informational purposes only and should not be considered an
+                endorsement by Status, investment advice, or solicitation to buy
+                or sell SNT or any other token.
+                <span className="block pt-5 text-15 text-neutral-50">
+                  For more details, please refer to disclaimers in our{' '}
+                  <Link
+                    className="underline decoration-1 underline-offset-4"
+                    href={LEGAL.termsOfUse.href}
+                  >
+                    {LEGAL.termsOfUse.name}
+                  </Link>
+                  .
+                </span>
+              </>
+            }
+            video={{
+              id: 'Exchanges/Animations/Exchanges_Hero:1133:904',
+              posterId: 'Exchanges/Frames/Exchanges_Hero_Frame:1133:904',
+            }}
+          />
+        </div>
+
+        <div className="container px-5 pb-40 pt-10 xl:pt-0">
+          <ExchangesTable tickers={tickers} />
+          <p className="mt-6 flex flex-row items-center gap-[6px] text-13 font-medium text-neutral-50">
+            Powered by
+            <a
+              href="https://www.coingecko.com/en/coins/status"
+              rel="noreferrer"
+            >
+              <span className="sr-only">CoinGecko</span>
+              <CoinGeckoIcon aria-hidden />
+            </a>
+          </p>
+        </div>
+      </Body>
+    </>
   )
 }
 

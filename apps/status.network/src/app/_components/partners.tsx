@@ -6,8 +6,8 @@ import {
   CATS_FISHING_URL,
   DIN_URL,
   GATEWAY_URL,
-  HASHVEGAS_URL,
   LINEA_URL,
+  PONZI_HERO_URL,
   SPLA_LABS_URL,
 } from '~/config/routes'
 import { cx } from 'cva'
@@ -52,12 +52,12 @@ const Partners = () => {
               icon="/spla-labs-avatar.png"
             />
             <GameCard
-              title={t('partners.hash_vegas.title.translation')}
-              description={t('partners.hash_vegas.description.translation')}
-              image="/hashvegas-cover.png"
-              website={HASHVEGAS_URL}
-              twitter="Hashvegas_Offi"
-              icon="/hashvegas-avatar.png"
+              title={t('partners.ponzi_hero.title.translation')}
+              description={t('partners.ponzi_hero.description.translation')}
+              image="/ponzi-hero-cover.png"
+              website={PONZI_HERO_URL}
+              twitter="Splalabs"
+              icon="/ponzi-hero-avatar.png"
             />
           </div>
 

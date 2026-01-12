@@ -2,7 +2,7 @@
 
 import { getLocalizedRoutes } from '~/config/routes'
 import { Link } from '~/i18n/navigation'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { ButtonLink } from './button-link'
 import { Divider } from './divider'
@@ -10,10 +10,11 @@ import { LanguageSelector } from './language-selector'
 
 const NavBar = () => {
   const t = useTranslations()
-  const localizedRoutes = getLocalizedRoutes(t)
+  const locale = useLocale()
+  const localizedRoutes = getLocalizedRoutes(t, locale)
 
   return (
-    <header className="sticky left-0 top-0 z-40 hidden w-full bg-white-90 backdrop-blur supports-[backdrop-filter]:bg-white-80 lg:block">
+    <header className="sticky top-0 z-[60] hidden w-full bg-white-90 backdrop-blur supports-[backdrop-filter]:bg-white-80 lg:block">
       <nav className="mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center space-x-2">
           <Image
@@ -43,7 +44,7 @@ const NavBar = () => {
           >
             {t('common.read_docs.translation')}
           </ButtonLink>
-          <ButtonLink href={localizedRoutes.Bridge} size="32">
+          <ButtonLink href={localizedRoutes.Hub} size="32">
             {t('common.get_started.translation')}
           </ButtonLink>
           <LanguageSelector />

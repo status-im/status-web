@@ -53,12 +53,12 @@ export const FAUCET = {
   abi: faucetAbi as Abi,
 } as const
 
-export const wETH_TOKEN: Token = {
+export const WETH_TOKEN: Token = {
   address: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
   name: 'Wrapped Ether',
   symbol: 'WETH',
   decimals: 18,
-  priceKey: 'ETH',
+  // priceKey: 'ETH',
   abi: tokenAbi,
 } as const
 
@@ -125,18 +125,17 @@ export const LINEA_VAULT: Vault = {
   network: linea.name,
 } as const
 
-export const LIDO_VAULT: Vault = {
-  id: 'LIDO',
-  name: 'ETH Vault',
+export const WETH_VAULT: Vault = {
+  id: 'WETH',
+  name: 'WETH vault',
   apy: '',
   rewards: ['SNT, LINEA', 'vault.native_apps_points'],
-  icon: 'ETH',
+  icon: 'WETH',
   address: '0xc71Ec84Ee70a54000dB3370807bfAF4309a67a1f',
-  token: wETH_TOKEN,
+  token: WETH_TOKEN,
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
   network: mainnet.name,
-  soon: true,
 } as const
 
 export const GUSD_VAULT: Vault = {
@@ -146,14 +145,14 @@ export const GUSD_VAULT: Vault = {
   rewards: ['SNT, LINEA', 'vault.native_apps_points'],
   icon: 'GUSD',
   address: '0x0000000000000000000000000000000000000000',
-  token: wETH_TOKEN,
+  token: WETH_TOKEN,
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
   network: mainnet.name,
   soon: true,
 } as const
 
-export const VAULTS: Vault[] = [SNT_VAULT, LINEA_VAULT, LIDO_VAULT, GUSD_VAULT]
+export const VAULTS: Vault[] = [WETH_VAULT, SNT_VAULT, LINEA_VAULT, GUSD_VAULT]
 
 export const KARMA = {
   address: '0x7ec5Dc75D09fAbcD55e76077AFa5d4b77D112fde' as Address,

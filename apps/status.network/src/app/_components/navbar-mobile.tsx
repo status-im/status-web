@@ -6,7 +6,7 @@ import { Link } from '~/i18n/navigation'
 import { Button } from '~components/button'
 import { cx } from 'cva'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
@@ -19,7 +19,8 @@ const NavBarMobile = () => {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
   const t = useTranslations()
-  const localizedRoutes = getLocalizedRoutes(t)
+  const locale = useLocale()
+  const localizedRoutes = getLocalizedRoutes(t, locale)
 
   const scrollPositionRef = useRef(0)
 
@@ -53,11 +54,11 @@ const NavBarMobile = () => {
   }, [pathname])
 
   return (
-    <header>
+    <header className="sticky top-0 z-[100] block lg:hidden">
       <motion.nav
         key="nav-bar-mobile"
         className={cx([
-          'fixed left-0 top-0 z-[100] block w-screen border-x border-neutral-20 backdrop-blur transition-all supports-[backdrop-filter]:bg-white-80 lg:hidden',
+          'relative w-full border-x border-neutral-20 backdrop-blur transition-all supports-[backdrop-filter]:bg-white-80',
         ])}
         animate={{
           height: isOpen ? '100dvh' : '56px',
@@ -71,25 +72,6 @@ const NavBarMobile = () => {
         }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
       >
-        <motion.div
-          className="fixed left-[7px] h-dvh w-px bg-neutral-20"
-          animate={{
-            height: isOpen ? '100dvh' : '56px',
-          }}
-          initial={{
-            height: '56px',
-          }}
-        />
-        <motion.div
-          className="fixed right-[7px] h-dvh w-px bg-neutral-20"
-          animate={{
-            height: isOpen ? '100dvh' : '56px',
-          }}
-          initial={{
-            height: '56px',
-          }}
-        />
-
         <div className="flex items-center justify-between px-5 py-3">
           <Link href="/" className="flex items-center space-x-2">
             <Image
@@ -113,10 +95,10 @@ const NavBarMobile = () => {
             <motion.div
               key="menu"
               initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'calc(100% - 80px)' }}
+              animate={{ opacity: 1, height: 'calc(100% - 56px)' }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2, ease: 'easeInOut' }}
-              className="fixed inset-x-0 top-20 z-30 overflow-hidden"
+              className="overflow-hidden"
             >
               <motion.div
                 key="menu-content"
@@ -130,7 +112,7 @@ const NavBarMobile = () => {
                     delay: 0,
                   },
                 }}
-                className="flex h-[calc(100dvh-81px)] flex-col items-center"
+                className="flex h-full flex-col items-center"
               >
                 <ul className="flex h-[calc(100dvh-204px)] flex-col justify-center gap-6">
                   {localizedRoutes.Navigation.map((item, index) => (
@@ -164,7 +146,7 @@ const NavBarMobile = () => {
                   </ButtonLink>
                   <ButtonLink
                     className="w-full justify-center"
-                    href={localizedRoutes.Bridge}
+                    href={localizedRoutes.Hub}
                     onClick={() => setIsOpen(false)}
                   >
                     {t('common.get_started.translation')}

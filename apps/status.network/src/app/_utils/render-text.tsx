@@ -11,7 +11,7 @@ export function renderText(params: {
   const {
     children,
     size = 'text-19',
-    weight = 'font-300',
+    weight = 'font-400',
     color = 'text-white-400',
     parent,
   } = params

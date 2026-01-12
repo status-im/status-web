@@ -30,7 +30,6 @@ const Footer = ({ labels }: FooterProps) => {
             >
               {labels?.termsOfUse ?? LEGAL.termsOfUse.name}
             </Link>
-
             <Link
               href={LEGAL.privacyPolicy.href}
               className="text-13 text-neutral-50 transition-colors hover:text-neutral-100"
@@ -42,6 +41,12 @@ const Footer = ({ labels }: FooterProps) => {
               className="text-13 text-neutral-50 transition-colors hover:text-neutral-100"
             >
               {labels?.brandAssets ?? BRAND.name}
+            </Link>
+            <Link
+              href={LEGAL.preDepositDisclaimer.href}
+              className="text-13 text-neutral-50 transition-colors hover:text-neutral-100"
+            >
+              Pre-deposits disclaimer
             </Link>
           </div>
           <Dot className="2md:hidden text-neutral-50" />

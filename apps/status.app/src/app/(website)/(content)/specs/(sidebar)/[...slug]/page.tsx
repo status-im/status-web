@@ -30,6 +30,9 @@ export async function generateMetadata({ params }: Props) {
     title: doc.title,
     description:
       'Technical deep dives into the inner workings of the Status apps.',
+    alternates: {
+      canonical: `/specs/${slug.join('/')}`,
+    },
   })
 }
 

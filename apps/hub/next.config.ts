@@ -12,6 +12,15 @@ const nextConfig: NextConfig = {
     '@status-im/components',
     '@status-im/icons',
   ],
+  async redirects() {
+    return [
+      {
+        source: '/dashboard',
+        destination: '/',
+        permanent: true,
+      },
+    ]
+  },
 }
 
 export default withNextIntl(nextConfig)

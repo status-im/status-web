@@ -1,14 +1,16 @@
 'use client'
 
 import { BulletIcon, ExternalIcon } from '@status-im/icons/20'
-import { FEATURES } from '~/config/routes'
-import { useTranslations } from 'next-intl'
+import { getLocalizedFeatures } from '~/config/routes'
+import { useLocale, useTranslations } from 'next-intl'
 import { AnimatedFrames } from './animated-frames'
 import { ButtonLink } from './button-link'
 import { Divider } from './divider'
 
 const Features = () => {
   const t = useTranslations()
+  const locale = useLocale()
+  const localizedFeatures = getLocalizedFeatures(locale)
 
   return (
     <section className="relative w-full scroll-mt-16" id="features">
@@ -93,7 +95,7 @@ const Features = () => {
                 </li>
               </ol>
               <ButtonLink
-                href={FEATURES.sustainablePublicFunding.href}
+                href={localizedFeatures.sustainablePublicFunding.href}
                 variant="white"
               >
                 {t('features.sustainable_funding.button.translation')}
@@ -124,7 +126,7 @@ const Features = () => {
                 {t('features.gasless_transactions.description_2.translation')}
               </p>
               <ButtonLink
-                href={FEATURES.gaslessTransactions.href}
+                href={localizedFeatures.gaslessTransactions.href}
                 variant="white"
               >
                 {t('features.gasless_transactions.button.translation')}
@@ -154,7 +156,7 @@ const Features = () => {
               </p>
               <ButtonLink
                 variant="white"
-                href={FEATURES.performance.href}
+                href={localizedFeatures.performance.href}
                 icon={<ExternalIcon className="text-neutral-50" />}
               >
                 {t('features.performance.button.translation')}

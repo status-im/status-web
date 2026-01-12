@@ -50,6 +50,18 @@
     "testnet_live": {
       "translation": "Testnet is live!",
       "notes": "common::testnet_live"
+    },
+    "promo_message": {
+      "translation": "Pre-deposit ETH and SNT ahead of Status Network mainnet launch!",
+      "notes": "common::promo_message"
+    },
+    "visit_hub": {
+      "translation": "Visit hub",
+      "notes": "common::visit_hub"
+    },
+    "visit_hub_aria": {
+      "translation": "Visit hub (opens in new tab)",
+      "notes": "common::visit_hub_aria"
     }
   },
   "navigation": {
@@ -279,6 +291,16 @@
         "notes": "partners::hash_vegas::description"
       }
     },
+    "ponzi_hero": {
+      "title": {
+        "translation": "Ponzi Hero",
+        "notes": "partners::ponzi_hero::title"
+      },
+      "description": {
+        "translation": "Earn NFTs, have some fun!",
+        "notes": "partners::ponzi_hero::description"
+      }
+    },
     "linea": {
       "title": {
         "translation": "Linea",
@@ -335,6 +357,16 @@
       "description": {
         "translation": "Ethereum super-app with 4M+ downloads",
         "notes": "network::status::description"
+      }
+    },
+    "logos": {
+      "title": {
+        "translation": "Logos",
+        "notes": "network::logos::title"
+      },
+      "description": {
+        "translation": "Open tech to restore civil society",
+        "notes": "network::logos::description"
       }
     },
     "waku": {
@@ -524,7 +556,7 @@
       "notes": "brand::main_title"
     },
     "last_updated": {
-      "translation": "Last updated: 10 February 2025",
+      "translation": "Last updated: 12 November 2025",
       "notes": "brand::last_updated"
     },
     "download_all": {
@@ -552,7 +584,7 @@
       "notes": "brand::mark_only_title"
     },
     "mark_only_description": {
-      "translation": "With wordmark",
+      "translation": "Without wordmark",
       "notes": "brand::mark_only_description"
     },
     "main_colors_title": {

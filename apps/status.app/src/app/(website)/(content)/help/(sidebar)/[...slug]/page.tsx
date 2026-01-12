@@ -50,6 +50,9 @@ export async function generateMetadata({ params }: Props) {
   return Metadata({
     title: doc.title,
     description: 'Short-form guides on how to set up and use the app.',
+    alternates: {
+      canonical: `/help/${slug.join('/')}`,
+    },
   })
 }
 

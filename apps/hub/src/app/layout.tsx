@@ -2,34 +2,47 @@ import './globals.css'
 
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
+import { getLocale } from 'next-intl/server'
 
-import type { Metadata } from 'next'
+import { Metadata as MetadataFn } from './_metadata'
+import { jsonLD, JSONLDScript } from './_utils/json-ld'
 
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
 })
 
-export const metadata: Metadata = {
-  title: 'Status Hub',
+const organizationSchema = jsonLD.organization({
   description:
     'Manage your Status Network assets, discover applications, and navigate to various services.',
+  logo: 'https://hub.status.network/logo.svg',
+})
+
+const websiteSchema = jsonLD.website({
+  description:
+    'Manage your Status Network assets, discover applications, and navigate to various services.',
+})
+
+export const metadata = MetadataFn({
+  // title: 'Status Hub',
+  // description:
+  // 'Manage your Status Network assets, discover applications, and navigate to various services.',
   alternates: {
-    languages: {
-      'en-GB': '/',
-      'ko-KR': '/ko',
-    },
+    canonical: '/',
   },
-}
+})
 
 type Props = {
   children: React.ReactNode
 }
 
-export default function RootLayout({ children }: Props) {
+export default async function RootLayout({ children }: Props) {
+  const locale = await getLocale()
+
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang={locale} className={inter.variable}>
       <body className="font-inter antialiased">
+        <JSONLDScript schema={[organizationSchema, websiteSchema]} />
         {children}
         <Script
           strategy="afterInteractive"

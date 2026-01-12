@@ -14,7 +14,7 @@
     },
     "completion": 50,
     "description": {
-      "translation": "Status Network 웹사이트 번역",
+      "translation": "스테이터스 네트워크 웹사이트 번역",
       "notes": "meta::description"
     }
   },
@@ -50,6 +50,18 @@
     "testnet_live": {
       "translation": "테스트넷이 활성화되었습니다!",
       "notes": "common::testnet_live"
+    },
+    "promo_message": {
+      "translation": "Status Network 메인넷 출시 전에 ETH와 SNT를 사전 예치하세요!",
+      "notes": "common::promo_message"
+    },
+    "visit_hub": {
+      "translation": "허브 방문",
+      "notes": "common::visit_hub"
+    },
+    "visit_hub_aria": {
+      "translation": "허브 방문 (새 탭에서 열림)",
+      "notes": "common::visit_hub_aria"
     }
   },
   "navigation": {
@@ -62,7 +74,7 @@
       "notes": "navigation::about"
     },
     "features": {
-      "translation": "기능",
+      "translation": "주요 기능",
       "notes": "navigation::features"
     },
     "network": {
@@ -88,7 +100,7 @@
   },
   "hero": {
     "title": {
-      "translation": "가스 없는 네트워크",
+      "translation": "가스리스 네트워크",
       "notes": "hero::title"
     },
     "subtitle": {
@@ -96,7 +108,7 @@
       "notes": "hero::subtitle"
     },
     "description": {
-      "translation": "진정으로 무료한 거래로 소셜 앱과 게임을 출시하고 확장하세요.",
+      "translation": "진정한 무료 트랜잭션으로 소셜 앱과 게임을 출시하고 확장하세요.",
       "notes": "hero::description"
     }
   },
@@ -106,19 +118,19 @@
       "notes": "about::section_number"
     },
     "section_title": {
-      "translation": "STATUS NETWORK이란 무엇인가요?",
+      "translation": "STATUS NETWORK란 무엇인가요?",
       "notes": "about::section_title"
     },
     "title": {
-      "translation": "네이티브 수익률과 수수료로 자금을 조달받는 대규모 가스 없는 거래가 가능한 최초의 이더리움 L2입니다.",
+      "translation": "네이티브 수익과 수수료로 자금을 조달하며 대규모 가스리스 트랜잭션을 지원하는 최초의 이더리움 L2입니다.",
       "notes": "about::title"
     },
     "description": {
-      "translation": "공개 앱, 게임 및 프로토콜을 위한 지속 가능한 자금 조달이 있는 무료 네트워크입니다.",
+      "translation": "공공 앱, 게임 및 프로토콜을 위한 지속 가능한 자금을 조달하는 무료 네트워크입니다.",
       "notes": "about::description"
     },
     "build_button": {
-      "translation": "Status Network에서 구축하기",
+      "translation": "스테이터스 네트워크에서 개발하기",
       "notes": "about::build_button"
     },
     "learn_more_button": {
@@ -136,7 +148,7 @@
       "notes": "features::section_title"
     },
     "title": {
-      "translation": "커뮤니티에 힘을",
+      "translation": "커뮤니티에 의한, 커뮤니티를 위한",
       "notes": "features::title"
     },
     "sustainable_funding": {
@@ -145,15 +157,15 @@
         "notes": "features::sustainable_funding::title"
       },
       "description": {
-        "translation": "Status Network는 단기적 인센티브를 넘어서는 급진적인 한 걸음을 내딛습니다. 네이티브 수익률과 수수료로 구동되며, 공개 앱 자금 풀은 커뮤니티가 관리하여 온체인 개발자들을 위한 자본의 지속적인 할당을 보장합니다.",
+        "translation": "스테이터스 네트워크는 단기 인센티브를 넘어 근본적인 도약을 이룹니다. 네이티브 수익과 수수료로 운영되는 공공 앱 펀딩 풀은 커뮤니티가 관리하며, 온체인 빌더들을 위한 지속적인 자본 배분을 보장합니다.",
         "notes": "features::sustainable_funding::description"
       },
       "step_1": {
-        "translation": "사용자들이 수익률 자산을 Status Network에 브리지하여 자금 풀로 리디렉션되는 수익률을 증가시킵니다.",
+        "translation": "사용자들이 수익 창출 자산을 스테이터스 네트워크에 브릿지함으로써, 펀딩 풀에 할당되는 수익을 증가시킵니다.",
         "notes": "features::sustainable_funding::step_1"
       },
       "step_2": {
-        "translation": "앱과 게임이 풀에서 할당을 신청합니다. 커뮤니티는 네트워크에 긍정적으로 기여함으로써 획득한 비전송 가능한 거버넌스 토큰인 Karma를 사용하여 할당에 투표합니다:",
+        "translation": "앱과 게임 개발자들은 풀에서 자금 배분을 신청합니다. 커뮤니티는 다음과 같은 네트워크 기여를 통해 얻을 수 있는 양도 불가능한 거버넌스 토큰인 카르마(Karma)를 통해 배분 안건에 투표합니다.",
         "notes": "features::sustainable_funding::step_2"
       },
       "step_2_staking": {
@@ -161,7 +173,7 @@
         "notes": "features::sustainable_funding::step_2_staking"
       },
       "step_2_bridging": {
-        "translation": "수익률 자산 브리징",
+        "translation": "수익 창출 자산 브릿지",
         "notes": "features::sustainable_funding::step_2_bridging"
       },
       "step_2_using": {
@@ -169,15 +181,15 @@
         "notes": "features::sustainable_funding::step_2_using"
       },
       "step_2_premium": {
-        "translation": "프리미엄 가스 지불",
+        "translation": "프리미엄 가스비 지불",
         "notes": "features::sustainable_funding::step_2_premium"
       },
       "step_2_donations": {
-        "translation": "자금 풀에 직접 기부",
+        "translation": "펀딩 풀에 직접 기부",
         "notes": "features::sustainable_funding::step_2_donations"
       },
       "step_3": {
-        "translation": "모든 자금 지원 프로젝트는 새로운 사용자를 유입시켜 추가 자산 예치와 토큰 스왑을 촉진하여 자금 풀에 할당될 더 많은 수익률과 수수료를 생성합니다.",
+        "translation": "펀딩 지원을 받은 프로젝트들이 신규 유저를 끌어들이면, 더 많은 자산 예치와 토큰 교환이 발생하고, 그 결과 펀딩 풀로 돌아갈 수익과 수수료가 늘어납니다.",
         "notes": "features::sustainable_funding::step_3"
       },
       "button": {
@@ -187,15 +199,15 @@
     },
     "gasless_transactions": {
       "title": {
-        "translation": "가스 없는 거래",
+        "translation": "가스리스 트랜잭션",
         "notes": "features::gasless_transactions::title"
       },
       "description_1": {
-        "translation": "Status Network에서는 누구나 무료 거래를 경험할 수 있습니다! L2 운영 비용이 네이티브 수익률과 수수료로 충당되므로 앱을 사용하기 위해 가스를 브리지할 필요가 없습니다.",
+        "translation": "스테이터스 네트워크에서는 누구나 무료 트랜잭션을 경험할 수 있습니다! L2 운영 비용은 네이티브 수익과 수수료로 해결하므로, 여러분이 앱을 사용하기 위해 가스비를 브릿지할 필요가 없습니다.",
         "notes": "features::gasless_transactions::description_1"
       },
       "description_2": {
-        "translation": "앱과 게임 개발자들은 대규모로 사용자들에게 마찰 없는 온보딩을 제공할 수 있습니다.",
+        "translation": "앱과 게임 개발자들은 수많은 사용자에게 매끄러운 온보딩 경험을 제공할 수 있습니다.",
         "notes": "features::gasless_transactions::description_2"
       },
       "button": {
@@ -205,11 +217,11 @@
     },
     "performance": {
       "title": {
-        "translation": "성능을 위해 구축되고 이더리움으로 보안됨",
+        "translation": "성능을 위한 구현, 이더리움 기반 보안",
         "notes": "features::performance::title"
       },
       "description": {
-        "translation": "고속 거래를 위해 Linea의 최첨단 zkEVM 롤업 기술과 함께 이더리움의 보안을 활용하세요. 게임, 소셜, iGaming 및 고처리량 애플리케이션에 완벽합니다.",
+        "translation": "이더리움의 강력한 보안과 Linea의 혁신적인 zkEVM 롤업 기술이 만나 초고속 트랜잭션을 제공합니다. 게임, 소셜 미디어, iGaming, 대용량 애플리케이션을 위한 최고의 선택입니다.",
         "notes": "features::performance::description"
       },
       "button": {
@@ -219,11 +231,11 @@
     },
     "decentralization": {
       "title": {
-        "translation": "탈중앙화를 위해 설계됨",
+        "translation": "탈중앙화를 위한 설계",
         "notes": "features::decentralization::title"
       },
       "description": {
-        "translation": "Status와 IFT 생태계의 핵심 가치를 바탕으로 구축된 Status Network는 진정한 탈중앙화 L2가 되도록 설계되었습니다. 궁극적인 목표는 중앙 집중식 통제 지점 없이 커뮤니티가 번영할 수 있는 검열 저항 환경을 제공하는 것입니다.",
+        "translation": "스테이터스와 IFT 생태계의 핵심 가치 위에 세워진 스테이터스 네트워크는 완전한 탈중앙화 L2를 지향합니다. 최종 목표는 중앙화된 통제 없이 커뮤니티가 자유롭게 성장할 수 있는 검열 저항 환경을 만드는 것입니다.",
         "notes": "features::decentralization::description"
       },
       "button": {
@@ -242,11 +254,11 @@
       "notes": "partners::section_title"
     },
     "title": {
-      "translation": "대담한 크리에이터와 개발자들에게 힘을",
+      "translation": "도전하는 크리에이터와 개발자의 성장을 지원합니다",
       "notes": "partners::title"
     },
     "subtitle": {
-      "translation": "최고의 파트너들과 함께 구축",
+      "translation": "최고의 파트너들과 함께 구축합니다",
       "notes": "partners::subtitle"
     },
     "cats_fishing": {
@@ -255,7 +267,7 @@
         "notes": "partners::cats_fishing::title"
       },
       "description": {
-        "translation": "최초의 오픈소스, 플레이 증명 모바일 낚시 게임",
+        "translation": "최초의 오픈소스, proof of play 모바일 낚시 게임",
         "notes": "partners::cats_fishing::description"
       }
     },
@@ -265,7 +277,7 @@
         "notes": "partners::spla_labs::title"
       },
       "description": {
-        "translation": "TODL & Ponzi Hero 게임의 개발자",
+        "translation": "TODL & Ponzi Hero 게임의 개발사",
         "notes": "partners::spla_labs::description"
       }
     },
@@ -277,6 +289,16 @@
       "description": {
         "translation": "공정하고 투명한 온체인 게임",
         "notes": "partners::hash_vegas::description"
+      }
+    },
+    "ponzi_hero": {
+      "title": {
+        "translation": "Ponzi Hero",
+        "notes": "partners::ponzi_hero::title"
+      },
+      "description": {
+        "translation": "탭하고 NFT 받기, 함께 즐겨요!",
+        "notes": "partners::ponzi_hero::description"
       }
     },
     "linea": {
@@ -295,7 +317,7 @@
         "notes": "partners::gateway::title"
       },
       "description": {
-        "translation": "롤업 인프라 및 운영",
+        "translation": "롤업 인프라 제공 및 운영",
         "notes": "partners::gateway::description"
       }
     },
@@ -320,11 +342,11 @@
       "notes": "network::section_title"
     },
     "title": {
-      "translation": "가장 고급 탈중앙화 스택 활용",
+      "translation": "최첨단 탈중앙화 스택을 활용하세요",
       "notes": "network::title"
     },
     "description": {
-      "translation": "개발자들은 자유 기술 연구소 솔루션으로부터 우선 지원을 받습니다:",
+      "translation": "빌더들은 Institute of Free Technology의 솔루션을 우선적으로 지원받을 수 있습니다:",
       "notes": "network::description"
     },
     "status": {
@@ -335,6 +357,16 @@
       "description": {
         "translation": "400만+ 다운로드를 기록한 이더리움 슈퍼 앱",
         "notes": "network::status::description"
+      }
+    },
+    "logos": {
+      "title": {
+        "translation": "Logos",
+        "notes": "network::logos::title"
+      },
+      "description": {
+        "translation": "시민 사회를 재건하는 열려있는 기술",
+        "notes": "network::logos::description"
       }
     },
     "waku": {
@@ -363,7 +395,7 @@
         "notes": "network::nimbus::title"
       },
       "description": {
-        "translation": "이더리움 코어 개발자. 이더리움 합의를 구동",
+        "translation": "이더리움 코어 개발. 이더리움 합의를 구동",
         "notes": "network::nimbus::description"
       }
     },
@@ -373,7 +405,7 @@
         "notes": "network::keycard::title"
       },
       "description": {
-        "translation": "보안 오픈소스 하드웨어 지갑",
+        "translation": "안전한 오픈소스 하드웨어 지갑",
         "notes": "network::keycard::description"
       }
     }
@@ -388,15 +420,15 @@
       "notes": "tokenomics::section_title"
     },
     "title": {
-      "translation": "긍정적인 네트워크 참여를 통한 투표권 획득",
+      "translation": "긍정적인 네트워크 기여를 통해 투표권을 받으세요",
       "notes": "tokenomics::title"
     },
     "description": {
-      "translation": "네트워크에 더 많이 기여할수록 자금 할당과 네트워크 로드맵 우선순위에 대한 영향력을 더 많이 얻습니다.",
+      "translation": "네트워크에 더 많이 기여할수록 자금 할당과 네트워크 로드맵 우선순위에 대한 영향력을 더 많이 받아갑니다.",
       "notes": "tokenomics::description"
     },
     "karma_note": {
-      "translation": "이는 비전송 가능한 거버넌스 토큰인 Karma에 의해 조정됩니다.",
+      "translation": "이는 양도 불가능한 거버넌스 토큰인 Karma에 의해 조정됩니다.",
       "notes": "tokenomics::karma_note"
     },
     "app_developer": {
@@ -437,7 +469,7 @@
         "notes": "tokenomics::onchain_user::title"
       },
       "description": {
-        "translation": "네트워크에 브리지하고 앱을 사용하여 Karma로 보상을 받으세요. 더 높은 Karma는 더 많은 가스 없는 거래를 의미합니다.",
+        "translation": "네트워크에 브릿지하고 앱을 사용하며 Karma 보상을 받으세요. 더 높은 Karma는 더 많은 가스리스 트랜잭션을 의미합니다.",
         "notes": "tokenomics::onchain_user::description"
       }
     }
@@ -467,7 +499,7 @@
     },
     "post_2": {
       "title": {
-        "translation": "Status, Linea에서 최초의 가스 없는 Layer 2 출시",
+        "translation": "Status, Linea에서 최초의 가스리스 Layer 2 출시",
         "notes": "blog::post_2::title"
       }
     },
@@ -516,7 +548,7 @@
       "notes": "brand::page_title"
     },
     "page_description": {
-      "translation": "Status Network 브랜드 자산을 받아보세요.",
+      "translation": "스테이터스 네트워크 브랜드 자산을 받아보세요.",
       "notes": "brand::page_description"
     },
     "main_title": {
@@ -524,11 +556,11 @@
       "notes": "brand::main_title"
     },
     "last_updated": {
-      "translation": "마지막 업데이트: 2025년 2월 10일",
+      "translation": "마지막 업데이트: 2025년 11월 12일",
       "notes": "brand::last_updated"
     },
     "download_all": {
-      "translation": "모든 자산 다운로드",
+      "translation": "모든 자산 다운받기",
       "notes": "brand::download_all"
     },
     "logo_title": {
@@ -544,7 +576,7 @@
       "notes": "brand::logo_variation_title"
     },
     "logo_variation_description": {
-      "translation": "창의적인 인쇄 레이아웃용",
+      "translation": "다양한 인쇄 레이아웃을 위한 버전",
       "notes": "brand::logo_variation_description"
     },
     "mark_only_title": {
@@ -552,7 +584,7 @@
       "notes": "brand::mark_only_title"
     },
     "mark_only_description": {
-      "translation": "워드마크 포함",
+      "translation": "워드마크 없음",
       "notes": "brand::mark_only_description"
     },
     "main_colors_title": {
@@ -596,7 +628,7 @@
       "notes": "not_found::title"
     },
     "take_me_home": {
-      "translation": "홈으로 가기",
+      "translation": "홈으로 돌아가기",
       "notes": "not_found::take_me_home"
     }
   }

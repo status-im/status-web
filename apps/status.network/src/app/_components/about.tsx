@@ -1,11 +1,13 @@
-import { ROUTES } from '~/config/routes'
-import { getTranslations } from 'next-intl/server'
+import { getLocalizedRoutes } from '~/config/routes'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { AnimatedFrames } from './animated-frames'
 import { ButtonLink } from './button-link'
 import { Divider } from './divider'
 
 const About = async () => {
   const t = await getTranslations()
+  const locale = await getLocale()
+  const routes = getLocalizedRoutes(t, locale)
 
   return (
     <section className="relative w-full" id="about">
@@ -36,10 +38,10 @@ const About = async () => {
             </p>
 
             <div className="flex gap-3">
-              <ButtonLink href={ROUTES.Partner}>
+              <ButtonLink href={routes.Partner}>
                 {t('about.build_button.translation')}
               </ButtonLink>
-              <ButtonLink variant="white" href={ROUTES.Docs}>
+              <ButtonLink variant="white" href={routes.Docs}>
                 {t('about.learn_more_button.translation')}
               </ButtonLink>
             </div>
