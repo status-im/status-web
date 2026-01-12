@@ -46,7 +46,7 @@ const NavBar = () => {
           <ButtonLink href={localizedRoutes.Bridge} size="32">
             {t('common.get_started.translation')}
           </ButtonLink>
-          <LanguageSelector size="32" />
+          <LanguageSelector />
         </div>
       </nav>
       <Divider />

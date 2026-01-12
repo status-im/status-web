@@ -31,7 +31,7 @@ export function getLocalizedRoutes(
       { name: t('navigation.blog.translation'), href: '#blog' },
     ],
     Docs: 'https://docs.status.network/',
-    Bridge: 'https://bridge.status.network/',
+    Bridge: 'https://bridge.status.network/ ',
     Partner: 'https://statusnetwork.typeform.com/partner',
   } as const
 }

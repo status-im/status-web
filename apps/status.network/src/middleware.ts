@@ -30,5 +30,5 @@ export const config = {
   // - _next (Next.js internals)
   // - _static (inside /public)
   // - files with extensions (e.g. favicon.ico)
-  matcher: '/((?!api|_next|_static|.*\\..*).*)',
+  matcher: '/((?!api|legal|_next|_static|.*\\..*).*)',
 }
