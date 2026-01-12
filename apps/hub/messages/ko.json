@@ -164,6 +164,42 @@
     "explore_all_apps": {
       "translation": "모든 앱 알아보기",
       "notes": "apps::explore_all_apps"
+    },
+    "status_mines": {
+      "description": {
+        "translation": "스테이터스 네트워크의 검증 가능한 공정한 지뢰 찾기 게임",
+        "notes": "apps::status_mines::description"
+      }
+    },
+    "karma_climber": {
+      "description": {
+        "translation": "Pumpii가 등장하는 무한 아케이드 게임!",
+        "notes": "apps::karma_climber::description"
+      }
+    },
+    "canary": {
+      "description": {
+        "translation": "침묵이 닥쳤을 때 메시지를 안전하게 잠금 해제",
+        "notes": "apps::canary::description"
+      }
+    },
+    "ponzi_hero": {
+      "description": {
+        "translation": "NFT를 획득하고 즐거운 시간을 보내세요!",
+        "notes": "apps::ponzi_hero::description"
+      }
+    },
+    "cats_fishing": {
+      "description": {
+        "translation": "당신은 고양이를 사랑하고, 고양이는 물고기를 사랑합니다.",
+        "notes": "apps::cats_fishing::description"
+      }
+    },
+    "status_network_bridge": {
+      "description": {
+        "translation": "가스비를 절약하고 싶으신가요? 저희가 도와드립니다!",
+        "notes": "apps::status_network_bridge::description"
+      }
     }
   },
   "discover": {
@@ -550,6 +586,14 @@
     "audited_link": {
       "translation": "감사 완료되었습니다",
       "notes": "rewards::audited_link"
+    },
+    "deposit_confirmation": {
+      "translation": "자산을 볼트에 예치함으로써 귀하는 다음을 읽고 수락했음을 확인합니다",
+      "notes": "rewards::deposit_confirmation"
+    },
+    "disclaimer": {
+      "translation": "면책 조항",
+      "notes": "rewards::disclaimer"
     }
   },
   "pre_deposits": {

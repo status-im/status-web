@@ -164,6 +164,42 @@
     "explore_all_apps": {
       "translation": "Explore all apps",
       "notes": "apps::explore_all_apps"
+    },
+    "status_mines": {
+      "description": {
+        "translation": "Provably Fair Mines Game on Status Network",
+        "notes": "apps::status_mines::description"
+      }
+    },
+    "karma_climber": {
+      "description": {
+        "translation": "Endless arcade game featuring Pumpii!",
+        "notes": "apps::karma_climber::description"
+      }
+    },
+    "canary": {
+      "description": {
+        "translation": "Secure unlock of messages when silence hits",
+        "notes": "apps::canary::description"
+      }
+    },
+    "ponzi_hero": {
+      "description": {
+        "translation": "Earn NFTs, have some fun!",
+        "notes": "apps::ponzi_hero::description"
+      }
+    },
+    "cats_fishing": {
+      "description": {
+        "translation": "You love cats, cats love fish.",
+        "notes": "apps::cats_fishing::description"
+      }
+    },
+    "status_network_bridge": {
+      "description": {
+        "translation": "Saving for gas? We've got you covered!",
+        "notes": "apps::status_network_bridge::description"
+      }
     }
   },
   "discover": {
@@ -550,6 +586,14 @@
     "audited_link": {
       "translation": "audited",
       "notes": "rewards::audited_link"
+    },
+    "deposit_confirmation": {
+      "translation": "By depositing assets into the vaults, you confirm that you have read and accepted this",
+      "notes": "rewards::deposit_confirmation"
+    },
+    "disclaimer": {
+      "translation": "disclaimer",
+      "notes": "rewards::disclaimer"
     }
   },
   "pre_deposits": {
