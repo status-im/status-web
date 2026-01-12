@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 
 import { Skeleton } from '@status-im/components'
 import { useSIWE } from 'connectkit'
+import { useTranslations } from 'next-intl'
 import { formatEther } from 'viem'
 import { useAccount } from 'wagmi'
 
@@ -43,6 +44,7 @@ const KarmaOverviewCard = () => {
   const { data: karmaBalance, isLoading: karmaLoading } = useKarmaBalance()
   const { karmaLevels, isLoading: tiersLoading } = useProcessedKarmaTiers()
   const { isLoading: isSIWELoading } = useSIWE()
+  const t = useTranslations()
 
   const isLoading =
     tiersLoading || (isConnected && (karmaLoading || isSIWELoading))
@@ -76,7 +78,7 @@ const KarmaOverviewCard = () => {
               </span>
             </div>
             <span className="text-15 font-regular text-neutral-50">
-              Level {levelData?.level ?? 0}
+              {t('karma.level', { level: levelData?.level ?? 0 })}
             </span>
           </div>
         </div>
