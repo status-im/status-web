@@ -584,7 +584,7 @@
       "notes": "brand::mark_only_title"
     },
     "mark_only_description": {
-      "translation": "With wordmark",
+      "translation": "Without wordmark",
       "notes": "brand::mark_only_description"
     },
     "main_colors_title": {

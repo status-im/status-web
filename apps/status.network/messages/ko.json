@@ -584,7 +584,7 @@
       "notes": "brand::mark_only_title"
     },
     "mark_only_description": {
-      "translation": "워드마크 포함",
+      "translation": "워드마크 없음",
       "notes": "brand::mark_only_description"
     },
     "main_colors_title": {
