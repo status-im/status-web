@@ -17,16 +17,10 @@ const Network = () => {
       icon: '/logo-status.png',
     },
     {
-      title: t('network.waku.title.translation'),
-      description: t('network.waku.description.translation'),
-      website: 'waku.org',
-      icon: '/logo-waku.png',
-    },
-    {
-      title: t('network.codex.title.translation'),
-      description: t('network.codex.description.translation'),
-      website: 'codex.storage',
-      icon: '/logo-codex.png',
+      title: t('network.logos.title.translation'),
+      description: t('network.logos.description.translation'),
+      website: 'logos.co',
+      icon: '/logo-logos.png',
     },
     {
       title: t('network.nimbus.title.translation'),
@@ -64,7 +58,7 @@ const Network = () => {
           </p>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {SOLUTIONS.map(solution => (
             <TechSolution key={solution.title} {...solution} />
           ))}
