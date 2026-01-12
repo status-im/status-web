@@ -8,6 +8,7 @@ import { useAccount } from 'wagmi'
 
 import { useKarmaBalance } from '~hooks/useKarmaBalance'
 import { useProcessedKarmaTiers } from '~hooks/useProcessedKarmaTiers'
+import { useQuota } from '~hooks/useQuota'
 import { formatSNT } from '~utils/currency'
 
 // import { AchievementBadges } from './achievement-badges'
@@ -45,13 +46,16 @@ const OverviewCard = () => {
   const { karmaLevels, isLoading: tiersLoading } = useProcessedKarmaTiers()
   const { isLoading: isSIWELoading } = useSIWE()
   const t = useTranslations()
+  const { data: quotaData, isLoading: quotaLoading } = useQuota({
+    enabled: isConnected,
+  })
 
   const isLoading =
-    tiersLoading || (isConnected && (karmaLoading || isSIWELoading))
+    tiersLoading ||
+    (isConnected && (karmaLoading || isSIWELoading || quotaLoading))
 
   const currentKarma = karmaBalance?.balance ?? 0n
 
-  // Ensure we have valid levels array before calculating level data
   const levelData = useMemo(
     () =>
       karmaLevels.length > 0
@@ -60,13 +64,7 @@ const OverviewCard = () => {
     [currentKarma, karmaLevels]
   )
 
-  // TODO: Replace with actual API data
-  const txAllowance = {
-    used: 5040,
-    total: 10000,
-  }
-
-  const txPercentage = (txAllowance.used / txAllowance.total) * 100
+  const txPercentage = quotaData ? (quotaData.used / quotaData.total) * 100 : 0
 
   const progressBarColor = useMemo(() => {
     if (txPercentage <= 33) {
@@ -110,34 +108,36 @@ const OverviewCard = () => {
         <ProgressBar currentKarma={currentKarma} karmaLevels={karmaLevels} />
 
         {/* TXAllowance Section */}
-        <div className="flex flex-col gap-6 pt-3">
-          <div className="flex flex-col items-baseline gap-1.5 sm:flex-row">
-            <div className="text-27 font-semibold">
-              <span className="text-neutral-100">
-                {txAllowance.used.toLocaleString()}
-              </span>
-              <span className="text-neutral-40">
-                /
-                {txAllowance.total >= 1000
-                  ? `${txAllowance.total / 1000}K`
-                  : txAllowance.total}
+        {quotaData && (
+          <div className="flex flex-col gap-6 pt-3">
+            <div className="flex flex-col items-baseline gap-1.5 sm:flex-row">
+              <div className="text-27 font-semibold">
+                <span className="text-neutral-100">
+                  {quotaData.used.toLocaleString()}
+                </span>
+                <span className="text-neutral-40">
+                  /
+                  {quotaData.total >= 1000
+                    ? `${quotaData.total / 1000}K`
+                    : quotaData.total}
+                </span>
+              </div>
+              <span className="text-15 font-regular text-neutral-50">
+                free transactions left today
               </span>
             </div>
-            <span className="text-15 font-regular text-neutral-50">
-              free transactions left today
-            </span>
-          </div>
 
-          {/* Progress Bar */}
-          <div className="relative h-2 w-full overflow-hidden rounded-full bg-neutral-10">
-            <div
-              className={`h-full rounded-full transition-all duration-300 ${progressBarColor}`}
-              style={{
-                width: `${txPercentage}%`,
-              }}
-            />
+            {/* Progress Bar */}
+            <div className="relative h-2 w-full overflow-hidden rounded-full bg-neutral-10">
+              <div
+                className={`h-full rounded-full transition-all duration-300 ${progressBarColor}`}
+                style={{
+                  width: `${txPercentage}%`,
+                }}
+              />
+            </div>
           </div>
-        </div>
+        )}
       </div>
       {/* <div className="size-full rounded-b-20 bg-neutral-2.5 p-4">
         <AchievementBadges />
