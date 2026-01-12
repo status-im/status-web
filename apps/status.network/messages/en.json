@@ -50,6 +50,18 @@
     "testnet_live": {
       "translation": "Testnet is live!",
       "notes": "common::testnet_live"
+    },
+    "promo_message": {
+      "translation": "Pre-deposit ETH and SNT ahead of Status Network mainnet launch!",
+      "notes": "common::promo_message"
+    },
+    "visit_hub": {
+      "translation": "Visit hub",
+      "notes": "common::visit_hub"
+    },
+    "visit_hub_aria": {
+      "translation": "Visit hub (opens in new tab)",
+      "notes": "common::visit_hub_aria"
     }
   },
   "navigation": {

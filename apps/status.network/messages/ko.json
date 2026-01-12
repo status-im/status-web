@@ -50,6 +50,18 @@
     "testnet_live": {
       "translation": "테스트넷이 활성화되었습니다!",
       "notes": "common::testnet_live"
+    },
+    "promo_message": {
+      "translation": "Status Network 메인넷 출시 전에 ETH와 SNT를 사전 예치하세요!",
+      "notes": "common::promo_message"
+    },
+    "visit_hub": {
+      "translation": "허브 방문",
+      "notes": "common::visit_hub"
+    },
+    "visit_hub_aria": {
+      "translation": "허브 방문 (새 탭에서 열림)",
+      "notes": "common::visit_hub_aria"
     }
   },
   "navigation": {
