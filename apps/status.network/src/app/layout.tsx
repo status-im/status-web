@@ -4,7 +4,7 @@ import Script from 'next/script'
 import './globals.css'
 import { cx } from 'cva'
 import { NextIntlClientProvider } from 'next-intl'
-import { getMessages } from 'next-intl/server'
+import { getLocale, getMessages } from 'next-intl/server'
 import { Divider } from './_components/divider'
 import { Footer } from './_components/footer'
 import { NavBar } from './_components/navbar'
@@ -49,10 +49,11 @@ type Props = {
 }
 
 export default async function RootLayout({ children }: Props) {
+  const locale = await getLocale()
   const messages = await getMessages()
 
   return (
-    <html>
+    <html lang={locale}>
       <body
         className={cx(
           inter.variable,
