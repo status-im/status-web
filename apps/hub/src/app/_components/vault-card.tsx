@@ -6,6 +6,7 @@ import { Skeleton } from '@status-im/components'
 import { Button } from '@status-im/status-network/components'
 import { ConnectKitButton } from 'connectkit'
 import { cva } from 'cva'
+import { useAccount } from 'wagmi'
 
 import { formatCurrency, formatTokenAmount } from '~/utils/currency'
 import { type Vault } from '~constants/index'
@@ -43,7 +44,13 @@ const vaultCardStyles = cva({
   },
 })
 
-const VaultCardSkeleton: FC = () => {
+type VaultCardSkeletonProps = {
+  isConnected?: boolean
+}
+
+const VaultCardSkeleton: FC<VaultCardSkeletonProps> = ({
+  isConnected = false,
+}) => {
   return (
     <div className={vaultCardStyles()}>
       {/* header */}
@@ -56,8 +63,19 @@ const VaultCardSkeleton: FC = () => {
       {/* title */}
       <Skeleton width={180} height={28} className="mb-2 rounded-8" />
 
+      {isConnected && (
+        <div className="mb-4">
+          <Skeleton width={80} height={20} className="mb-1 rounded-6" />
+          <Skeleton width={120} height={32} className="rounded-8" />
+        </div>
+      )}
+
       {/* meta */}
       <ul className="my-4 space-y-2">
+        <li className="flex items-center gap-2">
+          <Skeleton width={20} height={20} className="rounded-full" />
+          <Skeleton width={50} height={20} className="rounded-6" />
+        </li>
         <li className="flex items-center gap-2">
           <Skeleton width={20} height={20} className="rounded-full" />
           <Skeleton width={120} height={20} className="rounded-6" />
@@ -70,10 +88,14 @@ const VaultCardSkeleton: FC = () => {
           <Skeleton width={20} height={20} className="rounded-full" />
           <Skeleton width={100} height={20} className="rounded-6" />
         </li>
+        <li className="flex items-center gap-2">
+          <Skeleton width={20} height={20} className="rounded-full" />
+          <Skeleton width={100} height={20} className="rounded-6" />
+        </li>
       </ul>
 
       {/* cta */}
-      <Skeleton width={100} height={40} className="mt-auto rounded-12" />
+      <Skeleton width={90} height={40} className="mt-auto rounded-12" />
     </div>
   )
 }
@@ -98,10 +120,11 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
   })
   const { data: totalAssets } = usePreDepositTVL({ vault })
   const { data: apyMap, isLoading: isApyLoading } = useVaultsAPY()
-  const { data: depositedBalance } = useUserVaultDeposit({
-    vault,
-    registerRefetch,
-  })
+  const { data: depositedBalance, isLoading: isDepositedBalanceLoading } =
+    useUserVaultDeposit({
+      vault,
+      registerRefetch,
+    })
 
   useEffect(() => {
     if (isConnected && pendingDepositRef.current) {
@@ -110,26 +133,26 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
     }
   }, [isConnected, onDeposit, pendingDepositRef])
 
-  // Get APY from API, fallback to static vault config
-  const dynamicApy = apyMap?.[vault.address.toLowerCase()]
+  const vaultAddressLower = vault.address.toLowerCase()
+  const isVaultInApi = apyMap !== undefined && vaultAddressLower in apyMap
+  const isDisabled = !isVaultInApi
+  const dynamicApy = apyMap?.[vaultAddressLower]
   const apyValue = dynamicApy !== undefined ? String(dynamicApy) : null
   const rewardsLine = rewards.join(', ')
 
-  const formattedTVL = !vault.soon
+  const formattedTVL = !isDisabled
     ? formatCurrency(tvlData?.tvlUSD ?? 0, { compact: true }).replace('$', '')
     : null
 
   const displayDecimals = token.symbol === 'WETH' ? 4 : 0
 
-  const formattedTokenAmount = !vault.soon
+  const formattedTokenAmount = !isDisabled
     ? formatTokenAmount(totalAssets ?? 0n, token.symbol, {
         tokenDecimals: token.decimals,
         decimals: displayDecimals,
         includeSymbol: true,
       })
     : null
-
-  const showDepositSection = !vault.soon
 
   const handleClick = () => {
     if (isConnected) {
@@ -141,7 +164,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
   }
 
   return (
-    <div className={vaultCardStyles({ disabled: !!vault.soon })}>
+    <div className={vaultCardStyles({ disabled: isDisabled })}>
       {/* header */}
       <div className="mb-6 flex items-start justify-between">
         <div className="flex items-center gap-4">
@@ -152,16 +175,20 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
 
       <h3 className="mb-2 text-19 font-600 lg:text-27">{vault.name}</h3>
 
-      {showDepositSection && isConnected && (
+      {!isDisabled && isConnected && (
         <div className="mb-4">
           <p className="text-15 font-400 text-neutral-50">Your deposit</p>
-          <p className="text-27 font-600">
-            {formatTokenAmount(depositedBalance ?? 0n, token.symbol, {
-              tokenDecimals: token.decimals,
-              decimals: displayDecimals,
-              includeSymbol: true,
-            })}
-          </p>
+          <div className="text-27 font-600">
+            {isDepositedBalanceLoading ? (
+              <Skeleton width={120} height={32} className="rounded-8" />
+            ) : (
+              formatTokenAmount(depositedBalance ?? 0n, token.symbol, {
+                tokenDecimals: token.decimals,
+                decimals: displayDecimals,
+                includeSymbol: true,
+              })
+            )}
+          </div>
         </div>
       )}
 
@@ -209,7 +236,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
             <span>{formattedTVL ? `$${formattedTVL} TVL` : 'TVL TBD'}</span>
           )}
         </li>
-        {!vault.soon && (
+        {!isDisabled && (
           <li className="flex items-center gap-2 text-15">
             <span className="text-neutral-50">
               <SumIcon />
@@ -223,10 +250,10 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
       <Button
         size="40"
         onClick={handleClick}
-        disabled={vault.soon}
+        disabled={isDisabled}
         className="mt-auto w-full justify-center lg:w-fit"
       >
-        {vault.soon ? 'Coming soon' : 'Deposit'}
+        {isDisabled ? 'Coming soon' : 'Deposit'}
       </Button>
     </div>
   )
@@ -235,13 +262,17 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
 const VaultCard: FC<Props> = props => {
   const pendingDepositRef = useRef(false)
   const [isMounted, setIsMounted] = useState(false)
+  const { isLoading: isApyLoading } = useVaultsAPY()
+  const { isConnected } = useAccount()
 
   useEffect(() => {
     setIsMounted(true)
   }, [])
 
-  if (!isMounted) {
-    return <VaultCardSkeleton />
+  const stableIsConnected = isMounted ? isConnected : false
+
+  if (!isMounted || isApyLoading) {
+    return <VaultCardSkeleton isConnected={stableIsConnected} />
   }
 
   return (

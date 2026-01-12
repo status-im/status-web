@@ -69,13 +69,13 @@ export default function PreDepositPage() {
             </p>
             <InfoTooltip content="Sum of token value locked across all vaults" />
           </div>
-          <p className="text-27 font-600 text-neutral-100">
+          <div className="text-27 font-600 text-neutral-100">
             {isLoadingTVL ? (
               <Skeleton width={120} height={27} className="rounded-6" />
             ) : (
               formattedTVL
             )}
-          </p>
+          </div>
         </div>
         <div className="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2">
           {VAULTS.map(vault => (
