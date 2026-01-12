@@ -1,13 +1,15 @@
 'use client'
 
-import { ROUTES } from '~/config/routes'
-import { useTranslations } from 'next-intl'
+import { getLocalizedRoutes } from '~/config/routes'
+import { useLocale, useTranslations } from 'next-intl'
 import { AnimatedFrames } from './animated-frames'
 import { ButtonLink } from './button-link'
 import { Divider } from './divider'
 
 const PreFooter = () => {
   const t = useTranslations()
+  const locale = useLocale()
+  const routes = getLocalizedRoutes(t, locale)
 
   return (
     <section className="relative w-full">
@@ -21,10 +23,10 @@ const PreFooter = () => {
               </p>
             </div>
             <div className="flex gap-3">
-              <ButtonLink href={ROUTES.Partner} variant="primary">
+              <ButtonLink href={routes.Partner} variant="primary">
                 {t('pre_footer.partner_button.translation')}
               </ButtonLink>
-              <ButtonLink href={ROUTES.Docs} variant="secondary">
+              <ButtonLink href={routes.Docs} variant="secondary">
                 {t('pre_footer.read_docs_button.translation')}
               </ButtonLink>
             </div>

@@ -6,7 +6,7 @@ import { Link } from '~/i18n/navigation'
 import { Button } from '~components/button'
 import { cx } from 'cva'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
@@ -19,7 +19,8 @@ const NavBarMobile = () => {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
   const t = useTranslations()
-  const localizedRoutes = getLocalizedRoutes(t)
+  const locale = useLocale()
+  const localizedRoutes = getLocalizedRoutes(t, locale)
 
   const scrollPositionRef = useRef(0)
 

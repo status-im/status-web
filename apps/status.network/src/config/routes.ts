@@ -20,7 +20,10 @@ export const DIN_URL = 'https://infura.io'
 // Function to create localized routes
 export function getLocalizedRoutes(
   t: Awaited<ReturnType<typeof getTranslations>>,
+  locale: string = 'en',
 ) {
+  const localePrefix = locale === 'en' ? '' : `/${locale}`
+
   return {
     Navigation: [
       { name: t('navigation.about.translation'), href: '#about' },
@@ -30,7 +33,7 @@ export function getLocalizedRoutes(
       { name: t('navigation.tokenomics.translation'), href: '#tokenomics' },
       { name: t('navigation.blog.translation'), href: '#blog' },
     ],
-    Docs: 'https://docs.status.network/',
+    Docs: `https://docs.status.network${localePrefix}/`,
     Bridge: 'https://bridge.status.network/ ',
     Partner: 'https://statusnetwork.typeform.com/partner',
   } as const
@@ -74,6 +77,26 @@ export const FEATURES = {
     name: 'Learn more about Linea',
     href: LINEA_URL,
   },
+}
+
+// Function to get locale-aware feature URLs
+export function getLocalizedFeatures(locale: string) {
+  const localePrefix = locale === 'en' ? '' : `/${locale}`
+
+  return {
+    sustainablePublicFunding: {
+      name: FEATURES.sustainablePublicFunding.name,
+      href: `https://docs.status.network${localePrefix}/tokenomics/karmic-tokenomics`,
+    },
+    gaslessTransactions: {
+      name: FEATURES.gaslessTransactions.name,
+      href: `https://docs.status.network${localePrefix}/tokenomics/economic-model`,
+    },
+    performance: {
+      name: FEATURES.performance.name,
+      href: FEATURES.performance.href, // External link, no localization needed
+    },
+  }
 }
 
 export const BRAND = {
