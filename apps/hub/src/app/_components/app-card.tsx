@@ -4,10 +4,12 @@ import { ExternalIcon } from '@status-im/icons/20'
 import { TwitterIcon } from '@status-im/icons/social'
 import { ButtonLink } from '@status-im/status-network/components'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 
 type Props = {
   name: string
   description: string
+  descriptionKey?: string
   website: string
   twitter?: string
   cover: string
@@ -15,7 +17,10 @@ type Props = {
 }
 
 function AppCard(props: Props) {
-  const { name, description, website, twitter, cover, icon } = props
+  const { name, description, descriptionKey, website, twitter, cover, icon } =
+    props
+  const t = useTranslations()
+  const displayDescription = descriptionKey ? t(descriptionKey) : description
 
   return (
     <div className="flex h-full flex-col rounded-28 border border-neutral-20 bg-white-100 p-2 shadow-2 transition-colors hover:border-neutral-30">
@@ -38,7 +43,7 @@ function AppCard(props: Props) {
           {name}
         </h3>
         <p className="mb-4 text-13 font-400 text-neutral-100 lg:mb-auto lg:text-15">
-          {description}
+          {displayDescription}
         </p>
         <div className="mt-1 flex items-start gap-2">
           <ButtonLink

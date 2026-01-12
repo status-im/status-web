@@ -4,6 +4,7 @@ export type App = {
   category: string
   status: string
   description: string
+  descriptionKey?: string
   website: string
   twitter?: string
   cover: string

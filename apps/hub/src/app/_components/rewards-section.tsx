@@ -34,15 +34,14 @@ const RewardsSection = () => {
         >
           {t('rewards.audited_link')}
         </Link>
-        . By depositing assets into the vaults, you confirm that you have read
-        and accepted this{' '}
+        . {t('rewards.deposit_confirmation')}{' '}
         <Link
           href="https://status.network/legal/status-network-pre-deposit-disclaimer"
           target="_blank"
           rel="noopener noreferrer"
           className="text-purple hover:text-purple-dark"
         >
-          disclaimer
+          {t('rewards.disclaimer')}
         </Link>
         .
       </p>
