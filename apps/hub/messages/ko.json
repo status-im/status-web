@@ -612,6 +612,42 @@
     "dragon_key_alt": {
       "translation": "열쇠를 든 드래곤",
       "notes": "pre_deposits::dragon_key_alt"
+    },
+    "faq": {
+      "translation": "자주 묻는 질문",
+      "notes": "pre_deposits::faq"
+    },
+    "faq_items": {
+      "when_unlocked": {
+        "title": {
+          "translation": "예치금은 언제 잠금 해제되나요?",
+          "notes": "pre_deposits::faq_items::when_unlocked::title"
+        },
+        "content": {
+          "translation": "사전 예치금은 Status Network 메인넷으로 브리징되면 잠금 해제됩니다. 출금 시 L2의 스테이킹 금고에서 SNT를 스테이킹하거나 잠글 수 있습니다. 최대 20개의 별도 금고를 만들 수 있으며, 각 금고는 스테이킹 기간 및 해당 보상 배수를 포함한 맞춤형 매개변수를 가질 수 있습니다. 브리징된 모든 토큰(런칷 시 LINEA, ETH 및 GUSD 포함)의 경우, 유동성을 제공할 앱을 선택하고 인센티브를 계속 받을 수 있습니다.",
+          "notes": "pre_deposits::faq_items::when_unlocked::content"
+        }
+      },
+      "wallet_warning": {
+        "title": {
+          "translation": "예치를 시도할 때 지갑 경고가 표시되는 이유는 무엇인가요?",
+          "notes": "pre_deposits::faq_items::wallet_warning::title"
+        },
+        "content": {
+          "translation": "이 경고는 가스 수수료를 지불하기에 소스 체인에 ETH가 부족함을 나타낼 수 있습니다. LINEA 토큰을 예치할 때는 충분한 Linea L2 ETH를, 다른 예치 유형의 경우 Ethereum L1 ETH를 확보하세요. 이러한 가스 마찰을 해결하기 위해 우리는 Status Network를 출시하고 있습니다 - 최초의 네이티브 가스리스 L2입니다.",
+          "notes": "pre_deposits::faq_items::wallet_warning::content"
+        }
+      },
+      "incentive_rewards": {
+        "title": {
+          "translation": "사전 예치자에 대한 총 인센티브 보상은 얼마인가요?",
+          "notes": "pre_deposits::faq_items::incentive_rewards::title"
+        },
+        "content": {
+          "translation": "15M SNT 및 20M LINEA 토큰의 유동 보상 풀이 모든 금고에 걸쳐 사전 예치자에게 제공됩니다. 유동 인센티브 및 Karma의 최종 할당은 금고 TVL 및 금고 내 체류 시간 + 테스트넷 v1 및 v2에서의 활동에 대한 잠재적 배수를 기반으로 합니다.",
+          "notes": "pre_deposits::faq_items::incentive_rewards::content"
+        }
+      }
     }
   },
   "vault": {

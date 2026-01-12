@@ -10,7 +10,7 @@ import { formatCurrency } from '~/utils/currency'
 
 import { HubLayout } from '../../_components/hub-layout'
 import { InfoTooltip } from '../../_components/info-tooltip'
-import { ITEMS, PreDepositFaq } from '../../_components/pre-deposit-faq'
+import { getFaqItems, PreDepositFaq } from '../../_components/pre-deposit-faq'
 import { PreDepositModal } from '../../_components/pre-deposit-modal'
 import { RewardsSection } from '../../_components/rewards-section'
 import { VaultCard } from '../../_components/vault-card'
@@ -34,8 +34,9 @@ export default function PreDepositPage() {
 
   const formattedTVL = totalTVL ? formatCurrency(totalTVL) : '$0'
 
+  const faqItems = getFaqItems(t)
   const faqSchema = jsonLD.faqPage({
-    questions: ITEMS.map(item => ({
+    questions: faqItems.map((item: { title: string; content: string }) => ({
       question: item.title,
       answer: item.content,
     })),
@@ -91,7 +92,9 @@ export default function PreDepositPage() {
         </div>
       </div>
       <div className="mx-auto flex flex-col gap-4 rounded-32 p-4 lg:mb-14 lg:gap-8 lg:bg-neutral-2.5 lg:p-8">
-        <h2 className="text-19 font-600 text-neutral-100 lg:text-27">FAQ</h2>
+        <h2 className="text-19 font-600 text-neutral-100 lg:text-27">
+          {t('pre_deposits.faq')}
+        </h2>
         <PreDepositFaq />
 
         <Image
