@@ -53,10 +53,9 @@ export function useQuota(
         Number.parseInt(quotaResponse.tier.quotaPerEpoch, 10) || 10000
       const remainingQuota =
         Number.parseInt(quotaResponse.epoch.remainingQuota, 10) || 0
-      const used = total - remainingQuota
 
       return {
-        used,
+        used: remainingQuota,
         total,
       }
     },
