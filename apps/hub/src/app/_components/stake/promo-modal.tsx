@@ -6,6 +6,7 @@ import { CloseIcon, ExternalIcon } from '@status-im/icons/20'
 import { Button, ButtonLink } from '@status-im/status-network/components'
 import { ConnectKitButton } from 'connectkit'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 
 type Props = {
   open: boolean
@@ -15,6 +16,7 @@ type Props = {
 
 const PromoModal = (props: Props) => {
   const { open, onClose, children } = props
+  const t = useTranslations()
 
   const handleOpenChange = (nextOpen: boolean) => {
     if (!nextOpen) {
@@ -35,7 +37,7 @@ const PromoModal = (props: Props) => {
           >
             <Dialog.Close asChild>
               <button
-                aria-label="Close"
+                aria-label={t('common.close')}
                 className="flex size-10 items-center justify-center rounded-12 bg-white-20 p-2 backdrop-blur-2xl hover:bg-white-30"
               >
                 <CloseIcon className="text-white-100" />
@@ -47,21 +49,18 @@ const PromoModal = (props: Props) => {
 
             <div className="relative z-10 flex flex-col gap-12 rounded-40 p-10 text-white-100 md:flex-row md:items-end md:justify-between">
               <div className="h-full max-w-[575px] space-y-4">
-                <Tag label="Status Wallet Connector" />
+                <Tag label={t('stake.promo_modal.wallet_connector_tag')} />
 
                 <div className="space-y-1">
                   <Dialog.Title asChild>
                     <h2 className="text-40 font-bold text-white-100">
-                      Connect to
-                      <br />
-                      Status Network
+                      {t('stake.promo_modal.connect_to_network_title')}
                     </h2>
                   </Dialog.Title>
 
                   <Dialog.Description asChild>
                     <p className="max-w-[325px] text-19 font-medium text-white-100">
-                      Use Status L2 features in Chrome with the safety and
-                      control of Status.
+                      {t('stake.promo_modal.description')}
                     </p>
                   </Dialog.Description>
                 </div>
@@ -72,7 +71,7 @@ const PromoModal = (props: Props) => {
                     href="https://chromewebstore.google.com/detail/a-wallet-connector-by-sta/kahehnbpamjplefhpkhafinaodkkenpg"
                     className="text-purple"
                   >
-                    Install Status Wallet Connector
+                    {t('stake.promo_modal.install_connector')}
                     <ExternalIcon className="size-4" />
                   </ButtonLink>
 
@@ -82,7 +81,9 @@ const PromoModal = (props: Props) => {
                         onClick={show}
                         variant={isConnected ? 'secondary' : 'primary'}
                       >
-                        {isConnected ? 'Connected' : 'Connect Wallet'}
+                        {isConnected
+                          ? t('stake.promo_modal.connected')
+                          : t('stake.connect_wallet')}
                       </Button>
                     )}
                   </ConnectKitButton.Custom>
@@ -92,14 +93,14 @@ const PromoModal = (props: Props) => {
               <div className="relative mx-auto h-[398px] w-full max-w-[444px] md:mx-0">
                 <Image
                   src="/modal/connector-1.png"
-                  alt="Status Wallet Connector"
+                  alt={t('stake.promo_modal.connector_alt')}
                   width="265"
                   height="235"
                   className="absolute -left-1/4 top-0 translate-x-14 scale-[120%]"
                 />
                 <Image
                   src="/modal/connector-2.png"
-                  alt="Status Wallet Connector"
+                  alt={t('stake.promo_modal.connector_alt')}
                   width="359"
                   height="248"
                   className="absolute bottom-2 right-8 scale-[120%]"

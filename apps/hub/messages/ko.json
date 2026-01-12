@@ -534,6 +534,32 @@
     "compound_info": {
       "translation": "카르마를 받는 속도를 높입니다. 복리를 적용하는 포인트가 많을수록 속도가 높아집니다. 금고를 더 오래 잠글수록 부스트가 높아지고 카르마가 더 빨리 누적됩니다.",
       "notes": "stake::compound_info"
+    },
+    "promo_modal": {
+      "wallet_connector_tag": {
+        "translation": "Status Wallet Connector",
+        "notes": "stake::promo_modal::wallet_connector_tag"
+      },
+      "connect_to_network_title": {
+        "translation": "Status Network에 연결",
+        "notes": "stake::promo_modal::connect_to_network_title"
+      },
+      "description": {
+        "translation": "Status의 안전성과 제어 기능을 갖춘 Chrome에서 Status L2 기능을 사용하세요.",
+        "notes": "stake::promo_modal::description"
+      },
+      "install_connector": {
+        "translation": "Status Wallet Connector 설치",
+        "notes": "stake::promo_modal::install_connector"
+      },
+      "connected": {
+        "translation": "연결됨",
+        "notes": "stake::promo_modal::connected"
+      },
+      "connector_alt": {
+        "translation": "Status Wallet Connector",
+        "notes": "stake::promo_modal::connector_alt"
+      }
     }
   },
   "karma": {
