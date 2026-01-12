@@ -966,6 +966,10 @@
     "brand_assets": {
       "translation": "브랜드 자산",
       "notes": "footer::brand_assets"
+    },
+    "pre_deposit_disclaimer": {
+      "translation": "사전 예치 면책 조항",
+      "notes": "footer::pre_deposit_disclaimer"
     }
   },
   "errors": {

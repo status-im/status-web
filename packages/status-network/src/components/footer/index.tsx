@@ -8,6 +8,7 @@ type FooterProps = {
     termsOfUse?: string
     privacyPolicy?: string
     brandAssets?: string
+    preDepositDisclaimer?: string
   }
 }
 
@@ -46,7 +47,7 @@ const Footer = ({ labels }: FooterProps) => {
               href={LEGAL.preDepositDisclaimer.href}
               className="text-13 text-neutral-50 transition-colors hover:text-neutral-100"
             >
-              Pre-deposits disclaimer
+              {labels?.preDepositDisclaimer ?? LEGAL.preDepositDisclaimer.name}
             </Link>
           </div>
           <Dot className="2md:hidden text-neutral-50" />

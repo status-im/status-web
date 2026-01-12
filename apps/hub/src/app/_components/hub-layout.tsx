@@ -61,6 +61,7 @@ export function HubLayout({ children }: HubLayoutProps) {
                 termsOfUse: t('footer.terms_of_use'),
                 privacyPolicy: t('footer.privacy_policy'),
                 brandAssets: t('footer.brand_assets'),
+                preDepositDisclaimer: t('footer.pre_deposit_disclaimer'),
               }}
             />
           </div>
