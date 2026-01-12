@@ -47,7 +47,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
 
           <div className="hidden items-center md:flex">
             {/* Status Network Logo */}
-            <Link href="/dashboard">
+            <Link href="/">
               <Image
                 src="/logo-long.svg"
                 alt="Status Network Logo"
