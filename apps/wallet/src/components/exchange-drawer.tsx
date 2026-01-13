@@ -38,7 +38,7 @@ export const ExchangeDrawer = (props: ExchangeDrawerProps) => {
   const { isConnected, address: connectedAddress } = useAccount()
 
   const handleOpenChange = useCallback(
-    async (isOpen: boolean) => {
+    (isOpen: boolean) => {
       if (isOpen && !isUnlocked) {
         setShowPasswordModal(true)
         return
