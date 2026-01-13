@@ -10,41 +10,12 @@ type ProgressBarProps = {
 }
 
 const ProgressBar = ({ currentKarma = 0n, karmaLevels }: ProgressBarProps) => {
-  const formatKarmaLabel = (karma: bigint, level: number) => {
-    const karmaNum = Number(formatEther(karma))
-
-    if (level < 4) {
-      if (level === 0) return '0'
-      if (level === 1) return '1'
-      if (level === 2) return '1+'
-      if (level === 3) return '50+'
-      if (level === 4) return '500+'
-    } else if (level >= 4 && level < 8) {
-      if (level === 4) return '500+'
-      if (level === 5) return '5K+'
-      if (level === 6) return '20K+'
-      if (level === 7) return '100K+'
-      if (level === 8) return '500K+'
-    } else if (level >= 8 && level <= 10) {
-      if (level === 8) return '500K+'
-      if (level === 9) return '5M+'
-      if (level === 10) return '10M+'
-    }
-
-    const formatter = new Intl.NumberFormat('en-US', {
-      notation: 'compact',
-      compactDisplay: 'short',
-      maximumFractionDigits: 1,
-    })
-
-    return formatter.format(karmaNum)
-  }
-
   if (karmaLevels.length === 0) {
     return null
   }
 
   const currentLevelData = getCurrentLevelData(currentKarma, karmaLevels)
+
   const { level, minKarma, maxKarma } = currentLevelData
 
   const visibleLevels = getVisibleLevelsByStage(karmaLevels, level)
@@ -66,6 +37,7 @@ const ProgressBar = ({ currentKarma = 0n, karmaLevels }: ProgressBarProps) => {
   const oneLevelPercentage = 100 / Math.max(visibleLevels.length - 1, 1)
 
   let desktopLevelProgress: number
+
   if (level >= 10) {
     desktopLevelProgress = 50
   } else {
@@ -279,19 +251,22 @@ const getVisibleLevelsByStage = (
     return []
   }
 
-  if (currentLevel < 4) {
-    return allLevels.slice(0, Math.min(5, allLevels.length))
-  } else if (currentLevel >= 4 && currentLevel < 8) {
-    const startIndex = Math.min(4, allLevels.length - 1)
-    const endIndex = Math.min(9, allLevels.length)
+  const getRange = (start: number, end: number) => {
+    const startIndex = Math.min(start, allLevels.length - 1)
+    const endIndex = Math.min(end, allLevels.length)
+
     return allLevels.slice(startIndex, endIndex)
-  } else if (currentLevel >= 8 && currentLevel <= 10) {
-    const startIndex = Math.min(8, allLevels.length - 1)
-    const endIndex = Math.min(11, allLevels.length)
-    return allLevels.slice(startIndex, endIndex)
-  } else {
-    const level10Index = Math.min(10, allLevels.length - 1)
-    return [allLevels[level10Index]]
+  }
+
+  switch (true) {
+    case currentLevel < 4:
+      return getRange(0, 5)
+    case currentLevel < 8:
+      return getRange(4, 9)
+    case currentLevel <= 10:
+      return getRange(8, 11)
+    default:
+      return [allLevels[Math.min(10, allLevels.length - 1)]]
   }
 }
 
@@ -313,6 +288,36 @@ const getCurrentLevelData = (
     levels.find(level => karma >= level.minKarma && karma <= level.maxKarma) ||
     levels[levels.length - 1]
   )
+}
+
+const formatKarmaLabel = (karma: bigint, level: number) => {
+  const karmaNum = Number(formatEther(karma))
+
+  if (level < 4) {
+    if (level === 0) return '0'
+    if (level === 1) return '1'
+    if (level === 2) return '1+'
+    if (level === 3) return '50+'
+    if (level === 4) return '500+'
+  } else if (level >= 4 && level < 8) {
+    if (level === 4) return '500+'
+    if (level === 5) return '5K+'
+    if (level === 6) return '20K+'
+    if (level === 7) return '100K+'
+    if (level === 8) return '500K+'
+  } else if (level >= 8 && level <= 10) {
+    if (level === 8) return '500K+'
+    if (level === 9) return '5M+'
+    if (level === 10) return '10M+'
+  }
+
+  const formatter = new Intl.NumberFormat('en-US', {
+    notation: 'compact',
+    compactDisplay: 'short',
+    maximumFractionDigits: 1,
+  })
+
+  return formatter.format(karmaNum)
 }
 
 export { getCurrentLevelData, ProgressBar }
