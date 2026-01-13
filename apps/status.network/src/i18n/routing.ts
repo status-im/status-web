@@ -11,5 +11,5 @@ export const routing = defineRouting({
   localePrefix: 'as-needed',
 
   // Disable automatic locale detection
-  localeDetection: false,
+  localeDetection: true,
 })
