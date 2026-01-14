@@ -128,7 +128,6 @@ export function statusConnector(options: StatusConnectorOptions) {
   const { getAddress, signAndSendTransaction, signMessage, signTypedData } =
     options
 
-  // @ts-expect-error - TypeScript can't infer the conditional return type withCapabilities
   return createConnector(config => {
     const createProvider = () => {
       const provider = {
@@ -179,7 +178,7 @@ export function statusConnector(options: StatusConnectorOptions) {
       name: 'Status Wallet',
       type: 'injected' as const,
 
-      async connect() {
+      async connect<withCapabilities extends boolean = false>() {
         const address = getAddress()
         if (!address) {
           throw new Error('No wallet connected')
@@ -187,9 +186,19 @@ export function statusConnector(options: StatusConnectorOptions) {
         return {
           accounts: [address] as readonly Address[],
           chainId: mainnet.id,
+        } as {
+          accounts: withCapabilities extends true
+            ? readonly {
+                address: Address
+                capabilities: Record<string, unknown>
+              }[]
+            : readonly Address[]
+          chainId: number
         }
       },
 
+      // required by wagmi's connector interface
+      // empty because we delegate connection state to wallet-context through getAddress()
       async disconnect() {},
 
       async getAccounts() {
