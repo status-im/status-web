@@ -180,7 +180,7 @@ export function UnstakeVaultModal(props: UnstakeVaultModalProps) {
                   onClick={handleMaxClick}
                   className={`uppercase ${hasError ? 'text-danger-50' : 'text-neutral-100'}`}
                 >
-                  {`MAX ${formatSTT(maxBalance ?? 0, { includeSymbol: true })}`}
+                  {`${t('vault.max')} ${formatSTT(maxBalance ?? 0, { includeSymbol: true })}`}
                 </button>
               </div>
             </div>
@@ -207,7 +207,7 @@ export function UnstakeVaultModal(props: UnstakeVaultModalProps) {
             className="flex-1 justify-center"
             disabled={isPending}
           >
-            Cancel
+            {t('common.cancel')}
           </Button>
           {amountValue && Number(amountValue) > 0 && (
             <Button
