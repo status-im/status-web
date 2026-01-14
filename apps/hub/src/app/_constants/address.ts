@@ -35,7 +35,6 @@ export type Vault = {
   chainId: number
   network: (typeof mainnet | typeof linea)['name']
   abi: typeof PreDepositVaultAbi
-  soon?: boolean
 }
 
 export const STAKING_MANAGER = {
@@ -149,7 +148,6 @@ export const GUSD_VAULT: Vault = {
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
   network: mainnet.name,
-  soon: true,
 } as const
 
 export const VAULTS: Vault[] = [WETH_VAULT, SNT_VAULT, LINEA_VAULT, GUSD_VAULT]

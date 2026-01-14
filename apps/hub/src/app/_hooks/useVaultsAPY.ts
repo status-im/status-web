@@ -11,7 +11,7 @@ interface VaultsAPYResponse {
   result: VaultAPYData[]
 }
 
-export type VaultsAPYMap = Record<string, number>
+export type VaultsAPYMap = Record<string, number | undefined>
 
 export function useVaultsAPY(): UseQueryResult<VaultsAPYMap, Error> {
   return useQuery({
