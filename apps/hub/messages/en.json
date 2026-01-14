@@ -1122,6 +1122,122 @@
     "transaction_failed": {
       "translation": "Transaction failed",
       "notes": "errors::transaction_failed"
+    },
+    "invalid_spender_address": {
+      "translation": "Invalid spender address provided",
+      "notes": "errors::invalid_spender_address"
+    },
+    "invalid_account_address": {
+      "translation": "Invalid account address provided",
+      "notes": "errors::invalid_account_address"
+    },
+    "lock_period_greater_than_zero": {
+      "translation": "Lock period must be greater than 0",
+      "notes": "errors::lock_period_greater_than_zero"
+    },
+    "vault_created_event_not_found": {
+      "translation": "VaultCreated event not found in transaction logs",
+      "notes": "errors::vault_created_event_not_found"
+    },
+    "no_address_provided": {
+      "translation": "No address provided",
+      "notes": "errors::no_address_provided"
+    },
+    "failed_fetch_karma_balance": {
+      "translation": "Failed to fetch karma balance: {error}",
+      "notes": "errors::failed_fetch_karma_balance"
+    },
+    "failed_fetch_karma_rewards": {
+      "translation": "Failed to fetch karma rewards balance: {error}",
+      "notes": "errors::failed_fetch_karma_rewards"
+    },
+    "failed_fetch_daily_limit": {
+      "translation": "Failed to fetch daily limit",
+      "notes": "errors::failed_fetch_daily_limit"
+    },
+    "failed_fetch_account_requests": {
+      "translation": "Failed to fetch account requests",
+      "notes": "errors::failed_fetch_account_requests"
+    },
+    "failed_fetch_reset_time": {
+      "translation": "Failed to fetch reset time",
+      "notes": "errors::failed_fetch_reset_time"
+    },
+    "transaction_reverted": {
+      "translation": "Transaction reverted",
+      "notes": "errors::transaction_reverted_short"
+    },
+    "token_required": {
+      "translation": "Token is required",
+      "notes": "errors::token_required"
+    },
+    "failed_claim_karma": {
+      "translation": "Failed to claim karma: {error}",
+      "notes": "errors::failed_claim_karma"
+    },
+    "invalid_lockup_period_values": {
+      "translation": "Invalid lockup period values returned from contract",
+      "notes": "errors::invalid_lockup_period_values"
+    },
+    "min_lockup_greater_than_max": {
+      "translation": "Minimum lockup period must be less than maximum lockup period",
+      "notes": "errors::min_lockup_greater_than_max"
+    },
+    "failed_fetch_slider_config": {
+      "translation": "Failed to fetch slider configuration: {error}",
+      "notes": "errors::failed_fetch_slider_config"
+    },
+    "failed_fetch_exchange_rate": {
+      "translation": "Failed to fetch exchange rate for {token}: {status} {statusText}",
+      "notes": "errors::failed_fetch_exchange_rate"
+    },
+    "invalid_market_api_response": {
+      "translation": "Invalid response from market API: missing {token} price",
+      "notes": "errors::invalid_market_api_response"
+    },
+    "invalid_price_value": {
+      "translation": "Invalid price value for {token}: {price}",
+      "notes": "errors::invalid_price_value"
+    },
+    "failed_fetch_vaults_apy": {
+      "translation": "Failed to fetch vaults APY: {error}",
+      "notes": "errors::failed_fetch_vaults_apy"
+    }
+  },
+  "not_found": {
+    "title": {
+      "translation": "This is not the page you're looking for",
+      "notes": "not_found::title"
+    },
+    "take_me_home": {
+      "translation": "Take me home",
+      "notes": "not_found::take_me_home"
+    }
+  },
+  "success": {
+    "token_allowance_increased": {
+      "translation": "Token Allowance has been increased",
+      "notes": "success::token_allowance_increased"
+    },
+    "lock_time_extended": {
+      "translation": "Lock time extended successfully",
+      "notes": "success::lock_time_extended"
+    },
+    "vault_locked": {
+      "translation": "Vault {address} has been locked",
+      "notes": "success::vault_locked"
+    },
+    "deposit_successful": {
+      "translation": "Successfully deposited into {vault}",
+      "notes": "success::deposit_successful"
+    },
+    "eth_wrapped": {
+      "translation": "Successfully wrapped ETH to WETH",
+      "notes": "success::eth_wrapped"
+    },
+    "vault_created": {
+      "translation": "Vault {address} has been created",
+      "notes": "success::vault_created"
     }
   }
 }

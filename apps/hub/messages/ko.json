@@ -1122,6 +1122,122 @@
     "transaction_failed": {
       "translation": "트랜잭션 실패",
       "notes": "errors::transaction_failed"
+    },
+    "invalid_spender_address": {
+      "translation": "유효하지 않은 지출자 주소가 제공되었습니다",
+      "notes": "errors::invalid_spender_address"
+    },
+    "invalid_account_address": {
+      "translation": "유효하지 않은 계정 주소가 제공되었습니다",
+      "notes": "errors::invalid_account_address"
+    },
+    "lock_period_greater_than_zero": {
+      "translation": "잠금 기간은 0보다 커야 합니다",
+      "notes": "errors::lock_period_greater_than_zero"
+    },
+    "vault_created_event_not_found": {
+      "translation": "트랜잭션 로그에서 VaultCreated 이벤트를 찾을 수 없습니다",
+      "notes": "errors::vault_created_event_not_found"
+    },
+    "no_address_provided": {
+      "translation": "주소가 제공되지 않았습니다",
+      "notes": "errors::no_address_provided"
+    },
+    "failed_fetch_karma_balance": {
+      "translation": "카르마 잔액을 불러오지 못했습니다: {error}",
+      "notes": "errors::failed_fetch_karma_balance"
+    },
+    "failed_fetch_karma_rewards": {
+      "translation": "카르마 보상 잔액을 불러오지 못했습니다: {error}",
+      "notes": "errors::failed_fetch_karma_rewards"
+    },
+    "failed_fetch_daily_limit": {
+      "translation": "일일 한도를 불러오지 못했습니다",
+      "notes": "errors::failed_fetch_daily_limit"
+    },
+    "failed_fetch_account_requests": {
+      "translation": "계정 요청을 불러오지 못했습니다",
+      "notes": "errors::failed_fetch_account_requests"
+    },
+    "failed_fetch_reset_time": {
+      "translation": "재설정 시간을 불러오지 못했습니다",
+      "notes": "errors::failed_fetch_reset_time"
+    },
+    "transaction_reverted": {
+      "translation": "트랜잭션이 되돌려졌습니다",
+      "notes": "errors::transaction_reverted_short"
+    },
+    "token_required": {
+      "translation": "토큰이 필요합니다",
+      "notes": "errors::token_required"
+    },
+    "failed_claim_karma": {
+      "translation": "카르마 수령에 실패했습니다: {error}",
+      "notes": "errors::failed_claim_karma"
+    },
+    "invalid_lockup_period_values": {
+      "translation": "컨트랙트에서 반환된 잠금 기간 값이 유효하지 않습니다",
+      "notes": "errors::invalid_lockup_period_values"
+    },
+    "min_lockup_greater_than_max": {
+      "translation": "최소 잠금 기간은 최대 잠금 기간보다 작아야 합니다",
+      "notes": "errors::min_lockup_greater_than_max"
+    },
+    "failed_fetch_slider_config": {
+      "translation": "슬라이더 구성을 불러오지 못했습니다: {error}",
+      "notes": "errors::failed_fetch_slider_config"
+    },
+    "failed_fetch_exchange_rate": {
+      "translation": "{token}의 환율을 불러오지 못했습니다: {status} {statusText}",
+      "notes": "errors::failed_fetch_exchange_rate"
+    },
+    "invalid_market_api_response": {
+      "translation": "마켓 API 응답이 유효하지 않습니다: {token} 가격 누락",
+      "notes": "errors::invalid_market_api_response"
+    },
+    "invalid_price_value": {
+      "translation": "{token}의 가격 값이 유효하지 않습니다: {price}",
+      "notes": "errors::invalid_price_value"
+    },
+    "failed_fetch_vaults_apy": {
+      "translation": "금고 APY를 불러오지 못했습니다: {error}",
+      "notes": "errors::failed_fetch_vaults_apy"
+    }
+  },
+  "not_found": {
+    "title": {
+      "translation": "찾고 계신 페이지가 아닙니다",
+      "notes": "not_found::title"
+    },
+    "take_me_home": {
+      "translation": "홈으로 이동",
+      "notes": "not_found::take_me_home"
+    }
+  },
+  "success": {
+    "token_allowance_increased": {
+      "translation": "토큰 허용량이 증가했습니다",
+      "notes": "success::token_allowance_increased"
+    },
+    "lock_time_extended": {
+      "translation": "잠금 시간이 성공적으로 연장되었습니다",
+      "notes": "success::lock_time_extended"
+    },
+    "vault_locked": {
+      "translation": "금고 {address}가 잠겼습니다",
+      "notes": "success::vault_locked"
+    },
+    "deposit_successful": {
+      "translation": "{vault}에 성공적으로 예치되었습니다",
+      "notes": "success::deposit_successful"
+    },
+    "eth_wrapped": {
+      "translation": "ETH를 WETH로 성공적으로 래핑했습니다",
+      "notes": "success::eth_wrapped"
+    },
+    "vault_created": {
+      "translation": "금고 {address}가 생성되었습니다",
+      "notes": "success::vault_created"
     }
   }
 }

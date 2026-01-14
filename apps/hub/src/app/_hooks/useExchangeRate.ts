@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
 
 import { clientEnv } from '~constants/env.client.mjs'
 
@@ -75,10 +76,14 @@ const DEFAULT_TOKEN = 'SNT'
  * Fetches the current exchange rate for a token in USD from the market API
  *
  * @param token - The token symbol to fetch the rate for
+ * @param t - Translation function
  * @returns Exchange rate data with price and timestamp
  * @throws Error if the API request fails or returns invalid data
  */
-async function fetchExchangeRate(token: string): Promise<ExchangeRateData> {
+async function fetchExchangeRate(
+  token: string,
+  t: ReturnType<typeof useTranslations>
+): Promise<ExchangeRateData> {
   const url = new URL(`${API_BASE_URL}/api/trpc/market.tokenPrice`)
   url.searchParams.set('input', JSON.stringify({ json: { symbols: [token] } }))
 
@@ -91,7 +96,11 @@ async function fetchExchangeRate(token: string): Promise<ExchangeRateData> {
 
   if (!response.ok) {
     throw new Error(
-      `Failed to fetch exchange rate for ${token}: ${response.status} ${response.statusText}`
+      t('errors.failed_fetch_exchange_rate', {
+        token,
+        status: response.status.toString(),
+        statusText: response.statusText,
+      })
     )
   }
 
@@ -100,11 +109,16 @@ async function fetchExchangeRate(token: string): Promise<ExchangeRateData> {
   const tokenPrice = body?.result?.data?.json?.[token]
 
   if (tokenPrice?.usd === undefined || tokenPrice?.usd === null) {
-    throw new Error(`Invalid response from market API: missing ${token} price`)
+    throw new Error(t('errors.invalid_market_api_response', { token }))
   }
 
   if (isNaN(tokenPrice.usd)) {
-    throw new Error(`Invalid price value for ${token}: ${tokenPrice.usd}`)
+    throw new Error(
+      t('errors.invalid_price_value', {
+        token,
+        price: tokenPrice.usd.toString(),
+      })
+    )
   }
 
   return {
@@ -174,10 +188,11 @@ export function useExchangeRate(options: UseExchangeRateOptions = {}) {
     refetchInterval = DEFAULT_REFETCH_INTERVAL,
     staleTime = DEFAULT_STALE_TIME,
   } = options
+  const t = useTranslations()
 
   return useQuery({
     queryKey: [QUERY_KEY_PREFIX, token] as const,
-    queryFn: () => fetchExchangeRate(token),
+    queryFn: () => fetchExchangeRate(token, t),
     enabled,
     refetchInterval,
     staleTime,

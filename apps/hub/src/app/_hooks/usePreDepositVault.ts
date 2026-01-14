@@ -1,5 +1,6 @@
 import { useToast } from '@status-im/components'
 import { useMutation, type UseMutationResult } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
 import { parseUnits } from 'viem'
 import { BaseError, useAccount, useConfig, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
@@ -105,6 +106,7 @@ export function usePreDepositVault(): UsePreDepositVaultReturn {
   const config = useConfig()
   const { send: sendPreDepositEvent } = usePreDepositStateContext()
   const toast = useToast()
+  const t = useTranslations()
 
   return useMutation({
     mutationKey: [MUTATION_KEY, address],
@@ -113,13 +115,11 @@ export function usePreDepositVault(): UsePreDepositVaultReturn {
       amount,
     }: PreDepositVaultParams): Promise<void> => {
       if (!address) {
-        throw new Error(
-          'Wallet not connected. Please connect your wallet first.'
-        )
+        throw new Error(t('errors.wallet_not_connected'))
       }
 
       if (!amount || parseFloat(amount) <= 0) {
-        throw new Error('Amount must be greater than 0')
+        throw new Error(t('errors.amount_greater_than_zero'))
       }
 
       const amountWei = parseUnits(amount, vault.token.decimals)
@@ -146,16 +146,18 @@ export function usePreDepositVault(): UsePreDepositVaultReturn {
         })
 
         if (status === 'reverted') {
-          throw new Error('Transaction was reverted')
+          throw new Error(t('errors.transaction_reverted'))
         }
 
         sendPreDepositEvent({ type: 'COMPLETE', amount })
-        toast.positive(`Successfully deposited into ${vault.name}`)
+        toast.positive(t('success.deposit_successful', { vault: vault.name }))
       } catch (error) {
         console.error(`Failed to deposit into ${vault.name}: `, error)
         sendPreDepositEvent({ type: 'REJECT' })
         const message =
-          error instanceof BaseError ? error.shortMessage : 'Transaction failed'
+          error instanceof BaseError
+            ? error.shortMessage
+            : t('errors.transaction_failed')
         toast.negative(message)
         throw error
       }
