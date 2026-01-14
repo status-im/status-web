@@ -24,13 +24,7 @@ const Hero = () => {
         <div className="relative px-4 py-[14px] md:p-12">
           <div className="flex flex-col items-start text-left text-white-100">
             <h1 className="mb-1 text-19 font-600 md:mb-5 md:text-56 lg:text-64">
-              {t('hero.title').includes('on the free network') ? (
-                <>
-                  Get started <br /> on the free network
-                </>
-              ) : (
-                t('hero.title')
-              )}
+              {t('hero.title_1')} <br /> {t('hero.title_2')}
             </h1>
 
             <p className="mb-8 max-w-[180px] text-13 text-white-90 md:max-w-[558px] md:text-19 lg:text-27">

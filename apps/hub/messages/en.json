@@ -109,9 +109,13 @@
     }
   },
   "hero": {
-    "title": {
-      "translation": "Get started on the free network",
-      "notes": "hero::title"
+    "title_1": {
+      "translation": "Get started",
+      "notes": "hero::title_1"
+    },
+    "title_2": {
+      "translation": "on the free network",
+      "notes": "hero::title_2"
     },
     "description": {
       "translation": "Try apps and deposit assets to earn Karma",

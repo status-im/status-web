@@ -109,9 +109,13 @@
     }
   },
   "hero": {
-    "title": {
-      "translation": "무료 네트워크 시작하기",
-      "notes": "hero::title"
+    "title_1": {
+      "translation": "시작하기",
+      "notes": "hero::title_1"
+    },
+    "title_2": {
+      "translation": "무료 네트워크에서",
+      "notes": "hero::title_2"
     },
     "description": {
       "translation": "앱을 사용하고 자산을 예치하여 카르마를 획득하세요",
