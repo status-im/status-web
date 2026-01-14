@@ -31,6 +31,30 @@
       "translation": "Close",
       "notes": "common::close"
     },
+    "close_aria": {
+      "translation": "Close",
+      "notes": "common::close_aria"
+    },
+    "karma": {
+      "translation": "Karma",
+      "notes": "common::karma"
+    },
+    "snt": {
+      "translation": "SNT",
+      "notes": "common::snt"
+    },
+    "ethereum": {
+      "translation": "Ethereum",
+      "notes": "common::ethereum"
+    },
+    "status_network_logo": {
+      "translation": "Status Network Logo",
+      "notes": "common::status_network_logo"
+    },
+    "dragon": {
+      "translation": "Dragon",
+      "notes": "common::dragon"
+    },
     "learn_more": {
       "translation": "Learn more",
       "notes": "common::learn_more"

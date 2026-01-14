@@ -31,6 +31,30 @@
       "translation": "닫기",
       "notes": "common::close"
     },
+    "close_aria": {
+      "translation": "닫기",
+      "notes": "common::close_aria"
+    },
+    "karma": {
+      "translation": "카르마",
+      "notes": "common::karma"
+    },
+    "snt": {
+      "translation": "SNT",
+      "notes": "common::snt"
+    },
+    "ethereum": {
+      "translation": "이더리움",
+      "notes": "common::ethereum"
+    },
+    "status_network_logo": {
+      "translation": "스테이터스 네트워크 로고",
+      "notes": "common::status_network_logo"
+    },
+    "dragon": {
+      "translation": "드래곤",
+      "notes": "common::dragon"
+    },
     "learn_more": {
       "translation": "더 알아보기",
       "notes": "common::learn_more"
