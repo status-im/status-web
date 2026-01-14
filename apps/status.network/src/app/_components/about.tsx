@@ -29,14 +29,29 @@ const About = async () => {
                 {t('about.section_title.translation')}
               </p>
               <h2 className="mb-2 text-40 font-600 lg:text-64">
-                {t('about.title_1.translation')}{' '}
-                <span className="whitespace-nowrap">
-                  {t('about.title_2.translation')}
-                </span>{' '}
-                {t('about.title_3.translation')}{' '}
-                <span className="text-40 font-600 text-neutral-80/60 md:text-64">
-                  {t('about.title_4.translation')}
-                </span>
+                {locale === 'ko' ? (
+                  <>
+                    <span className="text-40 font-600 text-neutral-80/60 md:text-64">
+                      {t('about.title_1.translation')}
+                    </span>{' '}
+                    <span className="whitespace-nowrap">
+                      {t('about.title_2.translation')}
+                    </span>{' '}
+                    {t('about.title_3.translation')}{' '}
+                    {t('about.title_4.translation')}
+                  </>
+                ) : (
+                  <>
+                    {t('about.title_1.translation')}{' '}
+                    <span className="whitespace-nowrap">
+                      {t('about.title_2.translation')}
+                    </span>{' '}
+                    {t('about.title_3.translation')}{' '}
+                    <span className="text-40 font-600 text-neutral-80/60 md:text-64">
+                      {t('about.title_4.translation')}
+                    </span>
+                  </>
+                )}
               </h2>
             </div>
 
