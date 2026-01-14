@@ -825,6 +825,38 @@
       "translation": "네이티브 앱 포인트",
       "notes": "vault::native_apps_points"
     },
+    "eth_wrapped_success": {
+      "translation": "ETH 래핑이 완료되었습니다. 이제 예치를 진행할 수 있습니다.",
+      "notes": "vault::eth_wrapped_success"
+    },
+    "eth_wrap_failed": {
+      "translation": "ETH 래핑에 실패했습니다. 다시 시도하세요.",
+      "notes": "vault::eth_wrap_failed"
+    },
+    "insufficient_balance": {
+      "translation": "잔액이 부족합니다. 최대: {max}",
+      "notes": "vault::insufficient_balance"
+    },
+    "exceeds_vault_limit": {
+      "translation": "금고 한도를 초과했습니다. 최대: {max}",
+      "notes": "vault::exceeds_vault_limit"
+    },
+    "below_minimum_deposit": {
+      "translation": "최소 예치 금액 미만입니다. 최소: {min}",
+      "notes": "vault::below_minimum_deposit"
+    },
+    "available_eth_to_wrap": {
+      "translation": "래핑 가능한 ETH:",
+      "notes": "vault::available_eth_to_wrap"
+    },
+    "wrapping_eth": {
+      "translation": "ETH 래핑 중...",
+      "notes": "vault::wrapping_eth"
+    },
+    "wrap_eth_to_weth": {
+      "translation": "ETH를 WETH로 래핑",
+      "notes": "vault::wrap_eth_to_weth"
+    },
     "or": {
       "translation": "또는",
       "notes": "vault::or"

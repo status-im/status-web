@@ -825,6 +825,38 @@
       "translation": "native apps points",
       "notes": "vault::native_apps_points"
     },
+    "eth_wrapped_success": {
+      "translation": "ETH wrapped successfully. You can now proceed with deposit.",
+      "notes": "vault::eth_wrapped_success"
+    },
+    "eth_wrap_failed": {
+      "translation": "Failed to wrap ETH. Please try again.",
+      "notes": "vault::eth_wrap_failed"
+    },
+    "insufficient_balance": {
+      "translation": "Insufficient balance. Max: {max}",
+      "notes": "vault::insufficient_balance"
+    },
+    "exceeds_vault_limit": {
+      "translation": "Exceeds vault limit. Max: {max}",
+      "notes": "vault::exceeds_vault_limit"
+    },
+    "below_minimum_deposit": {
+      "translation": "Below minimum deposit. Min: {min}",
+      "notes": "vault::below_minimum_deposit"
+    },
+    "available_eth_to_wrap": {
+      "translation": "Available ETH to wrap:",
+      "notes": "vault::available_eth_to_wrap"
+    },
+    "wrapping_eth": {
+      "translation": "Wrapping ETH...",
+      "notes": "vault::wrapping_eth"
+    },
+    "wrap_eth_to_weth": {
+      "translation": "Wrap ETH to WETH",
+      "notes": "vault::wrap_eth_to_weth"
+    },
     "or": {
       "translation": "or",
       "notes": "vault::or"

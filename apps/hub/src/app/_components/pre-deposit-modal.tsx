@@ -158,12 +158,10 @@ const PreDepositModal = ({
           {
             onSuccess: async () => {
               await refetchBalances()
-              toast.positive(
-                'ETH wrapped successfully. You can now proceed with deposit.'
-              )
+              toast.positive(t('vault.eth_wrapped_success'))
             },
             onError: () => {
-              toast.negative('Failed to wrap ETH. Please try again.')
+              toast.negative(t('vault.eth_wrap_failed'))
             },
           }
         )
@@ -204,7 +202,7 @@ const PreDepositModal = ({
               onOpenChange(false)
             },
             onError: () => {
-              toast.negative('Deposit failed. Please try again.')
+              toast.negative(t('vault.deposit_failed'))
               form.reset()
             },
           }
@@ -234,17 +232,19 @@ const PreDepositModal = ({
         vault.id === 'WETH'
           ? (balance ?? 0n) + (ethBalance ?? 0n)
           : (balance ?? 0n)
-      return `Insufficient balance. Max: ${formatTokenAmount(totalBalance, vault.token.symbol)}`
+      return t('vault.insufficient_balance', {
+        max: formatTokenAmount(totalBalance, vault.token.symbol),
+      })
     })
-    .with(
-      'exceeds-max',
-      () =>
-        `Exceeds vault limit. Max: ${formatTokenAmount(maxDeposit ?? 0n, vault.token.symbol)}`
+    .with('exceeds-max', () =>
+      t('vault.exceeds_vault_limit', {
+        max: formatTokenAmount(maxDeposit ?? 0n, vault.token.symbol),
+      })
     )
-    .with(
-      'below-min',
-      () =>
-        `Below minimum deposit. Min: ${formatTokenAmount(minDeposit ?? 0n, vault.token.symbol)}`
+    .with('below-min', () =>
+      t('vault.below_minimum_deposit', {
+        min: formatTokenAmount(minDeposit ?? 0n, vault.token.symbol),
+      })
     )
     .with('invalid-shares', () => sharesValidation.validationMessage)
     .otherwise(() => form.formState.errors.amount?.message)
@@ -362,7 +362,7 @@ const PreDepositModal = ({
                 {vault.id === 'WETH' && (
                   <div className="text-right">
                     <span>
-                      Available ETH to wrap:{' '}
+                      {t('vault.available_eth_to_wrap')}{' '}
                       {formatTokenAmount(ethBalance, 'ETH')}
                     </span>
                   </div>
@@ -444,10 +444,12 @@ const PreDepositModal = ({
                   isDepositing,
                   isWrapping,
                 })
-                  .with({ isWrapping: true }, () => 'Wrapping ETH...')
+                  .with({ isWrapping: true }, () => t('vault.wrapping_eth'))
                   .with({ isApproving: true }, () => t('vault.approving'))
                   .with({ isDepositing: true }, () => t('vault.depositing'))
-                  .with({ action: 'needs-wrap' }, () => 'Wrap ETH to WETH')
+                  .with({ action: 'needs-wrap' }, () =>
+                    t('vault.wrap_eth_to_weth')
+                  )
                   .with({ action: 'approve' }, () => t('vault.approve_deposit'))
                   .with({ action: 'deposit' }, () => t('vault.deposit'))
                   .otherwise(() => t('vault.enter_amount'))}
