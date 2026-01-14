@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { Skeleton } from '@status-im/components'
 import { Button } from '@status-im/status-network/components'
 import { useSIWE } from 'connectkit'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { formatUnits } from 'viem'
 import { useAccount } from 'wagmi'
 
@@ -19,10 +19,14 @@ import { useEmergencyModeEnabled } from '../../_hooks/useEmergencyModeEnabled'
 import { InfoTooltip } from '../info-tooltip'
 
 const WeightedBoostInfoTooltip = () => {
+  const locale = useLocale()
+  const localePrefix = locale === 'en' ? '' : `/${locale}`
+  const docsUrl = `https://docs.status.network${localePrefix}/tokenomics/snt-staking`
+
   return (
     <InfoTooltip
       content={`The longer STT is staked or locked in vaults, the higher this multiplier goes. This rewards long term believers. The maximum multiplier is x${MAX_BOOST}.`}
-      link="https://docs.status.network/tokenomics/snt-staking"
+      link={docsUrl}
     />
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 
 import {
   BridgeIcon,
@@ -25,6 +25,8 @@ type Props = {
 const Sidebar = (props: Props) => {
   const { isOpen, onClose } = props
   const t = useTranslations()
+  const locale = useLocale()
+  const localePrefix = locale === 'en' ? '' : `/${locale}`
 
   const NAV_LINKS = [
     {
@@ -98,7 +100,7 @@ const Sidebar = (props: Props) => {
       id: 'docs',
       label: t('navigation.docs'),
       icon: DocsIcon,
-      href: 'https://docs.status.network/',
+      href: `https://docs.status.network${localePrefix}/`,
     },
   ]
 
