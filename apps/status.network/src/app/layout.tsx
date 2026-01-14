@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
 import { cx } from 'cva'
-import { getLocale, getMessages } from 'next-intl/server'
+import { getLocale } from 'next-intl/server'
 import { Metadata } from './_metadata'
 import { jsonLD, JSONLDScript } from './_utils/json-ld'
 
@@ -56,7 +56,6 @@ type Props = {
 
 export default async function RootLayout({ children }: Props) {
   const locale = await getLocale()
-  const messages = await getMessages()
 
   return (
     <html lang={locale}>
