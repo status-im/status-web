@@ -1,4 +1,5 @@
 import { DownloadIcon } from '@status-im/icons/20'
+import { useTranslations } from 'next-intl'
 import { DownloadZipButton } from './download-zip-button'
 
 type Props = {
@@ -10,6 +11,8 @@ type Props = {
 
 const BrandSection = (props: Props) => {
   const { title, description, children, fileName } = props
+
+  const t = useTranslations()
 
   return (
     <section className="relative z-20 py-10">
@@ -26,7 +29,7 @@ const BrandSection = (props: Props) => {
             fileName={fileName}
             className="w-full justify-center lg:w-fit lg:justify-start"
           >
-            Download
+            {t('brand.download_button.translation')}
           </DownloadZipButton>
         )}
       </div>

@@ -6,7 +6,7 @@ import Image from 'next/image'
 
 import { formatKarma } from '~utils/currency'
 
-import { useKarmaRewardsDistributor } from '../_hooks/useKarmaRewardsDistributor'
+import { useKarmaBalance } from '../_hooks/useKarmaBalance'
 
 import type { ComponentProps } from 'react'
 
@@ -17,7 +17,7 @@ type Props = {
 
 const KarmaButton = (props: Props) => {
   const { size = '32', className, ...rest } = props
-  const { data } = useKarmaRewardsDistributor()
+  const { data } = useKarmaBalance()
 
   const amount = formatKarma(data?.balance ?? BigInt(0), {
     compact: size === '32' ? false : true,

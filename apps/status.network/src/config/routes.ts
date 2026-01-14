@@ -1,6 +1,7 @@
 import gitHubIcon from '~public/social/github.svg'
 import statusIcon from '~public/social/status.svg'
 import twitterIcon from '~public/social/twitter.svg'
+import type { getTranslations } from 'next-intl/server'
 
 export const STATUS_URL = 'https://status.im'
 export const KEYCARD_URL = 'https://keycard.tech'
@@ -13,7 +14,31 @@ export const GATEWAY_URL = 'https://gateway.fm'
 export const CATS_FISHING_URL = 'https://cats.fishing'
 export const SPLA_LABS_URL = 'https://splalabs.xyz'
 export const PONZI_HERO_URL = 'https://www.ponzihero.xyz'
+export const HASHVEGAS_URL = 'https://hash.vegas'
 export const DIN_URL = 'https://infura.io'
+
+// Function to create localized routes
+export function getLocalizedRoutes(
+  t: Awaited<ReturnType<typeof getTranslations>>,
+  locale: string = 'en',
+) {
+  const localePrefix = locale === 'en' ? '' : `/${locale}`
+
+  return {
+    Navigation: [
+      { name: t('navigation.about.translation'), href: '#about' },
+      { name: t('navigation.features.translation'), href: '#features' },
+      { name: t('navigation.partners.translation'), href: '#partners' },
+      { name: t('navigation.network.translation'), href: '#network' },
+      { name: t('navigation.tokenomics.translation'), href: '#tokenomics' },
+      { name: t('navigation.blog.translation'), href: '#blog' },
+    ],
+    Docs: `https://docs.status.network${localePrefix}/`,
+    Bridge: 'https://bridge.status.network/ ',
+    Partner: 'https://statusnetwork.typeform.com/partner',
+    Hub: 'https://hub.status.network/',
+  } as const
+}
 
 export const ROUTES = {
   Navigation: [
@@ -54,6 +79,26 @@ export const FEATURES = {
     name: 'Learn more about Linea',
     href: LINEA_URL,
   },
+}
+
+// Function to get locale-aware feature URLs
+export function getLocalizedFeatures(locale: string) {
+  const localePrefix = locale === 'en' ? '' : `/${locale}`
+
+  return {
+    sustainablePublicFunding: {
+      name: FEATURES.sustainablePublicFunding.name,
+      href: `https://docs.status.network${localePrefix}/tokenomics/karmic-tokenomics`,
+    },
+    gaslessTransactions: {
+      name: FEATURES.gaslessTransactions.name,
+      href: `https://docs.status.network${localePrefix}/tokenomics/economic-model`,
+    },
+    performance: {
+      name: FEATURES.performance.name,
+      href: FEATURES.performance.href, // External link, no localization needed
+    },
+  }
 }
 
 export const BRAND = {

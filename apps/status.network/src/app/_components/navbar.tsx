@@ -1,10 +1,18 @@
-import { ROUTES } from '~/config/routes'
+'use client'
+
+import { getLocalizedRoutes } from '~/config/routes'
+import { Link } from '~/i18n/navigation'
+import { useLocale, useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { ButtonLink } from './button-link'
 import { Divider } from './divider'
-import { Link } from './link'
+import { LanguageSelector } from './language-selector'
 
 const NavBar = () => {
+  const t = useTranslations()
+  const locale = useLocale()
+  const localizedRoutes = getLocalizedRoutes(t, locale)
+
   return (
     <header className="sticky top-0 z-[60] hidden w-full bg-white-90 backdrop-blur supports-[backdrop-filter]:bg-white-80 lg:block">
       <nav className="mx-auto flex h-16 items-center justify-between px-4">
@@ -17,7 +25,7 @@ const NavBar = () => {
           />
         </Link>
         <div className="hidden items-center space-x-6 md:flex">
-          {ROUTES.Navigation.map(link => (
+          {localizedRoutes.Navigation.map(link => (
             <Link
               key={link.name}
               href={link.href}
@@ -29,16 +37,17 @@ const NavBar = () => {
         </div>
         <div className="flex items-center space-x-4">
           <ButtonLink
-            href={ROUTES.Docs}
+            href={localizedRoutes.Docs}
             variant="white"
             size="32"
             className="hidden sm:block"
           >
-            Read docs
+            {t('common.read_docs.translation')}
           </ButtonLink>
-          <ButtonLink href={ROUTES.Hub} size="32">
-            Get started
+          <ButtonLink href={localizedRoutes.Hub} size="32">
+            {t('common.get_started.translation')}
           </ButtonLink>
+          <LanguageSelector />
         </div>
       </nav>
       <Divider />

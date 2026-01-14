@@ -1,9 +1,14 @@
-import { ROUTES } from '~/config/routes'
+import { getLocalizedRoutes } from '~/config/routes'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { AnimatedFrames } from './animated-frames'
 import { ButtonLink } from './button-link'
 import { Divider } from './divider'
 
-const About = () => {
+const About = async () => {
+  const t = await getTranslations()
+  const locale = await getLocale()
+  const routes = getLocalizedRoutes(t, locale)
+
   return (
     <section className="relative w-full" id="about">
       <div className="absolute left-0 top-0 z-10 h-full w-40 bg-gradient-to-r from-white-100 via-white-40 to-[transparent]" />
@@ -19,31 +24,32 @@ const About = () => {
           <div className="max-w-[936px]">
             <div className="mb-8">
               <p className="mb-6 inline-block text-13 font-500 text-purple">
-                01{' '}
+                {t('about.section_number.translation')}{' '}
                 <span className="inline-block h-2 w-px bg-purple-transparent" />{' '}
-                WHAT IS STATUS NETWORK?
+                {t('about.section_title.translation')}
               </p>
               <h2 className="mb-2 text-40 font-600 lg:text-64">
-                The first Ethereum L2 with{' '}
-                <span className="whitespace-nowrap">gas-free</span> transactions
-                at scale{' '}
+                {t('about.title_1.translation')}{' '}
+                <span className="whitespace-nowrap">
+                  {t('about.title_2.translation')}
+                </span>{' '}
+                {t('about.title_3.translation')}{' '}
                 <span className="text-40 font-600 text-neutral-80/60 md:text-64">
-                  funded by native yield + fees.
+                  {t('about.title_4.translation')}
                 </span>
               </h2>
             </div>
 
             <p className="mb-8 max-w-[816px] text-27">
-              A free network with sustainable funding for public apps, games and
-              protocols.
+              {t('about.description.translation')}
             </p>
 
             <div className="flex gap-3">
-              <ButtonLink href={ROUTES.Partner}>
-                Build on Status Network
+              <ButtonLink href={routes.Partner}>
+                {t('about.build_button.translation')}
               </ButtonLink>
-              <ButtonLink variant="white" href={ROUTES.Docs}>
-                Learn more
+              <ButtonLink variant="white" href={routes.Docs}>
+                {t('about.learn_more_button.translation')}
               </ButtonLink>
             </div>
           </div>
