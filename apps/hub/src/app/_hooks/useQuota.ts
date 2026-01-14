@@ -3,7 +3,7 @@ import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { getQuota } from '~constants/siwe'
 
 interface QuotaData {
-  used: number
+  remaining: number
   total: number
 }
 
@@ -55,7 +55,7 @@ export function useQuota(
         Number.parseInt(quotaResponse.epoch.remainingQuota, 10) || 0
 
       return {
-        used: remainingQuota,
+        remaining: remainingQuota,
         total,
       }
     },
