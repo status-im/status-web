@@ -42,10 +42,10 @@ const NavBar = () => {
             size="32"
             className="hidden sm:block"
           >
-            {t('common.read_docs.translation')}
+            {t('common.read_docs')}
           </ButtonLink>
           <ButtonLink href={localizedRoutes.Hub} size="32">
-            {t('common.get_started.translation')}
+            {t('common.get_started')}
           </ButtonLink>
           <LanguageSelector />
         </div>

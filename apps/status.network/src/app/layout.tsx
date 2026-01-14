@@ -3,20 +3,26 @@ import { Inter } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
 import { cx } from 'cva'
-import { NextIntlClientProvider } from 'next-intl'
-import { getLocale, getMessages } from 'next-intl/server'
-import { Divider } from './_components/divider'
-import { Footer } from './_components/footer'
-import { NavBar } from './_components/navbar'
-import { NavBarMobile } from './_components/navbar-mobile'
-import { PromoBar } from './_components/promo-bar'
+import { getLocale } from 'next-intl/server'
 import { Metadata } from './_metadata'
+import { jsonLD, JSONLDScript } from './_utils/json-ld'
 
 const inter = Inter({
   variable: '--font-inter',
   weight: ['200', '300', '400', '500'],
   subsets: ['latin'],
   preload: true,
+})
+
+const organizationSchema = jsonLD.organization({
+  description:
+    'The first natively gasless Ethereum L2 with sustainable yield and integrated public funding 🐉',
+  logo: 'https://status.network/logo.svg',
+})
+
+const websiteSchema = jsonLD.website({
+  description:
+    'The first natively gasless Ethereum L2 with sustainable yield and integrated public funding 🐉',
 })
 
 export const metadata = Metadata({
@@ -50,7 +56,6 @@ type Props = {
 
 export default async function RootLayout({ children }: Props) {
   const locale = await getLocale()
-  const messages = await getMessages()
 
   return (
     <html lang={locale}>
@@ -62,20 +67,8 @@ export default async function RootLayout({ children }: Props) {
         )}
         suppressHydrationWarning
       >
-        <NextIntlClientProvider messages={messages}>
-          <PromoBar />
-          <div className="relative flex min-h-screen justify-center overflow-clip px-2 2xl:px-0">
-            <div className="relative w-full max-w-[1418px] border-x border-neutral-20">
-              <div className="absolute -left-2 top-0 z-50 h-full w-2 bg-gradient-to-r from-white-100 to-[transparent] 2xl:-left-12 2xl:w-12" />
-              <div className="absolute -right-2 top-0 z-50 h-full w-2 bg-gradient-to-l from-white-100 to-[transparent] 2xl:-right-12 2xl:w-12" />
-              <NavBar />
-              <NavBarMobile />
-              {children}
-              <Divider />
-              <Footer />
-            </div>
-          </div>
-        </NextIntlClientProvider>
+        <JSONLDScript schema={[organizationSchema, websiteSchema]} />
+        {children}
         <Analytics />
         <Script
           strategy="afterInteractive"

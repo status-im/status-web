@@ -3,6 +3,7 @@ import {
   type UseMutationResult,
   useQueryClient,
 } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
 import { useAccount } from 'wagmi'
 
 import { clientEnv } from '~constants/env.client.mjs'
@@ -104,6 +105,7 @@ const API_ENDPOINT = `${clientEnv.NEXT_PUBLIC_STATUS_NETWORK_API_URL}/sybil/conn
 export function useClaimKarma(): UseClaimKarmaReturn {
   const { address } = useAccount()
   const queryClient = useQueryClient()
+  const t = useTranslations()
 
   return useMutation({
     mutationKey: [MUTATION_KEY, address],
@@ -112,14 +114,12 @@ export function useClaimKarma(): UseClaimKarmaReturn {
     }: ClaimKarmaParams): Promise<ClaimKarmaResponse> => {
       // Validate wallet connection
       if (!address) {
-        throw new Error(
-          'Wallet not connected. Please connect your wallet first.'
-        )
+        throw new Error(t('errors.wallet_not_connected'))
       }
 
       // Validate token
       if (!token || token.trim() === '') {
-        throw new Error('Token is required')
+        throw new Error(t('errors.token_required'))
       }
 
       // Make API request
@@ -133,7 +133,9 @@ export function useClaimKarma(): UseClaimKarmaReturn {
       })
 
       if (!response.ok) {
-        throw new Error(`Failed to claim karma: ${response.statusText}`)
+        throw new Error(
+          t('errors.failed_claim_karma', { error: response.statusText })
+        )
       }
 
       return response.json()

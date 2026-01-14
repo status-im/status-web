@@ -1,7 +1,8 @@
 import { ExternalIcon } from '@status-im/icons/20'
-import { Link } from '@status-im/status-network/components'
+import { Link as StatusLink } from '@status-im/status-network/components'
 import { cx } from 'cva'
-import { usePathname } from 'next/navigation'
+
+import { Link, usePathname } from '~/i18n/navigation'
 
 type LinkItemProps = {
   id: string
@@ -26,9 +27,12 @@ const LinkItem = (props: LinkItemProps) => {
     }
   }
 
+  // Use locale-aware Link for internal links, StatusLink for external
+  const LinkComponent = isExternal ? StatusLink : Link
+
   return (
     <li key={id}>
-      <Link
+      <LinkComponent
         href={href}
         onClick={handleClick}
         className={cx(
@@ -37,6 +41,9 @@ const LinkItem = (props: LinkItemProps) => {
             ? 'bg-customisation-purple-50/5 text-purple'
             : 'text-neutral-90 hover:bg-neutral-10 hover:text-neutral-100'
         )}
+        {...(isExternal
+          ? { target: '_blank', rel: 'noopener noreferrer' }
+          : {})}
       >
         <div className="flex flex-1 items-center justify-between">
           <div className={cx('flex items-center gap-2')}>
@@ -52,7 +59,7 @@ const LinkItem = (props: LinkItemProps) => {
           </div>
         </div>
         {isExternal && <ExternalIcon />}
-      </Link>
+      </LinkComponent>
     </li>
   )
 }

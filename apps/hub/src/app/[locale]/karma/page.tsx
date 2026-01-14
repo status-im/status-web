@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react'
 
+import { useTranslations } from 'next-intl'
 import { formatEther } from 'viem/utils'
 
 import { HubLayout } from '~components/hub-layout'
@@ -18,6 +19,8 @@ import { useKarmaRewardsDistributor } from '~hooks/useKarmaRewardsDistributor'
 import { useRequireStatusNetwork } from '~hooks/useRequireStatusNetwork'
 
 function KarmaCardsSkeleton() {
+  const t = useTranslations()
+
   return (
     <>
       <div className="flex flex-col gap-6 md:flex-row">
@@ -26,7 +29,7 @@ function KarmaCardsSkeleton() {
       </div>
       <div className="flex flex-col gap-6">
         <h2 className="text-19 font-semibold text-neutral-100">
-          Receive Karma
+          {t('karma.receive_karma')}
         </h2>
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
           <KarmaSourceCardSkeleton />
@@ -37,6 +40,7 @@ function KarmaCardsSkeleton() {
 }
 
 function KarmaCards() {
+  const t = useTranslations()
   const { data, isLoading, refetch } = useCurrentUser()
   const {
     data: rewardsData,
@@ -47,7 +51,7 @@ function KarmaCards() {
   // TODO: Replace with actual data from API/state
   const visualData = {
     imageSrc: '/karma/media.jpg',
-    imageAlt: 'Karma Visual',
+    imageAlt: t('karma.karma_visual_alt'),
     isLoading: false,
     onRefresh: () => {
       // TODO: Implement refresh logic
@@ -62,7 +66,7 @@ function KarmaCards() {
   const karmaSources = useMemo(
     () => [
       {
-        title: 'Welcome Karma',
+        title: t('karma.welcome_karma'),
         amount: formatEther(rewardsData?.balance ?? BigInt(0)),
         onComplete: async () => {
           refetch()
@@ -70,9 +74,11 @@ function KarmaCards() {
         },
         isComplete: data?.connectedSybilProviders.includes('POW') ?? false,
         isLoading: rewardsLoading || isLoading,
+        badgeTitle: t('karma.just_arrived'),
+        badgeDescription: t('karma.just_arrived_description'),
       },
     ],
-    [rewardsData, data, rewardsLoading, isLoading, refetch, rewardsRefetch]
+    [rewardsData, data, rewardsLoading, isLoading, refetch, rewardsRefetch, t]
   )
 
   return (
@@ -83,7 +89,7 @@ function KarmaCards() {
       </div>
       <div className="flex flex-col gap-6">
         <h2 className="text-19 font-semibold text-neutral-100">
-          Receive Karma
+          {t('karma.receive_karma')}
         </h2>
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
           {karmaSources.map(source => (
@@ -96,6 +102,7 @@ function KarmaCards() {
 }
 
 export default function KarmaPage() {
+  const t = useTranslations()
   const { isCorrectChain, isConnected, isSwitching } = useRequireStatusNetwork()
 
   const showSkeleton = isConnected && (!isCorrectChain || isSwitching)
@@ -105,11 +112,10 @@ export default function KarmaPage() {
       <div className="mx-auto flex size-full flex-col gap-4 p-4 lg:gap-8 lg:p-8">
         <div className="flex flex-col gap-2">
           <h1 className="text-27 font-bold text-neutral-100 lg:text-64">
-            Karma
+            {t('karma.title')}
           </h1>
           <p className="text-13 font-regular text-neutral-100 lg:text-19">
-            Increase your Karma, unlock more free transactions, gain power over
-            the network
+            {t('karma.description')}
           </p>
         </div>
         {showSkeleton ? <KarmaCardsSkeleton /> : <KarmaCards />}

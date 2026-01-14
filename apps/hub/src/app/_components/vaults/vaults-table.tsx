@@ -11,6 +11,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { useSIWE } from 'connectkit'
+import { useTranslations } from 'next-intl'
 import { useAccount, useChainId } from 'wagmi'
 
 import { useCreateVault } from '~hooks/useCreateVault'
@@ -119,6 +120,8 @@ function TableFooter({ table }: TableProps) {
 }
 
 function VaultsTableSkeleton() {
+  const t = useTranslations()
+
   return (
     <div className="max-h-[600px] overflow-auto">
       <div className="min-w-[800px]">
@@ -127,27 +130,27 @@ function VaultsTableSkeleton() {
             <tr>
               <th className="box-border px-3 text-left">
                 <span className="text-13 font-medium text-neutral-50">
-                  Vault name
+                  {t('stake.vault_name')}
                 </span>
               </th>
               <th className="box-border px-3 text-left">
                 <span className="text-13 font-medium text-neutral-50">
-                  Staked
+                  {t('stake.staked')}
                 </span>
               </th>
               <th className="box-border px-3 text-left">
                 <span className="text-13 font-medium text-neutral-50">
-                  Boost
+                  {t('stake.boost')}
                 </span>
               </th>
               <th className="box-border px-3 text-left">
                 <span className="text-13 font-medium text-neutral-50">
-                  Multiplier points
+                  {t('stake.multiplier_points')}
                 </span>
               </th>
               <th className="box-border px-3 text-right">
                 <span className="text-13 font-medium text-neutral-50">
-                  Actions
+                  {t('stake.actions')}
                 </span>
               </th>
             </tr>
@@ -188,6 +191,7 @@ function VaultsTableSkeleton() {
 // ============================================================================
 
 export function VaultsTable() {
+  const t = useTranslations()
   const [openModalVaultId, setOpenModalVaultId] = useState<string | null>(null)
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null)
   const { data: vaultDataList, isLoading: isLoadingVaults } = useStakingVaults()
@@ -215,6 +219,7 @@ export function VaultsTable() {
         isConnected,
         openDropdownId,
         setOpenDropdownId,
+        t,
       }),
     [
       vaultDataList,
@@ -224,6 +229,7 @@ export function VaultsTable() {
       emergencyModeEnabled,
       isConnected,
       openDropdownId,
+      t,
     ]
   )
 
@@ -249,7 +255,7 @@ export function VaultsTable() {
     <div className="flex flex-col gap-3">
       <div className="flex items-center gap-3 lg:justify-between">
         <h2 className="text-19 font-semibold leading-none text-neutral-100">
-          My vaults
+          {t('stake.my_vaults')}
         </h2>
         {isConnected && isSignedIn && !showSkeleton && (
           <Button
@@ -259,7 +265,7 @@ export function VaultsTable() {
             disabled={Boolean(emergencyModeEnabled)}
           >
             <AddCircleIcon />
-            <span className="whitespace-nowrap">Add vault</span>
+            <span className="whitespace-nowrap">{t('stake.add_vault')}</span>
           </Button>
         )}
       </div>

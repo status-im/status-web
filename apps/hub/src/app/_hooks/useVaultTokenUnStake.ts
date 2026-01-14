@@ -1,4 +1,5 @@
 import { useMutation, type UseMutationResult } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
 import { type Address, formatUnits } from 'viem'
 import { useAccount, useConfig, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
@@ -107,6 +108,7 @@ export function useVaultTokenUnStake(): UseVaultUnstakeReturn {
   const { send: sendVaultEvent, reset: resetVault } = useVaultStateContext()
   const { refetch: refetchStakingVaults } = useStakingVaults()
   const { refetch: refetchMultiplierPoints } = useMultiplierPointsBalance()
+  const t = useTranslations()
 
   return useMutation({
     mutationKey: [MUTATION_KEY_PREFIX, address],
@@ -116,14 +118,12 @@ export function useVaultTokenUnStake(): UseVaultUnstakeReturn {
     }: UnStakeParams): Promise<void> => {
       // Validate wallet connection
       if (!address) {
-        throw new Error(
-          'Wallet not connected. Please connect your wallet first.'
-        )
+        throw new Error(t('errors.wallet_not_connected'))
       }
 
       // Validate amount
       if (amountWei <= MIN_STAKE_AMOUNT) {
-        throw new Error('Amount must be greater than 0')
+        throw new Error(t('errors.amount_greater_than_zero'))
       }
 
       // Send state machine event to start unstaking
@@ -154,7 +154,7 @@ export function useVaultTokenUnStake(): UseVaultUnstakeReturn {
         // Check if transaction was reverted
         if (status === 'reverted') {
           sendVaultEvent({ type: 'REJECT' })
-          throw new Error('Transaction was reverted')
+          throw new Error(t('errors.transaction_reverted'))
         }
 
         // Transaction successful, refetch data and reset vault

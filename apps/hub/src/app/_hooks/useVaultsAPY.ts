@@ -1,4 +1,5 @@
 import { useQuery, type UseQueryResult } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
 
 import { clientEnv } from '~constants/env.client.mjs'
 
@@ -14,6 +15,8 @@ interface VaultsAPYResponse {
 export type VaultsAPYMap = Record<string, number | undefined>
 
 export function useVaultsAPY(): UseQueryResult<VaultsAPYMap, Error> {
+  const t = useTranslations()
+
   return useQuery({
     queryKey: ['vaults-apy'],
     queryFn: async (): Promise<VaultsAPYMap> => {
@@ -28,7 +31,9 @@ export function useVaultsAPY(): UseQueryResult<VaultsAPYMap, Error> {
       )
 
       if (!response.ok) {
-        throw new Error(`Failed to fetch vaults APY: ${response.statusText}`)
+        throw new Error(
+          t('errors.failed_fetch_vaults_apy', { error: response.statusText })
+        )
       }
 
       const data: VaultsAPYResponse = await response.json()
