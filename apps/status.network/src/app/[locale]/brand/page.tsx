@@ -29,24 +29,22 @@ export default function BrandPage() {
     <>
       <JSONLDScript schema={organizationSchema} />
       <div className="flex flex-col gap-3 px-4 pb-10 pt-24 lg:p-[120px]">
-        <h1 className="text-40 font-700 lg:text-64">
-          {t('brand.main_title.translation')}
-        </h1>
+        <h1 className="text-40 font-700 lg:text-64">{t('brand.main_title')}</h1>
         <p className="mb-5 text-19 font-400 text-neutral-50">
-          {t('brand.last_updated.translation')}
+          {t('brand.last_updated')}
         </p>
         <DownloadZipButton
           iconBefore={<DownloadIcon />}
           fileName="brand-assets.zip"
         >
-          {t('brand.download_all.translation')}
+          {t('brand.download_all')}
         </DownloadZipButton>
       </div>
 
       <div className="relative px-4 pb-10 lg:px-[120px] lg:pb-[77px] lg:pt-10">
         <LogoSection
-          title={t('brand.logo_title.translation')}
-          description={t('brand.logo_description.translation')}
+          title={t('brand.logo_title')}
+          description={t('brand.logo_description')}
           fileName="logo.zip"
           logos={[
             {
@@ -67,8 +65,8 @@ export default function BrandPage() {
           ]}
         />
         <LogoSection
-          title={t('brand.logo_variation_title.translation')}
-          description={t('brand.logo_variation_description.translation')}
+          title={t('brand.logo_variation_title')}
+          description={t('brand.logo_variation_description')}
           fileName="logo-variation.zip"
           logos={[
             {
@@ -89,8 +87,8 @@ export default function BrandPage() {
           ]}
         />
         <LogoSection
-          title={t('brand.mark_only_title.translation')}
-          description={t('brand.mark_only_description.translation')}
+          title={t('brand.mark_only_title')}
+          description={t('brand.mark_only_description')}
           fileName="mark.zip"
           logos={[
             {
@@ -115,8 +113,8 @@ export default function BrandPage() {
 
       <div className="relative bg-[#1B273D05] px-4 py-10 lg:px-[120px] lg:py-[118px]">
         <ColorSection
-          title={t('brand.main_colors_title.translation')}
-          description={t('brand.main_colors_description.translation')}
+          title={t('brand.main_colors_title')}
+          description={t('brand.main_colors_description')}
           colors={[
             transformColor('Purple', customisation.purple['50']),
             transformColor('Dark', neutral['100']),
@@ -129,12 +127,8 @@ export default function BrandPage() {
       <div className="relative px-4 py-20 lg:px-[120px] lg:pt-10">
         <div className="flex flex-col gap-5 pb-12 md:flex-row md:items-center md:justify-between md:gap-0 md:pb-10">
           <div className="grid gap-1">
-            <h2 className="text-27 font-600">
-              {t('brand.artwork_title.translation')}
-            </h2>
-            <p className="text-27">
-              {t('brand.artwork_description.translation')}
-            </p>
+            <h2 className="text-27 font-600">{t('brand.artwork_title')}</h2>
+            <p className="text-27">{t('brand.artwork_description')}</p>
           </div>
 
           <DownloadZipButton
@@ -143,7 +137,7 @@ export default function BrandPage() {
             fileName="artwork.zip"
             className="w-full justify-center lg:w-fit lg:justify-start"
           >
-            {t('brand.download_button.translation')}
+            {t('brand.download_button')}
           </DownloadZipButton>
         </div>
 

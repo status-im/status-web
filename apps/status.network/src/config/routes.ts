@@ -26,12 +26,12 @@ export function getLocalizedRoutes(
 
   return {
     Navigation: [
-      { name: t('navigation.about.translation'), href: '#about' },
-      { name: t('navigation.features.translation'), href: '#features' },
-      { name: t('navigation.partners.translation'), href: '#partners' },
-      { name: t('navigation.network.translation'), href: '#network' },
-      { name: t('navigation.tokenomics.translation'), href: '#tokenomics' },
-      { name: t('navigation.blog.translation'), href: '#blog' },
+      { name: t('navigation.about'), href: '#about' },
+      { name: t('navigation.features'), href: '#features' },
+      { name: t('navigation.partners'), href: '#partners' },
+      { name: t('navigation.network'), href: '#network' },
+      { name: t('navigation.tokenomics'), href: '#tokenomics' },
+      { name: t('navigation.blog'), href: '#blog' },
     ],
     Docs: `https://docs.status.network${localePrefix}/`,
     Bridge: 'https://bridge.status.network/ ',

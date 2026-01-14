@@ -24,31 +24,30 @@ const About = async () => {
           <div className="max-w-[936px]">
             <div className="mb-8">
               <p className="mb-6 inline-block text-13 font-500 text-purple">
-                {t('about.section_number.translation')}{' '}
+                {t('about.section_number')}{' '}
                 <span className="inline-block h-2 w-px bg-purple-transparent" />{' '}
-                {t('about.section_title.translation')}
+                {t('about.section_title')}
               </p>
               <h2 className="mb-2 text-40 font-600 lg:text-64">
                 {locale === 'ko' ? (
                   <>
                     <span className="text-40 font-600 text-neutral-80/60 md:text-64">
-                      {t('about.title_1.translation')}
+                      {t('about.title_1')}
                     </span>{' '}
                     <span className="whitespace-nowrap">
-                      {t('about.title_2.translation')}
+                      {t('about.title_2')}
                     </span>{' '}
-                    {t('about.title_3.translation')}{' '}
-                    {t('about.title_4.translation')}
+                    {t('about.title_3')} {t('about.title_4')}
                   </>
                 ) : (
                   <>
-                    {t('about.title_1.translation')}{' '}
+                    {t('about.title_1')}{' '}
                     <span className="whitespace-nowrap">
-                      {t('about.title_2.translation')}
+                      {t('about.title_2')}
                     </span>{' '}
-                    {t('about.title_3.translation')}{' '}
+                    {t('about.title_3')}{' '}
                     <span className="text-40 font-600 text-neutral-80/60 md:text-64">
-                      {t('about.title_4.translation')}
+                      {t('about.title_4')}
                     </span>
                   </>
                 )}
@@ -56,15 +55,15 @@ const About = async () => {
             </div>
 
             <p className="mb-8 max-w-[816px] text-27">
-              {t('about.description.translation')}
+              {t('about.description')}
             </p>
 
             <div className="flex gap-3">
               <ButtonLink href={routes.Partner}>
-                {t('about.build_button.translation')}
+                {t('about.build_button')}
               </ButtonLink>
               <ButtonLink variant="white" href={routes.Docs}>
-                {t('about.learn_more_button.translation')}
+                {t('about.learn_more_button')}
               </ButtonLink>
             </div>
           </div>

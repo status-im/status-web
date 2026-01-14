@@ -19,15 +19,15 @@ const PreFooter = () => {
           <div className="flex max-w-[686px] flex-col items-center justify-between gap-8">
             <div className="flex flex-col items-center pt-8">
               <p className="max-w-[340px] text-center text-40 font-600 text-white-100 sm:max-w-[420px] lg:max-w-max lg:text-64">
-                {t('pre_footer.title.translation')}
+                {t('pre_footer.title')}
               </p>
             </div>
             <div className="flex gap-3">
               <ButtonLink href={routes.Partner} variant="primary">
-                {t('pre_footer.partner_button.translation')}
+                {t('pre_footer.partner_button')}
               </ButtonLink>
               <ButtonLink href={routes.Docs} variant="secondary">
-                {t('pre_footer.read_docs_button.translation')}
+                {t('pre_footer.read_docs_button')}
               </ButtonLink>
             </div>
           </div>
