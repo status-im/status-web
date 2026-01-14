@@ -161,39 +161,54 @@ const ProgressBar = ({ currentKarma = 0n, karmaLevels }: ProgressBarProps) => {
       </div>
 
       {/* Karma Labels - Desktop */}
-      <div className="relative hidden w-full justify-between md:flex">
+      <div
+        className={`relative hidden w-full md:flex ${
+          level >= 10 && visibleLevels.length === 1
+            ? 'justify-start'
+            : 'justify-between'
+        }`}
+      >
         {visibleLevels.map((lvl, index) => {
-          // Use same even spacing as level labels
+          const isLevel10OrAbove = level >= 10 && visibleLevels.length === 1
+
           const evenSpacing =
             visibleLevels.length > 1
               ? (index / (visibleLevels.length - 1)) * 100
-              : 50
+              : isLevel10OrAbove
+                ? 0
+                : 50
 
           return (
             <div
               key={`karma-label-${lvl.level}`}
               className={`flex items-center ${
-                index === 0
+                isLevel10OrAbove
                   ? 'justify-start'
-                  : index === visibleLevels.length - 1
-                    ? 'justify-end'
-                    : 'justify-center'
+                  : index === 0
+                    ? 'justify-start'
+                    : index === visibleLevels.length - 1
+                      ? 'justify-end'
+                      : 'justify-center'
               }`}
               style={{
-                position:
-                  index === 0 || index === visibleLevels.length - 1
+                position: isLevel10OrAbove
+                  ? 'relative'
+                  : index === 0 || index === visibleLevels.length - 1
                     ? 'relative'
                     : 'absolute',
-                left:
-                  index > 0 && index < visibleLevels.length - 1
+                left: isLevel10OrAbove
+                  ? undefined
+                  : index > 0 && index < visibleLevels.length - 1
                     ? `${evenSpacing}%`
                     : undefined,
-                transform:
-                  index > 0 && index < visibleLevels.length - 1
+                transform: isLevel10OrAbove
+                  ? undefined
+                  : index > 0 && index < visibleLevels.length - 1
                     ? 'translateX(-50%)'
                     : undefined,
-                width:
-                  index > 0 && index < visibleLevels.length - 1
+                width: isLevel10OrAbove
+                  ? 'auto'
+                  : index > 0 && index < visibleLevels.length - 1
                     ? '110px'
                     : 'auto',
               }}
@@ -263,10 +278,12 @@ const getVisibleLevelsByStage = (
       return getRange(0, 5)
     case currentLevel < 8:
       return getRange(4, 9)
-    case currentLevel <= 10:
+    case currentLevel < 10:
       return getRange(8, 11)
-    default:
-      return [allLevels[Math.min(10, allLevels.length - 1)]]
+    default: {
+      const level10Index = Math.min(10, allLevels.length - 1)
+      return [allLevels[level10Index]]
+    }
   }
 }
 
@@ -293,18 +310,16 @@ const getCurrentLevelData = (
 const formatKarmaLabel = (karma: bigint, level: number) => {
   const karmaNum = Number(formatEther(karma))
 
-  if (level < 4) {
+  if (level <= 3) {
     if (level === 0) return '0'
     if (level === 1) return '1'
     if (level === 2) return '1+'
     if (level === 3) return '50+'
-    if (level === 4) return '500+'
-  } else if (level >= 4 && level < 8) {
+  } else if (level >= 4 && level <= 7) {
     if (level === 4) return '500+'
     if (level === 5) return '5K+'
     if (level === 6) return '20K+'
     if (level === 7) return '100K+'
-    if (level === 8) return '500K+'
   } else if (level >= 8 && level <= 10) {
     if (level === 8) return '500K+'
     if (level === 9) return '5M+'
