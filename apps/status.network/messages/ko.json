@@ -121,9 +121,21 @@
       "translation": "STATUS NETWORK란 무엇인가요?",
       "notes": "about::section_title"
     },
-    "title": {
-      "translation": "네이티브 수익과 수수료로 자금을 조달하며 대규모 가스리스 트랜잭션을 지원하는 최초의 이더리움 L2입니다.",
+    "title_1": {
+      "translation": "네이티브 수익과 수수료로 자금을 조달하며",
       "notes": "about::title"
+    },
+    "title_2": {
+      "translation": "대규모",
+      "notes": "about::title_2"
+    },
+    "title_3": {
+      "translation": "가스리스 트랜잭션을 지원하는",
+      "notes": "about::title_2"
+    },
+    "title_4": {
+      "translation": "최초의 이더리움 L2입니다.",
+      "notes": "about::title_4"
     },
     "description": {
       "translation": "공공 앱, 게임 및 프로토콜을 위한 지속 가능한 자금을 조달하는 무료 네트워크입니다.",
@@ -253,9 +265,13 @@
       "translation": "생태계 및 파트너",
       "notes": "partners::section_title"
     },
-    "title": {
-      "translation": "도전하는 크리에이터와 개발자의 성장을 지원합니다",
+    "title_1": {
+      "translation": "도전하는",
       "notes": "partners::title"
+    },
+    "title_2": {
+      "translation": "크리에이터와 개발자의 성장을 지원합니다",
+      "notes": "partners::title_2"
     },
     "subtitle": {
       "translation": "최고의 파트너들과 함께 구축합니다",
@@ -490,6 +506,10 @@
     "author": {
       "translation": "우리",
       "notes": "blog::author"
+    },
+    "on_date": {
+      "translation": "",
+      "notes": "blog::on_date"
     },
     "post_1": {
       "title": {

@@ -28,7 +28,7 @@
       "notes": "common::learn_more"
     },
     "get_started": {
-      "translation": "Get Started",
+      "translation": "Get started",
       "notes": "common::get_started"
     },
     "read_more": {
@@ -121,9 +121,21 @@
       "translation": "WHAT IS STATUS NETWORK?",
       "notes": "about::section_title"
     },
-    "title": {
-      "translation": "The first Ethereum L2 with gas-free transactions at scale funded by native yield + fees.",
+    "title_1": {
+      "translation": "The first Ethereum L2 with",
       "notes": "about::title"
+    },
+    "title_2": {
+      "translation": "gas-free",
+      "notes": "about::title_2"
+    },
+    "title_3": {
+      "translation": "transactions at scale",
+      "notes": "about::title_2"
+    },
+    "title_4": {
+      "translation": "funded by native yield + fees.",
+      "notes": "about::title_4"
     },
     "description": {
       "translation": "A free network with sustainable funding for public apps, games and protocols.",
@@ -253,9 +265,13 @@
       "translation": "ECOSYSTEM AND PARTNERS",
       "notes": "partners::section_title"
     },
-    "title": {
-      "translation": "Empowering bold creators and developers",
+    "title_1": {
+      "translation": "Empowering bold",
       "notes": "partners::title"
+    },
+    "title_2": {
+      "translation": "creators and developers",
+      "notes": "partners::title_2"
     },
     "subtitle": {
       "translation": "Building with the best in the game",
@@ -490,6 +506,10 @@
     "author": {
       "translation": "Us",
       "notes": "blog::author"
+    },
+    "on_date": {
+      "translation": "on",
+      "notes": "blog::on_date"
     },
     "post_1": {
       "title": {

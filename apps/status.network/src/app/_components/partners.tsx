@@ -30,7 +30,9 @@ const Partners = () => {
               {t('partners.section_title.translation')}
             </p>
             <h2 className="text-40 font-600 lg:text-64">
-              {t('partners.title.translation')}
+              {t('partners.title_1.translation')}
+              <br />
+              {t('partners.title_2.translation')}
             </h2>
           </div>
 
