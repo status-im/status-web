@@ -64,9 +64,10 @@ const OverviewCard = () => {
     [currentKarma, karmaLevels]
   )
 
-  const txPercentage = quotaData
-    ? ((quotaData.total - quotaData.remaining) / quotaData.total) * 100
-    : 0
+  const txPercentage =
+    quotaData && quotaData.total > 0
+      ? (quotaData.remaining / quotaData.total) * 100
+      : 0
 
   const progressBarColor = useMemo(() => {
     if (txPercentage <= 33) {
