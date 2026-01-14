@@ -31,7 +31,7 @@ export type PasswordModalOptions = {
 export type PasswordContext = {
   hasActiveSession: boolean
   sessionExpiresAt: number | null
-  establishSession: (password: string) => Promise<void>
+  establishSession: (password: string) => void
   getPassword: () => string | null
   clearSession: () => void
   requestPassword: (options?: PasswordModalOptions) => Promise<string | null>
@@ -71,7 +71,7 @@ export function PasswordProvider({ children }: { children: React.ReactNode }) {
     [session?.expiresAt],
   )
 
-  const establishSession = useCallback(async (password: string) => {
+  const establishSession = useCallback((password: string) => {
     if (typeof password !== 'string') {
       throw new Error('Password must be a string')
     }
@@ -188,7 +188,7 @@ export function PasswordProvider({ children }: { children: React.ReactNode }) {
           password,
         })
         if (!modalOptions?.requireFreshPassword) {
-          await establishSession(password)
+          establishSession(password)
         }
         setIsModalOpen(false)
         isModalOpenRef.current = false
