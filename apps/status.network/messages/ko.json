@@ -507,6 +507,10 @@
       "translation": "우리",
       "notes": "blog::author"
     },
+    "on_date": {
+      "translation": "",
+      "notes": "blog::on_date"
+    },
     "post_1": {
       "title": {
         "translation": "Status, Linea 컨소시엄 창립 멤버로 참여",

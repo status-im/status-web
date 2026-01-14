@@ -81,6 +81,7 @@ type BlogPost = {
 const BlogCard = (props: BlogPost) => {
   const { author, category, date, image, link, title } = props
   const locale = useLocale()
+  const t = useTranslations()
 
   return (
     <Link
@@ -103,17 +104,9 @@ const BlogCard = (props: BlogPost) => {
             className="rounded-full"
           />
           <p className="text-15 font-600">{author.name}</p>
-          {/* svg dot separator */}
-          <svg
-            width="4"
-            height="4"
-            viewBox="0 0 4 4"
-            className="mx-1 text-neutral-40"
-            aria-hidden="true"
-          >
-            <circle cx="2" cy="2" r="2" fill="currentColor" />
-          </svg>
           <p className="text-15 text-neutral-50">
+            {t('blog.on_date.translation') &&
+              `${t('blog.on_date.translation')} `}
             {formatDate(date, 'medium', locale)}
           </p>
         </div>

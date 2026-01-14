@@ -507,6 +507,10 @@
       "translation": "Us",
       "notes": "blog::author"
     },
+    "on_date": {
+      "translation": "on",
+      "notes": "blog::on_date"
+    },
     "post_1": {
       "title": {
         "translation": "Status Steps Up as Founding Member of Linea Consortium",
