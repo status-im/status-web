@@ -166,3 +166,7 @@ export const KARMA_TIER = {
   address: '0xc7fCD786a161f42bDaF66E18a67C767C23cFd30C' as Address,
   abi: karmaTierAbi as Abi,
 } as const
+
+export const NEW_CONSTANT_TEST = {
+  address: '0x0000000000000000000000000000000000000000' as Address,
+} as const
