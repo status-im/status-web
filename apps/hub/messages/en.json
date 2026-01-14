@@ -379,6 +379,10 @@
       "translation": "Weighted boost",
       "notes": "stake::weighted_boost"
     },
+    "weighted_boost_tooltip": {
+      "translation": "The longer STT is staked or locked in vaults, the higher this multiplier goes. This rewards long term believers. The maximum multiplier is x{maxBoost}.",
+      "notes": "stake::weighted_boost_tooltip"
+    },
     "compound_points": {
       "translation": "Compound points",
       "notes": "stake::compound_points"

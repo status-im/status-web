@@ -20,12 +20,13 @@ import { InfoTooltip } from '../info-tooltip'
 
 const WeightedBoostInfoTooltip = () => {
   const locale = useLocale()
+  const t = useTranslations()
   const localePrefix = locale === 'en' ? '' : `/${locale}`
   const docsUrl = `https://docs.status.network${localePrefix}/tokenomics/snt-staking`
 
   return (
     <InfoTooltip
-      content={`The longer STT is staked or locked in vaults, the higher this multiplier goes. This rewards long term believers. The maximum multiplier is x${MAX_BOOST}.`}
+      content={t('stake.weighted_boost_tooltip', { maxBoost: MAX_BOOST })}
       link={docsUrl}
     />
   )

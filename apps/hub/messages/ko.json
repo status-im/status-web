@@ -379,6 +379,10 @@
       "translation": "가중 부스트",
       "notes": "stake::weighted_boost"
     },
+    "weighted_boost_tooltip": {
+      "translation": "STT를 금고에 스테이킹하거나 잠그는 기간이 길수록 이 배수가 높아집니다. 이는 장기 투자자를 보상합니다. 최대 배수는 x{maxBoost}입니다.",
+      "notes": "stake::weighted_boost_tooltip"
+    },
     "compound_points": {
       "translation": "복리 포인트",
       "notes": "stake::compound_points"
