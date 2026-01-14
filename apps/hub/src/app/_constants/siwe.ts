@@ -101,7 +101,6 @@ export const getQuota = async () => {
     if (!response.ok) return null
 
     const data = await response.json()
-    console.log('Quota data:', data)
     return data.result ?? null
   } catch {
     return null
