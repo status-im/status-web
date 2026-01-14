@@ -65,7 +65,7 @@ const OverviewCard = () => {
   )
 
   const txPercentage = quotaData
-    ? ((quotaData.total - quotaData.used) / quotaData.total) * 100
+    ? ((quotaData.total - quotaData.remaining) / quotaData.total) * 100
     : 0
 
   const progressBarColor = useMemo(() => {
@@ -115,7 +115,7 @@ const OverviewCard = () => {
             <div className="flex flex-col items-baseline gap-1.5 sm:flex-row">
               <div className="text-27 font-semibold">
                 <span className="text-neutral-100">
-                  {quotaData.used.toLocaleString()}
+                  {quotaData.remaining.toLocaleString()}
                 </span>
                 <span className="text-neutral-40">
                   /
