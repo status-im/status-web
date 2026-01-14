@@ -47,7 +47,7 @@ export const ExchangeDrawer = (props: ExchangeDrawerProps) => {
 
       const password = await requestPassword({
         title: 'Enter password',
-        description: 'To complete exchange',
+        description: 'To use exchange feature',
         buttonLabel: 'Unlock & Exchange',
       })
 
