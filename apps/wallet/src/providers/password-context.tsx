@@ -39,10 +39,10 @@ export type PasswordContext = {
 
 const PasswordContext = createContext<PasswordContext | undefined>(undefined)
 
-export function usePasswordSession() {
+export function usePassword() {
   const context = useContext(PasswordContext)
   if (!context) {
-    throw new Error('usePasswordSession must be used within PasswordProvider')
+    throw new Error('usePassword must be used within PasswordProvider')
   }
   return context
 }

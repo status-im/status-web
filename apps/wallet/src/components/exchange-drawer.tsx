@@ -9,7 +9,7 @@ import {
 } from '@status-im/wallet/components'
 import { useAccount } from 'wagmi'
 
-import { usePasswordSession } from '../providers/password-context'
+import { usePassword } from '../providers/password-context'
 
 const NATIVE_ETH_ADDRESS = '0x0000000000000000000000000000000000000000'
 const ETHEREUM_MAINNET_CHAIN_ID = 1
@@ -30,7 +30,7 @@ export const ExchangeDrawer = (props: ExchangeDrawerProps) => {
   } = props
 
   const [open, setOpen] = useState(false)
-  const { hasActiveSession, requestPassword } = usePasswordSession()
+  const { hasActiveSession, requestPassword } = usePassword()
   const { isConnected, address: connectedAddress } = useAccount()
 
   const handleOpenChange = useCallback(

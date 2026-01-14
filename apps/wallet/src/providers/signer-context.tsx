@@ -4,7 +4,7 @@ import { type Address, createPublicClient, type Hex, http } from 'viem'
 import { mainnet } from 'viem/chains'
 
 import { apiClient } from './api-client'
-import { usePasswordSession } from './password-context'
+import { usePassword } from './password-context'
 import { useWallet } from './wallet-context'
 
 type SignerContextValue = {
@@ -44,7 +44,7 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
     requestPassword,
     establishSession,
     clearSession,
-  } = usePasswordSession()
+  } = usePassword()
 
   const address = useMemo(() => {
     return currentWallet?.activeAccounts[0]?.address as Address | undefined

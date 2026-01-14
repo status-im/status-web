@@ -41,7 +41,7 @@ import { parseUnits } from 'ethers'
 import { useEthBalance } from '@/hooks/use-eth-balance'
 import { renderMarkdown } from '@/lib/markdown'
 import { apiClient } from '@/providers/api-client'
-import { usePasswordSession } from '@/providers/password-context'
+import { usePassword } from '@/providers/password-context'
 import { usePendingTransactions } from '@/providers/pending-transactions-context'
 import { useWallet } from '@/providers/wallet-context'
 import { ExchangeDrawer } from '~/components/exchange-drawer'
@@ -83,8 +83,7 @@ const Token = (props: Props) => {
   const toast = useToast()
   const { currentWallet } = useWallet()
   const { addPendingTransaction } = usePendingTransactions()
-  const { hasActiveSession, getPassword, requestPassword } =
-    usePasswordSession()
+  const { hasActiveSession, getPassword, requestPassword } = usePassword()
 
   const [activeDataType, setActiveDataType] =
     useState<ChartDataType>(DEFAULT_DATA_TYPE)

@@ -7,14 +7,14 @@ import { RecoveryPhraseDialog } from '@status-im/wallet/components'
 import { ERROR_MESSAGES } from '@status-im/wallet/constants'
 
 import { apiClient } from '@/providers/api-client'
-import { usePasswordSession } from '@/providers/password-context'
+import { usePassword } from '@/providers/password-context'
 import { useWallet } from '@/providers/wallet-context'
 
 import { useRecoveryPhraseBackup } from '../../hooks/use-recovery-phrase-backup'
 
 export function RecoveryPhraseBackup() {
   const { currentWallet } = useWallet()
-  const { requestPassword } = usePasswordSession()
+  const { requestPassword } = usePassword()
   const {
     needsBackup,
     showRecoveryDialog,

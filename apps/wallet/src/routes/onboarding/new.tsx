@@ -6,7 +6,7 @@ import { CreatePasswordForm } from '@status-im/wallet/components'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
 import { useCreateWallet } from '../../hooks/use-create-wallet'
-import { usePasswordSession } from '../../providers/password-context'
+import { usePassword } from '../../providers/password-context'
 
 import type { CreatePasswordFormValues } from '@status-im/wallet/components'
 import type { SubmitHandler } from 'react-hook-form'
@@ -17,7 +17,7 @@ export const Route = createFileRoute('/onboarding/new')({
 
 function RouteComponent() {
   const { createWalletAsync } = useCreateWallet()
-  const { establishSession } = usePasswordSession()
+  const { establishSession } = usePassword()
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
 
