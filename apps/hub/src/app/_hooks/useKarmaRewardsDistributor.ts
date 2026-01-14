@@ -3,6 +3,7 @@ import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { type Address } from 'viem'
 import { useAccount, useChainId, useConfig } from 'wagmi'
 import { readContract } from 'wagmi/actions'
+import { statusSepolia } from 'wagmi/chains'
 
 import { CACHE_CONFIG, REWARDS } from '~constants/index'
 
@@ -178,11 +179,11 @@ export function useKarmaRewardsDistributor(
     refetchInterval = CACHE_CONFIG.MP_REFETCH_INTERVAL,
   } = options
 
-  // Use provided address or fall back to connected address
   const targetAddress = queryAddress ?? connectedAddress
+  const isStatusNetworkSepolia = chainId === statusSepolia.id
 
   return useQuery<KarmaRewardsBalanceData>({
-    queryKey: [QUERY_KEY_PREFIX, targetAddress, chainId] as const,
+    queryKey: [QUERY_KEY_PREFIX, targetAddress, statusSepolia.id] as const,
     queryFn: async (): Promise<KarmaRewardsBalanceData> => {
       if (!targetAddress) {
         return {
@@ -194,7 +195,7 @@ export function useKarmaRewardsDistributor(
       try {
         const balance = await fetchKarmaRewardsBalance(
           config,
-          chainId,
+          statusSepolia.id,
           targetAddress
         )
 
@@ -209,7 +210,7 @@ export function useKarmaRewardsDistributor(
         throw error
       }
     },
-    enabled: enabled && !!targetAddress,
+    enabled: enabled && !!targetAddress && isStatusNetworkSepolia,
     staleTime,
     refetchInterval,
     retry: 3,

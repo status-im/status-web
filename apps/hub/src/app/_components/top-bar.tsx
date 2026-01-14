@@ -4,7 +4,7 @@ import { FeedbackPopover, Link } from '@status-im/status-network/components'
 import Image from 'next/image'
 
 import { ConnectButton } from './connect-button'
-// import { KarmaButton } from './karma-button'
+import { KarmaButton } from './karma-button'
 
 interface TopBarProps {
   onMenuToggle: () => void
@@ -79,8 +79,8 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
           </div>
 
           {/* Karma Button */}
-          {/* <KarmaButton size="24" className="md:hidden" />
-          <KarmaButton size="32" className="hidden md:flex" /> */}
+          <KarmaButton size="24" className="md:hidden" />
+          <KarmaButton size="32" className="hidden md:flex" />
 
           {/* Connect Wallet Button */}
           <ConnectButton

@@ -1,0 +1,655 @@
+{
+  "meta": {
+    "locale": {
+      "translation": "en",
+      "notes": "meta::locale"
+    },
+    "name": {
+      "translation": "English",
+      "notes": "meta::name"
+    },
+    "direction": {
+      "translation": "ltr",
+      "notes": "meta::direction"
+    },
+    "completion": 100,
+    "description": {
+      "translation": "Complete Status Network website translations",
+      "notes": "meta::description"
+    }
+  },
+  "common": {
+    "loading": {
+      "translation": "Loading...",
+      "notes": "common::loading"
+    },
+    "learn_more": {
+      "translation": "Learn More",
+      "notes": "common::learn_more"
+    },
+    "get_started": {
+      "translation": "Get started",
+      "notes": "common::get_started"
+    },
+    "read_more": {
+      "translation": "Read More",
+      "notes": "common::read_more"
+    },
+    "read_docs": {
+      "translation": "Read docs",
+      "notes": "common::read_docs"
+    },
+    "view_blog": {
+      "translation": "View blog",
+      "notes": "common::view_blog"
+    },
+    "new": {
+      "translation": "NEW",
+      "notes": "common::new"
+    },
+    "testnet_live": {
+      "translation": "Testnet is live!",
+      "notes": "common::testnet_live"
+    },
+    "promo_message": {
+      "translation": "Pre-deposit ETH and SNT ahead of Status Network mainnet launch!",
+      "notes": "common::promo_message"
+    },
+    "visit_hub": {
+      "translation": "Visit hub",
+      "notes": "common::visit_hub"
+    },
+    "visit_hub_aria": {
+      "translation": "Visit hub (opens in new tab)",
+      "notes": "common::visit_hub_aria"
+    }
+  },
+  "navigation": {
+    "home": {
+      "translation": "Home",
+      "notes": "navigation::home"
+    },
+    "about": {
+      "translation": "About",
+      "notes": "navigation::about"
+    },
+    "features": {
+      "translation": "Features",
+      "notes": "navigation::features"
+    },
+    "network": {
+      "translation": "Network",
+      "notes": "navigation::network"
+    },
+    "partners": {
+      "translation": "Partners",
+      "notes": "navigation::partners"
+    },
+    "tokenomics": {
+      "translation": "Tokenomics",
+      "notes": "navigation::tokenomics"
+    },
+    "blog": {
+      "translation": "Blog",
+      "notes": "navigation::blog"
+    },
+    "brand": {
+      "translation": "Brand",
+      "notes": "navigation::brand"
+    }
+  },
+  "hero": {
+    "title": {
+      "translation": "The gasless network",
+      "notes": "hero::title"
+    },
+    "subtitle": {
+      "translation": "with sustainable funding for app builders",
+      "notes": "hero::subtitle"
+    },
+    "description": {
+      "translation": "Launch and scale your social apps and games with truly free transactions.",
+      "notes": "hero::description"
+    }
+  },
+  "about": {
+    "section_number": {
+      "translation": "01",
+      "notes": "about::section_number"
+    },
+    "section_title": {
+      "translation": "WHAT IS STATUS NETWORK?",
+      "notes": "about::section_title"
+    },
+    "title_1": {
+      "translation": "The first Ethereum L2 with",
+      "notes": "about::title"
+    },
+    "title_2": {
+      "translation": "gas-free",
+      "notes": "about::title_2"
+    },
+    "title_3": {
+      "translation": "transactions at scale",
+      "notes": "about::title_2"
+    },
+    "title_4": {
+      "translation": "funded by native yield + fees.",
+      "notes": "about::title_4"
+    },
+    "description": {
+      "translation": "A free network with sustainable funding for public apps, games and protocols.",
+      "notes": "about::description"
+    },
+    "build_button": {
+      "translation": "Build on Status Network",
+      "notes": "about::build_button"
+    },
+    "learn_more_button": {
+      "translation": "Learn more",
+      "notes": "about::learn_more_button"
+    }
+  },
+  "features": {
+    "section_number": {
+      "translation": "02",
+      "notes": "features::section_number"
+    },
+    "section_title": {
+      "translation": "WHY STATUS NETWORK?",
+      "notes": "features::section_title"
+    },
+    "title": {
+      "translation": "Power to the community",
+      "notes": "features::title"
+    },
+    "sustainable_funding": {
+      "title": {
+        "translation": "Sustainable public funding",
+        "notes": "features::sustainable_funding::title"
+      },
+      "description": {
+        "translation": "Status Network takes a radical step beyond short-term incentives. Powered by native yields and fees, its public app funding pool is governed by the community, ensuring a continuous allocation of capital for onchain builders.",
+        "notes": "features::sustainable_funding::description"
+      },
+      "step_1": {
+        "translation": "Users bridge yield-bearing assets to Status Network and increase the yield redirected to the funding pool.",
+        "notes": "features::sustainable_funding::step_1"
+      },
+      "step_2": {
+        "translation": "Apps and games apply for an allocation from the pool. The community votes on allocations using Karma, a non-transferrable governance token earned by contributing positively to the network:",
+        "notes": "features::sustainable_funding::step_2"
+      },
+      "step_2_staking": {
+        "translation": "Staking SNT",
+        "notes": "features::sustainable_funding::step_2_staking"
+      },
+      "step_2_bridging": {
+        "translation": "Bridging yield-bearing tokens",
+        "notes": "features::sustainable_funding::step_2_bridging"
+      },
+      "step_2_using": {
+        "translation": "Using apps",
+        "notes": "features::sustainable_funding::step_2_using"
+      },
+      "step_2_premium": {
+        "translation": "Paying premium gas",
+        "notes": "features::sustainable_funding::step_2_premium"
+      },
+      "step_2_donations": {
+        "translation": "Making direct donations to the funding pool",
+        "notes": "features::sustainable_funding::step_2_donations"
+      },
+      "step_3": {
+        "translation": "Every funded project onboards new users, driving additional asset deposits and token swaps - generating more yield and fees to be allocated in the funding pool.",
+        "notes": "features::sustainable_funding::step_3"
+      },
+      "button": {
+        "translation": "Discover Karmic Tokenomics",
+        "notes": "features::sustainable_funding::button"
+      }
+    },
+    "gasless_transactions": {
+      "title": {
+        "translation": "Gasless transactions",
+        "notes": "features::gasless_transactions::title"
+      },
+      "description_1": {
+        "translation": "On Status Network, anyone can experience free transactions! With the L2 operating costs covered by native yields and fees, no need to bridge gas to use an app.",
+        "notes": "features::gasless_transactions::description_1"
+      },
+      "description_2": {
+        "translation": "Apps and games developers can offer frictionless onboarding for their users at scale.",
+        "notes": "features::gasless_transactions::description_2"
+      },
+      "button": {
+        "translation": "Learn how it works",
+        "notes": "features::gasless_transactions::button"
+      }
+    },
+    "performance": {
+      "title": {
+        "translation": "Built for performance, secured by Ethereum",
+        "notes": "features::performance::title"
+      },
+      "description": {
+        "translation": "Leverage Ethereum's security with Linea's cutting-edge zkEVM rollup technology for high-speed transactions. Perfect for gaming, social, iGaming, and high-throughput applications.",
+        "notes": "features::performance::description"
+      },
+      "button": {
+        "translation": "Learn more about Linea",
+        "notes": "features::performance::button"
+      }
+    },
+    "decentralization": {
+      "title": {
+        "translation": "Geared for decentralization",
+        "notes": "features::decentralization::title"
+      },
+      "description": {
+        "translation": "Built on the core values of Status and the IFT ecosystem, Status Network is designed to become a truly decentralised L2. The endgame is to provide a censorship-resistant environment where communities can thrive without central points of control.",
+        "notes": "features::decentralization::description"
+      },
+      "button": {
+        "translation": "Learn more",
+        "notes": "features::decentralization::button"
+      }
+    }
+  },
+  "partners": {
+    "section_number": {
+      "translation": "03",
+      "notes": "partners::section_number"
+    },
+    "section_title": {
+      "translation": "ECOSYSTEM AND PARTNERS",
+      "notes": "partners::section_title"
+    },
+    "title_1": {
+      "translation": "Empowering bold",
+      "notes": "partners::title"
+    },
+    "title_2": {
+      "translation": "creators and developers",
+      "notes": "partners::title_2"
+    },
+    "subtitle": {
+      "translation": "Building with the best in the game",
+      "notes": "partners::subtitle"
+    },
+    "cats_fishing": {
+      "title": {
+        "translation": "Cats Fishing",
+        "notes": "partners::cats_fishing::title"
+      },
+      "description": {
+        "translation": "The first open-sourced, proof of play mobile fishing game",
+        "notes": "partners::cats_fishing::description"
+      }
+    },
+    "spla_labs": {
+      "title": {
+        "translation": "Spla Labs",
+        "notes": "partners::spla_labs::title"
+      },
+      "description": {
+        "translation": "Builders of TODL & Ponzi Hero games",
+        "notes": "partners::spla_labs::description"
+      }
+    },
+    "hash_vegas": {
+      "title": {
+        "translation": "Hash Vegas",
+        "notes": "partners::hash_vegas::title"
+      },
+      "description": {
+        "translation": "Fair and transparent onchain gaming",
+        "notes": "partners::hash_vegas::description"
+      }
+    },
+    "ponzi_hero": {
+      "title": {
+        "translation": "Ponzi Hero",
+        "notes": "partners::ponzi_hero::title"
+      },
+      "description": {
+        "translation": "Earn NFTs, have some fun!",
+        "notes": "partners::ponzi_hero::description"
+      }
+    },
+    "linea": {
+      "title": {
+        "translation": "Linea",
+        "notes": "partners::linea::title"
+      },
+      "description": {
+        "translation": "Secure zkEVM L2 stack",
+        "notes": "partners::linea::description"
+      }
+    },
+    "gateway": {
+      "title": {
+        "translation": "Gateway",
+        "notes": "partners::gateway::title"
+      },
+      "description": {
+        "translation": "Rollup infrastructure and operation",
+        "notes": "partners::gateway::description"
+      }
+    },
+    "din": {
+      "title": {
+        "translation": "DIN",
+        "notes": "partners::din::title"
+      },
+      "description": {
+        "translation": "Decentralised Infrastructure Network",
+        "notes": "partners::din::description"
+      }
+    }
+  },
+  "network": {
+    "section_number": {
+      "translation": "04",
+      "notes": "network::section_number"
+    },
+    "section_title": {
+      "translation": "NETWORK",
+      "notes": "network::section_title"
+    },
+    "title": {
+      "translation": "Leverage the most advanced decentralised stack",
+      "notes": "network::title"
+    },
+    "description": {
+      "translation": "Builders get priority support from Institute of Free Technology solutions:",
+      "notes": "network::description"
+    },
+    "status": {
+      "title": {
+        "translation": "Status",
+        "notes": "network::status::title"
+      },
+      "description": {
+        "translation": "Ethereum super-app with 4M+ downloads",
+        "notes": "network::status::description"
+      }
+    },
+    "logos": {
+      "title": {
+        "translation": "Logos",
+        "notes": "network::logos::title"
+      },
+      "description": {
+        "translation": "Open tech to restore civil society",
+        "notes": "network::logos::description"
+      }
+    },
+    "waku": {
+      "title": {
+        "translation": "Waku",
+        "notes": "network::waku::title"
+      },
+      "description": {
+        "translation": "P2P encrypted messaging protocol",
+        "notes": "network::waku::description"
+      }
+    },
+    "codex": {
+      "title": {
+        "translation": "Codex",
+        "notes": "network::codex::title"
+      },
+      "description": {
+        "translation": "Decentralised data storage layer",
+        "notes": "network::codex::description"
+      }
+    },
+    "nimbus": {
+      "title": {
+        "translation": "Nimbus",
+        "notes": "network::nimbus::title"
+      },
+      "description": {
+        "translation": "Ethereum core devs. Powering Eth consensus",
+        "notes": "network::nimbus::description"
+      }
+    },
+    "keycard": {
+      "title": {
+        "translation": "Keycard",
+        "notes": "network::keycard::title"
+      },
+      "description": {
+        "translation": "Secure open-source hardware wallet",
+        "notes": "network::keycard::description"
+      }
+    }
+  },
+  "tokenomics": {
+    "section_number": {
+      "translation": "05",
+      "notes": "tokenomics::section_number"
+    },
+    "section_title": {
+      "translation": "TOKENOMICS",
+      "notes": "tokenomics::section_title"
+    },
+    "title": {
+      "translation": "Earn voting power through positive network engagement",
+      "notes": "tokenomics::title"
+    },
+    "description": {
+      "translation": "The more you contribute to the network, the more influence you gain over funding allocation and the network's roadmap priorities.",
+      "notes": "tokenomics::description"
+    },
+    "karma_note": {
+      "translation": "This is coordinated by Karma, a non-transferable governance token.",
+      "notes": "tokenomics::karma_note"
+    },
+    "app_developer": {
+      "title": {
+        "translation": "App developer",
+        "notes": "tokenomics::app_developer::title"
+      },
+      "step_1": {
+        "translation": "Ship code",
+        "notes": "tokenomics::app_developer::step_1"
+      },
+      "step_2": {
+        "translation": "Get traction",
+        "notes": "tokenomics::app_developer::step_2"
+      },
+      "step_3": {
+        "translation": "Receive Karma",
+        "notes": "tokenomics::app_developer::step_3"
+      },
+      "step_4": {
+        "translation": "Earn funding",
+        "notes": "tokenomics::app_developer::step_4"
+      }
+    },
+    "liquidity_provider": {
+      "title": {
+        "translation": "Liquidity provider",
+        "notes": "tokenomics::liquidity_provider::title"
+      },
+      "description": {
+        "translation": "Earn Karma for staking SNT and get LP rewards boosted by native yield.",
+        "notes": "tokenomics::liquidity_provider::description"
+      }
+    },
+    "onchain_user": {
+      "title": {
+        "translation": "Onchain user",
+        "notes": "tokenomics::onchain_user::title"
+      },
+      "description": {
+        "translation": "Get rewarded with Karma for bridging to the network and using apps. A higher Karma means more gasless transactions.",
+        "notes": "tokenomics::onchain_user::description"
+      }
+    }
+  },
+  "blog": {
+    "title": {
+      "translation": "Stay up to date",
+      "notes": "blog::title"
+    },
+    "view_blog_button": {
+      "translation": "View blog",
+      "notes": "blog::view_blog_button"
+    },
+    "category": {
+      "translation": "Updates",
+      "notes": "blog::category"
+    },
+    "author": {
+      "translation": "Us",
+      "notes": "blog::author"
+    },
+    "on_date": {
+      "translation": "on",
+      "notes": "blog::on_date"
+    },
+    "post_1": {
+      "title": {
+        "translation": "Status Steps Up as Founding Member of Linea Consortium",
+        "notes": "blog::post_1::title"
+      }
+    },
+    "post_2": {
+      "title": {
+        "translation": "Status Launches First Gasless Layer 2 on Linea",
+        "notes": "blog::post_2::title"
+      }
+    },
+    "post_3": {
+      "title": {
+        "translation": "Embracing Community Choices: Status to Develop SNT Staking and Status L2",
+        "notes": "blog::post_3::title"
+      }
+    }
+  },
+  "footer": {
+    "copyright": {
+      "translation": "© Status Research & Development GmbH",
+      "notes": "footer::copyright"
+    },
+    "privacy_policy": {
+      "translation": "Privacy Policy",
+      "notes": "footer::privacy_policy"
+    },
+    "terms_of_use": {
+      "translation": "Terms of Use",
+      "notes": "footer::terms_of_use"
+    },
+    "brand": {
+      "translation": "Brand assets",
+      "notes": "footer::brand"
+    }
+  },
+  "pre_footer": {
+    "title": {
+      "translation": "Ready to build on the free network?",
+      "notes": "pre_footer::title"
+    },
+    "partner_button": {
+      "translation": "Partner with us",
+      "notes": "pre_footer::partner_button"
+    },
+    "read_docs_button": {
+      "translation": "Read docs",
+      "notes": "pre_footer::read_docs_button"
+    }
+  },
+  "brand": {
+    "page_title": {
+      "translation": "Brand",
+      "notes": "brand::page_title"
+    },
+    "page_description": {
+      "translation": "Get Status Network brand assets.",
+      "notes": "brand::page_description"
+    },
+    "main_title": {
+      "translation": "Brand assets",
+      "notes": "brand::main_title"
+    },
+    "last_updated": {
+      "translation": "Last updated: 12 November 2025",
+      "notes": "brand::last_updated"
+    },
+    "download_all": {
+      "translation": "Download all assets",
+      "notes": "brand::download_all"
+    },
+    "logo_title": {
+      "translation": "Logo",
+      "notes": "brand::logo_title"
+    },
+    "logo_description": {
+      "translation": "Our main logo",
+      "notes": "brand::logo_description"
+    },
+    "logo_variation_title": {
+      "translation": "Logo variation",
+      "notes": "brand::logo_variation_title"
+    },
+    "logo_variation_description": {
+      "translation": "For creative printing layouts",
+      "notes": "brand::logo_variation_description"
+    },
+    "mark_only_title": {
+      "translation": "Mark only",
+      "notes": "brand::mark_only_title"
+    },
+    "mark_only_description": {
+      "translation": "Without wordmark",
+      "notes": "brand::mark_only_description"
+    },
+    "main_colors_title": {
+      "translation": "Main colors",
+      "notes": "brand::main_colors_title"
+    },
+    "main_colors_description": {
+      "translation": "Our main colors palette",
+      "notes": "brand::main_colors_description"
+    },
+    "artwork_title": {
+      "translation": "Artwork",
+      "notes": "brand::artwork_title"
+    },
+    "artwork_description": {
+      "translation": "Our main characters",
+      "notes": "brand::artwork_description"
+    },
+    "download_button": {
+      "translation": "Download",
+      "notes": "brand::download_button"
+    },
+    "alt_text": {
+      "main_logo": {
+        "translation": "Main logo",
+        "notes": "brand::alt_text::main_logo"
+      },
+      "mark_only": {
+        "translation": "Mark only",
+        "notes": "brand::alt_text::mark_only"
+      },
+      "artwork": {
+        "translation": "Artwork",
+        "notes": "brand::alt_text::artwork"
+      }
+    }
+  },
+  "not_found": {
+    "title": {
+      "translation": "This is not the page you're looking for",
+      "notes": "not_found::title"
+    },
+    "take_me_home": {
+      "translation": "Take me home",
+      "notes": "not_found::take_me_home"
+    }
+  }
+}

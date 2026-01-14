@@ -1,36 +1,41 @@
+'use client'
+
 import { ExternalIcon } from '@status-im/icons/20'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { ButtonLink } from './button-link'
 import { Divider } from './divider'
 
-const SOLUTIONS = [
-  {
-    title: 'Status',
-    description: 'Ethereum super-app with 4M+ downloads',
-    website: 'status.app',
-    icon: '/logo-status.png',
-  },
-  {
-    title: 'Logos',
-    description: 'Open tech to restore civil society',
-    website: 'logos.co',
-    icon: '/logo-logos.png',
-  },
-  {
-    title: 'Nimbus',
-    description: 'Ethereum core devs. Powering Eth consensus',
-    website: 'nimbus.team',
-    icon: '/logo-nimbus.png',
-  },
-  {
-    title: 'Keycard',
-    description: 'Secure open-source hardware wallet',
-    website: 'keycard.tech',
-    icon: '/logo-keycard.png',
-  },
-]
-
 const Network = () => {
+  const t = useTranslations()
+
+  const SOLUTIONS = [
+    {
+      title: t('network.status.title.translation'),
+      description: t('network.status.description.translation'),
+      website: 'status.app',
+      icon: '/logo-status.png',
+    },
+    {
+      title: t('network.logos.title.translation'),
+      description: t('network.logos.description.translation'),
+      website: 'logos.co',
+      icon: '/logo-logos.png',
+    },
+    {
+      title: t('network.nimbus.title.translation'),
+      description: t('network.nimbus.description.translation'),
+      website: 'nimbus.team',
+      icon: '/logo-nimbus.png',
+    },
+    {
+      title: t('network.keycard.title.translation'),
+      description: t('network.keycard.description.translation'),
+      website: 'keycard.tech',
+      icon: '/logo-keycard.png',
+    },
+  ]
+
   return (
     <section className="relative w-full" id="network">
       <div className="absolute left-0 top-0 z-10 h-full w-40 bg-gradient-to-r from-white-100 via-white-40 to-[transparent]" />
@@ -41,17 +46,15 @@ const Network = () => {
       <div className="relative z-20 px-5 py-24 lg:px-[120px] lg:py-[160px]">
         <div className="mb-20 text-center">
           <p className="mb-8 inline-block text-13 font-500 text-purple">
-            04 <span className="inline-block h-2 w-px bg-purple-transparent" />{' '}
-            NETWORK
+            {t('network.section_number.translation')}{' '}
+            <span className="inline-block h-2 w-px bg-purple-transparent" />{' '}
+            {t('network.section_title.translation')}
           </p>
           <h2 className="mb-5 text-40 font-600 lg:text-64">
-            Leverage the most advanced
-            <br />
-            decentralised stack
+            {t('network.title.translation')}
           </h2>
           <p className="text-19 sm:text-27">
-            Builders get priority support from Institute of Free Technology
-            solutions:
+            {t('network.description.translation')}
           </p>
         </div>
 

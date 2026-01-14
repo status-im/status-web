@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server'
 import { ButtonLink } from './_components/button-link'
 import { Metadata } from './_metadata'
 
@@ -10,15 +11,19 @@ export const metadata = Metadata({
   },
 })
 
-export default function NotFound() {
+export default async function NotFound() {
+  const t = await getTranslations()
+
   return (
     <main className="flex min-h-[calc(100dvh-189px)] flex-1 items-center justify-center px-5 lg:min-h-[calc(100dvh-118px)]">
       <div className="flex max-w-[696px] flex-col items-center gap-8">
         <h1 className="text-center text-40 font-700 lg:text-64">
-          This is not the page you’re looking for
+          {t('not_found.title.translation')}
         </h1>
 
-        <ButtonLink href="/">Take me home</ButtonLink>
+        <ButtonLink href="/">
+          {t('not_found.take_me_home.translation')}
+        </ButtonLink>
       </div>
     </main>
   )

@@ -22,11 +22,112 @@ export type StatusConnectorOptions = {
   signTypedData: (typedData: string) => Promise<Hex>
 }
 
+function handleProviderRequest(
+  method: string,
+  params: unknown[] | undefined,
+  options: {
+    getAddress: () => Address | undefined
+    signAndSendTransaction: StatusConnectorOptions['signAndSendTransaction']
+    signMessage: StatusConnectorOptions['signMessage']
+    signTypedData: StatusConnectorOptions['signTypedData']
+    emitter: { emit: (event: string, ...args: unknown[]) => void }
+  },
+): Promise<unknown> {
+  const {
+    getAddress,
+    signAndSendTransaction,
+    signMessage,
+    signTypedData,
+    emitter,
+  } = options
+  const address = getAddress()
+
+  switch (method) {
+    case 'eth_requestAccounts':
+    case 'eth_accounts': {
+      const accounts = address ? [address] : []
+      if (method === 'eth_requestAccounts' && accounts.length > 0) {
+        emitter.emit('connect', {
+          accounts,
+          chainId: mainnet.id,
+        })
+      }
+      return Promise.resolve(accounts)
+    }
+
+    case 'eth_chainId':
+      return Promise.resolve(numberToHex(mainnet.id))
+
+    case 'eth_sendTransaction': {
+      const txParams = (params as Record<string, unknown>[])?.[0]
+      if (!txParams) throw new Error('No transaction params')
+
+      return signAndSendTransaction({
+        to: txParams.to as Address,
+        value: txParams.value ? BigInt(txParams.value as string) : 0n,
+        data: txParams.data as Hex | undefined,
+        gas: txParams.gas ? BigInt(txParams.gas as string) : undefined,
+        maxFeePerGas: txParams.maxFeePerGas
+          ? BigInt(txParams.maxFeePerGas as string)
+          : undefined,
+        maxPriorityFeePerGas: txParams.maxPriorityFeePerGas
+          ? BigInt(txParams.maxPriorityFeePerGas as string)
+          : undefined,
+      })
+    }
+
+    case 'wallet_switchEthereumChain':
+      return Promise.resolve(null)
+
+    case 'wallet_getCapabilities': {
+      const [requestedAddress, chainIds] = (params || []) as [
+        Address | undefined,
+        string[] | undefined,
+      ]
+      const address = requestedAddress || getAddress()
+      if (!address) {
+        return Promise.resolve({})
+      }
+      const requestedChains = chainIds || [numberToHex(mainnet.id)]
+      const capabilities: Record<string, Record<string, unknown>> = {}
+      for (const chainId of requestedChains) {
+        capabilities[chainId] = {
+          atomicBatch: {
+            supported: false,
+          },
+        }
+      }
+      return Promise.resolve(capabilities)
+    }
+
+    case 'personal_sign': {
+      const [message] = params as [Hex]
+      return signMessage(message)
+    }
+
+    case 'eth_signTypedData_v4': {
+      const [, typedData] = params as [Address, string]
+      return signTypedData(typedData)
+    }
+
+    default: {
+      const client = createPublicClient({
+        chain: mainnet,
+        transport: http(),
+      })
+
+      return client.request({
+        method: method as never,
+        params: params as never,
+      })
+    }
+  }
+}
+
 export function statusConnector(options: StatusConnectorOptions) {
   const { getAddress, signAndSendTransaction, signMessage, signTypedData } =
     options
 
-  // @ts-expect-error - TypeScript can't infer the conditional return type withCapabilities
   return createConnector(config => {
     const createProvider = () => {
       const provider = {
@@ -46,91 +147,15 @@ export function statusConnector(options: StatusConnectorOptions) {
           method: string
           params?: unknown[]
         }) => {
-          const address = getAddress()
-          switch (method) {
-            case 'eth_requestAccounts':
-            case 'eth_accounts': {
-              const accounts = address ? [address] : []
-              if (method === 'eth_requestAccounts' && accounts.length > 0) {
-                config.emitter.emit('connect', {
-                  accounts,
-                  chainId: mainnet.id,
-                })
-              }
-              return accounts
-            }
-
-            case 'eth_chainId':
-              return numberToHex(mainnet.id)
-
-            case 'eth_sendTransaction': {
-              const txParams = (params as Record<string, unknown>[])?.[0]
-              if (!txParams) throw new Error('No transaction params')
-
-              const hash = await signAndSendTransaction({
-                to: txParams.to as Address,
-                value: txParams.value ? BigInt(txParams.value as string) : 0n,
-                data: txParams.data as Hex | undefined,
-                gas: txParams.gas ? BigInt(txParams.gas as string) : undefined,
-                maxFeePerGas: txParams.maxFeePerGas
-                  ? BigInt(txParams.maxFeePerGas as string)
-                  : undefined,
-                maxPriorityFeePerGas: txParams.maxPriorityFeePerGas
-                  ? BigInt(txParams.maxPriorityFeePerGas as string)
-                  : undefined,
-              })
-
-              return hash
-            }
-
-            case 'wallet_switchEthereumChain':
-              return null
-
-            case 'wallet_getCapabilities': {
-              const [requestedAddress, chainIds] = (params || []) as [
-                Address | undefined,
-                string[] | undefined,
-              ]
-              const address = requestedAddress || getAddress()
-              if (!address) {
-                return {}
-              }
-              const requestedChains = chainIds || [numberToHex(mainnet.id)]
-              const capabilities: Record<string, Record<string, unknown>> = {}
-              for (const chainId of requestedChains) {
-                capabilities[chainId] = {
-                  atomicBatch: {
-                    supported: false,
-                  },
-                }
-              }
-              return capabilities
-            }
-
-            case 'personal_sign': {
-              const [message] = params as [Hex]
-              const signature = await signMessage(message)
-              return signature
-            }
-
-            case 'eth_signTypedData_v4': {
-              const [, typedData] = params as [Address, string]
-              const signature = await signTypedData(typedData)
-              return signature
-            }
-
-            default: {
-              const client = createPublicClient({
-                chain: mainnet,
-                transport: http(),
-              })
-
-              return client.request({
-                method: method as never,
-                params: params as never,
-              })
-            }
-          }
+          return handleProviderRequest(method, params, {
+            getAddress,
+            signAndSendTransaction,
+            signMessage,
+            signTypedData,
+            emitter: config.emitter as unknown as {
+              emit: (event: string, ...args: unknown[]) => void
+            },
+          })
         },
         on(event: string, handler: (...args: unknown[]) => void) {
           config.emitter.on(event as never, handler)
@@ -153,7 +178,7 @@ export function statusConnector(options: StatusConnectorOptions) {
       name: 'Status Wallet',
       type: 'injected' as const,
 
-      async connect() {
+      async connect<withCapabilities extends boolean = false>() {
         const address = getAddress()
         if (!address) {
           throw new Error('No wallet connected')
@@ -161,9 +186,19 @@ export function statusConnector(options: StatusConnectorOptions) {
         return {
           accounts: [address] as readonly Address[],
           chainId: mainnet.id,
+        } as {
+          accounts: withCapabilities extends true
+            ? readonly {
+                address: Address
+                capabilities: Record<string, unknown>
+              }[]
+            : readonly Address[]
+          chainId: number
         }
       },
 
+      // required by wagmi's connector interface
+      // empty because we delegate connection state to wallet-context through getAddress()
       async disconnect() {},
 
       async getAccounts() {
