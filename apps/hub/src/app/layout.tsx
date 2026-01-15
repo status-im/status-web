@@ -2,12 +2,10 @@ import './globals.css'
 
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
+import { getLocale } from 'next-intl/server'
 
 import { Metadata as MetadataFn } from './_metadata'
-import { Providers } from './_providers'
 import { jsonLD, JSONLDScript } from './_utils/json-ld'
-
-import type { Metadata } from 'next'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -25,7 +23,7 @@ const websiteSchema = jsonLD.website({
     'Manage your Status Network assets, discover applications, and navigate to various services.',
 })
 
-export const metadata: Metadata = MetadataFn({
+export const metadata = MetadataFn({
   // title: 'Status Hub',
   // description:
   // 'Manage your Status Network assets, discover applications, and navigate to various services.',
@@ -34,16 +32,18 @@ export const metadata: Metadata = MetadataFn({
   },
 })
 
-export default function RootLayout({
-  children,
-}: {
+type Props = {
   children: React.ReactNode
-}) {
+}
+
+export default async function RootLayout({ children }: Props) {
+  const locale = await getLocale()
+
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang={locale} className={inter.variable}>
       <body className="font-inter antialiased">
         <JSONLDScript schema={[organizationSchema, websiteSchema]} />
-        <Providers>{children}</Providers>
+        {children}
         <Script
           strategy="afterInteractive"
           src="https://umami.bi.status.im/script.js"

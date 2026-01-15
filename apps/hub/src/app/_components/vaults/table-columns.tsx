@@ -15,6 +15,7 @@ import { LockVaultModal } from './modals/lock-vault-modal'
 import { UnstakeVaultModal } from './modals/unstake-vault'
 import { WithdrawVaultModal } from './modals/withdraw-vault-modal'
 
+import type { useTranslations } from 'next-intl'
 import type { Address } from 'viem'
 
 interface TableColumnsProps {
@@ -26,6 +27,7 @@ interface TableColumnsProps {
   openDropdownId: string | null
   setOpenDropdownId: (id: string | null) => void
   setOpenModalVaultId: (vaultId: string | null) => void
+  t: ReturnType<typeof useTranslations>
 }
 
 // Calculate total staked across all vaults
@@ -57,11 +59,13 @@ const getCurrentTimestamp = (): bigint => {
 }
 
 // Validation function for lock time - extracted to avoid recreating on every render
-const validateLockTime = (_: string, days: string): string | null => {
-  const totalDays = parseInt(days || '0')
-  // TODO: read this from the contract
-  return totalDays > 1460 ? 'Maximum lock time is 4 years' : null
-}
+const createValidateLockTime =
+  (t: ReturnType<typeof useTranslations>) =>
+  (_: string, days: string): string | null => {
+    const totalDays = parseInt(days || '0')
+    // TODO: read this from the contract
+    return totalDays > 1460 ? t('stake.max_lock_time') : null
+  }
 
 const resolveChainExplorerHref = (
   chainId: number,
@@ -75,16 +79,16 @@ const resolveChainExplorerHref = (
   }
 }
 
-// Modal action configurations - static, never change
-const EXTEND_LOCK_ACTIONS = [
-  { label: 'Cancel' },
-  { label: 'Extend lock' },
-] as const
+// Modal action configurations - created with translations
+const createExtendLockActions = (t: ReturnType<typeof useTranslations>) =>
+  [{ label: t('common.cancel') }, { label: t('stake.extend_lock') }] as const
 
-const LOCK_VAULT_ACTIONS = [{ label: "Don't lock" }, { label: 'Lock' }] as const
+const createLockVaultActions = (t: ReturnType<typeof useTranslations>) =>
+  [{ label: t('stake.dont_lock') }, { label: t('stake.lock') }] as const
 
-const LOCK_INFO_MESSAGE =
-  'Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more STT at any time, but withdrawing your STT is only possible once the vault unlocks.' as const
+const createLockInfoMessage = (t: ReturnType<typeof useTranslations>) => {
+  return t('stake.lock_info_message')
+}
 
 export const createVaultTableColumns = ({
   vaults = [],
@@ -95,6 +99,7 @@ export const createVaultTableColumns = ({
   openDropdownId,
   setOpenDropdownId,
   chainId,
+  t,
 }: TableColumnsProps) => {
   // Calculate totals and current time once per column creation
   const totalStaked = calculateTotalStaked(
@@ -104,11 +109,15 @@ export const createVaultTableColumns = ({
   const totalKarma = calculateTotalKarma(vaults)
   const currentTimestamp = getCurrentTimestamp()
   const columnHelper = createColumnHelper<StakingVault>()
+  const validateLockTime = createValidateLockTime(t)
+  const EXTEND_LOCK_ACTIONS = createExtendLockActions(t)
+  const LOCK_VAULT_ACTIONS = createLockVaultActions(t)
+  const LOCK_INFO_MESSAGE = createLockInfoMessage(t)
 
   return [
     columnHelper.accessor('address', {
       id: 'vault',
-      header: 'Vault',
+      header: t('stake.vault'),
       cell: ({ row }) => {
         return (
           <span className="whitespace-pre text-13 font-medium text-neutral-100">
@@ -118,7 +127,9 @@ export const createVaultTableColumns = ({
       },
       footer: () => {
         return (
-          <span className="text-13 font-medium text-neutral-50">Total</span>
+          <span className="text-13 font-medium text-neutral-50">
+            {t('stake.total')}
+          </span>
         )
       },
       meta: {
@@ -127,7 +138,7 @@ export const createVaultTableColumns = ({
       },
     }),
     columnHelper.accessor('address', {
-      header: 'Address',
+      header: t('stake.address'),
       cell: ({ row }) => {
         return (
           <span className="whitespace-pre text-13 font-medium text-neutral-100">
@@ -141,7 +152,9 @@ export const createVaultTableColumns = ({
       },
     }),
     columnHelper.accessor('data.stakedBalance', {
-      header: emergencyModeEnabled ? 'Vault balance' : 'Staked',
+      header: emergencyModeEnabled
+        ? t('stake.vault_balance')
+        : t('stake.staked'),
       cell: ({ row }) => {
         const balance = emergencyModeEnabled
           ? row.original.data?.depositedBalance
@@ -167,7 +180,7 @@ export const createVaultTableColumns = ({
       },
     }),
     columnHelper.accessor('data.lockUntil', {
-      header: 'Unlocks in',
+      header: t('stake.unlocks_in'),
       cell: ({ row }) => {
         const isLocked = isVaultLocked(row.original.data?.lockUntil)
         const daysUntilUnlock = isLocked
@@ -193,7 +206,7 @@ export const createVaultTableColumns = ({
       },
     }),
     columnHelper.accessor('data.maxMP', {
-      header: 'Boost',
+      header: t('stake.boost'),
       cell: ({ row }) => {
         const stakedBalance = row.original.data?.stakedBalance || 0n
         const maxMP = row.original.data?.maxMP || 0n
@@ -220,8 +233,8 @@ export const createVaultTableColumns = ({
             </span>
             {potentialBoost && (
               <span className="text-13 font-medium text-purple">
-                x{formatSNT(formatUnits(potentialBoost, STT_TOKEN.decimals))} if
-                locked
+                x{formatSNT(formatUnits(potentialBoost, STT_TOKEN.decimals))}{' '}
+                {t('stake.if_locked')}
               </span>
             )}
           </div>
@@ -233,7 +246,7 @@ export const createVaultTableColumns = ({
       },
     }),
     columnHelper.accessor('data.rewardsAccrued', {
-      header: 'Karma',
+      header: t('karma.title'),
       cell: ({ row }) => {
         const karma = Number(row.original.data?.rewardsAccrued) / 1e18
         return (
@@ -260,7 +273,7 @@ export const createVaultTableColumns = ({
     }),
     columnHelper.accessor('data.lockUntil', {
       id: 'state',
-      header: 'State',
+      header: t('stake.state'),
       cell: ({ row }) => {
         const isLocked = isVaultLocked(row.original.data?.lockUntil)
 
@@ -272,7 +285,7 @@ export const createVaultTableColumns = ({
               <UnlockedIcon className="text-purple" />
             )}
             <span className="text-13 font-medium capitalize text-neutral-100">
-              {isLocked ? 'Locked' : 'Open'}
+              {isLocked ? t('stake.locked') : t('stake.open')}
             </span>
           </div>
         )
@@ -284,7 +297,7 @@ export const createVaultTableColumns = ({
     }),
     columnHelper.display({
       id: 'actions',
-      header: 'Actions',
+      header: t('stake.actions'),
       cell: ({ row }) => {
         const withdrawModalId = `withdraw-${row.original.address}`
         const lockModalId = `lock-${row.original.address}`
@@ -334,10 +347,10 @@ export const createVaultTableColumns = ({
                         setOpenModalVaultId(open ? lockModalId : null)
                       }
                       vaultAddress={row.original.address}
-                      title="Extend lock time"
+                      title={t('stake.extend_lock_title')}
                       initialYears={EXTEND_LOCK_PERIOD.INITIAL_YEARS}
                       initialDays={EXTEND_LOCK_PERIOD.INITIAL_DAYS}
-                      description="Extending lock time increasing Karma boost"
+                      description={t('stake.extend_lock_description')}
                       actions={[...EXTEND_LOCK_ACTIONS]}
                       onClose={() => setOpenModalVaultId(null)}
                       infoMessage={LOCK_INFO_MESSAGE}
@@ -349,10 +362,10 @@ export const createVaultTableColumns = ({
                       >
                         <TimeIcon className="shrink-0" />
                         <span className="hidden whitespace-nowrap xl:inline">
-                          Extend lock time
+                          {t('stake.extend_lock_time')}
                         </span>
                         <span className="whitespace-nowrap xl:hidden">
-                          Extend
+                          {t('stake.extend')}
                         </span>
                       </Button>
                     </LockVaultModal>
@@ -364,8 +377,8 @@ export const createVaultTableColumns = ({
                       setOpenModalVaultId(open ? lockModalId : null)
                     }
                     vaultAddress={row.original.address}
-                    title="Do you want to lock the vault?"
-                    description="Lock this vault to receive more Karma"
+                    title={t('stake.do_you_want_to_lock')}
+                    description={t('stake.lock_description')}
                     actions={[...LOCK_VAULT_ACTIONS]}
                     onClose={() => setOpenModalVaultId(null)}
                     infoMessage={LOCK_INFO_MESSAGE}
@@ -373,7 +386,9 @@ export const createVaultTableColumns = ({
                   >
                     <Button variant="primary" size="24" disabled={!isConnected}>
                       <LockedIcon fill="white" className="shrink-0" />
-                      <span className="whitespace-nowrap">Lock</span>
+                      <span className="whitespace-nowrap">
+                        {t('stake.lock')}
+                      </span>
                     </Button>
                   </LockVaultModal>
                 )}
@@ -392,14 +407,14 @@ export const createVaultTableColumns = ({
               >
                 {!isLocked && (
                   <DropdownMenu.Item
-                    label="Unstake"
+                    label={t('stake.unstake')}
                     onSelect={() => {
                       setOpenModalVaultId(unstakeModalId)
                     }}
                   />
                 )}
                 <DropdownMenu.Item
-                  label="Open in blockchain explorer"
+                  label={t('stake.open_in_explorer')}
                   external
                   onSelect={() => {
                     window.open(

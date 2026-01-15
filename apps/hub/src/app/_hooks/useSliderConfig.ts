@@ -1,4 +1,5 @@
 import { useQuery, type UseQueryResult } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
 import { useConfig } from 'wagmi'
 import { readContract } from 'wagmi/actions'
 
@@ -82,6 +83,7 @@ const QUERY_KEY_PREFIX = 'slider-config' as const
  */
 export function useSliderConfig(): UseSliderConfigReturn {
   const config = useConfig()
+  const t = useTranslations()
 
   return useQuery({
     queryKey: [QUERY_KEY_PREFIX],
@@ -106,14 +108,12 @@ export function useSliderConfig(): UseSliderConfigReturn {
           typeof minLockupPeriod !== 'bigint' ||
           typeof maxLockupPeriod !== 'bigint'
         ) {
-          throw new Error('Invalid lockup period values returned from contract')
+          throw new Error(t('errors.invalid_lockup_period_values'))
         }
 
         // Ensure min is less than max
         if (minLockupPeriod >= maxLockupPeriod) {
-          throw new Error(
-            'Minimum lockup period must be less than maximum lockup period'
-          )
+          throw new Error(t('errors.min_lockup_greater_than_max'))
         }
 
         return {
@@ -122,7 +122,9 @@ export function useSliderConfig(): UseSliderConfigReturn {
         }
       } catch (error) {
         throw new Error(
-          `Failed to fetch slider configuration: ${error instanceof Error ? error.message : 'Unknown error'}`
+          t('errors.failed_fetch_slider_config', {
+            error: error instanceof Error ? error.message : 'Unknown error',
+          })
         )
       }
     },

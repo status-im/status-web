@@ -11,26 +11,26 @@ const Network = () => {
 
   const SOLUTIONS = [
     {
-      title: t('network.status.title.translation'),
-      description: t('network.status.description.translation'),
+      title: t('network.status.title'),
+      description: t('network.status.description'),
       website: 'status.app',
       icon: '/logo-status.png',
     },
     {
-      title: t('network.logos.title.translation'),
-      description: t('network.logos.description.translation'),
+      title: t('network.logos.title'),
+      description: t('network.logos.description'),
       website: 'logos.co',
       icon: '/logo-logos.png',
     },
     {
-      title: t('network.nimbus.title.translation'),
-      description: t('network.nimbus.description.translation'),
+      title: t('network.nimbus.title'),
+      description: t('network.nimbus.description'),
       website: 'nimbus.team',
       icon: '/logo-nimbus.png',
     },
     {
-      title: t('network.keycard.title.translation'),
-      description: t('network.keycard.description.translation'),
+      title: t('network.keycard.title'),
+      description: t('network.keycard.description'),
       website: 'keycard.tech',
       icon: '/logo-keycard.png',
     },
@@ -46,16 +46,14 @@ const Network = () => {
       <div className="relative z-20 px-5 py-24 lg:px-[120px] lg:py-[160px]">
         <div className="mb-20 text-center">
           <p className="mb-8 inline-block text-13 font-500 text-purple">
-            {t('network.section_number.translation')}{' '}
+            {t('network.section_number')}{' '}
             <span className="inline-block h-2 w-px bg-purple-transparent" />{' '}
-            {t('network.section_title.translation')}
+            {t('network.section_title')}
           </p>
           <h2 className="mb-5 text-40 font-600 lg:text-64">
-            {t('network.title.translation')}
+            {t('network.title')}
           </h2>
-          <p className="text-19 sm:text-27">
-            {t('network.description.translation')}
-          </p>
+          <p className="text-19 sm:text-27">{t('network.description')}</p>
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">

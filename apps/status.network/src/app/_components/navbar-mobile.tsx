@@ -142,14 +142,14 @@ const NavBarMobile = () => {
                     href={localizedRoutes.Docs}
                     onClick={() => setIsOpen(false)}
                   >
-                    {t('common.read_docs.translation')}
+                    {t('common.read_docs')}
                   </ButtonLink>
                   <ButtonLink
                     className="w-full justify-center"
                     href={localizedRoutes.Hub}
                     onClick={() => setIsOpen(false)}
                   >
-                    {t('common.get_started.translation')}
+                    {t('common.get_started')}
                   </ButtonLink>
                   <LanguageSelector />
                 </motion.div>

@@ -11,10 +11,10 @@ const Blog = () => {
 
   const POSTS: BlogPost[] = [
     {
-      category: t('blog.category.translation'),
-      title: t('blog.post_1.title.translation'),
+      category: t('blog.category'),
+      title: t('blog.post_1.title'),
       author: {
-        name: t('blog.author.translation'),
+        name: t('blog.author'),
         avatar: '/blog/avatar.webp',
       },
       date: '2025-07-29',
@@ -22,10 +22,10 @@ const Blog = () => {
       link: 'https://status.app/blog/status-steps-up-as-founding-member-of-linea-consortium',
     },
     {
-      category: t('blog.category.translation'),
-      title: t('blog.post_2.title.translation'),
+      category: t('blog.category'),
+      title: t('blog.post_2.title'),
       author: {
-        name: t('blog.author.translation'),
+        name: t('blog.author'),
         avatar: '/blog/avatar.webp',
       },
       date: '2025-07-09',
@@ -33,10 +33,10 @@ const Blog = () => {
       link: 'https://status.app/blog/status-network-first-gasless-l2',
     },
     {
-      category: t('blog.category.translation'),
-      title: t('blog.post_3.title.translation'),
+      category: t('blog.category'),
+      title: t('blog.post_3.title'),
       author: {
-        name: t('blog.author.translation'),
+        name: t('blog.author'),
         avatar: '/blog/avatar.webp',
       },
       date: '2024-07-30',
@@ -49,9 +49,9 @@ const Blog = () => {
     <section className="w-full" id="blog">
       <div className="px-5 py-[120px] lg:px-[120px] lg:py-[168px]">
         <div className="mb-6 flex items-center justify-between lg:mb-12">
-          <h2 className="text-27 font-600">{t('blog.title.translation')}</h2>
+          <h2 className="text-27 font-600">{t('blog.title')}</h2>
           <ButtonLink variant="white" size="32" href="https://status.app/blog">
-            {t('blog.view_blog_button.translation')}
+            {t('blog.view_blog_button')}
           </ButtonLink>
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -105,8 +105,7 @@ const BlogCard = (props: BlogPost) => {
           />
           <p className="text-15 font-600">{author.name}</p>
           <p className="text-15 text-neutral-50">
-            {t('blog.on_date.translation') &&
-              `${t('blog.on_date.translation')} `}
+            {t('blog.on_date') && `${t('blog.on_date')} `}
             {formatDate(date, 'medium', locale)}
           </p>
         </div>

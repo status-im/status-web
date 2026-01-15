@@ -1,4 +1,5 @@
 import { useMutation, type UseMutationResult } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
 import { formatUnits, zeroAddress } from 'viem'
 import { useAccount, useConfig, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
@@ -103,20 +104,19 @@ export function useCompoundMultiplierPoints(): UseCompoundMultiplierPointsReturn
   const { data: mpBalance, refetch: refetchMultiplierPoints } =
     useMultiplierPointsBalance()
   const { send: sendVaultEvent, reset: resetVault } = useVaultStateContext()
+  const t = useTranslations()
 
   return useMutation({
     mutationKey: [MUTATION_KEY, address],
     mutationFn: async (): Promise<void> => {
       // Validate wallet connection
       if (!address) {
-        throw new Error(
-          'Wallet not connected. Please connect your wallet first.'
-        )
+        throw new Error(t('errors.wallet_not_connected'))
       }
 
       // Validate account address
       if (address === zeroAddress) {
-        throw new Error('Invalid account address provided')
+        throw new Error(t('errors.invalid_account_address'))
       }
 
       // Get the current MP balance to show in the dialog
@@ -151,7 +151,7 @@ export function useCompoundMultiplierPoints(): UseCompoundMultiplierPointsReturn
       // Check if transaction was reverted
       if (status === 'reverted') {
         sendVaultEvent({ type: 'REJECT' })
-        throw new Error('Transaction was reverted')
+        throw new Error(t('errors.transaction_reverted'))
       }
     },
     onSuccess: () => {

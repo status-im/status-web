@@ -1,5 +1,6 @@
 import { useToast } from '@status-im/components'
 import { useQuery, type UseQueryResult } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
 import { type Address } from 'viem'
 import { useAccount, useChainId, useConfig } from 'wagmi'
 import { readContract, readContracts } from 'wagmi/actions'
@@ -246,6 +247,7 @@ export function useStakingVaults(
   const config = useConfig()
   const chainId = useChainId()
   const toast = useToast()
+  const t = useTranslations()
 
   return useQuery<StakingVault[], Error>({
     queryKey: [QUERY_KEY, address, chainId],
@@ -273,7 +275,9 @@ export function useStakingVaults(
         return vaults
       } catch (error) {
         toast.negative(
-          `Failed to fetch staking vaults: ${error instanceof Error ? error.message : 'Unknown error'}`
+          t('errors.failed_fetch_vaults', {
+            error: error instanceof Error ? error.message : 'Unknown error',
+          })
         )
         throw error
       }

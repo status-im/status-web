@@ -1,5 +1,6 @@
 import { useToast } from '@status-im/components'
 import { useMutation, type UseMutationResult } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
 import { type Address, BaseError, parseUnits, zeroAddress } from 'viem'
 import { useAccount, useConfig, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
@@ -110,6 +111,7 @@ export function useApproveToken(): UseApprovePreDepositTokenReturn {
   const config = useConfig()
   const { send: sendPreDepositEvent } = usePreDepositStateContext()
   const toast = useToast()
+  const t = useTranslations()
 
   return useMutation({
     mutationKey: [MUTATION_KEY, address],
@@ -119,17 +121,15 @@ export function useApproveToken(): UseApprovePreDepositTokenReturn {
       spenderAddress,
     }: ApprovePreDepositTokenParams): Promise<void> => {
       if (!address) {
-        throw new Error(
-          'Wallet not connected. Please connect your wallet first.'
-        )
+        throw new Error(t('errors.wallet_not_connected'))
       }
 
       if (!spenderAddress || spenderAddress === zeroAddress) {
-        throw new Error('Invalid spender address provided')
+        throw new Error(t('errors.invalid_spender_address'))
       }
 
       if (!amount || parseFloat(amount) <= 0) {
-        throw new Error('Amount must be greater than 0')
+        throw new Error(t('errors.amount_greater_than_zero'))
       }
 
       const amountWei = parseUnits(amount, token.decimals)
@@ -155,15 +155,17 @@ export function useApproveToken(): UseApprovePreDepositTokenReturn {
         })
 
         if (status === 'reverted') {
-          throw new Error('Transaction was reverted')
+          throw new Error(t('errors.transaction_reverted'))
         }
 
         sendPreDepositEvent({ type: 'COMPLETE', amount })
-        toast.positive('Token Allowance has been increased')
+        toast.positive(t('success.token_allowance_increased'))
       } catch (error) {
         console.error('Failed to approve tokens:', error)
         const message =
-          error instanceof BaseError ? error.shortMessage : 'Transaction failed'
+          error instanceof BaseError
+            ? error.shortMessage
+            : t('errors.transaction_failed')
         toast.negative(message)
         sendPreDepositEvent({ type: 'REJECT' })
         throw error
