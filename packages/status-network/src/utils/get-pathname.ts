@@ -5,13 +5,8 @@ export async function getPathname(): Promise<string> {
   const pathname = headersList.get('x-pathname') || '/'
   const segments = pathname.split('/').filter(Boolean)
 
-  let basePagePath = '/'
-
   if (segments[0] === 'en' || segments[0] === 'ko') {
-    basePagePath = '/' + segments.slice(1).join('/')
-  } else {
-    basePagePath = pathname
+    return '/' + segments.slice(1).join('/')
   }
-
-  return basePagePath
+  return pathname
 }
