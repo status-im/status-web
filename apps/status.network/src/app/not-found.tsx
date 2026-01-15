@@ -18,12 +18,10 @@ export default async function NotFound() {
     <main className="flex min-h-[calc(100dvh-189px)] flex-1 items-center justify-center px-5 lg:min-h-[calc(100dvh-118px)]">
       <div className="flex max-w-[696px] flex-col items-center gap-8">
         <h1 className="text-center text-40 font-700 lg:text-64">
-          {t('not_found.title.translation')}
+          {t('not_found.title')}
         </h1>
 
-        <ButtonLink href="/">
-          {t('not_found.take_me_home.translation')}
-        </ButtonLink>
+        <ButtonLink href="/">{t('not_found.take_me_home')}</ButtonLink>
       </div>
     </main>
   )

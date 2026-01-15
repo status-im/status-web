@@ -29,7 +29,7 @@ const BrandSection = (props: Props) => {
             fileName={fileName}
             className="w-full justify-center lg:w-fit lg:justify-start"
           >
-            {t('brand.download_button.translation')}
+            {t('brand.download_button')}
           </DownloadZipButton>
         )}
       </div>

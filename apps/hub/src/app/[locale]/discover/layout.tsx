@@ -1,4 +1,4 @@
-import { Metadata as MetadataFn } from '../_metadata'
+import { Metadata as MetadataFn } from '~/app/_metadata'
 
 export const metadata = MetadataFn({
   // title: 'Discover — Gasless apps FTW',

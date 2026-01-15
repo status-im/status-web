@@ -43,6 +43,7 @@ import { renderMarkdown } from '@/lib/markdown'
 import { apiClient } from '@/providers/api-client'
 import { usePassword } from '@/providers/password-context'
 import { usePendingTransactions } from '@/providers/pending-transactions-context'
+import { useWalletSigner } from '@/providers/signer-context'
 import { useWallet } from '@/providers/wallet-context'
 import { ExchangeDrawer } from '~/components/exchange-drawer'
 

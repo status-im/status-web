@@ -1,5 +1,6 @@
 import { useToast } from '@status-im/components'
 import { useMutation, type UseMutationResult } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
 import { mainnet } from 'viem/chains'
 import { BaseError, useAccount, useConfig, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
@@ -20,18 +21,17 @@ export function useWrapETH(): UseWrapETHRETURN {
   const { writeContractAsync } = useWriteContract()
   const config = useConfig()
   const toast = useToast()
+  const t = useTranslations()
 
   return useMutation({
     mutationKey: ['wrapETH', address],
     mutationFn: async ({ amountWei }: UseWrapETHParams): Promise<void> => {
       if (!address) {
-        throw new Error(
-          'Wallet not connected. Please connect your wallet first.'
-        )
+        throw new Error(t('errors.wallet_not_connected'))
       }
 
       if (amountWei === 0n) {
-        throw new Error('Amount must be greater than 0')
+        throw new Error(t('errors.amount_greater_than_zero'))
       }
 
       try {
@@ -49,14 +49,16 @@ export function useWrapETH(): UseWrapETHRETURN {
         })
 
         if (status === 'reverted') {
-          throw new Error('Transaction was reverted')
+          throw new Error(t('errors.transaction_reverted'))
         }
 
-        toast.positive('Successfully wrapped ETH to WETH')
+        toast.positive(t('success.eth_wrapped'))
       } catch (error) {
         console.error('Failed to wrap ETH: ', error)
         const message =
-          error instanceof BaseError ? error.shortMessage : 'Transaction failed'
+          error instanceof BaseError
+            ? error.shortMessage
+            : t('errors.transaction_failed')
         toast.negative(message)
         throw error
       }

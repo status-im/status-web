@@ -30,33 +30,33 @@ const Hero = async () => {
             <Link href={routes.Bridge}>
               <div className="mb-4 inline-flex items-center gap-0.5 rounded-full bg-white-10 py-1 pl-1 pr-[6px] backdrop-blur-sm">
                 <span className="mr-[6px] rounded-full bg-gradient-to-r from-purple from-70% to-[#756ECB91] px-2 pb-[3.5px] pt-[2.5px] text-13 font-500">
-                  {t('common.new.translation')}
+                  {t('common.new')}
                 </span>
                 <span className="text-15 text-white-100">
-                  {t('common.testnet_live.translation')}
+                  {t('common.testnet_live')}
                 </span>
                 <ChevronRightIcon className="text-white-40" />
               </div>
             </Link>
 
             <h1 className="mb-5 text-56 font-600 lg:text-64">
-              {t('hero.title.translation')}
+              {t('hero.title')}
             </h1>
 
             <h2 className="mb-6 text-27 font-500 lg:text-40">
-              {t('hero.subtitle.translation')}
+              {t('hero.subtitle')}
             </h2>
 
             <p className="mb-8 max-w-[558px] text-19 text-white-90 sm:text-27">
-              {t('hero.description.translation')}
+              {t('hero.description')}
             </p>
 
             <div className="flex space-x-3">
               <ButtonLink href={routes.Hub} variant="primary">
-                {t('common.get_started.translation')}
+                {t('common.get_started')}
               </ButtonLink>
               <ButtonLink href={routes.Docs} variant="secondary">
-                {t('common.read_docs.translation')}
+                {t('common.read_docs')}
               </ButtonLink>
             </div>
           </div>

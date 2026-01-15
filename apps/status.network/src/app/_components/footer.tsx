@@ -12,7 +12,7 @@ const Footer = async () => {
       <div className="grid gap-4 p-3 lg:grid-cols-[1fr,auto,auto] lg:gap-5 lg:p-4">
         <div className="flex flex-col justify-center gap-2 lg:flex-row lg:justify-start lg:gap-3">
           <span className="text-center text-13 lg:text-left">
-            {t('footer.copyright.translation')}
+            {t('footer.copyright')}
           </span>
           <Dot className="hidden text-neutral-50 lg:block" />
         </div>
@@ -23,20 +23,20 @@ const Footer = async () => {
               href={LEGAL.termsOfUse.href}
               className="text-13 text-neutral-50 transition-colors hover:text-neutral-100"
             >
-              {t('footer.terms_of_use.translation')}
+              {t('footer.terms_of_use')}
             </CustomLink>
 
             <CustomLink
               href={LEGAL.privacyPolicy.href}
               className="text-13 text-neutral-50 transition-colors hover:text-neutral-100"
             >
-              {t('footer.privacy_policy.translation')}
+              {t('footer.privacy_policy')}
             </CustomLink>
             <Link
               href={BRAND.href}
               className="text-13 text-neutral-50 transition-colors hover:text-neutral-100"
             >
-              {t('footer.brand.translation')}
+              {t('footer.brand')}
             </Link>
           </div>
           <Dot className="2md:hidden text-neutral-50" />
