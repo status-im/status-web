@@ -1,7 +1,10 @@
+import { keccak256, stringToHex } from 'viem'
 import { linea, mainnet } from 'viem/chains'
 
 import {
+  bridgeCoordinatorL1Abi,
   faucetAbi,
+  genericDepositorAbi,
   karmaAbi,
   karmaTierAbi,
   lidoStETHAbi,
@@ -24,7 +27,21 @@ export type Token = {
   priceKey?: string
 }
 
-export type Vault = {
+export type StablecoinToken = Token & {
+  vaultAddress: Address
+}
+
+export type GUSDConfig = {
+  depositorAddress: Address
+  depositorAbi: typeof genericDepositorAbi
+  coordinatorAddress: Address
+  coordinatorAbi: typeof bridgeCoordinatorL1Abi
+  chainNickname: `0x${string}`
+  stablecoins: StablecoinToken[]
+  outputToken: Token
+}
+
+export type BaseVault = {
   id: string
   name: string
   address: Address
@@ -35,6 +52,17 @@ export type Vault = {
   chainId: number
   network: (typeof mainnet | typeof linea)['name']
   abi: typeof PreDepositVaultAbi
+}
+
+export type GUSDVault = BaseVault & {
+  id: 'GUSD'
+  gusdConfig: GUSDConfig
+}
+
+export type Vault = BaseVault | GUSDVault
+
+export function isGUSDVault(vault: Vault): vault is GUSDVault {
+  return vault.id === 'GUSD' && 'gusdConfig' in vault
 }
 
 export const STAKING_MANAGER = {
@@ -95,6 +123,69 @@ export const LINEA_TOKEN: Token = {
 } as const
 
 // ============================================================================
+// GUSD
+// ============================================================================
+
+export const USDC_TOKEN: StablecoinToken = {
+  address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+  name: 'USD Coin',
+  symbol: 'USDC',
+  decimals: 6,
+  abi: tokenAbi,
+  priceKey: 'USDC',
+  vaultAddress: '0x4825eFF24F9B7b76EEAFA2ecc6A1D5dFCb3c1c3f',
+} as const
+
+export const USDT_TOKEN: StablecoinToken = {
+  address: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+  name: 'Tether USD',
+  symbol: 'USDT',
+  decimals: 6,
+  abi: tokenAbi,
+  priceKey: 'USDT',
+  vaultAddress: '0xB8280955aE7b5207AF4CDbdCd775135Bd38157fE',
+} as const
+
+export const USDS_TOKEN: StablecoinToken = {
+  address: '0xdC035D45d973E3EC169d2276DDab16f1e407384F',
+  name: 'USDS Stablecoin',
+  symbol: 'USDS',
+  decimals: 18,
+  abi: tokenAbi,
+  priceKey: 'USDS',
+  vaultAddress: '0x6133dA4Cd25773Ebd38542a8aCEF8F94cA89892A',
+} as const
+
+export const GUSD_TOKEN: Token = {
+  address: '0x8c307baDbd78bEa5A1cCF9677caa58e7A2172502',
+  name: 'Generic USD Unit',
+  symbol: 'GUSD',
+  decimals: 18,
+  abi: tokenAbi,
+  priceKey: 'GUSD',
+} as const
+
+export const GUSD_STABLECOINS: StablecoinToken[] = [
+  USDC_TOKEN,
+  USDT_TOKEN,
+  USDS_TOKEN,
+]
+
+export const DEFAULT_GUSD_STABLECOIN = USDT_TOKEN
+
+export const GENERIC_DEPOSITOR = {
+  address: '0x79B4cDb14A31E8B0e21C0120C409Ac14Af35f919' as Address,
+  abi: genericDepositorAbi,
+} as const
+
+export const BRIDGE_COORDINATOR_L1 = {
+  address: '0x0503F2C5A1a4b72450c6Cfa790F2097CF5cB6a01' as Address,
+  abi: bridgeCoordinatorL1Abi,
+} as const
+
+export const STATUS_L2_CHAIN_NICKNAME = keccak256(stringToHex('Status_L2'))
+
+// ============================================================================
 // Vaults
 // ============================================================================
 
@@ -137,18 +228,27 @@ export const WETH_VAULT: Vault = {
   network: mainnet.name,
 } as const
 
-export const GUSD_VAULT: Vault = {
+export const GUSD_VAULT: GUSDVault = {
   id: 'GUSD',
   name: 'GUSD Vault',
   apy: '',
   rewards: ['SNT, LINEA', 'vault.native_apps_points'],
   icon: 'GUSD',
-  address: '0x0000000000000000000000000000000000000000',
-  token: WETH_TOKEN,
+  address: GENERIC_DEPOSITOR.address,
+  token: DEFAULT_GUSD_STABLECOIN,
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
   network: mainnet.name,
-} as const
+  gusdConfig: {
+    depositorAddress: GENERIC_DEPOSITOR.address,
+    depositorAbi: genericDepositorAbi,
+    coordinatorAddress: BRIDGE_COORDINATOR_L1.address,
+    coordinatorAbi: bridgeCoordinatorL1Abi,
+    chainNickname: STATUS_L2_CHAIN_NICKNAME,
+    stablecoins: GUSD_STABLECOINS,
+    outputToken: GUSD_TOKEN,
+  },
+}
 
 export const VAULTS: Vault[] = [WETH_VAULT, SNT_VAULT, LINEA_VAULT, GUSD_VAULT]
 

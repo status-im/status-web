@@ -1,5 +1,5 @@
 ---
-"hub": patch
+'hub': patch
 ---
 
 fix route auth session
