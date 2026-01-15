@@ -42,7 +42,13 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props) {
   const slug = (await params).slug
-  const post = (await getPostBySlug(slug))!
+  const post = await getPostBySlug(slug)
+
+  if (!post) {
+    return Metadata({
+      title: 'Post not found',
+    })
+  }
 
   return Metadata({
     title: post.title!,
