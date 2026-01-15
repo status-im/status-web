@@ -120,7 +120,7 @@ export default function AppsPage() {
                     alt: '',
                   },
                   {
-                    id: 'Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624',
+                    id: 'Platforms/Screens/Mobile Screens/New_Mobile_Communities:750:1624',
                     alt: '',
                   },
                 ],
