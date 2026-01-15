@@ -51,9 +51,9 @@ export function Metadata(input: Input): Metadata {
       ...(canonicalUrl && { canonical: canonicalUrl }),
       ...(input.pathname && {
         languages: {
-          en: input.pathname,
-          ko: `/ko${input.pathname === '/' ? '' : input.pathname}`,
-          'x-default': input.pathname,
+          en: `${DEFAULT_SITE_URL}${input.pathname}`,
+          ko: `${DEFAULT_SITE_URL}/ko${input.pathname === '/' ? '' : input.pathname}`,
+          'x-default': `${DEFAULT_SITE_URL}${input.pathname}`,
         },
       }),
     },
