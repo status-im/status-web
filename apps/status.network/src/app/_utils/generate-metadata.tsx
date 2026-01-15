@@ -26,5 +26,6 @@ export async function generateMetadata(
     title: t(options.titleKey),
     description: t(options.descriptionKey),
     pathname: options.pathname,
+    locale,
   })
 }
