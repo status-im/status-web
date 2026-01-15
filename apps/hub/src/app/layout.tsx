@@ -29,9 +29,6 @@ export const metadata = MetadataFn({
   // description:
   // 'Manage your Status Network assets, discover applications, and navigate to various services.',
   pathname: '/',
-  alternates: {
-    canonical: '/',
-  },
 })
 
 type Props = {
