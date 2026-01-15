@@ -25,37 +25,37 @@ const Partners = () => {
         <div className="rounded-24 bg-gradient-to-b from-[transparent] to-neutral-80/5 p-2 pt-[104px] lg:px-[112px] lg:py-40">
           <div className="mb-16">
             <p className="mb-6 inline-block text-13 font-500 text-purple">
-              {t('partners.section_number.translation')}{' '}
+              {t('partners.section_number')}{' '}
               <span className="inline-block h-2 w-px bg-purple-transparent" />{' '}
-              {t('partners.section_title.translation')}
+              {t('partners.section_title')}
             </p>
             <h2 className="text-40 font-600 lg:text-64">
-              {t('partners.title_1.translation')}
+              {t('partners.title_1')}
               <br />
-              {t('partners.title_2.translation')}
+              {t('partners.title_2')}
             </h2>
           </div>
 
           <div className="mb-24 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             <GameCard
-              title={t('partners.cats_fishing.title.translation')}
-              description={t('partners.cats_fishing.description.translation')}
+              title={t('partners.cats_fishing.title')}
+              description={t('partners.cats_fishing.description')}
               image="/cats-fishing-cover.png"
               website={CATS_FISHING_URL}
               twitter="catsfishings"
               icon="/cats-fishing-avatar.png"
             />
             <GameCard
-              title={t('partners.spla_labs.title.translation')}
-              description={t('partners.spla_labs.description.translation')}
+              title={t('partners.spla_labs.title')}
+              description={t('partners.spla_labs.description')}
               image="/spla-labs-cover.png"
               website={SPLA_LABS_URL}
               twitter="splalabs"
               icon="/spla-labs-avatar.png"
             />
             <GameCard
-              title={t('partners.ponzi_hero.title.translation')}
-              description={t('partners.ponzi_hero.description.translation')}
+              title={t('partners.ponzi_hero.title')}
+              description={t('partners.ponzi_hero.description')}
               image="/ponzi-hero-cover.png"
               website={PONZI_HERO_URL}
               twitter="Splalabs"
@@ -64,25 +64,23 @@ const Partners = () => {
           </div>
 
           <div className="space-y-8">
-            <h2 className="text-40 font-600">
-              {t('partners.subtitle.translation')}
-            </h2>
+            <h2 className="text-40 font-600">{t('partners.subtitle')}</h2>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               <PartnerCard
-                title={t('partners.linea.title.translation')}
-                description={t('partners.linea.description.translation')}
+                title={t('partners.linea.title')}
+                description={t('partners.linea.description')}
                 logo="/linea.png"
                 website={LINEA_URL}
               />
               <PartnerCard
-                title={t('partners.gateway.title.translation')}
-                description={t('partners.gateway.description.translation')}
+                title={t('partners.gateway.title')}
+                description={t('partners.gateway.description')}
                 logo="/gateway.png"
                 website={GATEWAY_URL}
               />
               <PartnerCard
-                title={t('partners.din.title.translation')}
-                description={t('partners.din.description.translation')}
+                title={t('partners.din.title')}
+                description={t('partners.din.description')}
                 logo="/din.png"
                 website={DIN_URL}
               />

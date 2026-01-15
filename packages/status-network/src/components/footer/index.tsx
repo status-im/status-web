@@ -3,7 +3,16 @@ import NextImage from 'next/image'
 import { BRAND, LEGAL, SOCIALS } from '../../config/routes'
 import { Link } from '../link'
 
-const Footer = () => {
+type FooterProps = {
+  labels?: {
+    termsOfUse?: string
+    privacyPolicy?: string
+    brandAssets?: string
+    preDepositDisclaimer?: string
+  }
+}
+
+const Footer = ({ labels }: FooterProps) => {
   return (
     <footer className="relative z-[61]">
       <div className="grid justify-start gap-4 p-3 lg:grid-cols-[1fr,auto,auto] lg:gap-0 lg:p-4">
@@ -20,25 +29,25 @@ const Footer = () => {
               href={LEGAL.termsOfUse.href}
               className="text-13 text-neutral-50 transition-colors hover:text-neutral-100"
             >
-              {LEGAL.termsOfUse.name}
+              {labels?.termsOfUse ?? LEGAL.termsOfUse.name}
             </Link>
             <Link
               href={LEGAL.privacyPolicy.href}
               className="text-13 text-neutral-50 transition-colors hover:text-neutral-100"
             >
-              {LEGAL.privacyPolicy.name}
+              {labels?.privacyPolicy ?? LEGAL.privacyPolicy.name}
             </Link>
             <Link
               href={BRAND.href}
               className="text-13 text-neutral-50 transition-colors hover:text-neutral-100"
             >
-              {BRAND.name}
+              {labels?.brandAssets ?? BRAND.name}
             </Link>
             <Link
               href={LEGAL.preDepositDisclaimer.href}
               className="text-13 text-neutral-50 transition-colors hover:text-neutral-100"
             >
-              Pre-deposits disclaimer
+              {labels?.preDepositDisclaimer ?? LEGAL.preDepositDisclaimer.name}
             </Link>
           </div>
           <Dot className="2md:hidden text-neutral-50" />

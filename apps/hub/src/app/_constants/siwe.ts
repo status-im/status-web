@@ -10,7 +10,7 @@ export const SESSION_REFETCH_INTERVAL = 300000 // 30 seconds
 
 const AUTH_ENDPOINTS = {
   verify: `${API_BASE_URL}/auth/ethereum`,
-  session: `${API_BASE_URL}/auth/me`,
+  session: `${API_BASE_URL}/auth/me/session`,
   logout: `${API_BASE_URL}/auth/logout`,
 } as const
 

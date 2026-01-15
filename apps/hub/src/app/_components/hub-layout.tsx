@@ -1,8 +1,10 @@
 'use client'
+
 import { useState } from 'react'
 
 import { ToastContainer } from '@status-im/components'
 import { Divider, Footer } from '@status-im/status-network/components'
+import { useTranslations } from 'next-intl'
 import { useReadContract } from 'wagmi'
 
 import { STAKING_MANAGER } from '~constants/index'
@@ -17,6 +19,7 @@ interface HubLayoutProps {
 }
 
 export function HubLayout({ children }: HubLayoutProps) {
+  const t = useTranslations()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const { data: emergencyModeEnabled } = useReadContract({
@@ -53,7 +56,14 @@ export function HubLayout({ children }: HubLayoutProps) {
             <div className="absolute right-0 top-0 h-px w-9 bg-gradient-to-r from-[#E7EAEE] to-[transparent]" />
           </div>
           <div className="px-0 lg:px-12">
-            <Footer />
+            <Footer
+              labels={{
+                termsOfUse: t('footer.terms_of_use'),
+                privacyPolicy: t('footer.privacy_policy'),
+                brandAssets: t('footer.brand_assets'),
+                preDepositDisclaimer: t('footer.pre_deposit_disclaimer'),
+              }}
+            />
           </div>
         </section>
       </div>

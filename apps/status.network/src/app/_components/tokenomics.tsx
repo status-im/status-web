@@ -9,10 +9,10 @@ const Tokenomics = () => {
   const t = useTranslations()
 
   const STEPS = [
-    { number: '1', text: t('tokenomics.app_developer.step_1.translation') },
-    { number: '2', text: t('tokenomics.app_developer.step_2.translation') },
-    { number: '3', text: t('tokenomics.app_developer.step_3.translation') },
-    { number: '🎉', text: t('tokenomics.app_developer.step_4.translation') },
+    { number: '1', text: t('tokenomics.app_developer.step_1') },
+    { number: '2', text: t('tokenomics.app_developer.step_2') },
+    { number: '3', text: t('tokenomics.app_developer.step_3') },
+    { number: '🎉', text: t('tokenomics.app_developer.step_4') },
   ]
 
   return (
@@ -21,37 +21,35 @@ const Tokenomics = () => {
         <div className="space-y-20">
           <div className="space-y-5">
             <p className="mb-3 inline-block text-13 font-500 text-purple">
-              {t('tokenomics.section_number.translation')}{' '}
+              {t('tokenomics.section_number')}{' '}
               <span className="inline-block h-2 w-px bg-purple-transparent" />{' '}
-              {t('tokenomics.section_title.translation')}
+              {t('tokenomics.section_title')}
             </p>
             <h2 className="max-w-[936px] text-40 font-600 lg:text-64">
-              {t('tokenomics.title.translation')}
+              {t('tokenomics.title')}
             </h2>
             <p className="max-w-[746px] text-27">
-              {t('tokenomics.description.translation')}
+              {t('tokenomics.description')}
             </p>
             <p className="mt-4 flex items-center gap-1 text-19 text-neutral-50">
               <InfoIcon className="shrink-0 text-neutral-50" />{' '}
-              {t('tokenomics.karma_note.translation')}
+              {t('tokenomics.karma_note')}
             </p>
           </div>
 
           <div className="space-y-2">
             <RoleCard
-              title={t('tokenomics.app_developer.title.translation')}
+              title={t('tokenomics.app_developer.title')}
               description=""
               steps={STEPS}
             />
             <RoleCard
-              title={t('tokenomics.liquidity_provider.title.translation')}
-              description={t(
-                'tokenomics.liquidity_provider.description.translation',
-              )}
+              title={t('tokenomics.liquidity_provider.title')}
+              description={t('tokenomics.liquidity_provider.description')}
             />
             <RoleCard
-              title={t('tokenomics.onchain_user.title.translation')}
-              description={t('tokenomics.onchain_user.description.translation')}
+              title={t('tokenomics.onchain_user.title')}
+              description={t('tokenomics.onchain_user.description')}
             />
           </div>
         </div>

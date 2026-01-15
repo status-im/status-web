@@ -5,6 +5,7 @@ import {
   useQueryClient,
   type UseQueryResult,
 } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
 import { useAccount, useChainId, useConfig, useWriteContract } from 'wagmi'
 import { readContracts, waitForTransactionReceipt } from 'wagmi/actions'
 
@@ -99,12 +100,13 @@ export function useFaucetMutation(): UseMutationResult<
   const config = useConfig()
   const queryClient = useQueryClient()
   const { refetch: refetchFaucetQuery } = useFaucetQuery()
+  const t = useTranslations()
 
   return useMutation({
     mutationKey: [QUERY_KEY_PREFIX, 'request', address],
     mutationFn: async ({ amount }: UseFaucetMutationOptions) => {
       if (!address) {
-        throw new Error('Wallet not connected')
+        throw new Error(t('errors.wallet_not_connected'))
       }
 
       const hash = await writeContractAsync({
@@ -122,7 +124,7 @@ export function useFaucetMutation(): UseMutationResult<
       })
 
       if (status === 'reverted') {
-        throw new Error('Transaction reverted')
+        throw new Error(t('errors.transaction_reverted'))
       }
     },
     onSuccess: () => {
@@ -176,12 +178,13 @@ export function useFaucetQuery(
   const config = useConfig()
   const { address } = useAccount()
   const chainId = useChainId()
+  const t = useTranslations()
 
   return useQuery({
     queryKey: [QUERY_KEY_PREFIX, address, chainId] as const,
     queryFn: async (): Promise<FaucetState> => {
       if (!address) {
-        throw new Error('Wallet not connected')
+        throw new Error(t('errors.wallet_not_connected'))
       }
 
       const results = await readContracts(config, {
@@ -213,13 +216,13 @@ export function useFaucetQuery(
       const [dailyLimitResult, requestsResult, resetTimeResult] = results
 
       if (dailyLimitResult.status === 'failure') {
-        throw new Error('Failed to fetch daily limit')
+        throw new Error(t('errors.failed_fetch_daily_limit'))
       }
       if (requestsResult.status === 'failure') {
-        throw new Error('Failed to fetch account requests')
+        throw new Error(t('errors.failed_fetch_account_requests'))
       }
       if (resetTimeResult.status === 'failure') {
-        throw new Error('Failed to fetch reset time')
+        throw new Error(t('errors.failed_fetch_reset_time'))
       }
 
       // Type-safe extraction of results

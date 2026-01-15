@@ -7,6 +7,7 @@ import { useToast } from '@status-im/components'
 import { DropdownIcon } from '@status-im/icons/20'
 import { Button, DropdownMenu } from '@status-im/status-network/components'
 import { cva } from 'cva'
+import { useTranslations } from 'next-intl'
 import { useForm, useWatch } from 'react-hook-form'
 import { match, P } from 'ts-pattern'
 import { formatUnits, parseUnits } from 'viem'
@@ -79,11 +80,12 @@ type PreDepositModalProps = {
   onDepositSuccess?: () => void
 }
 
-const depositFormSchema = z.object({
-  amount: z.string().min(1, 'Amount is required'),
-})
+const createDepositFormSchema = (t: ReturnType<typeof useTranslations>) =>
+  z.object({
+    amount: z.string().min(1, t('vault.amount_required')),
+  })
 
-type FormValues = z.infer<typeof depositFormSchema>
+type FormValues = z.infer<ReturnType<typeof createDepositFormSchema>>
 
 const inputContainerStyles = cva({
   base: 'rounded-16 border bg-white-100 px-4 py-3 transition-colors',
@@ -119,6 +121,7 @@ const PreDepositModal = ({
   setActiveVault,
   onDepositSuccess,
 }: PreDepositModalProps) => {
+  const t = useTranslations()
   const toast = useToast()
   const { address } = useAccount()
   const chainId = useChainId()
@@ -148,7 +151,7 @@ const PreDepositModal = ({
   const currentToken = selectedOption?.stablecoin ?? vault.token
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(depositFormSchema),
+    resolver: zodResolver(createDepositFormSchema(t)),
     mode: 'onChange',
     defaultValues: { amount: '' },
   })
@@ -230,7 +233,7 @@ const PreDepositModal = ({
             onOpenChange(false)
           },
           onError: () => {
-            toast.negative('Deposit failed. Please try again.')
+            toast.negative(t('vault.deposit_failed'))
             form.reset()
           },
         }
@@ -244,7 +247,7 @@ const PreDepositModal = ({
             onOpenChange(false)
           },
           onError: () => {
-            toast.negative('Deposit failed. Please try again.')
+            toast.negative(t('vault.deposit_failed'))
             form.reset()
           },
         }
@@ -265,12 +268,10 @@ const PreDepositModal = ({
           {
             onSuccess: async () => {
               await refetchBalances()
-              toast.positive(
-                'ETH wrapped successfully. You can now proceed with deposit.'
-              )
+              toast.positive(t('vault.eth_wrapped_success'))
             },
             onError: () => {
-              toast.negative('Failed to wrap ETH. Please try again.')
+              toast.negative(t('vault.eth_wrap_failed'))
             },
           }
         )
@@ -318,17 +319,25 @@ const PreDepositModal = ({
         vault.id === 'WETH'
           ? (balance ?? 0n) + (ethBalance ?? 0n)
           : (balance ?? 0n)
-      return `Insufficient balance. Max: ${formatTokenAmount(totalBalance, currentToken.symbol, { tokenDecimals: currentToken.decimals })}`
+      return t('vault.insufficient_balance', {
+        max: formatTokenAmount(totalBalance, currentToken.symbol, {
+          tokenDecimals: currentToken.decimals,
+        }),
+      })
     })
-    .with(
-      'exceeds-max',
-      () =>
-        `Exceeds vault limit. Max: ${formatTokenAmount(maxDeposit ?? 0n, currentToken.symbol, { tokenDecimals: currentToken.decimals })}`
+    .with('exceeds-max', () =>
+      t('vault.exceeds_vault_limit', {
+        max: formatTokenAmount(maxDeposit ?? 0n, currentToken.symbol, {
+          tokenDecimals: currentToken.decimals,
+        }),
+      })
     )
-    .with(
-      'below-min',
-      () =>
-        `Below minimum deposit. Min: ${formatTokenAmount(minDeposit ?? 0n, currentToken.symbol, { tokenDecimals: currentToken.decimals })}`
+    .with('below-min', () =>
+      t('vault.below_minimum_deposit', {
+        min: formatTokenAmount(minDeposit ?? 0n, currentToken.symbol, {
+          tokenDecimals: currentToken.decimals,
+        }),
+      })
     )
     .with('invalid-shares', () => sharesValidation.validationMessage)
     .otherwise(() => form.formState.errors.amount?.message)
@@ -343,14 +352,16 @@ const PreDepositModal = ({
       open={open}
       onOpenChange={onOpenChange}
       onClose={() => form.reset()}
-      title="Deposit funds"
-      description="Deposit funds for yield and rewards"
+      title={t('vault.deposit_funds')}
+      description={t('vault.deposit_description')}
     >
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <div className="space-y-4 px-4 pb-4">
           {/* Vault info */}
           <div className="">
-            <div className="text-13 font-500 text-neutral-50">Select token</div>
+            <div className="text-13 font-500 text-neutral-50">
+              {t('vault.select_token')}
+            </div>
             <DropdownMenu.Root modal>
               <button
                 type="button"
@@ -405,7 +416,7 @@ const PreDepositModal = ({
               htmlFor="deposit-amount"
               className="block text-13 font-500 text-neutral-50"
             >
-              Amount to deposit
+              {t('vault.amount_to_deposit')}
             </label>
 
             <div
@@ -449,7 +460,7 @@ const PreDepositModal = ({
                     onClick={handleSetMax}
                     className="uppercase hover:text-neutral-80"
                   >
-                    MAX{' '}
+                    {t('vault.max')}{' '}
                     {formatTokenAmount(balance, currentToken.symbol, {
                       includeSymbol: true,
                       tokenDecimals: currentToken.decimals,
@@ -459,7 +470,7 @@ const PreDepositModal = ({
                 {vault.id === 'WETH' && (
                   <div className="text-right">
                     <span>
-                      Available ETH to wrap:{' '}
+                      {t('vault.available_eth_to_wrap')}{' '}
                       {formatTokenAmount(ethBalance, 'ETH')}
                     </span>
                   </div>
@@ -491,7 +502,9 @@ const PreDepositModal = ({
 
           {/* Rewards */}
           <div>
-            <p className="mb-2 text-13 font-500 text-neutral-50">Rewards</p>
+            <p className="mb-2 text-13 font-500 text-neutral-50">
+              {t('vault.rewards')}
+            </p>
             <div className="flex flex-col flex-wrap gap-4">
               <div className="flex items-center gap-2 text-15">
                 <span className="text-purple">
@@ -504,7 +517,9 @@ const PreDepositModal = ({
                   <PercentIcon />
                 </span>
                 <span className="text-neutral-100">
-                  {apyValue ? `${apyValue}% liquid APY` : 'Liquid APY TBD'}
+                  {apyValue
+                    ? `${apyValue}% ${t('vault.liquid_apy')}`
+                    : t('vault.liquid_apy_tbd')}
                 </span>
               </div>
               <div className="flex items-center gap-2 text-15">
@@ -512,7 +527,13 @@ const PreDepositModal = ({
                   <PlusIcon />
                 </span>
                 <span className="text-neutral-100">
-                  {vault.rewards.join(', ')}
+                  {vault.rewards
+                    .map(reward =>
+                      reward.startsWith('vault.')
+                        ? t(reward as 'vault.native_apps_points')
+                        : reward
+                    )
+                    .join(', ')}
                 </span>
               </div>
             </div>
@@ -528,8 +549,8 @@ const PreDepositModal = ({
                 disabled={isSwitchingChain}
               >
                 {isSwitchingChain
-                  ? 'Switching...'
-                  : 'Switch Network to Deposit'}
+                  ? t('vault.switching')
+                  : t('vault.switch_network_to_deposit')}
               </Button>
             ) : (
               <Button
@@ -544,14 +565,16 @@ const PreDepositModal = ({
                   isGUSDDepositing,
                   isWrapping,
                 })
-                  .with({ isWrapping: true }, () => 'Wrapping ETH...')
-                  .with({ isApproving: true }, () => 'Approving...')
-                  .with({ isDepositing: true }, () => 'Depositing...')
-                  .with({ isGUSDDepositing: true }, () => 'Depositing...')
-                  .with({ action: 'needs-wrap' }, () => 'Wrap ETH to WETH')
-                  .with({ action: 'approve' }, () => 'Approve Deposit')
-                  .with({ action: 'deposit' }, () => 'Deposit')
-                  .otherwise(() => 'Enter amount')}
+                  .with({ isWrapping: true }, () => t('vault.wrapping_eth'))
+                  .with({ isApproving: true }, () => t('vault.approving'))
+                  .with({ isDepositing: true }, () => t('vault.depositing'))
+                  .with({ isGUSDDepositing: true }, () => t('vault.depositing'))
+                  .with({ action: 'needs-wrap' }, () =>
+                    t('vault.wrap_eth_to_weth')
+                  )
+                  .with({ action: 'approve' }, () => t('vault.approve_deposit'))
+                  .with({ action: 'deposit' }, () => t('vault.deposit'))
+                  .otherwise(() => t('vault.enter_amount'))}
               </Button>
             )}
           </div>

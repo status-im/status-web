@@ -18,12 +18,12 @@ const Features = () => {
         <div className="bg-[#1B273D05] lg:sticky lg:top-16 lg:h-[calc(100vh-6rem)] lg:max-w-[50%] lg:flex-shrink-0">
           <div className="px-4 py-20 lg:p-12">
             <p className="mb-6 inline-block text-13 font-500 text-purple">
-              {t('features.section_number.translation')}{' '}
+              {t('features.section_number')}{' '}
               <span className="inline-block h-2 w-px bg-purple-transparent" />{' '}
-              {t('features.section_title.translation')}
+              {t('features.section_title')}
             </p>
             <h2 className="text-40 font-600 lg:text-64">
-              {t('features.title.translation')}
+              {t('features.title')}
             </h2>
           </div>
         </div>
@@ -35,15 +35,15 @@ const Features = () => {
           <div className="space-y-12">
             <div className="flex flex-col gap-4 px-4 pt-12 text-19 lg:px-12 lg:py-0 xl:max-w-[540px] xl:pr-0">
               <h3 className="text-27 font-600 lg:mb-1 lg:text-40">
-                {t('features.sustainable_funding.title.translation')}
+                {t('features.sustainable_funding.title')}
               </h3>
-              <p>{t('features.sustainable_funding.description.translation')}</p>
+              <p>{t('features.sustainable_funding.description')}</p>
               <ol className="mb-4 space-y-4">
                 <li className="flex gap-3 lg:gap-4">
                   <div className="mt-1 flex h-[22px] w-5 flex-shrink-0 items-center justify-center rounded-8 border border-neutral-20 text-13 font-500">
                     1
                   </div>
-                  <p>{t('features.sustainable_funding.step_1.translation')}</p>
+                  <p>{t('features.sustainable_funding.step_1')}</p>
                 </li>
                 <li className="flex gap-3 lg:gap-4">
                   <div className="mt-1 flex h-[22px] w-5 flex-shrink-0 items-center justify-center rounded-8 border border-neutral-20 text-13 font-500">
@@ -51,38 +51,28 @@ const Features = () => {
                   </div>
                   <div>
                     <p className="mb-4">
-                      {t('features.sustainable_funding.step_2.translation')}
+                      {t('features.sustainable_funding.step_2')}
                     </p>
                     <div className="ml-6 list-disc space-y-2 marker:text-neutral-50">
                       <p className="flex items-center gap-1">
                         <BulletIcon className="text-neutral-50" />{' '}
-                        {t(
-                          'features.sustainable_funding.step_2_staking.translation',
-                        )}
+                        {t('features.sustainable_funding.step_2_staking')}
                       </p>
                       <p className="flex items-center gap-1">
                         <BulletIcon className="text-neutral-50" />
-                        {t(
-                          'features.sustainable_funding.step_2_bridging.translation',
-                        )}
+                        {t('features.sustainable_funding.step_2_bridging')}
                       </p>
                       <p className="flex items-center gap-1">
                         <BulletIcon className="text-neutral-50" />
-                        {t(
-                          'features.sustainable_funding.step_2_using.translation',
-                        )}
+                        {t('features.sustainable_funding.step_2_using')}
                       </p>
                       <p className="flex items-center gap-1">
                         <BulletIcon className="text-neutral-50" />
-                        {t(
-                          'features.sustainable_funding.step_2_premium.translation',
-                        )}
+                        {t('features.sustainable_funding.step_2_premium')}
                       </p>
                       <p className="flex items-center gap-1">
                         <BulletIcon className="text-neutral-50" />
-                        {t(
-                          'features.sustainable_funding.step_2_donations.translation',
-                        )}
+                        {t('features.sustainable_funding.step_2_donations')}
                       </p>
                     </div>
                   </div>
@@ -91,14 +81,14 @@ const Features = () => {
                   <div className="mt-1 flex h-[22px] w-5 flex-shrink-0 items-center justify-center rounded-8 border border-neutral-20 text-13 font-500">
                     3
                   </div>
-                  <p>{t('features.sustainable_funding.step_3.translation')}</p>
+                  <p>{t('features.sustainable_funding.step_3')}</p>
                 </li>
               </ol>
               <ButtonLink
                 href={localizedFeatures.sustainablePublicFunding.href}
                 variant="white"
               >
-                {t('features.sustainable_funding.button.translation')}
+                {t('features.sustainable_funding.button')}
               </ButtonLink>
               <AnimatedFrames
                 images={[
@@ -117,19 +107,17 @@ const Features = () => {
 
             <div className="flex flex-col gap-4 px-4 text-19 lg:px-12 xl:max-w-[540px]">
               <h3 className="text-27 font-600 lg:mb-1 lg:text-40">
-                {t('features.gasless_transactions.title.translation')}
+                {t('features.gasless_transactions.title')}
               </h3>
-              <p>
-                {t('features.gasless_transactions.description_1.translation')}
-              </p>
+              <p>{t('features.gasless_transactions.description_1')}</p>
               <p className="mb-4">
-                {t('features.gasless_transactions.description_2.translation')}
+                {t('features.gasless_transactions.description_2')}
               </p>
               <ButtonLink
                 href={localizedFeatures.gaslessTransactions.href}
                 variant="white"
               >
-                {t('features.gasless_transactions.button.translation')}
+                {t('features.gasless_transactions.button')}
               </ButtonLink>
               <AnimatedFrames
                 images={[
@@ -149,17 +137,15 @@ const Features = () => {
 
             <div className="flex flex-col gap-4 px-4 text-19 lg:px-12 xl:max-w-[540px]">
               <h3 className="text-27 font-600 lg:mb-1 lg:text-40">
-                {t('features.performance.title.translation')}
+                {t('features.performance.title')}
               </h3>
-              <p className="mb-4">
-                {t('features.performance.description.translation')}
-              </p>
+              <p className="mb-4">{t('features.performance.description')}</p>
               <ButtonLink
                 variant="white"
                 href={localizedFeatures.performance.href}
                 icon={<ExternalIcon className="text-neutral-50" />}
               >
-                {t('features.performance.button.translation')}
+                {t('features.performance.button')}
               </ButtonLink>
               <AnimatedFrames
                 images={['/features/kite-1.png', '/features/kite-2.png']}
@@ -175,17 +161,17 @@ const Features = () => {
 
             <div className="flex flex-col gap-4 px-4 pb-12 text-19 lg:px-12 lg:pb-0 xl:max-w-[540px]">
               <h3 className="text-27 font-600 lg:mb-1 lg:text-40">
-                {t('features.decentralization.title.translation')}
+                {t('features.decentralization.title')}
               </h3>
               <p className="mb-4">
-                {t('features.decentralization.description.translation')}
+                {t('features.decentralization.description')}
               </p>
               <ButtonLink
                 variant="white"
                 href="https://free.technology"
                 icon={<ExternalIcon className="text-neutral-50" />}
               >
-                {t('features.decentralization.button.translation')}
+                {t('features.decentralization.button')}
               </ButtonLink>
 
               <AnimatedFrames

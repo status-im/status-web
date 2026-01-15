@@ -7,12 +7,13 @@ import { ContextTag, Input } from '@status-im/components'
 import { InfoIcon } from '@status-im/icons/16'
 import { IncorrectIcon } from '@status-im/icons/20'
 import { Button } from '@status-im/status-network/components'
+import { useLocale, useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { useSliderConfig } from '~hooks/useSliderConfig'
 
-import { DATE_FORMAT, DEFAULT_LOCK_PERIOD, SECONDS_PER_DAY } from './constants'
+import { DEFAULT_LOCK_PERIOD, SECONDS_PER_DAY } from './constants'
 import { LockDurationSlider } from './lock-duration-slider'
 
 import type { HTMLAttributes } from 'react'
@@ -50,10 +51,12 @@ interface LockVaultFormProps {
  * Form component for vault lock configuration
  */
 export function LockVaultForm(props: LockVaultFormProps) {
+  const t = useTranslations()
+  const locale = useLocale()
   const {
     initialYears,
     initialDays,
-    infoMessage = 'Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more STT at any time, but withdrawing your STT is only possible once the vault unlocks.',
+    infoMessage = t('stake.lock_info_message'),
     errorMessage: externalErrorMessage,
     onValidate,
     onSubmit,
@@ -85,9 +88,13 @@ export function LockVaultForm(props: LockVaultFormProps) {
     const maxYears = maxDays / DAYS_PER_YEAR
 
     const minLabel =
-      minYears < 1 ? `${minDays} days` : `${minYears.toFixed(1)} years`
+      minYears < 1
+        ? t('vault.days_label', { count: minDays })
+        : t('vault.years_label', { count: minYears.toFixed(1) })
     const maxLabel =
-      maxYears < 1 ? `${maxDays} days` : `${Math.round(maxYears)} years`
+      maxYears < 1
+        ? t('vault.days_label', { count: maxDays })
+        : t('vault.years_label', { count: Math.round(maxYears) })
 
     return {
       minLabel,
@@ -96,7 +103,7 @@ export function LockVaultForm(props: LockVaultFormProps) {
       maxDays,
       initialPosition: 50,
     }
-  }, [sliderConfigQuery])
+  }, [sliderConfigQuery, t])
 
   const years = watch('years')
   const days = watch('days')
@@ -116,17 +123,14 @@ export function LockVaultForm(props: LockVaultFormProps) {
     // Convert to Date for display (multiply by 1000 for milliseconds)
     const unlockDate = new Date(unlockTimestamp * 1000)
 
-    const day = String(unlockDate.getDate()).padStart(
-      DATE_FORMAT.PAD_LENGTH,
-      DATE_FORMAT.PAD_CHAR
-    )
-    const month = String(unlockDate.getMonth() + 1).padStart(
-      DATE_FORMAT.PAD_LENGTH,
-      DATE_FORMAT.PAD_CHAR
-    )
     const year = unlockDate.getFullYear()
+    const month = String(unlockDate.getMonth() + 1).padStart(2, '0')
+    const day = String(unlockDate.getDate()).padStart(2, '0')
 
-    return `${day}${DATE_FORMAT.SEPARATOR}${month}${DATE_FORMAT.SEPARATOR}${year}`
+    if (locale === 'ko') {
+      return `${year}-${month}-${day}`
+    }
+    return `${day}/${month}/${year}`
   }
 
   const calculatedUnlockDate = useMemo(() => {
@@ -220,21 +224,21 @@ export function LockVaultForm(props: LockVaultFormProps) {
     const daysValue = parseInt(days || DEFAULT_LOCK_PERIOD.INITIAL_DAYS)
 
     if (daysValue > 0 && daysValue < sliderConfig.minDays) {
-      return `Minimum lock time is ${sliderConfig.minLabel}`
+      return t('vault.min_lock_time', { time: sliderConfig.minLabel })
     }
 
     if (daysValue > sliderConfig.maxDays) {
-      return `Maximum lock time is ${sliderConfig.maxLabel}`
+      return t('vault.max_lock_time', { time: sliderConfig.maxLabel })
     }
 
     const minYears = sliderConfig.minDays / DAYS_PER_YEAR
     if (yearsValue > 0 && yearsValue < minYears) {
-      return `Minimum lock time is ${sliderConfig.minLabel}`
+      return t('vault.min_lock_time', { time: sliderConfig.minLabel })
     }
 
     const maxYears = sliderConfig.maxDays / DAYS_PER_YEAR
     if (yearsValue > maxYears) {
-      return `Maximum lock time is ${sliderConfig.maxLabel}`
+      return t('vault.max_lock_time', { time: sliderConfig.maxLabel })
     }
 
     return null
@@ -257,17 +261,19 @@ export function LockVaultForm(props: LockVaultFormProps) {
       <div className="flex items-center justify-center gap-[2px] px-8 pb-2 pt-4">
         <div className="flex shrink-0 grow basis-0 gap-2">
           <Input
-            label="Years"
+            label={t('vault.years')}
             value={years}
             onChange={handleYearsChange}
             size="40"
             className={hasError ? 'border-danger-50/40' : ''}
           />
           <div className="flex flex-col items-center justify-center px-0 pb-0 pt-[23px]">
-            <span className="text-13 font-medium text-neutral-50">or</span>
+            <span className="text-13 font-medium text-neutral-50">
+              {t('vault.or')}
+            </span>
           </div>
           <Input
-            label="Days"
+            label={t('vault.days')}
             value={days}
             onChange={handleDaysChange}
             size="40"
@@ -297,7 +303,7 @@ export function LockVaultForm(props: LockVaultFormProps) {
       <div className="flex items-center gap-6 px-8 py-4">
         <div className="flex items-center gap-2">
           <div className="flex flex-col justify-center text-15 text-neutral-100">
-            <span>Boost:</span>
+            <span>{t('vault.boost_label')}:</span>
           </div>
           <ContextTag type="label" size="32">
             {/* TODO: calculate boost */}
@@ -306,7 +312,7 @@ export function LockVaultForm(props: LockVaultFormProps) {
         </div>
         <div className="flex items-center gap-2">
           <div className="flex flex-col justify-center text-15 text-neutral-100">
-            <span>Unlock:</span>
+            <span>{t('vault.unlock_label')}:</span>
           </div>
           <ContextTag type="label" size="32">
             {calculatedUnlockDate}
@@ -334,7 +340,7 @@ export function LockVaultForm(props: LockVaultFormProps) {
             variant="outline"
             type="button"
             onClick={onClose}
-            aria-label="Close"
+            aria-label={t('vault.close_aria')}
             className="flex-1 justify-center"
           >
             {closeAction.label}

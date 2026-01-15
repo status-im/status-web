@@ -2,8 +2,9 @@
 
 import * as Select from '@radix-ui/react-select'
 import { CheckIcon, ChevronDownIcon } from '@status-im/icons/20'
+import { usePathname, useRouter } from '~/i18n/navigation'
 import { cx } from 'cva'
-import { useParams, usePathname, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { routing } from '../../i18n/routing'
 
 const languages = [
@@ -23,24 +24,14 @@ export const LanguageSelector = () => {
   const router = useRouter()
   const pathname = usePathname()
   const params = useParams()
-  const currentLocale = params.locale as string
+  const currentLocale = (params['locale'] as string) || routing.defaultLocale
 
   const selectedLanguage =
     languages.find(lang => lang.value === currentLocale) || languages[0]
 
   const handleValueChange = (newLocale: string) => {
-    // Remove the current locale from the pathname
-    const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}(?=\/|$)/, '') || '/'
-
-    // Navigate to the new locale
-    if (newLocale === routing.defaultLocale) {
-      router.push(pathWithoutLocale)
-    } else {
-      router.push(`/${newLocale}${pathWithoutLocale}`)
-    }
-
-    // Force a refresh to ensure all components get updated translations
-    router.refresh()
+    // Use next-intl's router with locale option for proper locale switching
+    router.replace(pathname, { locale: newLocale as 'en' | 'ko' })
   }
 
   return (

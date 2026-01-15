@@ -9,6 +9,7 @@ import {
   LockedIcon,
   UnlockedIcon,
 } from '@status-im/icons/20'
+import { useTranslations } from 'next-intl'
 
 import { formatSTT } from '~utils/currency'
 import { isVaultLocked } from '~utils/vault'
@@ -92,9 +93,11 @@ export function VaultSelect({
   value,
   onChange,
   disabled = false,
-  placeholder = 'Add new vault',
+  placeholder,
 }: VaultSelectProps) {
+  const t = useTranslations()
   const [open, setOpen] = useState(false)
+  const defaultPlaceholder = placeholder ?? t('stake.add_new_vault')
 
   // Find the selected vault to display its label
   const selectedVault = vaults.find(vault => vault.address === value)
@@ -105,7 +108,7 @@ export function VaultSelect({
   const displayLabel =
     selectedVault && selectedIndex !== -1
       ? getVaultLabel(selectedVault, selectedIndex)
-      : placeholder
+      : defaultPlaceholder
 
   // If no vaults exist, show the "New vault" option (disabled)
   const hasVaults = vaults.length > 0
@@ -141,7 +144,7 @@ export function VaultSelect({
     >
       <DropdownMenu.Item
         icon={<AddSmallIcon className="text-neutral-100" />}
-        label={placeholder}
+        label={defaultPlaceholder}
         selected={!value}
         onSelect={() => {
           onChange('')
