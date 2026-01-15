@@ -376,7 +376,7 @@ const PreDepositModal = ({
                     />
                   )}
                   <span className="text-15 font-400 text-neutral-100">
-                    {selectedOption?.label ?? 'Select token'}
+                    {selectedOption?.label ?? t('vault.select_token')}
                   </span>
                 </div>
                 <DropdownIcon className="shrink-0 text-neutral-40 transition-transform" />
@@ -405,7 +405,7 @@ const PreDepositModal = ({
 
             {isGUSD && selectedOption?.stablecoin && (
               <p className="mt-2 text-13 text-neutral-50">
-                This stablecoin will be pre-deposited into the GUSD Vault.
+                {t('vault.gusd_stablecoin_info')}
               </p>
             )}
           </div>
@@ -480,9 +480,10 @@ const PreDepositModal = ({
                   gusdPreviewShares && (
                     <div className="text-right">
                       <span>
-                        You will receive:{' '}
-                        {formatTokenAmount(gusdPreviewShares, 'GUSD', {
-                          includeSymbol: true,
+                        {t('vault.you_will_receive', {
+                          amount: formatTokenAmount(gusdPreviewShares, 'GUSD', {
+                            includeSymbol: true,
+                          }),
                         })}
                       </span>
                     </div>

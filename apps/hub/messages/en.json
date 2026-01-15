@@ -908,6 +908,22 @@
     "years_label": {
       "translation": "{count} years",
       "notes": "vault::years_label"
+    },
+    "gusd_stablecoin_info": {
+      "translation": "This stablecoin will be pre-deposited into the GUSD Vault.",
+      "notes": "vault::gusd_stablecoin_info"
+    },
+    "you_will_receive": {
+      "translation": "You will receive: {amount}",
+      "notes": "vault::you_will_receive"
+    },
+    "transaction_submitted": {
+      "translation": "Transaction submitted. Waiting for confirmation...",
+      "notes": "vault::transaction_submitted"
+    },
+    "gusd_deposit_successful": {
+      "translation": "Successfully deposited {amount} {symbol}",
+      "notes": "vault::gusd_deposit_successful"
     }
   },
   "action_status": {
