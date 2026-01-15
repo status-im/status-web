@@ -1,7 +1,17 @@
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 
+import { Metadata as MetadataFn } from '../_metadata'
 import { Providers } from '../_providers'
+import { getPathname } from '../_utils/get-pathname'
+
+export async function generateMetadata() {
+  const pathname = await getPathname()
+
+  return MetadataFn({
+    pathname,
+  })
+}
 
 type Props = {
   children: React.ReactNode
