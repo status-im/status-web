@@ -20,7 +20,7 @@ export const STATUS_DESKTOP_DOWNLOAD_URL_LINUX = '/api/download/linux'
 export const STATUS_MOBILE_APP_STORE_URL =
   'https://apps.apple.com/us/app/status-privacy-super-app/id6754166924'
 export const STATUS_MOBILE_GOOGLE_PLAY_URL =
-  ' https://play.google.com/store/apps/details?id=app.status.mobile&ref=our.status.im'
+  'https://play.google.com/store/apps/details?id=app.status.mobile&ref=our.status.im'
 export const STATUS_MOBILE_F_DROID_URL =
   'https://f-droid.org/packages/im.status.ethereum'
 export const STATUS_MOBILE_APK_URL = '/api/download/android'
