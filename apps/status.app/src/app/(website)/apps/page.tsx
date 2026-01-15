@@ -207,9 +207,6 @@ const PlatformSection = (props: PlatformSectionProps) => {
     wideScreenshots = true,
   } = props
 
-  console.log('🔑 screenshots', screenshots)
-  console.log('🔑 wideScreenshots', wideScreenshots)
-
   return (
     <div className="border-dashed-default relative border-t pt-24 2xl:pt-40">
       <div className="container mb-12 2xl:mb-20">
