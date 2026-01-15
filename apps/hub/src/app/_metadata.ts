@@ -11,6 +11,7 @@ type Input = Metadata & {
   // todo: get product copy for titles and descriptions
   // title: NonNullable<Metadata['title']>
   description?: string
+  pathname?: string
 }
 
 // function getTitleString(title: Metadata['title']): string {
@@ -38,7 +39,7 @@ export function Metadata(input: Input): Metadata {
   const canonicalUrl = toAbsoluteUrl(
     typeof input.alternates?.canonical === 'string'
       ? input.alternates.canonical
-      : undefined
+      : input.pathname
   )
 
   return {
@@ -48,6 +49,13 @@ export function Metadata(input: Input): Metadata {
     alternates: {
       ...input.alternates,
       ...(canonicalUrl && { canonical: canonicalUrl }),
+      ...(input.pathname && {
+        languages: {
+          en: input.pathname,
+          ko: `/ko${input.pathname === '/' ? '' : input.pathname}`,
+          'x-default': input.pathname,
+        },
+      }),
     },
     openGraph: {
       type: 'website',

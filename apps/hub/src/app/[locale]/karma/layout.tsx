@@ -4,6 +4,7 @@ export const metadata = MetadataFn({
   // title: 'Karma',
   // description:
   //   'Increase your Karma, unlock more free transactions, gain power over the network on Status Network.',
+  pathname: '/karma',
   alternates: {
     canonical: '/karma',
   },

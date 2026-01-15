@@ -38,10 +38,6 @@ export const metadata = Metadata({
 
   alternates: {
     canonical: './',
-    languages: {
-      'en-GB': '/',
-      'ko-KR': '/ko',
-    },
   },
 
   twitter: {

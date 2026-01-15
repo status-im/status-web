@@ -13,6 +13,7 @@ import { LogoSection } from './_components/logo-section'
 export const metadata = Metadata({
   title: 'Brand',
   description: 'Get Status Network brand assets.',
+  pathname: '/brand',
   alternates: {
     canonical: '/brand',
   },

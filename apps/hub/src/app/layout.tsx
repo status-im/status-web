@@ -24,9 +24,11 @@ const websiteSchema = jsonLD.website({
 })
 
 export const metadata = MetadataFn({
+  metadataBase: new URL('https://hub.status.network'),
   // title: 'Status Hub',
   // description:
   // 'Manage your Status Network assets, discover applications, and navigate to various services.',
+  pathname: '/',
   alternates: {
     canonical: '/',
   },

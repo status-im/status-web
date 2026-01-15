@@ -8,6 +8,7 @@ const DEFAULT_OG_IMAGE = `${DEFAULT_SITE_URL}/opengraph-image.png`
 type Input = Metadata & {
   title: NonNullable<Metadata['title']>
   description?: string
+  pathname?: string
 }
 
 /**
@@ -21,8 +22,25 @@ export function Metadata(input: Input): Metadata {
         ? input.title.absolute
         : input.title.default
 
+  const canonicalUrl = input.pathname
+    ? `${DEFAULT_SITE_URL}${input.pathname}`
+    : typeof input.alternates?.canonical === 'string'
+      ? input.alternates.canonical
+      : undefined
+
   return {
     ...input,
+    alternates: {
+      ...input.alternates,
+      ...(canonicalUrl && { canonical: canonicalUrl }),
+      ...(input.pathname && {
+        languages: {
+          en: input.pathname,
+          ko: `/ko${input.pathname === '/' ? '' : input.pathname}`,
+          'x-default': input.pathname,
+        },
+      }),
+    },
     openGraph: {
       type: 'website',
       images: [
@@ -32,7 +50,7 @@ export function Metadata(input: Input): Metadata {
           height: 630,
         },
       ],
-      url: './',
+      url: canonicalUrl || './',
       title: ogTitle,
       description: input.description,
       siteName: DEFAULT_SITE_NAME,
