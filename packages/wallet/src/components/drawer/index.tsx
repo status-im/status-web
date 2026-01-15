@@ -13,7 +13,7 @@ const Close = forwardRef<
   React.ComponentRef<typeof Dialog.Close>,
   React.ComponentPropsWithoutRef<typeof Dialog.Close> & { children?: never }
 >((props, ref) => (
-  <div className="absolute right-3 top-3">
+  <div className="absolute right-3 top-3 z-50">
     <Dialog.Close {...props} ref={ref} asChild>
       <Button
         icon={<CloseIcon />}

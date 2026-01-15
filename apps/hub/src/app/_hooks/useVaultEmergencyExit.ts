@@ -3,6 +3,7 @@ import {
   type UseMutationResult,
   useQueryClient,
 } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
 import { type Address, formatUnits } from 'viem'
 import { useAccount, useConfig, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
@@ -99,6 +100,7 @@ export function useVaultEmergencyExit(): UseVaultEmergencyExitReturn {
   const config = useConfig()
   const queryClient = useQueryClient()
   const { send: sendVaultEvent, reset: resetVault } = useVaultStateContext()
+  const t = useTranslations()
 
   return useMutation({
     mutationKey: [MUTATION_KEY_PREFIX, address],
@@ -109,9 +111,7 @@ export function useVaultEmergencyExit(): UseVaultEmergencyExitReturn {
     }: EmergencyExitParams): Promise<void> => {
       // Validate wallet connection
       if (!address) {
-        throw new Error(
-          'Wallet not connected. Please connect your wallet first.'
-        )
+        throw new Error(t('errors.wallet_not_connected'))
       }
 
       // Send START_WITHDRAW event first to transition state machine to processing
@@ -143,7 +143,7 @@ export function useVaultEmergencyExit(): UseVaultEmergencyExitReturn {
         // Check if transaction was reverted
         if (status === 'reverted') {
           sendVaultEvent({ type: 'REJECT' })
-          throw new Error('Transaction was reverted')
+          throw new Error(t('errors.transaction_reverted'))
         }
 
         // Transaction successful, invalidate cache to force fresh data from blockchain

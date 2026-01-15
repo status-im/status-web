@@ -1,16 +1,22 @@
 'use client'
 
-import { FeedbackPopover, Link } from '@status-im/status-network/components'
+import { FeedbackPopover } from '@status-im/status-network/components'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
+
+import { Link } from '~/i18n/navigation'
 
 import { ConnectButton } from './connect-button'
 import { KarmaButton } from './karma-button'
+import { LanguageSelector } from './language-selector'
 
 interface TopBarProps {
   onMenuToggle: () => void
 }
 
 export function TopBar({ onMenuToggle }: TopBarProps) {
+  const t = useTranslations()
+
   return (
     <div
       data-theme="dark"
@@ -22,7 +28,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
           <button
             onClick={onMenuToggle}
             className="rounded p-1 text-white-80 hover:bg-white-10 lg:mr-3 lg:hidden"
-            aria-label="Toggle menu"
+            aria-label={t('navigation.toggle_menu')}
           >
             <svg
               className="size-6"
@@ -75,7 +81,13 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
         <div className="flex items-center gap-2">
           {/* Share Feedback */}
           <div className="hidden md:block">
-            <FeedbackPopover />
+            <FeedbackPopover
+              labels={{
+                shareFeedback: t('footer.share_feedback'),
+                contactUs: t('footer.contact_us'),
+                submitBug: t('footer.submit_bug'),
+              }}
+            />
           </div>
 
           {/* Karma Button */}
@@ -84,15 +96,23 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
 
           {/* Connect Wallet Button */}
           <ConnectButton
-            label="Connect wallet"
+            label={t('top_bar.connect_wallet')}
             size="32"
             className="hidden md:block"
           />
           <ConnectButton
-            label="Connect"
+            label={t('top_bar.connect')}
             size="24"
             className="block md:hidden"
           />
+
+          {/* Language Selector */}
+          <div className="hidden md:block">
+            <LanguageSelector size="32" />
+          </div>
+          <div className="block md:hidden">
+            <LanguageSelector size="24" />
+          </div>
         </div>
       </div>
     </div>

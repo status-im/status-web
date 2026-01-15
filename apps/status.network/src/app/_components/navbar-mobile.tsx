@@ -1,20 +1,26 @@
 'use client'
 
 import { CloseIcon, MenuIcon } from '@status-im/icons/20'
-import { BRAND, LEGAL, ROUTES, SOCIALS } from '~/config/routes'
+import { BRAND, getLocalizedRoutes, LEGAL, SOCIALS } from '~/config/routes'
+import { Link } from '~/i18n/navigation'
 import { Button } from '~components/button'
 import { cx } from 'cva'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useLocale, useTranslations } from 'next-intl'
 import Image from 'next/image'
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { ButtonLink } from './button-link'
 import { Divider } from './divider'
+import { LanguageSelector } from './language-selector'
+import { Link as CustomLink } from './link'
 
 const NavBarMobile = () => {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
+  const t = useTranslations()
+  const locale = useLocale()
+  const localizedRoutes = getLocalizedRoutes(t, locale)
 
   const scrollPositionRef = useRef(0)
 
@@ -108,8 +114,8 @@ const NavBarMobile = () => {
                 }}
                 className="flex h-full flex-col items-center"
               >
-                <ul className="flex flex-1 flex-col justify-center gap-6">
-                  {ROUTES.Navigation.map((item, index) => (
+                <ul className="flex h-[calc(100dvh-204px)] flex-col justify-center gap-6">
+                  {localizedRoutes.Navigation.map((item, index) => (
                     <motion.li
                       key={item.name}
                       initial={{ opacity: 0, y: 20 }}
@@ -128,23 +134,24 @@ const NavBarMobile = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 + 4 * 0.05, duration: 0.3 }}
-                  className="grid w-full grid-cols-2 gap-3 p-4"
+                  className="flex w-full items-center justify-center gap-3 p-4"
                 >
                   <ButtonLink
                     variant="white"
                     className="w-full justify-center"
-                    href={ROUTES.Docs}
+                    href={localizedRoutes.Docs}
                     onClick={() => setIsOpen(false)}
                   >
-                    Read docs
+                    {t('common.read_docs')}
                   </ButtonLink>
                   <ButtonLink
                     className="w-full justify-center"
-                    href={ROUTES.Hub}
+                    href={localizedRoutes.Hub}
                     onClick={() => setIsOpen(false)}
                   >
-                    Get started
+                    {t('common.get_started')}
                   </ButtonLink>
+                  <LanguageSelector />
                 </motion.div>
                 <div className="z-40 ml-0 w-[calc(100vw-18px)]">
                   <Divider />
@@ -157,19 +164,19 @@ const NavBarMobile = () => {
                   className="flex w-full justify-between gap-3 p-4"
                 >
                   <div className="flex items-center justify-center gap-4">
-                    <Link
+                    <CustomLink
                       href={LEGAL.termsOfUse.href}
                       className="text-13 text-neutral-50 transition-colors hover:text-neutral-100"
                     >
                       {LEGAL.termsOfUse.name}
-                    </Link>
+                    </CustomLink>
 
-                    <Link
+                    <CustomLink
                       href={LEGAL.privacyPolicy.href}
                       className="text-13 text-neutral-50 transition-colors hover:text-neutral-100"
                     >
                       {LEGAL.privacyPolicy.name}
-                    </Link>
+                    </CustomLink>
 
                     <Link
                       href={BRAND.href}

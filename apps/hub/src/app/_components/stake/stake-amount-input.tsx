@@ -1,4 +1,5 @@
 import { Skeleton } from '@status-im/components'
+import { useTranslations } from 'next-intl'
 import { type UseFormRegister } from 'react-hook-form'
 
 import { SNTIcon } from '~components/icons'
@@ -25,6 +26,7 @@ const StakeAmountInput = ({
   isDisabled = false,
   exceedsBalance = false,
 }: StakeAmountInputProps) => {
+  const t = useTranslations()
   const showBottomRow = isLoading || isConnected
   const containerClassName =
     (!isConnected && !isLoading) || isDisabled ? 'opacity-[40%]' : ''
@@ -35,7 +37,7 @@ const StakeAmountInput = ({
         htmlFor="stake-amount"
         className="block text-13 font-medium text-neutral-50"
       >
-        Amount to stake
+        {t('stake.amount_to_stake')}
       </label>
       <div className="rounded-16 border border-neutral-20 bg-white-100 px-4 py-3">
         <div className="flex items-center justify-between">
@@ -75,7 +77,7 @@ const StakeAmountInput = ({
                     onClick={onMaxClick}
                     className={`uppercase ${exceedsBalance ? 'text-danger-50' : 'text-neutral-100'}`}
                   >
-                    {`MAX ${formatSTT(balance ?? 0, { includeSymbol: true })}`}
+                    {`${t('vault.max')} ${formatSTT(balance ?? 0, { includeSymbol: true })}`}
                   </button>
                 </>
               )}

@@ -1,5 +1,5 @@
 ---
-"hub": patch
+'hub': patch
 ---
 
 Update vault card
