@@ -58,22 +58,22 @@ const NavMobile = () => {
         <div
           data-theme="dark"
           className={cx(
-            'hidden justify-stretch gap-2 py-3',
+            'hidden flex-row gap-2 py-3',
             'macos:grid windows:grid linux:grid'
           )}
         >
-          <DownloadDesktopButton variant="darkGrey" />
+          <DownloadDesktopButton variant="darkGrey" show="all" />
           <DownloadMobileButton size="40" variant="outline" />
         </div>
 
         <div
           data-theme="dark"
           className={cx(
-            'hidden justify-stretch gap-2 py-3',
+            'hidden flex-row gap-2 py-3',
             'ios:grid android:grid unknown:grid'
           )}
         >
-          <DownloadDesktopButton variant="outline" />
+          <DownloadDesktopButton variant="darkGrey" show="all" />
           <DownloadMobileButton size="40" variant="outline" />
         </div>
       </div>

@@ -89,7 +89,7 @@ const FloatingDesktop = (props: Props) => {
         </NavigationMenu.List>
 
         <div className={cx('hidden flex-row gap-2', 'ios:flex android:flex')}>
-          <DownloadDesktopButton size="32" variant="darkGrey" />
+          <DownloadDesktopButton size="32" variant="primary" />
           <DownloadMobileButton size="32" variant="outline" />
         </div>
         <div
@@ -98,7 +98,7 @@ const FloatingDesktop = (props: Props) => {
             'macos:flex windows:flex linux:flex unknown:flex'
           )}
         >
-          <DownloadDesktopButton size="32" variant="darkGrey" />
+          <DownloadDesktopButton size="32" variant="primary" show="all" />
           <DownloadMobileButton size="32" variant="outline" />
         </div>
       </div>

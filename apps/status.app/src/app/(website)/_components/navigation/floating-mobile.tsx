@@ -55,20 +55,20 @@ const FloatingMobile = (props: Props) => {
           <AccordionMenu />
           <div
             className={cx(
-              'hidden flex-col items-stretch justify-stretch gap-2 py-3',
+              'hidden flex-row items-stretch justify-stretch gap-2 py-3',
               'ios:grid android:grid unknown:grid'
             )}
           >
-            <DownloadDesktopButton variant="darkGrey" />
-            <DownloadMobileButton size="40" variant="primary" />
+            <DownloadDesktopButton variant="darkGrey" show="all" />
+            <DownloadMobileButton size="40" variant="outline" />
           </div>
           <div
             className={cx(
-              'hidden flex-col items-stretch justify-stretch gap-2 py-3',
+              'hidden flex-row items-stretch justify-stretch gap-2 py-3',
               'macos:flex windows:flex linux:flex'
             )}
           >
-            <DownloadDesktopButton variant="darkGrey" />
+            <DownloadDesktopButton variant="darkGrey" show="all" />
             <DownloadMobileButton size="40" variant="outline" />
           </div>
         </div>
