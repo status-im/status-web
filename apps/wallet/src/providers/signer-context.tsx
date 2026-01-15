@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useMemo } from 'react'
 
 import { type Address, createPublicClient, type Hex, http } from 'viem'
 import { mainnet } from 'viem/chains'
+import { formatEther } from 'viem/utils'
 
 import { apiClient } from './api-client'
 import { usePassword } from './password-context'
@@ -111,6 +112,49 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
     return password
   }, [hasActiveSession, getPassword, requestPassword])
 
+  const parseInsufficientFundsError = useCallback(
+    (error: unknown): Error | null => {
+      const errorObj =
+        typeof error === 'object' && error !== null && 'message' in error
+          ? error
+          : null
+      const errorMessage =
+        errorObj && typeof errorObj.message === 'string'
+          ? errorObj.message
+          : typeof error === 'string'
+            ? error
+            : null
+      if (!errorMessage) return null
+      const match = errorMessage.match(
+        /insufficient funds for gas \* price \+ value: have (\d+) want (\d+)/,
+      )
+      if (!match) return null
+      const haveWei = BigInt(match[1])
+      const wantWei = BigInt(match[2])
+      const haveEth = formatEther(haveWei)
+      const wantEth = formatEther(wantWei)
+      const shortfallEth = formatEther(wantWei - haveWei)
+      return new Error(
+        `Insufficient funds for gas. Have ${haveEth} ETH, need up to ${wantEth} ETH (max fee). Short ${shortfallEth} ETH.`,
+      )
+    },
+    [],
+  )
+
+  const handleTransactionError = useCallback(
+    (error: unknown, context: string): never => {
+      console.error(`${context} error:`, error)
+      const parsedError = parseInsufficientFundsError(error)
+      if (parsedError) throw parsedError
+      throw new Error(
+        typeof error === 'object' && error !== null && 'message' in error
+          ? String(error.message)
+          : String(error),
+      )
+    },
+    [parseInsufficientFundsError],
+  )
+
   const signAndSendTransaction = useCallback(
     async (tx: {
       to: Address
@@ -197,6 +241,10 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
               data: tx.data,
             })
 
+          if (result.id.txid?.error) {
+            handleTransactionError(result.id.txid.error, 'ERC20 transfer')
+          }
+
           const txHash = extractTxHash(result.id.txid)
           if (!txHash) throw new Error('Transaction failed')
           return txHash as Hex
@@ -217,8 +265,7 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
           })
 
         if (result.id.txid?.error) {
-          console.error('Contract call error:', result.id.txid.error)
-          throw new Error(result.id.txid.error)
+          handleTransactionError(result.id.txid.error, 'Contract call')
         }
 
         const txHash = extractTxHash(result.id.txid)
@@ -238,11 +285,15 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
         maxInclusionFeePerGas: maxPriorityFeePerGas,
       })
 
+      if (result.id.txid?.error) {
+        handleTransactionError(result.id.txid.error, 'Send transaction')
+      }
+
       const txHash = extractTxHash(result.id.txid)
       if (!txHash) throw new Error('Transaction failed')
       return txHash as Hex
     },
-    [currentWallet?.id, address, ensurePassword],
+    [currentWallet?.id, address, ensurePassword, handleTransactionError],
   )
 
   const signMessage = useCallback(
