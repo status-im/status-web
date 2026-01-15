@@ -11,6 +11,7 @@ import {
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
 import { useImportWallet } from '../../hooks/use-import-wallet'
+import { usePassword } from '../../providers/password-context'
 
 import type { SubmitHandler } from 'react-hook-form'
 
@@ -115,6 +116,7 @@ function CreatePassword({
   onBack: (mnemonic: string) => void
 }) {
   const { importWalletAsync } = useImportWallet()
+  const { establishSession } = usePassword()
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -125,7 +127,7 @@ function CreatePassword({
         mnemonic,
         password: data.password,
       })
-
+      establishSession(data.password)
       navigate({ to: '/portfolio/assets' })
     } catch (error) {
       console.error(error)
