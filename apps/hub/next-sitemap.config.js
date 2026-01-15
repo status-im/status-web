@@ -1,5 +1,7 @@
 /* eslint-env node */
 /* eslint-disable no-undef */
+const { buildLocalizedPaths } = require('./sitemap-utils')
+
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
   siteUrl: 'https://hub.status.network',
@@ -53,28 +55,10 @@ module.exports = {
     }
   },
   additionalPaths: async () => {
-    const result = []
     const locales = ['en', 'ko']
     const pages = ['', 'pre-deposits', 'discover', 'stake', 'karma']
     const changefreq = 'monthly'
 
-    for (const locale of locales) {
-      for (const page of pages) {
-        let path
-        if (page === '') {
-          path = locale === 'en' ? '/' : `/${locale}`
-        } else {
-          path = locale === 'en' ? `/${page}` : `/${locale}/${page}`
-        }
-
-        result.push({
-          loc: path,
-          changefreq,
-          lastmod: new Date().toISOString(),
-        })
-      }
-    }
-
-    return result
+    return buildLocalizedPaths(locales, pages, changefreq)
   },
 }

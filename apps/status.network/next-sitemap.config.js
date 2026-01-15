@@ -1,5 +1,7 @@
 /* eslint-env node */
 /* eslint-disable no-undef */
+const { buildLocalizedPaths } = require('./sitemap-utils')
+
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
   siteUrl: 'https://status.network',
@@ -23,21 +25,7 @@ module.exports = {
   generateIndexSitemap: false,
   changefreq: 'monthly',
   transform: async (config, path) => {
-    const staticExtensions = [
-      '.png',
-      '.jpg',
-      '.jpeg',
-      '.gif',
-      '.svg',
-      '.ico',
-      '.webp',
-      '.txt',
-      '.xml',
-    ]
-    const isStaticFile = staticExtensions.some(ext => path.endsWith(ext))
-
     if (
-      isStaticFile ||
       path === '/robots.txt' ||
       path === '/sitemap.xml' ||
       /\.(png|jpg|jpeg|gif|svg|ico|webp|txt|xml|js|css|json)$/i.test(path)
@@ -79,23 +67,9 @@ module.exports = {
     ]
     const changefreq = 'monthly'
 
-    for (const locale of locales) {
-      for (const page of pages) {
-        let path
-        if (page === '') {
-          path = locale === 'en' ? '/' : `/${locale}`
-        } else {
-          path = locale === 'en' ? `/${page}` : `/${locale}/${page}`
-        }
+    result.push(...buildLocalizedPaths(locales, pages, changefreq))
 
-        result.push({
-          loc: path,
-          changefreq,
-          lastmod: new Date().toISOString(),
-        })
-      }
-    }
-
+    const lastmod = new Date().toISOString()
     for (const locale of locales) {
       for (const legalPage of legalPages) {
         const path =
@@ -105,7 +79,7 @@ module.exports = {
         result.push({
           loc: path,
           changefreq,
-          lastmod: new Date().toISOString(),
+          lastmod,
         })
       }
     }
