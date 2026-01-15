@@ -1,27 +1,17 @@
-// import { Suspense } from 'react'
-
-// import OnboardingPage from '../../../portfolio/src/app/page'
 import { ToastContainer } from '@status-im/components'
 import { Navbar } from '@status-im/wallet/components'
-// import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {
   createRootRouteWithContext,
   HeadContent,
-  // Navigate,
   Outlet,
   redirect,
 } from '@tanstack/react-router'
 
-// import { TanStackRouterDevtools } from '@tanstack/router-devtools'
-// import { NotAllowed } from '../../../portfolio/src/app/_components/not-allowed'
-// import { AccountsProvider } from '../../../portfolio/src/app/_providers/accounts-context'
-// import { ConnectKitProvider } from '../../../portfolio/src/app/_providers/connectkit-provider'
-import { QueryClientProvider } from '../../../portfolio/src/app/_providers/query-client-provider'
-// import { StatusProvider } from '../../../portfolio/src/app/_providers/status-provider'
-import { WagmiProvider } from '../../../portfolio/src/app/_providers/wagmi-provider'
 import { Link } from '../components/link'
 import { apiClient } from '../providers/api-client'
 import { PendingTransactionsProvider } from '../providers/pending-transactions-context'
+import { SignerProvider } from '../providers/signer-context'
+import { WagmiConfigProvider } from '../providers/wagmi-provider'
 import { WalletProvider } from '../providers/wallet-context'
 
 // import { Inter } from 'next/font/google'
@@ -131,29 +121,12 @@ export const Route = createRootRouteWithContext<{
 function RootComponent() {
   return (
     <>
-      {/* <div className="min-h-screen bg-neutral-100 text-white-100">
-        <div className="flex gap-4 p-4">
-          <Link to="/" className="[&.active]:font-bold">
-            Home
-          </Link>
-          <Link to="/onboarding" className="[&.active]:font-bold">
-            Onboarding
-          </Link>
-        </div>
-        <hr />
-        <Outlet />
-      </div> */}
-
       <HeadContent />
 
       <div id="app" className="isolate" data-customisation="blue">
-        {/* <StatusProvider> */}
-        <WagmiProvider>
-          <QueryClientProvider>
-            {/* <Suspense fallback={<div>Loading...</div>}> */}
-            {/* <AccountsProvider> */}
-            {/* <ConnectKitProvider> */}
-            <WalletProvider>
+        <WalletProvider>
+          <SignerProvider>
+            <WagmiConfigProvider>
               <PendingTransactionsProvider>
                 <div className="flex min-h-[56px] items-center px-2">
                   <Navbar hasFeedback linkComponent={Link} />
@@ -169,21 +142,10 @@ function RootComponent() {
                   <ToastContainer />
                 </div>
               </PendingTransactionsProvider>
-            </WalletProvider>
-            {/* </ConnectKitProvider> */}
-            {/* </AccountsProvider> */}
-            {/* </Suspense> */}
-          </QueryClientProvider>
-        </WagmiProvider>
-        {/* </StatusProvider> */}
+            </WagmiConfigProvider>
+          </SignerProvider>
+        </WalletProvider>
       </div>
-      {/* <ReactQueryDevtools buttonPosition="bottom-right" />
-      <TanStackRouterDevtools position="bottom-left" />
-      <div className="fixed inset-x-0 bottom-0 flex justify-center gap-4 bg-blur-neutral-100/70 p-4 text-white-100">
-        <Link to="/">/index</Link>
-        <Link to="/onboarding">/onboarding</Link>
-        <Link to="/portfolio/assets">/portfolio</Link>
-      </div> */}
     </>
   )
 }

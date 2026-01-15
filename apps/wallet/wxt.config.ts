@@ -18,10 +18,12 @@ export default defineConfig({
       mode === 'production'
         ? "'self' 'wasm-unsafe-eval'"
         : "'self' 'wasm-unsafe-eval' http://localhost:4000/ http://localhost:8097/"
+    const rpcEndpoints =
+      'https://eth.merkle.io/ https://ethereum-rpc.publicnode.com/ https://rpc.ankr.com/ https://nodes.mewapi.io/ https://mainnet.infura.io/ https://cloudflare-eth.com/ https://rpc.flashbots.net/ https://rpc.tenderly.co/ https://rpc.ethernode.com/ https://ethereum.publicnode.com/ https://eth.drpc.org/'
     const connectSrc =
       mode === 'production'
-        ? 'https://status-api-status-im-web.vercel.app/ https://status-api-status-im-web.vercel.app/api/'
-        : 'ws: http://localhost:3030/ https://localhost:3030/'
+        ? `https://status-api-status-im-web.vercel.app/ https://status-api-status-im-web.vercel.app/api/ https://li.quest/ https://registry.npmjs.org/ ${rpcEndpoints}`
+        : `ws: http://localhost:3030/ https://localhost:3030/ https://li.quest/ https://registry.npmjs.org/ ${rpcEndpoints}`
 
     return {
       version: '0.1.0',

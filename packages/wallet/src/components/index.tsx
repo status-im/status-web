@@ -33,9 +33,11 @@ export {
 } from './create-password-form'
 export { CurrencyAmount } from './currency-amount'
 export { DeleteAddressAlert } from './delete-address-alert'
+export * as Drawer from './drawer'
 export { DropdownSort } from './dropdown-sort'
 export { EmptyState } from './empty-state'
 export { EmptyStateActions } from './empty-state-actions'
+export { ExchangeDrawer, type ExchangeDrawerProps } from './exchange-drawer'
 export { FeedbackPopover, FeedbackSection } from './feedback'
 export { Image, type ImageProps } from './image'
 export {
