@@ -1,5 +1,18 @@
 # portfolio
 
+## 0.2.2
+
+### Patch Changes
+
+- 06ceddc: Fix React Server Components CVE vulnerabilities
+- Updated dependencies [ff8dd31]
+- Updated dependencies [e0179d3]
+- Updated dependencies [be3d8dc]
+- Updated dependencies [06ceddc]
+- Updated dependencies [4614fcc]
+  - @status-im/components@1.2.0
+  - @status-im/wallet@0.1.2
+
 ## 0.2.1
 
 ### Patch Changes

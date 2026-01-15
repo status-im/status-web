@@ -1,5 +1,49 @@
 # hub
 
+## 1.0.2
+
+### Patch Changes
+
+- 97eb135: comment out KarmaButton components in TopBar for future adjustments
+- 9f70c8c: feat(pre-deposit): add available ETH to wrap to WETH vault
+- 256d25c: chore: Update hub app page data
+- 4bd5840: fix `apps/hub` og image ref
+- be3d8dc: display tooltip on mobile
+- 3779226: Post release updates in SN hub
+- c0d67bb: add og metadata
+- 04c980a: feat: add faq to predeposit page
+- e77bed6: fix: Karma tier progress fixed on point when tiers boundaries are equal
+- 6a0e6b6: enable WETH vault
+- 07e85e1: add i18n to apps/hub
+- 06ceddc: Fix React Server Components CVE vulnerabilities
+- e77bed6: withdraw
+- 7e6817a: integrate KarmaButton components back into TopBar
+- e77bed6: add app
+- e77bed6: implement karma
+- 1c12bd8: change order of the vaults
+- e77bed6: feat: Add UI and hooks for pre-deposit functionality
+- 4b9c6fc: Update vault card
+- 0a50862: Updates for Pre-deposits disclaimers
+- 6d8a492: fix route auth session
+- 0e24ca7: add dynamic APY to pre-deposit modal
+- afbdbe0: redirect `/dashboard` to `/`
+- d68c21e: feat: Add new apps to the hub
+- 207f4a5: feat: add predeposit disclaimer
+- 154287d: feat: add KarmaButton component and integrate into TopBar
+- e77bed6: Only show close button on rejected dialog and Compound initialize
+- Updated dependencies [ff8dd31]
+- Updated dependencies [e0179d3]
+- Updated dependencies [be3d8dc]
+- Updated dependencies [06ceddc]
+- Updated dependencies [e77bed6]
+- Updated dependencies [e77bed6]
+- Updated dependencies [0a50862]
+- Updated dependencies [4614fcc]
+- Updated dependencies [207f4a5]
+  - @status-im/components@1.2.0
+  - @status-im/wallet@0.1.2
+  - @status-im/status-network@0.1.2
+
 ## 1.0.1
 
 ### Patch Changes
