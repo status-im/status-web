@@ -105,7 +105,7 @@ export default function AppsPage() {
           />
           <PlatformSection
             platform="mobile"
-            title="Legacy Status mobile"
+            title="Status mobile"
             showScribble
             screenshots={[
               {
