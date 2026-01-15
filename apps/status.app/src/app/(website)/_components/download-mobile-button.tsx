@@ -9,7 +9,7 @@ import { match } from 'ts-pattern'
 import {
   STATUS_MOBILE_APK_URL,
   STATUS_MOBILE_APP_STORE_URL,
-  STATUS_MOBILE_F_DROID_URL,
+  // STATUS_MOBILE_F_DROID_URL,
   STATUS_MOBILE_GOOGLE_PLAY_URL,
 } from '~/config/routes'
 import { trackEvent } from '~app/_utils/track'
@@ -17,7 +17,7 @@ import { ScreenImage } from '~components/assets'
 import { Dialog } from '~components/dialog'
 import { useMobileOperatingSystem } from '~hooks/use-mobile-operating-system'
 import appStoreSrc from '~public/images/app-store.png'
-import fDroidSrc from '~public/images/f-droid.png'
+// import fDroidSrc from '~public/images/f-droid.png'
 import googlePlaySrc from '~public/images/google-play.png'
 import { useLatestReleaseTags } from '~website/_context/latest-release-tag-context'
 
@@ -82,7 +82,7 @@ export const DownloadMobileButton = (props: Props) => {
               <LatestVersionTag platform="mobile" />
             </div>
             <Dialog.Title className="mb-2 max-w-[381px] text-40 font-bold">
-              Download Legacy Status mobile app
+              Download Status mobile app
             </Dialog.Title>
             <Dialog.Description className="mb-6 max-w-[468px] pr-12 text-19 font-regular">
               Available for iOS or Android.
@@ -131,7 +131,7 @@ export const DownloadMobileButton = (props: Props) => {
                       alt="Google Play logo"
                     />
                   </a>
-                  <a
+                  {/* <a
                     href={STATUS_MOBILE_F_DROID_URL}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -149,7 +149,7 @@ export const DownloadMobileButton = (props: Props) => {
                       height={40}
                       alt="F-Droid logo"
                     />
-                  </a>
+                  </a> */}
                 </>
               )}
             </div>

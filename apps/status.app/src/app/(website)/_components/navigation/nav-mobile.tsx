@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 
 import { IconButton } from '@status-im/components'
 import { CloseIcon, MenuIcon } from '@status-im/icons/20'
+import { cx } from 'class-variance-authority'
 import { usePathname } from 'next/navigation'
 import { RemoveScroll } from 'react-remove-scroll'
 
@@ -11,6 +12,7 @@ import { Link } from '~components/link'
 import { Logo } from '~components/logo'
 
 import { DownloadDesktopButton } from '../download-desktop-button'
+import { DownloadMobileButton } from '../download-mobile-button'
 import { AccordionMenu } from './accordion-menu'
 
 const NavMobile = () => {
@@ -53,9 +55,26 @@ const NavMobile = () => {
         <div className="pt-5">
           <AccordionMenu />
         </div>
+        <div
+          data-theme="dark"
+          className={cx(
+            'hidden flex-row gap-2 py-3',
+            'macos:grid windows:grid linux:grid'
+          )}
+        >
+          <DownloadDesktopButton variant="darkGrey" show="all" />
+          <DownloadMobileButton size="40" variant="outline" />
+        </div>
 
-        <div data-theme="dark" className="flex justify-stretch gap-2 py-3">
-          <DownloadDesktopButton size="40" variant="darkGrey" show="all" />
+        <div
+          data-theme="dark"
+          className={cx(
+            'hidden flex-row gap-2 py-3',
+            'ios:grid android:grid unknown:grid'
+          )}
+        >
+          <DownloadDesktopButton variant="darkGrey" show="all" />
+          <DownloadMobileButton size="40" variant="outline" />
         </div>
       </div>
     </RemoveScroll>
