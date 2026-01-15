@@ -5,11 +5,17 @@ import { getMessages } from 'next-intl/server'
 import { Metadata as MetadataFn } from '../_metadata'
 import { Providers } from '../_providers'
 
-export async function generateMetadata() {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
   const pathname = await getPathname()
 
   return MetadataFn({
     pathname,
+    locale,
   })
 }
 
