@@ -25,7 +25,7 @@ function RouteComponent() {
     setIsLoading(true)
     try {
       await createWalletAsync(data.password)
-      await establishSession(data.password)
+      establishSession(data.password)
       navigate({ to: '/portfolio/assets' })
     } catch (error) {
       console.error(error)

@@ -65,7 +65,7 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
           walletId: currentWallet.id,
           password,
         })
-        await establishSession(password)
+        establishSession(password)
         return true
       } catch {
         return false
