@@ -7,7 +7,6 @@ export async function generateMetadata() {
   const pathname = await getPathname()
 
   return Metadata({
-    title: '',
     pathname,
   })
 }
