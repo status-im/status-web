@@ -21,6 +21,7 @@ export async function generateMetadata(props: Props) {
   return generateMetadataUtil(props, {
     titleKey: 'hero.title',
     descriptionKey: 'hero.description',
+    pathname: '/',
   })
 }
 
