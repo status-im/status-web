@@ -1,5 +1,18 @@
 # @status-im/status-network
 
+## 0.1.2
+
+### Patch Changes
+
+- 06ceddc: Fix React Server Components CVE vulnerabilities
+- e77bed6: withdraw
+- e77bed6: add app
+- 0a50862: Updates for Pre-deposits disclaimers
+- 207f4a5: feat: add predeposit disclaimer
+- Updated dependencies [ff8dd31]
+- Updated dependencies [be3d8dc]
+  - @status-im/components@1.2.0
+
 ## 0.1.1
 
 ### Patch Changes
