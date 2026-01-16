@@ -14,6 +14,23 @@ import { useVaultSelection } from '~hooks/useVaultSelection'
 import { Apps } from '../_components/apps'
 import { Hero } from '../_components/hero'
 import { RewardsSection } from '../_components/rewards-section'
+import { jsonLD, JSONLDScript } from '../_utils/json-ld'
+
+const breadcrumbListSchema = jsonLD.breadcrumbList([
+  {
+    name: 'Hub',
+    url: 'https://hub.status.network/',
+  },
+])
+
+const softwareApplicationSchema = jsonLD.softwareApplication({
+  name: 'Status Network Hub',
+  applicationCategory: 'BlockchainPlatform',
+  operatingSystem: 'Web',
+  url: 'https://hub.status.network',
+  description:
+    "Central hub for deposits, staking, apps, and reputation on Status Network's gasless Ethereum Layer 2.",
+})
 
 export default function HomePage() {
   const {
@@ -32,6 +49,9 @@ export default function HomePage() {
 
   return (
     <HubLayout>
+      <JSONLDScript
+        schema={[breadcrumbListSchema, softwareApplicationSchema as any]}
+      />
       <div className="flex flex-col p-4 lg:px-6 lg:py-8">
         {/* Hero Section */}
         <Hero />

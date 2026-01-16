@@ -36,13 +36,7 @@ export const metadata = Metadata({
   description:
     'The first natively gasless Ethereum L2 with sustainable yield and integrated public funding 🐉',
 
-  alternates: {
-    canonical: './',
-    languages: {
-      'en-GB': '/',
-      'ko-KR': '/ko',
-    },
-  },
+  pathname: '/',
 
   twitter: {
     card: 'summary_large_image',

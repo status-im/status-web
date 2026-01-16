@@ -1,5 +1,21 @@
+import { getPathname } from '@status-im/status-network/utils'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
+import { Metadata } from '../_metadata'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
+  const pathname = await getPathname()
+
+  return Metadata({
+    pathname,
+    locale,
+  })
+}
 
 type Props = {
   children: React.ReactNode

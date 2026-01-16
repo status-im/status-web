@@ -22,6 +22,27 @@ import {
   WeightedBoostCard,
   WeightedBoostCardSkeleton,
 } from '../../_components/stake/stake-weighted-boost-card'
+import { jsonLD, JSONLDScript } from '../../_utils/json-ld'
+
+const breadcrumbListSchema = jsonLD.breadcrumbList([
+  {
+    name: 'Hub',
+    url: 'https://hub.status.network/',
+  },
+  {
+    name: 'Stake',
+    url: 'https://hub.status.network/stake',
+  },
+])
+
+const softwareApplicationSchema = jsonLD.softwareApplication({
+  name: 'Status Network Staking',
+  applicationCategory: 'DeFi',
+  operatingSystem: 'Web',
+  url: 'https://hub.status.network/stake',
+  description:
+    "Stake assets to earn yield and support Status Network's gasless Ethereum Layer 2.",
+})
 
 function StakeCardsSkeleton() {
   return (
@@ -70,6 +91,9 @@ export default function StakePage() {
 
   return (
     <HubLayout>
+      <JSONLDScript
+        schema={[breadcrumbListSchema, softwareApplicationSchema as any]}
+      />
       <div className="mx-auto flex size-full flex-col gap-8 p-4 md:p-8">
         <header className="flex flex-col gap-2">
           <h1 className="text-27 font-bold md:text-40">{t('stake.title')}</h1>
