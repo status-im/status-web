@@ -36,17 +36,27 @@ const baseJsonLD = createJSONLD({
   defaultSocialLinks: STATUS_HUB_SOCIAL_LINKS,
 })
 
+type SoftwareApplicationSchema = {
+  '@context': 'https://schema.org'
+  '@type': 'SoftwareApplication'
+  name: string
+  applicationCategory: string
+  operatingSystem: string
+  url: string
+  description?: string
+}
+
 /**
  * JSON-LD schema generators with app-specific defaults
  *
  * All schemas automatically include:
  * - "@context": "https://schema.org"
- * - "@type": "Organization" | "WebSite" | "BreadcrumbList" | "ListItem" | etc.
+ * - "@type": "Organization" | "WebSite" | "BreadcrumbList" | "ListItem" | "SoftwareApplication" | etc.
  */
 export const jsonLD = {
   ...baseJsonLD,
   organization: (config?: {
-    '@id': string
+    '@id'?: string
     name?: string
     url?: string
     description?: string
@@ -59,13 +69,13 @@ export const jsonLD = {
       ...config,
     }),
   website: (config?: {
-    '@id': string
+    '@id'?: string
     description?: string
     searchUrl?: string
     name?: string
     url?: string
     publisher?: {
-      '@id': string
+      '@id'?: string
     }
   }) =>
     baseJsonLD.website({
@@ -74,6 +84,21 @@ export const jsonLD = {
       description: config?.description,
       searchUrl: config?.searchUrl,
     }),
+  softwareApplication: (config: {
+    name: string
+    applicationCategory: string
+    operatingSystem: string
+    url: string
+    description?: string
+  }): SoftwareApplicationSchema => ({
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: config.name,
+    applicationCategory: config.applicationCategory,
+    operatingSystem: config.operatingSystem,
+    url: config.url,
+    ...(config.description && { description: config.description }),
+  }),
 }
 
 /**
