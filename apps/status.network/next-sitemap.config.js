@@ -1,6 +1,17 @@
 /* eslint-env node */
 /* eslint-disable no-undef */
-const { buildLocalizedPaths } = require('./sitemap-utils')
+const path = require('path')
+const {
+  buildLocalizedPaths,
+  discoverPages,
+  discoverLegalPages,
+} = require('./sitemap-utils')
+
+// Discover pages from app directory
+const APP_DIR = path.join(__dirname, 'src', 'app')
+const LOCALES = ['en', 'ko']
+const PAGES = discoverPages(APP_DIR)
+const LEGAL_PAGES = discoverLegalPages(APP_DIR)
 
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
@@ -33,18 +44,20 @@ module.exports = {
       return null
     }
 
-    const allowedPaths = [
-      '/',
-      '/brand',
-      '/ko',
-      '/ko/brand',
-      '/legal/privacy-policy',
-      '/legal/terms-of-use',
-      '/legal/status-network-pre-deposit-disclaimer',
-      '/ko/legal/privacy-policy',
-      '/ko/legal/terms-of-use',
-      '/ko/legal/status-network-pre-deposit-disclaimer',
-    ]
+    // Generate allowed paths dynamically from discovered pages
+    const allowedPaths = buildLocalizedPaths(LOCALES, PAGES).map(p => p.loc)
+
+    // Add legal pages
+    const lastmod = new Date().toISOString()
+    for (const locale of LOCALES) {
+      for (const legalPage of LEGAL_PAGES) {
+        const legalPath =
+          locale === 'en'
+            ? `/legal/${legalPage}`
+            : `/${locale}/legal/${legalPage}`
+        allowedPaths.push(legalPath)
+      }
+    }
 
     if (!allowedPaths.includes(path)) {
       return null
@@ -58,20 +71,15 @@ module.exports = {
   },
   additionalPaths: async () => {
     const result = []
-    const locales = ['en', 'ko']
-    const pages = ['', 'brand']
-    const legalPages = [
-      'privacy-policy',
-      'terms-of-use',
-      'status-network-pre-deposit-disclaimer',
-    ]
     const changefreq = 'monthly'
 
-    result.push(...buildLocalizedPaths(locales, pages, changefreq))
+    // Add regular pages
+    result.push(...buildLocalizedPaths(LOCALES, PAGES, changefreq))
 
+    // Add legal pages
     const lastmod = new Date().toISOString()
-    for (const locale of locales) {
-      for (const legalPage of legalPages) {
+    for (const locale of LOCALES) {
+      for (const legalPage of LEGAL_PAGES) {
         const path =
           locale === 'en'
             ? `/legal/${legalPage}`

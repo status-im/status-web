@@ -1,6 +1,12 @@
 /* eslint-env node */
 /* eslint-disable no-undef */
-const { buildLocalizedPaths } = require('./sitemap-utils')
+const path = require('path')
+const { buildLocalizedPaths, discoverPages } = require('./sitemap-utils')
+
+// Discover pages from app directory
+const APP_DIR = path.join(__dirname, 'src', 'app')
+const LOCALES = ['en', 'ko']
+const PAGES = discoverPages(APP_DIR)
 
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
@@ -31,18 +37,8 @@ module.exports = {
       return null
     }
 
-    const allowedPaths = [
-      '/',
-      '/pre-deposits',
-      '/discover',
-      '/stake',
-      '/karma',
-      '/ko',
-      '/ko/pre-deposits',
-      '/ko/discover',
-      '/ko/stake',
-      '/ko/karma',
-    ]
+    // Generate allowed paths dynamically from discovered pages
+    const allowedPaths = buildLocalizedPaths(LOCALES, PAGES).map(p => p.loc)
 
     if (!allowedPaths.includes(path)) {
       return null
@@ -55,10 +51,7 @@ module.exports = {
     }
   },
   additionalPaths: async () => {
-    const locales = ['en', 'ko']
-    const pages = ['', 'pre-deposits', 'discover', 'stake', 'karma']
     const changefreq = 'monthly'
-
-    return buildLocalizedPaths(locales, pages, changefreq)
+    return buildLocalizedPaths(LOCALES, PAGES, changefreq)
   },
 }
