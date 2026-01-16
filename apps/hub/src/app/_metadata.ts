@@ -29,6 +29,10 @@ export function Metadata(input: Input): Metadata {
       ...input,
       title: DEFAULT_SITE_NAME as NonNullable<Metadata['title']>,
       description: DEFAULT_DESCRIPTION,
+      robots: {
+        index: true,
+        follow: true,
+      },
     },
     config
   )
