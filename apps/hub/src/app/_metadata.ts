@@ -27,8 +27,9 @@ export function Metadata(input: Input): Metadata {
   return generateMetadataUtil(
     {
       ...input,
-      title: DEFAULT_SITE_NAME as NonNullable<Metadata['title']>,
-      description: DEFAULT_DESCRIPTION,
+      title:
+        input.title || (DEFAULT_SITE_NAME as NonNullable<Metadata['title']>),
+      description: input.description || DEFAULT_DESCRIPTION,
       robots: {
         index: true,
         follow: true,

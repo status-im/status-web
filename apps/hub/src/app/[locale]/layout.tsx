@@ -13,6 +13,16 @@ export async function generateMetadata({
   const { locale } = await params
   const pathname = await getPathname()
 
+  if (pathname === '/') {
+    return MetadataFn({
+      title: 'Status Network | Gasless Ethereum Layer 2 with Privacy',
+      description:
+        'Explore Status Network, a gasless Ethereum Layer 2 with a native privacy layer, shared yield, staking, and reputation-based governance.',
+      pathname,
+      locale,
+    })
+  }
+
   return MetadataFn({
     pathname,
     locale,
