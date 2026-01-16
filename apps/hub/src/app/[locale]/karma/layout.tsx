@@ -8,9 +8,9 @@ export async function generateMetadata({
   const { locale } = await params
 
   return MetadataFn({
-    // title: 'Karma',
-    // description:
-    //   'Increase your Karma, unlock more free transactions, gain power over the network on Status Network.',
+    title: 'Reputation Governance on Ethereum L2 | Status Network',
+    description:
+      "Karma is Status Network's non-transferable reputation system for governance, incentives, and access on a gasless, privacy-enabled Ethereum L2.",
     pathname: '/karma',
     locale,
   })
