@@ -6,5 +6,6 @@ export {
   type JSONLDSchema,
   JSONLDScript,
   type OrganizationSchema,
+  type SoftwareApplicationSchema,
   type WebSiteSchema,
 } from './json-ld'

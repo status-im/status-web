@@ -60,7 +60,7 @@ export default function DiscoverPage() {
   return (
     <HubLayout>
       <JSONLDScript
-        schema={[breadcrumbListSchema, softwareApplicationSchema as any]}
+        schema={[breadcrumbListSchema, softwareApplicationSchema]}
       />
       <div className="flex flex-col p-4 lg:p-8">
         {/* Main Content */}

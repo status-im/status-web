@@ -132,7 +132,7 @@ export default function KarmaPage() {
   return (
     <HubLayout>
       <JSONLDScript
-        schema={[breadcrumbListSchema, softwareApplicationSchema as any]}
+        schema={[breadcrumbListSchema, softwareApplicationSchema]}
       />
       <div className="mx-auto flex size-full flex-col gap-4 p-4 lg:gap-8 lg:p-8">
         <div className="flex flex-col gap-2">
