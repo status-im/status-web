@@ -19,6 +19,7 @@
     "@radix-ui/react-select": "^2.2.6",
     "@status-im/colors": "workspace:*",
     "@status-im/components": "workspace:*",
+    "@status-im/sitemap-utils": "workspace:*",
     "@status-im/icons": "workspace:*",
     "@status-im/status-network": "workspace:*",
     "@vercel/analytics": "^1.5.0",

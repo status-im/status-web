@@ -304,6 +304,9 @@ importers:
       '@status-im/icons':
         specifier: workspace:*
         version: link:../../packages/icons
+      '@status-im/sitemap-utils':
+        specifier: workspace:*
+        version: link:../../packages/sitemap-utils
       '@status-im/status-network':
         specifier: workspace:*
         version: link:../../packages/status-network
@@ -1627,6 +1630,9 @@ importers:
       '@status-im/icons':
         specifier: workspace:*
         version: link:../../packages/icons
+      '@status-im/sitemap-utils':
+        specifier: workspace:*
+        version: link:../../packages/sitemap-utils
       '@status-im/status-network':
         specifier: workspace:*
         version: link:../../packages/status-network
@@ -2180,6 +2186,8 @@ importers:
       vite-node:
         specifier: 3.1.4
         version: 3.1.4(@types/node@22.19.1)(jiti@2.6.1)(less@4.4.2)(lightningcss@1.30.2)(sass@1.94.0)(terser@5.44.1)(tsx@4.20.6)(yaml@2.8.1)
+
+  packages/sitemap-utils: {}
 
   packages/status-js:
     dependencies:
@@ -28793,7 +28801,7 @@ snapshots:
       debug: 4.4.3(supports-color@5.5.0)
       invariant: 2.2.4
       metro: 0.83.3(bufferutil@4.0.9)(utf-8-validate@6.0.3)
-      metro-config: 0.83.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      metro-config: 0.83.3(bufferutil@4.0.9)(utf-8-validate@6.0.3)
       metro-core: 0.83.3
       semver: 7.7.3
     transitivePeerDependencies:
@@ -41131,6 +41139,22 @@ snapshots:
       - supports-color
       - utf-8-validate
 
+  metro-config@0.83.3(bufferutil@4.0.9)(utf-8-validate@6.0.3):
+    dependencies:
+      connect: 3.7.0
+      flow-enums-runtime: 0.0.6
+      jest-validate: 29.7.0
+      metro: 0.83.3(bufferutil@4.0.9)(utf-8-validate@6.0.3)
+      metro-cache: 0.83.3
+      metro-core: 0.83.3
+      metro-runtime: 0.83.3
+      yaml: 2.8.1
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    optional: true
+
   metro-core@0.83.3:
     dependencies:
       flow-enums-runtime: 0.0.6
@@ -41316,7 +41340,7 @@ snapshots:
       metro-babel-transformer: 0.83.3
       metro-cache: 0.83.3
       metro-cache-key: 0.83.3
-      metro-config: 0.83.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      metro-config: 0.83.3(bufferutil@4.0.9)(utf-8-validate@6.0.3)
       metro-core: 0.83.3
       metro-file-map: 0.83.3
       metro-resolver: 0.83.3
