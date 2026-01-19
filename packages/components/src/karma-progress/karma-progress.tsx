@@ -1,4 +1,4 @@
-import { formatEther } from 'viem'
+import { formatEther, parseEther } from 'viem'
 
 export interface KarmaLevel {
   level: number
@@ -59,19 +59,15 @@ export const getCurrentLevelData = (
     return levels[0]
   }
 
-  for (let i = 0; i < levels.length; i++) {
+  // Special case: 1 karma = Level 1
+  if (karma === parseEther('1')) {
+    return levels[1] || levels[0]
+  }
+
+  // Find the matching level from highest to lowest
+  // This ensures that boundary values (e.g., 50, 500) match the higher level
+  for (let i = levels.length - 1; i >= 0; i--) {
     const level = levels[i]
-
-    // Check if karma equals this level's minKarma and there's a previous level
-    if (i > 0 && karma === level.minKarma) {
-      const prevLevel = levels[i - 1]
-      // If previous level's maxKarma + 1 equals this level's minKarma,
-      // return the previous (lower) level for the boundary value
-      if (prevLevel.maxKarma + 1n === level.minKarma) {
-        return prevLevel
-      }
-    }
-
     if (karma >= level.minKarma && karma <= level.maxKarma) {
       return level
     }
