@@ -70,13 +70,13 @@ const OverviewCard = () => {
       : 0
 
   const progressBarColor = useMemo(() => {
-    if (txPercentage <= 33) {
-      return 'bg-[#E95460]'
+    if (txPercentage < 20) {
+      return 'bg-danger-50'
     }
-    if (txPercentage <= 66) {
+    if (txPercentage < 50) {
       return 'bg-yellow'
     }
-    return 'bg-[#23ADA0]'
+    return 'bg-success-50'
   }, [txPercentage])
 
   if (isLoading) {
