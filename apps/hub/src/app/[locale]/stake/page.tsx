@@ -92,7 +92,7 @@ export default function StakePage() {
   return (
     <HubLayout>
       <JSONLDScript
-        schema={[breadcrumbListSchema, softwareApplicationSchema as any]}
+        schema={[breadcrumbListSchema, softwareApplicationSchema]}
       />
       <div className="mx-auto flex size-full flex-col gap-8 p-4 md:p-8">
         <header className="flex flex-col gap-2">

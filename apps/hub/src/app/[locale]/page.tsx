@@ -50,7 +50,7 @@ export default function HomePage() {
   return (
     <HubLayout>
       <JSONLDScript
-        schema={[breadcrumbListSchema, softwareApplicationSchema as any]}
+        schema={[breadcrumbListSchema, softwareApplicationSchema]}
       />
       <div className="flex flex-col p-4 lg:px-6 lg:py-8">
         {/* Hero Section */}

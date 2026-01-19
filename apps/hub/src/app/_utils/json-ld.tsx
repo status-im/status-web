@@ -8,6 +8,7 @@ import type {
   BreadcrumbListSchema,
   JSONLDSchema,
   OrganizationSchema,
+  SoftwareApplicationSchema,
   WebSiteSchema,
 } from '@status-im/components'
 
@@ -35,16 +36,6 @@ const baseJsonLD = createJSONLD({
   defaultSiteUrl: DEFAULT_URL,
   defaultSocialLinks: STATUS_HUB_SOCIAL_LINKS,
 })
-
-type SoftwareApplicationSchema = {
-  '@context': 'https://schema.org'
-  '@type': 'SoftwareApplication'
-  name: string
-  applicationCategory: string
-  operatingSystem: string
-  url: string
-  description?: string
-}
 
 /**
  * JSON-LD schema generators with app-specific defaults
@@ -109,6 +100,7 @@ export type {
   BreadcrumbListSchema,
   JSONLDSchema,
   OrganizationSchema,
+  SoftwareApplicationSchema,
   WebSiteSchema,
 }
 
