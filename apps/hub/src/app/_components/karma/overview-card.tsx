@@ -1,6 +1,12 @@
 import { useMemo } from 'react'
 
-import { Skeleton } from '@status-im/components'
+import {
+  getCurrentLevelData,
+  KarmaOverviewCardSkeleton,
+  KarmaProgressBar,
+  QuotaProgressBar,
+} from '@status-im/components'
+// import { AchievementBadges } from './achievement-badges'
 import { useSIWE } from 'connectkit'
 import { useTranslations } from 'next-intl'
 import { formatEther } from 'viem'
@@ -11,41 +17,12 @@ import { useProcessedKarmaTiers } from '~hooks/useProcessedKarmaTiers'
 import { useQuota } from '~hooks/useQuota'
 import { formatSNT } from '~utils/currency'
 
-// import { AchievementBadges } from './achievement-badges'
-import { getCurrentLevelData, ProgressBar } from './progress-tracker'
-
-const OverviewCardSkeleton = () => {
-  return (
-    <div className="flex h-[302px] flex-1 flex-col rounded-20 border border-neutral-20 bg-white-100 shadow-1">
-      <div className="flex flex-col gap-3 p-4 pb-2">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex flex-col gap-2">
-            <Skeleton height={32} width={280} className="rounded-6" />
-            <Skeleton height={16} width={120} className="rounded-6" />
-          </div>
-
-          <Skeleton height={32} width={80} className="rounded-6" />
-        </div>
-
-        <Skeleton height={68} width="100%" className="rounded-6" />
-
-        <div className="flex items-center gap-1 border-t border-dashed border-neutral-20 pt-3">
-          <Skeleton height={28} width={120} className="rounded-6" />
-        </div>
-      </div>
-      <div className="size-full rounded-b-20 bg-neutral-2.5 p-4">
-        <Skeleton height={24} width={500} className="rounded-6" />
-      </div>
-    </div>
-  )
-}
-
 const OverviewCard = () => {
+  const t = useTranslations()
   const { isConnected } = useAccount()
   const { data: karmaBalance, isLoading: karmaLoading } = useKarmaBalance()
   const { karmaLevels, isLoading: tiersLoading } = useProcessedKarmaTiers()
   const { isLoading: isSIWELoading } = useSIWE()
-  const t = useTranslations()
   const { data: quotaData, isLoading: quotaLoading } = useQuota({
     enabled: isConnected,
   })
@@ -64,23 +41,8 @@ const OverviewCard = () => {
     [currentKarma, karmaLevels]
   )
 
-  const txPercentage =
-    quotaData && quotaData.total > 0
-      ? (quotaData.remaining / quotaData.total) * 100
-      : 0
-
-  const progressBarColor = useMemo(() => {
-    if (txPercentage < 20) {
-      return 'bg-danger-50'
-    }
-    if (txPercentage < 50) {
-      return 'bg-yellow'
-    }
-    return 'bg-success-50'
-  }, [txPercentage])
-
   if (isLoading) {
-    return <OverviewCardSkeleton />
+    return <KarmaOverviewCardSkeleton />
   }
 
   return (
@@ -108,37 +70,19 @@ const OverviewCard = () => {
             </span>
           )} */}
         </div>
-        <ProgressBar currentKarma={currentKarma} karmaLevels={karmaLevels} />
+        <KarmaProgressBar
+          currentKarma={currentKarma}
+          karmaLevels={karmaLevels}
+        />
 
         {/* TXAllowance Section */}
         {quotaData && (
-          <div className="flex flex-col gap-6 pt-3">
-            <div className="flex flex-col items-baseline gap-1.5 sm:flex-row">
-              <div className="text-27 font-semibold">
-                <span className="text-neutral-100">
-                  {quotaData.remaining.toLocaleString()}
-                </span>
-                <span className="text-neutral-40">
-                  /
-                  {quotaData.total >= 1000
-                    ? `${quotaData.total / 1000}K`
-                    : quotaData.total}
-                </span>
-              </div>
-              <span className="text-15 font-regular text-neutral-50">
-                {t('karma.free_transactions_left_today')}
-              </span>
-            </div>
-
-            {/* Progress Bar */}
-            <div className="relative h-2 w-full overflow-hidden rounded-full bg-neutral-10">
-              <div
-                className={`h-full rounded-full transition-all duration-300 ${progressBarColor}`}
-                style={{
-                  width: `${txPercentage}%`,
-                }}
-              />
-            </div>
+          <div className="pt-3">
+            <QuotaProgressBar
+              remaining={quotaData.remaining}
+              total={quotaData.total}
+              label={t('karma.free_transactions_left_today')}
+            />
           </div>
         )}
       </div>
@@ -150,4 +94,4 @@ const OverviewCard = () => {
   )
 }
 
-export { OverviewCard, OverviewCardSkeleton }
+export { OverviewCard }

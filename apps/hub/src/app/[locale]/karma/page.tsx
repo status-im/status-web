@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react'
 
+import { KarmaOverviewCardSkeleton } from '@status-im/components'
 import { useTranslations } from 'next-intl'
 import { formatEther } from 'viem/utils'
 
@@ -12,7 +13,6 @@ import {
   KarmaVisualCard,
   KarmaVisualCardSkeleton,
   OverviewCard,
-  OverviewCardSkeleton,
 } from '~components/karma'
 import { useCurrentUser } from '~hooks/useCurrentUser'
 import { useKarmaRewardsDistributor } from '~hooks/useKarmaRewardsDistributor'
@@ -27,7 +27,7 @@ function KarmaCardsSkeleton() {
     <>
       <div className="flex flex-col gap-6 md:flex-row">
         <KarmaVisualCardSkeleton />
-        <OverviewCardSkeleton />
+        <KarmaOverviewCardSkeleton />
       </div>
       <div className="flex flex-col gap-6">
         <h2 className="text-19 font-semibold text-neutral-100">
