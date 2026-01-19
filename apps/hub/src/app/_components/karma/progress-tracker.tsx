@@ -307,24 +307,26 @@ const getCurrentLevelData = (
   )
 }
 
-const formatKarmaLabel = (karma: bigint, level: number) => {
-  const karmaNum = Number(formatEther(karma))
+const LEVEL_LABELS: Record<number, string> = {
+  0: '0',
+  1: '1',
+  2: '1+',
+  3: '50+',
+  4: '500+',
+  5: '5K+',
+  6: '20K+',
+  7: '100K+',
+  8: '500K+',
+  9: '5M+',
+  10: '10M+',
+}
 
-  if (level <= 3) {
-    if (level === 0) return '0'
-    if (level === 1) return '1'
-    if (level === 2) return '1+'
-    if (level === 3) return '50+'
-  } else if (level >= 4 && level <= 7) {
-    if (level === 4) return '500+'
-    if (level === 5) return '5K+'
-    if (level === 6) return '20K+'
-    if (level === 7) return '100K+'
-  } else if (level >= 8 && level <= 10) {
-    if (level === 8) return '500K+'
-    if (level === 9) return '5M+'
-    if (level === 10) return '10M+'
+const formatKarmaLabel = (karma: bigint, level: number) => {
+  if (level in LEVEL_LABELS) {
+    return LEVEL_LABELS[level]
   }
+
+  const karmaNum = Number(formatEther(karma))
 
   const formatter = new Intl.NumberFormat('en-US', {
     notation: 'compact',
