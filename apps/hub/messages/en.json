@@ -654,6 +654,10 @@
     "unexpected_error": {
       "translation": "An unexpected error occurred",
       "notes": "karma::unexpected_error"
+    },
+    "free_transactions_left_today": {
+      "translation": "free transactions left today",
+      "notes": "karma::free_transactions_left_today"
     }
   },
   "rewards": {
