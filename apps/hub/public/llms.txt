@@ -4,7 +4,7 @@
 - [Status Network Hub – Gasless Ethereum L2](https://hub.status.network): Central hub for Status Network, a gasless Ethereum Layer 2 with a native privacy layer, designed for liquidity onboarding, shared yield, and participation.
 
 ## Pre-Deposits
-- [Pre-Deposit Crypto on Status Network](https://hub.status.network/pre-deposits: Pre-deposit crypto assets to help seed network liquidity, earn yield, and prepare for staking and app participation on a gasless Ethereum Layer 2 with privacy by design.
+- [Pre-Deposit Crypto on Status Network](https://hub.status.network/pre-deposits): Pre-deposit crypto assets to help seed network liquidity, earn yield, and prepare for staking and app participation on a gasless Ethereum Layer 2 with privacy by design.
 
 ## App Discovery
 - [Discover Apps on Status Network](https://hub.status.network/discover): Explore decentralized applications built on Status Network, a gasless Ethereum Layer 2 where apps can offer private interactions by default.
