@@ -4,7 +4,7 @@ import {
   getCurrentLevelData,
   KarmaOverviewCardSkeleton,
   KarmaProgressBar,
-  QuotaProgressBar,
+  // QuotaProgressBar,
 } from '@status-im/components'
 // import { AchievementBadges } from './achievement-badges'
 import { useSIWE } from 'connectkit'
@@ -14,7 +14,7 @@ import { useAccount } from 'wagmi'
 
 import { useKarmaBalance } from '~hooks/useKarmaBalance'
 import { useProcessedKarmaTiers } from '~hooks/useProcessedKarmaTiers'
-import { useQuota } from '~hooks/useQuota'
+// import { useQuota } from '~hooks/useQuota'
 import { formatSNT } from '~utils/currency'
 
 const OverviewCard = () => {
@@ -23,13 +23,12 @@ const OverviewCard = () => {
   const { data: karmaBalance, isLoading: karmaLoading } = useKarmaBalance()
   const { karmaLevels, isLoading: tiersLoading } = useProcessedKarmaTiers()
   const { isLoading: isSIWELoading } = useSIWE()
-  const { data: quotaData, isLoading: quotaLoading } = useQuota({
-    enabled: isConnected,
-  })
+  // const { data: quotaData, isLoading: quotaLoading } = useQuota({
+  //   enabled: isConnected,
+  // })
 
   const isLoading =
-    tiersLoading ||
-    (isConnected && (karmaLoading || isSIWELoading || quotaLoading))
+    tiersLoading || (isConnected && (karmaLoading || isSIWELoading))
 
   const currentKarma = karmaBalance?.balance ?? 0n
 
@@ -75,8 +74,8 @@ const OverviewCard = () => {
           karmaLevels={karmaLevels}
         />
 
-        {/* TXAllowance Section */}
-        {quotaData && (
+        {/* TODO: Enable TX allowance when API is ready */}
+        {/* {quotaData && (
           <div className="pt-3">
             <QuotaProgressBar
               remaining={quotaData.remaining}
@@ -84,7 +83,7 @@ const OverviewCard = () => {
               label={t('karma.free_transactions_left_today')}
             />
           </div>
-        )}
+        )} */}
       </div>
       {/* <div className="size-full rounded-b-20 bg-neutral-2.5 p-4">
         <AchievementBadges />
