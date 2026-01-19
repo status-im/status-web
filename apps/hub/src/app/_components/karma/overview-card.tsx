@@ -126,7 +126,7 @@ const OverviewCard = () => {
                 </span>
               </div>
               <span className="text-15 font-regular text-neutral-50">
-                free transactions left today
+                {t('karma.free_transactions_left_today')}
               </span>
             </div>
 

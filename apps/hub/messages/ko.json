@@ -654,6 +654,10 @@
     "unexpected_error": {
       "translation": "예기치 않은 오류가 발생했습니다",
       "notes": "karma::unexpected_error"
+    },
+    "free_transactions_left_today": {
+      "translation": "오늘 남은 무료 트랜잭션",
+      "notes": "karma::free_transactions_left_today"
     }
   },
   "rewards": {
