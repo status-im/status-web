@@ -59,10 +59,26 @@ export const getCurrentLevelData = (
     return levels[0]
   }
 
-  return (
-    levels.find(level => karma >= level.minKarma && karma <= level.maxKarma) ||
-    levels[levels.length - 1]
-  )
+  for (let i = 0; i < levels.length; i++) {
+    const level = levels[i]
+
+    // Check if karma equals this level's minKarma and there's a previous level
+    if (i > 0 && karma === level.minKarma) {
+      const prevLevel = levels[i - 1]
+      // If previous level's maxKarma + 1 equals this level's minKarma,
+      // return the previous (lower) level for the boundary value
+      if (prevLevel.maxKarma + 1n === level.minKarma) {
+        return prevLevel
+      }
+    }
+
+    if (karma >= level.minKarma && karma <= level.maxKarma) {
+      return level
+    }
+  }
+
+  // If no match found, return the highest level
+  return levels[levels.length - 1]
 }
 
 const LEVEL_LABELS: Record<number, string> = {
@@ -148,6 +164,7 @@ export const KarmaProgressBar = ({
   return (
     <div className="flex w-full flex-col gap-2">
       <div className="relative hidden h-3 w-full rounded-20 bg-neutral-5 md:block">
+        {/* prettier-ignore */}
         <div
           className="bg-purple h-full rounded-20 transition-all duration-300"
           style={{
@@ -185,6 +202,7 @@ export const KarmaProgressBar = ({
       </div>
 
       <div className="relative h-3 w-full rounded-20 bg-neutral-5 md:hidden">
+        {/* prettier-ignore */}
         <div
           className="bg-purple h-full rounded-20 transition-all duration-300"
           style={{ width: `${levelProgress}%` }}

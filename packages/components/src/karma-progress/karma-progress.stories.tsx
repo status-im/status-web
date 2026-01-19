@@ -9,15 +9,15 @@ const generateKarmaLevels = (): KarmaLevel[] => {
   const baseValues = [
     0n,
     parseEther('1'),
-    parseEther('1'),
-    parseEther('50'),
-    parseEther('500'),
-    parseEther('5000'),
-    parseEther('20000'),
-    parseEther('100000'),
-    parseEther('500000'),
-    parseEther('5000000'),
-    parseEther('10000000'),
+    parseEther('2'),
+    parseEther('51'),
+    parseEther('501'),
+    parseEther('5001'),
+    parseEther('20001'),
+    parseEther('100001'),
+    parseEther('500001'),
+    parseEther('5000001'),
+    parseEther('10000001'),
   ]
 
   for (let i = 0; i < baseValues.length; i++) {
