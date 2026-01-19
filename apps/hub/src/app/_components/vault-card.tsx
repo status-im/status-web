@@ -6,6 +6,7 @@ import { Skeleton } from '@status-im/components'
 import { Button } from '@status-im/status-network/components'
 import { ConnectKitButton } from 'connectkit'
 import { cva } from 'cva'
+import { useTranslations } from 'next-intl'
 import { useAccount } from 'wagmi'
 
 import { formatCurrency, formatTokenAmount } from '~/utils/currency'
@@ -133,12 +134,20 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
     }
   }, [isConnected, onDeposit, pendingDepositRef])
 
+  const t = useTranslations()
+
   const vaultAddressLower = vault.address.toLowerCase()
   const isVaultInApi = apyMap !== undefined && vaultAddressLower in apyMap
   const isDisabled = !isVaultInApi
   const dynamicApy = apyMap?.[vaultAddressLower]
   const apyValue = dynamicApy !== undefined ? String(dynamicApy) : null
-  const rewardsLine = rewards.join(', ')
+  const rewardsLine = rewards
+    .map(reward =>
+      reward.startsWith('vault.')
+        ? t(reward as 'vault.native_apps_points')
+        : reward
+    )
+    .join(', ')
 
   const formattedTVL = !isDisabled
     ? formatCurrency(tvlData?.tvlUSD ?? 0, { compact: true }).replace('$', '')
@@ -170,14 +179,16 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
         <div className="flex items-center gap-4">
           <VaultImage vault={icon} network={vault.network} size="56" />
         </div>
-        <InfoTooltip content="Estimated APY based on TVL and total available liquid token rewards across all vaults: 15M SNT + 20M LINEA" />
+        <InfoTooltip content={t('vault.apy_tooltip')} />
       </div>
 
       <h3 className="mb-2 text-19 font-600 lg:text-27">{vault.name}</h3>
 
       {!isDisabled && isConnected && (
         <div className="mb-4">
-          <p className="text-15 font-400 text-neutral-50">Your deposit</p>
+          <p className="text-15 font-400 text-neutral-50">
+            {t('vault.your_deposit')}
+          </p>
           <div className="text-27 font-600">
             {isDepositedBalanceLoading ? (
               <Skeleton width={120} height={32} className="rounded-8" />
@@ -208,7 +219,9 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
             <Skeleton width={120} height={20} className="rounded-6" />
           ) : (
             <span>
-              {apyValue ? `${apyValue}% liquid APY` : 'Liquid APY TBD'}
+              {apyValue
+                ? `${apyValue}% ${t('vault.liquid_apy')}`
+                : t('vault.liquid_apy_tbd')}
             </span>
           )}
         </li>
@@ -223,7 +236,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
             <span className="text-neutral-50">
               <GusdIcon />
             </span>
-            <span>Generic Protocol points</span>
+            <span>{t('vault.generic_protocol_points')}</span>
           </li>
         )}
         <li className="flex items-center gap-2 text-15">
@@ -233,7 +246,11 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
           {isTvlLoading ? (
             <Skeleton width={80} height={20} className="rounded-6" />
           ) : (
-            <span>{formattedTVL ? `$${formattedTVL} TVL` : 'TVL TBD'}</span>
+            <span>
+              {formattedTVL
+                ? `$${formattedTVL} ${t('vault.tvl')}`
+                : t('vault.tvl_tbd')}
+            </span>
           )}
         </li>
         {!isDisabled && (
@@ -253,7 +270,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
         disabled={isDisabled}
         className="mt-auto w-full justify-center lg:w-fit"
       >
-        {isDisabled ? 'Coming soon' : 'Deposit'}
+        {isDisabled ? t('vault.coming_soon') : t('vault.deposit')}
       </Button>
     </div>
   )

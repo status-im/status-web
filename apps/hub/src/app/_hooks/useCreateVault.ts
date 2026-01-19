@@ -1,5 +1,6 @@
 import { useToast } from '@status-im/components'
 import { useMutation, type UseMutationResult } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
 import { type Address, type Hash } from 'viem'
 import { useAccount, useConfig, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
@@ -37,7 +38,8 @@ const MUTATION_KEY = 'create-vault' as const
  * Extracts the vault address from VaultCreated event logs
  */
 function extractVaultAddressFromLogs(
-  logs: Array<{ address: Address; topics: readonly string[] }>
+  logs: Array<{ address: Address; topics: readonly string[] }>,
+  t: ReturnType<typeof useTranslations>
 ): Address {
   const vaultCreatedLog = logs.find(log => {
     // Check if this log is from the vault factory contract
@@ -50,7 +52,7 @@ function extractVaultAddressFromLogs(
   })
 
   if (!vaultCreatedLog || !vaultCreatedLog.topics[1]) {
-    throw new Error('VaultCreated event not found in transaction logs')
+    throw new Error(t('errors.vault_created_event_not_found'))
   }
 
   // The vault address is the first indexed parameter (topics[1])
@@ -118,15 +120,14 @@ export function useCreateVault(): UseCreateVaultReturn {
   const { send: sendVaultEvent, reset: resetVault } = useVaultStateContext()
   const config = useConfig()
   const toast = useToast()
+  const t = useTranslations()
 
   return useMutation({
     mutationKey: [MUTATION_KEY, address],
     mutationFn: async (): Promise<Hash> => {
       // Validate wallet connection
       if (!address) {
-        throw new Error(
-          'Wallet not connected. Please connect your wallet first.'
-        )
+        throw new Error(t('errors.wallet_not_connected'))
       }
 
       // Notify state machine of vault creation start
@@ -152,15 +153,17 @@ export function useCreateVault(): UseCreateVaultReturn {
         // Check for transaction revert
         if (status === 'reverted') {
           sendVaultEvent({ type: 'REJECT' })
-          throw new Error('Transaction was reverted')
+          throw new Error(t('errors.transaction_reverted'))
         }
 
         // Extract the newly created vault address from logs
-        const deployedVaultAddress = extractVaultAddressFromLogs(logs)
+        const deployedVaultAddress = extractVaultAddressFromLogs(logs, t)
 
         // Show success toast
         toast.positive(
-          `Vault ${shortenAddress(deployedVaultAddress)} has been created`
+          t('success.vault_created', {
+            address: shortenAddress(deployedVaultAddress),
+          })
         )
 
         // Small delay to ensure toast is rendered before state reset

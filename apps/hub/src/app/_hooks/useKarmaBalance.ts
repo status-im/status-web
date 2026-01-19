@@ -1,5 +1,6 @@
 import { useToast } from '@status-im/components'
 import { useQuery, type UseQueryResult } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
 import { type Address } from 'viem'
 import { useAccount, useChainId, useConfig } from 'wagmi'
 import { readContract } from 'wagmi/actions'
@@ -152,6 +153,7 @@ export function useKarmaBalance(
   const config = useConfig()
   const chainId = useChainId()
   const toast = useToast()
+  const t = useTranslations()
 
   const {
     address: queryAddress,
@@ -168,7 +170,7 @@ export function useKarmaBalance(
     queryKey: [QUERY_KEY_PREFIX, targetAddress, statusSepolia.id] as const,
     queryFn: async (): Promise<KarmaBalanceData> => {
       if (!targetAddress) {
-        throw new Error('No address provided')
+        throw new Error(t('errors.no_address_provided'))
       }
 
       try {
@@ -184,7 +186,9 @@ export function useKarmaBalance(
         }
       } catch (error) {
         toast.negative(
-          `Failed to fetch karma balance: ${error instanceof Error ? error.message : 'Unknown error'}`
+          t('errors.failed_fetch_karma_balance', {
+            error: error instanceof Error ? error.message : 'Unknown error',
+          })
         )
         throw error
       }

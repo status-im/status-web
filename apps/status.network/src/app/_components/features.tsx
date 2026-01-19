@@ -1,22 +1,29 @@
+'use client'
+
 import { BulletIcon, ExternalIcon } from '@status-im/icons/20'
-import { FEATURES } from '~/config/routes'
+import { getLocalizedFeatures } from '~/config/routes'
+import { useLocale, useTranslations } from 'next-intl'
 import { AnimatedFrames } from './animated-frames'
 import { ButtonLink } from './button-link'
 import { Divider } from './divider'
 
 const Features = () => {
+  const t = useTranslations()
+  const locale = useLocale()
+  const localizedFeatures = getLocalizedFeatures(locale)
+
   return (
     <section className="relative w-full scroll-mt-16" id="features">
       <div className="flex flex-col lg:flex-row">
         <div className="bg-[#1B273D05] lg:sticky lg:top-16 lg:h-[calc(100vh-6rem)] lg:max-w-[50%] lg:flex-shrink-0">
           <div className="px-4 py-20 lg:p-12">
             <p className="mb-6 inline-block text-13 font-500 text-purple">
-              02{' '}
+              {t('features.section_number')}{' '}
               <span className="inline-block h-2 w-px bg-purple-transparent" />{' '}
-              WHY STATUS NETWORK?
+              {t('features.section_title')}
             </p>
             <h2 className="text-40 font-600 lg:text-64">
-              Power to the community
+              {t('features.title')}
             </h2>
           </div>
         </div>
@@ -28,23 +35,15 @@ const Features = () => {
           <div className="space-y-12">
             <div className="flex flex-col gap-4 px-4 pt-12 text-19 lg:px-12 lg:py-0 xl:max-w-[540px] xl:pr-0">
               <h3 className="text-27 font-600 lg:mb-1 lg:text-40">
-                Sustainable public funding
+                {t('features.sustainable_funding.title')}
               </h3>
-              <p>
-                Status Network takes a radical step beyond short-term
-                incentives. Powered by native yields and fees, its public app
-                funding pool is governed by the community, ensuring a continuous
-                allocation of capital for onchain builders.
-              </p>
+              <p>{t('features.sustainable_funding.description')}</p>
               <ol className="mb-4 space-y-4">
                 <li className="flex gap-3 lg:gap-4">
                   <div className="mt-1 flex h-[22px] w-5 flex-shrink-0 items-center justify-center rounded-8 border border-neutral-20 text-13 font-500">
                     1
                   </div>
-                  <p>
-                    Users bridge yield-bearing assets to Status Network and
-                    increase the yield redirected to the funding pool.
-                  </p>
+                  <p>{t('features.sustainable_funding.step_1')}</p>
                 </li>
                 <li className="flex gap-3 lg:gap-4">
                   <div className="mt-1 flex h-[22px] w-5 flex-shrink-0 items-center justify-center rounded-8 border border-neutral-20 text-13 font-500">
@@ -52,30 +51,28 @@ const Features = () => {
                   </div>
                   <div>
                     <p className="mb-4">
-                      Apps and games apply for an allocation from the pool. The
-                      community votes on allocations using Karma, a
-                      non-transferrable governance token earned by contributing
-                      positively to the network:
+                      {t('features.sustainable_funding.step_2')}
                     </p>
                     <div className="ml-6 list-disc space-y-2 marker:text-neutral-50">
                       <p className="flex items-center gap-1">
-                        <BulletIcon className="text-neutral-50" /> Staking SNT
+                        <BulletIcon className="text-neutral-50" />{' '}
+                        {t('features.sustainable_funding.step_2_staking')}
                       </p>
                       <p className="flex items-center gap-1">
                         <BulletIcon className="text-neutral-50" />
-                        Bridging yield-bearing tokens
+                        {t('features.sustainable_funding.step_2_bridging')}
                       </p>
                       <p className="flex items-center gap-1">
                         <BulletIcon className="text-neutral-50" />
-                        Using apps
+                        {t('features.sustainable_funding.step_2_using')}
                       </p>
                       <p className="flex items-center gap-1">
                         <BulletIcon className="text-neutral-50" />
-                        Paying premium gas
+                        {t('features.sustainable_funding.step_2_premium')}
                       </p>
                       <p className="flex items-center gap-1">
                         <BulletIcon className="text-neutral-50" />
-                        Making direct donations to the funding pool
+                        {t('features.sustainable_funding.step_2_donations')}
                       </p>
                     </div>
                   </div>
@@ -84,18 +81,14 @@ const Features = () => {
                   <div className="mt-1 flex h-[22px] w-5 flex-shrink-0 items-center justify-center rounded-8 border border-neutral-20 text-13 font-500">
                     3
                   </div>
-                  <p>
-                    Every funded project onboards new users, driving additional
-                    asset deposits and token swaps - generating more yield and
-                    fees to be allocated in the funding pool.
-                  </p>
+                  <p>{t('features.sustainable_funding.step_3')}</p>
                 </li>
               </ol>
               <ButtonLink
-                href={FEATURES.sustainablePublicFunding.href}
+                href={localizedFeatures.sustainablePublicFunding.href}
                 variant="white"
               >
-                {FEATURES.sustainablePublicFunding.name}
+                {t('features.sustainable_funding.button')}
               </ButtonLink>
               <AnimatedFrames
                 images={[
@@ -114,22 +107,17 @@ const Features = () => {
 
             <div className="flex flex-col gap-4 px-4 text-19 lg:px-12 xl:max-w-[540px]">
               <h3 className="text-27 font-600 lg:mb-1 lg:text-40">
-                Gasless transactions
+                {t('features.gasless_transactions.title')}
               </h3>
-              <p>
-                On Status Network, anyone can experience free transactions! With
-                the L2 operating costs covered by native yields and fees, no
-                need to bridge gas to use an app.
-              </p>
+              <p>{t('features.gasless_transactions.description_1')}</p>
               <p className="mb-4">
-                Apps and games developers can offer frictionless onboarding for
-                their users at scale.
+                {t('features.gasless_transactions.description_2')}
               </p>
               <ButtonLink
-                href={FEATURES.gaslessTransactions.href}
+                href={localizedFeatures.gaslessTransactions.href}
                 variant="white"
               >
-                {FEATURES.gaslessTransactions.name}
+                {t('features.gasless_transactions.button')}
               </ButtonLink>
               <AnimatedFrames
                 images={[
@@ -149,19 +137,15 @@ const Features = () => {
 
             <div className="flex flex-col gap-4 px-4 text-19 lg:px-12 xl:max-w-[540px]">
               <h3 className="text-27 font-600 lg:mb-1 lg:text-40">
-                Built for performance, secured by Ethereum
+                {t('features.performance.title')}
               </h3>
-              <p className="mb-4">
-                Leverage Ethereum&apos;s security with Linea&apos;s cutting-edge
-                zkEVM rollup technology for high-speed transactions. Perfect for
-                gaming, social, iGaming, and high-throughput applications.
-              </p>
+              <p className="mb-4">{t('features.performance.description')}</p>
               <ButtonLink
                 variant="white"
-                href={FEATURES.performance.href}
+                href={localizedFeatures.performance.href}
                 icon={<ExternalIcon className="text-neutral-50" />}
               >
-                {FEATURES.performance.name}
+                {t('features.performance.button')}
               </ButtonLink>
               <AnimatedFrames
                 images={['/features/kite-1.png', '/features/kite-2.png']}
@@ -177,20 +161,17 @@ const Features = () => {
 
             <div className="flex flex-col gap-4 px-4 pb-12 text-19 lg:px-12 lg:pb-0 xl:max-w-[540px]">
               <h3 className="text-27 font-600 lg:mb-1 lg:text-40">
-                Geared for decentralization
+                {t('features.decentralization.title')}
               </h3>
               <p className="mb-4">
-                Built on the core values of Status and the IFT ecosystem, Status
-                Network is designed to become a truly decentralised L2. The
-                endgame is to provide a censorship-resistant environment where
-                communities can thrive without central points of control.
+                {t('features.decentralization.description')}
               </p>
               <ButtonLink
                 variant="white"
                 href="https://free.technology"
                 icon={<ExternalIcon className="text-neutral-50" />}
               >
-                Learn more
+                {t('features.decentralization.button')}
               </ButtonLink>
 
               <AnimatedFrames

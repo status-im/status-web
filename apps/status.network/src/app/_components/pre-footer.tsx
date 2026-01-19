@@ -1,9 +1,16 @@
-import { ROUTES } from '~/config/routes'
+'use client'
+
+import { getLocalizedRoutes } from '~/config/routes'
+import { useLocale, useTranslations } from 'next-intl'
 import { AnimatedFrames } from './animated-frames'
 import { ButtonLink } from './button-link'
 import { Divider } from './divider'
 
 const PreFooter = () => {
+  const t = useTranslations()
+  const locale = useLocale()
+  const routes = getLocalizedRoutes(t, locale)
+
   return (
     <section className="relative w-full">
       <Divider />
@@ -12,15 +19,15 @@ const PreFooter = () => {
           <div className="flex max-w-[686px] flex-col items-center justify-between gap-8">
             <div className="flex flex-col items-center pt-8">
               <p className="max-w-[340px] text-center text-40 font-600 text-white-100 sm:max-w-[420px] lg:max-w-max lg:text-64">
-                Ready to build on the free network?
+                {t('pre_footer.title')}
               </p>
             </div>
             <div className="flex gap-3">
-              <ButtonLink href={ROUTES.Partner} variant="primary">
-                Partner with us
+              <ButtonLink href={routes.Partner} variant="primary">
+                {t('pre_footer.partner_button')}
               </ButtonLink>
-              <ButtonLink href={ROUTES.Docs} variant="secondary">
-                Read docs
+              <ButtonLink href={routes.Docs} variant="secondary">
+                {t('pre_footer.read_docs_button')}
               </ButtonLink>
             </div>
           </div>

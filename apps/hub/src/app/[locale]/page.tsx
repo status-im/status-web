@@ -3,6 +3,7 @@
 import { ExternalIcon } from '@status-im/icons/20'
 import { ButtonLink } from '@status-im/status-network/components'
 import Image from 'next/image'
+import { useLocale, useTranslations } from 'next-intl'
 
 import { HubLayout } from '~components/hub-layout'
 import { PreDepositModal } from '~components/pre-deposit-modal'
@@ -10,9 +11,9 @@ import { VaultCard } from '~components/vault-card'
 import { VAULTS } from '~constants/index'
 import { useVaultSelection } from '~hooks/useVaultSelection'
 
-import { Apps } from './_components/apps'
-import { Hero } from './_components/hero'
-import { RewardsSection } from './_components/rewards-section'
+import { Apps } from '../_components/apps'
+import { Hero } from '../_components/hero'
+import { RewardsSection } from '../_components/rewards-section'
 
 export default function HomePage() {
   const {
@@ -24,6 +25,10 @@ export default function HomePage() {
     handleDepositSuccess,
     isModalOpen,
   } = useVaultSelection()
+  const t = useTranslations()
+  const locale = useLocale()
+  const localePrefix = locale === 'en' ? '' : `/${locale}`
+  const docsUrl = `https://docs.status.network${localePrefix}/`
 
   return (
     <HubLayout>
@@ -37,7 +42,7 @@ export default function HomePage() {
             <div className="mb-8 flex items-start justify-between">
               <div className="flex flex-col gap-4">
                 <h3 className="text-19 font-600 text-neutral-90 lg:text-27">
-                  Deposit funds for yield and rewards
+                  {t('dashboard.deposit_funds_title')}
                 </h3>
                 <RewardsSection />
               </div>
@@ -48,7 +53,7 @@ export default function HomePage() {
                 size="32"
                 icon={<ExternalIcon className="text-neutral-50" />}
               >
-                Learn more
+                {t('common.learn_more')}
               </ButtonLink>
             </div>
 
@@ -83,21 +88,21 @@ export default function HomePage() {
           <div className="flex flex-col items-center justify-center gap-8 text-center lg:flex-row lg:items-center lg:justify-center lg:text-left">
             <div className="order-2 max-w-2xl lg:order-1">
               <h3 className="mb-2 text-27 font-medium text-neutral-90 lg:mb-3 lg:text-64 lg:font-bold">
-                Build with us
+                {t('dashboard.build_with_us_title')}
               </h3>
               <p className="mb-4 text-13 font-medium text-neutral-60 lg:mb-8 lg:text-27">
-                Launch your app on the free network
+                {t('dashboard.build_with_us_description')}
               </p>
 
               <div className="flex flex-wrap justify-center gap-3 lg:justify-start">
                 <ButtonLink
-                  href="https://docs.status.network"
+                  href={docsUrl}
                   variant="primary"
                   size="32"
                   className="text-white-100"
                   icon={<ExternalIcon className="text-blur-white/70" />}
                 >
-                  Read docs
+                  {t('dashboard.read_docs')}
                 </ButtonLink>
 
                 <ButtonLink
@@ -107,7 +112,7 @@ export default function HomePage() {
                   className="bg-neutral-10 text-neutral-100"
                   icon={<ExternalIcon className="text-neutral-50" />}
                 >
-                  Submit an app
+                  {t('dashboard.submit_app')}
                 </ButtonLink>
               </div>
             </div>

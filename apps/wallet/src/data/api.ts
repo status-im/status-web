@@ -5,6 +5,10 @@ import { createTRPCProxyClient } from '@trpc/client'
 import { initTRPC } from '@trpc/server'
 import superjson from 'superjson'
 import { createChromeHandler } from 'trpc-chrome/adapter'
+import {
+  signMessage as viemSignMessage,
+  signTypedData as viemSignTypedData,
+} from 'viem/accounts'
 import { z } from 'zod'
 
 import * as bitcoin from './bitcoin/bitcoin'
@@ -372,6 +376,142 @@ const apiRouter = router({
             return {
               id,
             }
+          }),
+
+        sendContractCall: t.procedure
+          .input(
+            z.object({
+              walletId: z.string(),
+              password: z.string(),
+              fromAddress: z.string(),
+              toAddress: z.string(),
+              gasLimit: z.string(),
+              maxFeePerGas: z.string(),
+              maxInclusionFeePerGas: z.string(),
+              data: z.string(),
+              value: z.string().optional(),
+            }),
+          )
+          .mutation(async ({ input, ctx }) => {
+            const { keyStore, walletCore } = ctx
+
+            const wallet = await keyStore.load(input.walletId)
+
+            const account = wallet.activeAccounts.find(
+              account => account.address === input.fromAddress,
+            )
+
+            if (!account) {
+              throw new Error('From address not found')
+            }
+
+            const privateKey = await keyStore.getKey(
+              wallet.id,
+              input.password,
+              account,
+            )
+
+            const id = await ethereum.sendContractCall({
+              walletCore,
+              walletPrivateKey: privateKey,
+              chainID: '01',
+              toAddress: input.toAddress,
+              fromAddress: input.fromAddress,
+              gasLimit: input.gasLimit,
+              maxFeePerGas: input.maxFeePerGas,
+              maxInclusionFeePerGas: input.maxInclusionFeePerGas,
+              data: input.data,
+              value: input.value,
+            })
+
+            return {
+              id,
+            }
+          }),
+
+        signMessage: t.procedure
+          .input(
+            z.object({
+              walletId: z.string(),
+              password: z.string(),
+              fromAddress: z.string(),
+              message: z.string(),
+            }),
+          )
+          .mutation(async ({ input, ctx }) => {
+            const { keyStore, walletCore } = ctx
+
+            const wallet = await keyStore.load(input.walletId)
+            const account = wallet.activeAccounts.find(
+              acc => acc.address === input.fromAddress,
+            )
+
+            if (!account) {
+              throw new Error('From address not found')
+            }
+
+            const privateKey = await keyStore.getKey(
+              wallet.id,
+              input.password,
+              account,
+            )
+
+            const privateKeyHex = walletCore.HexCoding.encode(privateKey.data())
+            const message = input.message.startsWith('0x')
+              ? { raw: input.message as `0x${string}` }
+              : input.message
+
+            const signature = await viemSignMessage({
+              message,
+              privateKey: privateKeyHex as `0x${string}`,
+            })
+
+            return { signature }
+          }),
+
+        signTypedData: t.procedure
+          .input(
+            z.object({
+              walletId: z.string(),
+              password: z.string(),
+              fromAddress: z.string(),
+              domain: z.record(z.unknown()),
+              types: z.record(
+                z.array(z.object({ name: z.string(), type: z.string() })),
+              ),
+              primaryType: z.string(),
+              message: z.record(z.unknown()),
+            }),
+          )
+          .mutation(async ({ input, ctx }) => {
+            const { keyStore, walletCore } = ctx
+
+            const wallet = await keyStore.load(input.walletId)
+            const account = wallet.activeAccounts.find(
+              acc => acc.address === input.fromAddress,
+            )
+
+            if (!account) {
+              throw new Error('From address not found')
+            }
+
+            const privateKey = await keyStore.getKey(
+              wallet.id,
+              input.password,
+              account,
+            )
+
+            const privateKeyHex = walletCore.HexCoding.encode(privateKey.data())
+
+            const signature = await viemSignTypedData({
+              domain: input.domain,
+              types: input.types,
+              primaryType: input.primaryType,
+              message: input.message,
+              privateKey: privateKeyHex as `0x${string}`,
+            })
+
+            return { signature }
           }),
       }),
 

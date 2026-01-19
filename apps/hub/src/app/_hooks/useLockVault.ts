@@ -1,5 +1,6 @@
 import { useToast } from '@status-im/components'
 import { useMutation, type UseMutationResult } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
 import { type Address, type Hash } from 'viem'
 import { useAccount, useConfig, useReadContract, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
@@ -53,17 +54,19 @@ const MUTATION_KEY = 'lock-vault' as const
  *
  * @param vaultAddress - The vault address that was locked/extended
  * @param wasAlreadyLocked - True if extending an existing lock, false if creating a new lock
+ * @param t - Translation function
  * @returns Formatted success message for the toast notification
  */
 const formatLockSuccessMessage = (
   vaultAddress: Address,
-  wasAlreadyLocked: boolean
+  wasAlreadyLocked: boolean,
+  t: ReturnType<typeof useTranslations>
 ): string => {
   if (wasAlreadyLocked) {
-    return 'Lock time extended successfully'
+    return t('success.lock_time_extended')
   }
 
-  return `Vault ${shortenAddress(vaultAddress)} has been locked`
+  return t('success.vault_locked', { address: shortenAddress(vaultAddress) })
 }
 
 // ============================================================================
@@ -126,6 +129,7 @@ export function useLockVault(vaultAddress: Address): UseLockVaultReturn {
   const { send: sendVaultEvent, reset: resetVault } = useVaultStateContext()
   const { refetch: refetchStakingVaults } = useStakingVaults()
   const toast = useToast()
+  const t = useTranslations()
 
   // Read current lockUntil to determine if vault is already locked
   const { data: currentLockUntil } = useReadContract({
@@ -141,14 +145,12 @@ export function useLockVault(vaultAddress: Address): UseLockVaultReturn {
     }: LockVaultParams): Promise<Hash> => {
       // Validate wallet connection
       if (!address) {
-        throw new Error(
-          'Wallet not connected. Please connect your wallet first.'
-        )
+        throw new Error(t('errors.wallet_not_connected'))
       }
 
       // Validate lock period
       if (lockPeriodInSeconds <= MIN_LOCK_PERIOD) {
-        throw new Error('Lock period must be greater than 0')
+        throw new Error(t('errors.lock_period_greater_than_zero'))
       }
 
       // Notify state machine of lock start
@@ -177,7 +179,7 @@ export function useLockVault(vaultAddress: Address): UseLockVaultReturn {
         // Check for transaction revert
         if (status === 'reverted') {
           sendVaultEvent({ type: 'REJECT' })
-          throw new Error('Transaction was reverted')
+          throw new Error(t('errors.transaction_reverted'))
         }
 
         // Check if vault was already locked before this transaction
@@ -186,7 +188,7 @@ export function useLockVault(vaultAddress: Address): UseLockVaultReturn {
 
         // Show success toast
         toast.positive(
-          formatLockSuccessMessage(vaultAddress, !!wasAlreadyLocked)
+          formatLockSuccessMessage(vaultAddress, !!wasAlreadyLocked, t)
         )
 
         // Reset state machine and refetch vaults

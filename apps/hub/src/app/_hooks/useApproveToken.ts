@@ -1,5 +1,6 @@
 import { useToast } from '@status-im/components'
 import { useMutation, type UseMutationResult } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
 import { type Address, parseUnits, zeroAddress } from 'viem'
 import { useAccount, useConfig, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
@@ -105,6 +106,7 @@ export function useApproveToken(): UseApproveTokenReturn {
   const config = useConfig()
   const { send: sendVaultEvent } = useVaultStateContext()
   const toast = useToast()
+  const t = useTranslations()
 
   return useMutation({
     mutationKey: [MUTATION_KEY, address],
@@ -114,19 +116,17 @@ export function useApproveToken(): UseApproveTokenReturn {
     }: ApproveTokenParams): Promise<void> => {
       // Validate wallet connection
       if (!address) {
-        throw new Error(
-          'Wallet not connected. Please connect your wallet first.'
-        )
+        throw new Error(t('errors.wallet_not_connected'))
       }
 
       // Validate spender address
       if (!spenderAddress || spenderAddress === zeroAddress) {
-        throw new Error('Invalid spender address provided')
+        throw new Error(t('errors.invalid_spender_address'))
       }
 
       // Validate amount
       if (!amount || parseFloat(amount) <= 0) {
-        throw new Error('Amount must be greater than 0')
+        throw new Error(t('errors.amount_greater_than_zero'))
       }
 
       // Convert amount to wei
@@ -158,12 +158,12 @@ export function useApproveToken(): UseApproveTokenReturn {
 
         // Check for revert
         if (status === 'reverted') {
-          throw new Error('Transaction was reverted')
+          throw new Error(t('errors.transaction_reverted'))
         }
 
         // Approval successful, notify state machine
         sendVaultEvent({ type: 'COMPLETE', amount })
-        toast.positive('Token Allowance has been increased')
+        toast.positive(t('success.token_allowance_increased'))
       } catch (error) {
         // Handle approval failure
         console.error('Failed to approve tokens:', error)
