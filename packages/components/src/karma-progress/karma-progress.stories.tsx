@@ -35,7 +35,7 @@ const generateKarmaLevels = (): KarmaLevel[] => {
 }
 
 type StoryArgs = {
-  currentKarma: string
+  currentKarma: number
 }
 
 const meta: Meta<StoryArgs> = {
@@ -45,17 +45,17 @@ const meta: Meta<StoryArgs> = {
   },
   argTypes: {
     currentKarma: {
-      control: 'text',
+      control: 'number',
       description:
-        'Current karma amount (in ETH, e.g., "0", "75", "10000", "15000000")',
+        'Current karma amount (in ETH, e.g., 0, 75, 10000, 15000000)',
     },
   },
   args: {
-    currentKarma: '0',
+    currentKarma: 0,
   },
   render: (args: StoryArgs) => {
     const karmaLevels = generateKarmaLevels()
-    const currentKarma = parseEther(args.currentKarma || '0')
+    const currentKarma = parseEther(String(args.currentKarma || 0))
 
     return (
       <KarmaProgressBar currentKarma={currentKarma} karmaLevels={karmaLevels} />
@@ -69,6 +69,6 @@ type Story = StoryObj<StoryArgs>
 
 export const Default: Story = {
   args: {
-    currentKarma: '0',
+    currentKarma: 0,
   },
 }
