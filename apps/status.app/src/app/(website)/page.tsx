@@ -99,17 +99,43 @@ export default async function HomePage() {
               <DownloadDesktopButton variant="primary" show="all" />
               <DownloadMobileButton variant="outline" />
             </div>
-
-            <div
-              data-theme="dark"
-              className={cx(
-                'hidden w-fit flex-row items-stretch gap-2 rounded-16 border border-dashed border-neutral-80 p-2',
-                'md:w-fit md:flex-row md:items-center',
-                'macos:flex windows:flex linux:flex xl:unknown:flex'
-              )}
-            >
-              <DownloadDesktopButton variant="primary" show="all" />
-              <DownloadMobileButton variant="outline" />
+          </div>
+          <div
+            data-theme="dark"
+            className={cx(
+              'hidden w-fit flex-row items-stretch gap-2 rounded-16 border border-dashed border-neutral-80 p-2',
+              'md:w-fit md:flex-row md:items-center',
+              'macos:flex windows:flex linux:flex xl:unknown:flex'
+            )}
+          >
+            <DownloadDesktopButton variant="primary" show="all" />
+            <DownloadMobileButton variant="outline" />
+          </div>
+          <div
+            data-theme="dark"
+            className="mt-6 flex max-w-[572px] flex-col items-start gap-4 rounded-20 border border-solid border-white-10 bg-white-5 px-5 py-3 text-left lg:flex-row lg:items-center lg:gap-10"
+          >
+            <div className="flex flex-col text-left">
+              <h3 className="text-19 font-600 text-white-100">
+                Using the Status Legacy mobile app? Find out how to migrate to
+                the new app.
+              </h3>
+              <p className="text-15 font-400 text-white-100">
+                Built from a single codebase for unified experience across
+                Mobile and Desktop. One app, one experience — connecting the
+                Status community across devices
+              </p>
+            </div>
+            <div className="flex items-center">
+              <Button
+                size="32"
+                variant="outline"
+                href="https://status.app/blog/introducing-unified-status-mobile-app"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Learn more
+              </Button>
             </div>
           </div>
           <Image
