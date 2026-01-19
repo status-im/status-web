@@ -1,5 +1,4 @@
 /* eslint-env node */
-/* eslint-disable no-undef */
 const fs = require('fs')
 const path = require('path')
 
@@ -9,15 +8,15 @@ function buildLocalizedPaths(locales, pages, changefreq = 'monthly') {
 
   for (const locale of locales) {
     for (const page of pages) {
-      let path
+      let loc
       if (page === '') {
-        path = locale === 'en' ? '/' : `/${locale}`
+        loc = locale === 'en' ? '/' : `/${locale}`
       } else {
-        path = locale === 'en' ? `/${page}` : `/${locale}/${page}`
+        loc = locale === 'en' ? `/${page}` : `/${locale}/${page}`
       }
 
       result.push({
-        loc: path,
+        loc,
         changefreq,
         lastmod,
       })
@@ -27,11 +26,6 @@ function buildLocalizedPaths(locales, pages, changefreq = 'monthly') {
   return result
 }
 
-/**
- * Discover pages by scanning the app/[locale] directory
- * @param {string} appDir - Path to the app directory
- * @returns {string[]} Array of page slugs (e.g., ['', 'brand'])
- */
 function discoverPages(appDir) {
   const localeDir = path.join(appDir, '[locale]')
 
@@ -40,18 +34,16 @@ function discoverPages(appDir) {
     return ['']
   }
 
-  const pages = [''] // Always include root page
+  const pages = ['']
 
   try {
     const entries = fs.readdirSync(localeDir, { withFileTypes: true })
 
     for (const entry of entries) {
-      // Skip non-directories and special directories
       if (!entry.isDirectory() || entry.name.startsWith('_')) {
         continue
       }
 
-      // Check if directory contains a page.tsx or page.js
       const pagePath = path.join(localeDir, entry.name, 'page.tsx')
       const pagePathJs = path.join(localeDir, entry.name, 'page.js')
 
@@ -66,16 +58,10 @@ function discoverPages(appDir) {
   return pages
 }
 
-/**
- * Discover legal pages by scanning the app/legal directory
- * @param {string} appDir - Path to the app directory
- * @returns {string[]} Array of legal page slugs
- */
 function discoverLegalPages(appDir) {
   const legalDir = path.join(appDir, 'legal')
 
   if (!fs.existsSync(legalDir)) {
-    console.warn(`legal directory not found at ${legalDir}`)
     return []
   }
 
@@ -85,12 +71,10 @@ function discoverLegalPages(appDir) {
     const entries = fs.readdirSync(legalDir, { withFileTypes: true })
 
     for (const entry of entries) {
-      // Skip non-directories and special directories
       if (!entry.isDirectory() || entry.name.startsWith('_')) {
         continue
       }
 
-      // Check if directory contains a page.tsx or page.js
       const pagePath = path.join(legalDir, entry.name, 'page.tsx')
       const pagePathJs = path.join(legalDir, entry.name, 'page.js')
 

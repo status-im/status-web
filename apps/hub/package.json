@@ -25,6 +25,7 @@
     "@scure/base": "^1.2.6",
     "@status-im/colors": "workspace:*",
     "@status-im/components": "workspace:*",
+    "@status-im/sitemap-utils": "workspace:*",
     "@status-im/icons": "workspace:*",
     "@status-im/status-network": "workspace:*",
     "@status-im/wallet": "workspace:*",

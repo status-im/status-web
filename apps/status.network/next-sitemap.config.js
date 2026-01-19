@@ -5,7 +5,7 @@ const {
   buildLocalizedPaths,
   discoverPages,
   discoverLegalPages,
-} = require('./sitemap-utils')
+} = require('@status-im/sitemap-utils')
 
 // Discover pages from app directory
 const APP_DIR = path.join(__dirname, 'src', 'app')

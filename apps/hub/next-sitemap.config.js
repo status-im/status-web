@@ -1,7 +1,10 @@
 /* eslint-env node */
 /* eslint-disable no-undef */
 const path = require('path')
-const { buildLocalizedPaths, discoverPages } = require('./sitemap-utils')
+const {
+  buildLocalizedPaths,
+  discoverPages,
+} = require('@status-im/sitemap-utils')
 
 // Discover pages from app directory
 const APP_DIR = path.join(__dirname, 'src', 'app')
