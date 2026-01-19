@@ -124,7 +124,11 @@ export function useGUSDPreDeposit(): UseGUSDPreDepositReturn {
           account: address,
         })
 
-        const gasLimit = estimatedGas ? (estimatedGas * 120n) / 100n : undefined
+        const GAS_LIMIT_MULTIPLIER_PERCENT = 120n
+
+        const gasLimit = estimatedGas
+          ? (estimatedGas * GAS_LIMIT_MULTIPLIER_PERCENT) / 100n
+          : undefined
 
         const hash = await writeContractAsync({
           address: GENERIC_DEPOSITOR.address,

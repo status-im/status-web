@@ -7,6 +7,7 @@ import { Button } from '@status-im/status-network/components'
 import { ConnectKitButton } from 'connectkit'
 import { cva } from 'cva'
 import { useTranslations } from 'next-intl'
+import { formatUnits } from 'viem'
 import { useAccount } from 'wagmi'
 
 import { formatCurrency, formatTokenAmount } from '~/utils/currency'
@@ -159,7 +160,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
         symbol: 'GUSD',
         tokenDecimals: 18,
         tvlRaw: gusdTvl,
-        tvlUSD: gusdTvl ? Number(gusdTvl) / 1e18 : 0,
+        tvlUSD: gusdTvl ? Number(formatUnits(gusdTvl, 18)) : 0,
         balance: gusdBalance,
         isBalanceLoading: isGUSDBalanceLoading,
         isTvlLoading: isGUSDTvlLoading,
@@ -176,7 +177,10 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
       }
 
   const formattedTVL = !isDisabled
-    ? formatCurrency(vaultDisplay.tvlUSD, { compact: true }).replace('$', '')
+    ? formatCurrency(vaultDisplay.tvlUSD, {
+        compact: true,
+        roundDown: true,
+      }).replace('$', '')
     : null
 
   const formattedTokenAmount = !isDisabled
@@ -184,6 +188,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
         tokenDecimals: vaultDisplay.tokenDecimals,
         decimals: vaultDisplay.decimals,
         includeSymbol: true,
+        roundDown: true,
       })
     : null
 
@@ -224,6 +229,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
                   tokenDecimals: vaultDisplay.tokenDecimals,
                   decimals: vaultDisplay.decimals,
                   includeSymbol: true,
+                  roundDown: true,
                 }
               )
             )}

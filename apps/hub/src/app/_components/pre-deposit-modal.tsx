@@ -42,7 +42,6 @@ type TokenOption = {
   label: string
   symbol: string
   icon: string
-  iconPath: 'vaults' | 'tokens'
   vault: Vault
   stablecoin?: StablecoinToken
 }
@@ -55,7 +54,6 @@ const buildTokenOptions = (vaults: Vault[]): TokenOption[] =>
           label: `${stablecoin.name}, ${stablecoin.symbol}`,
           symbol: stablecoin.symbol,
           icon: stablecoin.symbol.toLowerCase(),
-          iconPath: 'tokens',
           vault,
           stablecoin,
         }))
@@ -65,7 +63,6 @@ const buildTokenOptions = (vaults: Vault[]): TokenOption[] =>
             label: `${vault.token.name}, ${vault.token.symbol}`,
             symbol: vault.token.symbol,
             icon: vault.icon.toLowerCase(),
-            iconPath: 'vaults',
             vault,
           },
         ]
