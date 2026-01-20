@@ -297,7 +297,13 @@ const PreDepositModal = ({
   const handleSetMax = () => {
     let maxAmount = balance ?? 0n
     if (maxDeposit && maxAmount > maxDeposit) maxAmount = maxDeposit
-    form.setValue('amount', formatUnits(maxAmount, currentToken.decimals))
+    const formatted = formatUnits(maxAmount, currentToken.decimals)
+    const parts = formatted.split('.')
+    const truncated =
+      parts[1] && parts[1].length > 6
+        ? `${parts[0]}.${parts[1].slice(0, 6)}`
+        : formatted
+    form.setValue('amount', truncated)
   }
 
   const isPending =
@@ -425,7 +431,16 @@ const PreDepositModal = ({
                 <input
                   id="deposit-amount"
                   inputMode="decimal"
-                  {...form.register('amount')}
+                  {...form.register('amount', {
+                    onChange: e => {
+                      const value = e.target.value
+                      const parts = value.split('.')
+                      if (parts[1] && parts[1].length > 6) {
+                        e.target.value = `${parts[0]}.${parts[1].slice(0, 6)}`
+                        form.setValue('amount', e.target.value)
+                      }
+                    },
+                  })}
                   placeholder="0"
                   disabled={isPending}
                   className="w-full border-none bg-transparent text-27 font-600 text-neutral-100 outline-none placeholder:text-neutral-40"
@@ -461,6 +476,7 @@ const PreDepositModal = ({
                     {formatTokenAmount(balance, currentToken.symbol, {
                       includeSymbol: true,
                       tokenDecimals: currentToken.decimals,
+                      roundDown: true,
                     })}
                   </button>
                 </div>
@@ -468,7 +484,9 @@ const PreDepositModal = ({
                   <div className="text-right">
                     <span>
                       {t('vault.available_eth_to_wrap')}{' '}
-                      {formatTokenAmount(ethBalance, 'ETH')}
+                      {formatTokenAmount(ethBalance, 'ETH', {
+                        roundDown: true,
+                      })}
                     </span>
                   </div>
                 )}
@@ -480,6 +498,7 @@ const PreDepositModal = ({
                         {t('vault.you_will_receive', {
                           amount: formatTokenAmount(gusdPreviewShares, 'GUSD', {
                             includeSymbol: true,
+                            roundDown: true,
                           }),
                         })}
                       </span>

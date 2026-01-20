@@ -910,7 +910,7 @@
       "notes": "vault::years_label"
     },
     "gusd_stablecoin_info": {
-      "translation": "이 스테이블코인은 GUSD Vault에 사전 예치됩니다.",
+      "translation": "사전 예치금은 현재 풀 조건을 기준으로, 아래에 표시된 예상 환율에 따라 GUSD 금고에 예치됩니다.",
       "notes": "vault::gusd_stablecoin_info"
     },
     "you_will_receive": {

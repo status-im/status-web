@@ -910,7 +910,7 @@
       "notes": "vault::years_label"
     },
     "gusd_stablecoin_info": {
-      "translation": "This stablecoin will be pre-deposited into the GUSD Vault.",
+      "translation": "Your pre-deposit will be made into the GUSD vault in this stablecoin and at the preview rate shown below, based on current pool conditions.",
       "notes": "vault::gusd_stablecoin_info"
     },
     "you_will_receive": {
