@@ -1,10 +1,14 @@
 import createNextIntlPlugin from 'next-intl/plugin'
 
+import { localEnv } from './src/config/env.local.mjs'
+
 import type { NextConfig } from 'next'
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
 const nextConfig: NextConfig = {
+  ...(localEnv.NEXT_LOCAL_OUTPUT === 'export' ? { output: 'export' } : {}),
+
   /* config options here */
   transpilePackages: [
     // why: https://github.com/hashicorp/next-mdx-remote/issues/467#issuecomment-2432166413

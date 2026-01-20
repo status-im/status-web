@@ -1,5 +1,7 @@
 import { Metadata as MetadataFn } from '~/app/_metadata'
 
+export const dynamic = 'force-static'
+
 export const metadata = MetadataFn({
   // title: 'Pre-Deposit Vaults',
   // description:
