@@ -28,7 +28,6 @@ module.exports = {
     '/*.xml',
     '/robots.txt',
     '/sitemap.xml',
-    '/dashboard',
     '/icon2.png',
     '/_next/*',
     '/static/*',
@@ -36,10 +35,6 @@ module.exports = {
   generateIndexSitemap: false,
   changefreq: 'monthly',
   transform: async (config, path) => {
-    if (path === '/dashboard') {
-      return null
-    }
-
     // Generate allowed paths dynamically from discovered pages
     const allowedPaths = buildLocalizedPaths(LOCALES, PAGES).map(p => p.loc)
 
