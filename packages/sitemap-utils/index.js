@@ -26,6 +26,34 @@ function buildLocalizedPaths(locales, pages, changefreq = 'monthly') {
   return result
 }
 
+function scanPages(dir, pages, localeDir) {
+  const hasPage =
+    fs.existsSync(path.join(dir, 'page.tsx')) ||
+    fs.existsSync(path.join(dir, 'page.js'))
+    
+  if (hasPage) {
+    const slug = toRouteSegment(dir, localeDir)
+    if (slug !== '' && !pages.includes(slug)) pages.push(slug)
+  }
+
+  try {
+    const entries = fs.readdirSync(dir, { withFileTypes: true })
+
+    for (const entry of entries) {
+      if (
+        !entry.isDirectory() ||
+        entry.name.startsWith('_') ||
+        entry.name.startsWith('[')
+      ) {
+        continue
+      }
+      scanPages(path.join(dir, entry.name), pages, localeDir)
+    }
+  } catch (error) {
+    console.error('Error discovering pages:', error)
+  }
+}
+
 function toRouteSegment(dirPath, localeDir) {
   const rel = path.relative(localeDir, dirPath)
   if (rel === '') return ''
@@ -45,33 +73,7 @@ function discoverPages(appDir) {
 
   const pages = ['']
 
-  function scan(dir) {
-    const hasPage =
-      fs.existsSync(path.join(dir, 'page.tsx')) ||
-      fs.existsSync(path.join(dir, 'page.js'))
-    if (hasPage) {
-      const slug = toRouteSegment(dir, localeDir)
-      if (slug !== '' && !pages.includes(slug)) pages.push(slug)
-    }
-
-    try {
-      const entries = fs.readdirSync(dir, { withFileTypes: true })
-      for (const entry of entries) {
-        if (
-          !entry.isDirectory() ||
-          entry.name.startsWith('_') ||
-          entry.name.startsWith('[')
-        ) {
-          continue
-        }
-        scan(path.join(dir, entry.name))
-      }
-    } catch (error) {
-      console.error('Error discovering pages:', error)
-    }
-  }
-
-  scan(localeDir)
+  scanPages(localeDir, pages, localeDir)
   return pages
 }
 
