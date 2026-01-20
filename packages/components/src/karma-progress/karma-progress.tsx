@@ -158,11 +158,11 @@ export const KarmaProgressBar = ({
   ]
 
   return (
-    <div className="flex w-full flex-col gap-2">
+    <div className="flex w-full flex-col gap-4">
       <div className="relative hidden h-3 w-full rounded-20 bg-neutral-5 md:block">
         {/* prettier-ignore */}
         <div
-          className="bg-purple h-full rounded-20 transition-all duration-300"
+          className="bg-purple h-2.5 rounded-20 transition-all duration-300"
           style={{
             width: `${desktopLevelProgress}%`,
           }}
@@ -307,16 +307,20 @@ export const KarmaProgressBar = ({
             >
               <div className="flex flex-col justify-center gap-0.5">
                 <div
-                  className={`flex items-center gap-1 rounded-6 px-3 ${
+                  className={`flex items-center rounded-6 px-1.5 ${
                     lvl.level === level ? 'bg-purple' : 'bg-neutral-5'
                   }`}
                 >
                   <span
-                    className={`text-13 font-medium ${
+                    className={`flex items-baseline gap-0.5 ${
                       lvl.level === level ? 'text-white-100' : 'text-neutral-50'
                     }`}
                   >
-                    lv
+                    <span
+                      className={`text-13 font-medium ${lvl.level === level ? 'text-white-100' : 'text-neutral-50'}`}
+                    >
+                      lv
+                    </span>
                     <span
                       className={`text-15 font-medium ${
                         lvl.level === level
