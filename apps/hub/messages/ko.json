@@ -910,7 +910,7 @@
       "notes": "vault::years_label"
     },
     "gusd_stablecoin_info": {
-      "translation": "이 스테이블코인은 GUSD Vault에 사전 입금됩니다.",
+      "translation": "이 스테이블코인은 GUSD Vault에 사전 예치됩니다.",
       "notes": "vault::gusd_stablecoin_info"
     },
     "you_will_receive": {
