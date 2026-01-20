@@ -27,7 +27,7 @@ export const QuotaProgressBar = ({
             /{total >= 1000 ? `${total / 1000}K` : total}
           </span>
         </div>
-        <span className="text-15 font-regular text-neutral-50">{label}</span>
+        <span className="text-15 font-medium text-neutral-50">{label}</span>
       </div>
 
       <div className="relative h-2 w-full overflow-hidden rounded-full bg-neutral-10">
