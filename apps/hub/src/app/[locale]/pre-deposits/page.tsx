@@ -65,11 +65,7 @@ export default function PreDepositPage() {
   return (
     <HubLayout>
       <JSONLDScript
-        schema={[
-          faqSchema,
-          breadcrumbListSchema,
-          softwareApplicationSchema as any,
-        ]}
+        schema={[faqSchema, breadcrumbListSchema, softwareApplicationSchema]}
       />
       <div className="mx-auto mb-8 flex flex-col gap-4 rounded-32 p-4 lg:mt-14 lg:gap-8 lg:bg-neutral-2.5 lg:p-8">
         <div className="flex flex-col justify-between gap-4 lg:flex-row">
