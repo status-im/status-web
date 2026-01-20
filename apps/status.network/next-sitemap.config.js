@@ -12,6 +12,7 @@ const APP_DIR = path.join(__dirname, 'src', 'app')
 const LOCALES = ['en', 'ko']
 const PAGES = discoverPages(APP_DIR)
 const LEGAL_PAGES = discoverLegalPages(APP_DIR)
+const ALLOWED_PATHS = buildLocalizedPaths(LOCALES, PAGES).map(p => p.loc)
 
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
@@ -44,10 +45,7 @@ module.exports = {
       return null
     }
 
-    // Generate allowed paths dynamically from discovered pages
-    const allowedPaths = buildLocalizedPaths(LOCALES, PAGES).map(p => p.loc)
-
-    if (!allowedPaths.includes(path)) {
+    if (!ALLOWED_PATHS.includes(path)) {
       return null
     }
 
