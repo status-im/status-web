@@ -1,7 +1,15 @@
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 
+import { routing } from '~/i18n/routing'
+
 import { Providers } from '../_providers'
+
+export const dynamic = 'force-static'
+
+export function generateStaticParams() {
+  return routing.locales.map(locale => ({ locale }))
+}
 
 type Props = {
   children: React.ReactNode

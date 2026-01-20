@@ -3,6 +3,8 @@ import { getTranslations } from 'next-intl/server'
 
 import { Metadata } from './_metadata'
 
+export const dynamic = 'force-static'
+
 export const metadata = Metadata({
   // title: '404 — Page Not Found',
   // description:

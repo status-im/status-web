@@ -7,6 +7,7 @@
     "predev": "pnpm install",
     "dev": "next dev",
     "build": "next build",
+    "build:export": "NEXT_LOCAL_OUTPUT=export next build",
     "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "eslint src",
