@@ -1,14 +1,10 @@
-import { useMemo } from 'react'
-
 import {
-  getCurrentLevelData,
   KarmaOverviewCardSkeleton,
   KarmaProgressBar,
   // QuotaProgressBar,
 } from '@status-im/components'
 // import { AchievementBadges } from './achievement-badges'
 import { useSIWE } from 'connectkit'
-import { useTranslations } from 'next-intl'
 import { formatEther } from 'viem'
 import { useAccount } from 'wagmi'
 
@@ -18,7 +14,6 @@ import { useProcessedKarmaTiers } from '~hooks/useProcessedKarmaTiers'
 import { formatSNT } from '~utils/currency'
 
 const OverviewCard = () => {
-  const t = useTranslations()
   const { isConnected } = useAccount()
   const { data: karmaBalance, isLoading: karmaLoading } = useKarmaBalance()
   const { karmaLevels, isLoading: tiersLoading } = useProcessedKarmaTiers()
@@ -32,24 +27,16 @@ const OverviewCard = () => {
 
   const currentKarma = karmaBalance?.balance ?? 0n
 
-  const levelData = useMemo(
-    () =>
-      karmaLevels.length > 0
-        ? getCurrentLevelData(currentKarma, karmaLevels)
-        : undefined,
-    [currentKarma, karmaLevels]
-  )
-
   if (isLoading) {
     return <KarmaOverviewCardSkeleton />
   }
 
   return (
     <div className="flex flex-1 flex-col justify-between rounded-20 border border-neutral-20 bg-white-100 shadow-1">
-      <div className="flex flex-col gap-3 px-4 pb-3 pt-4">
+      <div className="flex flex-col gap-6 px-4 pb-3 pt-4">
         <div className="flex items-start justify-between gap-4">
           <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-2">
+            <div className="flex items-baseline gap-1.5">
               <span className="text-27 font-semibold text-neutral-100">
                 {formatSNT(formatEther(currentKarma))}
               </span>
@@ -57,9 +44,6 @@ const OverviewCard = () => {
                 Karma
               </span>
             </div>
-            <span className="text-15 font-regular text-neutral-50">
-              {t('karma.level', { level: levelData?.level ?? 0 })}
-            </span>
           </div>
           {/* TODO: Replace with actual rank from API when available */}
           {/* {currentKarma > 0n && (
