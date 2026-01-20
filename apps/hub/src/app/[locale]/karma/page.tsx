@@ -18,6 +18,8 @@ import { useCurrentUser } from '~hooks/useCurrentUser'
 import { useKarmaRewardsDistributor } from '~hooks/useKarmaRewardsDistributor'
 import { useRequireStatusNetwork } from '~hooks/useRequireStatusNetwork'
 
+import { jsonLD, JSONLDScript } from '../../_utils/json-ld'
+
 function KarmaCardsSkeleton() {
   const t = useTranslations()
 
@@ -101,6 +103,26 @@ function KarmaCards() {
   )
 }
 
+const breadcrumbListSchema = jsonLD.breadcrumbList([
+  {
+    name: 'Hub',
+    url: 'https://hub.status.network/',
+  },
+  {
+    name: 'Karma',
+    url: 'https://hub.status.network/karma',
+  },
+])
+
+const softwareApplicationSchema = jsonLD.softwareApplication({
+  name: 'Status Network Karma',
+  applicationCategory: 'GovernanceSystem',
+  operatingSystem: 'Web',
+  url: 'https://hub.status.network/karma',
+  description:
+    'Non-transferable reputation system used for governance and incentives on Status Network.',
+})
+
 export default function KarmaPage() {
   const t = useTranslations()
   const { isCorrectChain, isConnected, isSwitching } = useRequireStatusNetwork()
@@ -109,6 +131,9 @@ export default function KarmaPage() {
 
   return (
     <HubLayout>
+      <JSONLDScript
+        schema={[breadcrumbListSchema, softwareApplicationSchema]}
+      />
       <div className="mx-auto flex size-full flex-col gap-4 p-4 lg:gap-8 lg:p-8">
         <div className="flex flex-col gap-2">
           <h1 className="text-27 font-bold text-neutral-100 lg:text-64">

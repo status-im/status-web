@@ -1,5 +1,6 @@
 packages:
   - 'packages/eslint-config'
+  - 'packages/sitemap-utils'
   - 'packages/status-js'
   - 'packages/colors'
   - 'packages/icons'

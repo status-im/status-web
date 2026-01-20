@@ -9,6 +9,7 @@ export type JSONLDSchema =
   | ArticleSchema
   | BreadcrumbListSchema
   | FAQPageSchema
+  | SoftwareApplicationSchema
 
 export type OrganizationSchema = {
   '@context': 'https://schema.org'
@@ -87,6 +88,16 @@ export type FAQPageSchema = {
       text: string
     }
   }>
+}
+
+export type SoftwareApplicationSchema = {
+  '@context': 'https://schema.org'
+  '@type': 'SoftwareApplication'
+  name: string
+  applicationCategory: string
+  operatingSystem: string
+  url: string
+  description?: string
 }
 
 type CreateJSONLDConfig = {
