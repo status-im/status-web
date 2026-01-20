@@ -47,18 +47,6 @@ module.exports = {
     // Generate allowed paths dynamically from discovered pages
     const allowedPaths = buildLocalizedPaths(LOCALES, PAGES).map(p => p.loc)
 
-    // Add legal pages
-    const lastmod = new Date().toISOString()
-    for (const locale of LOCALES) {
-      for (const legalPage of LEGAL_PAGES) {
-        const legalPath =
-          locale === 'en'
-            ? `/legal/${legalPage}`
-            : `/${locale}/legal/${legalPage}`
-        allowedPaths.push(legalPath)
-      }
-    }
-
     if (!allowedPaths.includes(path)) {
       return null
     }
