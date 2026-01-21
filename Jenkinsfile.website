@@ -1,0 +1,95 @@
+#!/usr/bin/env groovy
+library 'status-jenkins-lib@v1.9.40'
+
+pipeline {
+  agent {
+    docker {
+      label 'linuxcontainer'
+      image 'harbor.status.im/infra/ci-build-containers:linux-base-1.0.0'
+      args '--volume=/nix:/nix ' +
+           '--volume=/etc/nix:/etc/nix '
+    }
+  }
+
+  options {
+    disableConcurrentBuilds()
+    disableRestartFromStage()
+    /* manage how many builds we keep */
+    buildDiscarder(logRotator(
+      numToKeepStr: '20',
+      daysToKeepStr: '30',
+    ))
+  }
+
+  parameters {
+    choice(
+      name: 'APP_NAME',
+      description: 'Name of app from apps folder.',
+      choices: ['hub'],
+    )
+  }
+
+  environment {
+    GIT_COMMITTER_NAME = 'status-im-auto'
+    GIT_COMMITTER_EMAIL = 'auto@status.im'
+  }
+
+  stages {
+    stage('Install') {
+      steps {
+        dir("${env.WORKSPACE}/apps/${params.APP_NAME}") {
+          script {
+            nix.develop(
+              'pnpm install --aggregate-output',
+              pure: false,
+            )
+          }
+        }
+      }
+    }
+
+    stage('Build') {
+      steps {
+        script {
+          nix.develop(
+            'pnpm build',
+            pure: false,
+          )
+        }
+        dir("${env.WORKSPACE}/apps/${params.APP_NAME}") {
+          script {
+            nix.develop(
+              'pnpm build:export',
+              pure: false,
+            )
+            jenkins.genBuildMetaJSON('out/build.json')
+          }
+        }
+      }
+    }
+
+    stage('Publish') {
+      steps {
+        sshagent(credentials: ['status-im-auto-ssh']) {
+          script {
+            nix.develop("""
+              ghp-import \
+                -b ${deployBranch()} \
+                -c ${deployDomain()} \
+                -p apps/${params.APP_NAME}/out
+              """
+            )
+          }
+        }
+      }
+    }
+  }
+
+  post {
+    cleanup { cleanWs() }
+  }
+}
+
+def isMainBranch() { GIT_BRANCH ==~ /.*main/ }
+def deployBranch() { isMainBranch() ? 'deploy-main' : 'deploy-develop' }
+def deployDomain() { isMainBranch() ? 'hub.status.network' : 'dev.hub.status.network' }
