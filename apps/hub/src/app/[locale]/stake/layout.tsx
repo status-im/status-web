@@ -1,13 +1,20 @@
 import { Metadata as MetadataFn } from '~/app/_metadata'
 
-export const metadata = MetadataFn({
-  // title: 'Stake STT, receive good Karma',
-  // description:
-  //   'Stake STT to increase your Karma on Status Network testnet. Unlock more gasless transactions and increase your power over the network.',
-  alternates: {
-    canonical: '/stake',
-  },
-})
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
+
+  return MetadataFn({
+    title: 'Stake Crypto on Ethereum L2 | Status Network',
+    description:
+      'Stake crypto on Status Network to earn yield while supporting a gasless Ethereum Layer 2 with a native privacy layer and sustainable incentives.',
+    pathname: '/stake',
+    locale,
+  })
+}
 
 export default function StakeLayout({
   children,

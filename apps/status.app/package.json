@@ -28,7 +28,7 @@
     "format:prettier": "prettier --write .",
     "types:check": "contentlayer2 build && tsc",
     "env:check": "node -r dotenv/config ./src/config/env.server.mjs dotenv_config_path=./.env && node -r dotenv/config ./src/config/env.client.mjs dotenv_config_path=./.env && :",
-    "clean": "rimraf .next .vercel/output node_modules .contentlayer2 .turbo",
+    "clean": "rimraf .next .vercel/output node_modules .contentlayer .contentlayer2 .turbo",
     "preview": "next start --port 8151",
     "codegen": "graphql-codegen -r dotenv/config --config codegen.yml",
     "codegen:watch": "pnpm run codegen -- --watch",

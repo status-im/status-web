@@ -10,6 +10,9 @@ export default function middleware(request: NextRequest) {
   // Get the hash fragment from the original URL
   const hash = request.url.split('#')[1]
 
+  // Set the pathname in a custom header so it can be read in server components
+  request.headers.set('x-pathname', request.nextUrl.pathname)
+
   // Run the next-intl middleware
   const response = handleI18nRouting(request)
 

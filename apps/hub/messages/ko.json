@@ -908,6 +908,22 @@
     "years_label": {
       "translation": "{count}년",
       "notes": "vault::years_label"
+    },
+    "gusd_stablecoin_info": {
+      "translation": "사전 예치금은 현재 풀 조건을 기준으로, 아래에 표시된 예상 환율에 따라 GUSD 금고에 예치됩니다.",
+      "notes": "vault::gusd_stablecoin_info"
+    },
+    "you_will_receive": {
+      "translation": "받게 될 금액: {amount}",
+      "notes": "vault::you_will_receive"
+    },
+    "transaction_submitted": {
+      "translation": "트랜잭션이 제출되었습니다. 확인을 기다리는 중...",
+      "notes": "vault::transaction_submitted"
+    },
+    "gusd_deposit_successful": {
+      "translation": "{amount} {symbol} 입금 성공",
+      "notes": "vault::gusd_deposit_successful"
     }
   },
   "action_status": {
