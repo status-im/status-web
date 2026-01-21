@@ -8,7 +8,7 @@ export async function generateMetadata({
   const { locale } = await params
 
   return MetadataFn({
-    title: 'Stake Crypto on Ethereum L2 | Status Network',
+    title: 'Status Network | Stake Crypto on Ethereum L2',
     description:
       'Stake crypto on Status Network to earn yield while supporting a gasless Ethereum Layer 2 with a native privacy layer and sustainable incentives.',
     pathname: '/stake',

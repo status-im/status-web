@@ -8,7 +8,7 @@ export async function generateMetadata({
   const { locale } = await params
 
   return MetadataFn({
-    title: 'Deposit Crypto & Earn Yield | Status Network',
+    title: 'Status Network | Deposit Crypto & Earn Yield',
     description:
       'Deposit crypto on Status Network to earn yield, support liquidity, and prepare for staking and app usage on a gasless, privacy-enabled Ethereum L2.',
     pathname: '/pre-deposits',
