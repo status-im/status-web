@@ -1,6 +1,5 @@
 'use client'
 
-import { HeartIcon } from '@status-im/icons/20'
 import { useLocale, useTranslations } from 'next-intl'
 
 import {
@@ -10,6 +9,7 @@ import {
   DocsIcon,
   ExplorerIcon,
   HandIcon,
+  HeartIcon,
   // GovernanceIcon,
   HomeIcon,
   KarmaIcon,
@@ -111,12 +111,6 @@ const Sidebar = (props: Props) => {
       label: t('footer.share_feedback'),
       icon: HeartIcon,
       href: 'https://statusnetwork.typeform.com/contact-us',
-    },
-    {
-      id: 'submit-bug',
-      label: t('footer.submit_bug'),
-      icon: HeartIcon,
-      href: 'https://github.com/status-im/status-web/issues/new?template=bug_report.md',
     },
   ]
 

@@ -47,7 +47,7 @@ const LinkItem = (props: LinkItemProps) => {
       >
         <div className="flex flex-1 items-center justify-between">
           <div className={cx('flex items-center gap-2')}>
-            {Icon && <Icon className="size-5" />}
+            <Icon className="size-5" />
             <span className="text-15 font-medium">{label}</span>
           </div>
           <div className="flex items-center gap-1">
