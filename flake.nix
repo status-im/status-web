@@ -26,6 +26,7 @@
             ghp-import # 2.1.0
             git # 2.47.2
             nodejs_22 # v22.20.0
+            openssh
             pnpm # 9.15.9
           ];
         };

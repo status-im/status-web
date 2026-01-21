@@ -91,5 +91,5 @@ pipeline {
 }
 
 def isMainBranch() { GIT_BRANCH ==~ /.*main/ }
-def deployBranch() { isMainBranch() ? 'deploy-main' : 'deploy-develop' }
+def deployBranch() { isMainBranch() ? 'deploy-hub-main' : 'deploy-hub-develop' }
 def deployDomain() { isMainBranch() ? 'hub.status.network' : 'dev.hub.status.network' }
