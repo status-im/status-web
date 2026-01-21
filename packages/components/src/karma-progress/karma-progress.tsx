@@ -127,7 +127,20 @@ export const KarmaProgressBar = ({
   )
 
   let levelProgress = 0
-  if (level !== 0) {
+
+  if (level === 0) {
+    const nextLevel = karmaLevels[1]
+    if (nextLevel) {
+      const range = nextLevel.minKarma - minKarma
+
+      levelProgress =
+        range === 0n
+          ? 0
+          : Number(
+              ((currentKarma - minKarma) * 100n) / (range > 0n ? range : 1n),
+            )
+    }
+  } else {
     const range = maxKarma - minKarma
     levelProgress =
       range === 0n
@@ -184,12 +197,17 @@ export const KarmaProgressBar = ({
           }
 
           const isReached = currentKarma >= lvl.minKarma
+          const isHidden = desktopLevelProgress >= position
 
           return (
             <div
               key={`milestone-dot-${lvl.level}`}
               className={`absolute top-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full transition-colors duration-300 ${
-                isReached ? 'bg-purple' : 'bg-neutral-80/20'
+                isHidden
+                  ? 'hidden'
+                  : isReached
+                    ? 'bg-purple'
+                    : 'bg-neutral-80/20'
               }`}
               style={{ left: `${position}%` }}
             />
