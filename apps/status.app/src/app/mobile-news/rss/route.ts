@@ -1,8 +1,12 @@
 import { handleRssFeed } from '~app/_utils/rss-handler'
 
 export const dynamic = 'force-dynamic'
-export const revalidate = 300
 
 export async function GET() {
-  return handleRssFeed('mobile-news')
+  const response = await handleRssFeed('mobile-news')
+  response.headers.set(
+    'Cache-Control',
+    'public, s-maxage=300, stale-while-revalidate=300'
+  )
+  return response
 }
