@@ -2005,7 +2005,7 @@ importers:
         specifier: ^5.3.1
         version: 5.9.0
       viem:
-        specifier: ^2.21.45
+        specifier: ^2.43.1
         version: 2.44.1(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@6.0.3)(zod@4.1.12)
       zustand:
         specifier: ^4.3.7
