@@ -250,7 +250,7 @@ export const GUSD_VAULT: GUSDVault = {
   },
 }
 
-export const VAULTS: Vault[] = [WETH_VAULT, SNT_VAULT, LINEA_VAULT, GUSD_VAULT]
+export const VAULTS: Vault[] = [WETH_VAULT, GUSD_VAULT, SNT_VAULT, LINEA_VAULT]
 
 export const KARMA = {
   address: '0x7ec5Dc75D09fAbcD55e76077AFa5d4b77D112fde' as Address,
