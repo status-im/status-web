@@ -16,13 +16,29 @@ const inter = Inter({
 
 const organizationSchema = jsonLD.organization({
   description:
-    'The first natively gasless Ethereum L2 with sustainable yield and integrated public funding 🐉',
+    'Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack.',
   logo: 'https://status.network/logo.svg',
 })
 
 const websiteSchema = jsonLD.website({
   description:
-    'The first natively gasless Ethereum L2 with sustainable yield and integrated public funding 🐉',
+    'Status Network is a privacy-first, fully gasless Ethereum Layer 2 designed for scalable onchain activity, coordinated through reputation and native yield.',
+})
+
+const webpageSchema = jsonLD.webpage({
+  name: 'A Privacy-First Gasless Ethereum Layer 2 Powered by Native Yield',
+  description:
+    'Status Network is a privacy-first, fully gasless Ethereum Layer 2. It replaces per-transaction gas with reputation-based coordination and uses native yield and network activity to cover execution costs.',
+  url: 'https://status.network/',
+})
+
+const softwareApplicationSchema = jsonLD.softwareApplication({
+  name: 'Status Network',
+  description:
+    'Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack. Execution is coordinated through Karma, a non-transferable reputation system, and supported by native yield and network activity.',
+  applicationCategory: 'Blockchain',
+  operatingSystem: 'Web3',
+  url: 'https://status.network/',
 })
 
 export const metadata = Metadata({
@@ -30,11 +46,11 @@ export const metadata = Metadata({
 
   title: {
     default:
-      'Status Network — First gasless L2 with sustainable apps funding 🐉',
+      'Status Network | Gasless Ethereum L2 with Native Yield',
     template: '%s — Status Network',
   },
   description:
-    'The first natively gasless Ethereum L2 with sustainable yield and integrated public funding 🐉',
+    'Status Network is a gasless zkEVM Ethereum Layer 2 with native yield, privacy by design, and reputation-based governance for scalable onchain apps.',
 
   pathname: '/',
 
@@ -61,7 +77,7 @@ export default async function RootLayout({ children }: Props) {
         )}
         suppressHydrationWarning
       >
-        <JSONLDScript schema={[organizationSchema, websiteSchema]} />
+        <JSONLDScript schema={[organizationSchema,websiteSchema,webpageSchema,softwareApplicationSchema,]}/>
         {children}
         <Analytics />
         <Script
