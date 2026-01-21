@@ -77,7 +77,8 @@ pipeline {
                 -b ${deployBranch()} \
                 -c ${deployDomain()} \
                 -p apps/${params.APP_NAME}/out
-              """
+              """,
+              pure: false,
             )
           }
         }
