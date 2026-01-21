@@ -17,12 +17,13 @@
       forEachSystem = nixpkgs.lib.genAttrs supportedSystems;
       pkgsFor = forEachSystem (system: import nixpkgs { inherit system; });
     in
-    rec {
+      {
       formatter = forEachSystem (system: pkgsFor.${system}.nixpkgs-fmt);
 
       devShells = forEachSystem (system: {
         default = pkgsFor.${system}.mkShellNoCC {
           packages = with pkgsFor.${system}.buildPackages; [
+            ghp-import # 2.1.0
             git # 2.47.2
             nodejs_22 # v22.20.0
             pnpm # 9.15.9
