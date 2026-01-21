@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+Disallow: /api/*
+
+Sitemap: https://hub.status.network/sitemap.xml

@@ -1,0 +1,15 @@
+{
+    "timestamp": "2026-01-21T16:00:03Z",
+    "git": {
+        "commit": "74f001e1d5fcb0030c224f7a25fe36a9483cf0f8",
+        "branch": "origin/hub/static",
+        "url": "git@github.com:status-im/status-web.git"
+    },
+    "build": {
+        "id": "6",
+        "number": "6",
+        "name": "website/hub.status.network",
+        "slave": "linux-01",
+        "url": "https://ci.infra.status.im/job/website/job/hub.status.network/6/"
+    }
+}
