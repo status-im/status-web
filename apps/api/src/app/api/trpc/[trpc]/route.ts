@@ -52,8 +52,9 @@ async function handler(request: NextRequest) {
       return Response.json(result, {
         headers: {
           'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+          'Access-Control-Request-Method': '*',
+          'Access-Control-Allow-Methods': 'OPTIONS, GET, POST',
+          'Access-Control-Allow-Headers': '*',
           'cache-control': 'private, no-store',
         },
       })
@@ -82,8 +83,9 @@ async function handler(request: NextRequest) {
           status: 500,
           headers: {
             'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            'Access-Control-Request-Method': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS, GET, POST',
+            'Access-Control-Allow-Headers': '*',
           },
         }
       )
@@ -146,8 +148,9 @@ async function handler(request: NextRequest) {
           headers: {
             'cache-control': cacheControl,
             'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            'Access-Control-Request-Method': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS, GET, POST',
+            'Access-Control-Allow-Headers': '*',
           },
         }
       },
@@ -160,8 +163,9 @@ async function handler(request: NextRequest) {
     // Get CORS headers from responseMeta
     const corsHeaders = {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      'Access-Control-Request-Method': '*',
+      'Access-Control-Allow-Methods': 'OPTIONS, GET, POST',
+      'Access-Control-Allow-Headers': '*',
     }
 
     return Response.json(
@@ -197,8 +201,9 @@ async function handler(request: NextRequest) {
       status: status,
       headers: {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Request-Method': '*',
+        'Access-Control-Allow-Methods': 'OPTIONS, GET, POST',
+        'Access-Control-Allow-Headers': '*',
       },
     })
   }
@@ -206,11 +211,12 @@ async function handler(request: NextRequest) {
 
 export async function OPTIONS() {
   return new Response(null, {
-    status: 204,
+    status: 200,
     headers: {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      'Access-Control-Request-Method': '*',
+      'Access-Control-Allow-Methods': 'OPTIONS, GET, POST',
+      'Access-Control-Allow-Headers': '*',
     },
   })
 }
