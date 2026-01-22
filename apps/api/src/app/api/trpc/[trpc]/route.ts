@@ -28,9 +28,22 @@ async function handler(request: NextRequest) {
   const url = new URL(request.url)
   const isRpcProxyPath = url.pathname.endsWith('/rpc.proxy')
 
+  // Handle CORS preflight for rpc.proxy
+  if (request.method === 'OPTIONS' && isRpcProxyPath) {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      },
+    })
+  }
+
   if (request.method === 'POST' && isRpcProxyPath) {
+    let body: any
     try {
-      const body = await request.json()
+      body = await request.json()
       // Extract chainId from query parameters (wagmi can include it in the URL)
       const chainIdParam = url.searchParams.get('chainId')
       const chainId = chainIdParam
@@ -63,10 +76,9 @@ async function handler(request: NextRequest) {
 
       let errorId: string | number | null = null
       try {
-        const body = await request.clone().json()
-        errorId = body.id ?? null
+        errorId = body?.id ?? null
       } catch {
-        // Ignore if we can't parse the body for error ID
+        // Ignore errors when accessing body
       }
 
       return Response.json(
