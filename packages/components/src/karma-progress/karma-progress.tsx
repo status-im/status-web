@@ -16,6 +16,11 @@ const PROGRESS_BAR_DOT_INSET = {
   END: 99,
 } as const
 
+const KARMA_THRESHOLDS = {
+  LEVEL_10_MIN: parseEther('10000000'),
+  LEVEL_10_MAX: parseEther('100000000'),
+} as const
+
 const getVisibleLevelsByStage = (
   allLevels: KarmaLevel[],
   currentLevel: number,
@@ -129,8 +134,9 @@ export const KarmaProgressBar = ({
   let levelProgress = 0
 
   if (level >= 10) {
-    const level10MinKarma = karmaLevels[10]?.minKarma ?? parseEther('10000000')
-    const level10MaxKarma = parseEther('100000000')
+    const level10MinKarma =
+      karmaLevels[10]?.minKarma ?? KARMA_THRESHOLDS.LEVEL_10_MIN
+    const level10MaxKarma = KARMA_THRESHOLDS.LEVEL_10_MAX
     const range = level10MaxKarma - level10MinKarma
 
     if (range === 0n) {
@@ -167,8 +173,8 @@ export const KarmaProgressBar = ({
 
   if (level >= 10) {
     const level10 = karmaLevels[10]
-    const level10MinKarma = level10?.minKarma ?? parseEther('10000000')
-    const level10MaxKarma = parseEther('100000000')
+    const level10MinKarma = level10?.minKarma ?? KARMA_THRESHOLDS.LEVEL_10_MIN
+    const level10MaxKarma = KARMA_THRESHOLDS.LEVEL_10_MAX
 
     const range = level10MaxKarma - level10MinKarma
 
