@@ -28,6 +28,18 @@ async function handler(request: NextRequest) {
   const url = new URL(request.url)
   const isRpcProxyPath = url.pathname.endsWith('/rpc.proxy')
 
+  // Handle OPTIONS preflight for rpc.proxy
+  if (request.method === 'OPTIONS' && isRpcProxyPath) {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      },
+    })
+  }
+
   if (request.method === 'POST' && isRpcProxyPath) {
     try {
       const body = await request.json()
@@ -157,11 +169,21 @@ async function handler(request: NextRequest) {
     const status = response.status
     const result = await response.json()
 
+    // Get CORS headers from responseMeta
+    const corsHeaders = {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    }
+
     return Response.json(
       result,
       // { status: result.httpStatus }
       // { status: 429 }
-      { status: status }
+      {
+        status: status,
+        headers: corsHeaders,
+      }
     )
   } catch (error) {
     console.error(error)
@@ -183,8 +205,26 @@ async function handler(request: NextRequest) {
     }
 
     // @see https://vercel.com/docs/errors/FUNCTION_INVOCATION_TIMEOUT for ensuring response is always returned
-    return Response.json(result, { status: status })
+    return Response.json(result, {
+      status: status,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      },
+    })
   }
+}
+
+export async function OPTIONS() {
+  return new Response(null, {
+    status: 204,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    },
+  })
 }
 
 export { handler as GET, handler as POST }
