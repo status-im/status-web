@@ -128,7 +128,20 @@ export const KarmaProgressBar = ({
 
   let levelProgress = 0
 
-  if (level === 0) {
+  if (level >= 10) {
+    const level10MinKarma = karmaLevels[10]?.minKarma ?? parseEther('10000000')
+    const level10MaxKarma = parseEther('100000000')
+    const range = level10MaxKarma - level10MinKarma
+
+    if (range === 0n) {
+      levelProgress = currentKarma >= level10MinKarma ? 100 : 0
+    } else {
+      levelProgress = Number(
+        ((currentKarma - level10MinKarma) * 100n) / (range > 0n ? range : 1n),
+      )
+      levelProgress = Math.min(100, Math.max(0, levelProgress))
+    }
+  } else if (level === 0) {
     const nextLevel = karmaLevels[1]
     if (nextLevel) {
       const range = nextLevel.minKarma - minKarma
@@ -262,7 +275,7 @@ export const KarmaProgressBar = ({
 
       <div className="flex w-full justify-between md:hidden">
         <div
-          className={`flex items-center gap-0.5 rounded-6 px-1.5 ${
+          className={`flex w-fit items-center gap-0.5 rounded-6 px-1.5 ${
             mobileStartLevel === level ? 'bg-purple' : 'bg-neutral-5'
           }`}
         >
@@ -281,26 +294,28 @@ export const KarmaProgressBar = ({
             {mobileStartLevel}
           </span>
         </div>
-        <div
-          className={`flex items-center gap-0.5 rounded-6 px-1.5 ${
-            mobileEndLevel === level ? 'bg-purple' : 'bg-neutral-5'
-          }`}
-        >
-          <span
-            className={`text-13 font-medium ${
-              mobileEndLevel === level ? 'text-white-100' : 'text-neutral-50'
+        {level < 10 && (
+          <div
+            className={`flex items-center gap-0.5 rounded-6 px-1.5 ${
+              mobileEndLevel === level ? 'bg-purple' : 'bg-neutral-5'
             }`}
           >
-            lv
-          </span>
-          <span
-            className={`text-15 font-medium ${
-              mobileEndLevel === level ? 'text-white-100' : 'text-neutral-100'
-            }`}
-          >
-            {mobileEndLevel}
-          </span>
-        </div>
+            <span
+              className={`text-13 font-medium ${
+                mobileEndLevel === level ? 'text-white-100' : 'text-neutral-50'
+              }`}
+            >
+              lv
+            </span>
+            <span
+              className={`text-15 font-medium ${
+                mobileEndLevel === level ? 'text-white-100' : 'text-neutral-100'
+              }`}
+            >
+              {mobileEndLevel}
+            </span>
+          </div>
+        )}
       </div>
 
       <div
@@ -357,7 +372,7 @@ export const KarmaProgressBar = ({
             >
               <div className="flex flex-col justify-center gap-0.5">
                 <div
-                  className={`flex items-center rounded-6 px-1.5 ${
+                  className={`flex w-fit items-center rounded-6 px-1.5 ${
                     lvl.level === level ? 'bg-purple' : 'bg-neutral-5'
                   }`}
                 >
@@ -395,9 +410,11 @@ export const KarmaProgressBar = ({
         <span className="text-13 font-medium text-neutral-50">
           {formatKarmaLabel(mobileMilestones[0], mobileStartLevel)}
         </span>
-        <span className="text-13 font-medium text-neutral-50">
-          {formatKarmaLabel(mobileMilestones[1], mobileEndLevel)}
-        </span>
+        {level < 10 && (
+          <span className="text-13 font-medium text-neutral-50">
+            {formatKarmaLabel(mobileMilestones[1], mobileEndLevel)}
+          </span>
+        )}
       </div>
     </div>
   )
