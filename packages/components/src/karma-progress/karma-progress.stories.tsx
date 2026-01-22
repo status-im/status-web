@@ -58,7 +58,12 @@ const meta: Meta<StoryArgs> = {
     const currentKarma = parseEther(String(args.currentKarma || 0))
 
     return (
-      <KarmaProgressBar currentKarma={currentKarma} karmaLevels={karmaLevels} />
+      <div className="w-full">
+        <KarmaProgressBar
+          currentKarma={currentKarma}
+          karmaLevels={karmaLevels}
+        />
+      </div>
     )
   },
 }
