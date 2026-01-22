@@ -15,14 +15,23 @@ const inter = Inter({
 })
 
 const organizationSchema = jsonLD.organization({
+  '@id': 'https://status.network/#organization',
+  name: 'Status Network',
+  url: 'https://status.network',
+  logo: 'https://status.network/logo.svg',
   description:
     'Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack.',
-  logo: 'https://status.network/logo.svg',
 })
 
 const websiteSchema = jsonLD.website({
+  '@id': 'https://status.network/#website',
+  name: 'Status Network',
+  url: 'https://status.network',
   description:
     'Status Network is a privacy-first, fully gasless Ethereum Layer 2 designed for scalable onchain activity, coordinated through reputation and native yield.',
+  publisher: {
+    '@id': 'https://status.network/#organization',
+  },
 })
 
 const webpageSchema = jsonLD.webpage({
@@ -45,8 +54,7 @@ export const metadata = Metadata({
   metadataBase: new URL('https://status.network/'),
 
   title: {
-    default:
-      'Status Network | Gasless Ethereum L2 with Native Yield',
+    default: 'Status Network | Gasless Ethereum L2 with Native Yield',
     template: '%s — Status Network',
   },
   description:
@@ -77,7 +85,14 @@ export default async function RootLayout({ children }: Props) {
         )}
         suppressHydrationWarning
       >
-        <JSONLDScript schema={[organizationSchema,websiteSchema,webpageSchema,softwareApplicationSchema,]}/>
+        <JSONLDScript
+          schema={[
+            organizationSchema,
+            websiteSchema,
+            webpageSchema,
+            softwareApplicationSchema,
+          ]}
+        />
         {children}
         <Analytics />
         <Script
