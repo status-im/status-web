@@ -153,7 +153,20 @@ export const KarmaProgressBar = ({
   let desktopLevelProgress: number
 
   if (level >= 10) {
-    desktopLevelProgress = 50
+    const level10 = karmaLevels[10]
+    const level10MinKarma = level10?.minKarma ?? parseEther('10000000')
+    const level10MaxKarma = parseEther('100000000')
+
+    const range = level10MaxKarma - level10MinKarma
+
+    if (range === 0n) {
+      desktopLevelProgress = currentKarma >= level10MinKarma ? 100 : 0
+    } else {
+      const progress = Number(
+        ((currentKarma - level10MinKarma) * 100n) / (range > 0n ? range : 1n),
+      )
+      desktopLevelProgress = Math.min(100, Math.max(0, progress))
+    }
   } else {
     desktopLevelProgress = Math.min(
       100,
