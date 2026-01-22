@@ -21,10 +21,9 @@ export const getDefaultWagmiConfig = () =>
       [mainnet.id]: http(
         `${clientEnv.NEXT_PUBLIC_STATUS_API_URL}/api/trpc/rpc.proxy?chainId=${mainnet.id}`
       ),
-      // [linea.id]: http(
-      //   `${clientEnv.NEXT_PUBLIC_STATUS_API_URL}/api/trpc/rpc.proxy?chainId=${linea.id}`
-      // ),
-      [linea.id]: http(linea.rpcUrls.default.http[0]),
+      [linea.id]: http(
+        `${clientEnv.NEXT_PUBLIC_STATUS_API_URL}/api/trpc/rpc.proxy?chainId=${linea.id}`
+      ),
     },
     walletConnectProjectId:
       clientEnv.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID as string,
