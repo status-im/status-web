@@ -1116,6 +1116,9 @@ importers:
       '@status-im/js':
         specifier: workspace:*
         version: link:../../packages/status-js
+      '@status-im/wallet':
+        specifier: workspace:*
+        version: link:../../packages/wallet
       '@tanstack/query-core':
         specifier: 5.29.0
         version: 5.29.0

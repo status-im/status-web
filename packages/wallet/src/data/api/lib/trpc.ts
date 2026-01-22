@@ -2,6 +2,8 @@ import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
 import { ZodError } from 'zod'
 
+import { createRateLimitMiddleware } from './rate-limiter'
+
 /**
  * 1. CONTEXT
  *
@@ -59,6 +61,30 @@ export const { createCallerFactory } = t
  */
 export const router = t.router
 
+/**
+ * Rate limiting for Market Proxy (60 RPM)
+ *
+ * RATIONALE:
+ * - WIP
+ */
+const marketRateLimitMiddleware = createRateLimitMiddleware(t, {
+  windowMs: 60 * 1000,
+  maxRequests: 60,
+  keyPrefix: 'market',
+})
+
+/**
+ * Rate limiting for ETH RPC Proxy (Alchemy) (30 RPM)
+ *
+ * RATIONALE:
+ * - WIP
+ */
+const nodesRateLimitMiddleware = createRateLimitMiddleware(t, {
+  windowMs: 60 * 1000,
+  maxRequests: 30,
+  keyPrefix: 'nodes',
+})
+
 const errorMiddleware = t.middleware(async opts => {
   const result = await opts.next()
 
@@ -84,10 +110,16 @@ const errorMiddleware = t.middleware(async opts => {
 })
 
 /**
- * Unauthenticated procedure
- *
- * This is the base piece you use to build new queries and mutations on your tRPC API. It does not
- * guarantee that a user querying is authorized, but you can still access user session data if they
- * are logged in.
+ * Unauthenticated procedure (Standard)
  */
 export const publicProcedure = t.procedure.use(errorMiddleware)
+
+/**
+ * Procedure for Market data endpoints
+ */
+export const marketProcedure = publicProcedure.use(marketRateLimitMiddleware)
+
+/**
+ * Procedure for Node/RPC endpoints
+ */
+export const nodesProcedure = publicProcedure.use(nodesRateLimitMiddleware)

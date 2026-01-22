@@ -7,7 +7,7 @@ import erc20TokenList from '../../../constants/erc20.json'
 import { groupBy } from '../../../utils/group-by'
 import { getAssetTransfers, getTransactionStatus } from '../../services/alchemy'
 import { fetchTokensPriceForDate } from '../../services/coingecko/index'
-import { publicProcedure, router } from '../lib/trpc'
+import { nodesProcedure, router } from '../lib/trpc'
 
 import type { AssetTransfer } from '../../services/alchemy/types'
 import type { NetworkType } from '../types'
@@ -93,7 +93,7 @@ async function runWithConcurrency<T>(
 }
 
 export const activitiesRouter = router({
-  page: publicProcedure
+  page: nodesProcedure
     .input(
       z.object({
         address: z.string(),
@@ -107,7 +107,7 @@ export const activitiesRouter = router({
       return await cachedPage(key)
     }),
 
-  activities: publicProcedure
+  activities: nodesProcedure
     .input(
       z.object({
         address: z.string(),
