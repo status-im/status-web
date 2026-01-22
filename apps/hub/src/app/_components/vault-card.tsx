@@ -192,6 +192,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
         decimals: vaultDisplay.decimals,
         includeSymbol: true,
         roundDown: true,
+        compact: true,
       })
     : null
 
@@ -308,6 +309,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
                         decimals: token.decimals === 18 ? 2 : 0,
                         includeSymbol: true,
                         roundDown: true,
+                        compact: true,
                       })
                     )
                     .join(' + ')}
