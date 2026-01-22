@@ -15,6 +15,7 @@ export type JSONLDSchema =
 export type OrganizationSchema = {
   '@context': 'https://schema.org'
   '@type': 'Organization'
+  '@id'?: string
   name: string
   url: string
   logo?: string
@@ -31,9 +32,13 @@ export type OrganizationSchema = {
 export type WebSiteSchema = {
   '@context': 'https://schema.org'
   '@type': 'WebSite'
+  '@id'?: string
   name: string
   url: string
   description?: string
+  publisher?: {
+    '@id'?: string
+  }
   potentialAction?: {
     '@type': 'SearchAction'
     target: {
@@ -250,65 +255,143 @@ export function createJSONLD(config: CreateJSONLDConfig) {
   }
 }
 
-type CreateAppJSONLDConfig = {
-  defaultSiteUrl: string
-  defaultSocialLinks?: string[]
-  defaultName: string
-  defaultUrl: string
-}
-
 /**
- * Create enhanced JSON-LD schema generators with app-specific defaults
+ * Create enhanced JSON-LD schema generators
  * Includes support for @id, publisher, webpage, and softwareApplication
+ * All values must be provided explicitly - no defaults
  */
-export function createAppJSONLD(config: CreateAppJSONLDConfig) {
-  const { defaultName, defaultUrl } = config
-  const baseJsonLD = createJSONLD({
-    defaultSiteUrl: config.defaultSiteUrl,
-    defaultSocialLinks: config.defaultSocialLinks,
-  })
-
+export function createAppJSONLD() {
   return {
-    ...baseJsonLD,
-    organization: (orgConfig?: {
+    organization: (orgConfig: {
       '@id'?: string
-      name?: string
-      url?: string
+      name: string
+      url: string
       description?: string
       logo?: string
       sameAs?: string[]
-    }) => {
-      const { '@id': id, ...restConfig } = orgConfig ?? {}
-      const schema = baseJsonLD.organization({
-        name: orgConfig?.name ?? defaultName,
-        url: orgConfig?.url ?? defaultUrl,
-        ...restConfig,
-      })
+    }): OrganizationSchema => {
+      const { '@id': id, ...restConfig } = orgConfig
+      const schema: OrganizationSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: restConfig.name,
+        url: restConfig.url,
+        ...(restConfig.logo && { logo: restConfig.logo }),
+        ...(restConfig.description && {
+          description: restConfig.description,
+        }),
+        sameAs: restConfig.sameAs ?? [],
+      }
       return id ? { ...schema, '@id': id } : schema
     },
-    website: (websiteConfig?: {
+    website: (websiteConfig: {
       '@id'?: string
+      name: string
+      url: string
       description?: string
       searchUrl?: string
-      name?: string
-      url?: string
       publisher?: {
         '@id'?: string
       }
-    }) => {
-      const { '@id': id, publisher, ...restConfig } = websiteConfig ?? {}
-      const schema = baseJsonLD.website({
-        name: restConfig.name ?? defaultName,
-        url: restConfig.url ?? defaultUrl,
-        description: restConfig.description,
-        searchUrl: restConfig.searchUrl,
-      })
+    }): WebSiteSchema => {
+      const { '@id': id, publisher, ...restConfig } = websiteConfig
+      const schema: WebSiteSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: restConfig.name,
+        url: restConfig.url,
+        ...(restConfig.description && {
+          description: restConfig.description,
+        }),
+        ...(restConfig.searchUrl && {
+          potentialAction: {
+            '@type': 'SearchAction',
+            target: {
+              '@type': 'EntryPoint',
+              urlTemplate: restConfig.searchUrl,
+            },
+            'query-input': 'required name=search_term_string',
+          },
+        }),
+      }
       return {
         ...schema,
         ...(id && { '@id': id }),
         ...(publisher && { publisher }),
       }
     },
+    article: (articleConfig: {
+      headline: string
+      description?: string
+      image?: string | string[]
+      datePublished?: string
+      dateModified?: string
+      author?: {
+        name: string
+        url?: string
+        type?: 'Person' | 'Organization'
+      }
+      publisher?: { name: string; logo?: string }
+    }): ArticleSchema => ({
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: articleConfig.headline,
+      ...(articleConfig.description && {
+        description: articleConfig.description,
+      }),
+      ...(articleConfig.image && { image: articleConfig.image }),
+      ...(articleConfig.datePublished && {
+        datePublished: articleConfig.datePublished,
+      }),
+      ...(articleConfig.dateModified && {
+        dateModified: articleConfig.dateModified,
+      }),
+      ...(articleConfig.author && {
+        author: {
+          '@type': articleConfig.author.type || 'Person',
+          name: articleConfig.author.name,
+          ...(articleConfig.author.url && { url: articleConfig.author.url }),
+        },
+      }),
+      ...(articleConfig.publisher && {
+        publisher: {
+          '@type': 'Organization',
+          name: articleConfig.publisher.name,
+          ...(articleConfig.publisher.logo && {
+            logo: {
+              '@type': 'ImageObject',
+              url: articleConfig.publisher.logo,
+            },
+          }),
+        },
+      }),
+    }),
+    breadcrumbList: (
+      items: Array<{ name: string; url?: string }>,
+    ): BreadcrumbListSchema => ({
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: items.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.name,
+        ...(item.url && { item: item.url }),
+      })),
+    }),
+    faqPage: (faqConfig: {
+      questions: Array<{ question: string; answer: string }>
+    }): FAQPageSchema => ({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqConfig.questions.map(q => ({
+        '@type': 'Question',
+        name: q.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: q.answer,
+        },
+      })),
+    }),
     webpage: (webpageConfig: {
       name?: string
       description?: string
