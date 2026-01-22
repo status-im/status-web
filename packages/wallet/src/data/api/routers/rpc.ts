@@ -14,6 +14,7 @@ const CHAIN_ID_TO_PROXY_PATH: Record<number, string> = {
   1: 'ethereum/mainnet',
   59144: 'linea/mainnet',
   11155111: 'ethereum/sepolia',
+  1660990954: 'status/sepolia',
 }
 
 export const rpcRouter = router({
