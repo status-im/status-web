@@ -181,35 +181,54 @@ export const KarmaProgressBar = ({
           }}
         />
 
-        {visibleLevels.slice(1).map((lvl, index) => {
-          const actualIndex = index + 1
+        {visibleLevels.map((lvl, index) => {
           const evenSpacing =
             visibleLevels.length > 1
-              ? (actualIndex / (visibleLevels.length - 1)) * 100
+              ? (index / (visibleLevels.length - 1)) * 100
               : 50
+
+          const isLastLevel = index === visibleLevels.length - 1
+          const isFirstLevel = index === 0
 
           let position = evenSpacing
 
-          if (position <= 0) {
+          if (isLastLevel) {
+            position = 100
+          } else if (position <= 0) {
             position = PROGRESS_BAR_DOT_INSET.START
           } else if (position >= 100) {
             position = PROGRESS_BAR_DOT_INSET.END
           }
 
-          const isReached = currentKarma >= lvl.minKarma
-          const isHidden = desktopLevelProgress >= position
+          const isReached = currentKarma > lvl.minKarma
+          const isExactThreshold = currentKarma === lvl.minKarma
+
+          const isHidden = !isLastLevel && desktopLevelProgress >= position
+
+          const getTransformClass = () => {
+            if (isFirstLevel) return 'translate-x-[calc(-50%+6px)]'
+            if (isLastLevel) return ''
+            return ''
+          }
+
+          const getStyle = () => {
+            if (isLastLevel) {
+              return { right: '3px' }
+            }
+            return { left: `${position}%` }
+          }
 
           return (
             <div
               key={`milestone-dot-${lvl.level}`}
-              className={`absolute top-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full transition-colors duration-300 ${
+              className={`absolute top-1/2 size-2 ${isLastLevel ? '' : '-translate-x-1/2'} -translate-y-1/2 rounded-full transition-colors duration-300 ${getTransformClass()} ${
                 isHidden
                   ? 'hidden'
-                  : isReached
-                    ? 'bg-purple'
-                    : 'bg-neutral-80/20'
+                  : isExactThreshold || !isReached
+                    ? 'bg-neutral-80/20'
+                    : 'bg-purple'
               }`}
-              style={{ left: `${position}%` }}
+              style={getStyle()}
             />
           )
         })}
@@ -223,8 +242,8 @@ export const KarmaProgressBar = ({
         />
 
         <div
-          className="absolute top-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-neutral-80/20"
-          style={{ left: `${PROGRESS_BAR_DOT_INSET.END}%` }}
+          className="absolute top-1/2 size-2 -translate-y-1/2 rounded-full bg-neutral-80/20"
+          style={{ right: '3px' }}
         />
       </div>
 
