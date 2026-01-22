@@ -112,6 +112,11 @@ const Sidebar = (props: Props) => {
       icon: HeartIcon,
       href: 'https://statusnetwork.typeform.com/contact-us',
     },
+    {
+      id: 'submit-bug',
+      label: t('footer.submit_bug'),
+      href: 'https://github.com/status-im/status-web/issues/new?template=bug_report.md',
+    },
   ]
 
   return (
