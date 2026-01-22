@@ -5,7 +5,12 @@
 // @see https://stackoverflow.com/questions/78800979/trpc-giving-error-when-trying-to-test-with-postman for calling via postman
 // @see https://github.com/trpc/trpc/issues/752 for use of superjson
 
-import { type ApiRouter, apiRouter } from '@status-im/wallet/data'
+import {
+  type ApiRouter,
+  apiRouter,
+  createCaller,
+  createTRPCContext,
+} from '@status-im/wallet/data'
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
 import { headers as nextHeaders } from 'next/headers'
 
@@ -17,6 +22,74 @@ export type { ApiRouter }
 export const dynamic = 'force-dynamic'
 
 async function handler(request: NextRequest) {
+  // Handle JSON-RPC requests to rpc.proxy
+  // tRPC's fetchRequestHandler expects tRPC format, not JSON-RPC format
+  // So we need to intercept JSON-RPC requests and translate them
+  const url = new URL(request.url)
+  const isRpcProxyPath = url.pathname.endsWith('/rpc.proxy')
+
+  if (request.method === 'POST' && isRpcProxyPath) {
+    try {
+      const body = await request.json()
+      // Extract chainId from query parameters (wagmi can include it in the URL)
+      const chainIdParam = url.searchParams.get('chainId')
+      const chainId = chainIdParam
+        ? Number.parseInt(chainIdParam, 10)
+        : undefined
+
+      const headers = new Headers(await nextHeaders())
+      const ctx = await createTRPCContext({ headers })
+      const caller = createCaller(ctx)
+
+      const result = await caller.rpc.proxy({
+        method: body.method,
+        params: body.params,
+        id: body.id,
+        jsonrpc: '2.0',
+        chainId,
+      })
+
+      return Response.json(result, {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+          'cache-control': 'private, no-store',
+        },
+      })
+    } catch (error) {
+      console.error('RPC proxy error:', error)
+
+      let errorId: string | number | null = null
+      try {
+        const body = await request.clone().json()
+        errorId = body.id ?? null
+      } catch {
+        // Ignore if we can't parse the body for error ID
+      }
+
+      return Response.json(
+        {
+          jsonrpc: '2.0',
+          id: errorId,
+          error: {
+            code: -32603,
+            message:
+              error instanceof Error ? error.message : 'Internal server error',
+          },
+        },
+        {
+          status: 500,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+          },
+        }
+      )
+    }
+  }
+
   // let error: Error | undefined
 
   try {
@@ -60,6 +133,7 @@ async function handler(request: NextRequest) {
               'assets.token',
               'collectibles.page',
               'market.tokenPrice',
+              'rpc.proxy',
             ].includes(path)
           ) ||
           opts?.type === 'mutation'
