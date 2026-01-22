@@ -6,6 +6,7 @@ import type { ReactNode } from 'react'
 export type JSONLDSchema =
   | OrganizationSchema
   | WebSiteSchema
+  | WebPageSchema
   | ArticleSchema
   | BreadcrumbListSchema
   | FAQPageSchema
@@ -41,6 +42,14 @@ export type WebSiteSchema = {
     }
     'query-input': string
   }
+}
+
+export type WebPageSchema = {
+  '@context': 'https://schema.org'
+  '@type': 'WebPage'
+  name?: string
+  description?: string
+  url?: string
 }
 
 export type ArticleSchema = {
@@ -237,6 +246,96 @@ export function createJSONLD(config: CreateJSONLDConfig) {
           text: q.answer,
         },
       })),
+    }),
+  }
+}
+
+type CreateAppJSONLDConfig = {
+  defaultSiteUrl: string
+  defaultSocialLinks?: string[]
+  defaultName: string
+  defaultUrl: string
+}
+
+/**
+ * Create enhanced JSON-LD schema generators with app-specific defaults
+ * Includes support for @id, publisher, webpage, and softwareApplication
+ */
+export function createAppJSONLD(config: CreateAppJSONLDConfig) {
+  const { defaultName, defaultUrl } = config
+  const baseJsonLD = createJSONLD({
+    defaultSiteUrl: config.defaultSiteUrl,
+    defaultSocialLinks: config.defaultSocialLinks,
+  })
+
+  return {
+    ...baseJsonLD,
+    organization: (orgConfig?: {
+      '@id'?: string
+      name?: string
+      url?: string
+      description?: string
+      logo?: string
+      sameAs?: string[]
+    }) => {
+      const { '@id': id, ...restConfig } = orgConfig ?? {}
+      const schema = baseJsonLD.organization({
+        name: orgConfig?.name ?? defaultName,
+        url: orgConfig?.url ?? defaultUrl,
+        ...restConfig,
+      })
+      return id ? { ...schema, '@id': id } : schema
+    },
+    website: (websiteConfig?: {
+      '@id'?: string
+      description?: string
+      searchUrl?: string
+      name?: string
+      url?: string
+      publisher?: {
+        '@id'?: string
+      }
+    }) => {
+      const { '@id': id, publisher, ...restConfig } = websiteConfig ?? {}
+      const schema = baseJsonLD.website({
+        name: restConfig.name ?? defaultName,
+        url: restConfig.url ?? defaultUrl,
+        description: restConfig.description,
+        searchUrl: restConfig.searchUrl,
+      })
+      return {
+        ...schema,
+        ...(id && { '@id': id }),
+        ...(publisher && { publisher }),
+      }
+    },
+    webpage: (webpageConfig: {
+      name?: string
+      description?: string
+      url?: string
+    }): WebPageSchema => ({
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      ...(webpageConfig.name && { name: webpageConfig.name }),
+      ...(webpageConfig.description && {
+        description: webpageConfig.description,
+      }),
+      ...(webpageConfig.url && { url: webpageConfig.url }),
+    }),
+    softwareApplication: (appConfig: {
+      name: string
+      applicationCategory: string
+      operatingSystem: string
+      url: string
+      description?: string
+    }): SoftwareApplicationSchema => ({
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: appConfig.name,
+      applicationCategory: appConfig.applicationCategory,
+      operatingSystem: appConfig.operatingSystem,
+      url: appConfig.url,
+      ...(appConfig.description && { description: appConfig.description }),
     }),
   }
 }
