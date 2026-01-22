@@ -14,7 +14,12 @@ import { formatUnits, parseUnits } from 'viem'
 import { useAccount, useChainId, useSwitchChain } from 'wagmi'
 import { z } from 'zod'
 
-import { KarmaCircleIcon, PercentIcon, PlusIcon } from '~components/icons/index'
+import {
+  GusdIcon,
+  KarmaCircleIcon,
+  PercentIcon,
+  PlusIcon,
+} from '~components/icons/index'
 import {
   DEFAULT_GUSD_STABLECOIN,
   GUSD_STABLECOINS,
@@ -553,6 +558,16 @@ const PreDepositModal = ({
                     .join(', ')}
                 </span>
               </div>
+              {isGUSD && (
+                <div className="flex items-center gap-2 text-15">
+                  <span className="text-neutral-50">
+                    <GusdIcon />
+                  </span>
+                  <span className="text-neutral-100">
+                    {t('vault.generic_protocol_points')}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
 
