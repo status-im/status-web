@@ -34,13 +34,6 @@ const websiteSchema = jsonLD.website({
   },
 })
 
-const webpageSchema = jsonLD.webpage({
-  name: 'A Privacy-First Gasless Ethereum Layer 2 Powered by Native Yield',
-  description:
-    'Status Network is a privacy-first, fully gasless Ethereum Layer 2. It replaces per-transaction gas with reputation-based coordination and uses native yield and network activity to cover execution costs.',
-  url: 'https://status.network/',
-})
-
 const softwareApplicationSchema = jsonLD.softwareApplication({
   name: 'Status Network',
   description:
@@ -89,7 +82,6 @@ export default async function RootLayout({ children }: Props) {
           schema={[
             organizationSchema,
             websiteSchema,
-            webpageSchema,
             softwareApplicationSchema,
           ]}
         />
