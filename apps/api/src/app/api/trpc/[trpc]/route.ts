@@ -28,18 +28,6 @@ async function handler(request: NextRequest) {
   const url = new URL(request.url)
   const isRpcProxyPath = url.pathname.endsWith('/rpc.proxy')
 
-  // Handle OPTIONS preflight for rpc.proxy
-  if (request.method === 'OPTIONS' && isRpcProxyPath) {
-    return new Response(null, {
-      status: 204,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-      },
-    })
-  }
-
   if (request.method === 'POST' && isRpcProxyPath) {
     try {
       const body = await request.json()
