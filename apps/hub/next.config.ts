@@ -14,14 +14,12 @@ const nextConfig: NextConfig = {
     '@status-im/components',
     '@status-im/icons',
   ],
-  async redirects() {
-    return [
-      {
-        source: '/dashboard',
-        destination: '/',
-        permanent: true,
-      },
-    ]
+
+  images: {
+    unoptimized: true,
+    // @see https://nextjs.org/docs/app/guides/static-exports#image-optimization
+    // loader: 'custom',
+    // loaderFile: './loader.ts',
   },
 }
 
