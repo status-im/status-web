@@ -46,7 +46,18 @@ const getVisibleLevelsByStage = (
       return getRange(8, 11)
     default: {
       const level10Index = Math.min(10, allLevels.length - 1)
-      return [allLevels[level10Index]]
+      const level10 = allLevels[level10Index]
+      if (!level10) {
+        return []
+      }
+      return [
+        level10,
+        {
+          level: 11,
+          minKarma: KARMA_THRESHOLDS.LEVEL_10_MAX,
+          maxKarma: KARMA_THRESHOLDS.LEVEL_10_MAX,
+        },
+      ]
     }
   }
 }
@@ -169,6 +180,12 @@ export const KarmaProgressBar = ({
         : Number(((currentKarma - minKarma) * 100n) / (range > 0n ? range : 1n))
   }
 
+  const isFirstLevelExactThresholdMobile = currentKarma === minKarma
+
+  if (isFirstLevelExactThresholdMobile) {
+    levelProgress = 0
+  }
+
   const oneLevelPercentage = 100 / Math.max(visibleLevels.length - 1, 1)
 
   let desktopLevelProgress: number
@@ -196,6 +213,47 @@ export const KarmaProgressBar = ({
     )
   }
 
+  const exactThresholdPositions = visibleLevels.map((lvl, index) => {
+    if (currentKarma !== lvl.minKarma) {
+      return null
+    }
+
+    const evenSpacing =
+      visibleLevels.length > 1 ? (index / (visibleLevels.length - 1)) * 100 : 50
+
+    const isLastLevel = index === visibleLevels.length - 1
+
+    let position = evenSpacing
+
+    if (isLastLevel) {
+      position = 100
+    } else if (position <= 0) {
+      position = PROGRESS_BAR_DOT_INSET.START
+    } else if (position >= 100) {
+      position = PROGRESS_BAR_DOT_INSET.END
+    }
+
+    return position
+  })
+
+  const validPositions = exactThresholdPositions.filter(
+    (pos): pos is number => pos !== null,
+  )
+
+  const isFirstLevelExactThreshold =
+    validPositions.length > 0 && currentKarma === visibleLevels[0]?.minKarma
+
+  if (isFirstLevelExactThreshold) {
+    desktopLevelProgress = 0
+  } else if (validPositions.length > 0) {
+    const maxExactThresholdPosition = Math.max(...validPositions)
+    const dotRadiusOffset = 0.5
+    desktopLevelProgress = Math.max(
+      desktopLevelProgress,
+      maxExactThresholdPosition + dotRadiusOffset,
+    )
+  }
+
   const mobileStartLevel = Math.max(0, level)
   const mobileEndLevel = Math.min(karmaLevels.length - 1, level + 1)
 
@@ -215,10 +273,10 @@ export const KarmaProgressBar = ({
         </span>
       </div>
       <div className="flex w-full flex-col gap-4">
-        <div className="relative hidden h-3 w-full rounded-20 bg-neutral-5 md:block">
+        <div className="relative hidden h-3 w-full rounded-20 bg-neutral-5 md:flex md:items-center">
           {/* prettier-ignore */}
           <div
-            className="bg-purple h-2.5 rounded-20 transition-all duration-300"
+            className="bg-purple ml-px h-2.5 rounded-20 transition-all duration-300"
             style={{
               width: `${desktopLevelProgress}%`,
             }}
@@ -246,7 +304,13 @@ export const KarmaProgressBar = ({
             const isReached = currentKarma > lvl.minKarma
             const isExactThreshold = currentKarma === lvl.minKarma
 
-            const isHidden = !isLastLevel && desktopLevelProgress >= position
+            const shouldHideLevel11Dot = level === 10 && lvl.level === 11
+
+            const isHidden =
+              shouldHideLevel11Dot ||
+              (!isLastLevel &&
+                desktopLevelProgress >= position &&
+                !isExactThreshold)
 
             const getTransformClass = () => {
               if (isFirstLevel) return 'translate-x-[calc(-50%+6px)]'
@@ -354,6 +418,10 @@ export const KarmaProgressBar = ({
           }`}
         >
           {visibleLevels.map((lvl, index) => {
+            if (lvl.level === 11) {
+              return null
+            }
+
             const isLevel10OrAbove = level >= 10 && visibleLevels.length === 1
 
             const evenSpacing =
