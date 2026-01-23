@@ -1,13 +1,11 @@
 import createNextIntlPlugin from 'next-intl/plugin'
 
-import { localEnv } from './src/config/env.local.mjs'
-
 import type { NextConfig } from 'next'
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
 const nextConfig: NextConfig = {
-  ...(localEnv.NEXT_LOCAL_OUTPUT === 'export' ? { output: 'export' } : {}),
+  output: 'export',
 
   /* config options here */
   transpilePackages: [
