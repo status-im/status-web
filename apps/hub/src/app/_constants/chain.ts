@@ -14,9 +14,15 @@ export const getDefaultWagmiConfig = () =>
   getDefaultConfig({
     chains: [statusSepolia, mainnet, linea],
     transports: {
-      [statusSepolia.id]: http(statusSepolia.rpcUrls.default.http[0]),
-      [mainnet.id]: http('https://eth.llamarpc.com'),
-      [linea.id]: http(linea.rpcUrls.default.http[0]),
+      [statusSepolia.id]: http(
+        `${clientEnv.NEXT_PUBLIC_STATUS_API_URL}/api/trpc/rpc.proxy?chainId=${statusSepolia.id}`
+      ),
+      [mainnet.id]: http(
+        `${clientEnv.NEXT_PUBLIC_STATUS_API_URL}/api/trpc/rpc.proxy?chainId=${mainnet.id}`
+      ),
+      [linea.id]: http(
+        `${clientEnv.NEXT_PUBLIC_STATUS_API_URL}/api/trpc/rpc.proxy?chainId=${linea.id}`
+      ),
     },
     walletConnectProjectId:
       clientEnv.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID as string,
