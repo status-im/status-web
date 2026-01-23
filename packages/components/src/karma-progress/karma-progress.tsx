@@ -273,13 +273,16 @@ export const KarmaProgressBar = ({
               return { left: `${position}%` }
             }
 
+            const shouldBeGray =
+              isExactThreshold || !isReached || (level >= 10 && isLastLevel)
+
             return (
               <div
                 key={`milestone-dot-${lvl.level}`}
                 className={`absolute top-1/2 size-2 ${isLastLevel ? '' : '-translate-x-1/2'} -translate-y-1/2 rounded-full transition-colors duration-300 ${getTransformClass()} ${
                   isHidden
                     ? 'hidden'
-                    : isExactThreshold || !isReached
+                    : shouldBeGray
                       ? 'bg-neutral-80/20'
                       : 'bg-purple'
                 }`}
