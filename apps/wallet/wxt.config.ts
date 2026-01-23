@@ -30,7 +30,7 @@ export default defineConfig({
       name: '!Status Portfolio Wallet (Beta)',
       description:
         'Easily view and manage your crypto portfolio in real time — Beta crypto wallet and Web3 portfolio tracker in one.',
-      permissions: ['storage'],
+      permissions: ['storage', 'tabs'],
       action: {},
       web_accessible_resources: [
         {
