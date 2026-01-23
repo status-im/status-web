@@ -9,7 +9,7 @@ export interface KarmaLevel {
 export type KarmaProgressBarProps = {
   currentKarma?: bigint
   karmaLevels: KarmaLevel[]
-  formatKarma?: (amount: string) => string
+  formattedKarma: string
 }
 
 const PROGRESS_BAR_DOT_INSET = {
@@ -116,7 +116,7 @@ const formatKarmaLabel = (karma: bigint, level: number) => {
 export const KarmaProgressBar = ({
   currentKarma = 0n,
   karmaLevels,
-  formatKarma,
+  formattedKarma,
 }: KarmaProgressBarProps) => {
   if (karmaLevels.length === 0) {
     return null
@@ -203,18 +203,6 @@ export const KarmaProgressBar = ({
     karmaLevels[mobileStartLevel]?.minKarma ?? 0n,
     karmaLevels[mobileEndLevel]?.minKarma ?? 0n,
   ]
-
-  const karmaEther = formatEther(currentKarma)
-  const formattedKarma = formatKarma
-    ? formatKarma(karmaEther)
-    : (() => {
-        const num = Number(karmaEther)
-        const formatter = new Intl.NumberFormat('en-US', {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        })
-        return formatter.format(num)
-      })()
 
   return (
     <div className="flex w-full flex-col gap-6">

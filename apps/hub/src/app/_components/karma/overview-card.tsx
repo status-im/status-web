@@ -5,11 +5,13 @@ import {
 } from '@status-im/components'
 // import { AchievementBadges } from './achievement-badges'
 import { useSIWE } from 'connectkit'
+import { formatEther } from 'viem'
 import { useAccount } from 'wagmi'
 
 import { useKarmaBalance } from '~hooks/useKarmaBalance'
 import { useProcessedKarmaTiers } from '~hooks/useProcessedKarmaTiers'
 // import { useQuota } from '~hooks/useQuota'
+import { formatSNT } from '~utils/currency'
 
 const OverviewCard = () => {
   const { isConnected } = useAccount()
@@ -35,6 +37,7 @@ const OverviewCard = () => {
         <KarmaProgressBar
           currentKarma={currentKarma}
           karmaLevels={karmaLevels}
+          formattedKarma={formatSNT(formatEther(currentKarma))}
         />
 
         {/* TODO: Enable TX allowance when API is ready */}
