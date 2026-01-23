@@ -9,6 +9,7 @@ export interface KarmaLevel {
 export type KarmaProgressBarProps = {
   currentKarma?: bigint
   karmaLevels: KarmaLevel[]
+  formatKarma?: (amount: string) => string
 }
 
 const PROGRESS_BAR_DOT_INSET = {
@@ -115,6 +116,7 @@ const formatKarmaLabel = (karma: bigint, level: number) => {
 export const KarmaProgressBar = ({
   currentKarma = 0n,
   karmaLevels,
+  formatKarma,
 }: KarmaProgressBarProps) => {
   if (karmaLevels.length === 0) {
     return null
@@ -202,225 +204,257 @@ export const KarmaProgressBar = ({
     karmaLevels[mobileEndLevel]?.minKarma ?? 0n,
   ]
 
+  const karmaEther = formatEther(currentKarma)
+  const formattedKarma = formatKarma
+    ? formatKarma(karmaEther)
+    : (() => {
+        const num = Number(karmaEther)
+        const formatter = new Intl.NumberFormat('en-US', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })
+        return formatter.format(num)
+      })()
+
   return (
-    <div className="flex w-full flex-col gap-4">
-      <div className="relative hidden h-3 w-full rounded-20 bg-neutral-5 md:block">
-        {/* prettier-ignore */}
-        <div
-          className="bg-purple h-2.5 rounded-20 transition-all duration-300"
-          style={{
-            width: `${desktopLevelProgress}%`,
-          }}
-        />
-
-        {visibleLevels.map((lvl, index) => {
-          const evenSpacing =
-            visibleLevels.length > 1
-              ? (index / (visibleLevels.length - 1)) * 100
-              : 50
-
-          const isLastLevel = index === visibleLevels.length - 1
-          const isFirstLevel = index === 0
-
-          let position = evenSpacing
-
-          if (isLastLevel) {
-            position = 100
-          } else if (position <= 0) {
-            position = PROGRESS_BAR_DOT_INSET.START
-          } else if (position >= 100) {
-            position = PROGRESS_BAR_DOT_INSET.END
-          }
-
-          const isReached = currentKarma > lvl.minKarma
-          const isExactThreshold = currentKarma === lvl.minKarma
-
-          const isHidden = !isLastLevel && desktopLevelProgress >= position
-
-          const getTransformClass = () => {
-            if (isFirstLevel) return 'translate-x-[calc(-50%+6px)]'
-            if (isLastLevel) return ''
-            return ''
-          }
-
-          const getStyle = () => {
-            if (isLastLevel) {
-              return { right: '3px' }
-            }
-            return { left: `${position}%` }
-          }
-
-          return (
-            <div
-              key={`milestone-dot-${lvl.level}`}
-              className={`absolute top-1/2 size-2 ${isLastLevel ? '' : '-translate-x-1/2'} -translate-y-1/2 rounded-full transition-colors duration-300 ${getTransformClass()} ${
-                isHidden
-                  ? 'hidden'
-                  : isExactThreshold || !isReached
-                    ? 'bg-neutral-80/20'
-                    : 'bg-purple'
-              }`}
-              style={getStyle()}
-            />
-          )
-        })}
+    <div className="flex w-full flex-col gap-6">
+      <div className="flex items-baseline gap-1.5">
+        <span className="text-27 font-semibold text-neutral-100">
+          {formattedKarma}
+        </span>
+        <span className="text-15 font-medium uppercase text-neutral-50">
+          Karma
+        </span>
       </div>
-
-      <div className="relative h-3 w-full rounded-20 bg-neutral-5 md:hidden">
-        {/* prettier-ignore */}
-        <div
-          className="bg-purple h-full rounded-20 transition-all duration-300"
-          style={{ width: `${levelProgress}%` }}
-        />
-
-        <div
-          className="absolute top-1/2 size-2 -translate-y-1/2 rounded-full bg-neutral-80/20"
-          style={{ right: '3px' }}
-        />
-      </div>
-
-      <div className="flex w-full justify-between md:hidden">
-        <div
-          className={`flex w-fit items-center gap-0.5 rounded-6 px-1.5 ${
-            mobileStartLevel === level ? 'bg-purple' : 'bg-neutral-5'
-          }`}
-        >
-          <span
-            className={`text-13 font-medium ${
-              mobileStartLevel === level ? 'text-white-100' : 'text-neutral-50'
-            }`}
-          >
-            lv
-          </span>
-          <span
-            className={`text-15 font-medium ${
-              mobileStartLevel === level ? 'text-white-100' : 'text-neutral-100'
-            }`}
-          >
-            {mobileStartLevel}
-          </span>
-        </div>
-        {level < 10 && (
+      <div className="flex w-full flex-col gap-4">
+        <div className="relative hidden h-3 w-full rounded-20 bg-neutral-5 md:block">
+          {/* prettier-ignore */}
           <div
-            className={`flex items-center gap-0.5 rounded-6 px-1.5 ${
-              mobileEndLevel === level ? 'bg-purple' : 'bg-neutral-5'
+            className="bg-purple h-2.5 rounded-20 transition-all duration-300"
+            style={{
+              width: `${desktopLevelProgress}%`,
+            }}
+          />
+
+          {visibleLevels.map((lvl, index) => {
+            const evenSpacing =
+              visibleLevels.length > 1
+                ? (index / (visibleLevels.length - 1)) * 100
+                : 50
+
+            const isLastLevel = index === visibleLevels.length - 1
+            const isFirstLevel = index === 0
+
+            let position = evenSpacing
+
+            if (isLastLevel) {
+              position = 100
+            } else if (position <= 0) {
+              position = PROGRESS_BAR_DOT_INSET.START
+            } else if (position >= 100) {
+              position = PROGRESS_BAR_DOT_INSET.END
+            }
+
+            const isReached = currentKarma > lvl.minKarma
+            const isExactThreshold = currentKarma === lvl.minKarma
+
+            const isHidden = !isLastLevel && desktopLevelProgress >= position
+
+            const getTransformClass = () => {
+              if (isFirstLevel) return 'translate-x-[calc(-50%+6px)]'
+              if (isLastLevel) return ''
+              return ''
+            }
+
+            const getStyle = () => {
+              if (isLastLevel) {
+                return { right: '3px' }
+              }
+              return { left: `${position}%` }
+            }
+
+            return (
+              <div
+                key={`milestone-dot-${lvl.level}`}
+                className={`absolute top-1/2 size-2 ${isLastLevel ? '' : '-translate-x-1/2'} -translate-y-1/2 rounded-full transition-colors duration-300 ${getTransformClass()} ${
+                  isHidden
+                    ? 'hidden'
+                    : isExactThreshold || !isReached
+                      ? 'bg-neutral-80/20'
+                      : 'bg-purple'
+                }`}
+                style={getStyle()}
+              />
+            )
+          })}
+        </div>
+
+        <div className="relative h-3 w-full rounded-20 bg-neutral-5 md:hidden">
+          {/* prettier-ignore */}
+          <div
+            className="bg-purple h-full rounded-20 transition-all duration-300"
+            style={{ width: `${levelProgress}%` }}
+          />
+
+          <div
+            className="absolute top-1/2 size-2 -translate-y-1/2 rounded-full bg-neutral-80/20"
+            style={{ right: '3px' }}
+          />
+        </div>
+
+        <div className="flex w-full justify-between md:hidden">
+          <div
+            className={`flex w-fit items-center gap-0.5 rounded-6 px-1.5 ${
+              mobileStartLevel === level ? 'bg-purple' : 'bg-neutral-5'
             }`}
           >
             <span
               className={`text-13 font-medium ${
-                mobileEndLevel === level ? 'text-white-100' : 'text-neutral-50'
+                mobileStartLevel === level
+                  ? 'text-white-100'
+                  : 'text-neutral-50'
               }`}
             >
               lv
             </span>
             <span
               className={`text-15 font-medium ${
-                mobileEndLevel === level ? 'text-white-100' : 'text-neutral-100'
+                mobileStartLevel === level
+                  ? 'text-white-100'
+                  : 'text-neutral-100'
               }`}
             >
-              {mobileEndLevel}
+              {mobileStartLevel}
             </span>
           </div>
-        )}
-      </div>
-
-      <div
-        className={`relative hidden w-full md:flex ${
-          level >= 10 && visibleLevels.length === 1
-            ? 'justify-start'
-            : 'justify-between'
-        }`}
-      >
-        {visibleLevels.map((lvl, index) => {
-          const isLevel10OrAbove = level >= 10 && visibleLevels.length === 1
-
-          const evenSpacing =
-            visibleLevels.length > 1
-              ? (index / (visibleLevels.length - 1)) * 100
-              : isLevel10OrAbove
-                ? 0
-                : 50
-
-          return (
+          {level < 10 && (
             <div
-              key={`karma-label-${lvl.level}`}
-              className={`flex items-center ${
-                isLevel10OrAbove
-                  ? 'justify-start'
-                  : index === 0
-                    ? 'justify-start'
-                    : index === visibleLevels.length - 1
-                      ? 'justify-end'
-                      : 'justify-center'
+              className={`flex items-center gap-0.5 rounded-6 px-1.5 ${
+                mobileEndLevel === level ? 'bg-purple' : 'bg-neutral-5'
               }`}
-              style={{
-                position: isLevel10OrAbove
-                  ? 'relative'
-                  : index === 0 || index === visibleLevels.length - 1
-                    ? 'relative'
-                    : 'absolute',
-                left: isLevel10OrAbove
-                  ? undefined
-                  : index > 0 && index < visibleLevels.length - 1
-                    ? `${evenSpacing}%`
-                    : undefined,
-                transform: isLevel10OrAbove
-                  ? undefined
-                  : index > 0 && index < visibleLevels.length - 1
-                    ? 'translateX(-50%)'
-                    : undefined,
-                width: isLevel10OrAbove
-                  ? 'auto'
-                  : index > 0 && index < visibleLevels.length - 1
-                    ? '110px'
-                    : 'auto',
-              }}
             >
-              <div className="flex flex-col justify-center gap-0.5">
-                <div
-                  className={`flex w-fit items-center rounded-6 px-1.5 ${
-                    lvl.level === level ? 'bg-purple' : 'bg-neutral-5'
-                  }`}
-                >
-                  <span
-                    className={`flex items-baseline gap-0.5 ${
-                      lvl.level === level ? 'text-white-100' : 'text-neutral-50'
+              <span
+                className={`text-13 font-medium ${
+                  mobileEndLevel === level
+                    ? 'text-white-100'
+                    : 'text-neutral-50'
+                }`}
+              >
+                lv
+              </span>
+              <span
+                className={`text-15 font-medium ${
+                  mobileEndLevel === level
+                    ? 'text-white-100'
+                    : 'text-neutral-100'
+                }`}
+              >
+                {mobileEndLevel}
+              </span>
+            </div>
+          )}
+        </div>
+
+        <div
+          className={`relative hidden w-full md:flex ${
+            level >= 10 && visibleLevels.length === 1
+              ? 'justify-start'
+              : 'justify-between'
+          }`}
+        >
+          {visibleLevels.map((lvl, index) => {
+            const isLevel10OrAbove = level >= 10 && visibleLevels.length === 1
+
+            const evenSpacing =
+              visibleLevels.length > 1
+                ? (index / (visibleLevels.length - 1)) * 100
+                : isLevel10OrAbove
+                  ? 0
+                  : 50
+
+            return (
+              <div
+                key={`karma-label-${lvl.level}`}
+                className={`flex items-center ${
+                  isLevel10OrAbove
+                    ? 'justify-start'
+                    : index === 0
+                      ? 'justify-start'
+                      : index === visibleLevels.length - 1
+                        ? 'justify-end'
+                        : 'justify-center'
+                }`}
+                style={{
+                  position: isLevel10OrAbove
+                    ? 'relative'
+                    : index === 0 || index === visibleLevels.length - 1
+                      ? 'relative'
+                      : 'absolute',
+                  left: isLevel10OrAbove
+                    ? undefined
+                    : index > 0 && index < visibleLevels.length - 1
+                      ? `${evenSpacing}%`
+                      : undefined,
+                  transform: isLevel10OrAbove
+                    ? undefined
+                    : index > 0 && index < visibleLevels.length - 1
+                      ? 'translateX(-50%)'
+                      : undefined,
+                  width: isLevel10OrAbove
+                    ? 'auto'
+                    : index > 0 && index < visibleLevels.length - 1
+                      ? '110px'
+                      : 'auto',
+                }}
+              >
+                <div className="flex flex-col justify-center gap-0.5">
+                  <div
+                    className={`flex w-fit items-center rounded-6 px-1.5 ${
+                      lvl.level === level ? 'bg-purple' : 'bg-neutral-5'
                     }`}
                   >
                     <span
-                      className={`text-13 font-medium ${lvl.level === level ? 'text-white-100' : 'text-neutral-50'}`}
-                    >
-                      lv
-                    </span>
-                    <span
-                      className={`text-15 font-medium ${
+                      className={`flex items-baseline gap-0.5 ${
                         lvl.level === level
                           ? 'text-white-100'
-                          : 'text-neutral-100'
+                          : 'text-neutral-50'
                       }`}
                     >
-                      {lvl.level}
+                      <span
+                        className={`text-13 font-medium ${lvl.level === level ? 'text-white-100' : 'text-neutral-50'}`}
+                      >
+                        lv
+                      </span>
+                      <span
+                        className={`text-15 font-medium ${
+                          lvl.level === level
+                            ? 'text-white-100'
+                            : 'text-neutral-100'
+                        }`}
+                      >
+                        {lvl.level}
+                      </span>
                     </span>
+                  </div>
+                  <span className="text-center text-13 font-medium text-neutral-50">
+                    {formatKarmaLabel(lvl.minKarma, lvl.level)}
                   </span>
                 </div>
-                <span className="text-center text-13 font-medium text-neutral-50">
-                  {formatKarmaLabel(lvl.minKarma, lvl.level)}
-                </span>
               </div>
-            </div>
-          )
-        })}
-      </div>
+            )
+          })}
+        </div>
 
-      <div className="flex w-full justify-between md:hidden">
-        <span className="text-13 font-medium text-neutral-50">
-          {formatKarmaLabel(mobileMilestones[0], mobileStartLevel)}
-        </span>
-        {level < 10 && (
+        <div className="flex w-full justify-between md:hidden">
           <span className="text-13 font-medium text-neutral-50">
-            {formatKarmaLabel(mobileMilestones[1], mobileEndLevel)}
+            {formatKarmaLabel(mobileMilestones[0], mobileStartLevel)}
           </span>
-        )}
+          {level < 10 && (
+            <span className="text-13 font-medium text-neutral-50">
+              {formatKarmaLabel(mobileMilestones[1], mobileEndLevel)}
+            </span>
+          )}
+        </div>
       </div>
     </div>
   )
