@@ -50,11 +50,6 @@
       "~/*": ["./src/*"]
     }
   },
-  "references": [
-    {
-      "path": "../../packages/wallet"
-    }
-  ],
   "include": [
     "next-env.d.ts",
     "**/*.ts",

@@ -1,4 +1,3 @@
-import { createRateLimitMiddleware } from '@status-im/wallet/data'
 import { initTRPC } from '@trpc/server'
 import { notFound } from 'next/navigation'
 import superjson from 'superjson'
@@ -69,12 +68,7 @@ export const router = t.router
  * guarantee that a user querying is authorized, but you can still access user session data if they
  * are logged in.
  */
-const rateLimitMiddleware = createRateLimitMiddleware(t, {
-  windowMs: 60 * 1000,
-  maxRequests: 60,
-})
-
-export const publicProcedure = t.procedure.use(rateLimitMiddleware)
+export const publicProcedure = t.procedure
 
 /**
  * Authenticated procedure
