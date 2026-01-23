@@ -1138,6 +1138,24 @@
       "notes": "footer::pre_deposit_disclaimer"
     }
   },
+  "network_switch_error": {
+    "title": {
+      "translation": "네트워크 전환 불가",
+      "notes": "network_switch_error::title"
+    },
+    "description": {
+      "translation": "지갑이 자동 네트워크 전환을 지원하지 않습니다. 계속하려면 수동으로 Status Network에 연결해주세요.",
+      "notes": "network_switch_error::description"
+    },
+    "network_details": {
+      "translation": "네트워크 세부 정보 보기",
+      "notes": "network_switch_error::network_details"
+    },
+    "retry": {
+      "translation": "다시 시도",
+      "notes": "network_switch_error::retry"
+    }
+  },
   "errors": {
     "wallet_not_connected": {
       "translation": "지갑이 연결되지 않았습니다. 먼저 지갑을 연결해주세요.",
