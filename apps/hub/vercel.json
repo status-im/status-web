@@ -2,5 +2,12 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "ignoreCommand": "git diff --quiet HEAD^ HEAD ../../{patches,package.json,turbo.json} ../../packages/{colors,icons,components,wallet,status-network} ./",
   "installCommand": "pnpm install --dir ../../ --frozen-lockfile",
-  "buildCommand": "turbo run build --cwd ../../ --filter=./apps/hub..."
+  "buildCommand": "turbo run build --cwd ../../ --filter=./apps/hub...",
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/en",
+      "permanent": false
+    }
+  ]
 }

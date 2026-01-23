@@ -7,9 +7,9 @@ export const routing = defineRouting({
   // Used when no locale matches
   defaultLocale: 'en',
 
-  // Show locale prefix only when needed
-  localePrefix: 'as-needed',
+  // Always show locale prefix (required for static export)
+  localePrefix: 'always',
 
-  // Disable automatic locale detection
-  localeDetection: true,
+  // Disable automatic locale detection (required for static export)
+  localeDetection: false,
 })
