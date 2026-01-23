@@ -62,7 +62,7 @@ export const { createCallerFactory } = t
 export const router = t.router
 
 /**
- * Rate limiting for Market Proxy (60 RPM)
+ * Rate limiting for Market Proxy
  *
  * RATIONALE:
  * - WIP
