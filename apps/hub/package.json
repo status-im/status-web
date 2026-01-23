@@ -7,9 +7,8 @@
     "predev": "pnpm install",
     "dev": "next dev",
     "build": "next build",
-    "build:export": "NEXT_LOCAL_OUTPUT=export next build",
     "postbuild": "next-sitemap",
-    "start": "next start",
+    "start": "serve out",
     "lint": "eslint src",
     "format": "prettier --write . --ignore-path .gitignore",
     "check": "tsc --noEmit",
@@ -65,6 +64,7 @@
     "postcss": "^8.5.1",
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.6.11",
+    "serve": "^14.2.5",
     "tailwindcss": "^3.4.11",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.22.0"
