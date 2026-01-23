@@ -9,7 +9,7 @@ import {
   DocsIcon,
   ExplorerIcon,
   HandIcon,
-  HeartIcon,
+  // HeartIcon,
   // GovernanceIcon,
   HomeIcon,
   KarmaIcon,
@@ -109,7 +109,7 @@ const Sidebar = (props: Props) => {
     {
       id: 'contact-us',
       label: t('footer.share_feedback'),
-      icon: HeartIcon,
+      // icon: HeartIcon,
       href: 'https://statusnetwork.typeform.com/contact-us',
     },
     {
