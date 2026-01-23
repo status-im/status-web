@@ -48,7 +48,7 @@ export default defineBackground({
       const extensionUrl = chrome.runtime.getURL('page.html#/onboarding')
       const extensionBaseUrl = chrome.runtime.getURL('page.html')
 
-      const allTabs = await chrome.tabs.query({})
+      const allTabs = await chrome.tabs.query({ currentWindow: true })
       const existingTabs = allTabs.filter(tab =>
         tab.url?.startsWith(extensionBaseUrl),
       )
@@ -56,10 +56,6 @@ export default defineBackground({
       if (existingTabs.length > 0 && existingTabs[0]) {
         const tab = existingTabs[0]
         await chrome.tabs.update(tab.id!, { active: true })
-
-        if (tab.windowId) {
-          await chrome.windows.update(tab.windowId, { focused: true })
-        }
       } else {
         await chrome.tabs.create({ url: extensionUrl })
       }
