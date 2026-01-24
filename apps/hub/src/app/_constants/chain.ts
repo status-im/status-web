@@ -15,7 +15,9 @@ export const getDefaultWagmiConfig = () =>
     chains: [statusSepolia, mainnet, linea],
     transports: {
       [statusSepolia.id]: http(statusSepolia.rpcUrls.default.http[0]),
-      [mainnet.id]: http('https://eth.llamarpc.com'),
+      [mainnet.id]: http(
+        'https://mainnet.infura.io/v3/6291a6aa45c94fd79bda6770b58153dd'
+      ),
       [linea.id]: http(linea.rpcUrls.default.http[0]),
     },
     walletConnectProjectId:
