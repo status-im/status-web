@@ -1140,15 +1140,15 @@
   },
   "network_switch_error": {
     "title": {
-      "translation": "네트워크 전환 불가",
+      "translation": "네트워크 전환을 할 수 없습니다",
       "notes": "network_switch_error::title"
     },
     "description": {
-      "translation": "지갑이 자동 네트워크 전환을 지원하지 않습니다. 계속하려면 수동으로 Status Network에 연결해주세요.",
+      "translation": "현재 사용 중인 지갑은 네트워크 자동 전환을 지원하지 않습니다. 계속하려면 Status Network에 수동으로 연결해 주세요.",
       "notes": "network_switch_error::description"
     },
     "network_details": {
-      "translation": "네트워크 세부 정보 보기",
+      "translation": "네트워크 정보 보기",
       "notes": "network_switch_error::network_details"
     },
     "retry": {
