@@ -5,9 +5,12 @@ import { TRPCError } from '@trpc/server'
  */
 export interface RateLimitOptions {
   windowMs: number
-  maxRequests: number
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  maxRequests: number | ((opts: any) => number)
   message?: string
   keyPrefix?: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getCategory?: (opts: any) => string | undefined
 }
 
 const requestCounts = new Map<string, { count: number; resetTime: number }>()
@@ -25,6 +28,7 @@ export const createRateLimitMiddleware = (
     maxRequests,
     message = 'Rate limit exceeded. Please try again later.',
     keyPrefix = 'default',
+    getCategory,
   } = options
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,7 +37,8 @@ export const createRateLimitMiddleware = (
     const ip = ctx.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown'
     const now = Date.now()
 
-    const key = `${keyPrefix}:${ip}`
+    const category = getCategory ? getCategory(opts) : undefined
+    const key = `${keyPrefix}:${category ? category + ':' : ''}${ip}`
     let record = requestCounts.get(key)
 
     if (!record || now > record.resetTime) {
@@ -43,7 +48,10 @@ export const createRateLimitMiddleware = (
     record.count++
     requestCounts.set(key, record)
 
-    if (record.count > maxRequests) {
+    const limit =
+      typeof maxRequests === 'function' ? maxRequests(opts) : maxRequests
+
+    if (record.count > limit) {
       throw new TRPCError({
         code: 'TOO_MANY_REQUESTS',
         message,
