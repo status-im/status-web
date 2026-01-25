@@ -17,7 +17,7 @@ import {
   fetchTokenPriceHistory,
   fetchTokensPrice,
 } from '../../services/coingecko/index'
-import { nodesProcedure, router } from '../lib/trpc'
+import { ethRPCProcedure, router } from '../lib/trpc'
 
 import type {
   CoinGeckoCoinDetailResponse,
@@ -195,7 +195,7 @@ async function fetchTokenData(
 }
 
 export const assetsRouter = router({
-  all: nodesProcedure
+  all: ethRPCProcedure
     .input(
       z.object({
         address: z.string(),
@@ -216,7 +216,7 @@ export const assetsRouter = router({
 
       return await cachedAll(inputHash)
     }),
-  nativeToken: nodesProcedure
+  nativeToken: ethRPCProcedure
     .input(
       z.object({
         address: z.string(),
@@ -240,7 +240,7 @@ export const assetsRouter = router({
 
       return await cachedNativeToken(inputHash)
     }),
-  token: nodesProcedure
+  token: ethRPCProcedure
     .input(
       z.object({
         address: z.string(),
@@ -264,7 +264,7 @@ export const assetsRouter = router({
 
       return await cachedToken(inputHash)
     }),
-  nativeTokenPriceChart: nodesProcedure
+  nativeTokenPriceChart: ethRPCProcedure
     .input(
       z.object({
         symbol: z.string(),
@@ -276,7 +276,7 @@ export const assetsRouter = router({
 
       return await cachedNativeTokenPriceChart(inputHash)
     }),
-  tokenPriceChart: nodesProcedure
+  tokenPriceChart: ethRPCProcedure
     .input(
       z.object({
         symbol: z.string(),
@@ -288,7 +288,7 @@ export const assetsRouter = router({
 
       return await cachedTokenPriceChart(inputHash)
     }),
-  nativeTokenBalanceChart: nodesProcedure
+  nativeTokenBalanceChart: ethRPCProcedure
     .input(
       z.object({
         address: z.string(),
@@ -301,7 +301,7 @@ export const assetsRouter = router({
 
       return await cachedNativeTokenBalanceChart(inputHash)
     }),
-  tokenBalanceChart: nodesProcedure
+  tokenBalanceChart: ethRPCProcedure
     .input(
       z.object({
         address: z.string(),

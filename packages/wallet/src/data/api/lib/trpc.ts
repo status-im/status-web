@@ -65,25 +65,67 @@ export const router = t.router
  * Rate limiting for Market Proxy
  *
  * RATIONALE:
- * - WIP
+ * - Aligned with the Market Proxy's CoinGecko API rate limit (30 RPM for Demo/NoKey).
+ * - Although the proxy implements a 5-minute cache, a 30 RPM limit per user provides
+ *   a safe baseline to prevent backend rate limiting for uncached requests.
+ * - Reference: https://github.com/status-im/market-proxy/blob/master/market-fetcher/config.yaml
  */
 const marketRateLimitMiddleware = createRateLimitMiddleware(t, {
   windowMs: 60 * 1000,
-  maxRequests: 60,
+  maxRequests: 30,
   keyPrefix: 'market',
 })
 
 /**
- * Rate limiting for ETH RPC Proxy (Alchemy) (30 RPM)
+ * RPC method categorization based on eth-rpc-proxy specs:
+ * - permanent: Immutable data (blocks, receipts)
+ * - short: Semi-static data (balances, calls)
+ * - minimal: Highly dynamic data (gas prices, fees, nonces)
+ */
+const RPC_METHOD_CATEGORY_MAP: Record<
+  string,
+  'permanent' | 'short' | 'minimal'
+> = {
+  'nodes.getFeeRate': 'minimal',
+  'nodes.getNonce': 'short',
+  'nodes.broadcastTransaction': 'minimal',
+  // Default to short for other potential node-related calls
+}
+
+/**
+ * Category-specific limits (RPM)
+ * - permanent: Highly cacheable, higher limit allowed as hits likely won't reach provider.
+ * - short: Standard semi-static data.
+ * - minimal: Highly dynamic data, more restrictive to protect provider capacity.
+ */
+const RPC_CATEGORY_LIMITS: Record<string, number> = {
+  permanent: 60,
+  short: 30,
+  minimal: 15,
+}
+
+/**
+ * Rate limiting for ETH RPC Proxy (Alchemy)
  *
  * RATIONALE:
- * - WIP
+ * - Aligned with the Alchemy Tier (30 RPM total for free bucket, but split by category).
+ * - By categorizing and varying limits, we optimize for proxy cache efficiency while protecting
+ *   against high-frequency uncached request spikes.
+ * - Reference: https://github.com/status-im/eth-rpc-proxy/blob/master/nginx-proxy/cache.md#yaml-configuration-system
  */
-const nodesRateLimitMiddleware = createRateLimitMiddleware(t, {
+const ethRPCRateLimitMiddleware = createRateLimitMiddleware(t, {
   windowMs: 60 * 1000,
-  maxRequests: 30,
-  keyPrefix: 'nodes',
+  maxRequests: opts => {
+    const category = RPC_METHOD_CATEGORY_MAP[opts.path] ?? 'short'
+    return RPC_CATEGORY_LIMITS[category]
+  },
+  keyPrefix: 'eth-rpc',
+  getCategory: opts => RPC_METHOD_CATEGORY_MAP[opts.path] ?? 'short',
 })
+
+/** Rate limit test:
+ * pnpm exec vitest packages/wallet/src/data/api/lib/__tests__/rate-limiter.test.ts --run
+ */
 
 const errorMiddleware = t.middleware(async opts => {
   const result = await opts.next()
@@ -122,4 +164,4 @@ export const marketProcedure = publicProcedure.use(marketRateLimitMiddleware)
 /**
  * Procedure for Node/RPC endpoints
  */
-export const nodesProcedure = publicProcedure.use(nodesRateLimitMiddleware)
+export const ethRPCProcedure = publicProcedure.use(ethRPCRateLimitMiddleware)
