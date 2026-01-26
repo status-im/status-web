@@ -27,6 +27,21 @@ pipeline {
       description: 'Name of app from apps folder.',
       choices: ['hub'],
     )
+    string(
+      name: 'NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID',
+      description: 'Name of app from apps folder.',
+      defaultValue: params.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ?: ''
+    )
+    string(
+      name: 'NEXT_PUBLIC_STATUS_NETWORK_API_URL',
+      description: 'Name of app from apps folder.',
+      defaultValue: params.NEXT_PUBLIC_STATUS_NETWORK_API_URL ?: 'https://api-dev.status.network/api/v1'
+    )
+    string(
+      name: 'NEXT_PUBLIC_STATUS_API_URL',
+      description: 'Name of app from apps folder.',
+      defaultValue: params.NEXT_PUBLIC_STATUS_API_URL ?: 'https://api-dev.status.network'
+    )
   }
 
   environment {
