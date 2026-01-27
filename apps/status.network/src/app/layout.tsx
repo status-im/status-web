@@ -4,7 +4,7 @@ import Script from 'next/script'
 import './globals.css'
 import { cx } from 'cva'
 import { getLocale } from 'next-intl/server'
-import { Metadata } from './_metadata'
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, Metadata } from './_metadata'
 import { jsonLD, JSONLDScript } from './_utils/json-ld'
 
 const inter = Inter({
@@ -47,11 +47,10 @@ export const metadata = Metadata({
   metadataBase: new URL('https://status.network/'),
 
   title: {
-    default: 'Status Network | Gasless Ethereum L2 with Native Yield',
+    default: DEFAULT_TITLE,
     template: '%s — Status Network',
   },
-  description:
-    'Status Network is a gasless zkEVM Ethereum Layer 2 with native yield, privacy by design, and reputation-based governance for scalable onchain apps.',
+  description: DEFAULT_DESCRIPTION,
 
   pathname: '/',
 
