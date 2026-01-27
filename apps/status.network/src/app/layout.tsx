@@ -48,7 +48,7 @@ export const metadata = Metadata({
 
   title: {
     default: DEFAULT_TITLE,
-    template: '%s — Status Network',
+    template: '%s',
   },
   description: DEFAULT_DESCRIPTION,
 
