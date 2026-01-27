@@ -124,7 +124,7 @@ export default async function HomePage() {
               <Button
                 size="32"
                 variant="outline"
-                href="https://status.app/blog/introducing-unified-status-mobile-app"
+                href="https://status.app/blog/migrate-from-status-legacy-to-unified-status-mobile-app"
                 target="_blank"
                 rel="noopener noreferrer"
               >

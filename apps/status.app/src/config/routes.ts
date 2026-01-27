@@ -45,7 +45,7 @@ export const ROUTES = {
     },
     {
       name: 'Legacy mobile',
-      href: 'https://status.app/blog/introducing-unified-status-mobile-app',
+      href: 'https://status.app/blog/migrate-from-status-legacy-to-unified-status-mobile-app',
     },
   ],
   Ecosystem: [
