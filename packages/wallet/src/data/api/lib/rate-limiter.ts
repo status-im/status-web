@@ -28,6 +28,11 @@ let lastPruneAt = 0
 
 const PRUNE_INTERVAL_MS = 60 * 1000
 
+export const clearRateLimitCache = () => {
+  requestCounts.clear()
+  lastPruneAt = 0
+}
+
 /**
  * Higher-order function to create a rate limiting middleware
  */
