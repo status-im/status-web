@@ -11,7 +11,7 @@ import { Partners } from '../_components/partners'
 import { PreFooter } from '../_components/pre-footer'
 import { PromoBar } from '../_components/promo-bar'
 import { Tokenomics } from '../_components/tokenomics'
-import { generateMetadata as generateMetadataUtil } from '../_utils/generate-metadata'
+import { Metadata } from '../_metadata'
 import { jsonLD, JSONLDScript } from '../_utils/json-ld'
 
 type Props = {
@@ -19,10 +19,14 @@ type Props = {
 }
 
 export async function generateMetadata(props: Props) {
-  return generateMetadataUtil(props, {
-    titleKey: 'hero.title',
-    descriptionKey: 'hero.description',
+  const { locale } = await props.params
+
+  return Metadata({
+    title: 'Status Network | Gasless Ethereum L2 with Native Yield',
+    description:
+      'Status Network is a gasless zkEVM Ethereum Layer 2 with native yield, privacy by design, and reputation-based governance for scalable onchain apps.',
     pathname: '/',
+    locale,
   })
 }
 
