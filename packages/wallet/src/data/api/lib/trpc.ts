@@ -72,8 +72,9 @@ export const router = trpc.router
  */
 const marketRateLimitMiddleware = createRateLimitMiddleware(trpc, {
   windowMs: 60 * 1000,
-  maxRequests: 30,
+  maxRequests: 2,
   keyPrefix: 'market',
+  message: 'Market data rate limit exceeded. Please try again in a minute.',
 })
 
 /**
@@ -121,6 +122,7 @@ const ethRPCRateLimitMiddleware = createRateLimitMiddleware(trpc, {
   },
   keyPrefix: 'eth-rpc',
   getCategory: opts => RPC_METHOD_CATEGORY_MAP[opts.path] ?? 'short',
+  message: 'RPC request rate limit exceeded. Please try again in a minute.',
 })
 
 /** Rate limit test:
