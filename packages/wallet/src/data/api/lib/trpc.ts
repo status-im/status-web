@@ -1,4 +1,4 @@
-import { initTRPC, TRPCError } from '@trpc/server'
+import { initTRPC } from '@trpc/server'
 import superjson from 'superjson'
 import { ZodError } from 'zod'
 
@@ -71,8 +71,8 @@ export const router = trpc.router
  * - Reference: https://github.com/status-im/market-proxy/blob/master/market-fetcher/config.yaml
  */
 const marketRateLimitMiddleware = createRateLimitMiddleware(trpc, {
-  windowMs: 60 * 1000,
-  maxRequests: 2,
+  windowMs: 60 * 1000, // 1 minute
+  maxRequests: 30, // 30 requests per minute
   keyPrefix: 'market',
   message: 'Market data rate limit exceeded. Please try again in a minute.',
 })
@@ -115,7 +115,7 @@ const RPC_CATEGORY_LIMITS: Record<string, number> = {
  * - Reference: https://github.com/status-im/eth-rpc-proxy/blob/master/nginx-proxy/cache.md#yaml-configuration-system
  */
 const ethRPCRateLimitMiddleware = createRateLimitMiddleware(trpc, {
-  windowMs: 60 * 1000,
+  windowMs: 60 * 1000, // 1 minute
   maxRequests: opts => {
     const category = RPC_METHOD_CATEGORY_MAP[opts.path] ?? 'short'
     return RPC_CATEGORY_LIMITS[category]
@@ -133,21 +133,7 @@ const errorMiddleware = trpc.middleware(async opts => {
   const result = await opts.next()
 
   if (!result.ok && result.error) {
-    const error = result.error.cause
-
-    if (error instanceof Error && error.cause === 429) {
-      throw new TRPCError({
-        code: 'TOO_MANY_REQUESTS',
-        message: error.message,
-        cause: error,
-      })
-    }
-
-    throw new TRPCError({
-      code: 'INTERNAL_SERVER_ERROR',
-      message: error?.message || 'Unknown error',
-      cause: error,
-    })
+    throw result.error
   }
 
   return result

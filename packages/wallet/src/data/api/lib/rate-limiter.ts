@@ -56,7 +56,10 @@ export const createRateLimitMiddleware = <
 
   return trpc.middleware((opts: TOpts) => {
     const { ctx, next } = opts
-    const ip = ctx.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown'
+
+    const ip =
+      ctx.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+
     const now = Date.now()
 
     const category = getCategory ? getCategory(opts) : undefined
