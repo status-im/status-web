@@ -3,25 +3,43 @@ import { TRPCError } from '@trpc/server'
 /**
  * Rate limiting configuration
  */
-export interface RateLimitOptions {
+type RateLimitContext = {
+  headers: {
+    get(name: string): string | null | undefined
+  }
+}
+
+export interface RateLimitMiddlewareOptions<TNextResult = Promise<unknown>> {
+  ctx: RateLimitContext
+  next: () => TNextResult
+}
+
+export interface RateLimitOptions<TOpts extends RateLimitMiddlewareOptions> {
   windowMs: number
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  maxRequests: number | ((opts: any) => number)
+  maxRequests: number | ((opts: TOpts) => number)
   message?: string
   keyPrefix?: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getCategory?: (opts: any) => string | undefined
+  getCategory?: (opts: TOpts) => string | undefined
 }
 
 const requestCounts = new Map<string, { count: number; resetTime: number }>()
 
+let lastPruneAt = 0
+
+const PRUNE_INTERVAL_MS = 60 * 1000
+
 /**
  * Higher-order function to create a rate limiting middleware
  */
-export const createRateLimitMiddleware = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  t: { middleware: (fn: any) => any },
-  options: RateLimitOptions,
+export const createRateLimitMiddleware = <
+  TOpts extends RateLimitMiddlewareOptions<TNextResult>,
+  TNextResult extends Promise<unknown>,
+  TMiddlewareReturn,
+>(
+  trpc: {
+    middleware: (fn: (opts: TOpts) => TNextResult) => TMiddlewareReturn
+  },
+  options: RateLimitOptions<TOpts>,
 ) => {
   const {
     windowMs,
@@ -31,8 +49,7 @@ export const createRateLimitMiddleware = (
     getCategory,
   } = options
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return t.middleware(async (opts: any) => {
+  return trpc.middleware((opts: TOpts) => {
     const { ctx, next } = opts
     const ip = ctx.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown'
     const now = Date.now()
@@ -40,6 +57,15 @@ export const createRateLimitMiddleware = (
     const category = getCategory ? getCategory(opts) : undefined
     const key = `${keyPrefix}:${category ? category + ':' : ''}${ip}`
     let record = requestCounts.get(key)
+
+    if (now - lastPruneAt >= PRUNE_INTERVAL_MS) {
+      for (const [storedKey, storedRecord] of requestCounts) {
+        if (now > storedRecord.resetTime) {
+          requestCounts.delete(storedKey)
+        }
+      }
+      lastPruneAt = now
+    }
 
     if (!record || now > record.resetTime) {
       record = { count: 0, resetTime: now + windowMs }

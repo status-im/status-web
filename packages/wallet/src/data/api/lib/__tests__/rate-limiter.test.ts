@@ -1,15 +1,19 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { createRateLimitMiddleware } from '../rate-limiter'
+import {
+  createRateLimitMiddleware,
+  type RateLimitMiddlewareOptions,
+} from '../rate-limiter'
 
 describe('rate-limiter', () => {
-  const t = {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    middleware: (fn: any) => fn,
+  type TestOpts = RateLimitMiddlewareOptions & { category?: string }
+
+  const trpc = {
+    middleware: (fn: (opts: TestOpts) => Promise<unknown>) => fn,
   }
 
   it('should allow requests within limit', async () => {
-    const middleware = createRateLimitMiddleware(t, {
+    const middleware = createRateLimitMiddleware(trpc, {
       windowMs: 1000,
       maxRequests: 2,
       keyPrefix: 'test1',
@@ -24,7 +28,7 @@ describe('rate-limiter', () => {
   })
 
   it('should block requests exceeding limit', async () => {
-    const middleware = createRateLimitMiddleware(t, {
+    const middleware = createRateLimitMiddleware(trpc, {
       windowMs: 1000,
       maxRequests: 1,
       keyPrefix: 'test2',
@@ -40,7 +44,7 @@ describe('rate-limiter', () => {
   })
 
   it('should use separate buckets for different categories', async () => {
-    const middleware = createRateLimitMiddleware(t, {
+    const middleware = createRateLimitMiddleware(trpc, {
       windowMs: 1000,
       maxRequests: 1,
       keyPrefix: 'test3',
@@ -64,7 +68,7 @@ describe('rate-limiter', () => {
   })
 
   it('should support dynamic maxRequests based on category', async () => {
-    const middleware = createRateLimitMiddleware(t, {
+    const middleware = createRateLimitMiddleware(trpc, {
       windowMs: 1000,
       maxRequests: opts => (opts.category === 'VIP' ? 2 : 1),
       keyPrefix: 'test_dynamic',
@@ -92,7 +96,7 @@ describe('rate-limiter', () => {
 
   it('should reset after windowMs', async () => {
     vi.useFakeTimers()
-    const middleware = createRateLimitMiddleware(t, {
+    const middleware = createRateLimitMiddleware(trpc, {
       windowMs: 1000,
       maxRequests: 1,
       keyPrefix: 'test4',

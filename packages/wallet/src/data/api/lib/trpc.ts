@@ -31,7 +31,7 @@ type ApiContext = Awaited<ReturnType<typeof createTRPCContext>>
  * ZodErrors so that you get typesafety on the frontend if your procedure fails due to validation
  * errors on the backend.
  */
-const t = initTRPC.context<ApiContext>().create({
+const trpc = initTRPC.context<ApiContext>().create({
   transformer: superjson,
   isServer: true,
   allowOutsideOfServer: false,
@@ -52,25 +52,25 @@ const t = initTRPC.context<ApiContext>().create({
  *
  * @see https://trpc.io/docs/server/server-side-calls
  */
-export const { createCallerFactory } = t
+export const { createCallerFactory } = trpc
 
 /**
  * 3. ROUTER & PROCEDURES
  *
  * @see https://trpc.io/docs/router
  */
-export const router = t.router
+export const router = trpc.router
 
 /**
  * Rate limiting for Market Proxy
  *
  * RATIONALE:
  * - Aligned with the Market Proxy's CoinGecko API rate limit (30 RPM for Demo/NoKey).
- * - Although the proxy implements a 5-minute cache, a 30 RPM limit per user provides
+ * - Although the proxy implements a 5-minute cache, a 30 RPM limit per IP provides
  *   a safe baseline to prevent backend rate limiting for uncached requests.
  * - Reference: https://github.com/status-im/market-proxy/blob/master/market-fetcher/config.yaml
  */
-const marketRateLimitMiddleware = createRateLimitMiddleware(t, {
+const marketRateLimitMiddleware = createRateLimitMiddleware(trpc, {
   windowMs: 60 * 1000,
   maxRequests: 30,
   keyPrefix: 'market',
@@ -113,7 +113,7 @@ const RPC_CATEGORY_LIMITS: Record<string, number> = {
  *   against high-frequency uncached request spikes.
  * - Reference: https://github.com/status-im/eth-rpc-proxy/blob/master/nginx-proxy/cache.md#yaml-configuration-system
  */
-const ethRPCRateLimitMiddleware = createRateLimitMiddleware(t, {
+const ethRPCRateLimitMiddleware = createRateLimitMiddleware(trpc, {
   windowMs: 60 * 1000,
   maxRequests: opts => {
     const category = RPC_METHOD_CATEGORY_MAP[opts.path] ?? 'short'
@@ -127,7 +127,7 @@ const ethRPCRateLimitMiddleware = createRateLimitMiddleware(t, {
  * pnpm exec vitest packages/wallet/src/data/api/lib/__tests__/rate-limiter.test.ts --run
  */
 
-const errorMiddleware = t.middleware(async opts => {
+const errorMiddleware = trpc.middleware(async opts => {
   const result = await opts.next()
 
   if (!result.ok && result.error) {
@@ -154,7 +154,7 @@ const errorMiddleware = t.middleware(async opts => {
 /**
  * Unauthenticated procedure (Standard)
  */
-export const publicProcedure = t.procedure.use(errorMiddleware)
+export const publicProcedure = trpc.procedure.use(errorMiddleware)
 
 /**
  * Procedure for Market data endpoints
