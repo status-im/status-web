@@ -31,13 +31,15 @@ export const jsonLD = {
     description?: string
     logo?: string
     sameAs?: string[]
-  }) =>
-    baseJsonLD.organization({
+  }) => {
+    const { sameAs, ...restConfig } = config ?? {}
+    return baseJsonLD.organization({
       name: DEFAULT_NAME,
       url: DEFAULT_URL,
-      ...config,
-      sameAs: config?.sameAs ?? STATUS_NETWORK_SOCIAL_LINKS,
-    }),
+      ...restConfig,
+      sameAs: sameAs ?? STATUS_NETWORK_SOCIAL_LINKS,
+    })
+  },
 }
 
 /**
