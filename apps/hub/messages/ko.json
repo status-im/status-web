@@ -1143,9 +1143,13 @@
       "translation": "네트워크 전환을 할 수 없습니다",
       "notes": "network_switch_error::title"
     },
-    "description": {
+    "description_status_network": {
       "translation": "현재 사용 중인 지갑은 네트워크 자동 전환을 지원하지 않습니다. 계속하려면 Status Network에 수동으로 연결해 주세요.",
-      "notes": "network_switch_error::description"
+      "notes": "network_switch_error::description_status_network"
+    },
+    "description_ethereum_mainnet": {
+      "translation": "현재 사용 중인 지갑은 네트워크 자동 전환을 지원하지 않습니다. 계속하려면 Ethereum Mainnet에 수동으로 연결해 주세요.",
+      "notes": "network_switch_error::description_ethereum_mainnet"
     },
     "network_details": {
       "translation": "네트워크 정보 보기",

@@ -11,10 +11,21 @@ type Props = {
   open: boolean
   onClose: () => void
   onRetry: () => void
+  description?: string
+  showNetworkDetails?: boolean
 }
 
-const NetworkSwitchErrorDialog = ({ open, onClose, onRetry }: Props) => {
+const NetworkSwitchErrorDialog = ({
+  open,
+  onClose,
+  onRetry,
+  description,
+  showNetworkDetails = true,
+}: Props) => {
   const t = useTranslations()
+  const defaultDescription = t(
+    'network_switch_error.description_status_network'
+  )
 
   return (
     <Dialog.Root open={open} onOpenChange={nextOpen => !nextOpen && onClose()}>
@@ -43,18 +54,20 @@ const NetworkSwitchErrorDialog = ({ open, onClose, onRetry }: Props) => {
               </Dialog.Title>
               <Dialog.Description asChild>
                 <p className="text-center text-15 text-neutral-100">
-                  {t('network_switch_error.description')}
+                  {description ?? defaultDescription}
                 </p>
               </Dialog.Description>
-              <Link
-                href={NETWORK_DOCS_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-purple hover:text-purple-dark"
-              >
-                {t('network_switch_error.network_details')}
-                <ExternalIcon />
-              </Link>
+              {showNetworkDetails && (
+                <Link
+                  href={NETWORK_DOCS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-purple hover:text-purple-dark"
+                >
+                  {t('network_switch_error.network_details')}
+                  <ExternalIcon />
+                </Link>
+              )}
               <div className="mt-2 flex w-full flex-col gap-3 md:flex-row">
                 <Button
                   onClick={onClose}
