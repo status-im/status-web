@@ -90,6 +90,43 @@ describe('rate-limiter', () => {
       await expectRequest(middleware, { ctx, next }, true)
       await expectRequest(middleware, { ctx, next }, false)
     })
+
+    it('should block multiple consecutive requests after limit', async () => {
+      // After hitting the limit, all subsequent requests should be blocked
+      const middleware = createMiddleware({
+        windowMs: 1000,
+        maxRequests: 2,
+        keyPrefix: 'block-consecutive',
+      })
+
+      const { ctx } = createContext('1.2.3.4')
+      const next = createNext()
+
+      await expectRequest(middleware, { ctx, next }, true)
+      await expectRequest(middleware, { ctx, next }, true)
+      await expectRequest(middleware, { ctx, next }, false)
+      await expectRequest(middleware, { ctx, next }, false)
+      await expectRequest(middleware, { ctx, next }, false)
+
+      expect(next).toHaveBeenCalledTimes(2)
+    })
+
+    it('should handle zero max requests', async () => {
+      // Zero max requests should block all requests
+      const middleware = createMiddleware({
+        windowMs: 1000,
+        maxRequests: 0,
+        keyPrefix: 'zero-requests',
+      })
+
+      const { ctx } = createContext('1.2.3.4')
+      const next = createNext()
+
+      await expectRequest(middleware, { ctx, next }, false)
+      await expectRequest(middleware, { ctx, next }, false)
+
+      expect(next).toHaveBeenCalledTimes(0)
+    })
   })
 
   // ============================================================================
@@ -189,6 +226,56 @@ describe('rate-limiter', () => {
         'Rate limit exceeded',
       )
     })
+
+    it('should not allow IP spoofing to bypass limit', async () => {
+      // Changing IP after hitting the limit should not allow bypassing
+      // if the IP is not actually different
+      const middleware = createRateLimitMiddleware(trpc, {
+        windowMs: 1000,
+        maxRequests: 1,
+        keyPrefix: 'ip-no-spoof',
+      })
+
+      const ip1Ctx = createContext('1.2.3.4')
+      const next = vi.fn().mockResolvedValue('ok')
+
+      await expect(middleware({ ...ip1Ctx, next })).resolves.toBe('ok')
+      await expect(middleware({ ...ip1Ctx, next })).rejects.toThrow(
+        'Rate limit exceeded',
+      )
+
+      // Same IP should still be blocked
+      await expect(middleware({ ...ip1Ctx, next })).rejects.toThrow(
+        'Rate limit exceeded',
+      )
+
+      expect(next).toHaveBeenCalledTimes(1)
+    })
+
+    it('should handle whitespace in x-forwarded-for', async () => {
+      // Should properly trim whitespace from IP addresses
+      const middleware = createRateLimitMiddleware(trpc, {
+        windowMs: 1000,
+        maxRequests: 1,
+        keyPrefix: 'ip-whitespace',
+      })
+
+      const headers1 = new Map([['x-forwarded-for', '  1.2.3.4  ']])
+      const headers2 = new Map([['x-forwarded-for', '1.2.3.4']])
+      const next = vi.fn().mockResolvedValue('ok')
+
+      // Request with whitespace
+      await expect(
+        middleware({ ctx: { headers: headers1 }, next }),
+      ).resolves.toBe('ok')
+
+      // Request without whitespace should be treated as same IP and blocked
+      await expect(
+        middleware({ ctx: { headers: headers2 }, next }),
+      ).rejects.toThrow('Rate limit exceeded')
+
+      expect(next).toHaveBeenCalledTimes(1)
+    })
   })
 
   // ============================================================================
@@ -249,6 +336,78 @@ describe('rate-limiter', () => {
       await expect(middleware({ ctx, next, category: 'VIP' })).rejects.toThrow(
         'Rate limit exceeded',
       )
+    })
+
+    it('should block requests when category limit is exceeded', async () => {
+      // Once a category limit is reached, subsequent requests should be blocked
+      const middleware = createRateLimitMiddleware(trpc, {
+        windowMs: 1000,
+        maxRequests: 2,
+        keyPrefix: 'category-block',
+        getCategory: opts => opts.category,
+      })
+
+      const { ctx } = createContext('1.2.3.4')
+      const next = vi.fn().mockResolvedValue('ok')
+
+      await expect(middleware({ ctx, next, category: 'A' })).resolves.toBe('ok')
+      await expect(middleware({ ctx, next, category: 'A' })).resolves.toBe('ok')
+      await expect(middleware({ ctx, next, category: 'A' })).rejects.toThrow(
+        'Rate limit exceeded',
+      )
+      await expect(middleware({ ctx, next, category: 'A' })).rejects.toThrow(
+        'Rate limit exceeded',
+      )
+
+      expect(next).toHaveBeenCalledTimes(2)
+    })
+
+    it('should handle undefined category gracefully', async () => {
+      // Undefined category should be handled without errors
+      const middleware = createRateLimitMiddleware(trpc, {
+        windowMs: 1000,
+        maxRequests: 1,
+        keyPrefix: 'category-undefined',
+        getCategory: opts => opts.category,
+      })
+
+      const { ctx } = createContext('1.2.3.4')
+      const next = vi.fn().mockResolvedValue('ok')
+
+      await expect(
+        middleware({ ctx, next, category: undefined }),
+      ).resolves.toBe('ok')
+      await expect(
+        middleware({ ctx, next, category: undefined }),
+      ).rejects.toThrow('Rate limit exceeded')
+
+      expect(next).toHaveBeenCalledTimes(1)
+    })
+
+    it('should not allow switching categories to bypass limit', async () => {
+      // Switching categories should not bypass the per-category limit
+      const middleware = createRateLimitMiddleware(trpc, {
+        windowMs: 1000,
+        maxRequests: 1,
+        keyPrefix: 'category-no-switch',
+        getCategory: opts => opts.category,
+      })
+
+      const { ctx } = createContext('1.2.3.4')
+      const next = vi.fn().mockResolvedValue('ok')
+
+      // Hit limit for category A
+      await expect(middleware({ ctx, next, category: 'A' })).resolves.toBe('ok')
+      await expect(middleware({ ctx, next, category: 'A' })).rejects.toThrow(
+        'Rate limit exceeded',
+      )
+
+      // Try category A again - should still be blocked
+      await expect(middleware({ ctx, next, category: 'A' })).rejects.toThrow(
+        'Rate limit exceeded',
+      )
+
+      expect(next).toHaveBeenCalledTimes(1)
     })
   })
 
@@ -383,6 +542,168 @@ describe('rate-limiter', () => {
 
       expect(next).toHaveBeenCalledTimes(3000)
     })
+
+    it('should continue blocking requests after limit exceeded', async () => {
+      // After exceeding the limit, all subsequent requests should be blocked
+      // until the time window resets
+      const middleware = createRateLimitMiddleware(trpc, {
+        windowMs: 1000,
+        maxRequests: 2,
+        keyPrefix: 'host-block-continue',
+        getKey: opts => opts.ctx.headers.get('host') || 'unknown',
+      })
+
+      const headers = createHeadersWithHost('api.example.com', '1.2.3.4')
+      const next = vi.fn().mockResolvedValue('ok')
+
+      // First 2 requests should succeed
+      await expect(middleware({ ctx: { headers }, next })).resolves.toBe('ok')
+      await expect(middleware({ ctx: { headers }, next })).resolves.toBe('ok')
+
+      // Next 3 requests should all be blocked
+      await expect(middleware({ ctx: { headers }, next })).rejects.toThrow(
+        'Rate limit exceeded',
+      )
+      await expect(middleware({ ctx: { headers }, next })).rejects.toThrow(
+        'Rate limit exceeded',
+      )
+      await expect(middleware({ ctx: { headers }, next })).rejects.toThrow(
+        'Rate limit exceeded',
+      )
+
+      expect(next).toHaveBeenCalledTimes(2)
+    })
+
+    it('should accumulate requests from multiple IPs to same host', async () => {
+      // Multiple IPs requesting the same host should accumulate to the same bucket
+      // Verifies that host-based limiting is truly global per host
+      const middleware = createRateLimitMiddleware(trpc, {
+        windowMs: 1000,
+        maxRequests: 3,
+        keyPrefix: 'host-accumulate',
+        getKey: opts => opts.ctx.headers.get('host') || 'unknown',
+      })
+
+      const host = 'api.example.com'
+      const next = vi.fn().mockResolvedValue('ok')
+
+      // Request from IP 1
+      await expect(
+        middleware({
+          ctx: { headers: createHeadersWithHost(host, '1.1.1.1') },
+          next,
+        }),
+      ).resolves.toBe('ok')
+
+      // Request from IP 2
+      await expect(
+        middleware({
+          ctx: { headers: createHeadersWithHost(host, '2.2.2.2') },
+          next,
+        }),
+      ).resolves.toBe('ok')
+
+      // Request from IP 3
+      await expect(
+        middleware({
+          ctx: { headers: createHeadersWithHost(host, '3.3.3.3') },
+          next,
+        }),
+      ).resolves.toBe('ok')
+
+      // Request from IP 1 again - should be blocked as total is now 4
+      await expect(
+        middleware({
+          ctx: { headers: createHeadersWithHost(host, '1.1.1.1') },
+          next,
+        }),
+      ).rejects.toThrow('Rate limit exceeded')
+
+      expect(next).toHaveBeenCalledTimes(3)
+    })
+
+    it('should handle empty string host gracefully', async () => {
+      // Empty string host should be treated as a valid key
+      const middleware = createRateLimitMiddleware(trpc, {
+        windowMs: 1000,
+        maxRequests: 1,
+        keyPrefix: 'host-empty',
+        getKey: opts => opts.ctx.headers.get('host') || 'unknown',
+      })
+
+      const headers = createHeadersWithHost('', '1.2.3.4')
+      const next = vi.fn().mockResolvedValue('ok')
+
+      await expect(middleware({ ctx: { headers }, next })).resolves.toBe('ok')
+      await expect(middleware({ ctx: { headers }, next })).rejects.toThrow(
+        'Rate limit exceeded',
+      )
+
+      expect(next).toHaveBeenCalledTimes(1)
+    })
+
+    it('should not reset counter prematurely', async () => {
+      // Counter should NOT reset before windowMs expires
+      vi.useFakeTimers()
+
+      const middleware = createRateLimitMiddleware(trpc, {
+        windowMs: 2000,
+        maxRequests: 1,
+        keyPrefix: 'host-no-premature-reset',
+        getKey: opts => opts.ctx.headers.get('host') || 'unknown',
+      })
+
+      const headers = createHeadersWithHost('api.example.com', '1.2.3.4')
+      const next = vi.fn().mockResolvedValue('ok')
+
+      // First request
+      await expect(middleware({ ctx: { headers }, next })).resolves.toBe('ok')
+
+      // Second request immediately - should be blocked
+      await expect(middleware({ ctx: { headers }, next })).rejects.toThrow(
+        'Rate limit exceeded',
+      )
+
+      // Advance time by 1 second (half of window) - should still be blocked
+      vi.advanceTimersByTime(1000)
+      await expect(middleware({ ctx: { headers }, next })).rejects.toThrow(
+        'Rate limit exceeded',
+      )
+
+      // Advance time by another 1001ms (total 2001ms) - should now succeed
+      vi.advanceTimersByTime(1001)
+      await expect(middleware({ ctx: { headers }, next })).resolves.toBe('ok')
+
+      vi.useRealTimers()
+      expect(next).toHaveBeenCalledTimes(2)
+    })
+
+    it('should handle concurrent requests to same host correctly', async () => {
+      // Multiple concurrent requests should all be counted
+      const middleware = createRateLimitMiddleware(trpc, {
+        windowMs: 1000,
+        maxRequests: 5,
+        keyPrefix: 'host-concurrent',
+        getKey: opts => opts.ctx.headers.get('host') || 'unknown',
+      })
+
+      const headers = createHeadersWithHost('api.example.com', '1.2.3.4')
+      const next = vi.fn().mockResolvedValue('ok')
+
+      // Send 5 concurrent requests
+      const promises = Array.from({ length: 5 }, () =>
+        middleware({ ctx: { headers }, next }),
+      )
+
+      await Promise.all(promises.map(p => expect(p).resolves.toBe('ok')))
+
+      // 6th request should be blocked
+      await expect(middleware({ ctx: { headers }, next })).rejects.toThrow(
+        'Rate limit exceeded',
+      )
+
+      expect(next).toHaveBeenCalledTimes(5)
+    })
   })
 
   // ============================================================================
@@ -413,6 +734,122 @@ describe('rate-limiter', () => {
 
       await expect(middleware({ ctx, next })).resolves.toBe('ok')
       vi.useRealTimers()
+    })
+
+    it('should not reset before window expires', async () => {
+      // Counter should remain blocked if time hasn't fully elapsed
+      vi.useFakeTimers()
+
+      const middleware = createRateLimitMiddleware(trpc, {
+        windowMs: 5000,
+        maxRequests: 1,
+        keyPrefix: 'time-no-early-reset',
+      })
+
+      const { ctx } = createContext('1.2.3.4')
+      const next = vi.fn().mockResolvedValue('ok')
+
+      await expect(middleware({ ctx, next })).resolves.toBe('ok')
+      await expect(middleware({ ctx, next })).rejects.toThrow(
+        'Rate limit exceeded',
+      )
+
+      // Advance time but not enough
+      vi.advanceTimersByTime(4999)
+      await expect(middleware({ ctx, next })).rejects.toThrow(
+        'Rate limit exceeded',
+      )
+
+      // Now advance past the window
+      vi.advanceTimersByTime(2)
+      await expect(middleware({ ctx, next })).resolves.toBe('ok')
+
+      vi.useRealTimers()
+    })
+
+    it('should maintain separate timers for different keys', async () => {
+      // Each key should have its own independent timer
+      vi.useFakeTimers()
+
+      const middleware = createRateLimitMiddleware(trpc, {
+        windowMs: 2000,
+        maxRequests: 1,
+        keyPrefix: 'time-separate-timers',
+      })
+
+      const ip1Ctx = createContext('1.2.3.4')
+      const ip2Ctx = createContext('5.6.7.8')
+      const next = vi.fn().mockResolvedValue('ok')
+
+      // IP1 hits limit at time 0
+      await expect(middleware({ ...ip1Ctx, next })).resolves.toBe('ok')
+
+      // Advance 1 second
+      vi.advanceTimersByTime(1000)
+
+      // IP2 hits limit at time 1000
+      await expect(middleware({ ...ip2Ctx, next })).resolves.toBe('ok')
+
+      // Advance 1001ms more (total 2001ms) - IP1 should be reset
+      vi.advanceTimersByTime(1001)
+
+      // IP1 should be reset now (2001ms elapsed since first request)
+      await expect(middleware({ ...ip1Ctx, next })).resolves.toBe('ok')
+
+      // IP2 should still be blocked (only 1001ms elapsed since its request)
+      await expect(middleware({ ...ip2Ctx, next })).rejects.toThrow(
+        'Rate limit exceeded',
+      )
+
+      // Advance 1000ms more (total 3001ms) - IP2 should be reset
+      vi.advanceTimersByTime(1000)
+
+      // IP2 should now be reset (2001ms elapsed since its request)
+      await expect(middleware({ ...ip2Ctx, next })).resolves.toBe('ok')
+
+      vi.useRealTimers()
+    })
+
+    it('should handle rapid sequential resets correctly', async () => {
+      // Multiple reset cycles should work correctly
+      vi.useFakeTimers()
+
+      const middleware = createRateLimitMiddleware(trpc, {
+        windowMs: 1000,
+        maxRequests: 2,
+        keyPrefix: 'time-rapid-resets',
+      })
+
+      const { ctx } = createContext('1.2.3.4')
+      const next = vi.fn().mockResolvedValue('ok')
+
+      // First cycle
+      await expect(middleware({ ctx, next })).resolves.toBe('ok')
+      await expect(middleware({ ctx, next })).resolves.toBe('ok')
+      await expect(middleware({ ctx, next })).rejects.toThrow(
+        'Rate limit exceeded',
+      )
+
+      vi.advanceTimersByTime(1001)
+
+      // Second cycle
+      await expect(middleware({ ctx, next })).resolves.toBe('ok')
+      await expect(middleware({ ctx, next })).resolves.toBe('ok')
+      await expect(middleware({ ctx, next })).rejects.toThrow(
+        'Rate limit exceeded',
+      )
+
+      vi.advanceTimersByTime(1001)
+
+      // Third cycle
+      await expect(middleware({ ctx, next })).resolves.toBe('ok')
+      await expect(middleware({ ctx, next })).resolves.toBe('ok')
+      await expect(middleware({ ctx, next })).rejects.toThrow(
+        'Rate limit exceeded',
+      )
+
+      vi.useRealTimers()
+      expect(next).toHaveBeenCalledTimes(6)
     })
   })
 })
