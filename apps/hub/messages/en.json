@@ -1144,11 +1144,11 @@
       "notes": "network_switch_error::title"
     },
     "description_status_network": {
-      "translation": "Your wallet doesn't support automatic network switching. Please connect to Status Network manually to continue.",
+      "translation": "Your wallet does not support switching networks from this app. Try switching network to Status Network from within your wallet instead.",
       "notes": "network_switch_error::description_status_network"
     },
     "description_ethereum_mainnet": {
-      "translation": "Your wallet doesn't support automatic network switching. Please connect to Ethereum Mainnet manually to continue.",
+      "translation": "Your wallet does not support switching networks from this app. Try switching network to Ethereum Mainnet from within your wallet instead.",
       "notes": "network_switch_error::description_ethereum_mainnet"
     },
     "network_details": {
