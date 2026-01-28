@@ -66,9 +66,7 @@ export const router = trpc.router
  *
  * RATIONALE:
  * - Aligned with the Market Proxy's CoinGecko API rate limit (30 RPM for Demo/NoKey).
- * - Although the proxy implements a 5-minute cache, a 30 RPM limit per IP provides
- *   a safe baseline to prevent backend rate limiting for uncached requests.
- * - Reference: https://github.com/status-im/market-proxy/blob/master/market-fetcher/config.yaml
+ * - Reference: https://github.com/status-im/market-proxy/blob/master/market-fetcher/config.yaml#L14-L19
  */
 const marketRateLimitMiddleware = createRateLimitMiddleware(trpc, {
   windowMs: 60 * 1000, // 1 minute
@@ -110,8 +108,6 @@ const RPC_CATEGORY_LIMITS: Record<string, number> = {
  *
  * RATIONALE:
  * - Aligned with the Alchemy Tier (30 RPM total for free bucket, but split by category).
- * - By categorizing and varying limits, we optimize for proxy cache efficiency while protecting
- *   against high-frequency uncached request spikes.
  * - Reference: https://github.com/status-im/eth-rpc-proxy/blob/master/nginx-proxy/cache.md#yaml-configuration-system
  */
 const ethRPCRateLimitMiddleware = createRateLimitMiddleware(trpc, {
@@ -125,9 +121,25 @@ const ethRPCRateLimitMiddleware = createRateLimitMiddleware(trpc, {
   message: 'RPC request rate limit exceeded. Please try again in a minute.',
 })
 
-/** Rate limit test:
- * pnpm exec vitest packages/wallet/src/data/api/lib/__tests__/rate-limiter.test.ts --run
+/**
+ * Global rate limiting for all API requests
+ *
+ * RATIONALE:
+ * - Protects the API from excessive requests to any domain
+ * - Keys by host header to limit per domain (regardless of IP address)
+ * - Fixed window: 60 seconds, 3000 requests per host
  */
+const globalHostRateLimitMiddleware = createRateLimitMiddleware(trpc, {
+  windowMs: 60 * 1000, // 1 minute
+  maxRequests: 3000, // 3000 requests per minute per host
+  keyPrefix: 'global-host',
+  getKey: opts => {
+    const host = opts.ctx.headers.get('host') || 'unknown'
+    return host
+  },
+  message:
+    'Too many requests to this API domain. Please try again in a minute.',
+})
 
 const errorMiddleware = trpc.middleware(async opts => {
   const result = await opts.next()
@@ -139,17 +151,13 @@ const errorMiddleware = trpc.middleware(async opts => {
   return result
 })
 
-/**
- * Unauthenticated procedure (Standard)
- */
-export const publicProcedure = trpc.procedure.use(errorMiddleware)
+// Unauthenticated procedure (Standard) with global host-based rate limiting
+export const publicProcedure = trpc.procedure
+  .use(globalHostRateLimitMiddleware)
+  .use(errorMiddleware)
 
-/**
- * Procedure for Market data endpoints
- */
+// Procedure for Market data endpoints
 export const marketProcedure = publicProcedure.use(marketRateLimitMiddleware)
 
-/**
- * Procedure for Node/RPC endpoints
- */
+// Procedure for Node/RPC endpoints
 export const ethRPCProcedure = publicProcedure.use(ethRPCRateLimitMiddleware)
