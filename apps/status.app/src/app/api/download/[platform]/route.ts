@@ -44,12 +44,9 @@ export async function GET(
       store: 'direct',
     })
 
-    // const { browser_download_url: downloadUrl } = release.data.assets.find(
-    //   asset => asset.name.endsWith('universal.apk')
-    // )!
-
-    const downloadUrl =
-      'https://ci.infra.status.im/job/status-app/job/release/job/release%252F2.36.x/69/artifact/pkg/StatusIm-Desktop-2.36.1-9-g2648904e5-264890-arm64.apk'
+    const { browser_download_url: downloadUrl } = release.data.assets.find(
+      asset => asset.name.endsWith('arm64.apk')
+    )!
 
     return NextResponse.redirect(downloadUrl)
   }
