@@ -13,23 +13,30 @@ const inter = Inter({
 })
 
 const organizationSchema = jsonLD.organization({
-  description:
-    'Manage your Status Network assets, discover applications, and navigate to various services.',
-  logo: 'https://hub.status.network/logo.svg',
+  '@id': 'https://hub.status.network/#organization',
+  name: 'Status Network',
+  url: 'https://hub.status.network',
+  logo: 'https://hub.status.network/og-image.png',
+  description: 'The gasless network with sustainable funding for app builders',
 })
 
 const websiteSchema = jsonLD.website({
+  '@id': 'https://hub.status.network/#website',
+  name: 'Status Network Hub',
+  url: 'https://hub.status.network',
   description:
-    'Manage your Status Network assets, discover applications, and navigate to various services.',
+    'Explore Status Network, a gasless Ethereum Layer 2 with a native privacy layer, shared yield, staking, and reputation-based governance.',
+  publisher: {
+    '@id': 'https://hub.status.network/#organization',
+  },
 })
 
 export const metadata = MetadataFn({
+  metadataBase: new URL('https://hub.status.network'),
   // title: 'Status Hub',
   // description:
   // 'Manage your Status Network assets, discover applications, and navigate to various services.',
-  alternates: {
-    canonical: '/',
-  },
+  pathname: '/',
 })
 
 type Props = {

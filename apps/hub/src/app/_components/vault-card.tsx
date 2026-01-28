@@ -7,10 +7,14 @@ import { Button } from '@status-im/status-network/components'
 import { ConnectKitButton } from 'connectkit'
 import { cva } from 'cva'
 import { useTranslations } from 'next-intl'
+import { formatUnits } from 'viem'
 import { useAccount } from 'wagmi'
 
 import { formatCurrency, formatTokenAmount } from '~/utils/currency'
-import { type Vault } from '~constants/index'
+import { isGUSDVault, type Vault } from '~constants/address'
+import { useGUSDStablecoinBreakdown } from '~hooks/useGUSDStablecoinBreakdown'
+import { useGUSDTVL } from '~hooks/useGUSDTVL'
+import { useGUSDUserBalance } from '~hooks/useGUSDUserBalance'
 import { usePreDepositTVL } from '~hooks/usePreDepositTVL'
 import { usePreDepositTVLInUSD } from '~hooks/usePreDepositTVLInUSD'
 import { useUserVaultDeposit } from '~hooks/useUserVaultDeposit'
@@ -116,16 +120,20 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
   pendingDepositRef,
 }) => {
   const { rewards, icon, token } = vault
+  const isGUSD = isGUSDVault(vault)
+
   const { data: tvlData, isLoading: isTvlLoading } = usePreDepositTVLInUSD({
     vault,
   })
   const { data: totalAssets } = usePreDepositTVL({ vault })
+  const { data: gusdTvl, isLoading: isGUSDTvlLoading } = useGUSDTVL()
+  const { data: gusdBreakdown, isLoading: isGUSDBreakdownLoading } =
+    useGUSDStablecoinBreakdown({ enabled: isGUSD })
   const { data: apyMap, isLoading: isApyLoading } = useVaultsAPY()
   const { data: depositedBalance, isLoading: isDepositedBalanceLoading } =
-    useUserVaultDeposit({
-      vault,
-      registerRefetch,
-    })
+    useUserVaultDeposit({ vault, registerRefetch })
+  const { data: gusdBalance, isLoading: isGUSDBalanceLoading } =
+    useGUSDUserBalance({ registerRefetch })
 
   useEffect(() => {
     if (isConnected && pendingDepositRef.current) {
@@ -137,8 +145,9 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
   const t = useTranslations()
 
   const vaultAddressLower = vault.address.toLowerCase()
-  const isVaultInApi = apyMap !== undefined && vaultAddressLower in apyMap
-  const isDisabled = !isVaultInApi
+  // const isVaultInApi = apyMap !== undefined && vaultAddressLower in apyMap
+  // const isDisabled = !isVaultInApi
+  const isDisabled = false
   const dynamicApy = apyMap?.[vaultAddressLower]
   const apyValue = dynamicApy !== undefined ? String(dynamicApy) : null
   const rewardsLine = rewards
@@ -149,17 +158,42 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
     )
     .join(', ')
 
+  const vaultDisplay = isGUSD
+    ? {
+        decimals: 2,
+        symbol: 'GUSD',
+        tokenDecimals: 18,
+        tvlRaw: gusdTvl,
+        tvlUSD: gusdTvl ? Number(formatUnits(gusdTvl, 18)) : 0,
+        balance: gusdBalance,
+        isBalanceLoading: isGUSDBalanceLoading,
+        isTvlLoading: isGUSDTvlLoading,
+      }
+    : {
+        decimals: token.symbol === 'WETH' ? 4 : 0,
+        symbol: token.symbol,
+        tokenDecimals: token.decimals,
+        tvlRaw: totalAssets,
+        tvlUSD: tvlData?.tvlUSD ?? 0,
+        balance: depositedBalance,
+        isBalanceLoading: isDepositedBalanceLoading,
+        isTvlLoading: isTvlLoading,
+      }
+
   const formattedTVL = !isDisabled
-    ? formatCurrency(tvlData?.tvlUSD ?? 0, { compact: true }).replace('$', '')
+    ? formatCurrency(vaultDisplay.tvlUSD, {
+        compact: true,
+        roundDown: true,
+      }).replace('$', '')
     : null
 
-  const displayDecimals = token.symbol === 'WETH' ? 4 : 0
-
   const formattedTokenAmount = !isDisabled
-    ? formatTokenAmount(totalAssets ?? 0n, token.symbol, {
-        tokenDecimals: token.decimals,
-        decimals: displayDecimals,
+    ? formatTokenAmount(vaultDisplay.tvlRaw ?? 0n, vaultDisplay.symbol, {
+        tokenDecimals: vaultDisplay.tokenDecimals,
+        decimals: vaultDisplay.decimals,
         includeSymbol: true,
+        roundDown: true,
+        compact: true,
       })
     : null
 
@@ -190,14 +224,19 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
             {t('vault.your_deposit')}
           </p>
           <div className="text-27 font-600">
-            {isDepositedBalanceLoading ? (
+            {vaultDisplay.isBalanceLoading ? (
               <Skeleton width={120} height={32} className="rounded-8" />
             ) : (
-              formatTokenAmount(depositedBalance ?? 0n, token.symbol, {
-                tokenDecimals: token.decimals,
-                decimals: displayDecimals,
-                includeSymbol: true,
-              })
+              formatTokenAmount(
+                vaultDisplay.balance ?? 0n,
+                vaultDisplay.symbol,
+                {
+                  tokenDecimals: vaultDisplay.tokenDecimals,
+                  decimals: vaultDisplay.decimals,
+                  includeSymbol: true,
+                  roundDown: true,
+                }
+              )
             )}
           </div>
         </div>
@@ -231,7 +270,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
           </span>
           <span>{rewardsLine}</span>
         </li>
-        {vault.id === 'GUSD' && (
+        {isGUSD && (
           <li className="flex items-center gap-2 text-15">
             <span className="text-neutral-50">
               <GusdIcon />
@@ -243,7 +282,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
           <span className="text-neutral-50">
             <DollarIcon />
           </span>
-          {isTvlLoading ? (
+          {vaultDisplay.isTvlLoading ? (
             <Skeleton width={80} height={20} className="rounded-6" />
           ) : (
             <span>
@@ -258,7 +297,28 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
             <span className="text-neutral-50">
               <SumIcon />
             </span>
-            <span>{formattedTokenAmount}</span>
+            {isGUSD ? (
+              isGUSDBreakdownLoading ? (
+                <Skeleton width={140} height={20} className="rounded-6" />
+              ) : (
+                <span>
+                  {gusdBreakdown
+                    .filter(({ amount }) => amount > 0n)
+                    .map(({ token, amount }) =>
+                      formatTokenAmount(amount, token.symbol, {
+                        tokenDecimals: token.decimals,
+                        decimals: token.decimals === 18 ? 2 : 0,
+                        includeSymbol: true,
+                        roundDown: true,
+                        compact: true,
+                      })
+                    )
+                    .join(' + ')}
+                </span>
+              )
+            ) : (
+              <span>{formattedTokenAmount}</span>
+            )}
           </li>
         )}
       </ul>

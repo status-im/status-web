@@ -106,11 +106,13 @@ const PasswordModal = (props: PasswordModalProps) => {
               </Dialog.Close>
             </div>
 
-            <p className="mb-5 text-13 text-neutral-50">To sign transaction</p>
+            <Dialog.Description className="mb-5 text-13 text-neutral-50">
+              To sign transaction
+            </Dialog.Description>
 
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="flex flex-1 flex-col place-content-between content-between justify-between"
+              className="flex flex-1 flex-col place-content-between"
             >
               <div className="mb-4 w-full">
                 <Controller
@@ -122,6 +124,7 @@ const PasswordModal = (props: PasswordModalProps) => {
                         {...field}
                         type={showPassword ? 'text' : 'password'}
                         placeholder="Type password"
+                        aria-label="Password"
                         isInvalid={!!errors.password}
                         isDisabled={isLoading}
                         onKeyDown={e => {
@@ -133,6 +136,9 @@ const PasswordModal = (props: PasswordModalProps) => {
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
+                        aria-label={
+                          showPassword ? 'Hide password' : 'Show password'
+                        }
                         className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-50 hover:text-neutral-70"
                       >
                         {showPassword ? <HideIcon /> : <RevealIcon />}

@@ -9,6 +9,7 @@ import {
   DocsIcon,
   ExplorerIcon,
   HandIcon,
+  // HeartIcon,
   // GovernanceIcon,
   HomeIcon,
   KarmaIcon,
@@ -104,6 +105,20 @@ const Sidebar = (props: Props) => {
     },
   ]
 
+  const FEEDBACK_LINKS = [
+    {
+      id: 'contact-us',
+      label: t('footer.share_feedback'),
+      // icon: HeartIcon,
+      href: 'https://statusnetwork.typeform.com/contact-us',
+    },
+    {
+      id: 'submit-bug',
+      label: t('footer.submit_bug'),
+      href: 'https://github.com/status-im/status-web/issues/new?template=bug_report.md',
+    },
+  ]
+
   return (
     <>
       {/* Mobile overlay */}
@@ -155,6 +170,13 @@ const Sidebar = (props: Props) => {
             {/* Bottom Section */}
             <ul className="space-y-1">
               {OTHER_LINKS.map(item => {
+                return <LinkItem key={item.id} {...item} />
+              })}
+            </ul>
+
+            <div className="my-3 h-px bg-customisation-purple-50/40 lg:hidden"></div>
+            <ul className="space-y-1 lg:hidden">
+              {FEEDBACK_LINKS.map(item => {
                 return <LinkItem key={item.id} {...item} />
               })}
             </ul>

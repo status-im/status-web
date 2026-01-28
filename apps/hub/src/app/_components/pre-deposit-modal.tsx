@@ -1,13 +1,12 @@
 'use client'
 
-import { type Dispatch, type SetStateAction, useMemo } from 'react'
+import { type Dispatch, type SetStateAction, useMemo, useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useToast } from '@status-im/components'
 import { DropdownIcon } from '@status-im/icons/20'
 import { Button, DropdownMenu } from '@status-im/status-network/components'
 import { cva } from 'cva'
-import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { useForm, useWatch } from 'react-hook-form'
 import { match, P } from 'ts-pattern'
@@ -15,11 +14,24 @@ import { formatUnits, parseUnits } from 'viem'
 import { useAccount, useChainId, useSwitchChain } from 'wagmi'
 import { z } from 'zod'
 
-import { KarmaCircleIcon, PercentIcon, PlusIcon } from '~components/icons/index'
-import { type Vault } from '~constants/index'
+import {
+  GusdIcon,
+  KarmaCircleIcon,
+  PercentIcon,
+  PlusIcon,
+} from '~components/icons/index'
+import {
+  DEFAULT_GUSD_STABLECOIN,
+  GUSD_STABLECOINS,
+  isGUSDVault,
+  type StablecoinToken,
+  type Vault,
+} from '~constants/address'
 import { useApproveToken } from '~hooks/useApprovePreDepositToken'
 import { useDepositFlow } from '~hooks/useDepositFlow'
 import { useExchangeRate } from '~hooks/useExchangeRate'
+import { useGUSDPreDeposit } from '~hooks/useGUSDPreDeposit'
+import { useGUSDPreview } from '~hooks/useGUSDPreview'
 import { usePreDepositVault } from '~hooks/usePreDepositVault'
 import { useVaultsAPY } from '~hooks/useVaultsAPY'
 import { useWrapETH } from '~hooks/useWrapETH'
@@ -29,6 +41,37 @@ import { VaultImage } from './vault-image'
 import { BaseVaultModal } from './vaults/modals/base-vault-modal'
 
 const MAX_USD_VALUE = 1_000_000_000_000
+
+type TokenOption = {
+  id: string
+  label: string
+  symbol: string
+  icon: string
+  vault: Vault
+  stablecoin?: StablecoinToken
+}
+
+const buildTokenOptions = (vaults: Vault[]): TokenOption[] =>
+  vaults.flatMap((vault): TokenOption[] =>
+    isGUSDVault(vault)
+      ? GUSD_STABLECOINS.map(stablecoin => ({
+          id: `GUSD-${stablecoin.symbol}`,
+          label: `${stablecoin.name}, ${stablecoin.symbol}`,
+          symbol: stablecoin.symbol,
+          icon: stablecoin.symbol.toLowerCase(),
+          vault,
+          stablecoin,
+        }))
+      : [
+          {
+            id: vault.id,
+            label: `${vault.token.name}, ${vault.token.symbol}`,
+            symbol: vault.token.symbol,
+            icon: vault.icon.toLowerCase(),
+            vault,
+          },
+        ]
+  )
 
 type PreDepositModalProps = {
   open: boolean
@@ -86,6 +129,29 @@ const PreDepositModal = ({
   const chainId = useChainId()
   const { switchChain, isPending: isSwitchingChain } = useSwitchChain()
 
+  const tokenOptions = useMemo(() => buildTokenOptions(vaults), [vaults])
+  const [selectedStablecoin, setSelectedStablecoin] = useState<StablecoinToken>(
+    DEFAULT_GUSD_STABLECOIN
+  )
+
+  const isGUSD = isGUSDVault(vault)
+
+  const selectedOption = useMemo(() => {
+    if (isGUSD) {
+      return (
+        tokenOptions.find(
+          o => o.stablecoin?.symbol === selectedStablecoin.symbol
+        ) ??
+        tokenOptions.find(
+          o => o.stablecoin?.symbol === DEFAULT_GUSD_STABLECOIN.symbol
+        )
+      )
+    }
+    return tokenOptions.find(o => o.vault.id === vault.id)
+  }, [tokenOptions, vault.id, isGUSD, selectedStablecoin.symbol])
+
+  const currentToken = selectedOption?.stablecoin ?? vault.token
+
   const form = useForm<FormValues>({
     resolver: zodResolver(createDepositFormSchema(t)),
     mode: 'onChange',
@@ -96,19 +162,27 @@ const PreDepositModal = ({
 
   const { mutate: approveToken, isPending: isApproving } = useApproveToken()
   const { mutate: preDeposit, isPending: isDepositing } = usePreDepositVault()
+  const { mutate: gusdPreDeposit, isPending: isGUSDDepositing } =
+    useGUSDPreDeposit()
   const { mutate: wrapETH, isPending: isWrapping } = useWrapETH()
 
   const amountWei = useMemo(() => {
     if (!vault || !amountValue) return 0n
     try {
-      return parseUnits(amountValue, vault.token.decimals)
+      return parseUnits(amountValue, currentToken.decimals)
     } catch {
       return 0n
     }
-  }, [amountValue, vault])
+  }, [amountValue, vault, currentToken.decimals])
+
+  const { data: gusdPreviewShares } = useGUSDPreview({
+    stablecoin: selectedStablecoin,
+    amount: amountWei,
+    enabled: isGUSD && amountWei > 0n,
+  })
 
   const { data: exchangeRate } = useExchangeRate({
-    token: vault.token.priceKey || vault.token.symbol,
+    token: currentToken.priceKey || currentToken.symbol,
   })
 
   const { data: apyMap } = useVaultsAPY()
@@ -136,7 +210,13 @@ const PreDepositModal = ({
     sharesValidation,
     refetchAllowance,
     refetchBalances,
-  } = useDepositFlow({ vault, amountWei, address })
+    vaultAddress,
+  } = useDepositFlow({
+    vault,
+    amountWei,
+    address,
+    selectedStablecoin: isGUSD ? selectedStablecoin : undefined,
+  })
 
   const isWrongChain = useMemo(() => {
     if (!vault || !chainId) return false
@@ -144,6 +224,38 @@ const PreDepositModal = ({
   }, [vault, chainId])
 
   if (!vault) return null
+
+  const performDeposit = (amount: string) => {
+    if (isGUSD) {
+      gusdPreDeposit(
+        { stablecoin: selectedStablecoin, amount },
+        {
+          onSuccess: () => {
+            onDepositSuccess?.()
+            onOpenChange(false)
+          },
+          onError: () => {
+            toast.negative(t('vault.deposit_failed'))
+            form.reset()
+          },
+        }
+      )
+    } else {
+      preDeposit(
+        { amount, vault },
+        {
+          onSuccess: () => {
+            onDepositSuccess?.()
+            onOpenChange(false)
+          },
+          onError: () => {
+            toast.negative(t('vault.deposit_failed'))
+            form.reset()
+          },
+        }
+      )
+    }
+  }
 
   const handleSubmit = (data: FormValues) => {
     if (!vault || !address || isWrongChain) return
@@ -169,44 +281,20 @@ const PreDepositModal = ({
       .with('approve', () => {
         approveToken(
           {
-            token: vault.token,
+            token: currentToken,
             amount: data.amount,
-            spenderAddress: vault.address,
+            spenderAddress: vaultAddress,
           },
           {
             onSuccess: async () => {
               await refetchAllowance()
-              preDeposit(
-                { amount: data.amount, vault },
-                {
-                  onSuccess: () => {
-                    onDepositSuccess?.()
-                    onOpenChange(false)
-                  },
-                  onError: () => {
-                    toast.negative(t('vault.deposit_failed'))
-                    form.reset()
-                  },
-                }
-              )
+              performDeposit(data.amount)
             },
           }
         )
       })
       .with('deposit', () => {
-        preDeposit(
-          { amount: data.amount, vault },
-          {
-            onSuccess: () => {
-              onDepositSuccess?.()
-              onOpenChange(false)
-            },
-            onError: () => {
-              toast.negative(t('vault.deposit_failed'))
-              form.reset()
-            },
-          }
-        )
+        performDeposit(data.amount)
       })
       .otherwise(() => {})
   }
@@ -214,10 +302,17 @@ const PreDepositModal = ({
   const handleSetMax = () => {
     let maxAmount = balance ?? 0n
     if (maxDeposit && maxAmount > maxDeposit) maxAmount = maxDeposit
-    form.setValue('amount', formatUnits(maxAmount, vault.token.decimals))
+    const formatted = formatUnits(maxAmount, currentToken.decimals)
+    const parts = formatted.split('.')
+    const truncated =
+      parts[1] && parts[1].length > 6
+        ? `${parts[0]}.${parts[1].slice(0, 6)}`
+        : formatted
+    form.setValue('amount', truncated)
   }
 
-  const isPending = isApproving || isDepositing || isWrapping
+  const isPending =
+    isApproving || isDepositing || isWrapping || isGUSDDepositing
 
   const isInputError = match(actionState)
     .with(
@@ -233,17 +328,23 @@ const PreDepositModal = ({
           ? (balance ?? 0n) + (ethBalance ?? 0n)
           : (balance ?? 0n)
       return t('vault.insufficient_balance', {
-        max: formatTokenAmount(totalBalance, vault.token.symbol),
+        max: formatTokenAmount(totalBalance, currentToken.symbol, {
+          tokenDecimals: currentToken.decimals,
+        }),
       })
     })
     .with('exceeds-max', () =>
       t('vault.exceeds_vault_limit', {
-        max: formatTokenAmount(maxDeposit ?? 0n, vault.token.symbol),
+        max: formatTokenAmount(maxDeposit ?? 0n, currentToken.symbol, {
+          tokenDecimals: currentToken.decimals,
+        }),
       })
     )
     .with('below-min', () =>
       t('vault.below_minimum_deposit', {
-        min: formatTokenAmount(minDeposit ?? 0n, vault.token.symbol),
+        min: formatTokenAmount(minDeposit ?? 0n, currentToken.symbol, {
+          tokenDecimals: currentToken.decimals,
+        }),
       })
     )
     .with('invalid-shares', () => sharesValidation.validationMessage)
@@ -275,32 +376,46 @@ const PreDepositModal = ({
                 className="flex w-full items-center justify-between gap-2 rounded-12 border border-neutral-20 bg-white-100 px-3 py-[9px]"
               >
                 <div className="flex items-center justify-center gap-2">
-                  <Image
-                    src={`/vaults/${vault?.icon.toLowerCase()}.png`}
-                    alt={vault?.icon}
-                    width="20"
-                    height="20"
-                    className="size-5 shrink-0"
-                  />
+                  {selectedOption && (
+                    <VaultImage
+                      vault={selectedOption.icon}
+                      network={vault.network}
+                      size="20"
+                    />
+                  )}
                   <span className="text-15 font-400 text-neutral-100">
-                    {vault.token.name}, {vault.token.symbol}
+                    {selectedOption?.label ?? t('vault.select_token')}
                   </span>
                 </div>
                 <DropdownIcon className="shrink-0 text-neutral-40 transition-transform" />
               </button>
 
               <DropdownMenu.Content>
-                {vaults.map(v => (
+                {tokenOptions.map(option => (
                   <DropdownMenu.Item
-                    key={v.id}
-                    label={`${v.token.name}, ${v.token.symbol}`}
-                    selected={v.id === vault.id}
-                    onSelect={() => setActiveVault(v)}
-                    icon={v.icon.toLowerCase()}
+                    key={option.id}
+                    label={option.label}
+                    selected={selectedOption?.id === option.id}
+                    onSelect={() => {
+                      if (option.stablecoin) {
+                        setSelectedStablecoin(option.stablecoin)
+                        setActiveVault(option.vault)
+                      } else {
+                        setActiveVault(option.vault)
+                      }
+                      form.setValue('amount', '')
+                    }}
+                    icon={option.icon}
                   />
                 ))}
               </DropdownMenu.Content>
             </DropdownMenu.Root>
+
+            {isGUSD && selectedOption?.stablecoin && (
+              <p className="mt-2 text-13 text-neutral-50">
+                {t('vault.gusd_stablecoin_info')}
+              </p>
+            )}
           </div>
 
           {/* Amount input */}
@@ -321,19 +436,28 @@ const PreDepositModal = ({
                 <input
                   id="deposit-amount"
                   inputMode="decimal"
-                  {...form.register('amount')}
+                  {...form.register('amount', {
+                    onChange: e => {
+                      const value = e.target.value
+                      const parts = value.split('.')
+                      if (parts[1] && parts[1].length > 6) {
+                        e.target.value = `${parts[0]}.${parts[1].slice(0, 6)}`
+                        form.setValue('amount', e.target.value)
+                      }
+                    },
+                  })}
                   placeholder="0"
                   disabled={isPending}
                   className="w-full border-none bg-transparent text-27 font-600 text-neutral-100 outline-none placeholder:text-neutral-40"
                 />
                 <div className="flex items-center gap-1">
                   <VaultImage
-                    vault={vault.icon}
+                    vault={selectedOption?.icon ?? vault.icon}
                     network={vault.network}
                     size="32"
                   />
                   <span className="text-19 font-600 text-neutral-80">
-                    {vault.token.symbol}
+                    {currentToken.symbol}
                   </span>
                 </div>
               </div>
@@ -354,8 +478,10 @@ const PreDepositModal = ({
                     className="uppercase hover:text-neutral-80"
                   >
                     {t('vault.max')}{' '}
-                    {formatTokenAmount(balance, vault.token.symbol, {
+                    {formatTokenAmount(balance, currentToken.symbol, {
                       includeSymbol: true,
+                      tokenDecimals: currentToken.decimals,
+                      roundDown: true,
                     })}
                   </button>
                 </div>
@@ -363,10 +489,26 @@ const PreDepositModal = ({
                   <div className="text-right">
                     <span>
                       {t('vault.available_eth_to_wrap')}{' '}
-                      {formatTokenAmount(ethBalance, 'ETH')}
+                      {formatTokenAmount(ethBalance, 'ETH', {
+                        roundDown: true,
+                      })}
                     </span>
                   </div>
                 )}
+                {selectedOption?.stablecoin &&
+                  amountWei > 0n &&
+                  gusdPreviewShares && (
+                    <div className="text-right">
+                      <span>
+                        {t('vault.you_will_receive', {
+                          amount: formatTokenAmount(gusdPreviewShares, 'GUSD', {
+                            includeSymbol: true,
+                            roundDown: true,
+                          }),
+                        })}
+                      </span>
+                    </div>
+                  )}
               </div>
             </div>
 
@@ -416,6 +558,16 @@ const PreDepositModal = ({
                     .join(', ')}
                 </span>
               </div>
+              {isGUSD && (
+                <div className="flex items-center gap-2 text-15">
+                  <span className="text-neutral-50">
+                    <GusdIcon />
+                  </span>
+                  <span className="text-neutral-100">
+                    {t('vault.generic_protocol_points')}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -442,11 +594,13 @@ const PreDepositModal = ({
                   action: actionState,
                   isApproving,
                   isDepositing,
+                  isGUSDDepositing,
                   isWrapping,
                 })
                   .with({ isWrapping: true }, () => t('vault.wrapping_eth'))
                   .with({ isApproving: true }, () => t('vault.approving'))
                   .with({ isDepositing: true }, () => t('vault.depositing'))
+                  .with({ isGUSDDepositing: true }, () => t('vault.depositing'))
                   .with({ action: 'needs-wrap' }, () =>
                     t('vault.wrap_eth_to_weth')
                   )
