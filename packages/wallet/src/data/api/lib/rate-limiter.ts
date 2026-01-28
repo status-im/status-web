@@ -20,6 +20,7 @@ export interface RateLimitOptions<TOpts extends RateLimitMiddlewareOptions> {
   message?: string
   keyPrefix?: string
   getCategory?: (opts: TOpts) => string | undefined
+  getKey?: (opts: TOpts) => string
 }
 
 const requestCounts = new Map<string, { count: number; resetTime: number }>()
@@ -52,18 +53,25 @@ export const createRateLimitMiddleware = <
     message = 'Rate limit exceeded. Please try again later.',
     keyPrefix = 'default',
     getCategory,
+    getKey,
   } = options
 
   return trpc.middleware((opts: TOpts) => {
     const { ctx, next } = opts
 
-    const ip =
-      ctx.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
-
     const now = Date.now()
 
-    const category = getCategory ? getCategory(opts) : undefined
-    const key = `${keyPrefix}:${category ? category + ':' : ''}${ip}`
+    // Use custom key function if provided, otherwise default to IP-based key
+    let key: string
+    if (getKey) {
+      key = `${keyPrefix}:${getKey(opts)}`
+    } else {
+      const ip =
+        ctx.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+      const category = getCategory ? getCategory(opts) : undefined
+      key = `${keyPrefix}:${category ? category + ':' : ''}${ip}`
+    }
+
     let record = requestCounts.get(key)
 
     if (now - lastPruneAt >= PRUNE_INTERVAL_MS) {
