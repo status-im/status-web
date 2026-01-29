@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl'
 
 import { HubLayout } from '~components/hub-layout'
+import { NetworkSwitchErrorDialog } from '~components/network-switch-error-dialog'
 import { VaultsTable } from '~components/vaults/vaults-table'
 import { useRequireStatusNetwork } from '~hooks/useRequireStatusNetwork'
 
@@ -85,14 +86,31 @@ function StakeCards() {
 
 export default function StakePage() {
   const t = useTranslations()
-  const { isCorrectChain, isConnected, isSwitching } = useRequireStatusNetwork()
+  const {
+    isCorrectChain,
+    isConnected,
+    isSwitching,
+    hasSwitchError,
+    dismissError,
+  } = useRequireStatusNetwork()
 
-  const showSkeleton = isConnected && (!isCorrectChain || isSwitching)
+  const showSkeleton =
+    isConnected && (!isCorrectChain || isSwitching) && !hasSwitchError
+
+  const handleRetry = () => {
+    dismissError()
+    window.location.reload()
+  }
 
   return (
     <HubLayout>
       <JSONLDScript
         schema={[breadcrumbListSchema, softwareApplicationSchema]}
+      />
+      <NetworkSwitchErrorDialog
+        open={hasSwitchError}
+        onClose={dismissError}
+        onRetry={handleRetry}
       />
       <div className="mx-auto flex size-full flex-col gap-8 p-4 md:p-8">
         <header className="flex flex-col gap-2">

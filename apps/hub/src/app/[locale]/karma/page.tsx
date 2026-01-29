@@ -14,6 +14,7 @@ import {
   KarmaVisualCardSkeleton,
   OverviewCard,
 } from '~components/karma'
+import { NetworkSwitchErrorDialog } from '~components/network-switch-error-dialog'
 import { useCurrentUser } from '~hooks/useCurrentUser'
 import { useKarmaRewardsDistributor } from '~hooks/useKarmaRewardsDistributor'
 import { useRequireStatusNetwork } from '~hooks/useRequireStatusNetwork'
@@ -125,14 +126,31 @@ const softwareApplicationSchema = jsonLD.softwareApplication({
 
 export default function KarmaPage() {
   const t = useTranslations()
-  const { isCorrectChain, isConnected, isSwitching } = useRequireStatusNetwork()
+  const {
+    isCorrectChain,
+    isConnected,
+    isSwitching,
+    hasSwitchError,
+    dismissError,
+  } = useRequireStatusNetwork()
 
-  const showSkeleton = isConnected && (!isCorrectChain || isSwitching)
+  const showSkeleton =
+    isConnected && (!isCorrectChain || isSwitching) && !hasSwitchError
+
+  const handleRetry = () => {
+    dismissError()
+    window.location.reload()
+  }
 
   return (
     <HubLayout>
       <JSONLDScript
         schema={[breadcrumbListSchema, softwareApplicationSchema]}
+      />
+      <NetworkSwitchErrorDialog
+        open={hasSwitchError}
+        onClose={dismissError}
+        onRetry={handleRetry}
       />
       <div className="mx-auto flex size-full flex-col gap-4 p-4 lg:gap-8 lg:p-8">
         <div className="flex flex-col gap-2">

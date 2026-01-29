@@ -15,6 +15,7 @@ interface BaseVaultModalProps {
   description: string
   children?: ReactNode
   trigger?: ReactNode
+  blur?: boolean
 }
 
 /**
@@ -22,8 +23,16 @@ interface BaseVaultModalProps {
  * Provides consistent dialog wrapper with close button, overlay, and styling.
  */
 export function BaseVaultModal(props: BaseVaultModalProps) {
-  const { open, onOpenChange, onClose, title, description, children, trigger } =
-    props
+  const {
+    open,
+    onOpenChange,
+    onClose,
+    title,
+    description,
+    children,
+    trigger,
+    blur = false,
+  } = props
 
   const handleOpenChange = (nextOpen: boolean) => {
     onOpenChange?.(nextOpen)
@@ -63,7 +72,11 @@ export function BaseVaultModal(props: BaseVaultModalProps) {
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-40 bg-neutral-80/60 backdrop-blur-sm" />
         <Dialog.Content className="fixed inset-x-0 top-0 z-50 flex size-full max-w-[480px] flex-col items-center justify-center p-4 focus:outline-none md:left-1/2 md:top-1/2 md:h-auto md:-translate-x-1/2 md:-translate-y-1/2 md:py-0">
-          <div className="relative mx-auto w-full max-w-[480px] overflow-y-auto rounded-20 bg-white-100 shadow-3 max-md:max-h-full">
+          <div
+            className={`relative mx-auto w-full max-w-[480px] overflow-y-auto rounded-20 bg-white-100 shadow-3 max-md:max-h-full ${
+              blur ? 'pointer-events-none blur-sm' : ''
+            }`}
+          >
             <Dialog.Close asChild>
               <button
                 aria-label="Close"

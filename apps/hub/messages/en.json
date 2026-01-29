@@ -1142,6 +1142,28 @@
       "notes": "footer::pre_deposit_disclaimer"
     }
   },
+  "network_switch_error": {
+    "title": {
+      "translation": "Unable to Switch Network",
+      "notes": "network_switch_error::title"
+    },
+    "description_status_network": {
+      "translation": "Your wallet does not support switching networks from this app. Try switching network to Status Network from within your wallet instead.",
+      "notes": "network_switch_error::description_status_network"
+    },
+    "description_ethereum_mainnet": {
+      "translation": "Your wallet does not support switching networks from this app. Try switching network to Ethereum Mainnet from within your wallet instead.",
+      "notes": "network_switch_error::description_ethereum_mainnet"
+    },
+    "network_details": {
+      "translation": "View network details",
+      "notes": "network_switch_error::network_details"
+    },
+    "retry": {
+      "translation": "Retry",
+      "notes": "network_switch_error::retry"
+    }
+  },
   "errors": {
     "wallet_not_connected": {
       "translation": "Wallet not connected. Please connect your wallet first.",
