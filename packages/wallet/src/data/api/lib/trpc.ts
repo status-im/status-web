@@ -1,4 +1,4 @@
-import { initTRPC } from '@trpc/server'
+import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
 import { ZodError } from 'zod'
 
@@ -85,10 +85,36 @@ const RPC_METHOD_CATEGORY_MAP: Record<
   string,
   'permanent' | 'short' | 'minimal'
 > = {
-  'nodes.getFeeRate': 'minimal',
+  // Permanent: Immutable data (60 RPM)
+  eth_getBlockByNumber: 'permanent',
+  eth_getTransactionReceipt: 'permanent',
+  alchemy_getAssetTransfers: 'permanent',
+  'assets.nativeTokenBalanceChart': 'permanent',
+  'assets.tokenBalanceChart': 'permanent',
+  'activities.page': 'permanent',
+  'activities.activities': 'permanent',
+  'collectibles.page': 'permanent',
+  'collectibles.collectible': 'permanent',
+
+  // Short: Semi-static data (30 RPM)
+  eth_getBalance: 'short',
   'nodes.getNonce': 'short',
+  eth_getTransactionCount: 'short',
+  eth_feeHistory: 'short',
+  alchemy_getTokenBalances: 'short',
+  'assets.all': 'short',
+  'assets.nativeToken': 'short',
+  'assets.token': 'short',
+  'assets.nativeTokenPriceChart': 'short',
+  'assets.tokenPriceChart': 'short',
+
+  // Minimal: Highly dynamic data (15 RPM)
+  eth_estimateGas: 'minimal',
+  eth_maxPriorityFeePerGas: 'minimal',
+  eth_blockNumber: 'minimal',
+  'nodes.getFeeRate': 'minimal',
   'nodes.broadcastTransaction': 'minimal',
-  // Default to short for other potential node-related calls
+  eth_sendRawTransaction: 'minimal',
 }
 
 /**
@@ -145,6 +171,16 @@ const errorMiddleware = trpc.middleware(async opts => {
   const result = await opts.next()
 
   if (!result.ok && result.error) {
+    const error = result.error
+    if (error.cause instanceof Error && error.cause.cause === 429) {
+      throw new TRPCError({
+        code: 'TOO_MANY_REQUESTS',
+        message:
+          'Provider rate limit exceeded. Please try again in a few moments.',
+        cause: error.cause,
+      })
+    }
+
     throw result.error
   }
 

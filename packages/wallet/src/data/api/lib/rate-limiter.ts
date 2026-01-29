@@ -93,6 +93,14 @@ export const createRateLimitMiddleware = <
     const limit =
       typeof maxRequests === 'function' ? maxRequests(opts) : maxRequests
 
+    // Debug logging
+    // console.log('[Rate Limiter]', {
+    //   key,
+    //   count: record.count,
+    //   limit,
+    //   timeUntilReset: Math.round((record.resetTime - now) / 1000) + 's',
+    // })
+
     if (record.count > limit) {
       throw new TRPCError({
         code: 'TOO_MANY_REQUESTS',
