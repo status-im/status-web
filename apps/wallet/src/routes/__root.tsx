@@ -9,6 +9,7 @@ import {
 
 import { Link } from '../components/link'
 import { apiClient } from '../providers/api-client'
+import { PasswordProvider } from '../providers/password-context'
 import { PendingTransactionsProvider } from '../providers/pending-transactions-context'
 import { SignerProvider } from '../providers/signer-context'
 import { WagmiConfigProvider } from '../providers/wagmi-provider'
@@ -125,25 +126,27 @@ function RootComponent() {
 
       <div id="app" className="isolate" data-customisation="blue">
         <WalletProvider>
-          <SignerProvider>
-            <WagmiConfigProvider>
-              <PendingTransactionsProvider>
-                <div className="flex min-h-[56px] items-center px-2">
-                  <Navbar hasFeedback linkComponent={Link} />
-                </div>
-                <div className="px-1">
-                  <div className="flex-1 flex-col 2md:flex xl:pb-1">
-                    <div className="flex h-[calc(100vh-60px)] flex-col overflow-y-hidden rounded-[24px] bg-white-100">
-                      {/* <OnboardingPage /> */}
-                      <Outlet />
-                    </div>
+          <PasswordProvider>
+            <SignerProvider>
+              <WagmiConfigProvider>
+                <PendingTransactionsProvider>
+                  <div className="flex min-h-[56px] items-center px-2">
+                    <Navbar hasFeedback linkComponent={Link} />
                   </div>
-                  {/* <NotAllowed /> */}
-                  <ToastContainer />
-                </div>
-              </PendingTransactionsProvider>
-            </WagmiConfigProvider>
-          </SignerProvider>
+                  <div className="px-1">
+                    <div className="flex-1 flex-col 2md:flex xl:pb-1">
+                      <div className="flex h-[calc(100vh-60px)] flex-col overflow-y-hidden rounded-[24px] bg-white-100">
+                        {/* <OnboardingPage /> */}
+                        <Outlet />
+                      </div>
+                    </div>
+                    {/* <NotAllowed /> */}
+                    <ToastContainer />
+                  </div>
+                </PendingTransactionsProvider>
+              </WagmiConfigProvider>
+            </SignerProvider>
+          </PasswordProvider>
         </WalletProvider>
       </div>
     </>
