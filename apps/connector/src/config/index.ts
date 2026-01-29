@@ -1,7 +1,7 @@
 export const config = {
   desktop: {
     rpc: {
-      url: 'ws://localhost:8586',
+      url: 'ws://127.0.0.1:8586',
       method: 'connector_callRPC',
     },
     downloadUrls: {
