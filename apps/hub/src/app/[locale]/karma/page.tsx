@@ -2,17 +2,17 @@
 
 import { useMemo } from 'react'
 
+import { KarmaOverviewCardSkeleton } from '@status-im/components'
 import { useTranslations } from 'next-intl'
 import { formatEther } from 'viem/utils'
 
 import { HubLayout } from '~components/hub-layout'
 import {
-  KarmaOverviewCard,
-  KarmaOverviewCardSkeleton,
   KarmaSourceCard,
   KarmaSourceCardSkeleton,
   KarmaVisualCard,
   KarmaVisualCardSkeleton,
+  OverviewCard,
 } from '~components/karma'
 import { NetworkSwitchErrorDialog } from '~components/network-switch-error-dialog'
 import { useCurrentUser } from '~hooks/useCurrentUser'
@@ -88,7 +88,7 @@ function KarmaCards() {
     <>
       <div className="flex flex-col gap-6 md:flex-row">
         <KarmaVisualCard {...visualData} />
-        <KarmaOverviewCard />
+        <OverviewCard />
       </div>
       <div className="flex flex-col gap-6">
         <h2 className="text-19 font-semibold text-neutral-100">

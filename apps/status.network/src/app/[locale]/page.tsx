@@ -11,25 +11,37 @@ import { Partners } from '../_components/partners'
 import { PreFooter } from '../_components/pre-footer'
 import { PromoBar } from '../_components/promo-bar'
 import { Tokenomics } from '../_components/tokenomics'
-import { generateMetadata as generateMetadataUtil } from '../_utils/generate-metadata'
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, Metadata } from '../_metadata'
+import { jsonLD, JSONLDScript } from '../_utils/json-ld'
 
 type Props = {
   params: Promise<{ locale: string }>
 }
 
 export async function generateMetadata(props: Props) {
-  return generateMetadataUtil(props, {
-    titleKey: 'hero.title',
-    descriptionKey: 'hero.description',
+  const { locale } = await props.params
+
+  return Metadata({
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
     pathname: '/',
+    locale,
   })
 }
+
+const webpageSchema = jsonLD.webpage({
+  name: 'A Privacy-First Gasless Ethereum Layer 2 Powered by Native Yield',
+  description:
+    'Status Network is a privacy-first, fully gasless Ethereum Layer 2. It replaces per-transaction gas with reputation-based coordination and uses native yield and network activity to cover execution costs.',
+  url: 'https://status.network/',
+})
 
 export default async function Homepage({ params }: Props) {
   await params
 
   return (
     <>
+      <JSONLDScript schema={webpageSchema} />
       <PromoBar />
       <div className="relative flex min-h-screen justify-center overflow-clip px-2 2xl:px-0">
         <div className="relative w-full max-w-[1418px] border-x border-neutral-20">

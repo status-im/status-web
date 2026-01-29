@@ -12,6 +12,7 @@ import { useAccount } from 'wagmi'
 
 import { formatCurrency, formatTokenAmount } from '~/utils/currency'
 import { isGUSDVault, type Vault } from '~constants/address'
+import { useGUSDStablecoinBreakdown } from '~hooks/useGUSDStablecoinBreakdown'
 import { useGUSDTVL } from '~hooks/useGUSDTVL'
 import { useGUSDUserBalance } from '~hooks/useGUSDUserBalance'
 import { usePreDepositTVL } from '~hooks/usePreDepositTVL'
@@ -126,6 +127,8 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
   })
   const { data: totalAssets } = usePreDepositTVL({ vault })
   const { data: gusdTvl, isLoading: isGUSDTvlLoading } = useGUSDTVL()
+  const { data: gusdBreakdown, isLoading: isGUSDBreakdownLoading } =
+    useGUSDStablecoinBreakdown({ enabled: isGUSD })
   const { data: apyMap, isLoading: isApyLoading } = useVaultsAPY()
   const { data: depositedBalance, isLoading: isDepositedBalanceLoading } =
     useUserVaultDeposit({ vault, registerRefetch })
@@ -142,8 +145,9 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
   const t = useTranslations()
 
   const vaultAddressLower = vault.address.toLowerCase()
-  const isVaultInApi = apyMap !== undefined && vaultAddressLower in apyMap
-  const isDisabled = !isVaultInApi
+  // const isVaultInApi = apyMap !== undefined && vaultAddressLower in apyMap
+  // const isDisabled = !isVaultInApi
+  const isDisabled = false
   const dynamicApy = apyMap?.[vaultAddressLower]
   const apyValue = dynamicApy !== undefined ? String(dynamicApy) : null
   const rewardsLine = rewards
@@ -189,6 +193,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
         decimals: vaultDisplay.decimals,
         includeSymbol: true,
         roundDown: true,
+        compact: true,
       })
     : null
 
@@ -292,7 +297,28 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
             <span className="text-neutral-50">
               <SumIcon />
             </span>
-            <span>{formattedTokenAmount}</span>
+            {isGUSD ? (
+              isGUSDBreakdownLoading ? (
+                <Skeleton width={140} height={20} className="rounded-6" />
+              ) : (
+                <span>
+                  {gusdBreakdown
+                    .filter(({ amount }) => amount > 0n)
+                    .map(({ token, amount }) =>
+                      formatTokenAmount(amount, token.symbol, {
+                        tokenDecimals: token.decimals,
+                        decimals: token.decimals === 18 ? 2 : 0,
+                        includeSymbol: true,
+                        roundDown: true,
+                        compact: true,
+                      })
+                    )
+                    .join(' + ')}
+                </span>
+              )
+            ) : (
+              <span>{formattedTokenAmount}</span>
+            )}
           </li>
         )}
       </ul>
