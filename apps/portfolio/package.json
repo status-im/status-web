@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "dev": "next dev --turbopack",
+    "dev": "next dev --turbopack --port 3004",
     "build": "next build",
     "start": "next start",
     "lint": "next lint --dir=src --ext=.ts --ext=.tsx",
