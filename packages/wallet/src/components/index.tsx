@@ -67,7 +67,6 @@ export {
   shortenAddress,
   type ShortenAddressProps,
 } from './shorten-address'
-export { SignTransactionDialog } from './sign-transaction'
 export { Slider, type SliderProps } from './slider'
 export { StickyHeaderContainer } from './sticky-header-container'
 export { getTabLinkClassName, TabLink } from './tab-link'
