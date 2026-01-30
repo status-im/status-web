@@ -1,5 +1,15 @@
 # api
 
+## 0.2.2
+
+### Patch Changes
+
+- 06ceddc: Fix React Server Components CVE vulnerabilities
+- Updated dependencies [e0179d3]
+- Updated dependencies [06ceddc]
+- Updated dependencies [4614fcc]
+  - @status-im/wallet@0.1.2
+
 ## 0.2.1
 
 ### Patch Changes
