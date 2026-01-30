@@ -1,5 +1,21 @@
 # wallet
 
+## 0.1.2
+
+### Patch Changes
+
+- e0179d3: Update wallet package with token metadata improvements
+- 74891e3: feat(wallet): update tab management
+- 4614fcc: feat: integrate li.fi widget to swap tokens on ETH network
+- Updated dependencies [ff8dd31]
+- Updated dependencies [e0179d3]
+- Updated dependencies [be3d8dc]
+- Updated dependencies [06ceddc]
+- Updated dependencies [d292620]
+- Updated dependencies [4614fcc]
+  - @status-im/components@1.2.0
+  - @status-im/wallet@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes
