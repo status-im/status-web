@@ -9,7 +9,7 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "predev": "pnpm install",
-    "dev:next": "next dev --turbopack",
+    "dev:next": "next dev --turbopack --port 3001",
     "dev:content": "contentlayer2 dev",
     "watch:content": "node --watch-path=./content --watch-preserve-output ./scripts/trigger-content-compilation.cjs",
     "build": "pnpm lint && next build",
