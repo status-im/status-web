@@ -10,7 +10,7 @@ import { AnchorLink } from '~website/(content)/_components/anchor-link'
 import { TOC } from '~website/(content)/_components/toc'
 import { getLegalDocumentContent } from '~website/legal/_utils/get-legal-document-content'
 
-const GITHUB_REPO_RFC_URL = 'https://github.com/vacp2p/rfc-index/tree/main'
+const GITHUB_REPO_RFC_URL = 'https://github.com/status-im/status-specs/tree/master'
 
 export const dynamicParams = false
 

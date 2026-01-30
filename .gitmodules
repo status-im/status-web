@@ -1,6 +1,6 @@
 [submodule "apps/status.app/content/specs"]
 	path = apps/status.app/content/specs
-	url = https://github.com/vacp2p/rfc-index.git
+	url = https://github.com/status-im/status-specs.git
 [submodule "apps/status.network/content/legal-external"]
 	path = apps/status.network/content/legal-external
 	url = https://github.com/status-im/status-software-legal-documents.git
