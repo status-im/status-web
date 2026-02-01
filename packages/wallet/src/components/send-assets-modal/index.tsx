@@ -305,7 +305,7 @@ const SendAssetsModal = (props: Props) => {
 
               <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="flex h-full flex-col place-content-between content-between justify-between space-y-6 px-4 pb-4"
+                className="flex h-full flex-col place-content-between space-y-6 px-4 pb-4"
               >
                 <div>
                   <div className="mb-2 mt-4">
@@ -356,7 +356,7 @@ const SendAssetsModal = (props: Props) => {
                             step="any"
                             placeholder="0"
                             className={cx([
-                              'w-full px-4 py-3 text-27 font-medium',
+                              'w-full py-3 pl-4 pr-24 text-27 font-medium',
                               '[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none',
                               hasInsufficientBalance && 'text-danger-50',
                             ])}
@@ -364,7 +364,7 @@ const SendAssetsModal = (props: Props) => {
                         )}
                       />
 
-                      <div className="absolute right-4 top-3 flex items-center gap-2">
+                      <div className="absolute right-4 top-3 flex items-center gap-2 bg-white-100">
                         <div className="relative">
                           <img
                             className="size-8 rounded-full"
