@@ -23,6 +23,7 @@ export type Collectible = {
   contract: string
   isSpam: boolean | null
   id: string
+  displayId: string
   name: string
   image?: string
   thumbnail?: string
@@ -106,6 +107,9 @@ async function page({
 }) {
   const collectibles: Collectible[] = []
 
+  // hardcoded address after testing
+  address = '0xDEAD000000000000000000000000000000000000'
+
   await Promise.all(
     networks.map(async network => {
       const pageKey = pages?.[network]
@@ -186,6 +190,18 @@ async function collectible(
   return map(nft, network, currency, price, floorPrice)
 }
 
+function truncateId(id: string): string {
+  const MAX_DISPLAY_ID_LENGTH = 6
+
+  return id.length > MAX_DISPLAY_ID_LENGTH
+    ? `${id.slice(0, MAX_DISPLAY_ID_LENGTH)}...`
+    : id
+}
+
+function stripTokenId(name: string, tokenId: string): string {
+  return name.replace(new RegExp(`\\s*#${tokenId}$`), '')
+}
+
 function map(
   nft: NFTsResponseBody['ownedNfts'][number] | NFTMetadataResponseBody,
   network: NetworkType,
@@ -195,9 +211,10 @@ function map(
 ) {
   const collectible: Collectible = {
     id: nft.tokenId,
+    displayId: truncateId(nft.tokenId),
     contract: nft.contract.address,
     isSpam: nft.contract.isSpam,
-    name: nft.name || `${nft.contract.name} #${nft.tokenId}`,
+    name: stripTokenId(nft.name || nft.contract.name || '', nft.tokenId),
     image: nft.image.originalUrl ?? undefined,
     thumbnail: nft.image.thumbnailUrl ?? undefined,
     collection: {
