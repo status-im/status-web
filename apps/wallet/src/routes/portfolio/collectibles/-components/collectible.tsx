@@ -133,15 +133,17 @@ const Collectible = (props: Props) => {
             )} */}
 
             <div className="flex gap-2">
-              <Button
-                size="32"
-                variant="outline"
-                iconBefore={<OpenseaIcon className="text-social-opensea" />}
-                iconAfter={<ExternalIcon />}
-                href={collectible.links.opensea}
-              >
-                View on OpenSea
-              </Button>
+              {collectible.openSea?.isVerified && (
+                <Button
+                  size="32"
+                  variant="outline"
+                  iconBefore={<OpenseaIcon className="text-social-opensea" />}
+                  iconAfter={<ExternalIcon />}
+                  href={collectible.links.opensea}
+                >
+                  View on OpenSea
+                </Button>
+              )}
               {/* <Button
                 size="32"
                 variant="outline"
