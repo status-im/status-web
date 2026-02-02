@@ -108,7 +108,7 @@ async function page({
   const collectibles: Collectible[] = []
 
   // hardcoded address after testing
-  address = '0xDEAD000000000000000000000000000000000000'
+  // address = '0xDEAD000000000000000000000000000000000000'
 
   await Promise.all(
     networks.map(async network => {
