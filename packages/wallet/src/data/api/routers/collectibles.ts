@@ -115,11 +115,11 @@ async function page({
   // hardcoded address for testing. Should remove before merging
   // address = '0xb5be918f7412ab7358064e0cfca78c03e53645bf'
 
-  // Full scan is required when search or non-default sort needs global ordering.
+  // Full scan is required when search or non-default sort needs global ordering
   const shouldScanAll =
     !!search || (sort && (sort.column !== 'name' || sort.direction !== 'asc'))
 
-  // Primary filter: verified collections only, no spam flags.
+  // Primary filter: verified collections only, no spam flags
   const passesFilters = (collectible: Collectible) => {
     const hasSpamClassifications =
       (collectible.spamClassifications?.length ?? 0) > 0
@@ -129,7 +129,7 @@ async function page({
     return !collectible.isSpam && !hasSpamClassifications && isOpenSeaVerified
   }
 
-  // Fallback 1: allow unverified collections, still exclude spam classifications.
+  // Fallback 1: allow unverified collections, still exclude spam classifications
   const passesRelaxedFilters = (collectible: Collectible) => {
     const hasSpamClassifications =
       (collectible.spamClassifications?.length ?? 0) > 0
@@ -137,12 +137,12 @@ async function page({
     return !collectible.isSpam && !hasSpamClassifications
   }
 
-  // Fallback 2: only exclude explicit spam.
+  // Fallback 2: only exclude explicit spam
   const passesBareFilters = (collectible: Collectible) => {
     return collectible.isSpam !== true
   }
 
-  // Text match against name or collection.
+  // Text match against name or collection
   const applySearch = (items: Collectible[]) => {
     if (!search) return items
     const searchLower = search.toLowerCase()
@@ -154,7 +154,7 @@ async function page({
     )
   }
 
-  // Sorting is applied after filtering (and after fallback selection).
+  // Sorting is applied after filtering
   const applySort = (items: Collectible[]) => {
     if (!sort) return items
 
@@ -173,7 +173,7 @@ async function page({
     return sorted
   }
 
-  // Select the first non-empty filter result, in priority order.
+  // Select the first non-empty filter result, in priority order
   const selectWithFallbacks = (
     items: Collectible[],
     ...predicates: Array<(collectible: Collectible) => boolean>
@@ -187,7 +187,7 @@ async function page({
     return []
   }
 
-  // Full scan path: fetch all pages, then filter/search/sort/paginate in-memory.
+  // Full scan path: fetch all pages, then filter/search/sort/paginate in-memory
   if (shouldScanAll) {
     const collectibles: Collectible[] = []
 
@@ -229,7 +229,7 @@ async function page({
     }
   }
 
-  // Page-key path: fetch until we fill the page, preserving fallbacks locally.
+  // Page-key path: fetch until we fill the page, preserving fallbacks locally
   const paginatedCollectibles: Collectible[] = []
   const fallbackCollectibles: Collectible[] = []
   const bareCollectibles: Collectible[] = []

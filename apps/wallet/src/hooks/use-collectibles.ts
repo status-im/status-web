@@ -83,7 +83,7 @@ const useCollectibles = (props: Props) => {
   const search = searchParams.get('search') ?? undefined
   const sortParam = searchParams.get('sort')
 
-  // Sort comes from URL, defaults to name asc.
+  // Sort comes from URL, defaults to name asc
   const sort = {
     column:
       (sortParam?.split(',')[0] as 'name' | 'collection') ||
@@ -95,7 +95,7 @@ const useCollectibles = (props: Props) => {
 
   const networks = searchParams.get('networks')?.split(',') ?? ['ethereum']
 
-  // Use pageKey pagination only for the default sort with no search.
+  // Use pageKey pagination only for the default sort with no search
   const isDefaultSort =
     sort.column === DEFAULT_SORT.collectibles.column &&
     sort.direction === DEFAULT_SORT.collectibles.direction
@@ -104,18 +104,19 @@ const useCollectibles = (props: Props) => {
 
   return useInfiniteQuery({
     queryKey: ['collectibles', address, networks, search, sort, usePageKeys],
-    // pageParam is either { pages } for pageKey mode or a numeric page index for offset mode.
+    // pageParam is either { pages } for pageKey mode or a numeric page index for offset mode
     queryFn: async ({ pageParam = usePageKeys ? { pages: {} } : 0 }) => {
       if (!address) {
         throw new Error('No wallet address available')
       }
 
       if (usePageKeys) {
-        // Fast path: continue from server-provided page keys.
+        // Fast path: continue from server-provided page keys
         const pages =
           typeof pageParam === 'object' && pageParam
             ? (pageParam as { pages?: Record<NetworkType, string> }).pages
             : undefined
+
         const response = await getCollectibles(
           address,
           networks as NetworkType[],
@@ -132,6 +133,7 @@ const useCollectibles = (props: Props) => {
       }
 
       const offset = (pageParam as number) * PAGE_LIMIT
+
       const response = await getCollectibles(
         address,
         networks as NetworkType[],
@@ -139,6 +141,7 @@ const useCollectibles = (props: Props) => {
         sort,
         offset,
       )
+
       return {
         collectibles: response.collectibles,
         hasMore: response.hasMore,
