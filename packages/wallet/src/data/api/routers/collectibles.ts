@@ -22,6 +22,7 @@ import type { NetworkType } from '../types'
 export type Collectible = {
   contract: string
   isSpam: boolean | null
+  spamClassifications?: string[]
   id: string
   displayId: string
   name: string
@@ -32,6 +33,11 @@ export type Collectible = {
     name?: string
     image?: string
     size?: number
+  }
+  openSea?: {
+    collectionSlug?: string
+    safelistRequestStatus?: string
+    isVerified?: boolean
   }
   links: {
     opensea: string
@@ -108,27 +114,36 @@ async function page({
 }) {
   const collectibles: Collectible[] = []
 
-  // hardcoded address after testing
-  // address = '0xDEAD000000000000000000000000000000000000'
+  // hardcoded address for testing. Should remove before merging
+  address = '0xb5be918f7412ab7358064e0cfca78c03e53645bf'
 
   await Promise.all(
     networks.map(async network => {
-      const pageKey = pages?.[network]
-      const { ownedNfts } = await getNFTs(address, network, pageKey)
+      let pageKey: string | undefined = pages?.[network]
 
-      for (const nft of ownedNfts) {
-        collectibles.push(map(nft, network))
-      }
+      do {
+        const response = await getNFTs(address, network, pageKey)
+
+        for (const nft of response.ownedNfts) {
+          collectibles.push(map(nft, network))
+        }
+
+        pageKey = response.pageKey ?? undefined
+      } while (pageKey)
     }),
   )
 
-  let filteredCollectibles = collectibles.filter(
-    collectible => !collectible.isSpam,
-  )
+  let filteredCollectibles = collectibles.filter(collectible => {
+    const hasSpamClassifications =
+      (collectible.spamClassifications?.length ?? 0) > 0
+    const isOpenSeaVerified = collectible.openSea?.isVerified ?? false
+
+    return !collectible.isSpam && !hasSpamClassifications && isOpenSeaVerified
+  })
 
   if (search) {
     const searchLower = search.toLowerCase()
-    filteredCollectibles = collectibles.filter(
+    filteredCollectibles = filteredCollectibles.filter(
       collectible =>
         collectible.name?.toLowerCase().includes(searchLower) ||
         collectible.collection.name?.toLowerCase().includes(searchLower),
@@ -199,12 +214,39 @@ function truncateId(id: string): string {
     : id
 }
 
-function stripTokenId(name: string, tokenId: string): string {
-  return name.replace(new RegExp(`\\s*#${tokenId}$`), '')
+/** Resolve a readable name from nft.name and contract.name, stripping redundant token IDs. */
+function resolveName(
+  nftName: string | null,
+  contractName: string | null,
+  tokenId: string,
+): string {
+  const trimmed = (nftName || '').trim()
+  const isIdOnly = /^#\d+$/.test(trimmed)
+  const raw = isIdOnly ? contractName || '' : trimmed || contractName || ''
+
+  return raw.replace(new RegExp(`\\s*#${tokenId}$`), '').trim()
 }
 
 function formatDisplayName(name: string, displayId: string): string {
-  return name ? `${name} #${displayId}` : `#${displayId}`
+  if (!name) return `#${displayId}`
+  if (/#\d+/.test(name)) return name
+  return `${name} #${displayId}`
+}
+
+function isOpenSeaVerified(status?: string): boolean {
+  return status === 'verified' || status === 'approved'
+}
+
+function formatOpenSeaTokenId(tokenId: string): string {
+  if (tokenId.startsWith('0x')) {
+    try {
+      return BigInt(tokenId).toString(10)
+    } catch {
+      return tokenId
+    }
+  }
+
+  return tokenId
 }
 
 function map(
@@ -214,16 +256,20 @@ function map(
   price?: number,
   floorPrice?: number,
 ) {
+  const name = resolveName(nft.name, nft.contract.name, nft.tokenId)
+  const displayId = truncateId(nft.tokenId)
+  const safelistRequestStatus =
+    nft.contract.openSeaMetadata?.safelistRequestStatus ?? undefined
+  const spamClassifications = nft.contract.spamClassifications ?? []
+
   const collectible: Collectible = {
     id: nft.tokenId,
-    displayId: truncateId(nft.tokenId),
+    displayId,
     contract: nft.contract.address,
     isSpam: nft.contract.isSpam,
-    name: stripTokenId(nft.name || nft.contract.name || '', nft.tokenId),
-    displayName: formatDisplayName(
-      stripTokenId(nft.name || nft.contract.name || '', nft.tokenId),
-      truncateId(nft.tokenId),
-    ),
+    spamClassifications,
+    name,
+    displayName: formatDisplayName(name, displayId),
     image: nft.image.originalUrl ?? undefined,
     thumbnail: nft.image.thumbnailUrl ?? undefined,
     collection: {
@@ -233,8 +279,15 @@ function map(
         ? parseInt(nft.contract.totalSupply)
         : undefined,
     },
+    openSea: {
+      collectionSlug: nft.contract.openSeaMetadata?.collectionSlug ?? undefined,
+      safelistRequestStatus,
+      isVerified: isOpenSeaVerified(safelistRequestStatus),
+    },
     links: {
-      opensea: `https://opensea.io/assets/${network}/${nft.contract.address}/${nft.tokenId}`,
+      opensea: `https://opensea.io/item/${network}/${nft.contract.address}/${formatOpenSeaTokenId(
+        nft.tokenId,
+      )}`,
     },
     about: nft.description ?? undefined,
     network: network,
