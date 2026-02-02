@@ -106,52 +106,61 @@ async function page({
 }: {
   address: string
   networks: NetworkType[]
-  pages?: Record<NetworkType, string>
+  pages?: Partial<Record<NetworkType, string>>
   limit?: number
   offset?: number
   search?: string
   sort?: { column: 'name' | 'collection'; direction: 'asc' | 'desc' }
 }) {
-  const collectibles: Collectible[] = []
-
   // hardcoded address for testing. Should remove before merging
-  address = '0xb5be918f7412ab7358064e0cfca78c03e53645bf'
+  // address = '0xb5be918f7412ab7358064e0cfca78c03e53645bf'
 
-  await Promise.all(
-    networks.map(async network => {
-      let pageKey: string | undefined = pages?.[network]
+  // Full scan is required when search or non-default sort needs global ordering.
+  const shouldScanAll =
+    !!search || (sort && (sort.column !== 'name' || sort.direction !== 'asc'))
 
-      do {
-        const response = await getNFTs(address, network, pageKey)
-
-        for (const nft of response.ownedNfts) {
-          collectibles.push(map(nft, network))
-        }
-
-        pageKey = response.pageKey ?? undefined
-      } while (pageKey)
-    }),
-  )
-
-  let filteredCollectibles = collectibles.filter(collectible => {
+  // Primary filter: verified collections only, no spam flags.
+  const passesFilters = (collectible: Collectible) => {
     const hasSpamClassifications =
       (collectible.spamClassifications?.length ?? 0) > 0
+
     const isOpenSeaVerified = collectible.openSea?.isVerified ?? false
 
     return !collectible.isSpam && !hasSpamClassifications && isOpenSeaVerified
-  })
+  }
 
-  if (search) {
+  // Fallback 1: allow unverified collections, still exclude spam classifications.
+  const passesRelaxedFilters = (collectible: Collectible) => {
+    const hasSpamClassifications =
+      (collectible.spamClassifications?.length ?? 0) > 0
+
+    return !collectible.isSpam && !hasSpamClassifications
+  }
+
+  // Fallback 2: only exclude explicit spam.
+  const passesBareFilters = (collectible: Collectible) => {
+    return collectible.isSpam !== true
+  }
+
+  // Text match against name or collection.
+  const applySearch = (items: Collectible[]) => {
+    if (!search) return items
     const searchLower = search.toLowerCase()
-    filteredCollectibles = filteredCollectibles.filter(
+
+    return items.filter(
       collectible =>
         collectible.name?.toLowerCase().includes(searchLower) ||
         collectible.collection.name?.toLowerCase().includes(searchLower),
     )
   }
 
-  if (sort) {
-    filteredCollectibles.sort((a, b) => {
+  // Sorting is applied after filtering (and after fallback selection).
+  const applySort = (items: Collectible[]) => {
+    if (!sort) return items
+
+    const sorted = [...items]
+
+    sorted.sort((a, b) => {
       const comparison =
         sort.column === 'name'
           ? (a.name || '').localeCompare(b.name || '')
@@ -160,16 +169,144 @@ async function page({
 
       return sort.direction === 'asc' ? comparison : -comparison
     })
+
+    return sorted
   }
 
-  const paginatedCollectibles = filteredCollectibles.slice(
-    offset,
-    offset + limit,
-  )
+  // Select the first non-empty filter result, in priority order.
+  const selectWithFallbacks = (
+    items: Collectible[],
+    ...predicates: Array<(collectible: Collectible) => boolean>
+  ) => {
+    for (const predicate of predicates) {
+      const filtered = items.filter(predicate)
+
+      if (filtered.length > 0) return filtered
+    }
+
+    return []
+  }
+
+  // Full scan path: fetch all pages, then filter/search/sort/paginate in-memory.
+  if (shouldScanAll) {
+    const collectibles: Collectible[] = []
+
+    await Promise.all(
+      networks.map(async network => {
+        let pageKey: string | undefined = pages?.[network]
+
+        do {
+          const response = await getNFTs(address, network, pageKey)
+
+          for (const nft of response.ownedNfts) {
+            collectibles.push(map(nft, network))
+          }
+
+          pageKey = response.pageKey ?? undefined
+        } while (pageKey)
+      }),
+    )
+
+    const filteredCollectibles = applySort(
+      applySearch(
+        selectWithFallbacks(
+          collectibles,
+          passesFilters,
+          passesRelaxedFilters,
+          passesBareFilters,
+        ),
+      ),
+    )
+
+    const paginatedCollectibles = filteredCollectibles.slice(
+      offset,
+      offset + limit,
+    )
+
+    return {
+      collectibles: paginatedCollectibles,
+      hasMore: filteredCollectibles.length > offset + limit,
+    }
+  }
+
+  // Page-key path: fetch until we fill the page, preserving fallbacks locally.
+  const paginatedCollectibles: Collectible[] = []
+  const fallbackCollectibles: Collectible[] = []
+  const bareCollectibles: Collectible[] = []
+  const rawCollectibles: Collectible[] = []
+  const nextPages: Partial<Record<NetworkType, string>> = {}
+  const pageSize = Math.min(100, Math.max(1, limit))
+
+  for (const network of networks) {
+    let pageKey: string | undefined = pages?.[network]
+
+    while (paginatedCollectibles.length < limit) {
+      const response = await getNFTs(
+        address,
+        network,
+        pageKey,
+        String(pageSize),
+      )
+
+      for (const nft of response.ownedNfts) {
+        const collectible = map(nft, network)
+        if (rawCollectibles.length < limit) {
+          rawCollectibles.push(collectible)
+        }
+        if (passesFilters(collectible)) {
+          paginatedCollectibles.push(collectible)
+          if (paginatedCollectibles.length >= limit) {
+            break
+          }
+        } else if (passesRelaxedFilters(collectible)) {
+          fallbackCollectibles.push(collectible)
+        } else if (passesBareFilters(collectible)) {
+          bareCollectibles.push(collectible)
+        }
+      }
+
+      pageKey = response.pageKey ?? undefined
+
+      const hasVerified = paginatedCollectibles.length > 0
+      const hasRelaxed = fallbackCollectibles.length >= limit
+      const hasBare = bareCollectibles.length >= limit
+
+      if (
+        !pageKey ||
+        paginatedCollectibles.length >= limit ||
+        (!hasVerified && (hasRelaxed || hasBare))
+      ) {
+        break
+      }
+    }
+
+    if (pageKey) {
+      nextPages[network] = pageKey
+    }
+
+    if (paginatedCollectibles.length >= limit) {
+      break
+    }
+  }
+
+  let finalCollectibles = paginatedCollectibles
+
+  if (finalCollectibles.length === 0) {
+    if (fallbackCollectibles.length > 0) {
+      finalCollectibles = fallbackCollectibles.slice(0, limit)
+    } else if (bareCollectibles.length > 0) {
+      finalCollectibles = bareCollectibles.slice(0, limit)
+    } else if (rawCollectibles.length > 0) {
+      finalCollectibles = rawCollectibles.slice(0, limit)
+    }
+  }
+
+  finalCollectibles = applySort(applySearch(finalCollectibles))
 
   return {
-    collectibles: paginatedCollectibles,
-    hasMore: filteredCollectibles.length > offset + limit,
+    collectibles: finalCollectibles,
+    hasMore: Object.keys(nextPages).length > 0,
+    pages: Object.keys(nextPages).length > 0 ? nextPages : undefined,
   }
 }
 
@@ -188,6 +325,7 @@ async function collectible(
 
   // todo: replace floor price provider https://github.com/status-im/status-website/issues/1547
   const currency = 'USD'
+
   let price: number | undefined
   let floorPrice: number | undefined
 
