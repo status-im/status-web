@@ -98,15 +98,17 @@ const Collectible = (props: Props) => {
       <div className="mb-10 flex gap-4">
         <div className="flex-1">
           <div className="2xl:mb-6">
-            <div className="mb-2 flex items-center gap-1.5">
-              <div className="text-15 font-semibold text-neutral-100">
-                {collectible.collection.name}
+            {collectible.collection.name && (
+              <div className="mb-2 flex items-center gap-1.5">
+                <div className="text-15 font-semibold text-neutral-100">
+                  {collectible.collection.name}
+                </div>
               </div>
-            </div>
+            )}
 
             <div className="mb-6 2xl:mt-0">
               <div className="text-27 font-semibold text-neutral-100">
-                {collectible.name} #{collectible.displayId}
+                {collectible.displayName}
               </div>
             </div>
 
