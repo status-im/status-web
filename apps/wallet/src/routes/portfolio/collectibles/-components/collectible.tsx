@@ -106,7 +106,7 @@ const Collectible = (props: Props) => {
 
             <div className="mb-6 2xl:mt-0">
               <div className="text-27 font-semibold text-neutral-100">
-                {collectible.name}
+                {collectible.name} #{collectible.displayId}
               </div>
             </div>
 
