@@ -25,6 +25,7 @@ export type Collectible = {
   id: string
   displayId: string
   name: string
+  displayName: string
   image?: string
   thumbnail?: string
   collection: {
@@ -202,6 +203,10 @@ function stripTokenId(name: string, tokenId: string): string {
   return name.replace(new RegExp(`\\s*#${tokenId}$`), '')
 }
 
+function formatDisplayName(name: string, displayId: string): string {
+  return name ? `${name} #${displayId}` : `#${displayId}`
+}
+
 function map(
   nft: NFTsResponseBody['ownedNfts'][number] | NFTMetadataResponseBody,
   network: NetworkType,
@@ -215,6 +220,10 @@ function map(
     contract: nft.contract.address,
     isSpam: nft.contract.isSpam,
     name: stripTokenId(nft.name || nft.contract.name || '', nft.tokenId),
+    displayName: formatDisplayName(
+      stripTokenId(nft.name || nft.contract.name || '', nft.tokenId),
+      truncateId(nft.tokenId),
+    ),
     image: nft.image.originalUrl ?? undefined,
     thumbnail: nft.image.thumbnailUrl ?? undefined,
     collection: {

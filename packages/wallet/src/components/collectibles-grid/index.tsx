@@ -117,7 +117,7 @@ const CollectiblesGrid = (props: Props) => {
                   />
                 )} */}
                 <div className="truncate text-13 font-semibold text-neutral-100">
-                  {collectible.name} #{collectible.displayId}
+                  {collectible.displayName}
                 </div>
               </div>
             </LinkComponent>
