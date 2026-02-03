@@ -133,7 +133,7 @@ const Collectible = (props: Props) => {
             )} */}
 
             <div className="flex gap-2">
-              {collectible.openSea?.isVerified && (
+              {collectible?.links?.opensea && (
                 <Button
                   size="32"
                   variant="outline"
