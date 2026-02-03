@@ -53,12 +53,14 @@ Optional:
 
 ## Getting Started
 
-1.  Clone the repository:
+1.
+
+Clone the repository:
 
           git clone https://github.com/status-im/status-web.git
           cd status-web
 
-2.  Initialize and update submodules:
+2\. Initialize and update submodules:
 
           git submodule init
           git submodule update
