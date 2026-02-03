@@ -14,6 +14,15 @@ const supportedNetworks = [
   8453, // Base
 ]
 
+/**
+ * Manual overrides for tokens with incorrect decimals in upstream sources.
+ * Key: checksummed contract address, Value: correct decimals
+ * @see https://etherscan.io/token/{address} to verify on-chain decimals
+ */
+const decimalOverrides = {
+  '0x1151CB3d861920e07a38e03eEAd12C32178567F6': 5, // BONK - actual on-chain decimals is 5, not 18
+}
+
 const standardTokenLists = [
   { name: 'Uniswap', url: 'https://gateway.ipfs.io/ipns/tokens.uniswap.org' },
   // may include lowercased addresses (e.g. 0x744d70fdbe2ba4cf95131626614a1763df805b9e instead of 0x744d70FDBE2Ba4CF95131626614a1763DF805B9E)
@@ -152,21 +161,32 @@ function generateTemplate(tokens) {
       minor: 0,
       patch: 0,
     },
-    tokens: tokens.map(token => ({
-      chainId: token.chainId,
-      address: token.address,
-      name: token.name,
-      symbol: token.symbol,
-      decimals: token.decimals,
-      logoURI: token.logoURI,
-      ...(token.extensions &&
-        token.extensions.bridgeInfo &&
-        Object.keys(token.extensions.bridgeInfo).length > 0 && {
-          extensions: {
-            bridgeInfo: token.extensions.bridgeInfo,
-          },
-        }),
-    })),
+    tokens: tokens.map(token => {
+      // Apply decimal overrides for tokens with incorrect upstream data
+      const decimals = decimalOverrides[token.address] ?? token.decimals
+
+      if (decimalOverrides[token.address] !== undefined) {
+        console.log(
+          `  Applied decimal override for ${token.symbol} (${token.address}): ${token.decimals} -> ${decimals}`,
+        )
+      }
+
+      return {
+        chainId: token.chainId,
+        address: token.address,
+        name: token.name,
+        symbol: token.symbol,
+        decimals,
+        logoURI: token.logoURI,
+        ...(token.extensions &&
+          token.extensions.bridgeInfo &&
+          Object.keys(token.extensions.bridgeInfo).length > 0 && {
+            extensions: {
+              bridgeInfo: token.extensions.bridgeInfo,
+            },
+          }),
+      }
+    }),
   }
 
   return JSON.stringify(tokenList, null, 2)
