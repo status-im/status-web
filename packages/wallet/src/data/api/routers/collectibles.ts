@@ -113,20 +113,15 @@ async function page({
   sort?: { column: 'name' | 'collection'; direction: 'asc' | 'desc' }
 }) {
   // hardcoded address for testing. Should remove before merging
-  // address = '0xb5be918f7412ab7358064e0cfca78c03e53645bf'
+  address = '0xad1810c00def1bc68ef156328a823a9b8570487f'
 
   // Full scan is required when search or non-default sort needs global ordering
   const shouldScanAll =
     !!search || (sort && (sort.column !== 'name' || sort.direction !== 'asc'))
 
-  // Primary filter: verified collections only, no spam flags
+  // Primary filter: only exclude explicit spam
   const passesFilters = (collectible: Collectible) => {
-    const hasSpamClassifications =
-      (collectible.spamClassifications?.length ?? 0) > 0
-
-    const isOpenSeaVerified = collectible.openSea?.isVerified ?? false
-
-    return !collectible.isSpam && !hasSpamClassifications && isOpenSeaVerified
+    return !collectible.isSpam
   }
 
   // Fallback 1: allow unverified collections, still exclude spam classifications
