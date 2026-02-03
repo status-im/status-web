@@ -395,6 +395,8 @@ function map(
     nft.contract.openSeaMetadata?.safelistRequestStatus ?? undefined
   const spamClassifications = nft.contract.spamClassifications ?? []
 
+  const attributes = nft.raw?.metadata?.attributes
+
   const collectible: Collectible = {
     id: nft.tokenId,
     displayId,
@@ -425,8 +427,8 @@ function map(
     about: nft.description ?? undefined,
     network: network,
     standard: nft.tokenType,
-    traits: Array.isArray(nft.raw.metadata.attributes)
-      ? nft.raw.metadata.attributes.reduce(
+    traits: Array.isArray(attributes)
+      ? attributes.reduce(
           (acc, attribute) => {
             acc[attribute.trait_type] = attribute.value
             return acc
