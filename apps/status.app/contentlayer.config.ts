@@ -269,7 +269,7 @@ export const SpecsDoc = defineDocumentType(() => ({
       type: 'string[]',
       // resolve: doc => [
       //   slugify(METADATA[doc.title as keyof typeof METADATA].title),
-      resolve: doc => [slugify(doc.title.split('/')[1])],
+      resolve: doc => [slugify(getTitlePart(doc.title))],
     },
     title: {
       type: 'string',
@@ -280,7 +280,7 @@ export const SpecsDoc = defineDocumentType(() => ({
         const metadata = METADATA[doc.title as keyof typeof METADATA]
 
         if (!metadata || !metadata.title) {
-          return title(doc.title.split('/')[1].replaceAll('-', ' '))
+          return title(getTitlePart(doc.title).replaceAll('-', ' '))
         }
 
         return metadata.title
@@ -290,7 +290,7 @@ export const SpecsDoc = defineDocumentType(() => ({
     url: {
       type: 'string',
       // resolve: doc => METADATA[doc.title as keyof typeof METADATA].href,
-      resolve: doc => '/specs/' + slugify(doc.title.split('/')[1]),
+      resolve: doc => '/specs/' + slugify(getTitlePart(doc.title)),
     },
     authors: {
       type: 'list',
@@ -308,7 +308,7 @@ export const SpecsDoc = defineDocumentType(() => ({
     },
     titleSlug: {
       type: 'string',
-      resolve: doc => slugify(doc.title.split('/')[1]),
+      resolve: doc => slugify(getTitlePart(doc.title)),
     },
     headings: {
       // @ts-expect-error TODO
@@ -450,12 +450,22 @@ function indexer(root: Node) {
   return index
 }
 
+function getTitlePart(docTitle: string): string {
+  return docTitle.includes('/') ? docTitle.split('/')[1] : docTitle
+}
+
 export default makeSource({
   // syncFiles: syncContentFromGit,
   onMissingOrIncompatibleData: 'fail',
   contentDirPath: CONTENT_DIR_PATH,
   contentDirInclude: ['help', 'legal', specsDocContentDir],
   documentTypes: [HelpDoc, LegalDoc, SpecsDoc],
+  contentDirExclude: [
+    'specs/status/raw/status-app-protocols.md',
+    'specs/status/raw/status-mvds.md',
+    'specs/status/raw/url-data.md',
+    'specs/status/raw/url-scheme.md',
+  ],
   mdx: {
     // esbuildOptions: options => {
     //   return {
