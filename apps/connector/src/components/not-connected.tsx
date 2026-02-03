@@ -9,8 +9,8 @@ const NotConnected = () => {
       <div className="max-w-[304px] pb-5 pt-4 text-center">
         <p className="text-19 font-semibold">Unable to connect to Status</p>
         <p className="text-15">
-          Make sure Status desktop app is running on your machine or download it
-          below.
+          Make sure Status desktop app is running and &quot;Apps on device&quot;
+          permission is enabled in your browser settings.
         </p>
       </div>
       <DownloadButton />
