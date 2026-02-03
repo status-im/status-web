@@ -57,13 +57,17 @@ Optional:
 
 Clone the repository:
 
-          git clone https://github.com/status-im/status-web.git
-          cd status-web
+```
+      git clone https://github.com/status-im/status-web.git
+      cd status-web
+```
 
 2\. Initialize and update submodules:
 
-          git submodule init
-          git submodule update
+```
+      git submodule init
+      git submodule update
+```
 
 > \[!TIP]
 > If submodule URLs have changed (e.g., after a repo migration), sync them first:
@@ -73,31 +77,50 @@ Clone the repository:
 > git submodule update --init --recursive
 > ```
 
-3.  (Optional) If using Nix, enter development shell:
+> \[!TIP]
+> To update all submodules to the latest commit from their remote:
+>
+> ```bash
+> git submodule update --remote
+> ```
 
-          nix develop
+3. (Optional) If using Nix, enter development shell:
 
-4.  Install dependencies:
+   ```
+     nix develop
+   ```
 
-         pnpm install
+4. Install dependencies:
 
-5.  Build all packages:
+   ```
+    pnpm install
+   ```
 
-         pnpm build
+5. Build all packages:
 
-6.  Run tests:
+   ```
+    pnpm build
+   ```
 
-         pnpm test
+6. Run tests:
 
-7.  Start development mode:
+   ```
+    pnpm test
+   ```
 
-         pnpm dev
+7. Start development mode:
+
+   ```
+    pnpm dev
+   ```
 
 ## Storybook
 
 To view and interact with the components, you can run Storybook:
 
-    pnpm storybook
+```
+pnpm storybook
+```
 
 This will start the Storybook server, allowing you to browse and test components in isolation.
 
