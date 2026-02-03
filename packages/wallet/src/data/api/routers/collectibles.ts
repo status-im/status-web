@@ -113,11 +113,11 @@ async function page({
   sort?: { column: 'name' | 'collection'; direction: 'asc' | 'desc' }
 }) {
   // hardcoded address for testing. Should remove before merging
-  address = '0xad1810c00def1bc68ef156328a823a9b8570487f'
+  // address = '0xb5be918f7412ab7358064e0cfca78c03e53645bf'
 
-  // Full scan is required when search or non-default sort needs global ordering
+  // Full scan is required only for non-default sort (global ordering).
   const shouldScanAll =
-    !!search || (sort && (sort.column !== 'name' || sort.direction !== 'asc'))
+    !!sort && (sort.column !== 'name' || sort.direction !== 'asc')
 
   // Primary filter: only exclude explicit spam
   const passesFilters = (collectible: Collectible) => {
@@ -146,6 +146,15 @@ async function page({
       collectible =>
         collectible.name?.toLowerCase().includes(searchLower) ||
         collectible.collection.name?.toLowerCase().includes(searchLower),
+    )
+  }
+
+  const matchesSearch = (collectible: Collectible) => {
+    if (!search) return true
+    const searchLower = search.toLowerCase()
+    return (
+      collectible.name?.toLowerCase().includes(searchLower) ||
+      collectible.collection.name?.toLowerCase().includes(searchLower)
     )
   }
 
@@ -232,6 +241,30 @@ async function page({
   const nextPages: Partial<Record<NetworkType, string>> = {}
   const pageSize = Math.min(100, Math.max(1, limit))
 
+  const processCollectible = (collectible: Collectible) => {
+    if (!matchesSearch(collectible)) return false
+
+    if (rawCollectibles.length < limit) {
+      rawCollectibles.push(collectible)
+    }
+
+    if (passesFilters(collectible)) {
+      paginatedCollectibles.push(collectible)
+      return paginatedCollectibles.length >= limit
+    }
+
+    if (passesRelaxedFilters(collectible)) {
+      fallbackCollectibles.push(collectible)
+      return false
+    }
+
+    if (passesBareFilters(collectible)) {
+      bareCollectibles.push(collectible)
+    }
+
+    return false
+  }
+
   for (const network of networks) {
     let pageKey: string | undefined = pages?.[network]
 
@@ -244,19 +277,9 @@ async function page({
       )
 
       for (const nft of response.ownedNfts) {
-        const collectible = map(nft, network)
-        if (rawCollectibles.length < limit) {
-          rawCollectibles.push(collectible)
-        }
-        if (passesFilters(collectible)) {
-          paginatedCollectibles.push(collectible)
-          if (paginatedCollectibles.length >= limit) {
-            break
-          }
-        } else if (passesRelaxedFilters(collectible)) {
-          fallbackCollectibles.push(collectible)
-        } else if (passesBareFilters(collectible)) {
-          bareCollectibles.push(collectible)
+        const shouldStop = processCollectible(map(nft, network))
+        if (shouldStop) {
+          break
         }
       }
 
