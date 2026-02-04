@@ -151,6 +151,18 @@ const SendAssetsModal = (props: Props) => {
   const watchedTo = watch('to')
   const balanceEur = asset.totalBalanceEur
 
+  const MINIMUM_TRANSACTION_VALUE = 0.1
+
+  const amountFiatValue = useMemo(() => {
+    if (!watchedAmount || balance === 0) return 0
+    return Number.parseFloat(watchedAmount || '0') * (balanceEur / balance)
+  }, [watchedAmount, balance, balanceEur])
+
+  const hasValueBelowMinimum =
+    watchedAmount &&
+    Number.parseFloat(watchedAmount) > 0 &&
+    amountFiatValue < MINIMUM_TRANSACTION_VALUE
+
   useEffect(() => {
     setValue('contractAddress', asset.contractAddress || undefined)
   }, [asset.contractAddress, setValue])
@@ -416,6 +428,16 @@ const SendAssetsModal = (props: Props) => {
                       </div>
                     )}
 
+                    {hasValueBelowMinimum && (
+                      <div className="mt-2 flex items-center gap-1 text-13 text-danger-50">
+                        <AlertIcon className="size-4" />
+                        <p>
+                          Value of the transaction must be at least $
+                          {MINIMUM_TRANSACTION_VALUE}
+                        </p>
+                      </div>
+                    )}
+
                     {watchedAmount && !hasInsufficientBalance && (
                       <div className="mt-2 flex items-center gap-1 text-13 font-medium text-neutral-50">
                         Remaining ~{' '}
@@ -559,6 +581,7 @@ const SendAssetsModal = (props: Props) => {
                     disabled={
                       hasInsufficientBalance ||
                       hasInsufficientEth ||
+                      hasValueBelowMinimum ||
                       !watchedAmount ||
                       !watchedTo ||
                       !gasFees ||
