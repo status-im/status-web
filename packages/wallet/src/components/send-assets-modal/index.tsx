@@ -71,18 +71,18 @@ const createFormSchema = (
       .refine(
         val => {
           const amount = Number.parseFloat(val)
-          if (!maxGasFeeEth) return amount > 0 && amount <= balance
-
-          const isETH = assetSymbol === 'ETH'
-          const totalCost = isETH ? amount + maxGasFeeEth : maxGasFeeEth
-          const availableBalance = balance
-
-          return amount > 0 && totalCost <= availableBalance
+          return amount > 0 && amount <= balance
+        },
+        { message: 'More than available balance' },
+      )
+      .refine(
+        val => {
+          if (!maxGasFeeEth || assetSymbol !== 'ETH') return true
+          const amount = Number.parseFloat(val)
+          return amount + maxGasFeeEth <= balance
         },
         {
-          message: maxGasFeeEth
-            ? `Insufficient balance. Max gas fees: ${maxGasFeeEth.toFixed(6)} ETH`
-            : 'More than available balance',
+          message: `Insufficient balance. Max gas fees: ${maxGasFeeEth?.toFixed(6) ?? '0'} ETH`,
         },
       ),
     contractAddress: z
