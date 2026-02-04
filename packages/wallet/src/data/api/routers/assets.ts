@@ -105,7 +105,7 @@ export const DEFAULT_TOKEN_IDS: Record<string, string> = {
 
 function buildTokenSummary(
   assets: Asset[],
-  defaultIcon: string,
+  defaultIcon: string | undefined,
   defaultName: string,
   defaultSymbol: string,
 ) {
@@ -114,7 +114,7 @@ function buildTokenSummary(
 
   return {
     ...summary,
-    icon: defaultIcon,
+    icon: defaultIcon ?? '',
     name: defaultName,
     symbol: defaultSymbol,
     about: firstAsset?.metadata.about ?? '',
@@ -674,7 +674,7 @@ async function token({
 
       if (
         !Number(result.tokenBalances[0].tokenBalance) &&
-        !DEFAULT_TOKEN_SYMBOLS.includes(token.symbol)
+        !(DEFAULT_TOKEN_SYMBOLS as readonly string[]).includes(token.symbol)
       ) {
         throw new Error(`Balance not found for token ${token.symbol}`)
       }
