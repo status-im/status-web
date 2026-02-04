@@ -10,6 +10,7 @@ import type { ComponentType, ReactNode } from 'react'
 
 type LinkComponentProps = {
   href: string
+  scroll?: boolean
   className?: string
   children: ReactNode
 }
@@ -95,6 +96,7 @@ const CollectiblesGrid = (props: Props) => {
                 collectible.network
               }
               href={`${href}${query}`}
+              scroll={false}
               className={cx(
                 'rounded-16 border p-1 pb-0',
                 isActive
