@@ -14,6 +14,7 @@ import { CurrencyAmount } from '../currency-amount'
 import { NetworkLogo } from '../network-logo'
 import { PasswordModal } from '../password-modal'
 import { TokenAmount } from '../token-amount'
+import { TokenIcon } from '../token-icon'
 
 import type { NetworkType } from '../../data'
 import type { Account } from '../address'
@@ -26,7 +27,7 @@ type Props = {
   }
   asset: {
     name: string
-    icon: string
+    icon?: string
     symbol: string
     totalBalance: number
     totalBalanceEur: number
@@ -284,7 +285,7 @@ const SendAssetsModal = (props: Props) => {
             data-customisation="blue"
             className="fixed left-0 top-[38px] flex size-full justify-center"
           >
-            <div className="shadow opacity-100 fixed z-auto flex h-[calc(100vh-76px)] w-[calc(100%-23px)] max-w-[494px] flex-col gap-3 overflow-auto rounded-16 bg-white-100 transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in">
+            <div className="shadow fixed z-auto flex h-[calc(100vh-76px)] w-[calc(100%-23px)] max-w-[494px] flex-col gap-3 overflow-auto rounded-16 bg-white-100 opacity-[100] transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in">
               <div className="flex items-center justify-between p-4">
                 <Dialog.Title className="text-27 font-semibold">
                   Send assets
@@ -366,10 +367,11 @@ const SendAssetsModal = (props: Props) => {
 
                       <div className="absolute right-4 top-3 flex items-center gap-2 bg-white-100">
                         <div className="relative">
-                          <img
-                            className="size-8 rounded-full"
-                            alt={asset.name}
-                            src={asset.icon}
+                          <TokenIcon
+                            icon={asset.icon}
+                            name={asset.name}
+                            symbol={asset.symbol}
+                            size="32"
                           />
                           <div className="absolute bottom-[-3px] right-[-3px] rounded-full border-2 border-white-100">
                             <NetworkLogo name={asset.network} size={12} />

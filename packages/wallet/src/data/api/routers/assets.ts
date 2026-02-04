@@ -41,7 +41,7 @@ const tokenMetadataSchema = z.object({
 
 type Asset = {
   networks: NetworkType[]
-  icon: string
+  icon?: string
   name: string
   symbol: string
   price_eur: number
