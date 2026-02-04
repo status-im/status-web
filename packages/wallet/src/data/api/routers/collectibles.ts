@@ -113,7 +113,7 @@ async function page({
   sort?: { column: 'name' | 'collection'; direction: 'asc' | 'desc' }
 }) {
   // hardcoded address for testing. Should remove before merging
-  // address = '0xaD1810C00dEf1bC68ef156328a823A9b8570487F'
+  address = '0xaD1810C00dEf1bC68ef156328a823A9b8570487F'
 
   // Full scan is required only for non-default sort (global ordering).
   const shouldScanAll =

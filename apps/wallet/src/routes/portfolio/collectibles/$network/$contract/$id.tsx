@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useLayoutEffect, useMemo } from 'react'
 
 import { useToast } from '@status-im/components'
 import {
@@ -13,7 +13,10 @@ import { useCollectibles } from '@/hooks/use-collectibles'
 
 import { useWallet } from '../../../../../providers/wallet-context'
 import { Collectible } from '../../-components/collectible'
-import { LinkCollectible } from '../../-components/link-collectibe'
+import {
+  getSavedScrollTop,
+  LinkCollectible,
+} from '../../-components/link-collectibe'
 
 import type { NetworkType } from '@status-im/wallet/data'
 
@@ -55,6 +58,16 @@ function Component() {
   const collectibles = useMemo(() => {
     return data?.pages.flatMap(page => page.collectibles ?? []) ?? []
   }, [data?.pages])
+
+  useLayoutEffect(() => {
+    const scrollTop = getSavedScrollTop()
+    if (scrollTop > 0) {
+      const scrollContainer = document.querySelector('.scrollbar-stable')
+      if (scrollContainer) {
+        scrollContainer.scrollTop = scrollTop
+      }
+    }
+  }, [])
 
   // Show error toast if there is an error fetching collectibles
   useEffect(() => {
