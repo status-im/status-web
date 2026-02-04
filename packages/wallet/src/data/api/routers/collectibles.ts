@@ -113,18 +113,22 @@ async function page({
   sort?: { column: 'name' | 'collection'; direction: 'asc' | 'desc' }
 }) {
   // hardcoded address for testing. Should remove before merging
-  // address = '0xb5be918f7412ab7358064e0cfca78c03e53645bf'
+  // address = '0xaD1810C00dEf1bC68ef156328a823A9b8570487F'
 
   // Full scan is required only for non-default sort (global ordering).
   const shouldScanAll =
     !!sort && (sort.column !== 'name' || sort.direction !== 'asc')
 
-  // Primary filter: only exclude explicit spam
+  // Primary filter: exclude spam, spam classifications, and require OpenSea verified
   const passesFilters = (collectible: Collectible) => {
-    return !collectible.isSpam
+    const hasSpamClassifications =
+      (collectible.spamClassifications?.length ?? 0) > 0
+    const isVerified = collectible.openSea?.isVerified === true
+
+    return !collectible.isSpam && !hasSpamClassifications && isVerified
   }
 
-  // Fallback 1: allow unverified collections, still exclude spam classifications
+  // Fallback 1: exclude spam and spam classifications, allow unverified
   const passesRelaxedFilters = (collectible: Collectible) => {
     const hasSpamClassifications =
       (collectible.spamClassifications?.length ?? 0) > 0
@@ -134,7 +138,7 @@ async function page({
 
   // Fallback 2: only exclude explicit spam
   const passesBareFilters = (collectible: Collectible) => {
-    return collectible.isSpam !== true
+    return !collectible.isSpam
   }
 
   // Text match against name or collection
