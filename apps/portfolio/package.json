@@ -115,7 +115,7 @@
     "vfile-matter": "^5.0.0",
     "viem": "^2.21.1",
     "wagmi": "^2.12.8",
-    "zod": "^3.23.8"
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@1stg/remark-preset": "^2.0.0",
