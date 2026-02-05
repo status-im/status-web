@@ -82,7 +82,7 @@ const createFormSchema = (
           return amount + maxGasFeeEth <= balance
         },
         {
-          message: `Insufficient balance. Max gas fees: ${maxGasFeeEth?.toFixed(6) ?? '0'} ETH`,
+          message: `Insufficient balance. Max gas fees: ${(maxGasFeeEth ?? 0).toFixed(6)} ETH`,
         },
       ),
     contractAddress: z
@@ -151,6 +151,7 @@ const SendAssetsModal = (props: Props) => {
   const watchedTo = watch('to')
   const balanceEur = asset.totalBalanceEur
 
+  // Minimum transaction value in USD
   const MINIMUM_TRANSACTION_VALUE = 0.1
 
   const amountFiatValue = useMemo(() => {
@@ -432,8 +433,11 @@ const SendAssetsModal = (props: Props) => {
                       <div className="mt-2 flex items-center gap-1 text-13 text-danger-50">
                         <AlertIcon className="size-4" />
                         <p>
-                          Value of the transaction must be at least $
-                          {MINIMUM_TRANSACTION_VALUE}
+                          Value of the transaction must be at least{' '}
+                          <CurrencyAmount
+                            value={MINIMUM_TRANSACTION_VALUE}
+                            format="standard"
+                          />
                         </p>
                       </div>
                     )}
