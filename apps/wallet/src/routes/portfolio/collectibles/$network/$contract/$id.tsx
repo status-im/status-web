@@ -14,7 +14,7 @@ import { useCollectibles } from '@/hooks/use-collectibles'
 import { useWallet } from '../../../../../providers/wallet-context'
 import { Collectible } from '../../-components/collectible'
 import { LinkCollectible } from '../../-components/link-collectibe'
-import { useCollectiblesScrollRestorer } from '../../-hooks/use-collectibles-scroll'
+import { useScrollRestorer } from '../../-hooks/use-collectibles-scroll'
 
 import type { NetworkType } from '@status-im/wallet/data'
 
@@ -57,7 +57,7 @@ function Component() {
     return data?.pages.flatMap(page => page.collectibles ?? []) ?? []
   }, [data?.pages])
 
-  useCollectiblesScrollRestorer()
+  useScrollRestorer()
 
   // Show error toast if there is an error fetching collectibles
   useEffect(() => {

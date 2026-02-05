@@ -1,6 +1,6 @@
 import { Link as LinkBase, useRouter } from '@tanstack/react-router'
 
-import { useCollectiblesScrollSaver } from '../-hooks/use-collectibles-scroll'
+import { useScrollSaver } from '../-hooks/use-collectibles-scroll'
 
 type LinkProps = {
   href: string
@@ -12,7 +12,7 @@ type LinkProps = {
 const LinkCollectible = (props: LinkProps) => {
   const { href, className, children } = props
   const router = useRouter()
-  const { saveScrollFromElement } = useCollectiblesScrollSaver()
+  const { saveScrollFromElement } = useScrollSaver()
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
