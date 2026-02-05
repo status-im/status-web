@@ -113,7 +113,7 @@ export default async function HomePage() {
           </div>
           <div
             data-theme="dark"
-            className="mt-6 flex max-w-[572px] flex-row items-start gap-4 rounded-16 border border-solid border-white-10 bg-white-5 p-[6px] pl-[12px] text-left lg:flex-row lg:items-center lg:gap-10"
+            className="mt-6 flex max-w-[572px] flex-row items-center gap-4 rounded-16 border border-solid border-white-10 bg-white-5 p-[6px] pl-[12px] text-left lg:flex-row lg:gap-10"
           >
             <div className="flex text-left">
               <p className="text-15 font-400 text-white-100">
