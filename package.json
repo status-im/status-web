@@ -10,6 +10,7 @@
       "packages/components",
       "packages/wallet",
       "packages/status-network",
+      "packages/karma-sdk",
       "apps/hub",
       "apps/status.app",
       "apps/status.network",

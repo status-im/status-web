@@ -3,6 +3,10 @@ import '@pitininja/cap-react-widget/dist/index.css'
 import { useState } from 'react'
 
 import { Skeleton, useToast } from '@status-im/components'
+import {
+  getPowCaptchaEndpoint,
+  isValidCaptchaToken,
+} from '@status-im/karma-sdk'
 import { Button } from '@status-im/status-network/components'
 import { useSIWE } from 'connectkit'
 import dynamic from 'next/dynamic'
@@ -76,7 +80,9 @@ const KarmaSourceCard = ({
     useClaimKarma()
   const [isClaiming, setIsClaiming] = useState<boolean>(false)
   const toast = useToast()
-  const capApiEndpoint = `${clientEnv.NEXT_PUBLIC_STATUS_NETWORK_API_URL}/captcha/cap/`
+  const capApiEndpoint = getPowCaptchaEndpoint(
+    clientEnv.NEXT_PUBLIC_STATUS_NETWORK_API_URL
+  )
 
   const defaultBadgeTitle = badgeTitle ?? t('karma.just_arrived')
   const defaultBadgeDescription =
@@ -101,7 +107,7 @@ const KarmaSourceCard = ({
   }
 
   const handleClaim = async () => {
-    if (capToken && onComplete) {
+    if (isValidCaptchaToken(capToken) && onComplete) {
       setIsClaiming(true)
       try {
         await claimKarma(

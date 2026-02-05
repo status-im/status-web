@@ -27,6 +27,7 @@
     "@status-im/components": "workspace:*",
     "@status-im/sitemap-utils": "workspace:*",
     "@status-im/icons": "workspace:*",
+    "@status-im/karma-sdk": "workspace:*",
     "@status-im/status-network": "workspace:*",
     "@status-im/wallet": "workspace:*",
     "@tanstack/react-query": "^5.90.2",

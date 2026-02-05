@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
     'next-mdx-remote',
     '@status-im/components',
     '@status-im/icons',
+    '@status-im/karma-sdk',
   ],
   async redirects() {
     return [

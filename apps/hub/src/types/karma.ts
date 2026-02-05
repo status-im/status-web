@@ -1,9 +1,3 @@
-export interface KarmaLevel {
-  level: number
-  minKarma: bigint
-  maxKarma: bigint
-}
-
 export type AchievementBadgeType =
   | 'LIQUIDITY_PROVIDER'
   | 'SERIAL_STAKER'
