@@ -4,9 +4,8 @@ import { cx } from 'cva'
 import Image from 'next/image'
 
 import { Link } from '~/i18n/navigation'
+import { useKarmaBalance } from '~hooks/useKarmaBalance'
 import { formatKarma } from '~utils/currency'
-
-import { useKarmaBalance } from '../_hooks/useKarmaBalance'
 
 type Props = {
   size?: '24' | '32' | '40'
