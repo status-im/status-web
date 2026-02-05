@@ -1,5 +1,6 @@
-User-Agent: *
+User-agent: *
 Allow: /
 Disallow: /api/*
 
 Sitemap: https://hub.status.network/sitemap.xml
+llms: https://hub.status.network/llms.txt
