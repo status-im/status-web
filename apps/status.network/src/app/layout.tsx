@@ -4,7 +4,7 @@ import Script from 'next/script'
 import './globals.css'
 import { cx } from 'cva'
 import { getLocale } from 'next-intl/server'
-import { Metadata } from './_metadata'
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, Metadata } from './_metadata'
 import { jsonLD, JSONLDScript } from './_utils/json-ld'
 
 const inter = Inter({
@@ -15,26 +15,42 @@ const inter = Inter({
 })
 
 const organizationSchema = jsonLD.organization({
-  description:
-    'The first natively gasless Ethereum L2 with sustainable yield and integrated public funding 🐉',
+  '@id': 'https://status.network/#organization',
+  name: 'Status Network',
+  url: 'https://status.network',
   logo: 'https://status.network/logo.svg',
+  description:
+    'Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack.',
 })
 
 const websiteSchema = jsonLD.website({
+  '@id': 'https://status.network/#website',
+  name: 'Status Network',
+  url: 'https://status.network',
   description:
-    'The first natively gasless Ethereum L2 with sustainable yield and integrated public funding 🐉',
+    'Status Network is a privacy-first, fully gasless Ethereum Layer 2 designed for scalable onchain activity, coordinated through reputation and native yield.',
+  publisher: {
+    '@id': 'https://status.network/#organization',
+  },
+})
+
+const softwareApplicationSchema = jsonLD.softwareApplication({
+  name: 'Status Network',
+  description:
+    'Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack. Execution is coordinated through Karma, a non-transferable reputation system, and supported by native yield and network activity.',
+  applicationCategory: 'Blockchain',
+  operatingSystem: 'Web3',
+  url: 'https://status.network/',
 })
 
 export const metadata = Metadata({
   metadataBase: new URL('https://status.network/'),
 
   title: {
-    default:
-      'Status Network — First gasless L2 with sustainable apps funding 🐉',
-    template: '%s — Status Network',
+    default: DEFAULT_TITLE,
+    template: '%s',
   },
-  description:
-    'The first natively gasless Ethereum L2 with sustainable yield and integrated public funding 🐉',
+  description: DEFAULT_DESCRIPTION,
 
   pathname: '/',
 
@@ -61,7 +77,13 @@ export default async function RootLayout({ children }: Props) {
         )}
         suppressHydrationWarning
       >
-        <JSONLDScript schema={[organizationSchema, websiteSchema]} />
+        <JSONLDScript
+          schema={[
+            organizationSchema,
+            websiteSchema,
+            softwareApplicationSchema,
+          ]}
+        />
         {children}
         <Analytics />
         <Script

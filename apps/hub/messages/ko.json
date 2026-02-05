@@ -1142,6 +1142,28 @@
       "notes": "footer::pre_deposit_disclaimer"
     }
   },
+  "network_switch_error": {
+    "title": {
+      "translation": "네트워크 전환을 할 수 없습니다",
+      "notes": "network_switch_error::title"
+    },
+    "description_status_network": {
+      "translation": "이 앱에서는 지갑의 네트워크 전환을 지원하지 않습니다. 지갑 앱에서 직접 Status Network로 네트워크를 변경해 주세요.",
+      "notes": "network_switch_error::description_status_network"
+    },
+    "description_ethereum_mainnet": {
+      "translation": "이 앱에서는 지갑의 네트워크 전환을 지원하지 않습니다. 지갑 앱에서 직접 Ethereum 메인넷으로 네트워크를 변경해 주세요.",
+      "notes": "network_switch_error::description_ethereum_mainnet"
+    },
+    "network_details": {
+      "translation": "네트워크 정보 보기",
+      "notes": "network_switch_error::network_details"
+    },
+    "retry": {
+      "translation": "다시 시도",
+      "notes": "network_switch_error::retry"
+    }
+  },
   "errors": {
     "wallet_not_connected": {
       "translation": "지갑이 연결되지 않았습니다. 먼저 지갑을 연결해주세요.",

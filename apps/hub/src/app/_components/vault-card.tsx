@@ -145,9 +145,8 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
   const t = useTranslations()
 
   const vaultAddressLower = vault.address.toLowerCase()
-  // const isVaultInApi = apyMap !== undefined && vaultAddressLower in apyMap
-  // const isDisabled = !isVaultInApi
-  const isDisabled = false
+  const isVaultInApi = apyMap !== undefined && vaultAddressLower in apyMap
+  const isDisabled = !isVaultInApi
   const dynamicApy = apyMap?.[vaultAddressLower]
   const apyValue = dynamicApy !== undefined ? String(dynamicApy) : null
   const rewardsLine = rewards
