@@ -134,7 +134,7 @@
     "type-fest": "^4.18.2",
     "unified": "^11.0.5",
     "vfile-matter": "^5.0.1",
-    "zod": "^3.21.4"
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@1stg/remark-preset": "^3.0.0",

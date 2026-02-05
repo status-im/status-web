@@ -67,7 +67,7 @@
     "viem": "^2.44.1",
     "vite-plugin-node-polyfills": "^0.23.0",
     "wagmi": "^3.3.2",
-    "zod": "^3.23.8"
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "4.1.1",
