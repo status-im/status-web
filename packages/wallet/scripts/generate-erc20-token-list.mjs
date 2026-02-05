@@ -20,7 +20,7 @@ const supportedNetworks = [
  * @see https://etherscan.io/token/{address} to verify on-chain decimals
  */
 const decimalOverrides = {
-  '0x1151CB3d861920e07a38e03eEAd12C32178567F6': 5, // BONK - actual on-chain decimals is 5, not 18
+  '0x1151CB3d861920e07a38e03eEAd12C32178567F6': 5, // Wrapped BONK (Ethereum ERC-20) - on-chain decimals on Ethereum is 5, not 18
 }
 
 const standardTokenLists = [
