@@ -1,5 +1,7 @@
 import { Link as LinkBase, useRouter } from '@tanstack/react-router'
 
+import { useCollectiblesScrollSaver } from '../-hooks/use-collectibles-scroll'
+
 type LinkProps = {
   href: string
   scroll?: boolean
@@ -7,23 +9,15 @@ type LinkProps = {
   children: React.ReactNode
 }
 
-let _savedScrollTop = 0
-
-const getSavedScrollTop = () => _savedScrollTop
-
 const LinkCollectible = (props: LinkProps) => {
   const { href, className, children } = props
   const router = useRouter()
+  const { saveScrollFromElement } = useCollectiblesScrollSaver()
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
 
-    const scrollContainer = (e.currentTarget as HTMLElement).closest(
-      '.scrollbar-stable',
-    )
-    if (scrollContainer) {
-      _savedScrollTop = scrollContainer.scrollTop
-    }
+    saveScrollFromElement(e.currentTarget as HTMLElement)
 
     const [network, contract, id] = href.split('/').slice(-3)
 
@@ -46,4 +40,4 @@ const LinkCollectible = (props: LinkProps) => {
   )
 }
 
-export { getSavedScrollTop, LinkCollectible }
+export { LinkCollectible }

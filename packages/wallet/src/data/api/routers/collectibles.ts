@@ -3,6 +3,13 @@ import { cache } from 'react'
 import { z } from 'zod'
 
 import {
+  formatDisplayName,
+  formatOpenSeaTokenId,
+  isOpenSeaVerified,
+  resolveName,
+  truncateId,
+} from '../../../utils/nft'
+import {
   // getNFTFloorPrice,
   getNFTMetadata,
   getNFTs,
@@ -11,13 +18,6 @@ import {
   COINGECKO_REVALIDATION_TIMES,
   fetchTokensPrice,
 } from '../../services/coingecko/index'
-import {
-  formatDisplayName,
-  formatOpenSeaTokenId,
-  isOpenSeaVerified,
-  resolveName,
-  truncateId,
-} from '../../../utils/nft'
 import { publicProcedure, router } from '../lib/trpc'
 
 import type {
@@ -119,9 +119,6 @@ async function page({
   search?: string
   sort?: { column: 'name' | 'collection'; direction: 'asc' | 'desc' }
 }) {
-  // hardcoded address for testing. Should remove before merging
-  address = '0xaD1810C00dEf1bC68ef156328a823A9b8570487F'
-
   // Full scan is required only for non-default sort (global ordering).
   const shouldScanAll =
     !!sort && (sort.column !== 'name' || sort.direction !== 'asc')
