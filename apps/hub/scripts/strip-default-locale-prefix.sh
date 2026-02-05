@@ -58,10 +58,6 @@ find "$OUT_DIR" -type f \( -name "*.html" -o -name "*.js" -o -name "*.json" \) \
     s|'/${LOCALE}'|'/'|g;
     # Escaped quotes in JSON (e.g., \"/en/\")
     s|\\\\\"/${LOCALE}/|\\\\\"/|g;
-    # Patch next-intl: change localePrefix from 'always' to 'as-needed'
-    # This makes the Link component not prefix the default locale at runtime
-    s|localePrefix:\"always\"|localePrefix:\"as-needed\"|g;
-    s|localePrefix:'always'|localePrefix:'as-needed'|g;
   " {} +
 
 # 3. Fix sitemap URLs
