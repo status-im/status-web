@@ -152,9 +152,7 @@ export const BuyCryptoDrawer = (props: Props) => {
               <ProviderCard
                 key={provider.name}
                 {...provider}
-                onClick={() =>
-                  handleProviderSelect(provider.name.toLowerCase() as Provider)
-                }
+                onClick={() => handleProviderSelect(provider.name as Provider)}
               />
             ))}
           </div>
