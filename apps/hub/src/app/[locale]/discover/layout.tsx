@@ -1,15 +1,20 @@
 import { Metadata as MetadataFn } from '~/app/_metadata'
 
-export const dynamic = 'force-static'
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
 
-export const metadata = MetadataFn({
-  // title: 'Discover — Gasless apps FTW',
-  // description:
-  //   'Explore curated dApps and services built on Status Network. Discover gasless applications and services.',
-  alternates: {
-    canonical: '/discover',
-  },
-})
+  return MetadataFn({
+    title: 'Status Network | Discover dApps on Ethereum L2',
+    description:
+      'Discover dApps built on Status Network, a gasless Ethereum Layer 2 where users can interact with wallets, DeFi, and apps privately by default.',
+    pathname: '/discover',
+    locale,
+  })
+}
 
 export default function DiscoverLayout({
   children,

@@ -8,6 +8,7 @@ import { Link } from '~components/link'
 import { Logo } from '~components/logo'
 
 import { DownloadDesktopButton } from '../download-desktop-button'
+import { DownloadMobileButton } from '../download-mobile-button'
 import { useDesktopMenu } from './use-desktop-menu'
 
 type Props = {
@@ -87,11 +88,20 @@ const FloatingDesktop = (props: Props) => {
           ))}
         </NavigationMenu.List>
 
-        <div className="flex flex-row gap-2">
-          <DownloadDesktopButton size="40" variant="primary" show="all" />
+        <div className={cx('hidden flex-row gap-2', 'ios:flex android:flex')}>
+          <DownloadDesktopButton size="32" variant="primary" />
+          <DownloadMobileButton size="32" variant="outline" />
+        </div>
+        <div
+          className={cx(
+            'hidden flex-row gap-2',
+            'macos:flex windows:flex linux:flex unknown:flex'
+          )}
+        >
+          <DownloadDesktopButton size="32" variant="primary" show="all" />
+          <DownloadMobileButton size="32" variant="outline" />
         </div>
       </div>
-
       <NavigationMenu.Viewport
         className={cx([
           'data-[state=closed]:animate-heightOut data-[state=open]:animate-heightIn',

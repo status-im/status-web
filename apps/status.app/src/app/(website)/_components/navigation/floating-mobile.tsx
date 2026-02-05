@@ -3,12 +3,14 @@ import { useRef } from 'react'
 import { animated } from '@react-spring/web'
 import { IconButton } from '@status-im/components'
 import { CloseIcon, MenuIcon } from '@status-im/icons/20'
+import { cx } from 'class-variance-authority'
 import { RemoveScroll } from 'react-remove-scroll'
 
 import { Link } from '~components/link'
 import { Logo } from '~components/logo'
 
 import { DownloadDesktopButton } from '../download-desktop-button'
+import { DownloadMobileButton } from '../download-mobile-button'
 import { AccordionMenu } from './accordion-menu'
 
 type Props = {
@@ -51,9 +53,23 @@ const FloatingMobile = (props: Props) => {
       >
         <div ref={ref}>
           <AccordionMenu />
-
-          <div className="flex flex-col items-stretch justify-stretch gap-2 py-3">
-            <DownloadDesktopButton variant="primary" show="all" />
+          <div
+            className={cx(
+              'hidden flex-row items-stretch justify-stretch gap-2 py-3',
+              'ios:grid android:grid unknown:grid'
+            )}
+          >
+            <DownloadDesktopButton variant="darkGrey" show="all" />
+            <DownloadMobileButton size="40" variant="outline" />
+          </div>
+          <div
+            className={cx(
+              'hidden flex-row items-stretch justify-stretch gap-2 py-3',
+              'macos:flex windows:flex linux:flex'
+            )}
+          >
+            <DownloadDesktopButton variant="darkGrey" show="all" />
+            <DownloadMobileButton size="40" variant="outline" />
           </div>
         </div>
       </animated.div>

@@ -138,7 +138,7 @@ export function LockVaultForm(props: LockVaultFormProps) {
       days || initialDays || DEFAULT_LOCK_PERIOD.INITIAL_DAYS
     )
     return calculateUnlockDate(daysValue)
-  }, [days, initialDays]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [days, initialDays, calculateUnlockDate])
 
   useEffect(() => {
     const daysValue = parseInt(days || DEFAULT_LOCK_PERIOD.INITIAL_DAYS)

@@ -105,57 +105,23 @@ export default function AppsPage() {
           />
           <PlatformSection
             platform="mobile"
-            title="Legacy Status mobile"
-            showScribble
+            title="Status mobile"
+            showScribble={false}
             screenshots={[
               {
                 label: 'Wallet',
                 images: [
                   {
-                    id: 'Platforms/Screens/Mobile Screens/Wallet/Wallet_01:750:1624',
-                    alt: 'Mobile app screenshot showing the wallet feature included in the Status app',
+                    id: 'Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624',
+                    alt: '',
                   },
                   {
-                    id: 'Platforms/Screens/Mobile Screens/Wallet/Wallet_02:750:1624',
-                    alt: 'Mobile app screenshot showing the wallet feature included in the Status app',
+                    id: 'Platforms/Screens/Mobile Screens/New_Mobile_Chat:750:1624',
+                    alt: '',
                   },
                   {
-                    id: 'Platforms/Screens/Mobile Screens/Wallet/Wallet_03:750:1624',
-                    alt: 'Mobile app screenshot showing the wallet feature included in the Status app',
-                  },
-                ],
-              },
-              {
-                label: 'Messenger',
-                images: [
-                  {
-                    id: 'Platforms/Screens/Mobile Screens/Messenger/Messenger_01:750:1624',
-                    alt: 'Mobile app screenshot showing the messenger feature included in the Status app',
-                  },
-                  {
-                    id: 'Platforms/Screens/Mobile Screens/Messenger/Messenger_02:750:1624',
-                    alt: 'Mobile app screenshot showing the messenger feature included in the Status app',
-                  },
-                  {
-                    id: 'Platforms/Screens/Mobile Screens/Messenger/Messenger_03:750:1624',
-                    alt: 'Mobile app screenshot showing the messenger feature included in the Status app',
-                  },
-                ],
-              },
-              {
-                label: 'Communities',
-                images: [
-                  {
-                    id: 'Platforms/Screens/Mobile Screens/Communities/Communities_01:750:1624',
-                    alt: 'Mobile app screenshot showing the community feature included in the Status app',
-                  },
-                  {
-                    id: 'Platforms/Screens/Mobile Screens/Communities/Communities_02:750:1624',
-                    alt: 'Mobile app screenshot showing the community feature included in the Status app',
-                  },
-                  {
-                    id: 'Platforms/Screens/Mobile Screens/Communities/Communities_03:750:1624',
-                    alt: 'Mobile app screenshot showing the community feature included in the Status app',
+                    id: 'Platforms/Screens/Mobile Screens/New_Mobile_Communities:750:1624',
+                    alt: '',
                   },
                 ],
               },
@@ -307,11 +273,12 @@ const PlatformSection = (props: PlatformSectionProps) => {
           <div className="overflow-x-scroll scrollbar-none xl:overflow-x-visible">
             <div className="relative mx-5 flex lg:justify-center">
               <Tabs.List>
-                {screenshots.map(({ label }) => (
-                  <Tabs.Trigger key={label} value={label}>
-                    {label}
-                  </Tabs.Trigger>
-                ))}
+                {screenshots.length > 1 &&
+                  screenshots.map(({ label }) => (
+                    <Tabs.Trigger key={label} value={label}>
+                      {label}
+                    </Tabs.Trigger>
+                  ))}
               </Tabs.List>
               {showScribble && (
                 <Image

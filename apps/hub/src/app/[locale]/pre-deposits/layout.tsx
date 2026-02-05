@@ -1,15 +1,20 @@
 import { Metadata as MetadataFn } from '~/app/_metadata'
 
-export const dynamic = 'force-static'
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
 
-export const metadata = MetadataFn({
-  // title: 'Pre-Deposit Vaults',
-  // description:
-  //   'Deposit funds into pre-deposit vaults to earn rewards in KARMA, SNT, LINEA and points. Funds will be unlocked at mainnet launch.',
-  alternates: {
-    canonical: '/pre-deposits',
-  },
-})
+  return MetadataFn({
+    title: 'Status Network | Deposit Crypto & Earn Yield',
+    description:
+      'Deposit crypto on Status Network to earn yield, support liquidity, and prepare for staking and app usage on a gasless, privacy-enabled Ethereum L2.',
+    pathname: '/pre-deposits',
+    locale,
+  })
+}
 
 export default function PreDepositsLayout({
   children,

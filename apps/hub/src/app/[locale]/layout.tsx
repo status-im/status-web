@@ -18,14 +18,22 @@ const inter = Inter({
 })
 
 const organizationSchema = jsonLD.organization({
-  description:
-    'Manage your Status Network assets, discover applications, and navigate to various services.',
-  logo: 'https://hub.status.network/logo.svg',
+  '@id': 'https://hub.status.network/#organization',
+  name: 'Status Network',
+  url: 'https://hub.status.network',
+  logo: 'https://hub.status.network/og-image.png',
+  description: 'The gasless network with sustainable funding for app builders',
 })
 
 const websiteSchema = jsonLD.website({
+  '@id': 'https://hub.status.network/#website',
+  name: 'Status Network Hub',
+  url: 'https://hub.status.network',
   description:
-    'Manage your Status Network assets, discover applications, and navigate to various services.',
+    'Explore Status Network, a gasless Ethereum Layer 2 with a native privacy layer, shared yield, staking, and reputation-based governance.',
+  publisher: {
+    '@id': 'https://hub.status.network/#organization',
+  },
 })
 
 export const dynamic = 'force-static'
@@ -34,18 +42,22 @@ export function generateStaticParams() {
   return routing.locales.map(locale => ({ locale }))
 }
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
+
+  return MetadataFn({
+    metadataBase: new URL('https://hub.status.network'),
+    locale,
+  })
+}
+
 type Props = {
   children: React.ReactNode
   params: Promise<{ locale: string }>
-}
-
-export async function generateMetadata({ params }: Props) {
-  const { locale } = await params
-  return MetadataFn({
-    alternates: {
-      canonical: `/${locale}`,
-    },
-  })
 }
 
 export default async function LocaleLayout({ children, params }: Props) {
