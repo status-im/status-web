@@ -140,10 +140,13 @@ export function usePreDepositVault(): UsePreDepositVaultReturn {
 
         sendPreDepositEvent({ type: 'EXECUTE' })
 
-        const { status } = await waitForTransactionReceipt(config, {
+        const receipt = await waitForTransactionReceipt(config, {
           hash,
           confirmations: TRANSACTION_CONFIG.CONFIRMATION_BLOCKS,
+          pollingInterval: 2000,
         })
+
+        const { status } = receipt
 
         if (status === 'reverted') {
           throw new Error(t('errors.transaction_reverted'))
@@ -152,7 +155,6 @@ export function usePreDepositVault(): UsePreDepositVaultReturn {
         sendPreDepositEvent({ type: 'COMPLETE', amount })
         toast.positive(t('success.deposit_successful', { vault: vault.name }))
       } catch (error) {
-        console.error(`Failed to deposit into ${vault.name}: `, error)
         sendPreDepositEvent({ type: 'REJECT' })
         const message =
           error instanceof BaseError

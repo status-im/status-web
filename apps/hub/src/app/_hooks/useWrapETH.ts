@@ -43,10 +43,12 @@ export function useWrapETH(): UseWrapETHRETURN {
           chainId: mainnet.id,
         })
 
-        const { status } = await waitForTransactionReceipt(config, {
+        const receipt = await waitForTransactionReceipt(config, {
           hash,
           confirmations: TRANSACTION_CONFIG.CONFIRMATION_BLOCKS,
         })
+
+        const { status } = receipt
 
         if (status === 'reverted') {
           throw new Error(t('errors.transaction_reverted'))
@@ -54,7 +56,6 @@ export function useWrapETH(): UseWrapETHRETURN {
 
         toast.positive(t('success.eth_wrapped'))
       } catch (error) {
-        console.error('Failed to wrap ETH: ', error)
         const message =
           error instanceof BaseError
             ? error.shortMessage

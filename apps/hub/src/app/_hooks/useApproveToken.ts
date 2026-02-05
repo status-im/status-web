@@ -150,11 +150,12 @@ export function useApproveToken(): UseApproveTokenReturn {
         // Transaction submitted, notify state machine
         sendVaultEvent({ type: 'SIGN' })
 
-        // Wait for confirmation
-        const { status } = await waitForTransactionReceipt(config, {
+        const receipt = await waitForTransactionReceipt(config, {
           hash,
           confirmations: TRANSACTION_CONFIG.CONFIRMATION_BLOCKS,
         })
+
+        const { status } = receipt
 
         // Check for revert
         if (status === 'reverted') {
@@ -166,7 +167,6 @@ export function useApproveToken(): UseApproveTokenReturn {
         toast.positive(t('success.token_allowance_increased'))
       } catch (error) {
         // Handle approval failure
-        console.error('Failed to approve tokens:', error)
         sendVaultEvent({ type: 'REJECT' })
         throw error
       }

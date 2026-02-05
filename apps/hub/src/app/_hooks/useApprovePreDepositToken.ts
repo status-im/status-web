@@ -161,7 +161,6 @@ export function useApproveToken(): UseApprovePreDepositTokenReturn {
         sendPreDepositEvent({ type: 'COMPLETE', amount })
         toast.positive(t('success.token_allowance_increased'))
       } catch (error) {
-        console.error('Failed to approve tokens:', error)
         const message =
           error instanceof BaseError
             ? error.shortMessage

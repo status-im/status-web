@@ -149,10 +149,12 @@ export function useVaultTokenStake(): UseVaultStakeReturn {
         sendVaultEvent({ type: 'SIGN' })
 
         // Wait for transaction confirmation
-        const { status } = await waitForTransactionReceipt(config, {
+        const receipt = await waitForTransactionReceipt(config, {
           hash,
           confirmations: CONFIRMATION_BLOCKS,
         })
+
+        const { status } = receipt
 
         // Check if transaction was reverted
         if (status === 'reverted') {
