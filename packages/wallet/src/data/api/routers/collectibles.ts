@@ -11,6 +11,13 @@ import {
   COINGECKO_REVALIDATION_TIMES,
   fetchTokensPrice,
 } from '../../services/coingecko/index'
+import {
+  formatDisplayName,
+  formatOpenSeaTokenId,
+  isOpenSeaVerified,
+  resolveName,
+  truncateId,
+} from '../../../utils/nft'
 import { publicProcedure, router } from '../lib/trpc'
 
 import type {
@@ -364,49 +371,6 @@ async function collectible(
   }
 
   return map(nft, network, currency, price, floorPrice)
-}
-
-function truncateId(id: string): string {
-  const MAX_DISPLAY_ID_LENGTH = 6
-
-  return id.length > MAX_DISPLAY_ID_LENGTH
-    ? `${id.slice(0, MAX_DISPLAY_ID_LENGTH)}...`
-    : id
-}
-
-/** Resolve a readable name from nft.name and contract.name, stripping redundant token IDs. */
-function resolveName(
-  nftName: string | null,
-  contractName: string | null,
-  tokenId: string,
-): string {
-  const trimmed = (nftName || '').trim()
-  const isIdOnly = /^#\d+$/.test(trimmed)
-  const raw = isIdOnly ? contractName || '' : trimmed || contractName || ''
-
-  return raw.replace(new RegExp(`\\s*#${tokenId}$`), '').trim()
-}
-
-function formatDisplayName(name: string, displayId: string): string {
-  if (!name) return `#${displayId}`
-  if (/#\d+/.test(name)) return name
-  return `${name} #${displayId}`
-}
-
-function isOpenSeaVerified(status?: string): boolean {
-  return status === 'verified' || status === 'approved'
-}
-
-function formatOpenSeaTokenId(tokenId: string): string {
-  if (tokenId.startsWith('0x')) {
-    try {
-      return BigInt(tokenId).toString(10)
-    } catch {
-      return tokenId
-    }
-  }
-
-  return tokenId
 }
 
 function map(
