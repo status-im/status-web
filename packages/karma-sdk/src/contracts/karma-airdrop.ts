@@ -47,3 +47,33 @@ export async function getAirdropMerkleRoot(
     functionName: 'merkleRoot',
   })
 }
+
+export async function setAirdropMerkleRoot(
+  walletClient: AnyClient,
+  publicClient: AnyClient,
+  params: {
+    airdropAddress: `0x${string}`
+    root: `0x${string}`
+    account: `0x${string}`
+  }
+): Promise<`0x${string}`> {
+  try {
+    const { request } = await publicClient.simulateContract({
+      address: params.airdropAddress,
+      abi: karmaAirdropAbi,
+      functionName: 'setMerkleRoot',
+      args: [params.root],
+      account: params.account,
+    })
+    return walletClient.writeContract(request)
+  } catch {
+    const { request } = await publicClient.simulateContract({
+      address: params.airdropAddress,
+      abi: karmaAirdropAbi,
+      functionName: 'updateMerkleRoot',
+      args: [params.root],
+      account: params.account,
+    })
+    return walletClient.writeContract(request)
+  }
+}

@@ -4,14 +4,18 @@ import { useMemo, useState } from 'react'
 
 import { useToast } from '@status-im/components'
 import {
+  buildMerkleTree,
   distributeRewardsBatch,
   getAvailableSupply,
+  getKarmaAddresses,
   getMintedSupply,
   getRewardDistributors,
   getTotalRewardsSupply,
   KARMA_CHAIN_IDS,
   mintRewards,
   parseMerkleTreeOutput,
+  serializeMerkleTreeOutput,
+  setAirdropMerkleRoot,
   setKarmaReward,
 } from '@status-im/karma-sdk'
 import { Button } from '@status-im/status-network/components'
@@ -23,6 +27,14 @@ function parseBigIntInput(value: string, field: string): bigint {
     throw new Error(`${field} is required`)
   }
   return BigInt(value.trim())
+}
+
+function isAddress(value: string): value is `0x${string}` {
+  return /^0x[a-fA-F0-9]{40}$/.test(value)
+}
+
+function isBytes32(value: string): value is `0x${string}` {
+  return /^0x[a-fA-F0-9]{64}$/.test(value)
 }
 
 export function KarmaAdminPanel() {
@@ -43,7 +55,16 @@ export function KarmaAdminPanel() {
   const [batchJson, setBatchJson] = useState(
     '[\n  {"recipient":"0x0000000000000000000000000000000000000000","amount":"1000000000000000000"}\n]'
   )
+  const [merkleEntriesJson, setMerkleEntriesJson] = useState(
+    '[\n  {"account":"0x0000000000000000000000000000000000000000","amount":"1000000000000000000"}\n]'
+  )
+  const [merkleStartIndex, setMerkleStartIndex] = useState('0')
+  const [generatedMerkleJson, setGeneratedMerkleJson] = useState('')
   const [merkleJson, setMerkleJson] = useState('')
+  const [airdropAddressToPost, setAirdropAddressToPost] = useState(
+    getKarmaAddresses(KARMA_CHAIN_IDS.STATUS_SEPOLIA).karmaAirdrop ?? ''
+  )
+  const [merkleRootToPost, setMerkleRootToPost] = useState('')
   const [isPending, setIsPending] = useState(false)
 
   const { data: supplyData, refetch: refetchSupply } = useQuery({
@@ -75,6 +96,26 @@ export function KarmaAdminPanel() {
       return null
     }
   }, [merkleJson])
+
+  const generateMerkleTreeOutput = () => {
+    const startIndex = parseBigIntInput(merkleStartIndex, 'Start index')
+    const parsedEntries = JSON.parse(merkleEntriesJson) as Array<{
+      account: `0x${string}`
+      amount: string
+    }>
+
+    const entries = parsedEntries.map((entry, index) => ({
+      index: startIndex + BigInt(index),
+      account: entry.account,
+      amount: BigInt(entry.amount),
+    }))
+
+    const tree = buildMerkleTree(entries)
+    const serialized = serializeMerkleTreeOutput(tree)
+    setGeneratedMerkleJson(serialized)
+    setMerkleJson(serialized)
+    setMerkleRootToPost(tree.root)
+  }
 
   const requireClients = () => {
     if (!address) throw new Error('Connect wallet first')
@@ -250,7 +291,45 @@ export function KarmaAdminPanel() {
 
         <div className="rounded-12 border border-neutral-20 p-3 lg:col-span-2">
           <h4 className="mb-3 text-15 font-semibold text-neutral-100">
-            Merkle JSON Parser
+            Merkle Tree Generator
+          </h4>
+          <textarea
+            className="mb-2 min-h-28 w-full rounded-8 border border-neutral-20 px-3 py-2 font-mono text-13"
+            placeholder='[{"account":"0x...","amount":"1000000000000000000"}]'
+            value={merkleEntriesJson}
+            onChange={e => setMerkleEntriesJson(e.target.value)}
+          />
+          <input
+            className="mb-2 rounded-8 border border-neutral-20 px-3 py-2 text-13"
+            placeholder="Start index"
+            value={merkleStartIndex}
+            onChange={e => setMerkleStartIndex(e.target.value)}
+          />
+          <Button
+            size="40"
+            variant="primary"
+            disabled={isPending}
+            onClick={() =>
+              runAction(async () => {
+                generateMerkleTreeOutput()
+                toast.positive('Merkle tree generated')
+              })
+            }
+          >
+            Generate Merkle Output
+          </Button>
+          {generatedMerkleJson ? (
+            <textarea
+              className="mt-2 min-h-28 w-full rounded-8 border border-neutral-20 px-3 py-2 font-mono text-13"
+              value={generatedMerkleJson}
+              readOnly
+            />
+          ) : null}
+        </div>
+
+        <div className="rounded-12 border border-neutral-20 p-3 lg:col-span-2">
+          <h4 className="mb-3 text-15 font-semibold text-neutral-100">
+            Merkle Output Parser & Root Posting
           </h4>
           <textarea
             className="mb-2 min-h-28 w-full rounded-8 border border-neutral-20 px-3 py-2 font-mono text-13"
@@ -263,6 +342,46 @@ export function KarmaAdminPanel() {
               ? `Root: ${parsedMerkle.root}, entries: ${parsedMerkle.entries.length}`
               : 'Enter valid Merkle JSON'}
           </p>
+          <input
+            className="mt-2 rounded-8 border border-neutral-20 px-3 py-2 text-13"
+            placeholder="Airdrop contract address"
+            value={airdropAddressToPost}
+            onChange={e => setAirdropAddressToPost(e.target.value)}
+          />
+          <input
+            className="mt-2 rounded-8 border border-neutral-20 px-3 py-2 text-13"
+            placeholder="Merkle root (0x...)"
+            value={merkleRootToPost}
+            onChange={e => setMerkleRootToPost(e.target.value)}
+          />
+          <Button
+            size="40"
+            variant="primary"
+            disabled={isPending}
+            onClick={() =>
+              runAction(async () => {
+                const clients = requireClients()
+                if (!isAddress(airdropAddressToPost)) {
+                  throw new Error('Invalid airdrop contract address')
+                }
+                if (!isBytes32(merkleRootToPost)) {
+                  throw new Error('Invalid merkle root')
+                }
+                const txHash = await setAirdropMerkleRoot(
+                  clients.walletClient,
+                  clients.publicClient,
+                  {
+                    airdropAddress: airdropAddressToPost,
+                    root: merkleRootToPost,
+                    account: clients.address,
+                  }
+                )
+                toast.positive(`Root posted: ${txHash}`)
+              })
+            }
+          >
+            Post Merkle Root Onchain
+          </Button>
         </div>
       </div>
     </section>
