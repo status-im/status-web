@@ -42,6 +42,7 @@ export {
   isAirdropClaimed,
   claimAirdrop,
   getAirdropMerkleRoot,
+  setAirdropMerkleRoot,
 } from './contracts/karma-airdrop'
 
 // API Client

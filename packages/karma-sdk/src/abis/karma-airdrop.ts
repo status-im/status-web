@@ -32,4 +32,18 @@ export const karmaAirdropAbi = [
     stateMutability: 'view',
     type: 'function',
   },
+  {
+    inputs: [{ internalType: 'bytes32', name: '_merkleRoot', type: 'bytes32' }],
+    name: 'setMerkleRoot',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'bytes32', name: '_merkleRoot', type: 'bytes32' }],
+    name: 'updateMerkleRoot',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
 ] as const
