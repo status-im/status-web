@@ -24,6 +24,9 @@ type MessageHandler = Parameters<typeof chrome.runtime.onMessage.addListener>[0]
 
 export default function Popup() {
   const [connected] = useStorage('status:desktop:running')
+  const [connectionError] = useStorage<boolean>(
+    'status:desktop:connection_error',
+  )
   const [showPinInstructions] = useStorage('show-pin-instructions', true)
 
   const [reopen, setReopen] = useLocalStorage('status:popup:reopen', false)
@@ -78,7 +81,7 @@ export default function Popup() {
         </div>
 
         <div className="mx-1 mb-1 overflow-hidden rounded-[20px] bg-white-100 p-5">
-          {connected ? <Connected /> : <NotConnected />}
+          {connected && !connectionError ? <Connected /> : <NotConnected />}
           {showPinInstructions && <PinInstructions />}
         </div>
       </div>
