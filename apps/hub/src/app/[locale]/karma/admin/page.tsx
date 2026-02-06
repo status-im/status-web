@@ -3,7 +3,7 @@
 import Link from 'next/link'
 
 import { HubLayout } from '~components/hub-layout'
-import { KarmaAdminPanel } from '~components/karma'
+import { AirdropClaimCard, KarmaAdminPanel } from '~components/karma'
 
 export default function KarmaAdminPage() {
   return (
@@ -24,6 +24,7 @@ export default function KarmaAdminPage() {
           </Link>
         </div>
         <KarmaAdminPanel />
+        <AirdropClaimCard />
       </div>
     </HubLayout>
   )
