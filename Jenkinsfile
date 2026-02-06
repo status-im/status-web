@@ -91,7 +91,7 @@ pipeline {
         dir("${env.WORKSPACE}/apps/${params.APP_NAME}") {
           script {
             nix.develop(
-              'pnpm install --frozen-lockfile',
+              'pnpm install --aggregate-output',
               pure: false,
             )
           }

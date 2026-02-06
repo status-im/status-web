@@ -1,19 +1,12 @@
+'use client'
+
 import Link from 'next/link'
-import { getTranslations } from 'next-intl/server'
+import { useTranslations } from 'next-intl'
 
-import { Metadata } from './_metadata'
+export const dynamic = 'force-static'
 
-export const metadata = Metadata({
-  // title: '404 — Page Not Found',
-  // description:
-  //   'The page you were looking for could not be found. Return to the Status Hub homepage.',
-  robots: {
-    index: false,
-  },
-})
-
-export default async function NotFound() {
-  const t = await getTranslations()
+export default function NotFoundPage() {
+  const t = useTranslations()
 
   return (
     <main className="flex min-h-screen flex-1 items-center justify-center px-5">
