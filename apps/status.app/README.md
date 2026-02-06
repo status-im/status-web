@@ -1,50 +1,21 @@
 # Status Website
 
-This is the repository for the [https://status.app](https://status.app) – a [Next.js](https://nextjs.org/) project.
-
-## Prerequisites
-
-- [Node.js](https://nodejs.org/en/) `v18.x.x`
-- **[pnpm](https://pnpm.io)** v9.12.x
+This is the source for [https://status.app](https://status.app) – a [Next.js](https://nextjs.org/) project.
 
 ## Getting Started
 
-Clone the project:
+First, follow the [root README](../../README.md#getting-started) to clone the repo, initialize submodules, and install dependencies.
+
+Then, pull environment variables:
 
 ```bash
-  git clone https://github.com/status-im/status-website.git
-  git submodule init
-  git submodule update
-```
-
-Optionally, update submodules:
-
-```bash
-  git submodule update --remote [submodule]
-```
-
-Go to the project directory:
-
-```bash
-  cd status-website
-```
-
-Install dependencies:
-
-```bash
-  pnpm install
-```
-
-Pull environment variables:
-
-```bash
-  vercel env pull .env.local
+vercel env pull .env.local
 ```
 
 Start the development server:
 
 ```bash
-  pnpm dev
+pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -56,13 +27,13 @@ You can start editing the pages or content. Pages auto-update as you edit the fi
 Explore environment's database:
 
 ```bash
-  pnpm db:explore
+pnpm db:explore
 ```
 
 Directly modify the database and its schema:
 
 ```bash
-  pnpm db:push
+pnpm db:push
 ```
 
 On conflict, drop your migrations and generate new ones:
