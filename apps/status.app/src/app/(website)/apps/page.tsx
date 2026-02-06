@@ -113,15 +113,15 @@ export default function AppsPage() {
                 images: [
                   {
                     id: 'Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624',
-                    alt: '',
+                    alt: 'Mobile app screenshot showing the wallet feature included in the Status app',
                   },
                   {
                     id: 'Platforms/Screens/Mobile Screens/New_Mobile_Chat:750:1624',
-                    alt: '',
+                    alt: 'Mobile app screenshot showing the messenger feature included in the Status app',
                   },
                   {
                     id: 'Platforms/Screens/Mobile Screens/New_Mobile_Communities:750:1624',
-                    alt: '',
+                    alt: 'Mobile app screenshot showing the community feature included in the Status app',
                   },
                 ],
               },
