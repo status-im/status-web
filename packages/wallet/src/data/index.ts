@@ -1,4 +1,5 @@
 export { type ApiRouter, apiRouter } from './api'
+export { createRateLimitMiddleware } from './api/lib/rate-limiter'
 export type {
   Activity,
   ApiInput,
