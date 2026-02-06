@@ -1,4 +1,4 @@
-name: Preview Deploy (External Contributors)
+name: Preview Deploy
 
 on:
   pull_request_target:
@@ -7,14 +7,12 @@ on:
 permissions:
   contents: read
   pull-requests: write
-  statuses: write
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
 
 jobs:
-  deploy-preview:
-    name: Deploy Preview
+  deploy:
     if: github.event.pull_request.head.repo.fork == true
     runs-on: ubuntu-latest
     environment: preview-deploy-approval
@@ -23,21 +21,7 @@ jobs:
       - name: Set PR info
         id: pr
         run: |
-          echo "head_sha=${{ github.event.pull_request.head.sha }}" >> $GITHUB_OUTPUT
           echo "pr_number=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
-
-      - name: Set pending status
-        uses: actions/github-script@v7
-        with:
-          script: |
-            await github.rest.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              sha: '${{ steps.pr.outputs.head_sha }}',
-              state: 'pending',
-              context: 'Preview Deploy',
-              description: 'Detecting changes and deploying...'
-            });
 
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -178,84 +162,72 @@ jobs:
         env:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_COMPONENTS }}
 
-      - name: Set status and comment PR
-        if: success()
+      - name: Comment PR
+        if: always()
         uses: actions/github-script@v7
         with:
           script: |
-            const deployments = [];
+            const marker = '<!-- preview-deploy-comment -->';
+            const prNumber = ${{ steps.pr.outputs.pr_number }};
 
-            if ('${{ steps.deploy-status-app.outputs.url }}'.trim()) {
-              deployments.push({ name: 'status.app', url: '${{ steps.deploy-status-app.outputs.url }}' });
-            }
-            if ('${{ steps.deploy-hub.outputs.url }}'.trim()) {
-              deployments.push({ name: 'hub', url: '${{ steps.deploy-hub.outputs.url }}' });
-            }
-            if ('${{ steps.deploy-portfolio.outputs.url }}'.trim()) {
-              deployments.push({ name: 'portfolio', url: '${{ steps.deploy-portfolio.outputs.url }}' });
-            }
-            if ('${{ steps.deploy-api.outputs.url }}'.trim()) {
-              deployments.push({ name: 'api', url: '${{ steps.deploy-api.outputs.url }}' });
-            }
-            if ('${{ steps.deploy-status-network.outputs.url }}'.trim()) {
-              deployments.push({ name: 'status.network', url: '${{ steps.deploy-status-network.outputs.url }}' });
-            }
-            if ('${{ steps.deploy-components.outputs.url }}'.trim()) {
-              deployments.push({ name: 'components', url: '${{ steps.deploy-components.outputs.url }}' });
+            // Find existing comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+            });
+            const existingComment = comments.find(c => c.body.includes(marker));
+
+            let body;
+
+            if ('${{ job.status }}' === 'failure') {
+              body = `${marker}\n⚠️ **Preview deployment failed**\n\nCheck the [workflow logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.`;
+            } else {
+              const deployments = [];
+
+              if ('${{ steps.deploy-status-app.outputs.url }}'.trim()) {
+                deployments.push({ name: 'status.app', url: '${{ steps.deploy-status-app.outputs.url }}' });
+              }
+              if ('${{ steps.deploy-hub.outputs.url }}'.trim()) {
+                deployments.push({ name: 'hub', url: '${{ steps.deploy-hub.outputs.url }}' });
+              }
+              if ('${{ steps.deploy-portfolio.outputs.url }}'.trim()) {
+                deployments.push({ name: 'portfolio', url: '${{ steps.deploy-portfolio.outputs.url }}' });
+              }
+              if ('${{ steps.deploy-api.outputs.url }}'.trim()) {
+                deployments.push({ name: 'api', url: '${{ steps.deploy-api.outputs.url }}' });
+              }
+              if ('${{ steps.deploy-status-network.outputs.url }}'.trim()) {
+                deployments.push({ name: 'status.network', url: '${{ steps.deploy-status-network.outputs.url }}' });
+              }
+              if ('${{ steps.deploy-components.outputs.url }}'.trim()) {
+                deployments.push({ name: 'components', url: '${{ steps.deploy-components.outputs.url }}' });
+              }
+
+              if (deployments.length === 0) {
+                body = `${marker}\n⚠️ **No apps to deploy**\n\nNo changes detected in deployable apps.`;
+              } else {
+                let table = '| Project | Status | Preview |\n';
+                table += '|---------|--------|----------|\n';
+                for (const dep of deployments) {
+                  table += `| ${dep.name} | ✅ Ready | [Preview](${dep.url}) |\n`;
+                }
+                body = `${marker}\n**Preview deployments are ready!**\n\n${table}\n\n---\n*Deployed via GitHub Actions*`;
+              }
             }
 
-            if (deployments.length === 0) {
-              await github.rest.repos.createCommitStatus({
+            if (existingComment) {
+              await github.rest.issues.updateComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                sha: '${{ steps.pr.outputs.head_sha }}',
-                state: 'success',
-                context: 'Preview Deploy',
-                description: 'No deployable app changes detected'
+                comment_id: existingComment.id,
+                body: body
               });
+            } else {
               await github.rest.issues.createComment({
-                issue_number: ${{ steps.pr.outputs.pr_number }},
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                body: `⚠️ **No apps to deploy**\n\nNo changes detected in deployable apps.`
+                issue_number: prNumber,
+                body: body
               });
-              return;
             }
-
-            await github.rest.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              sha: '${{ steps.pr.outputs.head_sha }}',
-              state: 'success',
-              context: 'Preview Deploy',
-              description: `Deployed ${deployments.length} app(s) successfully`
-            });
-
-            let table = '| Project | Status | Preview |\n';
-            table += '|---------|--------|----------|\n';
-            for (const dep of deployments) {
-              table += `| ${dep.name} | ✅ Ready | [Preview](${dep.url}) |\n`;
-            }
-
-            const body = `**Preview deployments are ready!**\n\n${table}\n\n---\n*Deployed via GitHub Actions*`;
-
-            await github.rest.issues.createComment({
-              issue_number: ${{ steps.pr.outputs.pr_number }},
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: body
-            });
-
-      - name: Set failure status
-        if: failure()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            await github.rest.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              sha: '${{ steps.pr.outputs.head_sha }}',
-              state: 'failure',
-              context: 'Preview Deploy',
-              description: 'Deployment failed - check Actions logs'
-            });
