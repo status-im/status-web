@@ -5,7 +5,7 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "predev": "pnpm install",
-    "dev": "next dev",
+    "dev": "next dev --port 3002",
     "build": "next build",
     "postbuild": "next-sitemap",
     "start": "next start",
@@ -19,7 +19,9 @@
     "@radix-ui/react-select": "^2.2.6",
     "@status-im/colors": "workspace:*",
     "@status-im/components": "workspace:*",
+    "@status-im/sitemap-utils": "workspace:*",
     "@status-im/icons": "workspace:*",
+    "@status-im/status-network": "workspace:*",
     "@vercel/analytics": "^1.5.0",
     "cva": "1.0.0-beta.1",
     "framer-motion": "^12.0.6",
@@ -32,7 +34,7 @@
     "rehype-slug": "^6.0.0",
     "remark-gfm": "^4.0.1",
     "ts-pattern": "^5.6.2",
-    "zod": "^3.24.1"
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.3.1",

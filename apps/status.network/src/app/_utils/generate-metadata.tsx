@@ -9,6 +9,7 @@ type Options = {
   namespace?: string
   titleKey: string
   descriptionKey: string
+  pathname: string
 }
 
 export async function generateMetadata(
@@ -24,5 +25,7 @@ export async function generateMetadata(
   return Metadata({
     title: t(options.titleKey),
     description: t(options.descriptionKey),
+    pathname: options.pathname,
+    locale,
   })
 }

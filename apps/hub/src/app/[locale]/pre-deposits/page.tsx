@@ -19,6 +19,26 @@ import { useTotalTVL } from '../../_hooks/useTotalTVL'
 import { useVaultSelection } from '../../_hooks/useVaultSelection'
 import { jsonLD, JSONLDScript } from '../../_utils/json-ld'
 
+const breadcrumbListSchema = jsonLD.breadcrumbList([
+  {
+    name: 'Hub',
+    url: 'https://hub.status.network/',
+  },
+  {
+    name: 'Pre-Deposits',
+    url: 'https://hub.status.network/pre-deposits',
+  },
+])
+
+const softwareApplicationSchema = jsonLD.softwareApplication({
+  name: 'Status Network Pre-Deposits',
+  applicationCategory: 'DeFi',
+  operatingSystem: 'Web',
+  url: 'https://hub.status.network/pre-deposits',
+  description:
+    'Pre-deposit assets to support liquidity and earn yield on Status Network.',
+})
+
 export default function PreDepositPage() {
   const t = useTranslations()
   const { data: totalTVL, isLoading: isLoadingTVL } = useTotalTVL()
@@ -44,7 +64,9 @@ export default function PreDepositPage() {
 
   return (
     <HubLayout>
-      <JSONLDScript schema={faqSchema} />
+      <JSONLDScript
+        schema={[faqSchema, breadcrumbListSchema, softwareApplicationSchema]}
+      />
       <div className="mx-auto mb-8 flex flex-col gap-4 rounded-32 p-4 lg:mt-14 lg:gap-8 lg:bg-neutral-2.5 lg:p-8">
         <div className="flex flex-col justify-between gap-4 lg:flex-row">
           <div className="flex flex-col gap-4">

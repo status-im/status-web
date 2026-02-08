@@ -3,17 +3,21 @@ import { useMemo } from 'react'
 import { match, P } from 'ts-pattern'
 import { useBalance, useReadContract } from 'wagmi'
 
-import { WETH_VAULT } from '~constants/address'
+import {
+  isGUSDVault,
+  type StablecoinToken,
+  type Vault,
+  WETH_VAULT,
+} from '~constants/address'
 import { allowanceAbi } from '~constants/contracts/AllowanceAbi'
 import { usePreDepositLimits } from '~hooks/usePreDepositLimits'
 import { useVaultSharesValidation } from '~hooks/useVaultSharesValidation'
-
-import type { Vault } from '~constants/index'
 
 interface UseDepositFlowParams {
   vault: Vault
   amountWei: bigint
   address?: `0x${string}`
+  selectedStablecoin?: StablecoinToken
 }
 
 export type DepositAction =
@@ -30,12 +34,23 @@ export function useDepositFlow({
   vault,
   amountWei,
   address,
+  selectedStablecoin,
 }: UseDepositFlowParams) {
   const isWETHVault = vault.id === WETH_VAULT.id
+  const isGUSD = isGUSDVault(vault)
+
+  const tokenAddress =
+    isGUSD && selectedStablecoin
+      ? selectedStablecoin.address
+      : vault.token.address
+
+  const vaultAddress = isGUSD
+    ? vault.gusdConfig.depositorAddress
+    : vault.address
 
   const { data: balance, refetch: refetchWETHBalance } = useBalance({
     address,
-    token: vault.token.address,
+    token: tokenAddress,
     query: { enabled: !!address },
     chainId: vault.chainId,
   })
@@ -51,27 +66,27 @@ export function useDepositFlow({
     refetch: refetchAllowance,
     isPending: isLoadingAllowance,
   } = useReadContract({
-    address: vault.token.address,
+    address: tokenAddress,
     abi: allowanceAbi,
     functionName: 'allowance',
-    args: address ? [address, vault.address] : undefined,
+    args: address ? [address, vaultAddress] : undefined,
     query: { enabled: !!address },
     chainId: vault.chainId,
   })
 
   const { data: depositLimits } = usePreDepositLimits({ vault })
-  const maxDeposit = depositLimits?.maxDeposit
-  const minDeposit = depositLimits?.minDeposit
+  const maxDeposit = isGUSD ? undefined : depositLimits?.maxDeposit
+  const minDeposit = isGUSD ? undefined : depositLimits?.minDeposit
 
   const sharesValidation = useVaultSharesValidation({
     vault,
     depositAmount: amountWei,
-    enabled: !!vault && amountWei > 0n,
+    enabled: !!vault && amountWei > 0n && !isGUSD,
   })
 
   const actionState = useMemo((): DepositAction => {
     if (amountWei === 0n) return 'idle'
-    if (!sharesValidation.isValid) return 'invalid-shares'
+    if (!isGUSD && !sharesValidation.isValid) return 'invalid-shares'
 
     const currentBal = balance?.value ?? 0n
     const currentEthBal = ethBalance?.value ?? 0n
@@ -128,6 +143,7 @@ export function useDepositFlow({
     minDeposit,
     sharesValidation.isValid,
     isWETHVault,
+    isGUSD,
   ])
 
   const refetchBalances = async () => {
@@ -147,5 +163,7 @@ export function useDepositFlow({
     refetchAllowance,
     refetchBalances,
     isLoadingAllowance,
+    isGUSD,
+    vaultAddress,
   }
 }

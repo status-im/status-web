@@ -1,5 +1,5 @@
 import {
-  createJSONLD,
+  createAppJSONLD,
   JSONLDScript as BaseJSONLDScript,
 } from '@status-im/components'
 
@@ -8,52 +8,39 @@ import type {
   BreadcrumbListSchema,
   JSONLDSchema,
   OrganizationSchema,
+  SoftwareApplicationSchema,
   WebSiteSchema,
 } from '@status-im/components'
 
-/**
- * Status Hub social media links
- */
+const DEFAULT_NAME = 'Status Network Hub'
+const DEFAULT_URL = 'https://hub.status.network'
+
 const STATUS_HUB_SOCIAL_LINKS: string[] = [
+  'https://status.network/',
   'https://x.com/StatusL2',
   'https://github.com/status-im',
 ]
 
-/**
- * Create JSON-LD schema generators with Status Hub defaults
- */
-const baseJsonLD = createJSONLD({
-  defaultSiteUrl: 'https://hub.status.network',
-  defaultSocialLinks: STATUS_HUB_SOCIAL_LINKS,
-})
+const baseJsonLD = createAppJSONLD()
 
-/**
- * JSON-LD schema generators with app-specific defaults
- */
 export const jsonLD = {
   ...baseJsonLD,
   organization: (config?: {
+    '@id'?: string
+    name?: string
+    url?: string
     description?: string
     logo?: string
     sameAs?: string[]
-  }) =>
-    baseJsonLD.organization({
-      name: 'Status Hub',
-      url: 'https://hub.status.network',
-      ...config,
-    }),
-  website: (config?: {
-    description?: string
-    searchUrl?: string
-    name?: string
-    url?: string
-  }) =>
-    baseJsonLD.website({
-      name: config?.name ?? 'Status Hub',
-      url: config?.url ?? 'https://hub.status.network',
-      description: config?.description,
-      searchUrl: config?.searchUrl,
-    }),
+  }) => {
+    const { sameAs, ...restConfig } = config ?? {}
+    return baseJsonLD.organization({
+      name: DEFAULT_NAME,
+      url: DEFAULT_URL,
+      ...restConfig,
+      sameAs: sameAs ?? STATUS_HUB_SOCIAL_LINKS,
+    })
+  },
 }
 
 /**
@@ -64,6 +51,7 @@ export type {
   BreadcrumbListSchema,
   JSONLDSchema,
   OrganizationSchema,
+  SoftwareApplicationSchema,
   WebSiteSchema,
 }
 

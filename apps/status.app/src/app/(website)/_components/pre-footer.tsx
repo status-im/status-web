@@ -1,11 +1,13 @@
 'use client'
 
 import { Text } from '@status-im/components'
+import { cx } from 'class-variance-authority'
 import { usePathname } from 'next/navigation'
 
 import { Image } from '~components/assets'
 
 import { DownloadDesktopButton } from './download-desktop-button'
+import { DownloadMobileButton } from './download-mobile-button'
 
 const Prefooter = () => {
   const pathname = usePathname()!
@@ -32,9 +34,26 @@ const Prefooter = () => {
           <div className="relative flex w-[237px] flex-col items-center justify-center pt-8 md:w-full">
             <div
               data-theme="dark"
-              className="flex w-fit flex-col items-stretch gap-2 rounded-16 border border-dashed border-neutral-80 p-2"
+              className={cx(
+                'hidden w-fit flex-row items-stretch gap-2 rounded-16 border border-dashed border-neutral-80 p-2',
+                'md:w-fit md:flex-row md:items-center',
+                'ios:flex android:flex unknown:flex xl:unknown:hidden'
+              )}
             >
               <DownloadDesktopButton variant="primary" show="all" />
+              <DownloadMobileButton variant="outline" />
+            </div>
+
+            <div
+              data-theme="dark"
+              className={cx(
+                'hidden w-fit flex-row items-stretch gap-2 rounded-16 border border-dashed border-neutral-80 p-2',
+                'md:w-fit md:flex-row md:items-center',
+                'macos:flex windows:flex linux:flex xl:unknown:flex'
+              )}
+            >
+              <DownloadDesktopButton variant="primary" show="all" />
+              <DownloadMobileButton variant="outline" />
             </div>
           </div>
         </div>

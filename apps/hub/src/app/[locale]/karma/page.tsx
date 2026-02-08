@@ -2,21 +2,24 @@
 
 import { useMemo } from 'react'
 
+import { KarmaOverviewCardSkeleton } from '@status-im/components'
 import { useTranslations } from 'next-intl'
 import { formatEther } from 'viem/utils'
 
 import { HubLayout } from '~components/hub-layout'
 import {
-  KarmaOverviewCard,
-  KarmaOverviewCardSkeleton,
   KarmaSourceCard,
   KarmaSourceCardSkeleton,
   KarmaVisualCard,
   KarmaVisualCardSkeleton,
+  OverviewCard,
 } from '~components/karma'
+import { NetworkSwitchErrorDialog } from '~components/network-switch-error-dialog'
 import { useCurrentUser } from '~hooks/useCurrentUser'
 import { useKarmaRewardsDistributor } from '~hooks/useKarmaRewardsDistributor'
 import { useRequireStatusNetwork } from '~hooks/useRequireStatusNetwork'
+
+import { jsonLD, JSONLDScript } from '../../_utils/json-ld'
 
 function KarmaCardsSkeleton() {
   const t = useTranslations()
@@ -85,7 +88,7 @@ function KarmaCards() {
     <>
       <div className="flex flex-col gap-6 md:flex-row">
         <KarmaVisualCard {...visualData} />
-        <KarmaOverviewCard />
+        <OverviewCard />
       </div>
       <div className="flex flex-col gap-6">
         <h2 className="text-19 font-semibold text-neutral-100">
@@ -101,14 +104,54 @@ function KarmaCards() {
   )
 }
 
+const breadcrumbListSchema = jsonLD.breadcrumbList([
+  {
+    name: 'Hub',
+    url: 'https://hub.status.network/',
+  },
+  {
+    name: 'Karma',
+    url: 'https://hub.status.network/karma',
+  },
+])
+
+const softwareApplicationSchema = jsonLD.softwareApplication({
+  name: 'Status Network Karma',
+  applicationCategory: 'GovernanceSystem',
+  operatingSystem: 'Web',
+  url: 'https://hub.status.network/karma',
+  description:
+    'Non-transferable reputation system used for governance and incentives on Status Network.',
+})
+
 export default function KarmaPage() {
   const t = useTranslations()
-  const { isCorrectChain, isConnected, isSwitching } = useRequireStatusNetwork()
+  const {
+    isCorrectChain,
+    isConnected,
+    isSwitching,
+    hasSwitchError,
+    dismissError,
+  } = useRequireStatusNetwork()
 
-  const showSkeleton = isConnected && (!isCorrectChain || isSwitching)
+  const showSkeleton =
+    isConnected && (!isCorrectChain || isSwitching) && !hasSwitchError
+
+  const handleRetry = () => {
+    dismissError()
+    window.location.reload()
+  }
 
   return (
     <HubLayout>
+      <JSONLDScript
+        schema={[breadcrumbListSchema, softwareApplicationSchema]}
+      />
+      <NetworkSwitchErrorDialog
+        open={hasSwitchError}
+        onClose={dismissError}
+        onRetry={handleRetry}
+      />
       <div className="mx-auto flex size-full flex-col gap-4 p-4 lg:gap-8 lg:p-8">
         <div className="flex flex-col gap-2">
           <h1 className="text-27 font-bold text-neutral-100 lg:text-64">

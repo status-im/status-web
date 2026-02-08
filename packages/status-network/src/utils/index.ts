@@ -1,2 +1,5 @@
 export * from './colors'
 export * from './format-date'
+export * from './generate-metadata'
+export * from './get-pathname'
+export * from './middleware'

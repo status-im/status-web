@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl'
 
 import { HubLayout } from '~components/hub-layout'
+import { NetworkSwitchErrorDialog } from '~components/network-switch-error-dialog'
 import { VaultsTable } from '~components/vaults/vaults-table'
 import { useRequireStatusNetwork } from '~hooks/useRequireStatusNetwork'
 
@@ -22,6 +23,27 @@ import {
   WeightedBoostCard,
   WeightedBoostCardSkeleton,
 } from '../../_components/stake/stake-weighted-boost-card'
+import { jsonLD, JSONLDScript } from '../../_utils/json-ld'
+
+const breadcrumbListSchema = jsonLD.breadcrumbList([
+  {
+    name: 'Hub',
+    url: 'https://hub.status.network/',
+  },
+  {
+    name: 'Stake',
+    url: 'https://hub.status.network/stake',
+  },
+])
+
+const softwareApplicationSchema = jsonLD.softwareApplication({
+  name: 'Status Network Staking',
+  applicationCategory: 'DeFi',
+  operatingSystem: 'Web',
+  url: 'https://hub.status.network/stake',
+  description:
+    "Stake assets to earn yield and support Status Network's gasless Ethereum Layer 2.",
+})
 
 function StakeCardsSkeleton() {
   return (
@@ -64,12 +86,32 @@ function StakeCards() {
 
 export default function StakePage() {
   const t = useTranslations()
-  const { isCorrectChain, isConnected, isSwitching } = useRequireStatusNetwork()
+  const {
+    isCorrectChain,
+    isConnected,
+    isSwitching,
+    hasSwitchError,
+    dismissError,
+  } = useRequireStatusNetwork()
 
-  const showSkeleton = isConnected && (!isCorrectChain || isSwitching)
+  const showSkeleton =
+    isConnected && (!isCorrectChain || isSwitching) && !hasSwitchError
+
+  const handleRetry = () => {
+    dismissError()
+    window.location.reload()
+  }
 
   return (
     <HubLayout>
+      <JSONLDScript
+        schema={[breadcrumbListSchema, softwareApplicationSchema]}
+      />
+      <NetworkSwitchErrorDialog
+        open={hasSwitchError}
+        onClose={dismissError}
+        onRetry={handleRetry}
+      />
       <div className="mx-auto flex size-full flex-col gap-8 p-4 md:p-8">
         <header className="flex flex-col gap-2">
           <h1 className="text-27 font-bold md:text-40">{t('stake.title')}</h1>

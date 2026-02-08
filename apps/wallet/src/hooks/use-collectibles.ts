@@ -39,6 +39,7 @@ const getCollectibles = async (
     direction: 'asc' | 'desc'
   },
   offset = 0,
+  pages?: Record<NetworkType, string>,
 ) => {
   const url = new URL(
     `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/collectibles.page`,
@@ -54,6 +55,7 @@ const getCollectibles = async (
         offset,
         search,
         sort,
+        pages,
       },
     }),
   )
@@ -81,6 +83,7 @@ const useCollectibles = (props: Props) => {
   const search = searchParams.get('search') ?? undefined
   const sortParam = searchParams.get('sort')
 
+  // Sort comes from URL, defaults to name asc
   const sort = {
     column:
       (sortParam?.split(',')[0] as 'name' | 'collection') ||
@@ -92,14 +95,45 @@ const useCollectibles = (props: Props) => {
 
   const networks = searchParams.get('networks')?.split(',') ?? ['ethereum']
 
+  // Use pageKey pagination only for the default sort with no search
+  const isDefaultSort =
+    sort.column === DEFAULT_SORT.collectibles.column &&
+    sort.direction === DEFAULT_SORT.collectibles.direction
+
+  const usePageKeys = !search && isDefaultSort
+
   return useInfiniteQuery({
-    queryKey: ['collectibles', address, networks, search, sort],
-    queryFn: async ({ pageParam = 0 }) => {
+    queryKey: ['collectibles', address, networks, search, sort, usePageKeys],
+    // pageParam is either { pages } for pageKey mode or a numeric page index for offset mode
+    queryFn: async ({ pageParam = usePageKeys ? { pages: {} } : 0 }) => {
       if (!address) {
         throw new Error('No wallet address available')
       }
 
-      const offset = pageParam * PAGE_LIMIT
+      if (usePageKeys) {
+        // Fast path: continue from server-provided page keys
+        const pages =
+          typeof pageParam === 'object' && pageParam
+            ? (pageParam as { pages?: Record<NetworkType, string> }).pages
+            : undefined
+
+        const response = await getCollectibles(
+          address,
+          networks as NetworkType[],
+          search,
+          sort,
+          0,
+          pages,
+        )
+        return {
+          collectibles: response.collectibles,
+          hasMore: response.hasMore,
+          nextPage: { pages: response.pages },
+        }
+      }
+
+      const offset = (pageParam as number) * PAGE_LIMIT
+
       const response = await getCollectibles(
         address,
         networks as NetworkType[],
@@ -107,15 +141,16 @@ const useCollectibles = (props: Props) => {
         sort,
         offset,
       )
+
       return {
         collectibles: response.collectibles,
         hasMore: response.hasMore,
-        nextPage: pageParam + 1,
+        nextPage: (pageParam as number) + 1,
       }
     },
     getNextPageParam: lastPage =>
       lastPage.hasMore ? lastPage.nextPage : undefined,
-    initialPageParam: 0,
+    initialPageParam: usePageKeys ? { pages: {} } : 0,
     enabled: !!address && !isWalletLoading,
     staleTime: configEnv.staleTimeMs,
     gcTime: configEnv.gcTimeMs,

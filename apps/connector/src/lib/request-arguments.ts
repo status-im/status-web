@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod-3-23-8'
 
 /**
  * @see https://eips.ethereum.org/EIPS/eip-1193#request-1

@@ -12,7 +12,10 @@ const AUTH_ENDPOINTS = {
   verify: `${API_BASE_URL}/auth/ethereum`,
   session: `${API_BASE_URL}/auth/me/session`,
   logout: `${API_BASE_URL}/auth/logout`,
+  quota: `${API_BASE_URL}/auth/me/quota`,
 } as const
+
+export { AUTH_ENDPOINTS }
 
 // Helper for API calls
 const fetchAPI = async (url: string, options?: RequestInit) => {
@@ -90,4 +93,16 @@ export const siweConfig: SIWEConfig = {
   signOutOnDisconnect: true,
   signOutOnAccountChange: true,
   signOutOnNetworkChange: false,
+}
+
+export const getQuota = async () => {
+  try {
+    const response = await fetchAPI(AUTH_ENDPOINTS.quota)
+    if (!response.ok) return null
+
+    const data = await response.json()
+    return data.result ?? null
+  } catch {
+    return null
+  }
 }

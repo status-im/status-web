@@ -12,6 +12,7 @@ import { formatEther } from 'ethers'
 
 import { serverEnv } from '../../../config/env.server.mjs'
 import {
+  getRandomApiKey,
   markApiKeyAsRateLimited,
   markApiKeyAsSuccessful,
 } from '../api-key-rotation'
@@ -91,6 +92,10 @@ const STATUS_RPC_AUTH: { username: string; password: string } = {
 function getStatusRpcUrl(network: NetworkType): string {
   const { chain, network: networkName } = statusRpcNetworks[network]
   return `${STATUS_ETH_RPC_PROXY}/${chain}/${networkName}/alchemy`
+}
+
+function getAlchemyNftUrl(network: NetworkType, endpoint: string): string {
+  return `https://${alchemyNetworks[network]}.g.alchemy.com/nft/v3/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}/${endpoint}`
 }
 
 // todo: use `genesisTimestamp` for `all` days parame
@@ -459,8 +464,20 @@ export async function getNFTs(
   page?: string,
   pageSize?: string,
 ) {
+  // TODO: revert to proxy once it supports NFT endpoints
+  // const body = await _retry(async () => {
+  //   const url = new URL(getStatusRpcUrl(network))
+  //   url.searchParams.set('owner', address)
+  //   url.searchParams.set('withMetadata', 'true')
+  //   url.searchParams.set('pageSize', pageSize ?? '100')
+  //   url.searchParams.set('orderBy', 'transferTime')
+  //   if (page) {
+  //     url.searchParams.set('pageKey', page)
+  //   }
+  //   return _fetch<NFTsResponseBody>(url, 'GET', 0, undefined, STATUS_RPC_AUTH)
+  // })
   const body = await _retry(async () => {
-    const url = new URL(getStatusRpcUrl(network))
+    const url = new URL(getAlchemyNftUrl(network, 'getNFTsForOwner'))
     url.searchParams.set('owner', address)
     url.searchParams.set('withMetadata', 'true')
     url.searchParams.set('pageSize', pageSize ?? '100')
@@ -468,7 +485,7 @@ export async function getNFTs(
     if (page) {
       url.searchParams.set('pageKey', page)
     }
-    return _fetch<NFTsResponseBody>(url, 'GET', 0, undefined, STATUS_RPC_AUTH)
+    return _fetch<NFTsResponseBody>(url, 'GET', 0)
   })
 
   return body
@@ -484,17 +501,18 @@ export async function getNFTMetadata(
   tokenId: string,
   network: NetworkType,
 ) {
+  // TODO: revert to proxy once it supports NFT endpoints
+  // const body = await _retry(async () => {
+  //   const url = new URL(getStatusRpcUrl(network))
+  //   url.searchParams.set('contractAddress', contract)
+  //   url.searchParams.set('tokenId', tokenId)
+  //   return _fetch<NFTMetadataResponseBody>(url, 'GET', 0, undefined, STATUS_RPC_AUTH)
+  // })
   const body = await _retry(async () => {
-    const url = new URL(getStatusRpcUrl(network))
+    const url = new URL(getAlchemyNftUrl(network, 'getNFTMetadata'))
     url.searchParams.set('contractAddress', contract)
     url.searchParams.set('tokenId', tokenId)
-    return _fetch<NFTMetadataResponseBody>(
-      url,
-      'GET',
-      0,
-      undefined,
-      STATUS_RPC_AUTH,
-    )
+    return _fetch<NFTMetadataResponseBody>(url, 'GET', 0)
   })
 
   return body
@@ -901,20 +919,24 @@ export async function deprecated_getNFTSale(
   tokenId: string,
   network: NetworkType,
 ) {
+  // TODO: revert to proxy once it supports NFT endpoints
+  // const body = await _retry(async () => {
+  //   const url = new URL(getStatusRpcUrl(network))
+  //   url.searchParams.set('contractAddress', contract)
+  //   url.searchParams.set('tokenId', tokenId)
+  //   url.searchParams.set('buyerAddress', address)
+  //   url.searchParams.set('order', 'desc')
+  //   url.searchParams.set('taker', 'BUYER')
+  //   return _fetch<deprecated_NFTSaleResponseBody>(url, 'GET', 0, undefined, STATUS_RPC_AUTH)
+  // })
   const body = await _retry(async () => {
-    const url = new URL(getStatusRpcUrl(network))
+    const url = new URL(getAlchemyNftUrl(network, 'getNFTSales'))
     url.searchParams.set('contractAddress', contract)
     url.searchParams.set('tokenId', tokenId)
     url.searchParams.set('buyerAddress', address)
     url.searchParams.set('order', 'desc')
     url.searchParams.set('taker', 'BUYER')
-    return _fetch<deprecated_NFTSaleResponseBody>(
-      url,
-      'GET',
-      0,
-      undefined,
-      STATUS_RPC_AUTH,
-    )
+    return _fetch<deprecated_NFTSaleResponseBody>(url, 'GET', 0)
   })
 
   return body
@@ -929,16 +951,16 @@ export async function deprecated_getNFTSale(
  * 10 Throughput CU per second
  */
 export async function getNFTFloorPrice(contract: string, network: NetworkType) {
+  // TODO: revert to proxy once it supports NFT endpoints
+  // const body = await _retry(async () => {
+  //   const url = new URL(getStatusRpcUrl(network))
+  //   url.searchParams.set('contractAddress', contract)
+  //   return _fetch<NFTFloorPriceResponseBody>(url, 'GET', 0, undefined, STATUS_RPC_AUTH)
+  // })
   const body = await _retry(async () => {
-    const url = new URL(getStatusRpcUrl(network))
+    const url = new URL(getAlchemyNftUrl(network, 'getFloorPrice'))
     url.searchParams.set('contractAddress', contract)
-    return _fetch<NFTFloorPriceResponseBody>(
-      url,
-      'GET',
-      0,
-      undefined,
-      STATUS_RPC_AUTH,
-    )
+    return _fetch<NFTFloorPriceResponseBody>(url, 'GET', 0)
   })
 
   return body

@@ -13,6 +13,7 @@ import { CopyrightSymbol } from './_components/copyright-symbol'
 import { DesktopSection } from './_components/desktop-section'
 import { DownloadDesktopButton } from './_components/download-desktop-button'
 import { DownloadExtensionButton } from './_components/download-extension-button'
+import { DownloadMobileButton } from './_components/download-mobile-button'
 import { FeatureList } from './_components/feature-list'
 import { FeatureTag } from './_components/feature-tag'
 import { HandsSection } from './_components/hands-section'
@@ -89,34 +90,45 @@ export default async function HomePage() {
           <div className="relative z-20 inline-flex w-[237px] flex-col items-center gap-6 text-center md:w-full">
             <div
               data-theme="dark"
-              className="flex w-fit flex-col items-stretch gap-2 rounded-16 border border-dashed border-neutral-80 p-2"
+              className={cx(
+                'hidden w-fit flex-row items-stretch gap-2 rounded-20 border border-dashed border-neutral-80 p-2',
+                'md:w-fit md:flex-row md:items-center',
+                'ios:flex android:flex unknown:flex xl:unknown:hidden'
+              )}
             >
               <DownloadDesktopButton variant="primary" show="all" />
+              <DownloadMobileButton variant="outline" />
             </div>
           </div>
           <div
             data-theme="dark"
-            className="mt-6 flex max-w-[572px] flex-col items-start gap-4 rounded-20 border border-solid border-white-10 bg-white-5 px-5 py-3 text-left lg:flex-row lg:items-center lg:gap-10"
+            className={cx(
+              'hidden w-fit flex-row items-stretch gap-2 rounded-20 border border-dashed border-neutral-80 p-2',
+              'md:w-fit md:flex-row md:items-center',
+              'macos:flex windows:flex linux:flex xl:unknown:flex'
+            )}
           >
-            <div className="flex flex-col text-left">
-              <h3 className="text-19 font-600 text-white-100">
-                Try new Status mobile app
-              </h3>
+            <DownloadDesktopButton variant="primary" show="all" />
+            <DownloadMobileButton variant="outline" />
+          </div>
+          <div
+            data-theme="dark"
+            className="mt-6 flex max-w-[572px] flex-row items-center gap-4 rounded-16 border border-solid border-white-10 bg-white-5 p-[6px] pl-[12px] text-left lg:flex-row lg:gap-10"
+          >
+            <div className="flex text-left">
               <p className="text-15 font-400 text-white-100">
-                Built from a single codebase for unified experience across
-                Mobile and Desktop. One app, one experience — connecting the
-                Status community across devices
+                Still on the Status Legacy mobile app? Migrate now.
               </p>
             </div>
-            <div className="flex items-center">
+            <div className="flex shrink-0 items-center">
               <Button
                 size="32"
                 variant="outline"
-                href="https://status.app/blog/introducing-unified-status-mobile-app"
+                href="https://status.app/blog/migrate-from-status-legacy-to-unified-status-mobile-app"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Learn & try
+                Learn more
               </Button>
             </div>
           </div>

@@ -9,7 +9,7 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "predev": "pnpm install",
-    "dev:next": "next dev --turbopack",
+    "dev:next": "next dev --turbopack --port 3001",
     "dev:content": "contentlayer2 dev",
     "watch:content": "node --watch-path=./content --watch-preserve-output ./scripts/trigger-content-compilation.cjs",
     "build": "pnpm lint && next build",
@@ -28,7 +28,7 @@
     "format:prettier": "prettier --write .",
     "types:check": "contentlayer2 build && tsc",
     "env:check": "node -r dotenv/config ./src/config/env.server.mjs dotenv_config_path=./.env && node -r dotenv/config ./src/config/env.client.mjs dotenv_config_path=./.env && :",
-    "clean": "rimraf .next .vercel/output node_modules .contentlayer2 .turbo",
+    "clean": "rimraf .next .vercel/output node_modules .contentlayer .contentlayer2 .turbo",
     "preview": "next start --port 8151",
     "codegen": "graphql-codegen -r dotenv/config --config codegen.yml",
     "codegen:watch": "pnpm run codegen -- --watch",
@@ -134,7 +134,7 @@
     "type-fest": "^4.18.2",
     "unified": "^11.0.5",
     "vfile-matter": "^5.0.1",
-    "zod": "^3.21.4"
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@1stg/remark-preset": "^3.0.0",
