@@ -165,12 +165,6 @@ function generateTemplate(tokens) {
       // Apply decimal overrides for tokens with incorrect upstream data
       const decimals = decimalOverrides[token.address] ?? token.decimals
 
-      if (decimalOverrides[token.address] !== undefined) {
-        console.log(
-          `  Applied decimal override for ${token.symbol} (${token.address}): ${token.decimals} -> ${decimals}`,
-        )
-      }
-
       return {
         chainId: token.chainId,
         address: token.address,
