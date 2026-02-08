@@ -129,6 +129,11 @@ export function AirdropClaimCard() {
             value={airdropAddress}
             onChange={e => setAirdropAddress(e.target.value)}
           />
+          {airdropAddress.trim().length === 0 ? (
+            <span className="text-13 text-neutral-70">
+              Airdrop contract address is required to claim.
+            </span>
+          ) : null}
           <textarea
             className="min-h-24 w-full rounded-8 border border-neutral-20 px-3 py-2 font-mono text-13"
             placeholder='{"root":"0x...","entries":[{"index":"0","account":"0x...","amount":"1","proof":["0x..."]}]}'

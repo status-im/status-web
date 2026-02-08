@@ -66,7 +66,20 @@ export async function setAirdropMerkleRoot(
       account: params.account,
     })
     return walletClient.writeContract(request)
-  } catch {
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message.toLowerCase() : ''
+    const isMissingSelector =
+      message.includes('function') &&
+      (message.includes('does not exist') ||
+        message.includes('not found') ||
+        message.includes('no matching') ||
+        message.includes('unknown selector'))
+
+    if (!isMissingSelector) {
+      throw error
+    }
+
     const { request } = await publicClient.simulateContract({
       address: params.airdropAddress,
       abi: karmaAirdropAbi,
