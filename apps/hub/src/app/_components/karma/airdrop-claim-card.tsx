@@ -14,9 +14,7 @@ import { Button } from '@status-im/status-network/components'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAccount, usePublicClient, useWalletClient } from 'wagmi'
 
-function isAddress(value: string): value is `0x${string}` {
-  return /^0x[a-fA-F0-9]{40}$/.test(value)
-}
+import { isAddress } from '~utils/karma-input'
 
 export function AirdropClaimCard() {
   const { address, isConnected } = useAccount()
@@ -66,7 +64,8 @@ export function AirdropClaimCard() {
       toast.negative('Wallet client unavailable')
       return
     }
-    if (!isAddress(airdropAddress)) {
+    const targetAirdropAddress = airdropAddress
+    if (!isAddress(targetAirdropAddress)) {
       toast.negative('Enter a valid airdrop contract address')
       return
     }
@@ -82,7 +81,7 @@ export function AirdropClaimCard() {
     setIsPending(true)
     try {
       const alreadyClaimed = await isAirdropClaimed(publicClient, {
-        airdropAddress,
+        airdropAddress: targetAirdropAddress,
         index: myEntry.index,
       })
 
@@ -92,7 +91,7 @@ export function AirdropClaimCard() {
       }
 
       const txHash = await claimAirdrop(walletClient, publicClient, {
-        airdropAddress,
+        airdropAddress: targetAirdropAddress,
         index: myEntry.index,
         account: myEntry.account,
         amount: myEntry.amount,
