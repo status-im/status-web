@@ -7,7 +7,6 @@
   "main": "./dist/src/index.cjs.js",
   "module": "./dist/src/index.es.js",
   "types": "./dist/src/index.d.ts",
-  "source": "./src/index.ts",
   "exports": {
     ".": {
       "types": "./dist/src/index.d.ts",
@@ -23,7 +22,6 @@
     "node": "22.x"
   },
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
     "dev": "vite build --watch --mode development",
     "build": "vite build && pnpm build:types",
     "build:types": "tsc --noEmit false --emitDeclarationOnly",
