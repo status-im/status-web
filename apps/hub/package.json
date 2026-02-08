@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "predev": "pnpm install",
     "dev": "next dev --port 3003",
+    "prebuild": "pnpm install --frozen-lockfile",
     "build": "next build",
     "postbuild": "next-sitemap",
     "start": "next start",

@@ -25,7 +25,6 @@
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
     "test": "turbo run test --filter=@status-im/* --filter=./apps/* -- --run",
-    "predev": "pnpm install",
     "dev": "turbo run dev dev:next dev:content --filter=@status-im/* --filter=./apps/*",
     "build": "turbo run build --filter=@status-im/* --filter=./apps/*",
     "lint": "turbo run lint --filter=@status-im/* --filter=./apps/*",
