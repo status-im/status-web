@@ -37,6 +37,23 @@ function isBytes32(value: string): value is `0x${string}` {
   return /^0x[a-fA-F0-9]{64}$/.test(value)
 }
 
+function parseEntriesJson(raw: string) {
+  const parsed = JSON.parse(raw) as Array<{
+    account: `0x${string}`
+    amount: string
+  }>
+
+  return parsed.map((entry, index) => {
+    if (!isAddress(entry.account)) {
+      throw new Error(`Invalid account at entry ${index}`)
+    }
+    return {
+      account: entry.account,
+      amount: parseBigIntInput(entry.amount, `entries[${index}].amount`),
+    }
+  })
+}
+
 export function KarmaAdminPanel() {
   const { address } = useAccount()
   const { data: walletClient } = useWalletClient({
@@ -99,15 +116,12 @@ export function KarmaAdminPanel() {
 
   const generateMerkleTreeOutput = () => {
     const startIndex = parseBigIntInput(merkleStartIndex, 'Start index')
-    const parsedEntries = JSON.parse(merkleEntriesJson) as Array<{
-      account: `0x${string}`
-      amount: string
-    }>
+    const parsedEntries = parseEntriesJson(merkleEntriesJson)
 
     const entries = parsedEntries.map((entry, index) => ({
       index: startIndex + BigInt(index),
       account: entry.account,
-      amount: BigInt(entry.amount),
+      amount: entry.amount,
     }))
 
     const tree = buildMerkleTree(entries)
@@ -351,7 +365,8 @@ export function KarmaAdminPanel() {
           <input
             className="mt-2 rounded-8 border border-neutral-20 px-3 py-2 text-13"
             placeholder="Merkle root (0x...)"
-            value={merkleRootToPost}
+            value={parsedMerkle?.root ?? merkleRootToPost}
+            readOnly={!!parsedMerkle}
             onChange={e => setMerkleRootToPost(e.target.value)}
           />
           <Button
