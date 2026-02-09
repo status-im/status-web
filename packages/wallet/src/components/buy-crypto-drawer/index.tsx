@@ -3,12 +3,15 @@
 import { useState } from 'react'
 
 import { Avatar, useToast } from '@status-im/components'
-import { FeesIcon } from '@status-im/icons/12'
-import { ExternalIcon } from '@status-im/icons/20'
 
 import { ERROR_MESSAGES } from '../../constants'
 import * as Drawer from '../drawer'
-import { Image, type ImageId } from '../image'
+import {
+  getProviderUrl,
+  ProviderCard,
+  type ProviderInfo,
+  PROVIDERS,
+} from '../provider-card'
 
 import type { Account } from '../address'
 
@@ -25,26 +28,19 @@ export type Currency = {
 type NetworkOptions = Array<{
   id: 'ETHEREUM'
   name: string
-  image: ImageId
 }>
 
 const NETWORKS: NetworkOptions = [
   {
     id: 'ETHEREUM',
     name: 'Ethereum',
-    image: 'Wallet/Icons/Logos/01:120:120',
   },
 ]
 
 export type BuyCryptoDrawerProps = {
   children: React.ReactElement
   account?: Account
-  providers?: Array<{
-    name: string
-    description: string
-    fee: string
-    image: ImageId
-  }>
+  providers?: ProviderInfo[]
   onProviderSelect?: (
     provider: Provider,
     network: string,
@@ -60,20 +56,7 @@ export const BuyCryptoDrawer = (props: Props) => {
   const {
     children,
     account,
-    providers = [
-      {
-        name: 'mercuryo',
-        // description: 'Buy crypto within 15 seconds',
-        fee: '1% - 4.5%',
-        image: 'Wallet/Icons/Logos/mercuryo:64:64',
-      },
-      {
-        name: 'moonpay',
-        // description: 'The new standard for fiat to crypto',
-        fee: '1% - 4.5%',
-        image: 'Wallet/Icons/Logos/moonpay:64:64',
-      },
-    ],
+    providers = PROVIDERS,
     onProviderSelect,
     onOpenTab,
     symbol,
@@ -101,12 +84,11 @@ export const BuyCryptoDrawer = (props: Props) => {
         const data = await onProviderSelect(provider, network.id, currency.code)
         url = data.url
       } else {
-        const providerUrls = {
-          mercuryo: `https://exchange.mercuryo.io/?type=buy&network=${network.id}&currency=${currency.code}&address=${account.address}&hide_address=false&fix_address=true&widget_id=6a7eb330-2b09-49b7-8fd3-1c77cfb6cd47`,
-          moonpay: `https://buy.moonpay.com?apiKey=pk_live_YQC6CQPA5qqDu0unEwHJyAYQyeIqFGR`,
-        }
+        url = getProviderUrl(provider, account.address, {
+          network: network.id,
+          currency: currency.code,
+        })
 
-        url = providerUrls[provider]
         if (!url) {
           toast.negative(ERROR_MESSAGES.PROVIDER_NOT_SUPPORTED)
           return
@@ -165,43 +147,14 @@ export const BuyCryptoDrawer = (props: Props) => {
         </Drawer.Header>
 
         <Drawer.Body className="relative flex flex-col overflow-clip">
-          <div className="mt-2 flex flex-col gap-0.5 rounded-16 border border-neutral-10 bg-neutral-2.5 p-1">
-            {providers.map(provider => {
-              return (
-                <button
-                  key={provider.name}
-                  className="flex w-full cursor-pointer items-center justify-between gap-4 rounded-12 px-2 py-1 transition-colors hover:bg-neutral-5"
-                  onClick={() =>
-                    handleProviderSelect(provider.name as Provider)
-                  }
-                >
-                  <div className="flex items-center gap-2">
-                    <Image
-                      id={provider.image}
-                      alt={provider.name}
-                      className="size-8 rounded-full"
-                    />
-                    <div className="flex flex-col">
-                      <div className="flex flex-col items-start">
-                        <div className="text-15 font-600 capitalize">
-                          {provider.name}
-                        </div>
-                        {/* <div className="text-13 text-neutral-50">
-                          {provider.description}
-                        </div> */}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-1 text-13 font-500">
-                      <FeesIcon /> {provider.fee}
-                    </div>
-                    <ExternalIcon />
-                  </div>
-                </button>
-              )
-            })}
+          <div className="mt-2 flex flex-col gap-3">
+            {providers.map(provider => (
+              <ProviderCard
+                key={provider.name}
+                {...provider}
+                onClick={() => handleProviderSelect(provider.name as Provider)}
+              />
+            ))}
           </div>
         </Drawer.Body>
       </Drawer.Content>

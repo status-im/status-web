@@ -1,5 +1,6 @@
 import { cache } from 'react'
 
+import { format } from 'date-fns'
 import { z } from 'zod'
 
 import {
@@ -418,7 +419,22 @@ function map(
     traits: Array.isArray(attributes)
       ? attributes.reduce(
           (acc, attribute) => {
-            acc[attribute.trait_type] = attribute.value
+            if (
+              'display_type' in attribute &&
+              attribute.display_type === 'date' &&
+              typeof attribute.value === 'number'
+            ) {
+              const timestamp =
+                attribute.value < 10000000000
+                  ? attribute.value * 1000
+                  : attribute.value
+              acc[attribute.trait_type] = format(
+                new Date(timestamp),
+                'dd MMM yyyy',
+              )
+            } else {
+              acc[attribute.trait_type] = attribute.value
+            }
             return acc
           },
           {} as Record<string, string | number | boolean>,
