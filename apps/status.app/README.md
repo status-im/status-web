@@ -4,7 +4,7 @@ This is the repository for the [https://status.app](https://status.app) – a [N
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/en/) `v18.x.x`
+- **[Node.js](https://nodejs.org/)** v22.x
 - **[pnpm](https://pnpm.io)** v9.12.x
 
 ## Getting Started
