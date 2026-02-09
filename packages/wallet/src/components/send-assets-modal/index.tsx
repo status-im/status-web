@@ -152,7 +152,7 @@ const SendAssetsModal = (props: Props) => {
   const balanceEur = asset.totalBalanceEur
 
   // Minimum transaction value in USD
-  const MINIMUM_TRANSACTION_VALUE = 0.1
+  const MIN_TRANSACTION_AMOUNT_USD = 0.1
 
   const amountFiatValue = useMemo(() => {
     if (!watchedAmount || balance === 0) return 0
@@ -162,7 +162,7 @@ const SendAssetsModal = (props: Props) => {
   const hasValueBelowMinimum =
     watchedAmount &&
     Number.parseFloat(watchedAmount) > 0 &&
-    amountFiatValue < MINIMUM_TRANSACTION_VALUE
+    amountFiatValue < MIN_TRANSACTION_AMOUNT_USD
 
   useEffect(() => {
     setValue('contractAddress', asset.contractAddress || undefined)
@@ -423,19 +423,19 @@ const SendAssetsModal = (props: Props) => {
                     </div>
 
                     {errors.amount && hasInsufficientBalance && (
-                      <div className="mt-2 flex items-center gap-1 text-13 text-danger-50">
+                      <div className="mt-2 flex items-start gap-1 text-13 text-danger-50">
                         <AlertIcon className="size-4" />
                         <p>{errors.amount.message}</p>
                       </div>
                     )}
 
                     {hasValueBelowMinimum && (
-                      <div className="mt-2 flex items-center gap-1 text-13 text-danger-50">
+                      <div className="mt-2 flex items-start gap-1 text-13 text-danger-50">
                         <AlertIcon className="size-4" />
                         <p>
                           Value of the transaction must be at least{' '}
                           <CurrencyAmount
-                            value={MINIMUM_TRANSACTION_VALUE}
+                            value={MIN_TRANSACTION_AMOUNT_USD}
                             format="standard"
                           />
                         </p>
