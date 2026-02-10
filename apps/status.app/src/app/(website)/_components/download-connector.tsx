@@ -26,7 +26,7 @@ const DownloadConnectorSection = (props: Props) => {
         )}
       >
         <Image
-          id="Platforms/Screens/Extension Screens/Connector_02:1102:1012"
+          id="Platforms/Screens/Extension Screens/Connector_03:1102:1012"
           alt=""
           width={551}
           height={506}
