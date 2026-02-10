@@ -1,1 +1,1 @@
-export { KarmaAdminPanel } from './karma-admin-panel'
+export { KarmaPartnersPanel } from './karma-admin-panel'
