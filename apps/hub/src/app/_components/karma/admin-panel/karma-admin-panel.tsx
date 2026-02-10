@@ -7,7 +7,6 @@ import {
   buildMerkleTree,
   distributeRewardsBatch,
   getAvailableSupply,
-  getKarmaAddresses,
   getMintedSupply,
   getRewardDistributors,
   getTotalRewardsSupply,
@@ -35,10 +34,13 @@ import { MerkleRootPostingSection } from './sections/merkle-root-posting-section
 import { MintRewardSection } from './sections/mint-reward-section'
 import { SetRewardSection } from './sections/set-reward-section'
 
-const DEFAULT_AIRDROP_ADDRESS =
-  getKarmaAddresses(KARMA_CHAIN_IDS.STATUS_SEPOLIA).karmaAirdrop ?? ''
+type KarmaPartnersPanelProps = {
+  airdropAddress: string
+}
 
-export function KarmaAdminPanel() {
+export function KarmaPartnersPanel({
+  airdropAddress,
+}: KarmaPartnersPanelProps) {
   const { address } = useAccount()
   const { data: walletClient } = useWalletClient({
     chainId: KARMA_CHAIN_IDS.STATUS_SEPOLIA,
@@ -60,9 +62,6 @@ export function KarmaAdminPanel() {
   const [merkleStartIndex, setMerkleStartIndex] = useState('0')
   const [generatedMerkleJson, setGeneratedMerkleJson] = useState('')
   const [merkleJson, setMerkleJson] = useState('')
-  const [airdropAddressToPost, setAirdropAddressToPost] = useState(
-    DEFAULT_AIRDROP_ADDRESS
-  )
   const [merkleRootToPost, setMerkleRootToPost] = useState('')
   const [isPending, setIsPending] = useState(false)
 
@@ -223,7 +222,6 @@ export function KarmaAdminPanel() {
   const handlePostMerkleRoot = () =>
     runAction(async () => {
       const clients = requireClients()
-      const airdropAddress = airdropAddressToPost
       const root = rootToPost
 
       if (!isAddress(airdropAddress)) {
@@ -253,7 +251,9 @@ export function KarmaAdminPanel() {
   return (
     <section className="rounded-20 border border-neutral-20 bg-white-100 p-4 lg:p-6">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-19 font-semibold text-neutral-100">Karma Admin</h3>
+        <h3 className="text-19 font-semibold text-neutral-100">
+          Karma Partners Test
+        </h3>
         <span className="text-13 text-neutral-50">
           {address ? `Connected: ${address}` : 'Wallet not connected'}
         </span>
@@ -312,12 +312,10 @@ export function KarmaAdminPanel() {
         <MerkleRootPostingSection
           merkleJson={merkleJson}
           parsedMerkleSummary={merkleSummary}
-          airdropAddress={airdropAddressToPost}
           rootToPost={rootToPost}
           rootFromParsedMerkle={!!parsedMerkle.tree}
           isPending={isPending}
           onMerkleJsonChange={setMerkleJson}
-          onAirdropAddressChange={setAirdropAddressToPost}
           onRootChange={setMerkleRootToPost}
           onSubmit={handlePostMerkleRoot}
         />

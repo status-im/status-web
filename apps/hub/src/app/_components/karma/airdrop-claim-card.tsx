@@ -5,7 +5,6 @@ import { useMemo, useState } from 'react'
 import { useToast } from '@status-im/components'
 import {
   claimAirdrop,
-  getKarmaAddresses,
   isAirdropClaimed,
   KARMA_CHAIN_IDS,
   parseMerkleTreeOutput,
@@ -16,7 +15,11 @@ import { useAccount, usePublicClient, useWalletClient } from 'wagmi'
 
 import { isAddress } from '~utils/karma-input'
 
-export function AirdropClaimCard() {
+type AirdropClaimCardProps = {
+  airdropAddress: string
+}
+
+export function AirdropClaimCard({ airdropAddress }: AirdropClaimCardProps) {
   const { address, isConnected } = useAccount()
   const publicClient = usePublicClient({
     chainId: KARMA_CHAIN_IDS.STATUS_SEPOLIA,
@@ -27,10 +30,6 @@ export function AirdropClaimCard() {
   const queryClient = useQueryClient()
   const toast = useToast()
 
-  const defaultAirdropAddress =
-    getKarmaAddresses(KARMA_CHAIN_IDS.STATUS_SEPOLIA).karmaAirdrop ?? ''
-
-  const [airdropAddress, setAirdropAddress] = useState(defaultAirdropAddress)
   const [merkleJson, setMerkleJson] = useState('')
   const [isPending, setIsPending] = useState(false)
 
@@ -64,8 +63,7 @@ export function AirdropClaimCard() {
       toast.negative('Wallet client unavailable')
       return
     }
-    const targetAirdropAddress = airdropAddress
-    if (!isAddress(targetAirdropAddress)) {
+    if (!isAddress(airdropAddress)) {
       toast.negative('Enter a valid airdrop contract address')
       return
     }
@@ -81,7 +79,7 @@ export function AirdropClaimCard() {
     setIsPending(true)
     try {
       const alreadyClaimed = await isAirdropClaimed(publicClient, {
-        airdropAddress: targetAirdropAddress,
+        airdropAddress,
         index: myEntry.index,
       })
 
@@ -91,7 +89,7 @@ export function AirdropClaimCard() {
       }
 
       const txHash = await claimAirdrop(walletClient, publicClient, {
-        airdropAddress: targetAirdropAddress,
+        airdropAddress,
         index: myEntry.index,
         account: myEntry.account,
         amount: myEntry.amount,
@@ -122,17 +120,6 @@ export function AirdropClaimCard() {
         </div>
 
         <div className="mt-2.5 flex w-full flex-col gap-2">
-          <input
-            className="rounded-8 border border-neutral-20 px-3 py-2 text-13"
-            placeholder="Airdrop contract address (0x...)"
-            value={airdropAddress}
-            onChange={e => setAirdropAddress(e.target.value)}
-          />
-          {airdropAddress.trim().length === 0 ? (
-            <span className="text-13 text-neutral-70">
-              Airdrop contract address is required to claim.
-            </span>
-          ) : null}
           <textarea
             className="min-h-24 w-full rounded-8 border border-neutral-20 px-3 py-2 font-mono text-13"
             placeholder='{"root":"0x...","entries":[{"index":"0","account":"0x...","amount":"1","proof":["0x..."]}]}'
