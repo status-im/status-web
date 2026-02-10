@@ -25,7 +25,9 @@ export function MerkleRootPostingSection({
 }: MerkleRootPostingSectionProps) {
   return (
     <SectionCard
-      title="Merkle Output Parser & Root Posting"
+      step="Step 4"
+      title="Post Merkle Root Onchain"
+      description="Paste the generated Merkle output JSON. The root is parsed automatically and then submitted to your KarmaAirdrop contract. You must connect the owner wallet before clicking the button."
       className="lg:col-span-2"
     >
       <textarea
@@ -50,6 +52,11 @@ export function MerkleRootPostingSection({
       >
         Post Merkle Root Onchain
       </Button>
+      <p className="mt-2 text-13 text-neutral-60">
+        If you see <b>Ownable: caller is not the owner</b>, switch to the owner
+        wallet (the same address you set as <code>_owner</code> at deploy time)
+        and try again.
+      </p>
     </SectionCard>
   )
 }

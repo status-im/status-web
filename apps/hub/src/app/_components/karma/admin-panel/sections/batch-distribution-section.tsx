@@ -16,7 +16,11 @@ export function BatchDistributionSection({
   onSubmit,
 }: BatchDistributionSectionProps) {
   return (
-    <SectionCard title="Batch Distribute Rewards" className="lg:col-span-2">
+    <SectionCard
+      title="Optional: Batch Distribute Rewards"
+      description="Admin action. Submit multiple mint transactions from a JSON list of recipient and amount."
+      className="lg:col-span-2"
+    >
       <textarea
         className="mb-2 min-h-28 w-full rounded-8 border border-neutral-20 px-3 py-2 font-mono text-13"
         value={batchJson}

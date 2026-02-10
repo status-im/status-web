@@ -20,7 +20,10 @@ export function MintRewardSection({
   onSubmit,
 }: MintRewardSectionProps) {
   return (
-    <SectionCard title="Mint Reward">
+    <SectionCard
+      title="Optional: Mint Reward"
+      description="Admin action. Mint rewards to a recipient address before distribution/claim workflows."
+    >
       <div className="flex flex-col gap-2">
         <input
           className="rounded-8 border border-neutral-20 px-3 py-2 text-13"

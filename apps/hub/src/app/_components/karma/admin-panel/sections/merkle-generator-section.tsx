@@ -22,7 +22,12 @@ export function MerkleGeneratorSection({
   onGenerate,
 }: MerkleGeneratorSectionProps) {
   return (
-    <SectionCard title="Merkle Tree Generator" className="lg:col-span-2">
+    <SectionCard
+      step="Step 3"
+      title="Generate Merkle Tree And Proofs"
+      description="Paste recipient entries as JSON. Each entry must have account and amount. Start index is usually 0."
+      className="lg:col-span-2"
+    >
       <textarea
         className="mb-2 min-h-28 w-full rounded-8 border border-neutral-20 px-3 py-2 font-mono text-13"
         placeholder='[{"account":"0x...","amount":"1000000000000000000"}]'

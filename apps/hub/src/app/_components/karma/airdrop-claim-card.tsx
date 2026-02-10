@@ -5,12 +5,15 @@ import { useMemo, useState } from 'react'
 import { useToast } from '@status-im/components'
 import {
   claimAirdrop,
+  getAirdropMerkleRoot,
   isAirdropClaimed,
   KARMA_CHAIN_IDS,
   parseMerkleTreeOutput,
+  verifyMerkleProof,
 } from '@status-im/karma-sdk'
 import { Button } from '@status-im/status-network/components'
 import { useQueryClient } from '@tanstack/react-query'
+import { erc20Abi } from 'viem'
 import { useAccount, usePublicClient, useWalletClient } from 'wagmi'
 
 import { isAddress } from '~utils/karma-input'
@@ -18,6 +21,39 @@ import { isAddress } from '~utils/karma-input'
 type AirdropClaimCardProps = {
   airdropAddress: string
 }
+
+const ZERO_BYTES32 =
+  '0x0000000000000000000000000000000000000000000000000000000000000000'
+
+const pausableAbi = [
+  {
+    inputs: [],
+    name: 'paused',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+] as const
+
+const tokenGetterAbi = [
+  {
+    inputs: [],
+    name: 'token',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+] as const
+
+const tokenUpperGetterAbi = [
+  {
+    inputs: [],
+    name: 'TOKEN',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+] as const
 
 export function AirdropClaimCard({ airdropAddress }: AirdropClaimCardProps) {
   const { address, isConnected } = useAccount()
@@ -32,6 +68,7 @@ export function AirdropClaimCard({ airdropAddress }: AirdropClaimCardProps) {
 
   const [merkleJson, setMerkleJson] = useState('')
   const [isPending, setIsPending] = useState(false)
+  const [preflightNote, setPreflightNote] = useState('')
 
   const parsed = useMemo(() => {
     if (!merkleJson.trim()) return { tree: null, error: '' }
@@ -76,10 +113,99 @@ export function AirdropClaimCard({ airdropAddress }: AirdropClaimCardProps) {
       return
     }
 
+    setPreflightNote('')
     setIsPending(true)
     try {
+      const typedAirdropAddress = airdropAddress as `0x${string}`
+      const onchainRoot = await getAirdropMerkleRoot(publicClient, {
+        airdropAddress: typedAirdropAddress,
+      })
+      if (onchainRoot.toLowerCase() === ZERO_BYTES32) {
+        throw new Error(
+          'Merkle root is not set onchain. Complete Step 4 first with owner wallet.'
+        )
+      }
+      if (onchainRoot.toLowerCase() !== parsed.tree.root.toLowerCase()) {
+        throw new Error(
+          'Merkle root mismatch. Post the root from this JSON in Step 4, then try claim again.'
+        )
+      }
+
+      const isProofValid = verifyMerkleProof(
+        {
+          index: myEntry.index,
+          account: myEntry.account,
+          amount: myEntry.amount,
+        },
+        myEntry.proof,
+        onchainRoot
+      )
+      if (!isProofValid) {
+        throw new Error(
+          'Invalid proof for current onchain root. Regenerate Step 3 output and repost root in Step 4.'
+        )
+      }
+
+      let isPaused: boolean | null = null
+      try {
+        isPaused = await publicClient.readContract({
+          address: typedAirdropAddress,
+          abi: pausableAbi,
+          functionName: 'paused',
+        })
+      } catch {
+        // Some deployments may not expose paused().
+      }
+      if (isPaused) {
+        throw new Error(
+          'Airdrop contract is paused. Call unpause() from owner wallet in Remix, then try claim again.'
+        )
+      }
+
+      let tokenAddress: `0x${string}` | null = null
+      try {
+        tokenAddress = await publicClient.readContract({
+          address: typedAirdropAddress,
+          abi: tokenGetterAbi,
+          functionName: 'token',
+        })
+      } catch {
+        try {
+          tokenAddress = await publicClient.readContract({
+            address: typedAirdropAddress,
+            abi: tokenUpperGetterAbi,
+            functionName: 'TOKEN',
+          })
+        } catch {
+          setPreflightNote(
+            'Token balance pre-check skipped because token()/TOKEN() is unavailable on this contract ABI. If claim fails, verify token funding manually.'
+          )
+        }
+      }
+
+      if (tokenAddress) {
+        try {
+          const tokenBalance = await publicClient.readContract({
+            address: tokenAddress,
+            abi: erc20Abi,
+            functionName: 'balanceOf',
+            args: [typedAirdropAddress],
+          })
+          if (tokenBalance < myEntry.amount) {
+            throw new Error(
+              `Airdrop contract token balance is too low. Required: ${myEntry.amount.toString()}, current: ${tokenBalance.toString()}`
+            )
+          }
+        } catch (error) {
+          if (error instanceof Error) {
+            throw error
+          }
+          throw new Error('Failed to read token balance for airdrop contract.')
+        }
+      }
+
       const alreadyClaimed = await isAirdropClaimed(publicClient, {
-        airdropAddress,
+        airdropAddress: typedAirdropAddress,
         index: myEntry.index,
       })
 
@@ -89,7 +215,7 @@ export function AirdropClaimCard({ airdropAddress }: AirdropClaimCardProps) {
       }
 
       const txHash = await claimAirdrop(walletClient, publicClient, {
-        airdropAddress,
+        airdropAddress: typedAirdropAddress,
         index: myEntry.index,
         account: myEntry.account,
         amount: myEntry.amount,
@@ -115,7 +241,8 @@ export function AirdropClaimCard({ airdropAddress }: AirdropClaimCardProps) {
         <div className="flex w-full flex-col gap-0.5">
           <p className="text-15 font-regular text-neutral-50">Karma Airdrop</p>
           <p className="text-13 text-neutral-70">
-            Parse merkle JSON and claim your reward onchain.
+            Paste the Merkle output JSON from Step 3, then claim from the
+            recipient wallet.
           </p>
         </div>
 
@@ -131,10 +258,13 @@ export function AirdropClaimCard({ airdropAddress }: AirdropClaimCardProps) {
           ) : (
             <span className="text-13 text-neutral-70">
               {myEntry
-                ? `Claimable amount: ${myEntry.amount.toString()}`
+                ? `Claimable amount: ${myEntry.amount.toString()} (index: ${myEntry.index.toString()}, proof items: ${myEntry.proof.length})`
                 : 'No claimable entry detected for connected wallet'}
             </span>
           )}
+          {preflightNote ? (
+            <span className="text-13 text-neutral-70">{preflightNote}</span>
+          ) : null}
           <Button
             variant="primary"
             size="40"
