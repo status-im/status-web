@@ -50,6 +50,7 @@ export async function generateMetadata({
   const { locale } = await params
 
   return MetadataFn({
+    pathname: '/',
     metadataBase: new URL('https://hub.status.network'),
     locale,
   })
@@ -64,7 +65,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params
 
   if (!hasLocale(routing.locales, locale)) {
-    redirect('/en/404')
+    redirect('/404')
   }
 
   setRequestLocale(locale)

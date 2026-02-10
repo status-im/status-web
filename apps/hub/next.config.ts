@@ -1,11 +1,15 @@
 import createNextIntlPlugin from 'next-intl/plugin'
 
+import { serverEnv } from './src/app/_constants/env.server.mjs'
+
 import type { NextConfig } from 'next'
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
 const nextConfig: NextConfig = {
-  output: 'export',
+  // Only enable static export for builds, not dev mode
+  // This allows middleware to work in dev mode for locale routing
+  ...(serverEnv.NODE_ENV === 'production' && { output: 'export' }),
 
   /* config options here */
   transpilePackages: [

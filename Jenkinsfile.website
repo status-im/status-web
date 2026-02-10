@@ -34,12 +34,12 @@ pipeline {
     )
     string(
       name: 'NEXT_PUBLIC_STATUS_NETWORK_API_URL',
-      description: 'Name of app from apps folder.',
+      description: 'Status Network API URL',
       defaultValue: params.NEXT_PUBLIC_STATUS_NETWORK_API_URL ?: 'https://api-dev.status.network/api/v1'
     )
     string(
       name: 'NEXT_PUBLIC_STATUS_API_URL',
-      description: 'Name of app from apps folder.',
+      description: 'Status API URL',
       defaultValue: params.NEXT_PUBLIC_STATUS_API_URL ?: 'https://api-dev.status.network'
     )
   }

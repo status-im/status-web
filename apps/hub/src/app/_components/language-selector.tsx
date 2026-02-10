@@ -51,9 +51,13 @@ export const LanguageSelector = (props: Props) => {
   const handleValueChange = (newLocale: string) => {
     if (newLocale === routing.defaultLocale) {
       // For default locale (en), navigate without prefix
+      // usePathname() from next-intl returns pathname without locale prefix
+      // (e.g., '/discover' even when on '/ko/discover')
+      // So we can navigate directly to it using Next.js router
       nextRouter.replace(pathname)
     } else {
       // For other locales, use next-intl's router to add prefix
+      // This will construct /ko/pathname correctly from the locale-free pathname
       router.replace(pathname, { locale: newLocale as 'en' | 'ko' })
     }
   }

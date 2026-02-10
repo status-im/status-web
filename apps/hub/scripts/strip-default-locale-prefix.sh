@@ -42,22 +42,35 @@ cp -r "$OUT_DIR/$LOCALE"/* "$OUT_DIR/"
 echo "🔧 Rewriting links..."
 
 # Process all files at root and in _next (skip other locale dirs like /ko)
-find "$OUT_DIR" -type f \( -name "*.html" -o -name "*.js" -o -name "*.json" \) \
+find "$OUT_DIR" -type f \( -name "*.html" -o -name "*.js" -o -name "*.json" -o -name "*.txt" \) \
   ! -path "$OUT_DIR/??/*" \
   -exec perl -pi -e "
-    # HTML href attributes
+    # Match hub.status.network/en/ URLs (our domain - full URLs in meta tags, etc.)
+    s|https://hub\.status\.network/${LOCALE}/|https://hub.status.network/|g;
+    s|https://hub\.status\.network/${LOCALE}\"|https://hub.status.network/\"|g;
+    s|https://hub\.status\.network/${LOCALE}'|https://hub.status.network/'|g;
+    s|https://hub\.status\.network/${LOCALE}<|https://hub.status.network/<|g;
+    s|hub\.status\.network/${LOCALE}/|hub.status.network/|g;
+    s|hub\.status\.network/${LOCALE}\"|hub.status.network/\"|g;
+    # HTML href attributes - only match internal URLs (starting with /)
     s|href=\"/${LOCALE}/|href=\"/|g;
     s|href=\"/${LOCALE}\"|href=\"/\"|g;
     s|href='/${LOCALE}/|href='/|g;
     s|href='/${LOCALE}'|href='/'|g;
-    # Double-quoted strings (JS/JSON)
-    s|\"/${LOCALE}/|\"/|g;
-    s|\"/${LOCALE}\"|\"\/\"|g;
-    # Single-quoted strings (JS)
-    s|'/${LOCALE}/|'/|g;
-    s|'/${LOCALE}'|'/'|g;
-    # Escaped quotes in JSON (e.g., \"/en/\")
-    s|\\\\\"/${LOCALE}/|\\\\\"/|g;
+    # Internal paths in double quotes - match \"/en/ but NOT https://.../en/
+    # Match if preceded by common delimiters that indicate internal paths
+    s|([\s,:=\(])\"${LOCALE}/|\1\"/|g;
+    s|([\s,:=\(])\"${LOCALE}\"|\1\"/\"|g;
+    # Match \"/en/ at start of string (common in JSON)
+    s|^\"${LOCALE}/|\"/|g;
+    s|^\"${LOCALE}\"|\"/\"|g;
+    # Single-quoted strings - only internal URLs
+    s|([\s,:=\(])'${LOCALE}/|\1'/|g;
+    s|([\s,:=\(])'${LOCALE}'|\1'/'|g;
+    s|^'${LOCALE}/|'/|g;
+    s|^'${LOCALE}'|'/'|g;
+    # Escaped quotes in JSON (e.g., \"/en/\") - only internal paths
+    s|\\\\\"${LOCALE}/|\\\\\"/|g;
   " {} +
 
 # 3. Fix sitemap URLs
@@ -91,6 +104,11 @@ fi
 
 # 5. Remove the /en directory
 echo "🗑️  Removing /${LOCALE}/..."
+# Extra safety: ensure OUT_DIR is not empty or whitespace-only before removing
+if [[ -z "${OUT_DIR//[[:space:]]/}" ]]; then
+  echo "❌ OUT_DIR is empty or whitespace-only; refusing to remove locale directory"
+  exit 1
+fi
 rm -rf "${OUT_DIR:?}/$LOCALE"
 
 echo "✅ Done!"
