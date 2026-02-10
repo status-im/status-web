@@ -1,12 +1,12 @@
-import type { PublicClient } from 'viem'
-
 import { karmaTierAbi } from '../abis/karma-tier'
-import type { KarmaTier } from '../types'
 import { getKarmaAddresses } from './addresses'
+
+import type { KarmaTier } from '../types'
+import type { PublicClient } from 'viem'
 
 export async function getKarmaTiers(
   client: PublicClient,
-  params?: { chainId?: number }
+  params?: { chainId?: number },
 ): Promise<KarmaTier[]> {
   const chainId = params?.chainId ?? client.chain?.id
   if (!chainId) throw new Error('Chain ID required')
@@ -41,7 +41,7 @@ export async function getKarmaTiers(
 
 export async function getTierIdByBalance(
   client: PublicClient,
-  params: { balance: bigint; chainId?: number }
+  params: { balance: bigint; chainId?: number },
 ): Promise<number> {
   const chainId = params.chainId ?? client.chain?.id
   if (!chainId) throw new Error('Chain ID required')

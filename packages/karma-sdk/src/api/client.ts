@@ -35,7 +35,7 @@ export class KarmaApiError extends Error {
   constructor(
     public readonly status: number,
     public readonly statusText: string,
-    public readonly url: string
+    public readonly url: string,
   ) {
     super(`Karma API error ${status}: ${statusText} (${url})`)
     this.name = 'KarmaApiError'

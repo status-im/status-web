@@ -1,10 +1,10 @@
-import type { PublicClient, WalletClient } from 'viem'
-
 import { karmaAirdropAbi } from '../abis/karma-airdrop'
+
+import type { PublicClient, WalletClient } from 'viem'
 
 export async function isAirdropClaimed(
   client: PublicClient,
-  params: { airdropAddress: `0x${string}`; index: bigint }
+  params: { airdropAddress: `0x${string}`; index: bigint },
 ): Promise<boolean> {
   return client.readContract({
     address: params.airdropAddress,
@@ -23,7 +23,7 @@ export async function claimAirdrop(
     account: `0x${string}`
     amount: bigint
     proof: `0x${string}`[]
-  }
+  },
 ): Promise<`0x${string}`> {
   const { request } = await publicClient.simulateContract({
     address: params.airdropAddress,
@@ -38,7 +38,7 @@ export async function claimAirdrop(
 
 export async function getAirdropMerkleRoot(
   client: PublicClient,
-  params: { airdropAddress: `0x${string}` }
+  params: { airdropAddress: `0x${string}` },
 ): Promise<`0x${string}`> {
   return client.readContract({
     address: params.airdropAddress,
@@ -54,7 +54,7 @@ export async function setAirdropMerkleRoot(
     airdropAddress: `0x${string}`
     root: `0x${string}`
     account: `0x${string}`
-  }
+  },
 ): Promise<`0x${string}`> {
   try {
     const { request } = await publicClient.simulateContract({
@@ -66,8 +66,7 @@ export async function setAirdropMerkleRoot(
     })
     return walletClient.writeContract(request)
   } catch (error) {
-    const message =
-      error instanceof Error ? error.message.toLowerCase() : ''
+    const message = error instanceof Error ? error.message.toLowerCase() : ''
     const isMissingSelector =
       message.includes('function') &&
       (message.includes('does not exist') ||

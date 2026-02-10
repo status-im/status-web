@@ -1,7 +1,7 @@
-import type { PublicClient, WalletClient } from 'viem'
-
 import { rewardsDistributorAbi } from '../abis/rewards-distributor'
 import { getKarmaAddresses } from './addresses'
+
+import type { PublicClient, WalletClient } from 'viem'
 
 export async function getRewardsBalance(
   client: PublicClient,

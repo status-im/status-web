@@ -15,19 +15,18 @@ export function hashLeaf(entry: AirdropEntry): `0x${string}` {
   return keccak256(
     encodePacked(
       ['uint256', 'address', 'uint256'],
-      [entry.index, entry.account, entry.amount]
-    )
+      [entry.index, entry.account, entry.amount],
+    ),
   )
 }
 
 function hashPair(a: `0x${string}`, b: `0x${string}`): `0x${string}` {
-  const [left, right] =
-    a.toLowerCase() < b.toLowerCase() ? [a, b] : [b, a]
+  const [left, right] = a.toLowerCase() < b.toLowerCase() ? [a, b] : [b, a]
   return keccak256(
     encodePacked(
       ['bytes32', 'bytes32'],
-      [left as `0x${string}`, right as `0x${string}`]
-    )
+      [left as `0x${string}`, right as `0x${string}`],
+    ),
   )
 }
 
@@ -73,7 +72,7 @@ export function buildMerkleTree(entries: AirdropEntry[]): MerkleTreeOutput {
       }
 
       return { ...entry, proof }
-    }
+    },
   )
 
   return { root, entries: result }
