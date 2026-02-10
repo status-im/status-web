@@ -1,10 +1,9 @@
+import type { PublicClient, WalletClient } from 'viem'
+
 import { karmaAirdropAbi } from '../abis/karma-airdrop'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyClient = any
-
 export async function isAirdropClaimed(
-  client: AnyClient,
+  client: PublicClient,
   params: { airdropAddress: `0x${string}`; index: bigint }
 ): Promise<boolean> {
   return client.readContract({
@@ -16,8 +15,8 @@ export async function isAirdropClaimed(
 }
 
 export async function claimAirdrop(
-  walletClient: AnyClient,
-  publicClient: AnyClient,
+  walletClient: WalletClient,
+  publicClient: PublicClient,
   params: {
     airdropAddress: `0x${string}`
     index: bigint
@@ -38,7 +37,7 @@ export async function claimAirdrop(
 }
 
 export async function getAirdropMerkleRoot(
-  client: AnyClient,
+  client: PublicClient,
   params: { airdropAddress: `0x${string}` }
 ): Promise<`0x${string}`> {
   return client.readContract({
@@ -49,8 +48,8 @@ export async function getAirdropMerkleRoot(
 }
 
 export async function setAirdropMerkleRoot(
-  walletClient: AnyClient,
-  publicClient: AnyClient,
+  walletClient: WalletClient,
+  publicClient: PublicClient,
   params: {
     airdropAddress: `0x${string}`
     root: `0x${string}`
