@@ -24,7 +24,10 @@ export function SetRewardSection({
   onSubmit,
 }: SetRewardSectionProps) {
   return (
-    <SectionCard title="Set Reward (Karma)">
+    <SectionCard
+      title="Optional: Set Reward (Karma)"
+      description="Admin action. Configure reward amount and duration on the Karma contract."
+    >
       <div className="flex flex-col gap-2">
         <input
           className="rounded-8 border border-neutral-20 px-3 py-2 text-13"

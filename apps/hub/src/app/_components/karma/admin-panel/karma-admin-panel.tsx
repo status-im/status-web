@@ -252,12 +252,17 @@ export function KarmaPartnersPanel({
     <section className="rounded-8 bg-neutral-10 p-6">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-19 font-semibold text-neutral-100">
-          Karma Partners Test
+          Step 3 & Step 4: Build And Publish Merkle Data
         </h3>
         <span className="text-13 text-neutral-50">
           {address ? `Connected: ${address}` : 'Wallet not connected'}
         </span>
       </div>
+
+      <p className="mb-4 text-13 text-neutral-60">
+        Step 3 generates Merkle root and per-user proofs. Step 4 posts the root
+        to your deployed KarmaAirdrop contract.
+      </p>
 
       <div className="mb-6 grid grid-cols-1 gap-2 text-13 text-neutral-70 lg:grid-cols-2">
         <p>
@@ -272,33 +277,6 @@ export function KarmaPartnersPanel({
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <SetRewardSection
-          rewardDistributor={rewardDistributor}
-          rewardAmount={rewardAmount}
-          rewardDuration={rewardDuration}
-          isPending={isPending}
-          onRewardDistributorChange={setRewardDistributor}
-          onRewardAmountChange={setRewardAmount}
-          onRewardDurationChange={setRewardDuration}
-          onSubmit={handleSetReward}
-        />
-
-        <MintRewardSection
-          mintRecipient={mintRecipient}
-          mintAmount={mintAmount}
-          isPending={isPending}
-          onMintRecipientChange={setMintRecipient}
-          onMintAmountChange={setMintAmount}
-          onSubmit={handleMintReward}
-        />
-
-        <BatchDistributionSection
-          batchJson={batchJson}
-          isPending={isPending}
-          onBatchJsonChange={setBatchJson}
-          onSubmit={handleBatchDistribute}
-        />
-
         <MerkleGeneratorSection
           merkleEntriesJson={merkleEntriesJson}
           merkleStartIndex={merkleStartIndex}
@@ -319,6 +297,44 @@ export function KarmaPartnersPanel({
           onRootChange={setMerkleRootToPost}
           onSubmit={handlePostMerkleRoot}
         />
+      </div>
+
+      <div className="mt-8 border-t border-neutral-20 pt-6">
+        <h4 className="text-15 font-semibold text-neutral-100">
+          Optional Admin Actions
+        </h4>
+        <p className="mt-1 text-13 text-neutral-60">
+          These are not required for the basic partner simulation flow.
+        </p>
+
+        <div className="mt-4 grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <SetRewardSection
+            rewardDistributor={rewardDistributor}
+            rewardAmount={rewardAmount}
+            rewardDuration={rewardDuration}
+            isPending={isPending}
+            onRewardDistributorChange={setRewardDistributor}
+            onRewardAmountChange={setRewardAmount}
+            onRewardDurationChange={setRewardDuration}
+            onSubmit={handleSetReward}
+          />
+
+          <MintRewardSection
+            mintRecipient={mintRecipient}
+            mintAmount={mintAmount}
+            isPending={isPending}
+            onMintRecipientChange={setMintRecipient}
+            onMintAmountChange={setMintAmount}
+            onSubmit={handleMintReward}
+          />
+
+          <BatchDistributionSection
+            batchJson={batchJson}
+            isPending={isPending}
+            onBatchJsonChange={setBatchJson}
+            onSubmit={handleBatchDistribute}
+          />
+        </div>
       </div>
     </section>
   )
