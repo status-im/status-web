@@ -8,5 +8,5 @@ export type RewardSupplyData = {
   availableSupply: bigint
   mintedSupply: bigint
   totalRewardsSupply: bigint
-  distributors: `0x${string}`[]
+  distributors: readonly `0x${string}`[]
 }
