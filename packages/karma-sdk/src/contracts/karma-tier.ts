@@ -1,12 +1,11 @@
+import type { PublicClient } from 'viem'
+
 import { karmaTierAbi } from '../abis/karma-tier'
 import type { KarmaTier } from '../types'
 import { getKarmaAddresses } from './addresses'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyClient = any
-
 export async function getKarmaTiers(
-  client: AnyClient,
+  client: PublicClient,
   params?: { chainId?: number }
 ): Promise<KarmaTier[]> {
   const chainId = params?.chainId ?? client.chain?.id
@@ -41,7 +40,7 @@ export async function getKarmaTiers(
 }
 
 export async function getTierIdByBalance(
-  client: AnyClient,
+  client: PublicClient,
   params: { balance: bigint; chainId?: number }
 ): Promise<number> {
   const chainId = params.chainId ?? client.chain?.id

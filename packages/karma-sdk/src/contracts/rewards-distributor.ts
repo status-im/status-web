@@ -1,12 +1,11 @@
+import type { PublicClient, WalletClient } from 'viem'
+
 import { rewardsDistributorAbi } from '../abis/rewards-distributor'
 import { getKarmaAddresses } from './addresses'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyClient = any
-
 export async function getRewardsBalance(
-  client: AnyClient,
-  params: { account: `0x${string}`; chainId?: number }
+  client: PublicClient,
+  params: { account: `0x${string}`; chainId?: number },
 ): Promise<bigint> {
   const chainId = params.chainId ?? client.chain?.id
   if (!chainId) throw new Error('Chain ID required')
@@ -21,8 +20,8 @@ export async function getRewardsBalance(
 }
 
 export async function getRewardsBalanceOfAccount(
-  client: AnyClient,
-  params: { account: `0x${string}`; chainId?: number }
+  client: PublicClient,
+  params: { account: `0x${string}`; chainId?: number },
 ): Promise<bigint> {
   const chainId = params.chainId ?? client.chain?.id
   if (!chainId) throw new Error('Chain ID required')
@@ -37,9 +36,9 @@ export async function getRewardsBalanceOfAccount(
 }
 
 export async function redeemRewards(
-  walletClient: AnyClient,
-  publicClient: AnyClient,
-  params: { account: `0x${string}`; chainId?: number }
+  walletClient: WalletClient,
+  publicClient: PublicClient,
+  params: { account: `0x${string}`; chainId?: number },
 ): Promise<`0x${string}`> {
   const chainId = params.chainId ?? walletClient.chain?.id
   if (!chainId) throw new Error('Chain ID required')
@@ -57,8 +56,8 @@ export async function redeemRewards(
 }
 
 export async function getAvailableSupply(
-  client: AnyClient,
-  params?: { chainId?: number }
+  client: PublicClient,
+  params?: { chainId?: number },
 ): Promise<bigint> {
   const chainId = params?.chainId ?? client.chain?.id
   if (!chainId) throw new Error('Chain ID required')
@@ -72,8 +71,8 @@ export async function getAvailableSupply(
 }
 
 export async function getMintedSupply(
-  client: AnyClient,
-  params?: { chainId?: number }
+  client: PublicClient,
+  params?: { chainId?: number },
 ): Promise<bigint> {
   const chainId = params?.chainId ?? client.chain?.id
   if (!chainId) throw new Error('Chain ID required')
@@ -87,8 +86,8 @@ export async function getMintedSupply(
 }
 
 export async function getTotalRewardsSupply(
-  client: AnyClient,
-  params?: { chainId?: number }
+  client: PublicClient,
+  params?: { chainId?: number },
 ): Promise<bigint> {
   const chainId = params?.chainId ?? client.chain?.id
   if (!chainId) throw new Error('Chain ID required')
@@ -102,13 +101,13 @@ export async function getTotalRewardsSupply(
 }
 
 export async function setRewardsSupplier(
-  walletClient: AnyClient,
-  publicClient: AnyClient,
+  walletClient: WalletClient,
+  publicClient: PublicClient,
   params: {
     rewardsSupplier: `0x${string}`
     account: `0x${string}`
     chainId?: number
-  }
+  },
 ): Promise<`0x${string}`> {
   const chainId = params.chainId ?? walletClient.chain?.id
   if (!chainId) throw new Error('Chain ID required')
@@ -126,14 +125,14 @@ export async function setRewardsSupplier(
 }
 
 export async function setReward(
-  walletClient: AnyClient,
-  publicClient: AnyClient,
+  walletClient: WalletClient,
+  publicClient: PublicClient,
   params: {
     amount: bigint
     duration: bigint
     account: `0x${string}`
     chainId?: number
-  }
+  },
 ): Promise<`0x${string}`> {
   const chainId = params.chainId ?? walletClient.chain?.id
   if (!chainId) throw new Error('Chain ID required')
@@ -151,14 +150,14 @@ export async function setReward(
 }
 
 export async function mintRewards(
-  walletClient: AnyClient,
-  publicClient: AnyClient,
+  walletClient: WalletClient,
+  publicClient: PublicClient,
   params: {
     recipient: `0x${string}`
     amount: bigint
     account: `0x${string}`
     chainId?: number
-  }
+  },
 ): Promise<`0x${string}`> {
   const chainId = params.chainId ?? walletClient.chain?.id
   if (!chainId) throw new Error('Chain ID required')
@@ -176,13 +175,13 @@ export async function mintRewards(
 }
 
 export async function distributeRewardsBatch(
-  walletClient: AnyClient,
-  publicClient: AnyClient,
+  walletClient: WalletClient,
+  publicClient: PublicClient,
   params: {
     distributions: Array<{ recipient: `0x${string}`; amount: bigint }>
     account: `0x${string}`
     chainId?: number
-  }
+  },
 ): Promise<`0x${string}`[]> {
   const txHashes: `0x${string}`[] = []
 

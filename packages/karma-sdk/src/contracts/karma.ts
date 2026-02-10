@@ -1,11 +1,10 @@
+import type { PublicClient, WalletClient } from 'viem'
+
 import { karmaAbi } from '../abis/karma'
 import { getKarmaAddresses } from './addresses'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyClient = any
-
 export async function getKarmaBalance(
-  client: AnyClient,
+  client: PublicClient,
   params: { account: `0x${string}`; chainId?: number }
 ): Promise<bigint> {
   const chainId = params.chainId ?? client.chain?.id
@@ -21,7 +20,7 @@ export async function getKarmaBalance(
 }
 
 export async function getActualKarmaBalance(
-  client: AnyClient,
+  client: PublicClient,
   params: { account: `0x${string}`; chainId?: number }
 ): Promise<bigint> {
   const chainId = params.chainId ?? client.chain?.id
@@ -37,7 +36,7 @@ export async function getActualKarmaBalance(
 }
 
 export async function getKarmaTotalSupply(
-  client: AnyClient,
+  client: PublicClient,
   params?: { chainId?: number }
 ): Promise<bigint> {
   const chainId = params?.chainId ?? client.chain?.id
@@ -52,9 +51,9 @@ export async function getKarmaTotalSupply(
 }
 
 export async function getRewardDistributors(
-  client: AnyClient,
+  client: PublicClient,
   params?: { chainId?: number }
-): Promise<`0x${string}`[]> {
+): Promise<readonly `0x${string}`[]> {
   const chainId = params?.chainId ?? client.chain?.id
   if (!chainId) throw new Error('Chain ID required')
   const addresses = getKarmaAddresses(chainId)
@@ -67,8 +66,8 @@ export async function getRewardDistributors(
 }
 
 export async function setKarmaReward(
-  walletClient: AnyClient,
-  publicClient: AnyClient,
+  walletClient: WalletClient,
+  publicClient: PublicClient,
   params: {
     rewardsDistributor: `0x${string}`
     amount: bigint
