@@ -108,10 +108,12 @@ To contribute changes via a pull request:
 > [!NOTE]
 > Keep your fork in sync before starting new work:
 >
+> ```bash
 > git fetch upstream
 > git checkout main
 > git merge upstream/main
 > git push origin main
+> ```
 
 ## Storybook
 
