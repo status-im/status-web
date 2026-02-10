@@ -105,12 +105,13 @@ To contribute changes via a pull request:
 
 4.  Open a pull request on GitHub: go to your fork, click "Compare & pull request" for your branch, and open the PR against `status-im/status-web` (base: `main`).
 
-> [!NOTE] Keep your fork in sync before starting new work:
+> [!NOTE]
+> Keep your fork in sync before starting new work:
 >
->        git fetch upstream
->        git checkout main
->        git merge upstream/main
->        git push origin main
+> git fetch upstream
+> git checkout main
+> git merge upstream/main
+> git push origin main
 
 ## Storybook
 
