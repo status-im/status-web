@@ -3,7 +3,7 @@
 import * as Select from '@radix-ui/react-select'
 import { CheckIcon, ChevronDownIcon } from '@status-im/icons/20'
 import { cva, cx } from 'cva'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter as useNextRouter } from 'next/navigation'
 
 import { usePathname, useRouter } from '~/i18n/navigation'
 
@@ -40,6 +40,7 @@ export const LanguageSelector = (props: Props) => {
   const { size } = props
 
   const router = useRouter()
+  const nextRouter = useNextRouter()
   const pathname = usePathname()
   const params = useParams()
   const currentLocale = (params['locale'] as string) || routing.defaultLocale
@@ -48,8 +49,17 @@ export const LanguageSelector = (props: Props) => {
     languages.find(lang => lang.value === currentLocale) || languages[0]
 
   const handleValueChange = (newLocale: string) => {
-    // Use next-intl's router with locale option for proper locale switching
-    router.replace(pathname, { locale: newLocale as 'en' | 'ko' })
+    if (newLocale === routing.defaultLocale) {
+      // For default locale (en), navigate without prefix
+      // usePathname() from next-intl returns pathname without locale prefix
+      // (e.g., '/discover' even when on '/ko/discover')
+      // So we can navigate directly to it using Next.js router
+      nextRouter.replace(pathname)
+    } else {
+      // For other locales, use next-intl's router to add prefix
+      // This will construct /ko/pathname correctly from the locale-free pathname
+      router.replace(pathname, { locale: newLocale as 'en' | 'ko' })
+    }
   }
 
   return (
