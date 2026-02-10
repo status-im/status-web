@@ -110,7 +110,7 @@ export function AirdropClaimCard({ airdropAddress }: AirdropClaimCardProps) {
   }
 
   return (
-    <div className="min-h-[200px] w-full overflow-hidden rounded-20 border border-neutral-10 bg-white-100">
+    <div className="min-h-[200px] w-full overflow-hidden rounded-8 border border-neutral-10 bg-white-100">
       <div className="flex h-full flex-col items-start p-4">
         <div className="flex w-full flex-col gap-0.5">
           <p className="text-15 font-regular text-neutral-50">Karma Airdrop</p>

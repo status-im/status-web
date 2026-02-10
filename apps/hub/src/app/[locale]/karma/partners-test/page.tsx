@@ -14,13 +14,7 @@ export default function KarmaPartnersTestPage() {
     <HubLayout>
       <div className="mx-auto flex size-full flex-col gap-4 p-4 lg:gap-8 lg:p-8">
         <div className="flex flex-col gap-2">
-          <h1 className="text-27 font-bold text-neutral-100 lg:text-64">
-            Karma Partners Test
-          </h1>
-          <p className="text-13 font-regular text-neutral-100 lg:text-19">
-            Partner administrative tasks: Merkle tree generation, proof
-            creation, and smart contract interactions.
-          </p>
+          <h1 className="text-27 font-semibold">Admin Panel</h1>
           <Link
             href="/karma"
             className="text-13 font-medium text-neutral-100 underline"
