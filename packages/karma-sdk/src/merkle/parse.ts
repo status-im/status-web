@@ -15,7 +15,10 @@ function asBigInt(value: unknown, fieldName: string): bigint {
   throw new Error(`Invalid bigint field: ${fieldName}`)
 }
 
-function parseEntry(value: unknown, index: number): AirdropEntry & {
+function parseEntry(
+  value: unknown,
+  index: number,
+): AirdropEntry & {
   proof: `0x${string}`[]
 } {
   if (!value || typeof value !== 'object') {
@@ -43,7 +46,7 @@ function parseEntry(value: unknown, index: number): AirdropEntry & {
 }
 
 export function parseMerkleTreeOutput(
-  raw: string | MerkleTreeOutput
+  raw: string | MerkleTreeOutput,
 ): MerkleTreeOutput {
   const data: unknown = typeof raw === 'string' ? JSON.parse(raw) : raw
 
@@ -81,6 +84,6 @@ export function serializeMerkleTreeOutput(tree: MerkleTreeOutput): string {
       })),
     },
     null,
-    2
+    2,
   )
 }

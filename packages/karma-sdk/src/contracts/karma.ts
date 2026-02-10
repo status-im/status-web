@@ -1,11 +1,11 @@
-import type { PublicClient, WalletClient } from 'viem'
-
 import { karmaAbi } from '../abis/karma'
 import { getKarmaAddresses } from './addresses'
 
+import type { PublicClient, WalletClient } from 'viem'
+
 export async function getKarmaBalance(
   client: PublicClient,
-  params: { account: `0x${string}`; chainId?: number }
+  params: { account: `0x${string}`; chainId?: number },
 ): Promise<bigint> {
   const chainId = params.chainId ?? client.chain?.id
   if (!chainId) throw new Error('Chain ID required')
@@ -21,7 +21,7 @@ export async function getKarmaBalance(
 
 export async function getActualKarmaBalance(
   client: PublicClient,
-  params: { account: `0x${string}`; chainId?: number }
+  params: { account: `0x${string}`; chainId?: number },
 ): Promise<bigint> {
   const chainId = params.chainId ?? client.chain?.id
   if (!chainId) throw new Error('Chain ID required')
@@ -37,7 +37,7 @@ export async function getActualKarmaBalance(
 
 export async function getKarmaTotalSupply(
   client: PublicClient,
-  params?: { chainId?: number }
+  params?: { chainId?: number },
 ): Promise<bigint> {
   const chainId = params?.chainId ?? client.chain?.id
   if (!chainId) throw new Error('Chain ID required')
@@ -52,7 +52,7 @@ export async function getKarmaTotalSupply(
 
 export async function getRewardDistributors(
   client: PublicClient,
-  params?: { chainId?: number }
+  params?: { chainId?: number },
 ): Promise<readonly `0x${string}`[]> {
   const chainId = params?.chainId ?? client.chain?.id
   if (!chainId) throw new Error('Chain ID required')
@@ -74,7 +74,7 @@ export async function setKarmaReward(
     duration: bigint
     account: `0x${string}`
     chainId?: number
-  }
+  },
 ): Promise<`0x${string}`> {
   const chainId = params.chainId ?? walletClient.chain?.id
   if (!chainId) throw new Error('Chain ID required')

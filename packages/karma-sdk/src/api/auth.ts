@@ -3,7 +3,7 @@ import type { KarmaApiClient } from './client'
 
 export async function verifyMessage(
   client: KarmaApiClient,
-  params: { payload: string; signature: string }
+  params: { payload: string; signature: string },
 ): Promise<boolean> {
   try {
     await client.request('/auth/ethereum', {
@@ -17,11 +17,11 @@ export async function verifyMessage(
 }
 
 export async function getSession(
-  client: KarmaApiClient
+  client: KarmaApiClient,
 ): Promise<SiweSession | null> {
   try {
     const data = await client.request<{ result: SiweSession }>(
-      '/auth/me/session'
+      '/auth/me/session',
     )
     return data.result ?? null
   } catch {
@@ -39,24 +39,20 @@ export async function signOut(client: KarmaApiClient): Promise<boolean> {
 }
 
 export async function getCurrentUser(
-  client: KarmaApiClient
+  client: KarmaApiClient,
 ): Promise<CurrentUser> {
   const data = await client.request<{ result: CurrentUser }>('/auth/me')
   return data.result
 }
 
-export async function getQuota(
-  client: KarmaApiClient
-): Promise<QuotaResponse> {
-  const data = await client.request<{ result: QuotaResponse }>(
-    '/auth/me/quota'
-  )
+export async function getQuota(client: KarmaApiClient): Promise<QuotaResponse> {
+  const data = await client.request<{ result: QuotaResponse }>('/auth/me/quota')
   return data.result
 }
 
 export function createSiweAuthHandlers(
   client: KarmaApiClient,
-  options?: { onAuthenticated?: () => void; onSignedOut?: () => void }
+  options?: { onAuthenticated?: () => void; onSignedOut?: () => void },
 ) {
   return {
     verifyMessage: async (params: { message: string; signature: string }) => {
