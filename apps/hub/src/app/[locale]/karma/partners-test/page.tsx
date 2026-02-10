@@ -19,17 +19,6 @@ _owner: 0xYourWalletAddress
 _allowMerkleRootUpdate: true
 _defaultDelegatee: 0xYourWalletAddress`
 
-  const simulationTokenTemplate = `// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
-
-import "@openzeppelin/contracts@5.0.2/token/ERC20/ERC20.sol";
-
-contract PartnerSimulationToken is ERC20 {
-    constructor(uint256 initialSupply) ERC20("Partner Simulation Karma", "pKARMA") {
-        _mint(msg.sender, initialSupply);
-    }
-}`
-
   const simulationTokenDeployQuickCopy =
     'initialSupply: 1000000000000000000000 // 1000 tokens (18 decimals)'
 
@@ -304,84 +293,13 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
               1) Paste PartnerSimulationVotesToken code from the box below into
               <b> PartnerSimulationVotesToken.sol</b>.
               <br />
-              2) Copy the{' '}
-              <a
-                href="https://github.com/status-im/status-network-monorepo/blob/develop/status-network-contracts/src/KarmaAirdrop.sol"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline"
-              >
-                contract source on Github
-              </a>{' '}
-              or the template below into <b>KarmaAirdrop.sol</b>.
-              <br />
-              If your claim function has only 4 arguments
-              (index/account/amount/merkleProof), you can optionally use basic
-              PartnerSimulationToken instead.
+              2) Copy the template below into <b>KarmaAirdrop.sol</b>.
             </li>
             <li>
               <div className="mb-3 rounded-8 border border-neutral-20 bg-neutral-10 p-3">
                 <div className="mb-2 flex items-center justify-between gap-2">
                   <p className="text-13 font-medium text-neutral-90">
-                    Optional: Basic ERC20 (4-argument claim only)
-                  </p>
-                  <button
-                    type="button"
-                    className="rounded-8 border border-neutral-20 px-2 py-1 text-13 text-neutral-80"
-                    onClick={() =>
-                      void copySnippet(
-                        'simulation-token-template',
-                        simulationTokenTemplate
-                      )
-                    }
-                  >
-                    {copiedKey === 'simulation-token-template'
-                      ? 'Copied'
-                      : 'Copy'}
-                  </button>
-                </div>
-                <p className="mb-2 text-13 text-neutral-70">
-                  Use this only when your claim form has exactly 4 fields:
-                  index/account/amount/merkleProof. If claim includes nonce /
-                  expiry / v / r / s, use PartnerSimulationVotesToken below.
-                  Then use its address as
-                  <code className="rounded ml-1 bg-white-100 px-1 py-0.5 text-13">
-                    _token
-                  </code>{' '}
-                  in KarmaAirdrop constructor.
-                </p>
-                <pre className="overflow-x-auto rounded-8 bg-white-100 p-3 text-13 text-neutral-80">
-                  {simulationTokenTemplate}
-                </pre>
-                <div className="mt-2 flex items-center justify-between gap-2">
-                  <p className="text-13 text-neutral-70">
-                    Deploy input for PartnerSimulationToken:
-                  </p>
-                  <button
-                    type="button"
-                    className="rounded-8 border border-neutral-20 px-2 py-1 text-13 text-neutral-80"
-                    onClick={() =>
-                      void copySnippet(
-                        'simulation-token-deploy-quick-copy',
-                        simulationTokenDeployQuickCopy
-                      )
-                    }
-                  >
-                    {copiedKey === 'simulation-token-deploy-quick-copy'
-                      ? 'Copied'
-                      : 'Copy'}
-                  </button>
-                </div>
-                <pre className="overflow-x-auto rounded-8 bg-white-100 p-3 text-13 text-neutral-80">
-                  {simulationTokenDeployQuickCopy}
-                </pre>
-              </div>
-            </li>
-            <li>
-              <div className="mb-3 rounded-8 border border-neutral-20 bg-neutral-10 p-3">
-                <div className="mb-2 flex items-center justify-between gap-2">
-                  <p className="text-13 font-medium text-neutral-90">
-                    Recommended: Votes token (supports nonce/expiry/v/r/s claim)
+                    Deploy ERC20 Votes token
                   </p>
                   <button
                     type="button"
@@ -412,7 +330,7 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
                   {simulationVotesTokenTemplate}
                 </pre>
                 <p className="mt-2 text-13 text-neutral-70">
-                  Deploy input is same as above:{' '}
+                  Deploy input example:{' '}
                   <code className="rounded bg-white-100 px-1 py-0.5 text-13">
                     {simulationTokenDeployQuickCopy}
                   </code>
@@ -423,7 +341,7 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
               <div className="mb-3 rounded-8 border border-neutral-20 bg-neutral-10 p-3">
                 <div className="mb-2 flex items-center justify-between gap-2">
                   <p className="text-13 font-medium text-neutral-90">
-                    Optional: Minimal KarmaAirdrop Template
+                    Deploy KarmaAirdrop Template Contract
                   </p>
                   <button
                     type="button"
@@ -483,15 +401,7 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
                     <code className="rounded bg-white-100 px-1 py-0.5 text-13">
                       _token
                     </code>
-                    : use your deployed token address. Default/recommended is
-                    <code className="rounded ml-1 bg-white-100 px-1 py-0.5 text-13">
-                      PartnerSimulationVotesToken
-                    </code>
-                    . Use
-                    <code className="rounded ml-1 bg-white-100 px-1 py-0.5 text-13">
-                      PartnerSimulationToken
-                    </code>{' '}
-                    only for 4-argument claim contracts.
+                    : use your deployed token address. You can find it in Remix.
                   </li>
                   <li>
                     <code className="rounded bg-white-100 px-1 py-0.5 text-13">
@@ -537,8 +447,7 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
               confirm wallet connection, confirm network is Status testnet, fill
               constructor parameters, and deploy in this order:
               <br />
-              1) <b>PartnerSimulationVotesToken</b> (recommended) or
-              PartnerSimulationToken (only for 4-argument claim)
+              1) <b>PartnerSimulationVotesToken</b>
               <br />
               2) <b>KarmaAirdrop</b> (use your deployed token address in
               <code className="rounded ml-1 bg-neutral-10 px-1 py-0.5 text-13">
@@ -744,8 +653,8 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
             </h2>
           </div>
           <p className="mb-3 text-13 text-neutral-60">
-            This address is used for Merkle root posting and user claim
-            transactions below.
+            Copy and pastee the airdrop contract address. This address is used
+            for Merkle root posting and user claim transactions below.
           </p>
           <label
             htmlFor="airdrop-contract-address"
@@ -761,13 +670,8 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
             onChange={e => setAirdropAddress(e.target.value)}
           />
           <p className="mt-2 text-13 text-neutral-60">
-            Tip: verify this address on explorer and confirm it exposes claim /
-            isClaimed / merkleRoot functions. If those are missing, it is likely
-            the wrong contract address.
-          </p>
-          <p className="mt-2 text-13 text-neutral-60">
-            Do not paste token address (<b>PartnerSimulationToken</b> or
-            <b> PartnerSimulationVotesToken</b>) here. This field must be your
+            Do not paste token address
+            <b> PartnerSimulationVotesToken</b> here. This field must be your
             deployed <b>KarmaAirdrop</b> contract address.
           </p>
         </section>
