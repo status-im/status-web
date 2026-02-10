@@ -249,7 +249,7 @@ export function KarmaPartnersPanel({
     : parsedMerkle.error || 'Enter valid Merkle JSON'
 
   return (
-    <section className="rounded-20 border border-neutral-20 bg-white-100 p-4 lg:p-6">
+    <section className="rounded-8 bg-neutral-10 p-6">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-19 font-semibold text-neutral-100">
           Karma Partners Test
