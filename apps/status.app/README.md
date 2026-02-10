@@ -13,8 +13,7 @@ Clone the project:
 
 ```bash
   git clone https://github.com/status-im/status-website.git
-  git submodule init
-  git submodule update
+  git submodule update --init --recursive
 ```
 
 Optionally, update submodules:

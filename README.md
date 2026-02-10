@@ -57,7 +57,6 @@ Optional:
 
           git clone https://github.com/status-im/status-web.git
           cd status-web
-          git submodule init
           git submodule update --init --recursive
 
 > [!NOTE]
@@ -94,7 +93,6 @@ To contribute changes via a pull request:
         git clone https://github.com/YOUR_USERNAME/status-web.git
         cd status-web
         git remote add upstream https://github.com/status-im/status-web.git
-        git submodule init
         git submodule update --init --recursive
 
 3.  Create a branch, make your changes, then push to your fork:
