@@ -1,3 +1,4 @@
+// Note: all files under /admin-panel are for testing. Please don't review this file
 import type { ReactNode } from 'react'
 
 type SectionCardProps = {
