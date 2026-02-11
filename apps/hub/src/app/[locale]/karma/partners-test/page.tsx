@@ -1,8 +1,9 @@
 'use client'
 
+// Please don't review this file
+// This file is a temporary testing page for Karma partners simulation flow
+// This file should be removed when the PR is reviewed
 import { useState } from 'react'
-
-import Link from 'next/link'
 
 import { HubLayout } from '~components/hub-layout'
 import { AirdropClaimCard, KarmaPartnersPanel } from '~components/karma'
@@ -159,72 +160,13 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
       <div className="mx-auto flex size-full flex-col gap-4 p-4 lg:gap-8 lg:p-8">
         <div className="flex flex-col gap-2">
           <h1 className="text-27 font-semibold">Karma Partner Simulation</h1>
-          <p className="text-13 text-neutral-60">
-            Follow each step from top to bottom. This page is designed for
-            first-time partners.
+          <p className="text-15 text-neutral-60">
+            Follow each step from top to bottom.
           </p>
-          <Link
-            href="/karma"
-            className="text-13 font-medium text-neutral-100 underline"
-          >
-            Back to Karma
-          </Link>
-        </div>
-
-        <div className="mb-3 rounded-8 border border-neutral-20 p-3 text-13 text-neutral-70">
-          <p className="mb-1 font-medium text-neutral-90">Useful Links</p>
-          <ul className="list-disc space-y-1 pl-5">
-            <li>
-              <a
-                href="https://github.com/status-im/status-network-monorepo/blob/develop/status-network-contracts/src/KarmaAirdrop.sol"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline"
-              >
-                KarmaAirdrop.sol source code
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://remix.ethereum.org"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline"
-              >
-                Remix IDE
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://docs.status.network/general-info/add-status-network/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline"
-              >
-                How to add Status Network
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://docs.status.network/tools/testnet-faucets"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline"
-              >
-                Testnet faucet list
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://sepoliascan.status.network"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline"
-              >
-                Status testnet explorer
-              </a>
-            </li>
-          </ul>
+          <p className="text-15 text-neutral-60">
+            This page is for testing purposes only. Will be removed when the PR
+            is reviewed (or can keep it if useful)
+          </p>
         </div>
 
         <section className="rounded-8 border border-neutral-20 bg-white-100 p-4">
@@ -233,16 +175,24 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
               Step 1
             </span>
             <h2 className="text-15 font-semibold text-neutral-100">
-              Prepare Wallet And Deploy KarmaAirdrop In Remix
+              Prepare wallet and deploy KarmaAirdrop in{' '}
+              <a
+                href="https://remix.ethereum.org"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline"
+              >
+                Remix
+              </a>
             </h2>
           </div>
 
-          <p className="mb-3 text-13 text-neutral-60">
+          <p className="mb-3 text-15 text-neutral-60">
             Use your own wallet to deploy the contract in Remix. Then use the
             same wallet in Step 4 to post Merkle root onchain.
           </p>
 
-          <div className="mb-3 rounded-8 bg-neutral-10 p-3 text-13 text-neutral-70">
+          <div className="mb-3 rounded-8 bg-neutral-10 p-3 text-15 text-neutral-70">
             <p>
               Network: Status Network Testnet (Chain ID: <b>1660990954</b>)
             </p>
@@ -254,7 +204,7 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
             </p>
           </div>
 
-          <ol className="list-decimal space-y-2 pl-5 text-13 text-neutral-70">
+          <ol className="list-decimal space-y-2 pl-5 text-15 text-neutral-70">
             <li>
               Open your wallet (for example MetaMask),{' '}
               <a
@@ -298,12 +248,12 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
             <li>
               <div className="mb-3 rounded-8 border border-neutral-20 bg-neutral-10 p-3">
                 <div className="mb-2 flex items-center justify-between gap-2">
-                  <p className="text-13 font-medium text-neutral-90">
-                    Deploy ERC20 Votes token
+                  <p className="text-15 font-medium text-neutral-90">
+                    PartnerSimulationVotesToken - Deploy ERC20 Votes token
                   </p>
                   <button
                     type="button"
-                    className="rounded-8 border border-neutral-20 px-2 py-1 text-13 text-neutral-80"
+                    className="rounded-8 border border-neutral-20 px-2 py-1 text-15 text-neutral-80"
                     onClick={() =>
                       void copySnippet(
                         'simulation-votes-token-template',
@@ -316,22 +266,22 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
                       : 'Copy'}
                   </button>
                 </div>
-                <p className="mb-2 text-13 text-neutral-70">
+                <p className="mb-2 text-15 text-neutral-70">
                   If your deployed KarmaAirdrop claim form includes extra inputs
                   like <b>nonce</b>, <b>expiry</b>, <b>v</b>, <b>r</b>, <b>s</b>
                   , redeploy token as <b>PartnerSimulationVotesToken</b> and use
                   that address as{' '}
-                  <code className="rounded bg-white-100 px-1 py-0.5 text-13">
+                  <code className="rounded bg-white-100 px-1 py-0.5 text-15">
                     _token
                   </code>
                   .
                 </p>
-                <pre className="overflow-x-auto rounded-8 bg-white-100 p-3 text-13 text-neutral-80">
+                <pre className="overflow-x-auto rounded-8 bg-white-100 p-3 text-15 text-neutral-80">
                   {simulationVotesTokenTemplate}
                 </pre>
-                <p className="mt-2 text-13 text-neutral-70">
+                <p className="mt-2 text-15 text-neutral-70">
                   Deploy input example:{' '}
-                  <code className="rounded bg-white-100 px-1 py-0.5 text-13">
+                  <code className="rounded bg-white-100 px-1 py-0.5 text-15">
                     {simulationTokenDeployQuickCopy}
                   </code>
                 </p>
@@ -340,12 +290,12 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
             <li>
               <div className="mb-3 rounded-8 border border-neutral-20 bg-neutral-10 p-3">
                 <div className="mb-2 flex items-center justify-between gap-2">
-                  <p className="text-13 font-medium text-neutral-90">
-                    Deploy KarmaAirdrop Template Contract
+                  <p className="text-15 font-medium text-neutral-90">
+                    KarmaAirdrop - Deploy KarmaAirdrop template contract
                   </p>
                   <button
                     type="button"
-                    className="rounded-8 border border-neutral-20 px-2 py-1 text-13 text-neutral-80"
+                    className="rounded-8 border border-neutral-20 px-2 py-1 text-15 text-neutral-80"
                     onClick={() =>
                       void copySnippet(
                         'minimal-karma-airdrop-template',
@@ -358,12 +308,12 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
                       : 'Copy'}
                   </button>
                 </div>
-                <p className="mb-2 text-13 text-neutral-70">
+                <p className="mb-2 text-15 text-neutral-70">
                   If you want to start from scratch quickly, copy this full
                   template and paste into Remix as <b>KarmaAirdrop.sol</b>. This
                   is for local testing/simulation flow.
                 </p>
-                <pre className="overflow-x-auto rounded-8 bg-white-100 p-3 text-13 text-neutral-80">
+                <pre className="overflow-x-auto rounded-8 bg-white-100 p-3 text-15 text-neutral-80">
                   {minimalKarmaAirdropTemplate}
                 </pre>
               </div>
@@ -377,12 +327,12 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
             <li>
               <div className="mb-3 rounded-8 border border-neutral-20 bg-neutral-10 p-3">
                 <div className="mb-2 flex items-center justify-between gap-2">
-                  <p className="text-13 font-medium text-neutral-90">
+                  <p className="text-15 font-medium text-neutral-90">
                     Remix Deploy Inputs (For This Simulation)
                   </p>
                   <button
                     type="button"
-                    className="rounded-8 border border-neutral-20 px-2 py-1 text-13 text-neutral-80"
+                    className="rounded-8 border border-neutral-20 px-2 py-1 text-15 text-neutral-80"
                     onClick={() =>
                       void copySnippet(
                         'remix-deploy-inputs-quick-copy',
@@ -396,48 +346,36 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
                   </button>
                 </div>
 
-                <ul className="mb-2 list-disc space-y-1 pl-5 text-13 text-neutral-70">
+                <ul className="mb-2 list-disc space-y-1 pl-5 text-15 text-neutral-70">
                   <li>
-                    <code className="rounded bg-white-100 px-1 py-0.5 text-13">
+                    <code className="rounded bg-white-100 px-1 py-0.5 text-15">
                       _token
                     </code>
                     : use your deployed token address. You can find it in Remix.
                   </li>
                   <li>
-                    <code className="rounded bg-white-100 px-1 py-0.5 text-13">
+                    <code className="rounded bg-white-100 px-1 py-0.5 text-15">
                       _owner
                     </code>
                     : your deployer wallet address (admin for root updates)
                   </li>
                   <li>
-                    <code className="rounded bg-white-100 px-1 py-0.5 text-13">
+                    <code className="rounded bg-white-100 px-1 py-0.5 text-15">
                       _allowMerkleRootUpdate
                     </code>
                     : set to <b>true</b> for testing
                   </li>
                   <li>
-                    <code className="rounded bg-white-100 px-1 py-0.5 text-13">
+                    <code className="rounded bg-white-100 px-1 py-0.5 text-15">
                       _defaultDelegatee
                     </code>
                     : your wallet address (same as owner for now)
                   </li>
                 </ul>
 
-                <p className="mb-2 text-13 text-neutral-70">
-                  Quick copy values (replace token and wallet address):
-                </p>
-                <pre className="overflow-x-auto rounded-8 bg-white-100 p-3 text-13 text-neutral-80">
-                  {remixDeployInputsQuickCopy}
-                </pre>
-                <p className="mt-2 text-13 text-neutral-70">
+                <p className="mt-2 text-15 text-neutral-70">
                   Make sure network is{' '}
-                  <b>Status Network Testnet (chainId 1660990954)</b>. For
-                  production flows, you may want to set{' '}
-                  <code className="rounded bg-white-100 px-1 py-0.5 text-13">
-                    _allowMerkleRootUpdate
-                  </code>{' '}
-                  to false later. If you use a token you do not control/fund,
-                  claim will revert at transfer stage.
+                  <b>Status Network Testnet (chainId 1660990954)</b>.
                 </p>
               </div>
             </li>
@@ -450,7 +388,7 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
               1) <b>PartnerSimulationVotesToken</b>
               <br />
               2) <b>KarmaAirdrop</b> (use your deployed token address in
-              <code className="rounded ml-1 bg-neutral-10 px-1 py-0.5 text-13">
+              <code className="rounded ml-1 bg-neutral-10 px-1 py-0.5 text-15">
                 _token
               </code>
               )
@@ -462,19 +400,19 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
             </li>
             <li>
               From your token contract, call{' '}
-              <code className="rounded bg-neutral-10 px-1 py-0.5 text-13">
+              <code className="rounded bg-neutral-10 px-1 py-0.5 text-15">
                 transfer(airdropAddress, amount)
               </code>{' '}
               in Remix so KarmaAirdrop has enough token balance before claiming.
               Use <b>10 tokens</b> example value:{' '}
-              <code className="rounded bg-neutral-10 px-1 py-0.5 text-13">
+              <code className="rounded bg-neutral-10 px-1 py-0.5 text-15">
                 10000000000000000000
               </code>{' '}
               (18 decimals).
             </li>
             <li>
               Then call{' '}
-              <code className="rounded bg-neutral-10 px-1 py-0.5 text-13">
+              <code className="rounded bg-neutral-10 px-1 py-0.5 text-15">
                 balanceOf(airdropAddress)
               </code>{' '}
               on the same token contract and confirm the returned amount is
@@ -486,35 +424,20 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
             </li>
           </ol>
 
-          <div className="mt-3 rounded-8 border border-neutral-20 bg-white-100 p-3 text-13 text-neutral-70">
-            <p className="mb-1 font-medium text-neutral-90">
-              IMPORTANT: Deploying contracts is not enough
-            </p>
-            <p>
-              Even if both contracts are deployed successfully, claim will
-              revert until tokens are transferred into the{' '}
-              <b>KarmaAirdrop contract address</b>.
-            </p>
-            <p className="mt-1">
-              It is normal for the contract itself to have 0 ETH. Gas is paid by
-              the wallet that sends each transaction.
-            </p>
-          </div>
-
           <div className="mt-3 rounded-8 border border-neutral-20 bg-neutral-10 p-3">
             <div className="mb-2 flex items-center gap-2">
               <span className="rounded-full bg-neutral-20 px-2 py-0.5 text-11 font-medium text-neutral-70">
                 Troubleshooting
               </span>
-              <p className="text-13 font-medium text-neutral-90">
-                Remix Compile/Deploy Errors
+              <p className="text-15 font-medium text-neutral-90">
+                Remix Compile/Deploy errors
               </p>
             </div>
             <div className="mb-3 rounded-8 border border-neutral-20 bg-white-100 p-3">
-              <p className="mb-1 text-13 font-medium text-neutral-90">
+              <p className="mb-1 text-15 font-medium text-neutral-90">
                 If deployment fails with status 0
               </p>
-              <ul className="list-disc space-y-1 pl-5 text-13 text-neutral-70">
+              <ul className="list-disc space-y-1 pl-5 text-15 text-neutral-70">
                 <li>In Solidity Compiler, set EVM Version to Paris.</li>
                 <li>
                   If transaction consumes full gas limit, increase gas limit in
@@ -523,20 +446,20 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
               </ul>
             </div>
             <div className="mb-3 rounded-8 border border-neutral-20 bg-white-100 p-3">
-              <p className="mb-1 text-13 font-medium text-neutral-90">
+              <p className="mb-1 text-15 font-medium text-neutral-90">
                 If Step 4 fails with owner permission error
               </p>
-              <ul className="list-disc space-y-1 pl-5 text-13 text-neutral-70">
+              <ul className="list-disc space-y-1 pl-5 text-15 text-neutral-70">
                 <li>
                   Error message usually includes{' '}
-                  <code className="rounded bg-neutral-10 px-1 py-0.5 text-13">
+                  <code className="rounded bg-neutral-10 px-1 py-0.5 text-15">
                     Ownable: caller is not the owner
                   </code>
                   .
                 </li>
                 <li>
                   Switch wallet to the address used as{' '}
-                  <code className="rounded bg-neutral-10 px-1 py-0.5 text-13">
+                  <code className="rounded bg-neutral-10 px-1 py-0.5 text-15">
                     _owner
                   </code>{' '}
                   at deployment, then click <b>Post Merkle Root Onchain</b>{' '}
@@ -545,32 +468,32 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
               </ul>
             </div>
             <div className="mb-3 rounded-8 border border-neutral-20 bg-white-100 p-3">
-              <p className="mb-1 text-13 font-medium text-neutral-90">
+              <p className="mb-1 text-15 font-medium text-neutral-90">
                 If Step 4 fails with updateMerkleRoot unknown revert
               </p>
-              <ul className="list-disc space-y-1 pl-5 text-13 text-neutral-70">
+              <ul className="list-disc space-y-1 pl-5 text-15 text-neutral-70">
                 <li>
                   Confirm connected wallet is the same address used as{' '}
-                  <code className="rounded bg-neutral-10 px-1 py-0.5 text-13">
+                  <code className="rounded bg-neutral-10 px-1 py-0.5 text-15">
                     _owner
                   </code>
                   .
                 </li>
                 <li>
                   If error includes selector{' '}
-                  <code className="rounded bg-neutral-10 px-1 py-0.5 text-13">
+                  <code className="rounded bg-neutral-10 px-1 py-0.5 text-15">
                     0x5db8ec57
                   </code>{' '}
                   (KarmaAirdrop__MustBePausedToUpdate), do this in Remix with
                   owner wallet:
-                  <code className="rounded ml-1 bg-neutral-10 px-1 py-0.5 text-13">
+                  <code className="rounded ml-1 bg-neutral-10 px-1 py-0.5 text-15">
                     pause() → setMerkleRoot(newRoot) → unpause()
                   </code>
                   .
                 </li>
                 <li>
                   If your contract has{' '}
-                  <code className="rounded bg-neutral-10 px-1 py-0.5 text-13">
+                  <code className="rounded bg-neutral-10 px-1 py-0.5 text-15">
                     allowMerkleRootUpdate
                   </code>{' '}
                   set to false and root was already set once, update will
@@ -584,10 +507,10 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
               </ul>
             </div>
             <div className="mb-3 rounded-8 border border-neutral-20 bg-white-100 p-3">
-              <p className="mb-1 text-13 font-medium text-neutral-90">
+              <p className="mb-1 text-15 font-medium text-neutral-90">
                 If claim still reverts after root/balance/index checks
               </p>
-              <ul className="list-disc space-y-1 pl-5 text-13 text-neutral-70">
+              <ul className="list-disc space-y-1 pl-5 text-15 text-neutral-70">
                 <li>
                   You may be using a KarmaAirdrop implementation that is not
                   compatible with a generic simulation token.
@@ -599,18 +522,18 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
                 </li>
               </ul>
             </div>
-            <p className="mb-2 text-13 text-neutral-70">
+            <p className="mb-2 text-15 text-neutral-70">
               If compile fails with{' '}
-              <code className="rounded bg-white-100 px-1 py-0.5 text-13">
+              <code className="rounded bg-white-100 px-1 py-0.5 text-15">
                 No arguments passed to the base constructor
               </code>
               , Remix resolved OpenZeppelin v5 and Ownable now requires
-              <code className="rounded ml-1 bg-white-100 px-1 py-0.5 text-13">
+              <code className="rounded ml-1 bg-white-100 px-1 py-0.5 text-15">
                 initialOwner
               </code>
               .
             </p>
-            <ul className="mb-3 list-disc space-y-1 pl-5 text-13 text-neutral-70">
+            <ul className="mb-3 list-disc space-y-1 pl-5 text-15 text-neutral-70">
               <li>
                 v4 behavior: Ownable constructor had no required argument.
               </li>
@@ -622,12 +545,12 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
             <div className="space-y-3">
               <div className="rounded-8 border border-neutral-20 bg-white-100 p-3">
                 <div className="mb-2 flex items-center justify-between gap-2">
-                  <p className="text-13 font-medium text-neutral-90">
+                  <p className="text-15 font-medium text-neutral-90">
                     Quick alternative fix: pin OpenZeppelin imports to v4
                   </p>
                   <button
                     type="button"
-                    className="rounded-8 border border-neutral-20 px-2 py-1 text-13 text-neutral-80"
+                    className="rounded-8 border border-neutral-20 px-2 py-1 text-15 text-neutral-80"
                     onClick={() =>
                       void copySnippet('oz-v4-import-patch', ozV4ImportPatch)
                     }
@@ -635,7 +558,7 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
                     {copiedKey === 'oz-v4-import-patch' ? 'Copied' : 'Copy'}
                   </button>
                 </div>
-                <pre className="overflow-x-auto rounded-8 bg-neutral-10 p-3 text-13 text-neutral-80">
+                <pre className="overflow-x-auto rounded-8 bg-neutral-10 p-3 text-15 text-neutral-80">
                   {ozV4ImportPatch}
                 </pre>
               </div>
@@ -643,7 +566,7 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
           </div>
         </section>
 
-        <section className="rounded-8 border border-neutral-20 bg-white-100 p-4">
+        <section className="rounded-8 border border-neutral-20 bg-neutral-30 p-4">
           <div className="mb-3 flex items-center gap-2">
             <span className="rounded-full bg-neutral-20 px-2 py-0.5 text-11 font-medium text-neutral-70">
               Step 2
@@ -652,7 +575,7 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
               Enter Your Deployed KarmaAirdrop Address
             </h2>
           </div>
-          <p className="mb-3 text-13 text-neutral-60">
+          <p className="mb-3 text-15 text-neutral-60">
             Copy and pastee the airdrop contract address. This address is used
             for Merkle root posting and user claim transactions below.
           </p>
@@ -664,12 +587,12 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
           </label>
           <input
             id="airdrop-contract-address"
-            className="w-full rounded-8 border border-neutral-20 px-3 py-2 text-13"
+            className="w-full rounded-8 border border-neutral-20 px-3 py-2 text-15"
             placeholder="0x..."
             value={airdropAddress}
             onChange={e => setAirdropAddress(e.target.value)}
           />
-          <p className="mt-2 text-13 text-neutral-60">
+          <p className="mt-2 text-15 text-neutral-60">
             Do not paste token address
             <b> PartnerSimulationVotesToken</b> here. This field must be your
             deployed <b>KarmaAirdrop</b> contract address.
@@ -685,25 +608,25 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
               Prepare Merkle Input JSON
             </h2>
           </div>
-          <p className="mb-2 text-13 text-neutral-60">
+          <p className="mb-2 text-15 text-neutral-60">
             In Step 3 below, you will generate Merkle root and proofs from a
             recipient list. Prepare JSON in this shape:
           </p>
-          <pre className="overflow-x-auto rounded-8 bg-neutral-10 p-3 text-13 text-neutral-80">
+          <pre className="overflow-x-auto rounded-8 bg-neutral-10 p-3 text-15 text-neutral-80">
             {`[
   {"account":"0xRecipientAddress1","amount":"1000000000000000000"},
   {"account":"0xRecipientAddress2","amount":"2500000000000000000"}
 ]`}
           </pre>
-          <p className="mt-2 text-13 text-neutral-60">
+          <p className="mt-2 text-15 text-neutral-60">
             Amount should be a string in wei units. Example:
-            <code className="rounded ml-1 bg-neutral-10 px-1 py-0.5 text-13">
+            <code className="rounded ml-1 bg-neutral-10 px-1 py-0.5 text-15">
               "1000000000000000000"
             </code>{' '}
             means 1 token (18 decimals). `index` is included in each leaf and
             automatically generated by Step 3 using start index + row order.
           </p>
-          <p className="mt-2 text-13 text-neutral-60">
+          <p className="mt-2 text-15 text-neutral-60">
             Leaf format used for hashing: <b>(index, account, amount)</b>.
           </p>
         </section>
@@ -719,13 +642,13 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
               Claim as Recipient Wallet
             </h2>
           </div>
-          <p className="text-13 text-neutral-60">
+          <p className="text-15 text-neutral-60">
             Switch to the recipient wallet, paste the same Merkle output JSON
             from Step 3, then submit claim. If claim succeeds once and fails on
             second try as already claimed, simulation is working correctly.
           </p>
           <AirdropClaimCard airdropAddress={airdropAddress} />
-          <div className="rounded-8 border border-neutral-20 bg-white-100 p-3 text-13 text-neutral-70">
+          <div className="rounded-8 border border-neutral-20 bg-white-100 p-3 text-15 text-neutral-70">
             <p className="mb-1 font-medium text-neutral-90">
               If Claim Airdrop fails (execution reverted)
             </p>
@@ -756,7 +679,7 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
               </li>
               <li>
                 For single-entry trees, empty proof{' '}
-                <code className="rounded bg-neutral-10 px-1 py-0.5 text-13">
+                <code className="rounded bg-neutral-10 px-1 py-0.5 text-15">
                   []
                 </code>{' '}
                 is valid.
