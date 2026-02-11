@@ -14,13 +14,14 @@ export class KarmaApiClient {
 
   async request<T>(path: string, options?: RequestInit): Promise<T> {
     const url = `${this.baseUrl}${path}`
+    const { headers, ...rest } = options ?? {}
     const response = await this.fetchFn(url, {
       credentials: 'include',
+      ...rest,
       headers: {
         'Content-Type': 'application/json',
-        ...options?.headers,
+        ...headers,
       },
-      ...options,
     })
 
     if (!response.ok) {
