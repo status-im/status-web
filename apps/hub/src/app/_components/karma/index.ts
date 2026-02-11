@@ -1,6 +1,5 @@
 export * from './achievement-badges'
 export * from './admin-panel'
-export * from './airdrop-claim-card'
 export * from './overview-card'
 export * from './source-card'
 export * from './visual-card'
