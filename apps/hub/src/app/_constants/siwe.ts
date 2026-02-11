@@ -12,7 +12,7 @@ import type { SIWEConfig } from 'connectkit'
 const API_BASE_URL = clientEnv.NEXT_PUBLIC_STATUS_NETWORK_API_URL
 
 export const NONCE_REFETCH_INTERVAL = 300000
-export const SESSION_REFETCH_INTERVAL = 300000 // 30 seconds
+export const SESSION_REFETCH_INTERVAL = 300000 // 5 minutes
 
 const apiClient = new KarmaApiClient({ baseUrl: API_BASE_URL })
 
