@@ -608,7 +608,7 @@ export default makeSource({
 
     const filePath = path.resolve('./.contentlayer/en.json')
 
-    fs.writeFile(filePath, JSON.stringify(index))
+    await fs.writeFile(filePath, JSON.stringify(index))
 
     const { allSpecsDocs } = await importData()
 
@@ -661,9 +661,9 @@ export default makeSource({
     const specMetadataFilePath = path.resolve(
       './.contentlayer/specs.metadata.json'
     )
-    fs.writeFile(specMetadataFilePath, JSON.stringify(specMetadata))
+    await fs.writeFile(specMetadataFilePath, JSON.stringify(specMetadata))
 
     const specFilePath = path.resolve('./.contentlayer/specs.en.json')
-    fs.writeFile(specFilePath, JSON.stringify(specIndex))
+    await fs.writeFile(specFilePath, JSON.stringify(specIndex))
   },
 })
