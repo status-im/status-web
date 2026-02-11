@@ -267,14 +267,8 @@ contract KarmaAirdrop is Ownable2Step, Pausable {
                   </button>
                 </div>
                 <p className="mb-2 text-15 text-neutral-70">
-                  If your deployed KarmaAirdrop claim form includes extra inputs
-                  like <b>nonce</b>, <b>expiry</b>, <b>v</b>, <b>r</b>, <b>s</b>
-                  , redeploy token as <b>PartnerSimulationVotesToken</b> and use
-                  that address as{' '}
-                  <code className="rounded bg-white-100 px-1 py-0.5 text-15">
-                    _token
-                  </code>
-                  .
+                  Recommend changing the token name 'Partner Simulation Karma'
+                  and the ticker 'pKARMA'
                 </p>
                 <pre className="overflow-x-auto rounded-8 bg-white-100 p-3 text-15 text-neutral-80">
                   {simulationVotesTokenTemplate}
