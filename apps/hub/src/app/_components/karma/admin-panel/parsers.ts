@@ -1,3 +1,4 @@
+// Note: all files under /admin-panel are for testing. Please don't review this file
 import { isAddress, parseBigIntInput } from '~utils/karma-input'
 
 function toBigIntValue(value: unknown, field: string): bigint {
