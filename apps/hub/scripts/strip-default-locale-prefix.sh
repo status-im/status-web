@@ -59,11 +59,21 @@ find "$OUT_DIR" -type f \( -name "*.html" -o -name "*.js" -o -name "*.json" -o -
     s|href='/${LOCALE}'|href='/'|g;
     # Internal paths in double quotes - match \"/en/ but NOT https://.../en/
     # Match if preceded by common delimiters that indicate internal paths
+    # Only match \"en\" when it's clearly part of a URL path (followed by / or at end of path context)
+    # Avoid matching locale values in code (e.g., value:\"en\", locale:\"en\")
     s|([\s,:=\(])\"${LOCALE}/|\1\"/|g;
-    s|([\s,:=\(])\"${LOCALE}\"|\1\"/\"|g;
+    # Only replace \"en\" when followed by /, end markers, or in href/url contexts
+    # Exclude cases where it might be a property value (don't match standalone \"en\" after : or =)
+    # Match \"en\" followed by /, or end markers (quote, whitespace, comma, semicolon, closing brackets, or </)
+    s|([\s,\(])\"${LOCALE}\"/|\1\"/|g;
+    s|([\s,\(])\"${LOCALE}\"([\"'\s,;\)\]\}])|\1\"/\"\2|g;
+    s|([\s,\(])\"${LOCALE}\"</|\1\"/\"</|g;
     # Match \"/en/ at start of string (common in JSON)
     s|^\"${LOCALE}/|\"/|g;
-    s|^\"${LOCALE}\"|\"/\"|g;
+    # Only replace at start if followed by / or end markers
+    s|^\"${LOCALE}\"/|\"/|g;
+    s|^\"${LOCALE}\"([\"'\s,;\)\]\}])|\"/\"\1|g;
+    s|^\"${LOCALE}\"</|\"/\"</|g;
     # Single-quoted strings - only internal URLs
     s|([\s,:=\(])'${LOCALE}/|\1'/|g;
     s|([\s,:=\(])'${LOCALE}'|\1'/'|g;
