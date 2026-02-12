@@ -1,5 +1,28 @@
 # status.app
 
+## 0.1.2
+
+### Patch Changes
+
+- ff8dd31: Add JSON-LD schema utilities to @status-im/components for SEO structured data
+- 902875c: Revert "revert status-mobile rename to status-legacy (#881)"
+- 1100022: chore: update docs
+- f62dd13: add promo bars to status.app and status.network
+- 06ceddc: Fix React Server Components CVE vulnerabilities
+- 1efb8cf: prep mobile app release
+- e6096fd: update promo-bar.tsx copy
+- 5975aae: fix: zod version resolution
+- 06d63f4: fix(status.app): prevent RSS route build failures and handle missing blog posts
+- b66ff9b: fix: build issues with specs
+- 36502ad: update image alt texts for mobile app features in AppsPage and ImageType definition
+- 154287d: feat: add KarmaButton component and integrate into TopBar
+- Updated dependencies [ff8dd31]
+- Updated dependencies [be3d8dc]
+- Updated dependencies [d292620]
+- Updated dependencies [5975aae]
+  - @status-im/components@1.2.0
+  - @status-im/js@1.2.2
+
 ## 0.1.1
 
 ### Patch Changes
