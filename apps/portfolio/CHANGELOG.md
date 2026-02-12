@@ -1,5 +1,24 @@
 # portfolio
 
+## 0.2.2
+
+### Patch Changes
+
+- 06ceddc: Fix React Server Components CVE vulnerabilities
+- 5975aae: fix: zod version resolution
+- 36502ad: update image alt texts for mobile app features in AppsPage and ImageType definition
+- Updated dependencies [ff8dd31]
+- Updated dependencies [b6eb665]
+- Updated dependencies [03d2511]
+- Updated dependencies [e0179d3]
+- Updated dependencies [be3d8dc]
+- Updated dependencies [06ceddc]
+- Updated dependencies [d292620]
+- Updated dependencies [5975aae]
+- Updated dependencies [4614fcc]
+  - @status-im/components@1.2.0
+  - @status-im/wallet@0.1.2
+
 ## 0.2.1
 
 ### Patch Changes

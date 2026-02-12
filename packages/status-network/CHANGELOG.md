@@ -1,5 +1,21 @@
 # @status-im/status-network
 
+## 0.1.2
+
+### Patch Changes
+
+- 06ceddc: Fix React Server Components CVE vulnerabilities
+- e77bed6: withdraw
+- e77bed6: add app
+- d292620: Refactor JSON-LD utilities with default values, add 410 Gone response handling for invalid paths, and implement technical SEO for the Status Network website
+- 0a50862: Updates for Pre-deposits disclaimers
+- 5975aae: fix: zod version resolution
+- 207f4a5: feat: add predeposit disclaimer
+- Updated dependencies [ff8dd31]
+- Updated dependencies [be3d8dc]
+- Updated dependencies [d292620]
+  - @status-im/components@1.2.0
+
 ## 0.1.1
 
 ### Patch Changes

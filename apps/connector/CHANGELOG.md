@@ -1,5 +1,12 @@
 # connector
 
+## 0.0.7
+
+### Patch Changes
+
+- 5975aae: fix(connector): two different zod instances being used leading to errors in extension
+- 5975aae: fix: zod version resolution
+
 ## 0.0.6
 
 ### Patch Changes
