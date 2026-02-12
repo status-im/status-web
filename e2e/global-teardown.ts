@@ -1,22 +1,20 @@
-import fs from 'node:fs'
-import os from 'node:os'
-import path from 'node:path'
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 
 async function globalTeardown(): Promise<void> {
-  console.log('[global-teardown] Cleaning up temporary files...')
+  console.log('[global-teardown] Cleaning up temporary files...');
 
-  const tmpDir = os.tmpdir()
-  let cleaned = 0
+  const tmpDir = os.tmpdir();
+  let cleaned = 0;
 
   try {
-    const entries = fs
-      .readdirSync(tmpDir)
-      .filter(e => e.startsWith('pw-metamask-'))
+    const entries = fs.readdirSync(tmpDir).filter(e => e.startsWith('pw-metamask-'));
     for (const entry of entries) {
-      const fullPath = path.join(tmpDir, entry)
+      const fullPath = path.join(tmpDir, entry);
       try {
-        fs.rmSync(fullPath, { recursive: true, force: true })
-        cleaned++
+        fs.rmSync(fullPath, { recursive: true, force: true });
+        cleaned++;
       } catch {
         // Ignore cleanup errors for individual profiles
       }
@@ -26,12 +24,10 @@ async function globalTeardown(): Promise<void> {
   }
 
   if (cleaned > 0) {
-    console.log(
-      `[global-teardown] Removed ${cleaned} temporary browser profile(s).`,
-    )
+    console.log(`[global-teardown] Removed ${cleaned} temporary browser profile(s).`);
   }
 
-  console.log('[global-teardown] Cleanup complete.')
+  console.log('[global-teardown] Cleanup complete.');
 }
 
-export default globalTeardown
+export default globalTeardown;

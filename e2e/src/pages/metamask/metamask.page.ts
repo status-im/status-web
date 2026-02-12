@@ -1,42 +1,39 @@
-import { EXTENSION_TIMEOUTS } from '@constants/timeouts.js'
-
-import { MetaMaskHomePage } from './home.page.js'
-import { NotificationPage } from './notification.page.js'
-import { OnboardingPage } from './onboarding.page.js'
-
-import type { BrowserContext, Page } from '@playwright/test'
+import type { BrowserContext, Page } from '@playwright/test';
+import { OnboardingPage } from './onboarding.page.js';
+import { NotificationPage } from './notification.page.js';
+import { MetaMaskHomePage } from './home.page.js';
 
 export class MetaMaskPage {
-  readonly onboarding: OnboardingPage
-  readonly notification: NotificationPage
-  readonly home: MetaMaskHomePage
+  readonly onboarding: OnboardingPage;
+  readonly notification: NotificationPage;
+  readonly home: MetaMaskHomePage;
 
-  private readonly extensionPrefix: string
+  private readonly extensionPrefix: string;
 
   constructor(
     private readonly context: BrowserContext,
     extensionId: string,
   ) {
-    this.extensionPrefix = `chrome-extension://${extensionId}`
-    this.onboarding = new OnboardingPage(context, extensionId)
-    this.notification = new NotificationPage(context, extensionId)
-    this.home = new MetaMaskHomePage(context, extensionId)
+    this.extensionPrefix = `chrome-extension://${extensionId}`;
+    this.onboarding = new OnboardingPage(context, extensionId);
+    this.notification = new NotificationPage(context, extensionId);
+    this.home = new MetaMaskHomePage(context, extensionId);
   }
 
   /** Find the MetaMask extension page in the current context */
   async getExtensionPage(): Promise<Page> {
     let mmPage = this.context
       .pages()
-      .find(p => p.url().startsWith(this.extensionPrefix))
+      .find(p => p.url().startsWith(this.extensionPrefix));
 
     if (!mmPage) {
       mmPage = await this.context.waitForEvent('page', {
-        timeout: EXTENSION_TIMEOUTS.EXTENSION_PAGE,
+        timeout: 10_000,
         predicate: p => p.url().startsWith(this.extensionPrefix),
-      })
+      });
     }
 
-    return mmPage
+    return mmPage;
   }
 
   /**
@@ -48,36 +45,36 @@ export class MetaMaskPage {
   async connectToDApp(hubPage: Page): Promise<void> {
     const connectButton = hubPage
       .getByRole('button', { name: /connect/i })
-      .first()
-    await connectButton.click()
+      .first();
+    await connectButton.click();
 
-    await hubPage.getByRole('button', { name: 'MetaMask' }).click()
+    await hubPage.getByRole('button', { name: 'MetaMask' }).click();
 
-    await this.notification.approveConnection()
+    await this.notification.approveConnection();
   }
 
   /** Approve a transaction in the MetaMask notification popup */
   async approveTransaction(): Promise<void> {
-    await this.notification.approveTransaction()
+    await this.notification.approveTransaction();
   }
 
   /** Reject a transaction in the MetaMask notification popup */
   async rejectTransaction(): Promise<void> {
-    await this.notification.rejectTransaction()
+    await this.notification.rejectTransaction();
   }
 
   /** Approve adding/switching to a new network */
   async switchNetwork(): Promise<void> {
-    await this.notification.approveNetworkSwitch()
+    await this.notification.approveNetworkSwitch();
   }
 
   /** Approve a token spending allowance */
   async approveTokenSpend(): Promise<void> {
-    await this.notification.approveTokenSpend()
+    await this.notification.approveTokenSpend();
   }
 
   /** Sign a message (SIWE or EIP-712) */
   async signMessage(): Promise<void> {
-    await this.notification.signMessage()
+    await this.notification.signMessage();
   }
 }

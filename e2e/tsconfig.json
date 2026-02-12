@@ -12,8 +12,6 @@
     "noEmit": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "allowUnusedLabels": false,
-    "allowUnreachableCode": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
@@ -23,8 +21,10 @@
     "paths": {
       "@fixtures/*": ["./src/fixtures/*"],
       "@pages/*": ["./src/pages/*"],
+      "@helpers/*": ["./src/helpers/*"],
       "@constants/*": ["./src/constants/*"],
-      "@config/*": ["./src/config/*"]
+      "@config/*": ["./src/config/*"],
+      "@types/*": ["./src/types/*"]
     },
     "types": ["node"]
   },
