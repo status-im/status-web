@@ -6,10 +6,10 @@ import {
   COINGECKO_REVALIDATION_TIMES,
   fetchTokensPrice,
 } from '../../services/coingecko/index'
-import { publicProcedure, router } from '../lib/trpc'
+import { marketProcedure, router } from '../lib/trpc'
 
 export const marketRouter = router({
-  tokenPrice: publicProcedure
+  tokenPrice: marketProcedure
     .input(
       z.object({
         symbols: z.array(z.string()).min(1).max(100),
