@@ -12,7 +12,6 @@ import * as z from 'zod'
 
 import { CurrencyAmount } from '../currency-amount'
 import { NetworkLogo } from '../network-logo'
-import { PasswordModal } from '../password-modal'
 import { TokenAmount } from '../token-amount'
 import { TokenIcon } from '../token-icon'
 
@@ -36,8 +35,14 @@ type Props = {
     decimals: number
   }
   signTransaction: (data: FormData & { password: string }) => Promise<string>
-  verifyPassword: (inputPassword: string) => Promise<boolean>
   onEstimateGas: (to: string, value: string) => void
+  hasActiveSession: boolean
+  getPassword: () => string | null
+  requestPassword: (options?: {
+    title?: string
+    description?: string
+    buttonLabel?: string
+  }) => Promise<string | null>
   gasFees?: {
     maxFeeEur: number
     feeEur: number
@@ -102,8 +107,10 @@ const SendAssetsModal = (props: Props) => {
     asset,
     account,
     signTransaction,
-    verifyPassword,
     onEstimateGas,
+    hasActiveSession,
+    getPassword,
+    requestPassword,
     gasFees,
     isLoadingFees,
   } = props
@@ -111,9 +118,6 @@ const SendAssetsModal = (props: Props) => {
   const [hasInsufficientEth, setHasInsufficientEth] = useState(false)
   const [transactionState, setTransactionState] =
     useState<TransactionState>('idle')
-  const [showPasswordModal, setShowPasswordModal] = useState(false)
-  const [pendingTransactionData, setPendingTransactionData] =
-    useState<FormData | null>(null)
 
   const toast = useToast()
   const balance = asset.totalBalance
@@ -216,54 +220,44 @@ const SendAssetsModal = (props: Props) => {
   ])
 
   const onSubmit = async (data: FormData) => {
-    setPendingTransactionData(data)
-    setShowPasswordModal(true)
-  }
+    let password: string | null = null
 
-  const handlePasswordConfirm = async (password: string) => {
+    if (hasActiveSession) {
+      password = getPassword()
+    } else {
+      password = await requestPassword({
+        title: 'Enter password',
+        description: 'To send transaction',
+        buttonLabel: 'Send Transaction',
+      })
+    }
+
+    if (!password) {
+      return
+    }
+
     setTransactionState('signing')
 
     try {
-      const isValid = await verifyPassword(password)
+      toast.positive('Transaction signed and sent', {
+        duration: 2000,
+      })
 
-      if (!isValid) {
-        setTransactionState('idle')
-        throw new Error('Invalid password')
-      }
+      handleOnOpenChange(false)
 
-      setShowPasswordModal(false)
+      await signTransaction({
+        ...data,
+        password,
+      })
+
       setTransactionState('pending')
-
-      if (pendingTransactionData) {
-        toast.positive('Transaction signed and sent', {
-          duration: 2000,
-        })
-
-        handleOnOpenChange(false)
-
-        await signTransaction({
-          ...pendingTransactionData,
-          password,
-        })
-      }
     } catch (error) {
       setTransactionState('error')
-      if (error instanceof Error && error.message !== 'Invalid password') {
-        setShowPasswordModal(false)
-      }
-
       setTimeout(() => {
         setTransactionState('idle')
       }, 3000)
-
       throw error
     }
-  }
-
-  const handlePasswordModalClose = () => {
-    setShowPasswordModal(false)
-    setTransactionState('idle')
-    setPendingTransactionData(null)
   }
 
   const handleOnOpenChange = (open: boolean) => {
@@ -272,8 +266,6 @@ const SendAssetsModal = (props: Props) => {
       reset()
       setHasInsufficientEth(false)
       setTransactionState('idle')
-      setShowPasswordModal(false)
-      setPendingTransactionData(null)
     }
   }
 
@@ -281,8 +273,6 @@ const SendAssetsModal = (props: Props) => {
     watchedAmount &&
     Number.parseFloat(watchedAmount) > balance &&
     Number.parseFloat(watchedAmount) > 0
-
-  const isTransactionSigning = transactionState === 'signing'
 
   return (
     <>
@@ -589,7 +579,9 @@ const SendAssetsModal = (props: Props) => {
                       !watchedAmount ||
                       !watchedTo ||
                       !gasFees ||
-                      isLoadingFees
+                      isLoadingFees ||
+                      transactionState === 'signing' ||
+                      transactionState === 'pending'
                     }
                   >
                     Sign Transaction
@@ -600,15 +592,6 @@ const SendAssetsModal = (props: Props) => {
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
-
-      {/* Password Verification Modal */}
-      <PasswordModal
-        open={showPasswordModal}
-        onOpenChange={handlePasswordModalClose}
-        onConfirm={handlePasswordConfirm}
-        isLoading={isTransactionSigning}
-        buttonLabel="Send Transaction"
-      />
     </>
   )
 }

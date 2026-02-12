@@ -200,7 +200,7 @@ importers:
         version: 6.15.0(bufferutil@4.0.9)(utf-8-validate@6.0.3)
       plasmo:
         specifier: 0.88.0
-        version: 0.88.0(@swc/core@1.15.5(@swc/helpers@0.5.17))(@swc/helpers@0.5.17)(lodash@4.17.21)(postcss@8.5.6)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)(terser@5.44.1)
+        version: 0.88.0(@swc/core@1.15.1(@swc/helpers@0.5.17))(@swc/helpers@0.5.17)(lodash@4.17.21)(postcss@8.5.6)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)(terser@5.44.1)
       react:
         specifier: 19.1.2
         version: 19.1.2
@@ -27153,7 +27153,7 @@ snapshots:
     transitivePeerDependencies:
       - '@parcel/core'
 
-  '@plasmohq/parcel-config@0.41.0(@swc/core@1.15.5(@swc/helpers@0.5.17))(@swc/helpers@0.5.17)(lodash@4.17.21)(postcss@8.5.6)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)(terser@5.44.1)(typescript@5.2.2)':
+  '@plasmohq/parcel-config@0.41.0(@swc/core@1.15.1(@swc/helpers@0.5.17))(@swc/helpers@0.5.17)(lodash@4.17.21)(postcss@8.5.6)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)(terser@5.44.1)(typescript@5.2.2)':
     dependencies:
       '@parcel/compressor-raw': 2.9.3(@parcel/core@2.9.3)
       '@parcel/config-default': 2.9.3(@parcel/core@2.9.3)(@swc/helpers@0.5.17)(postcss@8.5.6)(terser@5.44.1)(typescript@5.2.2)
@@ -43289,7 +43289,7 @@ snapshots:
       exsolve: 1.0.8
       pathe: 2.0.3
 
-  plasmo@0.88.0(@swc/core@1.15.5(@swc/helpers@0.5.17))(@swc/helpers@0.5.17)(lodash@4.17.21)(postcss@8.5.6)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)(terser@5.44.1):
+  plasmo@0.88.0(@swc/core@1.15.1(@swc/helpers@0.5.17))(@swc/helpers@0.5.17)(lodash@4.17.21)(postcss@8.5.6)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)(terser@5.44.1):
     dependencies:
       '@expo/spawn-async': 1.7.2
       '@parcel/core': 2.9.3
@@ -43297,7 +43297,7 @@ snapshots:
       '@parcel/package-manager': 2.9.3(@parcel/core@2.9.3)
       '@parcel/watcher': 2.2.0
       '@plasmohq/init': 0.7.0
-      '@plasmohq/parcel-config': 0.41.0(@swc/core@1.15.5(@swc/helpers@0.5.17))(@swc/helpers@0.5.17)(lodash@4.17.21)(postcss@8.5.6)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)(terser@5.44.1)(typescript@5.2.2)
+      '@plasmohq/parcel-config': 0.41.0(@swc/core@1.15.1(@swc/helpers@0.5.17))(@swc/helpers@0.5.17)(lodash@4.17.21)(postcss@8.5.6)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)(terser@5.44.1)(typescript@5.2.2)
       '@plasmohq/parcel-core': 0.1.8
       buffer: 6.0.3
       chalk: 5.3.0
