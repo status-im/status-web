@@ -104,3 +104,6 @@ web-build/
 
 # Contentlayer
 .contentlayer
+
+# IDE
+.idea
