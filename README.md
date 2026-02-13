@@ -53,34 +53,53 @@ Optional:
 
 ## Getting Started
 
-1.  Clone the repository:
+1.
+
+Clone the repository:
 
           git clone https://github.com/status-im/status-web.git
           cd status-web
           git submodule update --init --recursive
 
-> [!NOTE]
-> If using Nix, enter development shell:
+2\. Initialize and update submodules:
+
+          git submodule init
+          git submodule update
+
+> \[!TIP]
+> If submodule URLs have changed (e.g., after a repo migration), sync them first:
 >
 > ```bash
-> nix develop
+> git submodule sync --recursive
+> git submodule update --init --recursive
 > ```
 
-2.  Install dependencies:
+> \[!TIP]
+> To update all submodules to the latest commit from their remote:
+>
+> ```bash
+> git submodule update --remote
+> ```
+
+3.  (Optional) If using Nix, enter development shell:
+
+          nix develop
+
+4.  Install dependencies:
 
          pnpm install
 
-3.  Build all packages:
+5.  Build all packages:
 
          pnpm build
 
-4.  Run tests:
+6.  Run tests:
 
          pnpm test
 
-5.  Start development mode:
+7.  Start development mode:
 
-        pnpm dev
+         pnpm dev
 
 ## Contributing
 
