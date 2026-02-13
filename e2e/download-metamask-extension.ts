@@ -7,9 +7,13 @@ import { spawnSync } from 'node:child_process';
 const extensionId =
   process.env.METAMASK_EXTENSION_ID ?? 'nkbihfbeogaeaoehlefnkodbefgpgknn';
 const chromeVersion = process.env.CHROME_VERSION ?? '131.0.0.0';
-const destDir =
-  process.env.METAMASK_EXTENSION_DEST ??
-  path.resolve(process.cwd(), '.extensions', 'metamask');
+const defaultDest = path.resolve(process.cwd(), '.extensions', 'metamask');
+const envPath = process.env.METAMASK_EXTENSION_PATH;
+const destDir = envPath
+  ? path.isAbsolute(envPath)
+    ? envPath
+    : path.resolve(process.cwd(), envPath)
+  : defaultDest;
 
 const url = `https://clients2.google.com/service/update2/crx?response=redirect&prodversion=${chromeVersion}&acceptformat=crx2,crx3&x=id%3D${extensionId}%26installsource%3Dondemand%26uc`;
 

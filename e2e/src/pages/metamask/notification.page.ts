@@ -3,19 +3,32 @@ import type { BrowserContext, Page } from '@playwright/test';
 export class NotificationPage {
   constructor(
     private readonly context: BrowserContext,
-    _extensionId: string,
+    private readonly extensionId: string,
   ) {}
+
+  private isNotificationPage(page: Page): boolean {
+    try {
+      const parsed = new URL(page.url());
+      return (
+        parsed.protocol === 'chrome-extension:' &&
+        parsed.host === this.extensionId &&
+        parsed.pathname.includes('notification.html')
+      );
+    } catch {
+      return false;
+    }
+  }
 
   /** Wait for the MetaMask notification popup to appear and return its page */
   private async waitForNotificationPage(): Promise<Page> {
     let notifPage = this.context
       .pages()
-      .find(p => p.url().includes('notification.html'));
+      .find(p => this.isNotificationPage(p));
 
     if (!notifPage) {
       notifPage = await this.context.waitForEvent('page', {
         timeout: 30_000,
-        predicate: p => p.url().includes('notification.html'),
+        predicate: p => this.isNotificationPage(p),
       });
     }
 
@@ -33,8 +46,32 @@ export class NotificationPage {
       await nextButton.isVisible({ timeout: 5000 }).catch(() => false)
     ) {
       await nextButton.click();
-      // Wait for the page to transition to the next step
-      await page.waitForTimeout(1000);
+      // Wait for the button to become disabled (transition started)…
+      await page.waitForFunction(
+        () => {
+          const btn = document.querySelector(
+            '[data-testid="page-container-footer-next"]',
+          ) as HTMLButtonElement | null;
+          return (
+            !btn ||
+            btn.disabled ||
+            btn.getAttribute('aria-disabled') === 'true'
+          );
+        },
+        { timeout: 10_000 },
+      );
+      // …then wait for it to be ready again (next step loaded)
+      await page.waitForFunction(
+        () => {
+          const btn = document.querySelector(
+            '[data-testid="page-container-footer-next"]',
+          ) as HTMLButtonElement | null;
+          return (
+            btn && !btn.disabled && btn.getAttribute('aria-disabled') !== 'true'
+          );
+        },
+        { timeout: 10_000 },
+      );
     }
 
     const confirmButton = page.getByTestId('page-container-footer-next');
