@@ -1,6 +1,11 @@
 # Status Website
 
-This is the source for [https://status.app](https://status.app) – a [Next.js](https://nextjs.org/) project.
+This is the repository for the [https://status.app](https://status.app) – a [Next.js](https://nextjs.org/) project.
+
+## Prerequisites
+
+- **[Node.js](https://nodejs.org/)** v22.x
+- **[pnpm](https://pnpm.io)** v9.12.x
 
 ## Getting Started
 
@@ -9,7 +14,32 @@ First, follow the [root README](../../README.md#getting-started) to clone the re
 Then, pull environment variables:
 
 ```bash
-vercel env pull .env.local
+  git clone https://github.com/status-im/status-website.git
+  git submodule update --init --recursive
+```
+
+Optionally, update submodules:
+
+```bash
+  git submodule update --remote [submodule]
+```
+
+Go to the project directory:
+
+```bash
+  cd status-website
+```
+
+Install dependencies:
+
+```bash
+  pnpm install
+```
+
+Pull environment variables:
+
+```bash
+  vercel env pull .env.local
 ```
 
 Start the development server:

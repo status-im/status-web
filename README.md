@@ -59,6 +59,7 @@ Clone the repository:
 
           git clone https://github.com/status-im/status-web.git
           cd status-web
+          git submodule update --init --recursive
 
 2\. Initialize and update submodules:
 
@@ -99,6 +100,39 @@ Clone the repository:
 7.  Start development mode:
 
          pnpm dev
+
+## Contributing
+
+To contribute changes via a pull request:
+
+1.  Fork the repository on GitHub: open [status-im/status-web](https://github.com/status-im/status-web), click "Fork", and create your fork under your account.
+
+2.  Clone your fork and add the official repo as `upstream`:
+
+        git clone https://github.com/YOUR_USERNAME/status-web.git
+        cd status-web
+        git remote add upstream https://github.com/status-im/status-web.git
+        git submodule update --init --recursive
+
+3.  Create a branch, make your changes, then push to your fork:
+
+        git checkout -b your-branch-name
+        # make changes, then:
+        git add .
+        git commit -m "your commit message"
+        git push origin your-branch-name
+
+4.  Open a pull request on GitHub: go to your fork, click "Compare & pull request" for your branch, and open the PR against `status-im/status-web` (base: `main`).
+
+> [!NOTE]
+> Keep your fork in sync before starting new work:
+>
+> ```bash
+> git fetch upstream
+> git checkout main
+> git merge upstream/main
+> git push origin main
+> ```
 
 ## Storybook
 

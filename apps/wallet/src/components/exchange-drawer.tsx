@@ -67,6 +67,7 @@ export const ExchangeDrawer = (props: ExchangeDrawerProps) => {
     () => ({
       integrator: 'StatusWallet',
       variant: 'compact',
+      appearance: 'light',
       fromChain,
       fromToken: fromToken || NATIVE_ETH_ADDRESS,
       fromAddress: isConnected ? connectedAddress : account?.address,
