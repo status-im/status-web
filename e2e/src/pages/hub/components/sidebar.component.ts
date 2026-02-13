@@ -8,7 +8,7 @@ export class SidebarComponent {
   }
 
   get preDepositsLink(): Locator {
-    return this.page.getByRole('link', { name: /pre.deposit/i }).first();
+    return this.page.getByRole('link', { name: /pre-deposits/i }).first();
   }
 
   get stakeLink(): Locator {
