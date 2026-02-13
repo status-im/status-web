@@ -6,6 +6,7 @@ on:
   pull_request:
     types: [opened, synchronize]
   workflow_call:
+  workflow_dispatch:
 
 env:
   INFURA_API_KEY: ''
@@ -55,3 +56,58 @@ jobs:
 
       - name: Test
         run: pnpm test
+
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.17.0
+          cache: pnpm
+          cache-dependency-path: e2e/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: cd e2e && pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: cd e2e && npx playwright install chromium --with-deps
+
+      - name: Download MetaMask extension
+        run: cd e2e && pnpm setup:metamask
+
+      - name: Run E2E tests
+        run: cd e2e && xvfb-run --auto-servernum -- pnpm test
+        env:
+          WALLET_SEED_PHRASE: ${{ secrets.E2E_WALLET_SEED_PHRASE }}
+          WALLET_PASSWORD: ${{ secrets.E2E_WALLET_PASSWORD }}
+          BASE_URL: https://hub.status.network
+          CI: true
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-report
+          path: e2e/test-results/
+          retention-days: 14
+
+      - name: Upload test artifacts
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: e2e-artifacts
+          path: |
+            e2e/test-results/artifacts/
+          retention-days: 7
