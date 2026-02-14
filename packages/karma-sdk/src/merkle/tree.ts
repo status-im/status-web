@@ -43,6 +43,7 @@ export function buildMerkleTree(entries: AirdropEntry[]): MerkleTreeOutput {
   while (layers[layers.length - 1]!.length > 1) {
     const currentLayer = layers[layers.length - 1]!
     const nextLayer: `0x${string}`[] = []
+
     for (let i = 0; i < currentLayer.length; i += 2) {
       if (i + 1 < currentLayer.length) {
         nextLayer.push(hashPair(currentLayer[i]!, currentLayer[i + 1]!))
@@ -50,6 +51,7 @@ export function buildMerkleTree(entries: AirdropEntry[]): MerkleTreeOutput {
         nextLayer.push(currentLayer[i]!)
       }
     }
+
     layers.push(nextLayer)
   }
 
