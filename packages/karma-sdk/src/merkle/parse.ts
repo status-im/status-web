@@ -1,9 +1,14 @@
 import type { AirdropEntry, MerkleTreeOutput } from './tree'
+import { isAddress, isHex } from 'viem'
 
 type UnknownRecord = Record<string, unknown>
 
-function isHexString(value: unknown): value is `0x${string}` {
-  return typeof value === 'string' && value.startsWith('0x')
+function isBytes32(value: unknown): value is `0x${string}` {
+  return isHex(value, { strict: true }) && value.length === 66
+}
+
+function isAccountAddress(value: unknown): value is `0x${string}` {
+  return typeof value === 'string' && isAddress(value)
 }
 
 function asBigInt(value: unknown, fieldName: string): bigint {
@@ -29,11 +34,11 @@ function parseEntry(
   const account = record['account']
   const proof = record['proof']
 
-  if (!isHexString(account)) {
+  if (!isAccountAddress(account)) {
     throw new Error(`Invalid account at entry ${index}`)
   }
 
-  if (!Array.isArray(proof) || !proof.every(isHexString)) {
+  if (!Array.isArray(proof) || !proof.every(isBytes32)) {
     throw new Error(`Invalid proof at entry ${index}`)
   }
 
@@ -58,7 +63,7 @@ export function parseMerkleTreeOutput(
   const root = record['root']
   const entries = record['entries']
 
-  if (!isHexString(root)) {
+  if (!isBytes32(root)) {
     throw new Error('Invalid merkle root')
   }
 
