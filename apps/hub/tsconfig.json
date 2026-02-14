@@ -29,6 +29,7 @@
     "plugins": [{ "name": "next" }],
     "baseUrl": ".",
     "paths": {
+      "@status-im/karma-sdk": ["../../packages/karma-sdk/src/index.ts"],
       "~components/*": ["./src/app/_components/*"],
       "~hooks/*": ["./src/app/_hooks/*"],
       "~constants/*": ["./src/app/_constants/*"],

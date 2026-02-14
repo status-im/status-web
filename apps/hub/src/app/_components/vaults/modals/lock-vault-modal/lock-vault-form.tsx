@@ -115,8 +115,11 @@ export function LockVaultForm(props: LockVaultFormProps) {
 
   const [sliderValue, setSliderValue] = useState(initialSliderValue)
 
-  const calculateUnlockDate = (totalDays: number): string => {
-    const totalSeconds = totalDays * SECONDS_PER_DAY
+  const calculatedUnlockDate = useMemo(() => {
+    const daysValue = parseInt(
+      days || initialDays || DEFAULT_LOCK_PERIOD.INITIAL_DAYS
+    )
+    const totalSeconds = daysValue * SECONDS_PER_DAY
     // Always calculate from today for consistent UX
     const unlockTimestamp = Math.floor(Date.now() / 1000) + totalSeconds
 
@@ -131,14 +134,7 @@ export function LockVaultForm(props: LockVaultFormProps) {
       return `${year}-${month}-${day}`
     }
     return `${day}/${month}/${year}`
-  }
-
-  const calculatedUnlockDate = useMemo(() => {
-    const daysValue = parseInt(
-      days || initialDays || DEFAULT_LOCK_PERIOD.INITIAL_DAYS
-    )
-    return calculateUnlockDate(daysValue)
-  }, [days, initialDays, calculateUnlockDate])
+  }, [days, initialDays, locale])
 
   useEffect(() => {
     const daysValue = parseInt(days || DEFAULT_LOCK_PERIOD.INITIAL_DAYS)
