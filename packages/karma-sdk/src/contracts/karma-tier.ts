@@ -18,23 +18,22 @@ export async function getKarmaTiers(
     functionName: 'getTierCount',
   })
 
-  const tiers: KarmaTier[] = []
-  for (let i = 0; i < Number(tierCount); i++) {
-    const tier = await client.readContract({
-      address: addresses.karmaTier,
-      abi: karmaTierAbi,
-      functionName: 'getTierById',
-      args: [i],
-    })
-
-    tiers.push({
-      id: i,
-      minKarma: tier.minKarma,
-      maxKarma: tier.maxKarma,
-      name: tier.name,
-      txPerEpoch: tier.txPerEpoch,
-    })
-  }
+  const tiers = (await Promise.all(
+    Array.from({ length: Number(tierCount) }, (_, i) =>
+      client.readContract({
+        address: addresses.karmaTier,
+        abi: karmaTierAbi,
+        functionName: 'getTierById',
+        args: [i],
+      })
+    )
+  )).map((tier, i) => ({
+    id: i,
+    minKarma: tier.minKarma,
+    maxKarma: tier.maxKarma,
+    name: tier.name,
+    txPerEpoch: tier.txPerEpoch,
+  }))
 
   return tiers
 }
