@@ -19,9 +19,7 @@ export const METADATA: Record<
     id: 28,
     fileName: 'featuring.md',
   },
-  // fixme: Missing required fields for 1 documents. (slug)
-  // fixme: Title still has ID despite being raw
-  '57/STATUS-Simple-Scaling': {
+  'STATUS-SIMPLE-SCALING': {
     id: 'raw',
     fileName: 'simple-scaling.md',
   },

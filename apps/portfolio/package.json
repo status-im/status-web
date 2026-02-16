@@ -89,7 +89,7 @@
     "minisearch": "^6.1.0",
     "next": "15.3.8",
     "next-contentlayer": "^0.3.4",
-    "next-mdx-remote": "^5.0.0",
+    "next-mdx-remote": "^6.0.0",
     "oslo": "1.0.1",
     "parallax-controller": "^1.7.1",
     "prettier-plugin-tailwindcss": "^0.6.6",
