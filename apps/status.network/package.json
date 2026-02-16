@@ -5,7 +5,7 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "predev": "pnpm install",
-    "dev": "next dev",
+    "dev": "next dev --port 3002",
     "build": "next build",
     "postbuild": "next-sitemap",
     "start": "next start",
@@ -28,7 +28,7 @@
     "negotiator": "^1.0.0",
     "next": "15.1.11",
     "next-intl": "^4.6.0",
-    "next-mdx-remote": "^5.0.0",
+    "next-mdx-remote": "^6.0.0",
     "react": "19.1.2",
     "react-dom": "19.1.2",
     "rehype-slug": "^6.0.0",

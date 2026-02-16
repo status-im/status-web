@@ -9,6 +9,7 @@ import { CurrencyAmount } from '../currency-amount'
 import { PercentageChange } from '../percentage-change'
 import * as Table from '../table'
 import { TokenAmount } from '../token-amount'
+import { TokenIcon } from '../token-icon'
 
 import type { ApiOutput } from '../../data'
 
@@ -104,10 +105,11 @@ const AssetsList = (props: Props) => {
                   >
                     <Table.Cell size={36}>
                       <div className="flex flex-row items-center gap-2">
-                        <img
-                          className="size-6 rounded-full bg-neutral-10"
-                          alt={asset.name}
-                          src={asset.icon}
+                        <TokenIcon
+                          icon={asset.icon}
+                          name={asset.name}
+                          symbol={asset.symbol}
+                          size="24"
                         />
                         <span className="truncate">{asset.name}</span>
                       </div>
@@ -177,10 +179,11 @@ const AssetsList = (props: Props) => {
                 }}
               >
                 <div className="flex items-center gap-2">
-                  <img
-                    className="size-8 rounded-full"
-                    alt={asset.name}
-                    src={asset.icon}
+                  <TokenIcon
+                    icon={asset.icon}
+                    name={asset.name}
+                    symbol={asset.symbol}
+                    size="32"
                   />
                   <div className="flex min-w-0 flex-col items-start text-left">
                     <span className="w-full max-w-40 truncate text-15 font-600 sm:max-w-full">
