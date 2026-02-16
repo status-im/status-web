@@ -29,7 +29,7 @@ pipeline {
     )
     string(
       name: 'NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID',
-      description: 'Name of app from apps folder.',
+      description: 'WalletConnect project ID for Web3 connectivity.',
       defaultValue: params.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ?: ''
     )
     string(
