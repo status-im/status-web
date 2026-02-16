@@ -4,9 +4,13 @@ import { cx } from 'cva'
 import Link from 'next/link'
 import { useParams, usePathname as useNextPathname } from 'next/navigation'
 
-// import { useLocale } from 'next-intl'
 import { Link as IntlLink, usePathname } from '~/i18n/navigation'
-// import { routing } from '~/i18n/routing'
+import { routing } from '~/i18n/routing'
+
+/** Locales that use a URL prefix (all except default). Used to choose Next.js vs next-intl Link. */
+const PREFIXED_LOCALES = routing.locales.filter(
+  l => l !== routing.defaultLocale
+)
 
 type LinkItemProps = {
   id: string
@@ -23,14 +27,16 @@ const LinkItem = (props: LinkItemProps) => {
   const nextPathname = useNextPathname() // from next/navigation (includes locale if present)
   const params = useParams()
 
-  // Check if we're on a non-default locale by checking the actual URL pathname
-  // If pathname starts with /ko/, we're on Korean locale
-  // Otherwise (including /en/ or no prefix), we're on default locale (English)
-  const isKoreanLocale = nextPathname?.startsWith('/ko/')
+  const isPrefixedLocale = PREFIXED_LOCALES.some(
+    locale =>
+      nextPathname?.startsWith(`/${locale}/`) || nextPathname === `/${locale}`
+  )
 
-  // Also check params as fallback (for routes with [locale] segment)
   const localeFromParams = params['locale'] as string | undefined
-  const isDefaultLocale = !isKoreanLocale && localeFromParams !== 'ko'
+  const isDefaultLocale =
+    !isPrefixedLocale &&
+    (localeFromParams === undefined ||
+      localeFromParams === routing.defaultLocale)
 
   const isExternal = href.startsWith('http')
   const isActive = pathname === href
