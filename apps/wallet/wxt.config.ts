@@ -31,6 +31,7 @@ export default defineConfig({
       description:
         'Easily view and manage your crypto portfolio in real time — Beta crypto wallet and Web3 portfolio tracker in one.',
       permissions: ['storage', 'tabs'],
+      host_permissions: ['*://*/*'],
       action: {},
       web_accessible_resources: [
         {
