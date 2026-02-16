@@ -1,8 +1,12 @@
 import { ExternalIcon } from '@status-im/icons/20'
 import { Link as StatusLink } from '@status-im/status-network/components'
 import { cx } from 'cva'
+import Link from 'next/link'
+import { useParams, usePathname as useNextPathname } from 'next/navigation'
 
-import { Link, usePathname } from '~/i18n/navigation'
+// import { useLocale } from 'next-intl'
+import { Link as IntlLink, usePathname } from '~/i18n/navigation'
+// import { routing } from '~/i18n/routing'
 
 type LinkItemProps = {
   id: string
@@ -15,7 +19,18 @@ type LinkItemProps = {
 
 const LinkItem = (props: LinkItemProps) => {
   const { id, label, icon: Icon, href, tag } = props
-  const pathname = usePathname()
+  const pathname = usePathname() // from next-intl (locale-free)
+  const nextPathname = useNextPathname() // from next/navigation (includes locale if present)
+  const params = useParams()
+
+  // Check if we're on a non-default locale by checking the actual URL pathname
+  // If pathname starts with /ko/, we're on Korean locale
+  // Otherwise (including /en/ or no prefix), we're on default locale (English)
+  const isKoreanLocale = nextPathname?.startsWith('/ko/')
+
+  // Also check params as fallback (for routes with [locale] segment)
+  const localeFromParams = params['locale'] as string | undefined
+  const isDefaultLocale = !isKoreanLocale && localeFromParams !== 'ko'
 
   const isExternal = href.startsWith('http')
   const isActive = pathname === href
@@ -27,8 +42,14 @@ const LinkItem = (props: LinkItemProps) => {
     }
   }
 
-  // Use locale-aware Link for internal links, StatusLink for external
-  const LinkComponent = isExternal ? StatusLink : Link
+  // Use Next.js Link for default locale (en) to avoid /en/ prefix
+  // This matches the pattern used in language-selector.tsx
+  // Use next-intl Link for other locales, StatusLink for external
+  const LinkComponent = isExternal
+    ? StatusLink
+    : isDefaultLocale
+      ? Link
+      : IntlLink
 
   return (
     <li key={id}>
