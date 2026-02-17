@@ -1,4 +1,5 @@
 import type { BrowserContext, Page } from '@playwright/test';
+import { NOTIFICATION_TIMEOUTS } from '../../constants/timeouts.js';
 
 export class NotificationPage {
   constructor(
@@ -27,7 +28,7 @@ export class NotificationPage {
 
     if (!notifPage) {
       notifPage = await this.context.waitForEvent('page', {
-        timeout: 30_000,
+        timeout: NOTIFICATION_TIMEOUTS.POPUP_APPEAR,
         predicate: p => this.isNotificationPage(p),
       });
     }
@@ -43,7 +44,7 @@ export class NotificationPage {
     // MetaMask connection approval may have multiple steps
     const nextButton = page.getByTestId('page-container-footer-next');
     if (
-      await nextButton.isVisible({ timeout: 5000 }).catch(() => false)
+      await nextButton.isVisible({ timeout: NOTIFICATION_TIMEOUTS.ELEMENT_VISIBLE }).catch(() => false)
     ) {
       await nextButton.click();
       // Wait for the button to become disabled (transition started)…
@@ -58,7 +59,7 @@ export class NotificationPage {
             btn.getAttribute('aria-disabled') === 'true'
           );
         },
-        { timeout: 10_000 },
+        { timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION },
       );
       // …then wait for it to be ready again (next step loaded)
       await page.waitForFunction(
@@ -70,7 +71,7 @@ export class NotificationPage {
             btn && !btn.disabled && btn.getAttribute('aria-disabled') !== 'true'
           );
         },
-        { timeout: 10_000 },
+        { timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION },
       );
     }
 
@@ -85,7 +86,7 @@ export class NotificationPage {
     const confirmButton = page
       .getByTestId('page-container-footer-next')
       .or(page.getByRole('button', { name: /confirm/i }));
-    await confirmButton.click({ timeout: 15_000 });
+    await confirmButton.click({ timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM });
   }
 
   /** Reject a transaction (Cancel button) */
@@ -117,7 +118,7 @@ export class NotificationPage {
       name: /use default/i,
     });
     if (
-      await useDefaultButton.isVisible({ timeout: 3000 }).catch(() => false)
+      await useDefaultButton.isVisible({ timeout: NOTIFICATION_TIMEOUTS.OPTIONAL_ELEMENT }).catch(() => false)
     ) {
       await useDefaultButton.click();
     }
