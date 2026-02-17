@@ -1,7 +1,8 @@
-import { test } from '../../src/fixtures/wallet-connected.fixture.js'
-import { PreDepositsPage } from '../../src/pages/hub/pre-deposits.page.js'
-import { PreDepositModalComponent } from '../../src/pages/hub/components/pre-deposit-modal.component.js'
-import { TEST_VAULTS } from '../../src/constants/vaults.js'
+import { test } from '@fixtures/wallet-connected.fixture.js'
+import { PreDepositsPage } from '@pages/hub/pre-deposits.page.js'
+import { PreDepositModalComponent } from '@pages/hub/components/pre-deposit-modal.component.js'
+import { TEST_VAULTS } from '@constants/vaults.js'
+import { NOTIFICATION_TIMEOUTS } from '@constants/timeouts.js'
 
 // Status Network Sepolia chain ID (hex) — a network that no vault uses,
 // ensuring all vaults show "Switch Network to Deposit".
@@ -42,7 +43,7 @@ test.describe('Pre-Deposit - Network switch', () => {
             'button[aria-label="Close"], [data-testid="connectkit-close"]',
           )
           if (
-            await siweClose.isVisible({ timeout: 3_000 }).catch(() => false)
+            await siweClose.isVisible({ timeout: NOTIFICATION_TIMEOUTS.OPTIONAL_ELEMENT }).catch(() => false)
           ) {
             await siweClose.click()
           }

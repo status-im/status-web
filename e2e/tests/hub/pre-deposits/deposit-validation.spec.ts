@@ -1,8 +1,9 @@
 import { expect } from '@playwright/test'
-import { test } from '../../src/fixtures/wallet-connected.fixture.js'
-import { PreDepositsPage } from '../../src/pages/hub/pre-deposits.page.js'
-import { PreDepositModalComponent } from '../../src/pages/hub/components/pre-deposit-modal.component.js'
-import { TEST_VAULTS, TEST_AMOUNTS } from '../../src/constants/vaults.js'
+import { test } from '@fixtures/wallet-connected.fixture.js'
+import { PreDepositsPage } from '@pages/hub/pre-deposits.page.js'
+import { PreDepositModalComponent } from '@pages/hub/components/pre-deposit-modal.component.js'
+import { TEST_VAULTS, TEST_AMOUNTS } from '@constants/vaults.js'
+import { NOTIFICATION_TIMEOUTS } from '@constants/timeouts.js'
 
 // MetaMask defaults to Ethereum Mainnet on a fresh profile.
 const METAMASK_DEFAULT_CHAIN_ID = 1
@@ -52,7 +53,7 @@ test.describe('Pre-Deposit validation - Exceed balance', () => {
               'button[aria-label="Close"], [data-testid="connectkit-close"]',
             )
             if (
-              await siweClose.isVisible({ timeout: 3_000 }).catch(() => false)
+              await siweClose.isVisible({ timeout: NOTIFICATION_TIMEOUTS.OPTIONAL_ELEMENT }).catch(() => false)
             ) {
               await siweClose.click()
             }
@@ -84,10 +85,10 @@ test.describe('Pre-Deposit validation - Exceed balance', () => {
         // action button has rendered.
         await test.step('Verify wallet is on the correct network', async () => {
           await expect(depositModal.switchNetworkButton).not.toBeVisible({
-            timeout: 2_000,
+            timeout: NOTIFICATION_TIMEOUTS.OPTIONAL_ELEMENT,
           })
           await expect(depositModal.actionButton).toBeVisible({
-            timeout: 10_000,
+            timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION,
           })
         })
 

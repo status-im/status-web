@@ -1,4 +1,5 @@
 import { expect, type Locator, type Page } from '@playwright/test'
+import { NOTIFICATION_TIMEOUTS, HUB_TIMEOUTS } from '@constants/timeouts.js'
 
 export class PreDepositModalComponent {
   readonly dialog: Locator
@@ -27,8 +28,8 @@ export class PreDepositModalComponent {
   }
 
   async waitForOpen(): Promise<void> {
-    await expect(this.dialog).toBeVisible({ timeout: 15_000 })
-    await expect(this.title).toBeVisible({ timeout: 5_000 })
+    await expect(this.dialog).toBeVisible({ timeout: HUB_TIMEOUTS.PAGE_READY })
+    await expect(this.title).toBeVisible({ timeout: NOTIFICATION_TIMEOUTS.ELEMENT_VISIBLE })
   }
 
   async enterAmount(amount: string): Promise<void> {
@@ -38,11 +39,11 @@ export class PreDepositModalComponent {
   async close(): Promise<void> {
     // force: true bypasses ConnectKit's SIWE overlay that may intercept clicks
     await this.closeButton.click({ force: true })
-    await expect(this.dialog).not.toBeVisible({ timeout: 5_000 })
+    await expect(this.dialog).not.toBeVisible({ timeout: NOTIFICATION_TIMEOUTS.ELEMENT_VISIBLE })
   }
 
   async expectErrorMessageMatching(pattern: RegExp): Promise<void> {
-    await expect(this.errorMessage).toBeVisible({ timeout: 10_000 })
+    await expect(this.errorMessage).toBeVisible({ timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION })
     await expect(this.errorMessage).toHaveText(pattern)
   }
 
@@ -55,7 +56,7 @@ export class PreDepositModalComponent {
   }
 
   async expectSwitchNetworkButtonVisible(): Promise<void> {
-    await expect(this.switchNetworkButton).toBeVisible({ timeout: 15_000 })
+    await expect(this.switchNetworkButton).toBeVisible({ timeout: HUB_TIMEOUTS.PAGE_READY })
   }
 
   async clickSwitchNetwork(): Promise<void> {
@@ -64,7 +65,7 @@ export class PreDepositModalComponent {
 
   async expectSwitchNetworkButtonGone(): Promise<void> {
     await expect(this.switchNetworkButton).not.toBeVisible({
-      timeout: 15_000,
+      timeout: HUB_TIMEOUTS.PAGE_READY,
     })
   }
 }
