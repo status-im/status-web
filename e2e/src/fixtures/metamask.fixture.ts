@@ -3,9 +3,9 @@ import type { BrowserContext, Page } from '@playwright/test';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { MetaMaskPage } from '../pages/metamask/metamask.page.js';
-import { loadEnvConfig } from '../config/env.js';
-import { VIEWPORT, EXTENSION_TIMEOUTS } from '../constants/timeouts.js';
+import { MetaMaskPage } from '@pages/metamask/metamask.page.js';
+import { loadEnvConfig } from '@config/env.js';
+import { VIEWPORT, EXTENSION_TIMEOUTS } from '@constants/timeouts.js';
 
 interface MetaMaskFixtures {
   extensionContext: BrowserContext;

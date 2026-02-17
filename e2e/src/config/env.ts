@@ -25,7 +25,7 @@ export function loadEnvConfig(): EnvConfig {
   const config: EnvConfig = {
     BASE_URL: process.env.BASE_URL ?? 'https://hub.status.network',
     WALLET_SEED_PHRASE: process.env.WALLET_SEED_PHRASE ?? '',
-    WALLET_PASSWORD: process.env.WALLET_PASSWORD ?? 'TestPassword123!',
+    WALLET_PASSWORD: process.env.WALLET_PASSWORD ?? '',
     METAMASK_EXTENSION_PATH: resolveExtensionPath(rootDir),
     METAMASK_EXTENSION_ID:
       process.env.METAMASK_EXTENSION_ID ?? 'nkbihfbeogaeaoehlefnkodbefgpgknn',
@@ -46,7 +46,7 @@ function requireEnv(name: string): string {
   if (!value) {
     throw new Error(
       `Required environment variable ${name} is not set. ` +
-        `Copy .env.example to .env and fill in the values.`,
+        'Copy .env.example to .env and fill in the values.',
     );
   }
   return value;
@@ -55,6 +55,11 @@ function requireEnv(name: string): string {
 /** Require WALLET_SEED_PHRASE — only called when wallet tests actually run */
 export function requireWalletSeedPhrase(): string {
   return requireEnv('WALLET_SEED_PHRASE');
+}
+
+/** Require WALLET_PASSWORD — only called when wallet tests actually run */
+export function requireWalletPassword(): string {
+  return requireEnv('WALLET_PASSWORD');
 }
 
 function resolveExtensionPath(rootDir: string): string {

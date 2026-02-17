@@ -1,12 +1,12 @@
 import { test as metamaskTest } from './metamask.fixture.js';
-import { loadEnvConfig, requireWalletSeedPhrase } from '../config/env.js';
+import { loadEnvConfig, requireWalletSeedPhrase, requireWalletPassword } from '@config/env.js';
 
 export const test = metamaskTest.extend({
   metamask: async ({ metamask }, use) => {
-    const env = loadEnvConfig();
     const seedPhrase = requireWalletSeedPhrase();
+    const password = requireWalletPassword();
 
-    await metamask.onboarding.importWallet(seedPhrase, env.WALLET_PASSWORD);
+    await metamask.onboarding.importWallet(seedPhrase, password);
 
     await use(metamask);
   },

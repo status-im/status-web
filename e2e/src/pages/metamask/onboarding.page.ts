@@ -1,5 +1,5 @@
 import type { BrowserContext, Page } from '@playwright/test';
-import { ONBOARDING_TIMEOUTS } from '../../constants/timeouts.js';
+import { ONBOARDING_TIMEOUTS } from '@constants/timeouts.js';
 
 export class OnboardingPage {
   constructor(

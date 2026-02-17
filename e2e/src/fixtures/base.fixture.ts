@@ -1,6 +1,6 @@
 import { test as base } from '@playwright/test';
-import { PreDepositsPage } from '../pages/hub/pre-deposits.page.js';
-import { SidebarComponent } from '../pages/hub/components/sidebar.component.js';
+import { PreDepositsPage } from '@pages/hub/pre-deposits.page.js';
+import { SidebarComponent } from '@pages/hub/components/sidebar.component.js';
 
 interface HubFixtures {
   preDepositsPage: PreDepositsPage;
