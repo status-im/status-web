@@ -34,4 +34,5 @@ export const TEST_AMOUNTS = {
   MEDIUM_DEPOSIT: '0.01',
   LARGE_DEPOSIT: '0.1',
   STAKE_AMOUNT: '100',
+  EXCEED_BALANCE: '999999999',
 } as const;

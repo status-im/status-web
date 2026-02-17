@@ -69,6 +69,11 @@ export class MetaMaskPage {
     await this.notification.approveNetworkSwitch();
   }
 
+  /** Dismiss pending "Add network" requests from the hub */
+  async dismissPendingAddNetwork(): Promise<void> {
+    await this.notification.dismissPendingAddNetwork();
+  }
+
   /** Approve a token spending allowance */
   async approveTokenSpend(): Promise<void> {
     await this.notification.approveTokenSpend();
