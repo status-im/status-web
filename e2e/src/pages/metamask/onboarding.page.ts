@@ -1,4 +1,5 @@
 import type { BrowserContext, Page } from '@playwright/test';
+import { ONBOARDING_TIMEOUTS } from '../../constants/timeouts.js';
 
 export class OnboardingPage {
   constructor(
@@ -27,7 +28,7 @@ export class OnboardingPage {
     // Step 3: Enter seed phrase in textarea
     const textarea = page.locator('textarea');
     await textarea.click();
-    await textarea.pressSequentially(seedPhrase.trim(), { delay: 30 });
+    await textarea.pressSequentially(seedPhrase.trim(), { delay: ONBOARDING_TIMEOUTS.SEED_PHRASE_TYPING_DELAY });
     await page.getByTestId('import-srp-confirm').click();
 
     // Step 4: Create password
@@ -66,7 +67,7 @@ export class OnboardingPage {
     // Try to dismiss "What's New" popup
     const whatsNewClose = page.getByTestId('popover-close');
     if (
-      await whatsNewClose.isVisible({ timeout: 3000 }).catch(() => false)
+      await whatsNewClose.isVisible({ timeout: ONBOARDING_TIMEOUTS.POPUP_DISMISS }).catch(() => false)
     ) {
       await whatsNewClose.click();
     }
