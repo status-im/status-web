@@ -107,3 +107,4 @@ web-build/
 
 # IDE
 .idea
+.vscode

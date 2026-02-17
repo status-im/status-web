@@ -2,6 +2,7 @@ import type { BrowserContext, Page } from '@playwright/test';
 import { OnboardingPage } from './onboarding.page.js';
 import { NotificationPage } from './notification.page.js';
 import { MetaMaskHomePage } from './home.page.js';
+import { EXTENSION_TIMEOUTS } from '../../constants/timeouts.js';
 
 export class MetaMaskPage {
   readonly onboarding: OnboardingPage;
@@ -28,7 +29,7 @@ export class MetaMaskPage {
 
     if (!mmPage) {
       mmPage = await this.context.waitForEvent('page', {
-        timeout: 10_000,
+        timeout: EXTENSION_TIMEOUTS.EXTENSION_PAGE,
         predicate: p => p.url().startsWith(this.extensionPrefix),
       });
     }

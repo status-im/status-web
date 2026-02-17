@@ -5,6 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { MetaMaskPage } from '../pages/metamask/metamask.page.js';
 import { loadEnvConfig } from '../config/env.js';
+import { VIEWPORT, EXTENSION_TIMEOUTS } from '../constants/timeouts.js';
 
 interface MetaMaskFixtures {
   extensionContext: BrowserContext;
@@ -36,7 +37,7 @@ export const test = base.extend<MetaMaskFixtures>({
         '--no-first-run',
         '--disable-default-apps',
       ],
-      viewport: { width: 1440, height: 900 },
+      viewport: { width: VIEWPORT.WIDTH, height: VIEWPORT.HEIGHT },
     });
 
     await use(context);
@@ -49,7 +50,7 @@ export const test = base.extend<MetaMaskFixtures>({
     const serviceWorker =
       extensionContext.serviceWorkers()[0] ??
       (await extensionContext.waitForEvent('serviceworker', {
-        timeout: 30_000,
+        timeout: EXTENSION_TIMEOUTS.SERVICE_WORKER,
       }));
 
     const extensionId = new URL(serviceWorker.url()).host;

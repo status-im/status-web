@@ -1,5 +1,6 @@
 import { expect, type Page } from '@playwright/test';
 import { BasePage } from '../base.page.js';
+import { HUB_TIMEOUTS } from '../../constants/timeouts.js';
 
 export class PreDepositsPage extends BasePage {
   readonly heading = this.page.getByRole('heading', {
@@ -27,7 +28,7 @@ export class PreDepositsPage extends BasePage {
   }
 
   async waitForReady(): Promise<void> {
-    await expect(this.heading).toBeVisible({ timeout: 15_000 });
+    await expect(this.heading).toBeVisible({ timeout: HUB_TIMEOUTS.PAGE_READY });
   }
 
   /** Click deposit on a specific vault by token symbol */

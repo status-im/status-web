@@ -1,1 +1,4 @@
+# This file prevents pnpm from traversing up the directory tree
+# and resolving against the monorepo root pnpm-workspace.yaml.
+# It declares e2e/ as an independent workspace root.
 packages: []
