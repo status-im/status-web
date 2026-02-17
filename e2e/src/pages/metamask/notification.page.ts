@@ -54,7 +54,7 @@ export class NotificationPage {
     const page = await this.waitForNotificationPage();
 
     const connectButton = page.getByRole('button', { name: /^connect$/i });
-    await connectButton.click({ timeout: 10_000 });
+    await connectButton.click({ timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION });
   }
 
   /** Approve a transaction (Confirm button) */
@@ -84,7 +84,7 @@ export class NotificationPage {
     const actionButton = page.getByRole('button', {
       name: /^(approve|confirm|switch network)$/i,
     });
-    await actionButton.click({ timeout: 10_000 });
+    await actionButton.click({ timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION });
   }
 
   /**
@@ -101,7 +101,7 @@ export class NotificationPage {
     // Wait for the hub's wallet_addEthereumChain request to arrive and render.
     const confirmButton = page.getByRole('button', { name: /^confirm$/i });
     const hasPending = await confirmButton
-      .isVisible({ timeout: 10_000 })
+      .isVisible({ timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION })
       .catch(() => false);
 
     if (!hasPending) {
