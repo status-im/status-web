@@ -1,0 +1,114 @@
+import { expect } from '@playwright/test'
+import { test } from '../../src/fixtures/wallet-connected.fixture.js'
+import { PreDepositsPage } from '../../src/pages/hub/pre-deposits.page.js'
+import { PreDepositModalComponent } from '../../src/pages/hub/components/pre-deposit-modal.component.js'
+import { TEST_VAULTS, TEST_AMOUNTS } from '../../src/constants/vaults.js'
+
+// MetaMask defaults to Ethereum Mainnet on a fresh profile.
+const METAMASK_DEFAULT_CHAIN_ID = 1
+
+// Status Network Sepolia chain ID (hex) — used to put MetaMask on a
+// wrong network so the deposit modal's "Switch Network" flow can be
+// exercised. Same constant as deposit-network-switch.spec.ts.
+const STATUS_SEPOLIA_CHAIN_ID = '0x6300b5ea'
+
+test.describe('Pre-Deposit validation - Exceed balance', () => {
+  for (const vault of Object.values(TEST_VAULTS)) {
+    test(
+      `${vault.token}: shows insufficient balance error when amount exceeds balance`,
+      { tag: '@wallet' },
+      async ({ hubPage, metamask }) => {
+        const preDepositsPage = new PreDepositsPage(hubPage)
+        const depositModal = new PreDepositModalComponent(hubPage)
+
+        // For vaults on a different chain we must first put MetaMask on a
+        // known wrong network, using the exact same 3-step setup as
+        // deposit-network-switch.spec.ts.  The crucial part is step 3:
+        // approveNetworkSwitch() leaves notification.html OPEN, which
+        // allows MetaMask to auto-process subsequent chain-switch requests.
+        if (vault.chainId !== METAMASK_DEFAULT_CHAIN_ID) {
+          await test.step(
+            'Set up MetaMask on Status Network Sepolia (wrong network)',
+            async () => {
+              // 1. Approve the pending "Add Status Network Sepolia" from hub
+              await metamask.dismissPendingAddNetwork()
+
+              // 2. Force-switch to Status Network Sepolia
+              await hubPage.evaluate((chainId) => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                ;(window as any).ethereum?.request({
+                  method: 'wallet_switchEthereumChain',
+                  params: [{ chainId }],
+                }).catch(() => {})
+              }, STATUS_SEPOLIA_CHAIN_ID)
+
+              // 3. Approve the switch — leaves notification page OPEN
+              await metamask.switchNetwork()
+            },
+          )
+
+          await test.step('Dismiss SIWE dialog if present', async () => {
+            const siweClose = hubPage.locator(
+              'button[aria-label="Close"], [data-testid="connectkit-close"]',
+            )
+            if (
+              await siweClose.isVisible({ timeout: 3_000 }).catch(() => false)
+            ) {
+              await siweClose.click()
+            }
+          })
+        }
+
+        await test.step('Navigate to Pre-Deposits page', async () => {
+          await preDepositsPage.goto()
+          await preDepositsPage.waitForReady()
+        })
+
+        await test.step(`Open deposit modal for ${vault.name}`, async () => {
+          await preDepositsPage.clickDepositForVault(vault.token)
+          await depositModal.waitForOpen()
+        })
+
+        // For vaults on a different chain, click "Switch Network to Deposit".
+        // Auto-switches to the vault's chain (well-known networks don't need
+        // an additional MetaMask notification approval).
+        if (vault.chainId !== METAMASK_DEFAULT_CHAIN_ID) {
+          await test.step('Switch to correct network for deposit', async () => {
+            await depositModal.expectSwitchNetworkButtonVisible()
+            await depositModal.clickSwitchNetwork()
+            await depositModal.expectSwitchNetworkButtonGone()
+          })
+        }
+
+        // Fail-safe: ensure we ended up on the correct network and the
+        // action button has rendered.
+        await test.step('Verify wallet is on the correct network', async () => {
+          await expect(depositModal.switchNetworkButton).not.toBeVisible({
+            timeout: 2_000,
+          })
+          await expect(depositModal.actionButton).toBeVisible({
+            timeout: 10_000,
+          })
+        })
+
+        await test.step('Enter amount exceeding balance', async () => {
+          await depositModal.enterAmount(TEST_AMOUNTS.EXCEED_BALANCE)
+        })
+
+        await test.step('Verify insufficient balance error', async () => {
+          await depositModal.expectErrorMessageMatching(
+            /insufficient balance/i,
+          )
+        })
+
+        await test.step('Verify action button is disabled', async () => {
+          await depositModal.expectActionButtonDisabled()
+        })
+
+        await test.step('Close modal', async () => {
+          await depositModal.close()
+        })
+      },
+    )
+  }
+})
