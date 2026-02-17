@@ -1,5 +1,5 @@
 import type { BrowserContext, Page } from '@playwright/test';
-import { NOTIFICATION_TIMEOUTS } from '../../constants/timeouts.js';
+import { NOTIFICATION_TIMEOUTS } from '@constants/timeouts.js';
 
 export class NotificationPage {
   constructor(
