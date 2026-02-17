@@ -21,10 +21,8 @@
     "paths": {
       "@fixtures/*": ["./src/fixtures/*"],
       "@pages/*": ["./src/pages/*"],
-      "@helpers/*": ["./src/helpers/*"],
       "@constants/*": ["./src/constants/*"],
-      "@config/*": ["./src/config/*"],
-      "@types/*": ["./src/types/*"]
+      "@config/*": ["./src/config/*"]
     },
     "types": ["node"]
   },

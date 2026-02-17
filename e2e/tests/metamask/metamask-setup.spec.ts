@@ -1,5 +1,5 @@
-import { test, expect } from '../../src/fixtures/metamask.fixture.js';
-import { TEST_TIMEOUTS } from '../../src/constants/timeouts.js';
+import { test, expect } from '@fixtures/metamask.fixture.js';
+import { TEST_TIMEOUTS } from '@constants/timeouts.js';
 
 test.describe('MetaMask extension', () => {
   test('extension loads and shows onboarding', { tag: '@wallet' }, async ({

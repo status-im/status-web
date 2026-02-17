@@ -1,5 +1,5 @@
-import { test, expect } from '../../../src/fixtures/base.fixture.js';
-import { TEST_VAULTS } from '../../../src/constants/vaults.js';
+import { test, expect } from '@fixtures/base.fixture.js';
+import { TEST_VAULTS } from '@constants/vaults.js';
 
 test.describe('Pre-Deposits page', () => {
   test('displays vaults after navigating from sidebar', { tag: '@smoke' }, async ({

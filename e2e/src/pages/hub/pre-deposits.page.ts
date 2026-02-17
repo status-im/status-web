@@ -1,6 +1,6 @@
 import { expect, type Page } from '@playwright/test';
-import { BasePage } from '../base.page.js';
-import { HUB_TIMEOUTS } from '../../constants/timeouts.js';
+import { BasePage } from '@pages/base.page.js';
+import { HUB_TIMEOUTS } from '@constants/timeouts.js';
 
 export class PreDepositsPage extends BasePage {
   readonly heading = this.page.getByRole('heading', {
