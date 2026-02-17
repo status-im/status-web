@@ -146,6 +146,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
 
   const vaultAddressLower = vault.address.toLowerCase()
   const isVaultInApi = apyMap !== undefined && vaultAddressLower in apyMap
+  // If the query inside useVaultsAPY fails, all vaults are disabled even though they might technically work
   const isDisabled = !isVaultInApi
   const dynamicApy = apyMap?.[vaultAddressLower]
   const apyValue = dynamicApy !== undefined ? String(dynamicApy) : null
