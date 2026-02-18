@@ -18,9 +18,7 @@ export function loadEnvConfig(): EnvConfig {
     WALLET_SEED_PHRASE: process.env.WALLET_SEED_PHRASE ?? '',
     WALLET_PASSWORD: process.env.WALLET_PASSWORD ?? '',
     METAMASK_EXTENSION_PATH: resolveExtensionPath(rootDir),
-    METAMASK_EXTENSION_ID:
-      process.env.METAMASK_EXTENSION_ID ?? 'nkbihfbeogaeaoehlefnkodbefgpgknn',
-    CHROME_VERSION: process.env.CHROME_VERSION ?? '131.0.0.0',
+    METAMASK_VERSION: process.env.METAMASK_VERSION ?? '13.18.1',
     STATUS_SEPOLIA_RPC_URL:
       process.env.STATUS_SEPOLIA_RPC_URL ??
       'https://public.sepolia.rpc.status.network',
