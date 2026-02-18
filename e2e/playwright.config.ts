@@ -54,5 +54,12 @@ export default defineConfig({
         headless: false,
       },
     },
+    {
+      name: 'anvil-deposits',
+      grep: /@anvil/,
+      use: {
+        headless: false,
+      },
+    },
   ],
 });
