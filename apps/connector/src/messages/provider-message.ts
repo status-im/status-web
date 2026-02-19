@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod-3-23-8'
 
 import { RequestArguments } from '~lib/request-arguments'
 

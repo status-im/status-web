@@ -7,7 +7,7 @@ import { Link, usePathname } from '~/i18n/navigation'
 type LinkItemProps = {
   id: string
   label: string
-  icon: React.ComponentType<{ className?: string }>
+  icon?: React.ComponentType<{ className?: string }>
   href: string
   tag?: string
   onClick?: () => void
@@ -47,7 +47,7 @@ const LinkItem = (props: LinkItemProps) => {
       >
         <div className="flex flex-1 items-center justify-between">
           <div className={cx('flex items-center gap-2')}>
-            <Icon className="size-5" />
+            {Icon && <Icon className="size-5" />}
             <span className="text-15 font-medium">{label}</span>
           </div>
           <div className="flex items-center gap-1">

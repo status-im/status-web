@@ -33,7 +33,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "ts-pattern": "^5.2.0",
-    "zod": "^3.23.8"
+    "zod-3-23-8": "npm:zod@3.23.8"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "4.1.1",

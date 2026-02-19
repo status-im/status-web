@@ -43,11 +43,15 @@ module.exports = {
     return {
       loc: path,
       changefreq: config.changefreq,
-      lastmod: config.autoLastmod ? new Date().toISOString() : undefined,
     }
   },
   additionalPaths: async () => {
     const changefreq = 'monthly'
-    return buildLocalizedPaths(LOCALES, PAGES, changefreq)
+    return buildLocalizedPaths(LOCALES, PAGES, changefreq).map(
+      ({ loc, changefreq: freq }) => ({
+        loc,
+        changefreq: freq,
+      })
+    )
   },
 }

@@ -5,6 +5,10 @@ const DEFAULT_SITE_NAME = 'Status Network'
 const DEFAULT_SITE_URL = 'https://status.network'
 const DEFAULT_TWITTER_SITE = '@StatusL2'
 const DEFAULT_OG_IMAGE = `${DEFAULT_SITE_URL}/opengraph-image.png`
+export const DEFAULT_TITLE =
+  'Status Network | Gasless Ethereum L2 with Native Yield'
+export const DEFAULT_DESCRIPTION =
+  'Status Network is a gasless zkEVM Ethereum Layer 2 with native yield, privacy by design, and reputation-based governance for scalable onchain apps.'
 
 type Input = Metadata & {
   title?: NonNullable<Metadata['title']>

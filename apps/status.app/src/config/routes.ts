@@ -18,9 +18,9 @@ export const STATUS_DESKTOP_DOWNLOAD_URL_WINDOWS = '/api/download/windows'
 export const STATUS_DESKTOP_DOWNLOAD_URL_LINUX = '/api/download/linux'
 
 export const STATUS_MOBILE_APP_STORE_URL =
-  'https://apps.apple.com/us/app/status-private-communication/id1178893006'
+  'https://apps.apple.com/us/app/status-privacy-super-app/id6754166924'
 export const STATUS_MOBILE_GOOGLE_PLAY_URL =
-  'https://play.google.com/store/apps/details?id=im.status.ethereum&pcampaignid=web_share'
+  'https://play.google.com/store/apps/details?id=app.status.mobile&ref=our.status.im'
 export const STATUS_MOBILE_F_DROID_URL =
   'https://f-droid.org/packages/im.status.ethereum'
 export const STATUS_MOBILE_APK_URL = '/api/download/android'
@@ -39,10 +39,13 @@ export const ROUTES = {
   Apps: [
     { name: 'Browser', href: '/#browser' },
     { name: 'Desktop', href: '/apps#desktop' },
-    { name: 'Legacy mobile', href: '/apps#mobile' },
     {
-      name: 'New mobile',
-      href: 'https://status.app/blog/introducing-unified-status-mobile-app',
+      name: 'Mobile',
+      href: '/apps#mobile',
+    },
+    {
+      name: 'Legacy mobile',
+      href: 'https://status.app/blog/migrate-from-status-legacy-to-unified-status-mobile-app',
     },
   ],
   Ecosystem: [

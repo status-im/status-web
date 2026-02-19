@@ -21,6 +21,9 @@ const MIN_VALUE = 0.01
 export const CurrencyAmount = (props: Props) => {
   const { value, format = 'standard', className } = props
 
+  const factor = 10 ** 4
+  const amount = Math.floor(value * factor) / factor
+
   const formatter = useMemo(
     () =>
       match(format)
@@ -62,9 +65,9 @@ export const CurrencyAmount = (props: Props) => {
     [format],
   )
 
-  if (value > 0 && value < MIN_VALUE && format !== 'precise') {
+  if (amount > 0 && amount < MIN_VALUE && format !== 'precise') {
     return <div className={className}>{'< ' + formatter.format(MIN_VALUE)}</div>
   }
 
-  return <div className={className}>{formatter.format(value)}</div>
+  return <div className={className}>{formatter.format(amount)}</div>
 }

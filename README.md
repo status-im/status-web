@@ -53,33 +53,86 @@ Optional:
 
 ## Getting Started
 
-1.  Clone the repository:
+1.
+
+Clone the repository:
 
           git clone https://github.com/status-im/status-web.git
           cd status-web
+          git submodule update --init --recursive
 
-> [!NOTE]
-> If using Nix, enter development shell:
+2\. Initialize and update submodules:
+
+          git submodule init
+          git submodule update
+
+> \[!TIP]
+> If submodule URLs have changed (e.g., after a repo migration), sync them first:
 >
 > ```bash
-> nix develop
+> git submodule sync --recursive
+> git submodule update --init --recursive
 > ```
 
-2.  Install dependencies:
+> \[!TIP]
+> To update all submodules to the latest commit from their remote:
+>
+> ```bash
+> git submodule update --remote
+> ```
+
+3.  (Optional) If using Nix, enter development shell:
+
+          nix develop
+
+4.  Install dependencies:
 
          pnpm install
 
-3.  Build all packages:
+5.  Build all packages:
 
          pnpm build
 
-4.  Run tests:
+6.  Run tests:
 
          pnpm test
 
-5.  Start development mode:
+7.  Start development mode:
 
-        pnpm dev
+         pnpm dev
+
+## Contributing
+
+To contribute changes via a pull request:
+
+1.  Fork the repository on GitHub: open [status-im/status-web](https://github.com/status-im/status-web), click "Fork", and create your fork under your account.
+
+2.  Clone your fork and add the official repo as `upstream`:
+
+        git clone https://github.com/YOUR_USERNAME/status-web.git
+        cd status-web
+        git remote add upstream https://github.com/status-im/status-web.git
+        git submodule update --init --recursive
+
+3.  Create a branch, make your changes, then push to your fork:
+
+        git checkout -b your-branch-name
+        # make changes, then:
+        git add .
+        git commit -m "your commit message"
+        git push origin your-branch-name
+
+4.  Open a pull request on GitHub: go to your fork, click "Compare & pull request" for your branch, and open the PR against `status-im/status-web` (base: `main`).
+
+> [!NOTE]
+> Keep your fork in sync before starting new work:
+>
+> ```bash
+> git fetch upstream
+> git checkout main
+> git merge upstream/main
+> git push origin main
+> ```
 
 ## Storybook
 

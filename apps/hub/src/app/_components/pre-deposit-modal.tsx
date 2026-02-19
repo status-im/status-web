@@ -1,6 +1,12 @@
 'use client'
 
-import { type Dispatch, type SetStateAction, useMemo, useState } from 'react'
+import {
+  type Dispatch,
+  type SetStateAction,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useToast } from '@status-im/components'
@@ -14,7 +20,12 @@ import { formatUnits, parseUnits } from 'viem'
 import { useAccount, useChainId, useSwitchChain } from 'wagmi'
 import { z } from 'zod'
 
-import { KarmaCircleIcon, PercentIcon, PlusIcon } from '~components/icons/index'
+import {
+  GusdIcon,
+  KarmaCircleIcon,
+  PercentIcon,
+  PlusIcon,
+} from '~components/icons/index'
 import {
   DEFAULT_GUSD_STABLECOIN,
   GUSD_STABLECOINS,
@@ -32,6 +43,7 @@ import { useVaultsAPY } from '~hooks/useVaultsAPY'
 import { useWrapETH } from '~hooks/useWrapETH'
 import { formatCurrency, formatTokenAmount } from '~utils/currency'
 
+import { NetworkSwitchErrorDialog } from './network-switch-error-dialog'
 import { VaultImage } from './vault-image'
 import { BaseVaultModal } from './vaults/modals/base-vault-modal'
 
@@ -123,6 +135,7 @@ const PreDepositModal = ({
   const { address } = useAccount()
   const chainId = useChainId()
   const { switchChain, isPending: isSwitchingChain } = useSwitchChain()
+  const [hasSwitchError, setHasSwitchError] = useState(false)
 
   const tokenOptions = useMemo(() => buildTokenOptions(vaults), [vaults])
   const [selectedStablecoin, setSelectedStablecoin] = useState<StablecoinToken>(
@@ -217,6 +230,12 @@ const PreDepositModal = ({
     if (!vault || !chainId) return false
     return vault.chainId !== chainId
   }, [vault, chainId])
+
+  useEffect(() => {
+    if (!isWrongChain && hasSwitchError) {
+      setHasSwitchError(false)
+    }
+  }, [isWrongChain, hasSwitchError])
 
   if (!vault) return null
 
@@ -357,6 +376,7 @@ const PreDepositModal = ({
       onClose={() => form.reset()}
       title={t('vault.deposit_funds')}
       description={t('vault.deposit_description')}
+      blur={hasSwitchError}
     >
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <div className="space-y-4 px-4 pb-4">
@@ -553,6 +573,16 @@ const PreDepositModal = ({
                     .join(', ')}
                 </span>
               </div>
+              {isGUSD && (
+                <div className="flex items-center gap-2 text-15">
+                  <span className="text-neutral-50">
+                    <GusdIcon />
+                  </span>
+                  <span className="text-neutral-100">
+                    {t('vault.generic_protocol_points')}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -562,7 +592,16 @@ const PreDepositModal = ({
               <Button
                 type="button"
                 className="w-full justify-center"
-                onClick={() => switchChain({ chainId: vault.chainId })}
+                onClick={() =>
+                  switchChain(
+                    { chainId: vault.chainId },
+                    {
+                      onError: () => {
+                        setHasSwitchError(true)
+                      },
+                    }
+                  )
+                }
                 disabled={isSwitchingChain}
               >
                 {isSwitchingChain
@@ -597,6 +636,13 @@ const PreDepositModal = ({
           </div>
         </div>
       </form>
+      <NetworkSwitchErrorDialog
+        open={hasSwitchError}
+        onClose={() => setHasSwitchError(false)}
+        onRetry={() => window.location.reload()}
+        description={t('network_switch_error.description_ethereum_mainnet')}
+        showNetworkDetails={false}
+      />
     </BaseVaultModal>
   )
 }

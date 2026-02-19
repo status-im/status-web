@@ -35,7 +35,7 @@ export async function GET(
   if (platform === 'android') {
     const release = await octokit.repos.getLatestRelease({
       owner: 'status-im',
-      repo: 'status-legacy',
+      repo: 'status-app',
     })
 
     await track('Download', {
@@ -45,7 +45,7 @@ export async function GET(
     })
 
     const { browser_download_url: downloadUrl } = release.data.assets.find(
-      asset => asset.name.endsWith('universal.apk')
+      asset => asset.name.endsWith('arm64.apk')
     )!
 
     return NextResponse.redirect(downloadUrl)

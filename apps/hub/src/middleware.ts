@@ -1,3 +1,4 @@
+import { createGoneResponse } from '@status-im/status-network/utils'
 import createMiddleware from 'next-intl/middleware'
 
 import { routing } from './i18n/routing'
@@ -6,12 +7,20 @@ import type { NextRequest } from 'next/server'
 
 const handleI18nRouting = createMiddleware(routing)
 
+const GONE_PATHS = ['/$']
+
 export default function middleware(request: NextRequest) {
-  // Get the hash fragment from the original URL
+  const pathname = request.nextUrl.pathname
+
+  const goneResponse = createGoneResponse(pathname, routing.locales, GONE_PATHS)
+  if (goneResponse) {
+    return goneResponse
+  }
+
   const hash = request.url.split('#')[1]
 
   // Set the pathname in a custom header so it can be read in server components
-  request.headers.set('x-pathname', request.nextUrl.pathname)
+  request.headers.set('x-pathname', pathname)
 
   // Run the next-intl middleware
   const response = handleI18nRouting(request)
