@@ -1,5 +1,6 @@
-import type { AirdropEntry, MerkleTreeOutput } from './tree'
 import { isAddress, isHex } from 'viem'
+
+import type { AirdropEntry, MerkleTreeOutput } from './tree'
 
 type UnknownRecord = Record<string, unknown>
 
