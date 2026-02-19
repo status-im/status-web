@@ -32,6 +32,12 @@ const Footer = async () => {
             >
               {t('footer.privacy_policy')}
             </CustomLink>
+            <CustomLink
+              href="/blog"
+              className="text-13 text-neutral-50 transition-colors hover:text-neutral-100"
+            >
+              {t('footer.blog')}
+            </CustomLink>
             <Link
               href={BRAND.href}
               className="text-13 text-neutral-50 transition-colors hover:text-neutral-100"

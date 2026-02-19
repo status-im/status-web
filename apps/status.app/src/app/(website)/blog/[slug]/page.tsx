@@ -12,6 +12,7 @@ import rehypeParse from 'rehype-parse'
 import rehypeReact, { type Options } from 'rehype-react'
 import { unified } from 'unified'
 
+import { jsonLD, JSONLDScript } from '~/utils/json-ld'
 import { Metadata } from '~app/_metadata'
 import { formatDate } from '~app/_utils/format-time'
 import { Body } from '~components/body'
@@ -27,6 +28,7 @@ import {
 import { PostAuthor } from '~website/blog/_components/post-author'
 import { PostCard } from '~website/blog/_components/post-card'
 import { PostTag } from '~website/blog/_components/post-tag'
+import { getPostFAQItems } from '~website/blog/_utils/faq'
 
 import type { PostOrPage } from '@tryghost/content-api'
 
@@ -127,15 +129,46 @@ export default async function BlogDetailPage(props: Props) {
 
   const author = post.primary_author!
   const tag = post.primary_tag
+  const faqItems = getPostFAQItems(
+    post.codeinjection_head,
+    post.codeinjection_foot
+  )
 
   // const { asPath } = useRouter()
   const asPath = `/blog/${post.slug}`
 
   const url = `${baseUrl()}${asPath}`
   const shareUrl = encodeURIComponent(url)
+  const articleSchema = jsonLD.article({
+    headline: post.title!,
+    description: post.excerpt ?? undefined,
+    image: post.feature_image ?? undefined,
+    datePublished: post.published_at ?? undefined,
+    dateModified: post.updated_at ?? post.published_at ?? undefined,
+    author: {
+      name: author.name ?? author.slug,
+      type: 'Person',
+    },
+    publisher: {
+      name: 'Status',
+      logo: `${baseUrl()}/logo.svg`,
+    },
+  })
+  const faqSchema =
+    faqItems.length > 0
+      ? jsonLD.faqPage({
+          questions: faqItems.map(item => ({
+            question: item.question,
+            answer: item.answer,
+          })),
+        })
+      : null
 
   return (
     <>
+      <JSONLDScript
+        schema={faqSchema ? [articleSchema, faqSchema] : articleSchema}
+      />
       <Body>
         <Breadcrumbs items={breadcrumbs} />
 
@@ -163,6 +196,27 @@ export default async function BlogDetailPage(props: Props) {
 
         {/* Content */}
         <div className="root-content container-blog py-6">{content}</div>
+
+        {faqItems.length > 0 && (
+          <div className="container-blog py-6">
+            <div className="rounded-20 border border-neutral-20 bg-neutral-5 p-5 xl:p-6">
+              <h2 className="text-27 font-semibold">FAQ</h2>
+              <div className="mt-5 grid gap-4">
+                {faqItems.map((item, index) => (
+                  <div
+                    key={`${item.question}-${index}`}
+                    className="rounded-16 border border-neutral-20 bg-white-100 p-4"
+                  >
+                    <h3 className="text-19 font-semibold">{item.question}</h3>
+                    <p className="mt-2 whitespace-pre-line text-15 text-neutral-50">
+                      {item.answer}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="container-blog py-6">
           <div className="mb-4 flex flex-row items-center gap-2">

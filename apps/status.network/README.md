@@ -11,3 +11,17 @@ Start the development server:
 ```bash
 pnpm dev
 ```
+
+## Blog environment
+
+`/blog` uses Ghost Content API data from `our.status.im`.
+
+Set these environment variables (for local/dev/prod as needed):
+
+- `NEXT_PUBLIC_GHOST_API_URL` (optional, defaults to `https://our.status.im`)
+- `NEXT_PUBLIC_GHOST_API_KEY`
+
+Example (`apps/status.app/.env.development` naming):
+
+- `NEXT_PUBLIC_GHOST_API_URL=https://demo.ghost.io`
+- `NEXT_PUBLIC_GHOST_API_KEY=22444f78447824223cefc48062`

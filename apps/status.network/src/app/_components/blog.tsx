@@ -1,7 +1,11 @@
 'use client'
 
+import avatarImage from '~public/blog/avatar.webp'
+import consortiumImage from '~public/blog/consortium.png'
+import gaslessImage from '~public/blog/gasless.png'
+import stakingImage from '~public/blog/staking.jpg'
 import { useLocale, useTranslations } from 'next-intl'
-import Image from 'next/image'
+import Image, { type StaticImageData } from 'next/image'
 import { formatDate } from '../_utils/format-date'
 import { ButtonLink } from './button-link'
 import { Link } from './link'
@@ -15,33 +19,33 @@ const Blog = () => {
       title: t('blog.post_1.title'),
       author: {
         name: t('blog.author'),
-        avatar: '/blog/avatar.webp',
+        avatar: avatarImage,
       },
       date: '2025-07-29',
-      image: '/blog/consortium.png',
-      link: 'https://status.app/blog/status-steps-up-as-founding-member-of-linea-consortium',
+      image: consortiumImage,
+      link: '/blog/status-steps-up-as-founding-member-of-linea-consortium',
     },
     {
       category: t('blog.category'),
       title: t('blog.post_2.title'),
       author: {
         name: t('blog.author'),
-        avatar: '/blog/avatar.webp',
+        avatar: avatarImage,
       },
       date: '2025-07-09',
-      image: '/blog/gasless.png',
-      link: 'https://status.app/blog/status-network-first-gasless-l2',
+      image: gaslessImage,
+      link: '/blog/status-network-first-gasless-l2',
     },
     {
       category: t('blog.category'),
       title: t('blog.post_3.title'),
       author: {
         name: t('blog.author'),
-        avatar: '/blog/avatar.webp',
+        avatar: avatarImage,
       },
       date: '2024-07-30',
-      image: '/blog/staking.jpg',
-      link: 'https://status.app/blog/snt-staking-and-status-network',
+      image: stakingImage,
+      link: '/blog/snt-staking-and-status-network',
     },
   ]
 
@@ -50,7 +54,7 @@ const Blog = () => {
       <div className="px-5 py-[120px] lg:px-[120px] lg:py-[168px]">
         <div className="mb-6 flex items-center justify-between lg:mb-12">
           <h2 className="text-27 font-600">{t('blog.title')}</h2>
-          <ButtonLink variant="white" size="32" href="https://status.app/blog">
+          <ButtonLink variant="white" size="32" href="/blog">
             {t('blog.view_blog_button')}
           </ButtonLink>
         </div>
@@ -71,10 +75,10 @@ type BlogPost = {
   title: string
   author: {
     name: string
-    avatar: string
+    avatar: string | StaticImageData
   }
   date: Date | string
-  image: string
+  image: string | StaticImageData
   link: string
 }
 

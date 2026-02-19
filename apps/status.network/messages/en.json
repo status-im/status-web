@@ -543,6 +543,10 @@
       "translation": "Terms of Use",
       "notes": "footer::terms_of_use"
     },
+    "blog": {
+      "translation": "Blog",
+      "notes": "footer::blog"
+    },
     "brand": {
       "translation": "Brand assets",
       "notes": "footer::brand"

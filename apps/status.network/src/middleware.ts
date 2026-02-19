@@ -30,8 +30,9 @@ export default function middleware(request: NextRequest) {
 export const config = {
   // Match all pathnames except for
   // - API routes (/api/*)
+  // - Blog routes (/blog/*)
   // - _next (Next.js internals)
   // - _static (inside /public)
   // - files with extensions (e.g. favicon.ico)
-  matcher: '/((?!api|legal|_next|_static|.*\\..*).*)',
+  matcher: '/((?!api|legal|blog|_next|_static|.*\\..*).*)',
 }

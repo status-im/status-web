@@ -543,6 +543,10 @@
       "translation": "이용약관",
       "notes": "footer::terms_of_use"
     },
+    "blog": {
+      "translation": "블로그",
+      "notes": "footer::blog"
+    },
     "brand": {
       "translation": "브랜드 자산",
       "notes": "footer::brand"
