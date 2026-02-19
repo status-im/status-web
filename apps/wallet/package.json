@@ -27,6 +27,7 @@
     "clean": "rimraf .wxt .output node_modules .turbo"
   },
   "dependencies": {
+    "@metamask/browser-passworder": "^6.0.0",
     "@cardano-sdk/core": "^0.45.4",
     "@cardano-sdk/crypto": "^0.2.3",
     "@cardano-sdk/key-management": "^0.27.5",
