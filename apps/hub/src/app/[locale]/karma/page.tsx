@@ -154,7 +154,7 @@ export default function KarmaPage() {
         onClose={dismissError}
         onRetry={handleRetry}
       />
-      <div className="mx-auto flex size-full flex-col gap-4 p-4 lg:gap-8 lg:p-8">
+      <div className="mx-auto flex size-full flex-col gap-6 p-4 lg:gap-[60px] lg:p-8">
         <div className="flex flex-col gap-2">
           <h1 className="text-27 font-bold text-neutral-100 lg:text-64">
             {t('karma.title')}
