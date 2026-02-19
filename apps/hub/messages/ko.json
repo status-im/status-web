@@ -89,6 +89,14 @@
       "translation": "카르마",
       "notes": "navigation::karma"
     },
+    "mainnet": {
+      "translation": "메인넷",
+      "notes": "navigation::mainnet"
+    },
+    "testnet": {
+      "translation": "테스트넷",
+      "notes": "navigation::testnet"
+    },
     "tokens": {
       "translation": "토큰",
       "notes": "navigation::tokens"
@@ -142,7 +150,7 @@
       "notes": "hero::title_2"
     },
     "description": {
-      "translation": "앱을 사용하고 자산을 예치하여 카르마를 획득하세요",
+      "translation": "앱을 사용하고 자산을 예치하여 테스트넷 카르마(TKARMA)를 획득하세요",
       "notes": "hero::description"
     },
     "landscape_alt": {
@@ -312,11 +320,11 @@
   },
   "stake": {
     "title": {
-      "translation": "STT를 스테이킹하고, 카르마를 쌓으세요",
+      "translation": "STT를 스테이킹하고, 테스트넷 카르마를 쌓으세요",
       "notes": "stake::title"
     },
     "description": {
-      "translation": "스테이터스 네트워크 테스트넷에서 STT를 스테이킹하고 카르마를 받으세요. 더 많은 가스리스 트랜잭션을 잠금 해제하고 네트워크에서의 권한을 높이세요.",
+      "translation": "스테이터스 네트워크 테스트넷에서 STT를 스테이킹하고 테스트넷 카르마를 받으세요. 더 많은 가스리스 트랜잭션을 잠금 해제하고 네트워크에서의 권한을 높이세요.",
       "notes": "stake::description"
     },
     "faucet_title": {
@@ -596,11 +604,11 @@
   },
   "karma": {
     "title": {
-      "translation": "카르마",
+      "translation": "카르마 (TKARMA)",
       "notes": "karma::title"
     },
     "description": {
-      "translation": "카르마를 늘리고 더 많은 무료 트랜잭션을 잠금 해제하며 네트워크에 대한 권한을 얻으세요",
+      "translation": "테스트넷 카르마를 늘리고 더 많은 무료 트랜잭션을 잠금 해제하며 네트워크에 대한 권한을 얻으세요",
       "notes": "karma::description"
     },
     "level": {
@@ -658,11 +666,27 @@
     "free_transactions_left_today": {
       "translation": "오늘 남은 무료 트랜잭션",
       "notes": "karma::free_transactions_left_today"
+    },
+    "stake_card_title": {
+      "translation": "스테이킹을 통해 획득",
+      "notes": "karma::stake_card_title"
+    },
+    "stake_card_button": {
+      "translation": "스테이킹",
+      "notes": "karma::stake_card_button"
+    },
+    "stake_card_badge_title": {
+      "translation": "스테이커",
+      "notes": "karma::stake_card_badge_title"
+    },
+    "stake_card_badge_description": {
+      "translation": "STT를 스테이킹하여 레벨업하세요",
+      "notes": "karma::stake_card_badge_description"
     }
   },
   "rewards": {
     "description": {
-      "translation": "KARMA, SNT, LINEA 토큰 및 Generic Protocol 등의 네이티브 앱 포인트를 보상으로 받으세요. 자금은 메인넷 출시 시 잠금 해제됩니다.",
+      "translation": "TKARMA, SNT, LINEA 토큰 및 Generic Protocol 등의 네이티브 앱 포인트를 보상으로 받으세요. 자금은 메인넷 출시 시 잠금 해제됩니다.",
       "notes": "rewards::description"
     },
     "audited_prefix": {

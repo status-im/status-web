@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 
 const DEFAULT_SITE_NAME = 'Status Network Hub'
 const DEFAULT_DESCRIPTION =
-  'Get started on the gasless L2 with native yield and composable privacy! Try apps and deposit assets to earn Karma'
+  'Get started on the gasless L2 with native yield and composable privacy! Try apps and deposit assets to earn testnet Karma'
 const DEFAULT_SITE_URL = 'https://hub.status.network'
 const DEFAULT_TWITTER_SITE = '@StatusL2'
 const DEFAULT_OG_IMAGE = `${DEFAULT_SITE_URL}/og-image.png`

@@ -547,7 +547,7 @@ const PreDepositModal = ({
                 <span className="text-purple">
                   <KarmaCircleIcon />
                 </span>
-                <span className="text-neutral-100">KARMA</span>
+                <span className="text-neutral-100">TKARMA</span>
               </div>
               <div className="flex items-center gap-2 text-15">
                 <span className="text-neutral-50">

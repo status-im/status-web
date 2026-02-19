@@ -5,6 +5,7 @@ import { collectiblesRouter as collectibles } from './routers/collectibles'
 import { configRouter as config } from './routers/config'
 import { marketRouter as market } from './routers/market'
 import { nodesRouter as nodes } from './routers/nodes'
+import { rpcRouter as rpc } from './routers/rpc'
 
 export const apiRouter = router({
   assets,
@@ -13,9 +14,12 @@ export const apiRouter = router({
   activities,
   config,
   market,
+  rpc,
 })
 
 export type ApiRouter = typeof apiRouter
 
 export const createCaller: ReturnType<typeof createCallerFactory<ApiRouter>> =
   createCallerFactory(apiRouter)
+
+export { createTRPCContext } from './lib/trpc'

@@ -1,7 +1,4 @@
-import {
-  createAppJSONLD,
-  JSONLDScript as BaseJSONLDScript,
-} from '@status-im/components'
+import { createAppJSONLD, JSONLDScript } from '@status-im/components'
 
 import type {
   ArticleSchema,
@@ -58,4 +55,4 @@ export type {
 /**
  * Re-export JSONLDScript component
  */
-export { BaseJSONLDScript as JSONLDScript }
+export { JSONLDScript }

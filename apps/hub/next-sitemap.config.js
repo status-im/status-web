@@ -15,7 +15,9 @@ const ALLOWED_PATHS = buildLocalizedPaths(LOCALES, PAGES).map(p => p.loc)
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
   siteUrl: 'https://hub.status.network',
-  generateRobotsTxt: false,
+  generateRobotsTxt: false, // Using Next.js App Router robots.ts instead
+  generateIndexSitemap: false,
+  changefreq: 'monthly',
   exclude: [
     '/api/*',
     '/*.png',
@@ -32,9 +34,9 @@ module.exports = {
     '/icon2.png',
     '/_next/*',
     '/static/*',
+    '*/404',
+    '*/404/*',
   ],
-  generateIndexSitemap: false,
-  changefreq: 'monthly',
   transform: async (config, path) => {
     if (!ALLOWED_PATHS.includes(path)) {
       return null
