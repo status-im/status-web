@@ -10,6 +10,7 @@ import { HubLayout } from '~components/hub-layout'
 import {
   KarmaSourceCard,
   KarmaSourceCardSkeleton,
+  KarmaStakeCard,
   KarmaVisualCard,
   KarmaVisualCardSkeleton,
   OverviewCard,
@@ -98,6 +99,7 @@ function KarmaCards() {
           {karmaSources.map(source => (
             <KarmaSourceCard key={source.title} {...source} />
           ))}
+          <KarmaStakeCard />
         </div>
       </div>
     </>
