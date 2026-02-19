@@ -142,7 +142,7 @@
       "notes": "hero::title_2"
     },
     "description": {
-      "translation": "Try apps and deposit assets to earn Karma",
+      "translation": "Try apps and deposit assets to earn testnet Karma (TKARMA)",
       "notes": "hero::description"
     },
     "landscape_alt": {
@@ -312,11 +312,11 @@
   },
   "stake": {
     "title": {
-      "translation": "Stake STT, receive good Karma",
+      "translation": "Stake STT, receive good testnet Karma",
       "notes": "stake::title"
     },
     "description": {
-      "translation": "Stake STT to increase your Karma on Status Network testnet. Unlock more gasless transactions and increase your power over the network",
+      "translation": "Stake STT to increase your testnet Karma on Status Network testnet. Unlock more gasless transactions and increase your power over the network",
       "notes": "stake::description"
     },
     "faucet_title": {
@@ -596,11 +596,11 @@
   },
   "karma": {
     "title": {
-      "translation": "Karma",
+      "translation": "Karma (TKARMA)",
       "notes": "karma::title"
     },
     "description": {
-      "translation": "Increase your Karma, unlock more free transactions, gain power over the network",
+      "translation": "Increase your testnet Karma, unlock more free transactions, gain power over the network",
       "notes": "karma::description"
     },
     "level": {
@@ -658,11 +658,27 @@
     "free_transactions_left_today": {
       "translation": "free transactions left today",
       "notes": "karma::free_transactions_left_today"
+    },
+    "stake_card_title": {
+      "translation": "Staking",
+      "notes": "karma::stake_card_title"
+    },
+    "stake_card_button": {
+      "translation": "Stake STT",
+      "notes": "karma::stake_card_button"
+    },
+    "stake_card_badge_title": {
+      "translation": "Staking",
+      "notes": "karma::stake_card_badge_title"
+    },
+    "stake_card_badge_description": {
+      "translation": "Stake STT to earn testnet Karma",
+      "notes": "karma::stake_card_badge_description"
     }
   },
   "rewards": {
     "description": {
-      "translation": "Rewards in KARMA, SNT, LINEA and points from Generic Protocol and native apps. Funds will be unlocked at mainnet launch.",
+      "translation": "Rewards in TKARMA, SNT, LINEA and points from Generic Protocol and native apps. Funds will be unlocked at mainnet launch.",
       "notes": "rewards::description"
     },
     "audited_prefix": {

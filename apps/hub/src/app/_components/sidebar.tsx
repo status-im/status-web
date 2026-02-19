@@ -60,6 +60,7 @@ const Sidebar = (props: Props) => {
       label: t('navigation.karma'),
       icon: KarmaIcon,
       href: '/karma',
+      tag: t('common.testnet'),
     },
   ]
 
