@@ -1,4 +1,4 @@
-import { test as metamaskTest } from './metamask.fixture.js';
+import { test as metamaskTest } from '../metamask.fixture.js';
 import { loadEnvConfig, requireWalletSeedPhrase, requireWalletPassword } from '@config/env.js';
 
 export const test = metamaskTest.extend({
