@@ -269,7 +269,7 @@ export const KarmaProgressBar = ({
           {formattedKarma}
         </span>
         <span className="text-15 font-medium uppercase text-neutral-50">
-          Karma
+          TKARMA
         </span>
       </div>
       <div className="flex w-full flex-col gap-4">
