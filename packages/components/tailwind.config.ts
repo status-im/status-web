@@ -98,6 +98,8 @@ export default {
       transparent: 'transparent',
       current: 'currentColor',
       ...colors,
+      purple: 'rgba(113, 64, 253, 1)',
+      yellow: 'rgba(246, 176, 60, 1)',
       customisation: {
         ...colors.customisation,
         '50': 'var(--customisation-50)',

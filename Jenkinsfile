@@ -1,5 +1,5 @@
 #!/usr/bin/env groovy
-library 'status-jenkins-lib@v1.9.24'
+library 'status-jenkins-lib@v1.9.39'
 
 def changesDetected = false
 
@@ -65,7 +65,7 @@ pipeline {
         }
       }
     }
-      
+
     stage('Check Wallet Changes') {
       when {
         anyOf {

@@ -654,6 +654,10 @@
     "unexpected_error": {
       "translation": "예기치 않은 오류가 발생했습니다",
       "notes": "karma::unexpected_error"
+    },
+    "free_transactions_left_today": {
+      "translation": "오늘 남은 무료 트랜잭션",
+      "notes": "karma::free_transactions_left_today"
     }
   },
   "rewards": {
@@ -908,6 +912,22 @@
     "years_label": {
       "translation": "{count}년",
       "notes": "vault::years_label"
+    },
+    "gusd_stablecoin_info": {
+      "translation": "사전 예치금은 현재 풀 조건을 기준으로, 아래에 표시된 예상 환율에 따라 GUSD 금고에 예치됩니다.",
+      "notes": "vault::gusd_stablecoin_info"
+    },
+    "you_will_receive": {
+      "translation": "받게 될 금액: {amount}",
+      "notes": "vault::you_will_receive"
+    },
+    "transaction_submitted": {
+      "translation": "트랜잭션이 제출되었습니다. 확인을 기다리는 중...",
+      "notes": "vault::transaction_submitted"
+    },
+    "gusd_deposit_successful": {
+      "translation": "{amount} {symbol} 입금 성공",
+      "notes": "vault::gusd_deposit_successful"
     }
   },
   "action_status": {
@@ -1120,6 +1140,28 @@
     "pre_deposit_disclaimer": {
       "translation": "사전예치 면책 조항",
       "notes": "footer::pre_deposit_disclaimer"
+    }
+  },
+  "network_switch_error": {
+    "title": {
+      "translation": "네트워크 전환을 할 수 없습니다",
+      "notes": "network_switch_error::title"
+    },
+    "description_status_network": {
+      "translation": "이 앱에서는 지갑의 네트워크 전환을 지원하지 않습니다. 지갑 앱에서 직접 Status Network로 네트워크를 변경해 주세요.",
+      "notes": "network_switch_error::description_status_network"
+    },
+    "description_ethereum_mainnet": {
+      "translation": "이 앱에서는 지갑의 네트워크 전환을 지원하지 않습니다. 지갑 앱에서 직접 Ethereum 메인넷으로 네트워크를 변경해 주세요.",
+      "notes": "network_switch_error::description_ethereum_mainnet"
+    },
+    "network_details": {
+      "translation": "네트워크 정보 보기",
+      "notes": "network_switch_error::network_details"
+    },
+    "retry": {
+      "translation": "다시 시도",
+      "notes": "network_switch_error::retry"
     }
   },
   "errors": {

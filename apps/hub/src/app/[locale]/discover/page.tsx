@@ -15,6 +15,28 @@ import { featuredApps } from '~/data/featured-apps'
 import { AppCard } from '~components/app-card'
 import { HubLayout } from '~components/hub-layout'
 
+import { jsonLD, JSONLDScript } from '../../_utils/json-ld'
+
+const breadcrumbListSchema = jsonLD.breadcrumbList([
+  {
+    name: 'Hub',
+    url: 'https://hub.status.network/',
+  },
+  {
+    name: 'Discover',
+    url: 'https://hub.status.network/discover',
+  },
+])
+
+const softwareApplicationSchema = jsonLD.softwareApplication({
+  name: 'Status Network App Discovery',
+  applicationCategory: 'BlockchainPlatform',
+  operatingSystem: 'Web',
+  url: 'https://hub.status.network/discover',
+  description:
+    "Explore decentralized applications running on Status Network's gasless Ethereum Layer 2.",
+})
+
 export default function DiscoverPage() {
   const t = useTranslations()
   const [activeTab, setActiveTab] = useState('all')
@@ -37,6 +59,9 @@ export default function DiscoverPage() {
 
   return (
     <HubLayout>
+      <JSONLDScript
+        schema={[breadcrumbListSchema, softwareApplicationSchema]}
+      />
       <div className="flex flex-col p-4 lg:p-8">
         {/* Main Content */}
         <div className="mx-auto mt-6 flex w-full max-w-[1176px] flex-col gap-4 md:gap-8">

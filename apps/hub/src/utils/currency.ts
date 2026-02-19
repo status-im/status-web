@@ -309,10 +309,15 @@ export function formatCurrency(
     tokenDecimals = 0, // Default to 0 for currency values (already in display units)
     locale = DEFAULT_LOCALE,
     decimals = DEFAULT_DISPLAY_DECIMALS,
+    roundDown = false,
     ...rest
   } = options
 
-  const numericAmount = toNumericAmount(amount, tokenDecimals)
+  let numericAmount = toNumericAmount(amount, tokenDecimals)
+
+  if (roundDown) {
+    numericAmount = roundDownToDecimals(numericAmount, decimals)
+  }
 
   // Auto-enable compact notation for large numbers (>= 1M)
   const shouldCompact =

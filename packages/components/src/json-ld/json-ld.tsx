@@ -6,13 +6,16 @@ import type { ReactNode } from 'react'
 export type JSONLDSchema =
   | OrganizationSchema
   | WebSiteSchema
+  | WebPageSchema
   | ArticleSchema
   | BreadcrumbListSchema
   | FAQPageSchema
+  | SoftwareApplicationSchema
 
 export type OrganizationSchema = {
   '@context': 'https://schema.org'
   '@type': 'Organization'
+  '@id'?: string
   name: string
   url: string
   logo?: string
@@ -29,9 +32,13 @@ export type OrganizationSchema = {
 export type WebSiteSchema = {
   '@context': 'https://schema.org'
   '@type': 'WebSite'
+  '@id'?: string
   name: string
   url: string
   description?: string
+  publisher?: {
+    '@id'?: string
+  }
   potentialAction?: {
     '@type': 'SearchAction'
     target: {
@@ -40,6 +47,14 @@ export type WebSiteSchema = {
     }
     'query-input': string
   }
+}
+
+export type WebPageSchema = {
+  '@context': 'https://schema.org'
+  '@type': 'WebPage'
+  name?: string
+  description?: string
+  url?: string
 }
 
 export type ArticleSchema = {
@@ -89,6 +104,16 @@ export type FAQPageSchema = {
   }>
 }
 
+export type SoftwareApplicationSchema = {
+  '@context': 'https://schema.org'
+  '@type': 'SoftwareApplication'
+  name: string
+  applicationCategory: string
+  operatingSystem: string
+  url: string
+  description?: string
+}
+
 type CreateJSONLDConfig = {
   defaultSiteUrl: string
   defaultSocialLinks?: string[]
@@ -114,119 +139,284 @@ export function createJSONLD(config: CreateJSONLDConfig) {
       logo?: string
       description?: string
       sameAs?: string[]
-    }): OrganizationSchema => ({
-      '@context': 'https://schema.org',
-      '@type': 'Organization',
-      name: orgConfig.name,
-      url: orgConfig.url,
-      ...(orgConfig.logo && { logo: orgConfig.logo }),
-      ...(orgConfig.description && { description: orgConfig.description }),
-      sameAs: orgConfig.sameAs ?? defaultSocialLinks,
-    }),
+    }): OrganizationSchema =>
+      createOrganizationSchemaWithDefaults(orgConfig, defaultSocialLinks),
 
     website: (websiteConfig: {
       name: string
       url: string
       description?: string
       searchUrl?: string
-    }): WebSiteSchema => ({
-      '@context': 'https://schema.org',
-      '@type': 'WebSite',
-      name: websiteConfig.name,
-      url: websiteConfig.url,
-      ...(websiteConfig.description && {
-        description: websiteConfig.description,
-      }),
-      ...(websiteConfig.searchUrl && {
-        potentialAction: {
-          '@type': 'SearchAction',
-          target: {
-            '@type': 'EntryPoint',
-            urlTemplate: websiteConfig.searchUrl,
-          },
-          'query-input': 'required name=search_term_string',
-        },
-      }),
-    }),
+    }): WebSiteSchema => createWebsiteSchemaBasic(websiteConfig),
 
-    article: (articleConfig: {
-      headline: string
-      description?: string
-      image?: string | string[]
-      datePublished?: string
-      dateModified?: string
-      author?: {
-        name: string
-        url?: string
-        type?: 'Person' | 'Organization'
-      }
-      publisher?: { name: string; logo?: string }
-    }): ArticleSchema => ({
-      '@context': 'https://schema.org',
-      '@type': 'Article',
-      headline: articleConfig.headline,
-      ...(articleConfig.description && {
-        description: articleConfig.description,
-      }),
-      ...(articleConfig.image && { image: articleConfig.image }),
-      ...(articleConfig.datePublished && {
-        datePublished: articleConfig.datePublished,
-      }),
-      ...(articleConfig.dateModified && {
-        dateModified: articleConfig.dateModified,
-      }),
-      ...(articleConfig.author && {
-        author: {
-          '@type': articleConfig.author.type || 'Person',
-          name: articleConfig.author.name,
-          ...(articleConfig.author.url && { url: articleConfig.author.url }),
-        },
-      }),
-      ...(articleConfig.publisher && {
-        publisher: {
-          '@type': 'Organization',
-          name: articleConfig.publisher.name,
-          ...(articleConfig.publisher.logo && {
-            logo: {
-              '@type': 'ImageObject',
-              url: articleConfig.publisher.logo,
-            },
-          }),
-        },
-      }),
-    }),
+    article: createArticleSchema,
 
     breadcrumbList: (
       items: Array<{ name: string; url?: string }>,
-    ): BreadcrumbListSchema => ({
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: items.map((item, index) => ({
-        '@type': 'ListItem',
-        position: index + 1,
-        name: item.name,
-        ...(item.url && {
-          item: item.url.startsWith('http')
-            ? item.url
-            : `${defaultSiteUrl}${item.url}`,
-        }),
-      })),
-    }),
+    ): BreadcrumbListSchema =>
+      createBreadcrumbListSchemaWithBase(items, defaultSiteUrl),
 
-    faqPage: (faqConfig: {
-      questions: Array<{ question: string; answer: string }>
-    }): FAQPageSchema => ({
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: faqConfig.questions.map(q => ({
-        '@type': 'Question',
-        name: q.question,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: q.answer,
-        },
-      })),
+    faqPage: createFaqPageSchema,
+  }
+}
+
+function createOrganizationSchemaWithDefaults(
+  orgConfig: {
+    name: string
+    url: string
+    logo?: string
+    description?: string
+    sameAs?: string[]
+  },
+  defaultSocialLinks: string[],
+): OrganizationSchema {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: orgConfig.name,
+    url: orgConfig.url,
+    ...(orgConfig.logo && { logo: orgConfig.logo }),
+    ...(orgConfig.description && { description: orgConfig.description }),
+    sameAs: orgConfig.sameAs ?? defaultSocialLinks,
+  }
+}
+
+function createWebsiteSchemaBasic(websiteConfig: {
+  name: string
+  url: string
+  description?: string
+  searchUrl?: string
+}): WebSiteSchema {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: websiteConfig.name,
+    url: websiteConfig.url,
+    ...(websiteConfig.description && {
+      description: websiteConfig.description,
     }),
+    ...(websiteConfig.searchUrl && {
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: {
+          '@type': 'EntryPoint',
+          urlTemplate: websiteConfig.searchUrl,
+        },
+        'query-input': 'required name=search_term_string',
+      },
+    }),
+  }
+}
+
+function createBreadcrumbListSchemaWithBase(
+  items: Array<{ name: string; url?: string }>,
+  defaultSiteUrl: string,
+): BreadcrumbListSchema {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      ...(item.url && {
+        item: item.url.startsWith('http')
+          ? item.url
+          : `${defaultSiteUrl}${item.url}`,
+      }),
+    })),
+  }
+}
+
+/**
+ * Create enhanced JSON-LD schema generators
+ * Includes support for @id, publisher, webpage, and softwareApplication
+ * All values must be provided explicitly - no defaults
+ */
+export function createAppJSONLD() {
+  return {
+    organization: createOrganizationSchema,
+    website: createWebsiteSchema,
+    article: createArticleSchema,
+    breadcrumbList: createBreadcrumbListSchema,
+    faqPage: createFaqPageSchema,
+    webpage: createWebpageSchema,
+    softwareApplication: createSoftwareApplicationSchema,
+  }
+}
+
+function createOrganizationSchema(orgConfig: {
+  '@id'?: string
+  name: string
+  url: string
+  description?: string
+  logo?: string
+  sameAs?: string[]
+}): OrganizationSchema {
+  const { '@id': id, ...restConfig } = orgConfig
+  const schema: OrganizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: restConfig.name,
+    url: restConfig.url,
+    ...(restConfig.logo && { logo: restConfig.logo }),
+    ...(restConfig.description && {
+      description: restConfig.description,
+    }),
+    sameAs: restConfig.sameAs ?? [],
+  }
+  return id ? { ...schema, '@id': id } : schema
+}
+
+function createWebsiteSchema(websiteConfig: {
+  '@id'?: string
+  name: string
+  url: string
+  description?: string
+  searchUrl?: string
+  publisher?: {
+    '@id'?: string
+  }
+}): WebSiteSchema {
+  const { '@id': id, publisher, ...restConfig } = websiteConfig
+  const schema: WebSiteSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: restConfig.name,
+    url: restConfig.url,
+    ...(restConfig.description && {
+      description: restConfig.description,
+    }),
+    ...(restConfig.searchUrl && {
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: {
+          '@type': 'EntryPoint',
+          urlTemplate: restConfig.searchUrl,
+        },
+        'query-input': 'required name=search_term_string',
+      },
+    }),
+  }
+  return {
+    ...schema,
+    ...(id && { '@id': id }),
+    ...(publisher && { publisher }),
+  }
+}
+
+function createArticleSchema(articleConfig: {
+  headline: string
+  description?: string
+  image?: string | string[]
+  datePublished?: string
+  dateModified?: string
+  author?: {
+    name: string
+    url?: string
+    type?: 'Person' | 'Organization'
+  }
+  publisher?: { name: string; logo?: string }
+}): ArticleSchema {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: articleConfig.headline,
+    ...(articleConfig.description && {
+      description: articleConfig.description,
+    }),
+    ...(articleConfig.image && { image: articleConfig.image }),
+    ...(articleConfig.datePublished && {
+      datePublished: articleConfig.datePublished,
+    }),
+    ...(articleConfig.dateModified && {
+      dateModified: articleConfig.dateModified,
+    }),
+    ...(articleConfig.author && {
+      author: {
+        '@type': articleConfig.author.type || 'Person',
+        name: articleConfig.author.name,
+        ...(articleConfig.author.url && { url: articleConfig.author.url }),
+      },
+    }),
+    ...(articleConfig.publisher && {
+      publisher: {
+        '@type': 'Organization',
+        name: articleConfig.publisher.name,
+        ...(articleConfig.publisher.logo && {
+          logo: {
+            '@type': 'ImageObject',
+            url: articleConfig.publisher.logo,
+          },
+        }),
+      },
+    }),
+  }
+}
+
+function createBreadcrumbListSchema(
+  items: Array<{ name: string; url?: string }>,
+): BreadcrumbListSchema {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      ...(item.url && { item: item.url }),
+    })),
+  }
+}
+
+function createFaqPageSchema(faqConfig: {
+  questions: Array<{ question: string; answer: string }>
+}): FAQPageSchema {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqConfig.questions.map(q => ({
+      '@type': 'Question',
+      name: q.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: q.answer,
+      },
+    })),
+  }
+}
+
+function createWebpageSchema(webpageConfig: {
+  name?: string
+  description?: string
+  url?: string
+}): WebPageSchema {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    ...(webpageConfig.name && { name: webpageConfig.name }),
+    ...(webpageConfig.description && {
+      description: webpageConfig.description,
+    }),
+    ...(webpageConfig.url && { url: webpageConfig.url }),
+  }
+}
+
+function createSoftwareApplicationSchema(appConfig: {
+  name: string
+  applicationCategory: string
+  operatingSystem: string
+  url: string
+  description?: string
+}): SoftwareApplicationSchema {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: appConfig.name,
+    applicationCategory: appConfig.applicationCategory,
+    operatingSystem: appConfig.operatingSystem,
+    url: appConfig.url,
+    ...(appConfig.description && { description: appConfig.description }),
   }
 }
 

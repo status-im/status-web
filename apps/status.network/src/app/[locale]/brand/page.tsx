@@ -10,15 +10,24 @@ import { ColorSection } from './_components/color-section'
 import { DownloadZipButton } from './_components/download-zip-button'
 import { LogoSection } from './_components/logo-section'
 
-export const metadata = Metadata({
-  title: 'Brand',
-  description: 'Get Status Network brand assets.',
-  alternates: {
-    canonical: '/brand',
-  },
-})
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
+
+  return Metadata({
+    title: 'Brand',
+    description: 'Get Status Network brand assets.',
+    pathname: '/brand',
+    locale,
+  })
+}
 
 const organizationSchema = jsonLD.organization({
+  name: 'Status Network',
+  url: 'https://status.network',
   description: 'Get Status Network brand assets.',
 })
 

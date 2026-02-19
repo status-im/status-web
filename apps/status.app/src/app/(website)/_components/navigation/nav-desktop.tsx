@@ -10,6 +10,7 @@ import { Link } from '~components/link'
 import { Logo } from '~components/logo'
 
 import { DownloadDesktopButton } from '../download-desktop-button'
+import { DownloadMobileButton } from '../download-mobile-button'
 import { useDesktopMenu } from './use-desktop-menu'
 
 const NavDesktop = () => {
@@ -81,8 +82,23 @@ const NavDesktop = () => {
             </NavigationMenu.List>
           </div>
 
-          <div data-theme="dark" className="flex justify-end gap-2">
+          <div
+            data-theme="dark"
+            className={cx(
+              'hidden justify-end gap-2',
+              'macos:flex windows:flex linux:flex unknown:flex'
+            )}
+          >
             <DownloadDesktopButton size="32" variant="darkGrey" show="all" />
+            <DownloadMobileButton size="32" variant="outline" />
+          </div>
+
+          <div
+            data-theme="dark"
+            className={cx('hidden justify-end gap-2', 'ios:flex android:flex')}
+          >
+            <DownloadDesktopButton size="32" variant="darkGrey" show="all" />
+            <DownloadMobileButton size="32" variant="outline" />
           </div>
         </div>
         <NavigationMenu.Viewport

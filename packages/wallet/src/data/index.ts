@@ -1,4 +1,9 @@
-export { type ApiRouter, apiRouter } from './api'
+export {
+  type ApiRouter,
+  apiRouter,
+  createCaller,
+  createTRPCContext,
+} from './api'
 export type {
   Activity,
   ApiInput,

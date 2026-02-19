@@ -1,0 +1,122 @@
+export const genericDepositorAbi = [
+  {
+    inputs: [
+      { internalType: 'IGenericShare', name: '_unitToken', type: 'address' },
+      {
+        internalType: 'IBridgeCoordinatorL1Outbound',
+        name: '_bridgeCoordinator',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'nonpayable',
+    type: 'constructor',
+  },
+  { inputs: [], name: 'NoVaultForAsset', type: 'error' },
+  { inputs: [], name: 'AssetMismatch', type: 'error' },
+  { inputs: [], name: 'ZeroAssets', type: 'error' },
+  { inputs: [], name: 'ZeroShares', type: 'error' },
+  { inputs: [], name: 'ZeroReceiver', type: 'error' },
+  { inputs: [], name: 'MintAmountMismatch', type: 'error' },
+  {
+    inputs: [],
+    name: 'bridgeCoordinator',
+    outputs: [
+      {
+        internalType: 'IBridgeCoordinatorL1Outbound',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'IERC20', name: 'asset', type: 'address' },
+      { internalType: 'address', name: 'whitelabel', type: 'address' },
+      { internalType: 'uint256', name: 'assets', type: 'uint256' },
+    ],
+    name: 'deposit',
+    outputs: [{ internalType: 'uint256', name: 'shares', type: 'uint256' }],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'IERC20', name: 'asset', type: 'address' },
+      { internalType: 'uint256', name: 'assets', type: 'uint256' },
+      { internalType: 'uint16', name: 'bridgeType', type: 'uint16' },
+      { internalType: 'uint256', name: 'chainId', type: 'uint256' },
+      { internalType: 'bytes32', name: 'remoteRecipient', type: 'bytes32' },
+      { internalType: 'bytes32', name: 'whitelabel', type: 'bytes32' },
+      { internalType: 'bytes', name: 'bridgeParams', type: 'bytes' },
+    ],
+    name: 'depositAndBridge',
+    outputs: [
+      { internalType: 'uint256', name: 'shares', type: 'uint256' },
+      { internalType: 'bytes32', name: 'messageId', type: 'bytes32' },
+    ],
+    stateMutability: 'payable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'IERC20', name: 'asset', type: 'address' },
+      { internalType: 'uint256', name: 'assets', type: 'uint256' },
+      { internalType: 'bytes32', name: 'chainNickname', type: 'bytes32' },
+      { internalType: 'bytes32', name: 'remoteRecipient', type: 'bytes32' },
+    ],
+    name: 'depositAndPredeposit',
+    outputs: [{ internalType: 'uint256', name: 'shares', type: 'uint256' }],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'IERC20', name: 'asset', type: 'address' },
+      { internalType: 'address', name: 'whitelabel', type: 'address' },
+      { internalType: 'uint256', name: 'shares', type: 'uint256' },
+    ],
+    name: 'mint',
+    outputs: [{ internalType: 'uint256', name: 'assets', type: 'uint256' }],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'IERC20', name: 'asset', type: 'address' },
+      { internalType: 'uint256', name: 'shares', type: 'uint256' },
+      { internalType: 'uint16', name: 'bridgeType', type: 'uint16' },
+      { internalType: 'uint256', name: 'chainId', type: 'uint256' },
+      { internalType: 'bytes32', name: 'remoteRecipient', type: 'bytes32' },
+      { internalType: 'bytes32', name: 'whitelabel', type: 'bytes32' },
+      { internalType: 'bytes', name: 'bridgeParams', type: 'bytes' },
+    ],
+    name: 'mintAndBridge',
+    outputs: [
+      { internalType: 'uint256', name: 'assets', type: 'uint256' },
+      { internalType: 'bytes32', name: 'messageId', type: 'bytes32' },
+    ],
+    stateMutability: 'payable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'IERC20', name: 'asset', type: 'address' },
+      { internalType: 'uint256', name: 'shares', type: 'uint256' },
+      { internalType: 'bytes32', name: 'chainNickname', type: 'bytes32' },
+      { internalType: 'bytes32', name: 'remoteRecipient', type: 'bytes32' },
+    ],
+    name: 'mintAndPredeposit',
+    outputs: [{ internalType: 'uint256', name: 'assets', type: 'uint256' }],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'unitToken',
+    outputs: [{ internalType: 'IGenericShare', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+] as const

@@ -14,6 +14,7 @@ import { useCollectibles } from '@/hooks/use-collectibles'
 import { useWallet } from '../../../../../providers/wallet-context'
 import { Collectible } from '../../-components/collectible'
 import { LinkCollectible } from '../../-components/link-collectibe'
+import { useScrollRestorer } from '../../-hooks/use-collectibles-scroll'
 
 import type { NetworkType } from '@status-im/wallet/data'
 
@@ -55,6 +56,8 @@ function Component() {
   const collectibles = useMemo(() => {
     return data?.pages.flatMap(page => page.collectibles ?? []) ?? []
   }, [data?.pages])
+
+  useScrollRestorer()
 
   // Show error toast if there is an error fetching collectibles
   useEffect(() => {
