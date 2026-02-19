@@ -3,6 +3,7 @@ import { Navbar } from '@status-im/wallet/components'
 import {
   createRootRouteWithContext,
   HeadContent,
+  isRedirect,
   Outlet,
   redirect,
 } from '@tanstack/react-router'
@@ -51,7 +52,11 @@ export const Route = createRootRouteWithContext<{
         throw redirect({ to: '/portfolio/assets' })
       }
     } catch (error) {
-      if (error && typeof error === 'object' && 'isRedirect' in error) {
+      if (isRedirect(error)) {
+        throw error
+      }
+      // Router may represent redirect as Response (307) in some environments
+      if (error instanceof Response && [302, 303, 307].includes(error.status)) {
         throw error
       }
       console.error('Error loading wallets in beforeLoad:', error)
