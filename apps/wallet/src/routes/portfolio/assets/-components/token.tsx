@@ -83,7 +83,7 @@ const Token = (props: Props) => {
   const toast = useToast()
   const { currentWallet } = useWallet()
   const { addPendingTransaction } = usePendingTransactions()
-  const { hasActiveSession, getPassword, requestPassword } = usePassword()
+  const { hasActiveSession, requestPassword } = usePassword()
 
   const [activeDataType, setActiveDataType] =
     useState<ChartDataType>(DEFAULT_DATA_TYPE)
@@ -323,9 +323,7 @@ const Token = (props: Props) => {
     color: 'magenta',
   }
 
-  const signTransaction = async (
-    formData: SendAssetsFormData & { password: string },
-  ) => {
+  const signTransaction = async (formData: SendAssetsFormData) => {
     if (!gasFeeQuery.data) {
       throw new Error('Gas fees not available')
     }
@@ -338,7 +336,6 @@ const Token = (props: Props) => {
         amount: amountHex,
         toAddress: formData.to,
         fromAddress: address,
-        password: formData.password,
         walletId: currentWallet?.id || '',
         gasLimit: gasFeeQuery.data.txParams.gasLimit,
         maxFeePerGas: gasFeeQuery.data.txParams.maxFeePerGas,
@@ -395,7 +392,6 @@ const Token = (props: Props) => {
         amount: '0',
         toAddress: contractAddress,
         fromAddress: address,
-        password: formData.password,
         walletId: currentWallet?.id || '',
         gasLimit: gasFeeQuery.data.txParams.gasLimit,
         maxFeePerGas: gasFeeQuery.data.txParams.maxFeePerGas,
@@ -493,7 +489,6 @@ const Token = (props: Props) => {
             }}
             signTransaction={signTransaction}
             hasActiveSession={hasActiveSession}
-            getPassword={getPassword}
             requestPassword={requestPassword}
             gasFees={gasFeeQuery.data}
             isLoadingFees={gasFeeQuery.isFetching}
@@ -561,7 +556,6 @@ const Token = (props: Props) => {
               }}
               signTransaction={signTransaction}
               hasActiveSession={hasActiveSession}
-              getPassword={getPassword}
               requestPassword={requestPassword}
               gasFees={gasFeeQuery.data}
               isLoadingFees={gasFeeQuery.isFetching}

@@ -33,10 +33,9 @@ type Props = {
     network: NetworkType
     decimals: number
   }
-  signTransaction: (data: FormData & { password: string }) => Promise<string>
+  signTransaction: (data: FormData) => Promise<string>
   onEstimateGas: (to: string, value: string) => void
   hasActiveSession: boolean
-  getPassword: () => string | null
   requestPassword: (options?: {
     title?: string
     description?: string
@@ -108,7 +107,6 @@ const SendAssetsModal = (props: Props) => {
     signTransaction,
     onEstimateGas,
     hasActiveSession,
-    getPassword,
     requestPassword,
     gasFees,
     isLoadingFees,
@@ -206,20 +204,13 @@ const SendAssetsModal = (props: Props) => {
   ])
 
   const onSubmit = async (data: FormData) => {
-    let password: string | null = null
-
-    if (hasActiveSession) {
-      password = getPassword()
-    } else {
-      password = await requestPassword({
+    if (!hasActiveSession) {
+      const unlocked = await requestPassword({
         title: 'Enter password',
         description: 'To send transaction',
         buttonLabel: 'Send Transaction',
       })
-    }
-
-    if (!password) {
-      return
+      if (!unlocked) return
     }
 
     setTransactionState('signing')
@@ -231,10 +222,7 @@ const SendAssetsModal = (props: Props) => {
 
       handleOnOpenChange(false)
 
-      await signTransaction({
-        ...data,
-        password,
-      })
+      await signTransaction(data)
 
       setTransactionState('pending')
     } catch (error) {

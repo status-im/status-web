@@ -9,17 +9,12 @@ import {
 } from 'react'
 
 import { PasswordModal } from '@status-im/wallet/components'
+import { useQuery } from '@tanstack/react-query'
 
 import { apiClient } from './api-client'
 import { useWallet } from './wallet-context'
 
-const SESSION_TIMEOUT_MS = 15 * 60 * 1000 // 15 minutes
-
-export type PasswordSession = {
-  password: string
-  expiresAt: number
-  lastActivityAt: number
-}
+const SESSION_STATUS_REFETCH_MS = 10_000
 
 export type PasswordModalOptions = {
   title?: string
@@ -30,9 +25,6 @@ export type PasswordModalOptions = {
 
 export type PasswordContext = {
   hasActiveSession: boolean
-  sessionExpiresAt: number | null
-  establishSession: (password: string) => void
-  getPassword: () => string | null
   clearSession: () => void
   requestPassword: (options?: PasswordModalOptions) => Promise<string | null>
 }
@@ -48,7 +40,6 @@ export function usePassword() {
 }
 
 export function PasswordProvider({ children }: { children: React.ReactNode }) {
-  const [session, setSession] = useState<PasswordSession | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalOptions, setModalOptions] = useState<
     PasswordModalOptions | undefined
@@ -61,63 +52,15 @@ export function PasswordProvider({ children }: { children: React.ReactNode }) {
   const isModalOpenRef = useRef(false)
   const { currentWallet } = useWallet()
 
-  const hasActiveSession = useMemo(
-    () => session !== null && session.expiresAt > Date.now(),
-    [session],
-  )
-
-  const sessionExpiresAt = useMemo(
-    () => session?.expiresAt ?? null,
-    [session?.expiresAt],
-  )
-
-  const establishSession = useCallback((password: string) => {
-    if (typeof password !== 'string') {
-      throw new Error('Password must be a string')
-    }
-    const trimmed = password.trim()
-    if (!trimmed) {
-      throw new Error('Password cannot be empty')
-    }
-    const now = Date.now()
-    const expiresAt = now + SESSION_TIMEOUT_MS
-
-    setSession({
-      password: trimmed,
-      expiresAt,
-      lastActivityAt: now,
-    })
-  }, [])
-
-  const getPassword = useCallback((): string | null => {
-    if (!session) {
-      return null
-    }
-    const now = Date.now()
-    if (session.expiresAt <= now) {
-      return null
-    }
-    let currentPassword = session.password
-    setSession(prev => {
-      if (!prev) {
-        return prev
-      }
-      const currentTime = Date.now()
-      if (prev.expiresAt <= currentTime) {
-        return prev
-      }
-      currentPassword = prev.password
-      return {
-        ...prev,
-        lastActivityAt: currentTime,
-        expiresAt: currentTime + SESSION_TIMEOUT_MS,
-      }
-    })
-    return currentPassword
-  }, [session])
+  const { data: sessionStatus } = useQuery({
+    queryKey: ['session', 'status'],
+    queryFn: () => apiClient.session.status.query(),
+    refetchInterval: SESSION_STATUS_REFETCH_MS,
+  })
+  const hasActiveSession = sessionStatus?.isUnlocked ?? false
 
   const clearSession = useCallback(() => {
-    setSession(null)
+    void apiClient.session.lock.mutate()
   }, [])
 
   const cancelPendingModal = useCallback(() => {
@@ -142,7 +85,7 @@ export function PasswordProvider({ children }: { children: React.ReactNode }) {
       }
 
       if (hasActiveSession) {
-        return getPassword()
+        return 'unlocked'
       }
 
       cancelPendingModal()
@@ -155,7 +98,7 @@ export function PasswordProvider({ children }: { children: React.ReactNode }) {
         isModalOpenRef.current = true
       })
     },
-    [hasActiveSession, getPassword, currentWallet?.id, cancelPendingModal],
+    [hasActiveSession, currentWallet?.id, cancelPendingModal],
   )
 
   const handlePasswordConfirm = useCallback(
@@ -183,37 +126,18 @@ export function PasswordProvider({ children }: { children: React.ReactNode }) {
 
       setIsVerifying(true)
       try {
-        await apiClient.wallet.get.query({
-          walletId,
-          password,
-        })
-        if (!modalOptions?.requireFreshPassword) {
-          establishSession(password)
-        }
+        await apiClient.session.unlock.mutate({ password })
         setIsModalOpen(false)
         isModalOpenRef.current = false
         if (passwordResolveRef.current) {
-          passwordResolveRef.current(password)
+          passwordResolveRef.current('unlocked')
           passwordResolveRef.current = null
         }
-      } catch (error) {
-        if (error instanceof Error) {
-          const message = error.message.toLowerCase()
-          if (
-            message.includes('invalid password') ||
-            message.includes('incorrect password') ||
-            message.includes('wrong password') ||
-            message.includes('authentication failed')
-          ) {
-            throw new Error('Invalid password')
-          }
-        }
-        throw error
       } finally {
         setIsVerifying(false)
       }
     },
-    [currentWallet?.id, establishSession, modalOptions],
+    [currentWallet?.id],
   )
 
   const handleModalOpenChange = useCallback((open: boolean) => {
@@ -227,22 +151,6 @@ export function PasswordProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   useEffect(() => {
-    if (!session) {
-      return
-    }
-    const now = Date.now()
-    if (session.expiresAt <= now) {
-      clearSession()
-      return
-    }
-    const timeoutDuration = session.expiresAt - now
-    const timeout = setTimeout(() => {
-      clearSession()
-    }, timeoutDuration)
-    return () => clearTimeout(timeout)
-  }, [session, clearSession])
-
-  useEffect(() => {
     return () => {
       if (passwordResolveRef.current) {
         passwordResolveRef.current(null)
@@ -254,20 +162,10 @@ export function PasswordProvider({ children }: { children: React.ReactNode }) {
   const value: PasswordContext = useMemo(
     () => ({
       hasActiveSession,
-      sessionExpiresAt,
-      establishSession,
-      getPassword,
       clearSession,
       requestPassword,
     }),
-    [
-      hasActiveSession,
-      sessionExpiresAt,
-      establishSession,
-      getPassword,
-      clearSession,
-      requestPassword,
-    ],
+    [hasActiveSession, clearSession, requestPassword],
   )
 
   return (

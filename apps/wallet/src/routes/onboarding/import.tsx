@@ -8,10 +8,10 @@ import {
   ImportRecoveryPhraseForm,
   type ImportRecoveryPhraseFormValues,
 } from '@status-im/wallet/components'
+import { useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
 import { useImportWallet } from '../../hooks/use-import-wallet'
-import { usePassword } from '../../providers/password-context'
 
 import type { SubmitHandler } from 'react-hook-form'
 
@@ -116,7 +116,7 @@ function CreatePassword({
   onBack: (mnemonic: string) => void
 }) {
   const { importWalletAsync } = useImportWallet()
-  const { establishSession } = usePassword()
+  const queryClient = useQueryClient()
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -127,7 +127,7 @@ function CreatePassword({
         mnemonic,
         password: data.password,
       })
-      establishSession(data.password)
+      await queryClient.invalidateQueries({ queryKey: ['session', 'status'] })
       navigate({ to: '/portfolio/assets' })
     } catch (error) {
       console.error(error)

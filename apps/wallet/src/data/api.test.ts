@@ -115,7 +115,6 @@ test('should get wallet', async () => {
 
   const returnedWallet = await apiClient.wallet.get.query({
     walletId: importedWallet.id,
-    password,
   })
 
   expect(returnedWallet.mnemonic).toBe(mnemonic)

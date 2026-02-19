@@ -39,13 +39,7 @@ export function useWalletSigner() {
 
 export function SignerProvider({ children }: { children: React.ReactNode }) {
   const { currentWallet } = useWallet()
-  const {
-    hasActiveSession,
-    getPassword,
-    requestPassword,
-    establishSession,
-    clearSession,
-  } = usePassword()
+  const { hasActiveSession, requestPassword, clearSession } = usePassword()
 
   const address = useMemo(() => {
     return currentWallet?.activeAccounts[0]?.address as Address | undefined
@@ -53,64 +47,27 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
 
   const unlock = useCallback(async (): Promise<boolean> => {
     if (!currentWallet?.id) return false
-
-    let password: string | null = null
-
-    if (hasActiveSession) {
-      password = getPassword()
-      if (!password) {
-        return false
-      }
-      try {
-        await apiClient.wallet.get.query({
-          walletId: currentWallet.id,
-          password,
-        })
-        establishSession(password)
-        return true
-      } catch {
-        return false
-      }
-    }
-
-    password = await requestPassword({
+    const p = await requestPassword({
       title: 'Enter password',
       description: 'To allow for signing transactions',
     })
-
-    return password !== null
-  }, [
-    currentWallet?.id,
-    hasActiveSession,
-    getPassword,
-    requestPassword,
-    establishSession,
-  ])
+    return p !== null
+  }, [currentWallet?.id, requestPassword])
 
   const lock = useCallback(() => {
     clearSession()
   }, [clearSession])
 
   const requestUnlock = useCallback(async (): Promise<string | null> => {
-    if (hasActiveSession) {
-      return getPassword()
-    }
-    return await requestPassword()
-  }, [hasActiveSession, getPassword, requestPassword])
+    if (hasActiveSession) return 'unlocked'
+    return requestPassword()
+  }, [hasActiveSession, requestPassword])
 
-  const ensurePassword = useCallback(async (): Promise<string> => {
-    if (hasActiveSession) {
-      const password = getPassword()
-      if (password) {
-        return password
-      }
-    }
-    const password = await requestPassword()
-    if (!password) {
-      throw new Error('Wallet not unlocked')
-    }
-    return password
-  }, [hasActiveSession, getPassword, requestPassword])
+  const ensureUnlocked = useCallback(async (): Promise<void> => {
+    if (hasActiveSession) return
+    const p = await requestPassword()
+    if (!p) throw new Error('Wallet not unlocked')
+  }, [hasActiveSession, requestPassword])
 
   const parseInsufficientFundsError = useCallback(
     (error: unknown): Error | null => {
@@ -168,7 +125,7 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
         throw new Error('No wallet connected')
       }
 
-      const password = await ensurePassword()
+      await ensureUnlocked()
 
       let maxFeePerGas = tx.maxFeePerGas?.toString(16)
       let maxPriorityFeePerGas = tx.maxPriorityFeePerGas?.toString(16)
@@ -232,7 +189,6 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
           const result =
             await apiClient.wallet.account.ethereum.sendErc20.mutate({
               walletId: currentWallet.id,
-              password,
               fromAddress: address,
               toAddress: tx.to,
               gasLimit,
@@ -254,7 +210,6 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
         const result =
           await apiClient.wallet.account.ethereum.sendContractCall.mutate({
             walletId: currentWallet.id,
-            password,
             fromAddress: address,
             toAddress: tx.to,
             gasLimit,
@@ -276,7 +231,6 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
       const amountHex = tx.value.toString(16)
       const result = await apiClient.wallet.account.ethereum.send.mutate({
         walletId: currentWallet.id,
-        password,
         fromAddress: address,
         toAddress: tx.to,
         amount: amountHex,
@@ -293,7 +247,7 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
       if (!txHash) throw new Error('Transaction failed')
       return txHash as Hex
     },
-    [currentWallet?.id, address, ensurePassword, handleTransactionError],
+    [currentWallet?.id, address, ensureUnlocked, handleTransactionError],
   )
 
   const signMessage = useCallback(
@@ -302,12 +256,11 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
         throw new Error('No wallet connected')
       }
 
-      const password = await ensurePassword()
+      await ensureUnlocked()
 
       const result = await apiClient.wallet.account.ethereum.signMessage.mutate(
         {
           walletId: currentWallet.id,
-          password,
           fromAddress: address,
           message,
         },
@@ -315,7 +268,7 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
 
       return result.signature as Hex
     },
-    [currentWallet?.id, address, ensurePassword],
+    [currentWallet?.id, address, ensureUnlocked],
   )
 
   const signTypedData = useCallback(
@@ -324,14 +277,13 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
         throw new Error('No wallet connected')
       }
 
-      const password = await ensurePassword()
+      await ensureUnlocked()
 
       const parsed = JSON.parse(typedData)
 
       const result =
         await apiClient.wallet.account.ethereum.signTypedData.mutate({
           walletId: currentWallet.id,
-          password,
           fromAddress: address,
           domain: parsed.domain,
           types: parsed.types,
@@ -341,7 +293,7 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
 
       return result.signature as Hex
     },
-    [currentWallet?.id, address, ensurePassword],
+    [currentWallet?.id, address, ensureUnlocked],
   )
 
   const handleSetUnlockHandler = useCallback(

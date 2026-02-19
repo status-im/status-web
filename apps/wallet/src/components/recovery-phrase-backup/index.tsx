@@ -42,11 +42,9 @@ export function RecoveryPhraseBackup() {
       }
 
       const { mnemonic } = await apiClient.wallet.get.query({
-        password,
         walletId: currentWallet.id,
       })
-
-      setMnemonic(mnemonic)
+      setMnemonic(mnemonic ?? null)
       setShowRecoveryDialog(true)
     } catch (error) {
       console.error(error)
