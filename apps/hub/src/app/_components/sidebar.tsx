@@ -29,20 +29,16 @@ const Sidebar = (props: Props) => {
   const locale = useLocale()
   const localePrefix = locale === 'en' ? '' : `/${locale}`
 
-  const NAV_LINKS = [
-    {
-      id: 'dashboard',
-      label: t('navigation.home'),
-      icon: HomeIcon,
-      href: '/',
-    },
+  const MAINNET_LINKS = [
     {
       id: 'deposit',
       label: t('navigation.pre_deposits'),
       icon: DepositIcon,
       href: '/pre-deposits',
-      tag: t('common.mainnet'),
     },
+  ]
+
+  const TESTNET_LINKS = [
     {
       id: 'discover',
       label: t('navigation.discover'),
@@ -60,11 +56,7 @@ const Sidebar = (props: Props) => {
       label: t('navigation.karma'),
       icon: KarmaIcon,
       href: '/karma',
-      tag: t('common.testnet'),
     },
-  ]
-
-  const TOKENS_LINKS = [
     {
       id: 'bridge',
       label: t('navigation.bridge'),
@@ -143,24 +135,44 @@ const Sidebar = (props: Props) => {
           {/* Main Navigation */}
           <nav className="flex-1 px-6 lg:px-0">
             <ul className="space-y-1">
-              {NAV_LINKS.map(item => (
-                <LinkItem key={item.id} {...item} />
-              ))}
+              <LinkItem
+                {...{
+                  id: 'dashboard',
+                  label: t('navigation.home'),
+                  icon: HomeIcon,
+                  href: '/',
+                }}
+              />
             </ul>
 
-            {/* Separator with Title */}
+            {/* Mainnet Section */}
             <div className="my-3">
               <div className="mb-2 px-4">
                 <h3 className="text-13 font-medium leading-[1.4] tracking-[-0.3%] text-purple">
-                  {t('navigation.tokens')}
+                  {t('navigation.mainnet')}
                 </h3>
               </div>
               <div className="h-px bg-customisation-purple-50/40"></div>
             </div>
 
-            {/* Token Items */}
             <ul className="space-y-1">
-              {TOKENS_LINKS.map(item => {
+              {MAINNET_LINKS.map(item => (
+                <LinkItem key={item.id} {...item} />
+              ))}
+            </ul>
+
+            {/* Testnet Section */}
+            <div className="my-3">
+              <div className="mb-2 px-4">
+                <h3 className="text-13 font-medium leading-[1.4] tracking-[-0.3%] text-purple">
+                  {t('navigation.testnet')}
+                </h3>
+              </div>
+              <div className="h-px bg-customisation-purple-50/40"></div>
+            </div>
+
+            <ul className="space-y-1">
+              {TESTNET_LINKS.map(item => {
                 return <LinkItem key={item.id} {...item} />
               })}
             </ul>

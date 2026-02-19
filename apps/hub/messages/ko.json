@@ -89,6 +89,14 @@
       "translation": "카르마",
       "notes": "navigation::karma"
     },
+    "mainnet": {
+      "translation": "메인넷",
+      "notes": "navigation::mainnet"
+    },
+    "testnet": {
+      "translation": "테스트넷",
+      "notes": "navigation::testnet"
+    },
     "tokens": {
       "translation": "토큰",
       "notes": "navigation::tokens"

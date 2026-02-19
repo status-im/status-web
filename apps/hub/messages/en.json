@@ -89,6 +89,14 @@
       "translation": "Karma",
       "notes": "navigation::karma"
     },
+    "mainnet": {
+      "translation": "Mainnet",
+      "notes": "navigation::mainnet"
+    },
+    "testnet": {
+      "translation": "Testnet",
+      "notes": "navigation::testnet"
+    },
     "tokens": {
       "translation": "Tokens",
       "notes": "navigation::tokens"
