@@ -668,19 +668,19 @@
       "notes": "karma::free_transactions_left_today"
     },
     "stake_card_title": {
-      "translation": "스테이킹",
+      "translation": "스테이킹을 통해 획득",
       "notes": "karma::stake_card_title"
     },
     "stake_card_button": {
-      "translation": "STT 스테이킹",
+      "translation": "스테이킹",
       "notes": "karma::stake_card_button"
     },
     "stake_card_badge_title": {
-      "translation": "스테이킹",
+      "translation": "스테이커",
       "notes": "karma::stake_card_badge_title"
     },
     "stake_card_badge_description": {
-      "translation": "STT를 스테이킹하고 테스트넷 카르마를 획득하세요",
+      "translation": "STT를 스테이킹하여 레벨업하세요",
       "notes": "karma::stake_card_badge_description"
     }
   },

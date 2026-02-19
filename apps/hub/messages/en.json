@@ -668,19 +668,19 @@
       "notes": "karma::free_transactions_left_today"
     },
     "stake_card_title": {
-      "translation": "Staking",
+      "translation": "Earned through staking",
       "notes": "karma::stake_card_title"
     },
     "stake_card_button": {
-      "translation": "Stake STT",
+      "translation": "Stake",
       "notes": "karma::stake_card_button"
     },
     "stake_card_badge_title": {
-      "translation": "Staking",
+      "translation": "Staker",
       "notes": "karma::stake_card_badge_title"
     },
     "stake_card_badge_description": {
-      "translation": "Stake STT to earn testnet Karma",
+      "translation": "Stake STT to level up",
       "notes": "karma::stake_card_badge_description"
     }
   },
