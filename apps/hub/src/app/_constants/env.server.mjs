@@ -1,0 +1,32 @@
+import { z } from 'zod'
+import { handleError } from './env.base.mjs'
+
+if (typeof window !== 'undefined') {
+  throw new Error(
+    '❌ Attempted to access a server-side environment variable on the client'
+  )
+}
+
+export const envSchema = z.object({
+  VERCEL: z.string().optional(),
+  VERCEL_ENV: z
+    .union([
+      z.literal('production'),
+      z.literal('preview'),
+      z.literal('development'),
+    ])
+    .optional(),
+  NODE_ENV: z.string(),
+})
+
+const result = envSchema.safeParse(process.env)
+
+if (!result.success) {
+  handleError(result.error)
+
+  process.exit(1)
+}
+
+const serverEnv = result.data
+
+export { serverEnv }
