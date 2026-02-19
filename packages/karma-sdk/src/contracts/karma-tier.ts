@@ -18,16 +18,18 @@ export async function getKarmaTiers(
     functionName: 'getTierCount',
   })
 
-  const tiers = (await Promise.all(
-    Array.from({ length: Number(tierCount) }, (_, i) =>
-      client.readContract({
-        address: addresses.karmaTier,
-        abi: karmaTierAbi,
-        functionName: 'getTierById',
-        args: [i],
-      })
+  const tiers = (
+    await Promise.all(
+      Array.from({ length: Number(tierCount) }, (_, i) =>
+        client.readContract({
+          address: addresses.karmaTier,
+          abi: karmaTierAbi,
+          functionName: 'getTierById',
+          args: [i],
+        }),
+      ),
     )
-  )).map((tier, i) => ({
+  ).map((tier, i) => ({
     id: i,
     minKarma: tier.minKarma,
     maxKarma: tier.maxKarma,
