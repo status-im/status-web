@@ -23,5 +23,17 @@
 				"29:58:6A:6B:A0:CA:FA:A5:38:AA:CE:EA:DF:60:55:1C:EC:22:E9:65:68:40:35:D4:75:B7:9A:0A:8B:13:E2:9F"
 			]
 		}
+	},
+	{
+		"relation": [
+			"delegate_permission/common.handle_all_urls"
+		],
+		"target": {
+			"namespace": "android_app",
+			"package_name": "app.status.mobile",
+			"sha256_cert_fingerprints": [
+				""
+			]
+		}
 	}
 ]
