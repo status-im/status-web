@@ -28,10 +28,12 @@ import type { QueryClient } from '@tanstack/react-query'
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient
 }>()({
-  beforeLoad: async ({ location }) => {
+  beforeLoad: async ({ location, context }) => {
     try {
       const wallets = await apiClient.wallet.all.query()
       const hasWallets = Array.isArray(wallets) && wallets.length > 0
+
+      context.queryClient.setQueryData(['wallets'], wallets)
 
       if (location.pathname === '/') {
         if (hasWallets) {
