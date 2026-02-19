@@ -7,7 +7,7 @@
     "test": "playwright test",
     "test:smoke": "playwright test --project=smoke",
     "test:wallet": "playwright test --project=wallet-flows",
-    "test:anvil": "playwright test --project=anvil-deposits",
+    "test:anvil": "./scripts/setup-anvil.sh && playwright test --project=anvil-deposits; EXIT=$?; ./scripts/setup-anvil.sh --stop; exit $EXIT",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
     "test:ui": "playwright test --ui",

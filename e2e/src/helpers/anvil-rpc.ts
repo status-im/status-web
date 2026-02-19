@@ -4,35 +4,33 @@
  * Provides:
  * - Snapshot/revert for test isolation
  * - ETH balance manipulation
- * - ERC-20 token funding via whale impersonation
- * - WETH wrapping
+ * - SNT minting via MiniMeToken controller impersonation
+ * - LINEA token funding via storage slot manipulation
  *
  * All operations use raw fetch() — no external dependencies needed.
  */
 
-// Well-known contract addresses (mainnet)
+// Well-known contract addresses
 const CONTRACTS = {
-  WETH: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+  // Mainnet
   SNT: '0x744d70FDBE2Ba4CF95131626614a1763DF805B9E',
-  USDT: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
-  USDC: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-  USDS: '0xdC035D45d973E3EC169d2276DDab16f1e407384F',
+  // Linea chain
+  LINEA: '0x1789e0043623282D5DCc7F213d703C6D8BAfBB04',
 } as const;
 
-// Well-known whale addresses for ERC-20 funding
-const WHALES = {
-  // Binance hot wallet — holds SNT, USDT, USDC, and many others
-  BINANCE: '0xF977814e90dA44bFA03b6295A0616a897441aceC',
-} as const;
+// OpenZeppelin v5 ERC20Upgradeable namespaced storage slot for _balances.
+// keccak256(abi.encode(uint256(keccak256("openzeppelin.storage.ERC20")) - 1)) & ~bytes32(uint256(0xff))
+const OZ_V5_ERC20_BALANCE_SLOT = 0x52c63247e1f47db19d5ce0460030c497f067ca4cebf71ba98eeadabe20bace00n;
+
+// SNT (MiniMeToken) controller — can mint via generateTokens()
+const SNT_CONTROLLER = '0x52aE2B53C847327f95A5084a7C38c0adb12fD302';
 
 // Function selectors (4 bytes)
 const SELECTORS = {
-  // WETH.deposit()
-  DEPOSIT: '0xd0e30db0',
-  // ERC20.transfer(address,uint256)
-  TRANSFER: '0xa9059cbb',
   // ERC20.balanceOf(address)
   BALANCE_OF: '0x70a08231',
+  // MiniMeToken.generateTokens(address,uint256)
+  GENERATE_TOKENS: '0x827f32c0',
 } as const;
 
 /** Encode an address as 32-byte ABI parameter (left-padded with zeros) */
@@ -51,16 +49,15 @@ function toHex(value: bigint): string {
 }
 
 export interface FundingPreset {
+  /** ETH amount on mainnet fork (for gas). Linea ETH comes from setup-anvil.sh base snapshot. */
   eth?: bigint;
-  weth?: bigint;
   snt?: bigint;
-  usdt?: bigint;
-  usdc?: bigint;
-  usds?: bigint;
+  linea?: bigint;
 }
 
 export class AnvilRpcHelper {
   private rpcIdCounter = 0;
+  private lineaTokenBalanceSlot: bigint | null = null;
 
   constructor(
     readonly mainnetRpc: string,
@@ -123,57 +120,134 @@ export class AnvilRpcHelper {
   // ERC-20 token funding
   // ---------------------------------------------------------------------------
 
-  /** Wrap ETH → WETH by calling WETH.deposit() with value */
-  async fundWeth(amount: bigint): Promise<void> {
-    await this.call(this.mainnetRpc, 'anvil_impersonateAccount', [this.walletAddress]);
-    await this.call(this.mainnetRpc, 'eth_sendTransaction', [{
-      from: this.walletAddress,
-      to: CONTRACTS.WETH,
-      data: SELECTORS.DEPOSIT,
-      value: toHex(amount),
-    }]);
-    await this.call(this.mainnetRpc, 'anvil_stopImpersonatingAccount', [this.walletAddress]);
-  }
+  /**
+   * Fund SNT tokens (18 decimals) via MiniMeToken.generateTokens().
+   * SNT uses MiniMeToken which supports minting by the controller.
+   * Whale transfer won't work (Binance no longer holds SNT).
+   */
+  async fundSnt(amount: bigint): Promise<void> {
+    await this.call(this.mainnetRpc, 'anvil_setBalance', [
+      SNT_CONTROLLER,
+      toHex(10n ** 18n),
+    ]);
 
-  /** Transfer ERC-20 tokens from a whale to the test wallet */
-  async fundErc20(
-    token: string,
-    amount: bigint,
-    whale: string = WHALES.BINANCE,
-    rpc?: string,
-  ): Promise<void> {
-    const targetRpc = rpc ?? this.mainnetRpc;
-    const data = SELECTORS.TRANSFER
+    const data = SELECTORS.GENERATE_TOKENS
       + encodeAddress(this.walletAddress)
       + encodeUint256(amount);
 
-    await this.call(targetRpc, 'anvil_impersonateAccount', [whale]);
-    await this.call(targetRpc, 'eth_sendTransaction', [{
-      from: whale,
-      to: token,
+    await this.call(this.mainnetRpc, 'anvil_impersonateAccount', [SNT_CONTROLLER]);
+    await this.call(this.mainnetRpc, 'eth_sendTransaction', [{
+      from: SNT_CONTROLLER,
+      to: CONTRACTS.SNT,
       data,
     }]);
-    await this.call(targetRpc, 'anvil_stopImpersonatingAccount', [whale]);
+    await this.call(this.mainnetRpc, 'anvil_stopImpersonatingAccount', [SNT_CONTROLLER]);
+
+    // Verify minting succeeded (Anvil auto-mines, but the tx could revert)
+    const balance = await this.getErc20Balance(CONTRACTS.SNT, this.mainnetRpc);
+    if (balance < amount) {
+      throw new Error(
+        `SNT funding failed: expected >= ${amount}, got ${balance}. ` +
+        'The MiniMeToken controller may have changed.',
+      );
+    }
   }
 
-  /** Fund SNT tokens (18 decimals) */
-  async fundSnt(amount: bigint): Promise<void> {
-    await this.fundErc20(CONTRACTS.SNT, amount);
+  // ---------------------------------------------------------------------------
+  // ERC-20 storage-based funding (for tokens without a known whale)
+  // ---------------------------------------------------------------------------
+
+  /** Compute keccak256 via Anvil RPC (web3_sha3) — no external dependencies */
+  private async keccak256(hexData: string, rpc: string): Promise<string> {
+    return this.call(rpc, 'web3_sha3', [hexData]);
   }
 
-  /** Fund USDT tokens (6 decimals) */
-  async fundUsdt(amount: bigint): Promise<void> {
-    await this.fundErc20(CONTRACTS.USDT, amount);
+  /** Read ERC-20 balanceOf via eth_call */
+  async getErc20Balance(token: string, rpc?: string): Promise<bigint> {
+    const data = SELECTORS.BALANCE_OF + encodeAddress(this.walletAddress);
+    const result = await this.call(rpc ?? this.mainnetRpc, 'eth_call', [
+      { to: token, data },
+      'latest',
+    ]);
+    return BigInt(result);
   }
 
-  /** Fund USDC tokens (6 decimals) */
-  async fundUsdc(amount: bigint): Promise<void> {
-    await this.fundErc20(CONTRACTS.USDC, amount);
+  /**
+   * Set ERC-20 balance by writing directly to the _balances mapping storage slot.
+   * @param token - ERC-20 contract address
+   * @param amount - balance in smallest unit
+   * @param balanceSlot - storage slot of the _balances mapping (bigint for OZ v5 namespaced slots)
+   * @param rpc - RPC endpoint
+   */
+  private async setErc20BalanceViaStorage(
+    token: string,
+    amount: bigint,
+    balanceSlot: bigint,
+    rpc: string,
+  ): Promise<void> {
+    // Storage key for mapping(address => uint256) at slot S:
+    // keccak256(abi.encode(address, S))
+    const key = '0x' + encodeAddress(this.walletAddress) + encodeUint256(balanceSlot);
+    const storagePosition = await this.keccak256(key, rpc);
+
+    await this.call(rpc, 'anvil_setStorageAt', [
+      token,
+      storagePosition,
+      '0x' + encodeUint256(amount),
+    ]);
   }
 
-  /** Fund USDS tokens (18 decimals) */
-  async fundUsds(amount: bigint): Promise<void> {
-    await this.fundErc20(CONTRACTS.USDS, amount);
+  /**
+   * Find the storage slot of the _balances mapping by brute-force.
+   * Sets a unique test value at candidate slots and checks via balanceOf().
+   * Non-destructive: uses snapshot/revert.
+   */
+  private async findErc20BalanceSlot(token: string, rpc: string): Promise<bigint> {
+    const testAmount = 133742069n * 10n ** 18n;
+    const candidateSlots: bigint[] = [
+      0n, 1n, 2n, 3n, 4n, 5n,       // Standard ERC-20 layouts
+      OZ_V5_ERC20_BALANCE_SLOT,       // OpenZeppelin v5 ERC20Upgradeable
+    ];
+
+    const snapshotId = await this.snapshot(rpc);
+
+    try {
+      for (const slot of candidateSlots) {
+        await this.setErc20BalanceViaStorage(token, testAmount, slot, rpc);
+        const balance = await this.getErc20Balance(token, rpc);
+
+        if (balance === testAmount) {
+          return slot;
+        }
+      }
+
+      throw new Error(
+        `Could not find _balances storage slot for token ${token}. ` +
+        `Tried slots: ${candidateSlots.map(s => '0x' + s.toString(16)).join(', ')}`,
+      );
+    } finally {
+      await this.revert(snapshotId, rpc);
+    }
+  }
+
+  /**
+   * Fund LINEA tokens (18 decimals) on Linea fork via storage manipulation.
+   * Auto-discovers the _balances slot on first call and caches it.
+   */
+  async fundLinea(amount: bigint): Promise<void> {
+    if (this.lineaTokenBalanceSlot === null) {
+      this.lineaTokenBalanceSlot = await this.findErc20BalanceSlot(
+        CONTRACTS.LINEA,
+        this.lineaRpc,
+      );
+    }
+
+    await this.setErc20BalanceViaStorage(
+      CONTRACTS.LINEA,
+      amount,
+      this.lineaTokenBalanceSlot,
+      this.lineaRpc,
+    );
   }
 
   /**
@@ -184,20 +258,11 @@ export class AnvilRpcHelper {
     if (preset.eth !== undefined) {
       await this.setEthBalance(preset.eth);
     }
-    if (preset.weth !== undefined && preset.weth > 0n) {
-      await this.fundWeth(preset.weth);
-    }
     if (preset.snt !== undefined && preset.snt > 0n) {
       await this.fundSnt(preset.snt);
     }
-    if (preset.usdt !== undefined && preset.usdt > 0n) {
-      await this.fundUsdt(preset.usdt);
-    }
-    if (preset.usdc !== undefined && preset.usdc > 0n) {
-      await this.fundUsdc(preset.usdc);
-    }
-    if (preset.usds !== undefined && preset.usds > 0n) {
-      await this.fundUsds(preset.usds);
+    if (preset.linea !== undefined && preset.linea > 0n) {
+      await this.fundLinea(preset.linea);
     }
   }
 
@@ -267,38 +332,15 @@ export class AnvilRpcHelper {
 // ---------------------------------------------------------------------------
 
 const ETH = 10n ** 18n;
-const USDT_UNIT = 10n ** 6n;
-const USDC_UNIT = 10n ** 6n;
 
-/** Presets matching test scenarios from DEPOSIT_TESTS_PLAN.md */
+/** Funding presets for below-minimum validation tests */
 export const FUNDING_PRESETS = {
-  /** W-1: Wrap ETH flow. No WETH, only ETH. */
-  WETH_WRAP: { eth: 2n * ETH } satisfies FundingPreset,
-
-  /** W-2: Sufficient WETH for direct deposit. */
-  WETH_SUFFICIENT: { eth: 1n * ETH, weth: ETH / 100n } satisfies FundingPreset, // 0.01 WETH
-
-  /** W-3: Partial wrap. Some WETH + enough ETH to wrap the rest. */
-  WETH_PARTIAL: { eth: 1n * ETH, weth: ETH / 200n } satisfies FundingPreset, // 0.005 WETH
-
-  /** W-4: Below minimum validation. Need balance > 0.0005 to pass balance check. */
+  /** W-4: Below minimum validation. ETH only (no WETH needed — validation fires first). */
   WETH_BELOW_MIN: { eth: 1n * ETH } satisfies FundingPreset,
 
-  /** S-1: SNT deposit. */
-  SNT_DEPOSIT: { eth: 1n * ETH, snt: 100n * ETH } satisfies FundingPreset, // 100 SNT
-
   /** S-2: SNT below minimum. Need SNT > 0.5 to pass balance check. */
-  SNT_BELOW_MIN: { eth: 1n * ETH, snt: 1n * ETH } satisfies FundingPreset, // 1 SNT
+  SNT_BELOW_MIN: { eth: 1n * ETH, snt: 1n * ETH } satisfies FundingPreset,
 
-  /** G-1: GUSD deposit via USDT. */
-  GUSD_USDT: { eth: 1n * ETH, usdt: 100n * USDT_UNIT } satisfies FundingPreset,
-
-  /** G-2: GUSD deposit via USDC. */
-  GUSD_USDC: { eth: 1n * ETH, usdc: 100n * USDC_UNIT } satisfies FundingPreset,
-
-  /** G-3: GUSD deposit via USDS. */
-  GUSD_USDS: { eth: 1n * ETH, usds: 100n * ETH } satisfies FundingPreset,
-
-  /** Generic: just ETH for gas (validation tests that only need a connected wallet). */
-  ETH_ONLY: { eth: 10n * ETH } satisfies FundingPreset,
+  /** L-2: LINEA below minimum. Need LINEA > 0.5 to pass balance check. */
+  LINEA_BELOW_MIN: { linea: 2n * ETH } satisfies FundingPreset,
 } as const;

@@ -38,7 +38,7 @@ MAINNET_RPC="http://localhost:$MAINNET_FORK_PORT"
 LINEA_RPC="http://localhost:$LINEA_FORK_PORT"
 
 # Public RPC endpoints for forking (override via env for reliability)
-MAINNET_FORK_URL="${MAINNET_FORK_URL:-https://eth.llamarpc.com}"
+MAINNET_FORK_URL="${MAINNET_FORK_URL:-https://ethereum-rpc.publicnode.com}"
 LINEA_FORK_URL="${LINEA_FORK_URL:-https://rpc.linea.build}"
 
 # Derive test wallet address from seed phrase
@@ -49,6 +49,27 @@ fi
 
 WALLET_ADDRESS=$(cast wallet address --mnemonic "$WALLET_SEED_PHRASE" --mnemonic-index 0 2>/dev/null)
 echo "Test wallet address: $WALLET_ADDRESS"
+
+# Helper: set or append a key=value in .env (BSD/GNU sed compatible)
+update_env_var() {
+  local key=$1
+  local value=$2
+  if [ ! -f "$E2E_DIR/.env" ]; then return; fi
+  if grep -q "^${key}=" "$E2E_DIR/.env"; then
+    if [[ "$OSTYPE" == darwin* ]]; then
+      sed -i '' "s|^${key}=.*|${key}=${value}|" "$E2E_DIR/.env"
+    else
+      sed -i "s|^${key}=.*|${key}=${value}|" "$E2E_DIR/.env"
+    fi
+  else
+    echo "${key}=${value}" >> "$E2E_DIR/.env"
+  fi
+}
+
+# Auto-set derived values in .env
+update_env_var "WALLET_ADDRESS" "$WALLET_ADDRESS"
+update_env_var "ANVIL_MAINNET_RPC" "$MAINNET_RPC"
+update_env_var "ANVIL_LINEA_RPC" "$LINEA_RPC"
 
 # Vault addresses
 WETH_VAULT="0xc71Ec84Ee70a54000dB3370807bfAF4309a67a1f"
@@ -212,17 +233,11 @@ print_next_steps() {
   echo ""
   echo "=== Setup complete ==="
   echo ""
-  echo "Next steps:"
-  echo "  1. Start Hub with Anvil RPCs:"
-  echo "     NEXT_PUBLIC_MAINNET_RPC_URL=$MAINNET_RPC NEXT_PUBLIC_LINEA_RPC_URL=$LINEA_RPC pnpm --filter=./apps/hub dev"
+  echo "Anvil forks are ready. To run deposit tests:"
+  echo "  cd e2e && pnpm test:anvil"
   echo ""
-  echo "  2. Enable Anvil in e2e/.env:"
-  echo "     ANVIL_MAINNET_RPC=$MAINNET_RPC"
-  echo "     ANVIL_LINEA_RPC=$LINEA_RPC"
-  echo "     BASE_URL=http://localhost:3003"
-  echo ""
-  echo "  3. Run deposit tests:"
-  echo "     cd e2e && pnpm test:anvil"
+  echo "To stop forks manually:"
+  echo "  ./scripts/setup-anvil.sh --stop"
 }
 
 # -----------------------------------------------------------------------------

@@ -5,7 +5,7 @@
 export const TEST_VAULTS = {
   WETH: {
     id: 'WETH',
-    name: 'WETH vault',
+    name: 'WETH Vault',
     token: 'WETH',
     address: '0xc71Ec84Ee70a54000dB3370807bfAF4309a67a1f',
     chainId: 1,
@@ -34,9 +34,16 @@ export const TEST_VAULTS = {
 } as const
 
 export const TEST_AMOUNTS = {
-  SMALL_DEPOSIT: '0.001',
-  MEDIUM_DEPOSIT: '0.01',
-  LARGE_DEPOSIT: '0.1',
-  STAKE_AMOUNT: '100',
   EXCEED_BALANCE: '999999999',
+} as const
+
+/**
+ * Amounts below vault minimum deposit thresholds (for below-minimum validation tests).
+ * Current minimums: WETH = 0.001, SNT = 1, LINEA = 1.
+ * Each value here must be strictly less than the corresponding minimum.
+ */
+export const BELOW_MIN_AMOUNTS = {
+  WETH: '0.0005',
+  SNT: '0.5',
+  LINEA: '0.5',
 } as const
