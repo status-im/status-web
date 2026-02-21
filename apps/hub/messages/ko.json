@@ -150,7 +150,7 @@
       "notes": "hero::title_2"
     },
     "description": {
-      "translation": "앱을 사용하고 자산을 예치하여 테스트넷 카르마(TKARMA)를 획득하세요",
+      "translation": "앱을 사용하고 자산을 예치하여 카르마를 획득하세요",
       "notes": "hero::description"
     },
     "landscape_alt": {
@@ -686,7 +686,7 @@
   },
   "rewards": {
     "description": {
-      "translation": "TKARMA, SNT, LINEA 토큰 및 Generic Protocol 등의 네이티브 앱 포인트를 보상으로 받으세요. 자금은 메인넷 출시 시 잠금 해제됩니다.",
+      "translation": "KARMA, SNT, LINEA 토큰 및 Generic Protocol 등의 네이티브 앱 포인트를 보상으로 받으세요. 자금은 메인넷 출시 시 잠금 해제됩니다.",
       "notes": "rewards::description"
     },
     "audited_prefix": {

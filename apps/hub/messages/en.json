@@ -150,7 +150,7 @@
       "notes": "hero::title_2"
     },
     "description": {
-      "translation": "Try apps and deposit assets to earn testnet Karma (TKARMA)",
+      "translation": "Try apps and deposit assets to earn Karma",
       "notes": "hero::description"
     },
     "landscape_alt": {
@@ -686,7 +686,7 @@
   },
   "rewards": {
     "description": {
-      "translation": "Rewards in TKARMA, SNT, LINEA and points from Generic Protocol and native apps. Funds will be unlocked at mainnet launch.",
+      "translation": "Rewards in KARMA, SNT, LINEA and points from Generic Protocol and native apps. Funds will be unlocked at mainnet launch.",
       "notes": "rewards::description"
     },
     "audited_prefix": {
