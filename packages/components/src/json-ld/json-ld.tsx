@@ -103,15 +103,28 @@ export type FAQPageSchema = {
     }
   }>
 }
-
 export type SoftwareApplicationSchema = {
   '@context': 'https://schema.org'
-  '@type': 'SoftwareApplication'
+  '@type': 'SoftwareApplication' | 'WebApplication' | ('SoftwareApplication' | 'WebApplication')[]
+  id?: string
   name: string
-  applicationCategory: string
+  applicationCategory: string | string[]
   operatingSystem: string
   url: string
   description?: string
+  publisher?: {
+    '@type': 'Organization'
+    '@id'?: string
+    name?: string
+    url?: string
+  }
+  about?: {
+    '@type': 'Thing'
+    name: string
+  }[]
+  featureList?: string[]
+  inLanguage?: string
+  isAccessibleForFree?: boolean
 }
 
 type CreateJSONLDConfig = {
