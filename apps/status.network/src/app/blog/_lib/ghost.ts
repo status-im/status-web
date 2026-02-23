@@ -64,6 +64,7 @@ const DISALLOWED_TAGS = ['desktop-news', 'mobile-news']
 const DISALLOWED_TAGS_FILTER = DISALLOWED_TAGS.map(tag => `tag:-${tag}`).join(
   '+',
 )
+const NETWORK_BLOG_TAG = 'status-network-blog'
 
 const EMPTY_PAGINATION: Pagination = {
   page: 1,
@@ -84,8 +85,8 @@ export async function getPosts(params: GetPostsParams = {}) {
   const { page = 1, limit = 12, tag } = params
 
   const filter = tag
-    ? `tag:${tag}+visibility:public`
-    : `visibility:public+${DISALLOWED_TAGS_FILTER}`
+    ? `tag:${tag}+tag:${NETWORK_BLOG_TAG}+visibility:public`
+    : `tag:${NETWORK_BLOG_TAG}+visibility:public+${DISALLOWED_TAGS_FILTER}`
 
   const response = await fetchPosts({
     include: 'tags,authors',
@@ -105,7 +106,7 @@ export async function getPostBySlug(slug: string): Promise<GhostPost | null> {
   const response = await fetchPosts({
     include: 'tags,authors',
     limit: '1',
-    filter: `slug:${slug}+visibility:public+${DISALLOWED_TAGS_FILTER}`,
+    filter: `slug:${slug}+tag:${NETWORK_BLOG_TAG}+visibility:public+${DISALLOWED_TAGS_FILTER}`,
   })
 
   return response.posts[0] ?? null
@@ -115,7 +116,7 @@ export async function getPostSlugs(): Promise<string[]> {
   const response = await fetchPosts({
     fields: 'slug',
     limit: 'all',
-    filter: `visibility:public+${DISALLOWED_TAGS_FILTER}`,
+    filter: `tag:${NETWORK_BLOG_TAG}+visibility:public+${DISALLOWED_TAGS_FILTER}`,
   })
 
   return response.posts.map(post => post.slug)
@@ -129,7 +130,7 @@ export async function getPostsByTagSlug(
     include: 'tags,authors',
     limit: String(limit),
     order: 'published_at DESC',
-    filter: `tag:${slug}+visibility:public+${DISALLOWED_TAGS_FILTER}`,
+    filter: `tag:${slug}+tag:${NETWORK_BLOG_TAG}+visibility:public+${DISALLOWED_TAGS_FILTER}`,
   })
 
   return response.posts

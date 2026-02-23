@@ -11,7 +11,11 @@ const ghost = GhostContentAPI({
 
 type Params = { page?: number; limit?: number; tag?: string }
 
-export const DISALLOWED_TAGS = ['desktop-news', 'mobile-news']
+export const DISALLOWED_TAGS = [
+  'desktop-news',
+  'mobile-news',
+  'status-network-blog',
+]
 
 const DISALLOWED_TAGS_FILTER = DISALLOWED_TAGS.map(tag => `tag:-${tag}`).join(
   '+'
