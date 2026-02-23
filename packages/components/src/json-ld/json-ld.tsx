@@ -11,7 +11,6 @@ export type JSONLDSchema =
   | BreadcrumbListSchema
   | FAQPageSchema
   | SoftwareApplicationSchema
-
 export type OrganizationSchema = {
   '@context': 'https://schema.org'
   '@type': 'Organization'
@@ -21,6 +20,11 @@ export type OrganizationSchema = {
   logo?: string
   description?: string
   sameAs?: string[]
+  knowsAbout?: {
+    '@type': 'Thing'
+    name: string
+    sameAs?: string
+  }[]
   contactPoint?: {
     '@type': 'ContactPoint'
     contactType: string
@@ -37,8 +41,13 @@ export type WebSiteSchema = {
   url: string
   description?: string
   publisher?: {
-    '@id'?: string
+    '@id': string
   }
+  about?: {
+    '@type': 'Thing'
+    name: string
+    sameAs?: string
+  }[]
   potentialAction?: {
     '@type': 'SearchAction'
     target: {
