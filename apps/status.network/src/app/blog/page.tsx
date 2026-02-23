@@ -1,8 +1,7 @@
 import { Metadata } from '~app/_metadata'
 import { jsonLD, JSONLDScript } from '~app/_utils/json-ld'
-import { Link } from '~components/link'
 import { HighlightedPostCard, PostCard } from './_components/post-card'
-import { getPosts, getTags } from './_lib/ghost'
+import { getPosts } from './_lib/ghost'
 
 export const revalidate = 3600 // 1 hour
 
@@ -21,10 +20,7 @@ export default async function BlogPage({ searchParams }: Props) {
   const selectedTag =
     typeof resolvedParams.tag === 'string' ? resolvedParams.tag : undefined
 
-  const [{ posts }, tags] = await Promise.all([
-    getPosts({ limit: 12, tag: selectedTag }),
-    getTags(24),
-  ])
+  const { posts } = await getPosts({ limit: 12, tag: selectedTag })
 
   const highlightedPost = posts[0]
   const listedPosts = posts.slice(1)
@@ -49,34 +45,6 @@ export default async function BlogPage({ searchParams }: Props) {
             <p className="text-19 text-neutral-80/60">
               Long form articles, thoughts, and ideas.
             </p>
-          </div>
-
-          <div className="-ml-5 -mr-8 mb-12 flex gap-2 overflow-x-scroll pb-2 pl-5 pr-8">
-            <Link
-              href="/blog"
-              className={`flex h-8 shrink-0 items-center rounded-10 border px-3 text-15 shadow-1 transition-colors ${
-                !selectedTag
-                  ? 'border-neutral-50 bg-neutral-10'
-                  : 'border-neutral-30 hover:border-neutral-40'
-              }`}
-              scroll={false}
-            >
-              All
-            </Link>
-            {tags.map(tag => (
-              <Link
-                key={tag.id}
-                href={`/blog?tag=${tag.slug}`}
-                className={`flex h-8 shrink-0 items-center rounded-10 border px-3 text-15 shadow-1 transition-colors ${
-                  selectedTag === tag.slug
-                    ? 'border-neutral-50 bg-neutral-10'
-                    : 'border-neutral-30 hover:border-neutral-40'
-                }`}
-                scroll={false}
-              >
-                {tag.name}
-              </Link>
-            ))}
           </div>
 
           {highlightedPost ? (
