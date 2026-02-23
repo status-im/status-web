@@ -22,14 +22,35 @@ const breadcrumbListSchema = jsonLD.breadcrumbList([
     url: 'https://hub.status.network/',
   },
 ])
-
 const softwareApplicationSchema = jsonLD.softwareApplication({
+  id: 'https://hub.status.network/#app',
   name: 'Status Network Hub',
-  applicationCategory: 'BlockchainPlatform',
+  applicationCategory: [
+    'FinanceApplication',
+    'BusinessApplication',
+    'DeveloperApplication'
+  ],
   operatingSystem: 'Web',
-  url: 'https://hub.status.network',
+  url: 'https://hub.status.network/',
   description:
-    "Central hub for deposits, staking, apps, and reputation on Status Network's gasless Ethereum Layer 2.",
+    'Web interface for Status Network, a gasless Ethereum Layer 2. Provides access to liquidity coordination, staking flows, and reputation-based participation mechanisms.',
+  about: [
+    { '@type': 'Thing', name: 'Status Network' },
+    { '@type': 'Thing', name: 'Ethereum Layer 2' },
+    { '@type': 'Thing', name: 'Gasless transactions' },
+    { '@type': 'Thing', name: 'Meta-transactions' },
+    { '@type': 'Thing', name: 'Native yield funding' },
+    { '@type': 'Thing', name: 'Privacy' },
+    { '@type': 'Thing', name: 'Reputation system' }
+  ],
+  featureList: [
+    'Gasless transaction interface',
+    'Vault and liquidity coordination access',
+    'Staking and protocol interaction flows',
+    'Reputation and participation visibility'
+  ],
+  inLanguage: 'en',
+  isAccessibleForFree: true,
 })
 
 export default function HomePage() {
