@@ -11,9 +11,13 @@
  */
 
 // Well-known contract addresses
-const CONTRACTS = {
+export const CONTRACTS = {
   // Mainnet
   SNT: '0x744d70FDBE2Ba4CF95131626614a1763DF805B9E',
+  WETH: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+  USDT: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+  USDC: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+  USDS: '0xdC035D45d973E3EC169d2276DDab16f1e407384F',
   // Linea chain
   LINEA: '0x1789e0043623282D5DCc7F213d703C6D8BAfBB04',
 } as const;
@@ -53,11 +57,16 @@ export interface FundingPreset {
   eth?: bigint;
   snt?: bigint;
   linea?: bigint;
+  weth?: bigint;
+  usdt?: bigint;
+  usdc?: bigint;
+  usds?: bigint;
 }
 
 export class AnvilRpcHelper {
   private rpcIdCounter = 0;
   private lineaTokenBalanceSlot: bigint | null = null;
+  private erc20BalanceSlotCache = new Map<string, bigint>();
 
   constructor(
     readonly mainnetRpc: string,
@@ -104,6 +113,29 @@ export class AnvilRpcHelper {
   }
 
   // ---------------------------------------------------------------------------
+  // Block mining
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Enable interval mining on Anvil — mine a block every `intervalSec` seconds.
+   * IMPORTANT: evm_setIntervalMining DISABLES auto-mining. Call enableAutoMining()
+   * after this to re-enable instant tx confirmation alongside periodic empty blocks.
+   */
+  async enableIntervalMining(intervalSec: number, rpc?: string): Promise<void> {
+    await this.call(rpc ?? this.mainnetRpc, 'evm_setIntervalMining', [intervalSec]);
+  }
+
+  /** Enable auto-mining — transactions are mined immediately when received. */
+  async enableAutoMining(rpc?: string): Promise<void> {
+    await this.call(rpc ?? this.mainnetRpc, 'evm_setAutomine', [true]);
+  }
+
+  /** Mine a single block on Anvil */
+  async mineBlock(rpc?: string): Promise<void> {
+    await this.call(rpc ?? this.mainnetRpc, 'evm_mine', []);
+  }
+
+  // ---------------------------------------------------------------------------
   // ETH balance
   // ---------------------------------------------------------------------------
 
@@ -141,9 +173,13 @@ export class AnvilRpcHelper {
       to: CONTRACTS.SNT,
       data,
     }]);
+    // Force-mine the block: interval mining disables auto-mine, so the tx
+    // sits in the mempool until the next 1-second tick. Mine explicitly to
+    // avoid a race between tx inclusion and the balance check below.
+    await this.mineBlock();
     await this.call(this.mainnetRpc, 'anvil_stopImpersonatingAccount', [SNT_CONTROLLER]);
 
-    // Verify minting succeeded (Anvil auto-mines, but the tx could revert)
+    // Verify minting succeeded (tx could still revert on-chain)
     const balance = await this.getErc20Balance(CONTRACTS.SNT, this.mainnetRpc);
     if (balance < amount) {
       throw new Error(
@@ -206,6 +242,7 @@ export class AnvilRpcHelper {
     const testAmount = 133742069n * 10n ** 18n;
     const candidateSlots: bigint[] = [
       0n, 1n, 2n, 3n, 4n, 5n,       // Standard ERC-20 layouts
+      6n, 7n, 8n, 9n, 10n,          // Proxy / custom layouts (USDC FiatTokenV2 = slot 9)
       OZ_V5_ERC20_BALANCE_SLOT,       // OpenZeppelin v5 ERC20Upgradeable
     ];
 
@@ -251,6 +288,44 @@ export class AnvilRpcHelper {
   }
 
   /**
+   * Generic ERC-20 funding via storage slot manipulation.
+   * Auto-discovers the _balances slot on first call per token and caches it.
+   */
+  async fundErc20ViaStorage(token: string, amount: bigint, rpc: string): Promise<void> {
+    const cacheKey = `${token}:${rpc}`;
+    if (!this.erc20BalanceSlotCache.has(cacheKey)) {
+      const slot = await this.findErc20BalanceSlot(token, rpc);
+      this.erc20BalanceSlotCache.set(cacheKey, slot);
+    }
+    await this.setErc20BalanceViaStorage(
+      token,
+      amount,
+      this.erc20BalanceSlotCache.get(cacheKey)!,
+      rpc,
+    );
+  }
+
+  /** Fund WETH via storage (simpler and faster than actual wrapping on Anvil) */
+  async fundWeth(amount: bigint): Promise<void> {
+    await this.fundErc20ViaStorage(CONTRACTS.WETH, amount, this.mainnetRpc);
+  }
+
+  /** Fund USDT (6 decimals) via storage */
+  async fundUsdt(amount: bigint): Promise<void> {
+    await this.fundErc20ViaStorage(CONTRACTS.USDT, amount, this.mainnetRpc);
+  }
+
+  /** Fund USDC (6 decimals) via storage */
+  async fundUsdc(amount: bigint): Promise<void> {
+    await this.fundErc20ViaStorage(CONTRACTS.USDC, amount, this.mainnetRpc);
+  }
+
+  /** Fund USDS (18 decimals) via storage */
+  async fundUsds(amount: bigint): Promise<void> {
+    await this.fundErc20ViaStorage(CONTRACTS.USDS, amount, this.mainnetRpc);
+  }
+
+  /**
    * Apply a funding preset: set ETH + fund specific tokens.
    * Designed for test.beforeEach — call after revert to set exact preconditions.
    */
@@ -263,6 +338,18 @@ export class AnvilRpcHelper {
     }
     if (preset.linea !== undefined && preset.linea > 0n) {
       await this.fundLinea(preset.linea);
+    }
+    if (preset.weth !== undefined && preset.weth > 0n) {
+      await this.fundWeth(preset.weth);
+    }
+    if (preset.usdt !== undefined && preset.usdt > 0n) {
+      await this.fundUsdt(preset.usdt);
+    }
+    if (preset.usdc !== undefined && preset.usdc > 0n) {
+      await this.fundUsdc(preset.usdc);
+    }
+    if (preset.usds !== undefined && preset.usds > 0n) {
+      await this.fundUsds(preset.usds);
     }
   }
 
@@ -332,9 +419,12 @@ export class AnvilRpcHelper {
 // ---------------------------------------------------------------------------
 
 const ETH = 10n ** 18n;
+const USDT_UNIT = 10n ** 6n;
+const USDC_UNIT = 10n ** 6n;
 
-/** Funding presets for below-minimum validation tests */
+/** Funding presets for tests */
 export const FUNDING_PRESETS = {
+  // Below-minimum validation presets
   /** W-4: Below minimum validation. ETH only (no WETH needed — validation fires first). */
   WETH_BELOW_MIN: { eth: 1n * ETH } satisfies FundingPreset,
 
@@ -343,4 +433,29 @@ export const FUNDING_PRESETS = {
 
   /** L-2: LINEA below minimum. Need LINEA > 0.5 to pass balance check. */
   LINEA_BELOW_MIN: { linea: 2n * ETH } satisfies FundingPreset,
+
+  // Happy-path deposit presets
+  /** W-1: Wrap ETH then deposit. Only ETH, no WETH. */
+  WETH_DEPOSIT_WRAP: { eth: 5n * ETH } satisfies FundingPreset,
+
+  /** W-2: Direct deposit, pre-funded WETH. */
+  WETH_DEPOSIT_DIRECT: { eth: 1n * ETH, weth: 1n * ETH } satisfies FundingPreset,
+
+  /** W-3: Partial wrap. Some WETH + ETH to cover the rest. */
+  WETH_DEPOSIT_PARTIAL: { eth: 5n * ETH, weth: ETH / 100n } satisfies FundingPreset,
+
+  /** S-1: SNT deposit. */
+  SNT_DEPOSIT: { eth: 1n * ETH, snt: 100n * ETH } satisfies FundingPreset,
+
+  /** L-1: LINEA deposit. ETH on Linea comes from setup-anvil.sh base snapshot. */
+  LINEA_DEPOSIT: { linea: 100n * ETH } satisfies FundingPreset,
+
+  /** G-1: GUSD via USDT. */
+  GUSD_USDT_DEPOSIT: { eth: 1n * ETH, usdt: 100n * USDT_UNIT } satisfies FundingPreset,
+
+  /** G-2: GUSD via USDC. */
+  GUSD_USDC_DEPOSIT: { eth: 1n * ETH, usdc: 100n * USDC_UNIT } satisfies FundingPreset,
+
+  /** G-3: GUSD via USDS. */
+  GUSD_USDS_DEPOSIT: { eth: 1n * ETH, usds: 100n * ETH } satisfies FundingPreset,
 } as const;

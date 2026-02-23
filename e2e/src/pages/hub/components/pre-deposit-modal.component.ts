@@ -1,7 +1,12 @@
-import { HUB_TIMEOUTS, NOTIFICATION_TIMEOUTS } from '@constants/timeouts.js'
+import {
+  DEPOSIT_TIMEOUTS,
+  HUB_TIMEOUTS,
+  NOTIFICATION_TIMEOUTS,
+} from '@constants/timeouts.js'
 import { expect, type Locator, type Page } from '@playwright/test'
 
 export class PreDepositModalComponent {
+  private readonly page: Page
   readonly dialog: Locator
   readonly title: Locator
   readonly amountInput: Locator
@@ -12,6 +17,7 @@ export class PreDepositModalComponent {
   readonly closeButton: Locator
 
   constructor(page: Page) {
+    this.page = page
     this.dialog = page.getByRole('dialog')
     this.title = this.dialog.getByText('Deposit funds', { exact: true })
     this.amountInput = page.locator('#deposit-amount')
@@ -76,6 +82,36 @@ export class PreDepositModalComponent {
   async expectSwitchNetworkButtonGone(): Promise<void> {
     await expect(this.switchNetworkButton).not.toBeVisible({
       timeout: HUB_TIMEOUTS.PAGE_READY,
+    })
+  }
+
+  async clickActionButton(): Promise<void> {
+    await this.actionButton.click()
+  }
+
+  /** Wait for action button to become enabled and show expected text */
+  async expectActionButtonReady(pattern: RegExp): Promise<void> {
+    await expect(this.actionButton).toBeEnabled({
+      timeout: DEPOSIT_TIMEOUTS.BUTTON_STATE_CHANGE,
+    })
+    await expect(this.actionButton).toHaveText(pattern)
+  }
+
+  /** Open token dropdown and select a token by label (e.g. "Tether USD, USDT") */
+  async selectToken(tokenLabel: string): Promise<void> {
+    const dropdownTrigger = this.dialog
+      .locator('button[type="button"]')
+      .filter({
+        has: this.page.locator('.text-15'),
+      })
+      .first()
+    await dropdownTrigger.click()
+    await this.page.getByRole('menuitem', { name: tokenLabel }).click()
+  }
+
+  async expectModalClosed(): Promise<void> {
+    await expect(this.dialog).not.toBeVisible({
+      timeout: DEPOSIT_TIMEOUTS.MODAL_CLOSE,
     })
   }
 }

@@ -60,8 +60,8 @@ export class MetaMaskPage {
   }
 
   /** Approve a transaction in the MetaMask notification popup */
-  async approveTransaction(): Promise<void> {
-    await this.notification.approveTransaction()
+  async approveTransaction(contentTimeout?: number): Promise<void> {
+    await this.notification.approveTransaction(contentTimeout)
   }
 
   /** Reject a transaction in the MetaMask notification popup */

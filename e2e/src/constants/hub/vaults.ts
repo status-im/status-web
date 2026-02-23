@@ -47,3 +47,14 @@ export const BELOW_MIN_AMOUNTS = {
   SNT: '0.5',
   LINEA: '0.5',
 } as const
+
+/** Amounts for happy-path deposit tests (above minimum, reasonable values). */
+export const DEPOSIT_AMOUNTS = {
+  WETH: '0.01',
+  WETH_PARTIAL: '0.02',
+  SNT: '10',
+  LINEA: '10',
+  GUSD_USDT: '10',
+  GUSD_USDC: '10',
+  GUSD_USDS: '10',
+} as const
