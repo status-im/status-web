@@ -1,6 +1,15 @@
 import { createPublicClient, http } from 'viem'
 import { mainnet } from 'viem/chains'
 
+import {
+  type ApprovalResult,
+  clearApprovalResult,
+  clearPendingApproval,
+  getPendingApproval,
+  type PendingApproval,
+  setPendingApproval,
+} from './approval'
+
 const publicClient = createPublicClient({
   chain: mainnet,
   transport: http(),
@@ -11,6 +20,17 @@ let currentChainId = '0x1'
 async function getAddress(): Promise<string | null> {
   const result = await chrome.storage.session.get('dappAddress')
   return (result.dappAddress as string) || null
+}
+
+async function getWalletId(): Promise<string | null> {
+  const result = await chrome.storage.session.get('dappWalletId')
+  return (result.dappWalletId as string) || null
+}
+
+async function isOriginConnected(origin: string): Promise<boolean> {
+  const result = await chrome.storage.session.get('connectedOrigins')
+  const origins: string[] = result.connectedOrigins || []
+  return origins.includes(origin)
 }
 
 async function addConnectedOrigin(origin: string): Promise<void> {
@@ -29,6 +49,84 @@ async function removeConnectedOrigin(origin: string): Promise<void> {
   await chrome.storage.session.set({ connectedOrigins: filtered })
 }
 
+type PendingApprovalInput = PendingApproval extends infer T
+  ? T extends PendingApproval
+    ? Omit<T, 'id'>
+    : never
+  : never
+
+function requestApproval(
+  approval: PendingApprovalInput,
+): Promise<ApprovalResult | null> {
+  return new Promise(resolve => {
+    const id = crypto.randomUUID()
+    let popupWindowId: number | undefined
+    let settled = false
+    const timeout: ReturnType<typeof setTimeout> = setTimeout(
+      () => {
+        cleanup()
+        resolve(null)
+      },
+      5 * 60 * 1000,
+    )
+
+    const cleanup = () => {
+      if (settled) return
+      settled = true
+      clearTimeout(timeout)
+      chrome.storage.onChanged.removeListener(storageListener)
+      chrome.windows.onRemoved.removeListener(windowListener)
+      clearPendingApproval()
+      clearApprovalResult()
+    }
+
+    const storageListener = (
+      changes: Record<string, chrome.storage.StorageChange>,
+      area: string,
+    ) => {
+      if (area !== 'session' || !changes.approvalResult) return
+      const result = changes.approvalResult.newValue as
+        | ApprovalResult
+        | undefined
+      if (!result || result.id !== id) return
+      cleanup()
+      resolve(result.approved ? result : null)
+    }
+
+    const windowListener = (removedWindowId: number) => {
+      if (removedWindowId !== popupWindowId) return
+      cleanup()
+      resolve(null)
+    }
+
+    chrome.storage.onChanged.addListener(storageListener)
+    chrome.windows.onRemoved.addListener(windowListener)
+
+    setPendingApproval({ id, ...approval } as PendingApproval).then(
+      async () => {
+        const popupUrl = chrome.runtime.getURL('approval.html')
+        const currentWindow = await chrome.windows.getCurrent()
+        const width = 390
+        const height = 628
+        const left =
+          (currentWindow.left ?? 0) + (currentWindow.width ?? 0) - width - 16
+        const top = (currentWindow.top ?? 0) + 16
+
+        const popup = await chrome.windows.create({
+          url: popupUrl,
+          type: 'popup',
+          width,
+          height,
+          left,
+          top,
+          focused: true,
+        })
+        popupWindowId = popup?.id
+      },
+    )
+  })
+}
+
 /**
  * Handle an EIP-1193 RPC request from a dApp.
  * Runs in the background service worker context.
@@ -37,6 +135,7 @@ export async function handleRpcRequest(
   method: string,
   params: unknown,
   origin: string,
+  metadata?: { title?: string; favicon?: string },
 ): Promise<unknown> {
   switch (method) {
     case 'eth_requestAccounts': {
@@ -44,6 +143,32 @@ export async function handleRpcRequest(
       if (!address) {
         throw { code: 4100, message: 'No active account' }
       }
+
+      if (await isOriginConnected(origin)) {
+        return [address]
+      }
+
+      const existing = await getPendingApproval()
+      if (existing) {
+        throw {
+          code: -32002,
+          message: 'Already processing a connection request.',
+        }
+      }
+
+      const connectResult = await requestApproval({
+        type: 'eth_requestAccounts',
+        origin,
+        title: metadata?.title ?? origin,
+        favicon: metadata?.favicon ?? `${origin}/favicon.ico`,
+        address,
+        chainId: currentChainId,
+      })
+
+      if (!connectResult) {
+        throw { code: 4001, message: 'User rejected the request.' }
+      }
+
       await addConnectedOrigin(origin)
       return [address]
     }
@@ -104,12 +229,71 @@ export async function handleRpcRequest(
       return capabilities
     }
 
-    case 'personal_sign':
+    case 'personal_sign': {
+      const p = params as [string, string]
+      const message = p[0]
+      const signerAddress = p[1] || (await getAddress())
+      if (!signerAddress) {
+        throw { code: 4100, message: 'No active account' }
+      }
+
+      const walletId = await getWalletId()
+      if (!walletId) {
+        throw { code: 4100, message: 'No wallet available' }
+      }
+
+      // Guard against concurrent approval requests
+      const existingSign = await getPendingApproval()
+      if (existingSign) {
+        throw { code: -32002, message: 'Already processing a request.' }
+      }
+
+      const signResult = await requestApproval({
+        type: 'personal_sign',
+        origin,
+        title: metadata?.title ?? origin,
+        favicon: metadata?.favicon ?? `${origin}/favicon.ico`,
+        address: signerAddress,
+        chainId: currentChainId,
+        message,
+      })
+
+      if (!signResult?.password) {
+        throw { code: 4001, message: 'User rejected the request.' }
+      }
+
+      const signed = await (
+        globalThis as unknown as {
+          api: {
+            wallet: {
+              account: {
+                ethereum: {
+                  signMessage: (input: {
+                    walletId: string
+                    password: string
+                    fromAddress: string
+                    message: string
+                  }) => Promise<{ signature: string }>
+                }
+              }
+            }
+          }
+        }
+      ).api.wallet.account.ethereum.signMessage({
+        walletId,
+        password: signResult.password,
+        fromAddress: signerAddress,
+        message,
+      })
+
+      return signed.signature
+    }
+
     case 'eth_signTypedData_v4':
     case 'eth_sendTransaction': {
       throw {
         code: 4200,
-        message: 'Signing not yet supported via dApp connection',
+        message: 'Not yet supported via dApp connection',
       }
     }
 

@@ -57,6 +57,8 @@ export const RpcMessage = z.object({
     method: z.string(),
     params: z.unknown().optional(),
     origin: z.string(),
+    title: z.string().optional(),
+    favicon: z.string().optional(),
   }),
 })
 

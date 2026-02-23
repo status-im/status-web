@@ -7,6 +7,14 @@ export default defineContentScript({
   runAt: 'document_start',
 
   main(ctx) {
+    function getFavicon(): string {
+      const link = document.querySelector<HTMLLinkElement>(
+        'link[rel="icon"], link[rel="shortcut icon"]',
+      )
+      if (link?.href) return link.href
+      return `${window.location.origin}/favicon.ico`
+    }
+
     const handleProviderMessage = async (event: MessageEvent) => {
       if (event.origin !== window.origin) {
         return
@@ -45,6 +53,8 @@ export default defineContentScript({
             method: message.data.method,
             params: message.data.params,
             origin: window.location.origin,
+            title: document.title,
+            favicon: getFavicon(),
           },
         })
 

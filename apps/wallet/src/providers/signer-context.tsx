@@ -61,6 +61,14 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
     }
   }, [address])
 
+  useEffect(() => {
+    if (currentWallet?.id) {
+      chrome.storage.session.set({ dappWalletId: currentWallet.id })
+    } else {
+      chrome.storage.session.remove('dappWalletId')
+    }
+  }, [currentWallet?.id])
+
   const unlock = useCallback(
     async (password: string): Promise<boolean> => {
       if (!currentWallet?.id || !address) return false

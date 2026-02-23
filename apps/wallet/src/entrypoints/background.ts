@@ -74,9 +74,9 @@ export default defineBackground({
         return false
       }
 
-      const { method, params, origin } = message.data
+      const { method, params, origin, title, favicon } = message.data
 
-      handleRpcRequest(method, params, origin)
+      handleRpcRequest(method, params, origin, { title, favicon })
         .then(result => {
           sendResponse({ type: 'status:proxy:success', data: result })
         })
