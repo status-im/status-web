@@ -17,30 +17,38 @@ const inter = Inter({
 const organizationSchema = jsonLD.organization({
   '@id': 'https://status.network/#organization',
   name: 'Status Network',
-  url: 'https://status.network',
+  url: 'https://status.network/',
   logo: 'https://status.network/logo.svg',
   description:
-    'Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack.',
+    'Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack, with network-level spam protection enforced through reputation (Karma) and execution funded by native yield rather than user-paid gas fees.',
+  knowsAbout: [
+    { '@type': 'Thing', name: 'Ethereum Layer 2' },
+    { '@type': 'Thing', name: 'Gasless transactions' },
+    { '@type': 'Thing', name: 'Composable privacy' },
+    { '@type': 'Thing', name: 'Spam protection' },
+    { '@type': 'Thing', name: 'Reputation system' },
+    { '@type': 'Thing', name: 'Native yield funding' },
+    { '@type': 'Thing', name: 'Bots' }
+  ]
 })
 
 const websiteSchema = jsonLD.website({
   '@id': 'https://status.network/#website',
   name: 'Status Network',
-  url: 'https://status.network',
+  url: 'https://status.network/',
   description:
     'Status Network is a privacy-first, fully gasless Ethereum Layer 2 designed for scalable onchain activity, coordinated through reputation and native yield.',
   publisher: {
     '@id': 'https://status.network/#organization',
   },
-})
-
-const softwareApplicationSchema = jsonLD.softwareApplication({
-  name: 'Status Network',
-  description:
-    'Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack. Execution is coordinated through Karma, a non-transferable reputation system, and supported by native yield and network activity.',
-  applicationCategory: 'Blockchain',
-  operatingSystem: 'Web3',
-  url: 'https://status.network/',
+  about: [
+    { '@type': 'Thing', name: 'Ethereum Layer 2' },
+    { '@type': 'Thing', name: 'Gasless transactions' },
+    { '@type': 'Thing', name: 'Composable privacy' },
+    { '@type': 'Thing', name: 'Spam protection' },
+    { '@type': 'Thing', name: 'Reputation system' },
+    { '@type': 'Thing', name: 'Native yield funding' },
+  ],
 })
 
 export const metadata = Metadata({
