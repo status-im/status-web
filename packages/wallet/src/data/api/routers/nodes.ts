@@ -7,10 +7,10 @@ import {
   getFeeRate,
   getTransactionCount,
 } from '../../services/alchemy'
-import { ethRPCProcedure, router } from '../lib/trpc'
+import { publicProcedure, router } from '../lib/trpc'
 
 export const nodesRouter = router({
-  getFeeRate: ethRPCProcedure
+  getFeeRate: publicProcedure
     .input(
       z.object({
         network: z.enum(['ethereum']).optional(),
@@ -27,7 +27,7 @@ export const nodesRouter = router({
       return await cachedGetFeeRate(inputHash)
     }),
 
-  broadcastTransaction: ethRPCProcedure
+  broadcastTransaction: publicProcedure
     .input(
       z.object({
         txHex: z.string(),
@@ -41,7 +41,7 @@ export const nodesRouter = router({
       )
     }),
 
-  getNonce: ethRPCProcedure
+  getNonce: publicProcedure
     .input(
       z.object({
         address: z.string(),

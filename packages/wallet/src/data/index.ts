@@ -4,7 +4,6 @@ export {
   createCaller,
   createTRPCContext,
 } from './api'
-export { createRateLimitMiddleware } from './api/lib/rate-limiter'
 export type {
   Activity,
   ApiInput,
