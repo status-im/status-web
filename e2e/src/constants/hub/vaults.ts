@@ -1,3 +1,7 @@
+/**
+ * Test vault data — simplified subset of apps/hub constants.
+ * If vault addresses or names change, update this file accordingly.
+ */
 export const TEST_VAULTS = {
   WETH: {
     id: 'WETH',
@@ -27,11 +31,11 @@ export const TEST_VAULTS = {
     address: '0x79B4cDb14A31E8B0e21C0120C409Ac14Af35f919',
     chainId: 1,
   },
-} as const;
+} as const
 
 export const TEST_AMOUNTS = {
   SMALL_DEPOSIT: '0.001',
   MEDIUM_DEPOSIT: '0.01',
   LARGE_DEPOSIT: '0.1',
   STAKE_AMOUNT: '100',
-} as const;
+} as const

@@ -5,9 +5,11 @@ Playwright + TypeScript E2E tests for [Status Network Hub](https://hub.status.ne
 ## Quick Start
 
 ```bash
-cd e2e
+# From the monorepo root:
 pnpm install
-npx playwright install chromium
+
+cd e2e
+pnpm exec playwright install chromium
 
 # Configure environment
 cp .env.example .env
@@ -30,14 +32,16 @@ pnpm test:headed       # All tests with visible browser
 pnpm test:debug        # Step-by-step debug mode
 pnpm test:ui           # Interactive Playwright UI
 pnpm test:report       # Open last HTML report
-pnpm lint              # TypeScript type check
+pnpm lint              # ESLint
+pnpm typecheck         # TypeScript type check
+pnpm format            # Prettier formatting
 pnpm clean             # Remove test artifacts and extensions
 ```
 
 Run a specific file:
 
 ```bash
-npx playwright test tests/pre-deposits/pre-deposits-display.spec.ts
+pnpm exec playwright test tests/hub/pre-deposits/pre-deposits-display.spec.ts
 ```
 
 ## Tags
