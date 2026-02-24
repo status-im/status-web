@@ -12,6 +12,7 @@ type RateLimitContext = {
 export interface RateLimitMiddlewareOptions<TNextResult = Promise<unknown>> {
   ctx: RateLimitContext
   next: () => TNextResult
+  path?: string
 }
 
 export interface RateLimitOptions<TOpts extends RateLimitMiddlewareOptions> {
