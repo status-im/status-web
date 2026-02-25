@@ -55,9 +55,26 @@ function buildServiceWorkerPatch(mainnetRpc: string, lineaRpc: string): string {
   return `${PATCH_MARKER}
 (function() {
   var _f = globalThis.fetch;
+  var _R = globalThis.Response;  // capture before LavaMoat scuttles it
   var _c = {};
   var _m = { '1': '${mainnetRpc}', '59144': '${lineaRpc}' };
   var _tx = {};
+  var _stxCounter = 0;
+  var _stxHashes = {};  // STX uuid → mined tx hash (from Anvil)
+
+  // Hostname-based chain detection — avoids eth_chainId probes that can fail
+  // on Infura/Alchemy URLs with API keys in path segments.
+  var _mainnetHosts = ['mainnet.infura.io','eth.merkle.io','ethereum-rpc.publicnode.com',
+    'cloudflare-eth.com','eth-mainnet.g.alchemy.com','rpc.ankr.com','1rpc.io'];
+  var _lineaHosts = ['rpc.linea.build','linea-mainnet.infura.io','linea.drpc.org',
+    'linea-mainnet.quiknode.pro'];
+  function _chainByHost(u) {
+    // Check Linea FIRST — 'linea-mainnet.infura.io' contains 'mainnet.infura.io'
+    // as a substring, so checking mainnet first would misclassify Linea URLs.
+    for (var j = 0; j < _lineaHosts.length; j++) { if (u.indexOf(_lineaHosts[j]) !== -1) return '59144'; }
+    for (var i = 0; i < _mainnetHosts.length; i++) { if (u.indexOf(_mainnetHosts[i]) !== -1) return '1'; }
+    return null;
+  }
 
   function _txHashFromBody(body) {
     if (!body || typeof body !== 'string') return null;
@@ -91,7 +108,9 @@ function buildServiceWorkerPatch(mainnetRpc: string, lineaRpc: string): string {
   // issue where txs submitted in rapid succession (e.g. wrap → approve → deposit)
   // can get stuck in the mempool. The explicit mine guarantees mining.
   function _fwd(anvilUrl, init) {
-    var p = _f(anvilUrl, init);
+    var p = _f(anvilUrl, init).catch(function(err) {
+      throw err;
+    });
     if (init && init.body && typeof init.body === 'string'
         && init.body.indexOf('eth_sendRawTransaction') !== -1) {
       return p.then(function(res) {
@@ -158,17 +177,15 @@ function buildServiceWorkerPatch(mainnetRpc: string, lineaRpc: string): string {
     var _url = (typeof input === 'string') ? input
              : (input && input.url) ? input.url : '' + input;
     if (_url.indexOf('transaction.api') !== -1
-        || _url.indexOf('smart-transactions') !== -1) {
-      // Extract raw txs from STX submitTransactions and forward to Anvil.
-      // MetaMask's STX fallback to direct RPC works on mainnet but NOT on
-      // Linea (chain 59144) — the deposit tx is lost. By proactively
-      // submitting to Anvil, we ensure the tx is mined regardless of
-      // MetaMask's fallback behavior.
-      //
-      // IMPORTANT: never default unknown STX network ids to mainnet. That can
-      // misroute Linea txs and cause flaky "modal didn't close"/stuck approval
-      // failures. If the chain cannot be inferred, forward to both forks and
-      // let the wrong-chain fork reject the tx.
+        || _url.indexOf('smart-transactions') !== -1
+        || _url.indexOf('tx-sentinel') !== -1) {
+      // Intercept MetaMask Smart Transactions API requests.
+      // Instead of blocking (which causes MetaMask to mark txs as "Failed"
+      // without falling back to direct RPC on Linea), return fake success
+      // responses for all STX endpoints. Raw txs are forwarded to Anvil
+      // so they get mined locally.
+
+      // A. submitTransactions — forward raw txs to Anvil, return fake uuid
       try {
         var _stxBody = (init && init.body && typeof init.body === 'string') ? init.body : '';
         if (_stxBody && _stxBody.indexOf('rawTxs') !== -1) {
@@ -183,24 +200,85 @@ function buildServiceWorkerPatch(mainnetRpc: string, lineaRpc: string): string {
             if (_m['59144'] && _m['59144'] !== _m['1']) _stxTargets.push(_m['59144']);
           }
           var _txListMatch = _stxBody.match(/"rawTxs"\\s*:\\s*\\[([^\\]]+)\\]/);
+          var _fakeUuid = 'anvil-stx-' + Date.now() + '-' + (++_stxCounter);
           if (_txListMatch && _stxTargets.length) {
+            // Forward raw txs to Anvil and capture the mined tx hash.
+            // We wait for Anvil to respond so the hash is available when
+            // MetaMask polls batchStatus (which it does immediately after).
             var _hexRegex = /"(0x[a-fA-F0-9]+)"/g;
             var _hm;
+            var _fwdPromises = [];
             while ((_hm = _hexRegex.exec(_txListMatch[1])) !== null) {
               for (var _ti = 0; _ti < _stxTargets.length; _ti++) {
-                _fwd(_stxTargets[_ti], {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: '{"jsonrpc":"2.0","method":"eth_sendRawTransaction","params":["' + _hm[1] + '"],"id":99997}'
-                }).catch(function() {});
+                _fwdPromises.push(
+                  _fwd(_stxTargets[_ti], {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: '{"jsonrpc":"2.0","method":"eth_sendRawTransaction","params":["' + _hm[1] + '"],"id":99997}'
+                  }).then(function(res) {
+                    return res.clone().text().then(function(text) {
+                      var hm = text.match(/"result"\\s*:\\s*"(0x[a-fA-F0-9]{64})"/);
+                      return hm ? hm[1] : null;
+                    });
+                  }).catch(function() { return null; })
+                );
               }
             }
+            // Wait for all Anvil responses, store the first valid tx hash
+            return Promise.all(_fwdPromises).then(function(hashes) {
+              for (var _hi = 0; _hi < hashes.length; _hi++) {
+                if (hashes[_hi]) { _stxHashes[_fakeUuid] = hashes[_hi]; break; }
+              }
+              return new _R('{"uuid":"' + _fakeUuid + '"}', {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' }
+              });
+            });
           }
+          // No raw txs found — return uuid immediately
+          return Promise.resolve(new _R('{"uuid":"' + _fakeUuid + '"}', {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+          }));
         }
       } catch (_stxErr) {}
-      return _f('http://localhost:1/__stx_blocked__').catch(function() {
-        throw new TypeError('Network request failed');
-      });
+
+      // B. batchStatus — return fake status for all queried uuids.
+      // MetaMask polls this to check STX tx status after submission.
+      // Response MUST be an object keyed by UUID (MetaMask uses Object.entries).
+      // Each value needs minedTx + minedHash for MetaMask to confirm the tx.
+      if (_url.indexOf('batchStatus') !== -1) {
+        var _uuidsMatch = _url.match(/[?&]uuids=([^&]+)/);
+        if (_uuidsMatch) {
+          try {
+            var _uuidList = decodeURIComponent(_uuidsMatch[1]).split(',');
+            var _statusJson = '{';
+            for (var _si = 0; _si < _uuidList.length; _si++) {
+              if (_si > 0) _statusJson += ',';
+              var _uid = _uuidList[_si];
+              var _hash = _stxHashes[_uid];
+              if (_hash) {
+                _statusJson += '"' + _uid + '":{"minedTx":"success","minedHash":"' + _hash + '","cancellationReason":"not_cancelled"}';
+              } else {
+                // Hash not ready yet — return pending so MetaMask retries
+                _statusJson += '"' + _uid + '":{"minedTx":"not_mined","cancellationReason":"not_cancelled"}';
+              }
+            }
+            _statusJson += '}';
+            return Promise.resolve(new _R(_statusJson, {
+              status: 200,
+              headers: { 'Content-Type': 'application/json' }
+            }));
+          } catch (_bsErr) {}
+        }
+      }
+
+      // C. All other STX API calls (liveness, fees, network info) —
+      // return empty success to prevent MetaMask from erroring out.
+      return Promise.resolve(new _R('{}', {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      }));
     }
 
     // Handle Request objects: MetaMask may call fetch(request) or
@@ -239,7 +317,8 @@ function buildServiceWorkerPatch(mainnetRpc: string, lineaRpc: string): string {
 
     var txh2 = _txHashFromBody(init.body);
     if (_isReceiptRequest(init.body)) {
-      return _fwdReceiptWithFallback(init, txh2 && _tx[txh2] ? _tx[txh2] : null);
+      var _rxPref = txh2 && _tx[txh2] ? _tx[txh2] : null;
+      return _fwdReceiptWithFallback(init, _rxPref);
     }
 
     // Keep Linea custom RPC methods on the upstream provider.
@@ -256,7 +335,9 @@ function buildServiceWorkerPatch(mainnetRpc: string, lineaRpc: string): string {
 
     if (url in _c) {
       var cached = _c[url];
-      if (typeof cached === 'string') return _fwd(cached, init);
+      if (typeof cached === 'string') {
+        return _fwd(cached, init);
+      }
       if (cached === null) return _f.apply(globalThis, arguments);
       return cached.then(function(u) {
         return u ? _fwd(u, init) : _f(url, init);
@@ -266,6 +347,13 @@ function buildServiceWorkerPatch(mainnetRpc: string, lineaRpc: string): string {
     var ci = url.match(/[?&]chainId=(\\d+)/);
     if (ci) {
       _c[url] = _m[ci[1]] || null;
+      return _c[url] ? _fwd(_c[url], init) : _f.apply(globalThis, arguments);
+    }
+
+    // Hostname-based chain detection — no network needed
+    var _hc = _chainByHost(url);
+    if (_hc) {
+      _c[url] = _m[_hc] || null;
       return _c[url] ? _fwd(_c[url], init) : _f.apply(globalThis, arguments);
     }
 
@@ -312,66 +400,197 @@ const stxPatchedFiles: Array<{ path: string; original: string }> = [];
  *
  * Instead, we patch the compiled JS files to set the default opt-in to false
  * BEFORE the browser reads them. Files are restored in cleanup.
+ *
+ * Patches are idempotent: they match both the original (!0) and already-patched
+ * (!1) values. If a previous run crashed without restoring, the file is already
+ * in the target state and the "true original" is recovered via reverse transform.
  */
 function disableSmartTransactionsInFiles(extensionPath: string): void {
-  const optInDefaultPattern = /smartTransactionsOptInStatus:!0/g;
-  const txSimulationsPattern = /useTransactionSimulations:!0/g;
-  const stxPublishHookPattern =
-    'const{isSmartTransaction:c,featureFlags:l}=(0,h.getSmartTransactionCommonParams)(e,o.chainId),u=await(0,m.isSendBundleSupported)(o.chainId)';
-  const stxPublishHookReplacement =
-    'const{featureFlags:l}=(0,h.getSmartTransactionCommonParams)(e,o.chainId),c=!1,u=await(0,m.isSendBundleSupported)(o.chainId)';
+  // Match both !0 (original) and !1 (already patched) for idempotency.
+  const optInPattern = /smartTransactionsOptInStatus:![01]/g
+  const txSimulationsPattern = /useTransactionSimulations:![01]/g
+
+  // Regex-based patterns for the STX publish hooks in background-5.js.
+  // Uses capture groups for variable names so it works regardless of minification.
+  
+  const singleTxHookRegex =
+    /const\{isSmartTransaction:(\w+),featureFlags:(\w+)\}=\(0,(\w+)\.getSmartTransactionCommonParams\)\((\w+),(\w+)\.chainId\),(\w+)=await\(0,(\w+)\.isSendBundleSupported\)/g
+  const singleTxHookReplacement =
+    'const{featureFlags:$2}=(0,$3.getSmartTransactionCommonParams)($4,$5.chainId),$1=!1,$6=await(0,$7.isSendBundleSupported)'
+
+  const batchTxHookRegex =
+    /const\{isSmartTransaction:(\w+),featureFlags:(\w+)\}=\(0,(\w+)\.getSmartTransactionCommonParams\)\((\w+),(\w+)\.chainId\);return \1\?/g
+  const batchTxHookReplacement =
+    'const{isSmartTransaction:$1,featureFlags:$2}=(0,$3.getSmartTransactionCommonParams)($4,$5.chainId);return !1?'
+
+  // Reverse transforms — used to recover the "true original" from already-patched files.
+  // The patched form uses a known structure that can be reversed back to the original pattern.
+  const singleTxHookPatchedRegex =
+    /const\{featureFlags:(\w+)\}=\(0,(\w+)\.getSmartTransactionCommonParams\)\((\w+),(\w+)\.chainId\),(\w+)=!1,(\w+)=await\(0,(\w+)\.isSendBundleSupported\)/g
+  const singleTxHookReverse =
+    'const{isSmartTransaction:$5,featureFlags:$1}=(0,$2.getSmartTransactionCommonParams)($3,$4.chainId),$6=await(0,$7.isSendBundleSupported)'
+
+  const batchTxHookPatchedRegex =
+    /const\{isSmartTransaction:(\w+),featureFlags:(\w+)\}=\(0,(\w+)\.getSmartTransactionCommonParams\)\((\w+),(\w+)\.chainId\);return !1\?/g
+  const batchTxHookReverse =
+    'const{isSmartTransaction:$1,featureFlags:$2}=(0,$3.getSmartTransactionCommonParams)($4,$5.chainId);return $1?'
 
   const filePatchers: Array<{
-    fileName: string;
-    transform: (content: string) => string;
+    fileName: string
+    description: string
+    transform: (content: string) => string
+    reverseTransform: (content: string) => string
   }> = [
-    // Default STX opt-in state used by initial controller state.
     {
       fileName: 'common-0.js',
-      transform: (content) =>
+      description: 'STX opt-in + tx simulations defaults',
+      transform: content =>
         content
-          .replace(optInDefaultPattern, 'smartTransactionsOptInStatus:!1')
+          .replace(optInPattern, 'smartTransactionsOptInStatus:!1')
           .replace(txSimulationsPattern, 'useTransactionSimulations:!1'),
+      reverseTransform: content =>
+        content
+          .replace(
+            /smartTransactionsOptInStatus:!1/g,
+            'smartTransactionsOptInStatus:!0',
+          )
+          .replace(
+            /useTransactionSimulations:!1/g,
+            'useTransactionSimulations:!0',
+          ),
+    },
+    {
+      fileName: 'common-13.js',
+      description: 'STX opt-in nullish coalescing fallback',
+      transform: content =>
+        content
+          .replace(optInPattern, 'smartTransactionsOptInStatus:!1')
+          // Also patch the nullish coalescing fallback: ?.smartTransactionsOptInStatus)??!0 → ??!1
+          .replace(
+            /smartTransactionsOptInStatus\)\?\?![01]/g,
+            'smartTransactionsOptInStatus)??!1',
+          ),
+      reverseTransform: content =>
+        content
+          .replace(
+            /smartTransactionsOptInStatus:!1/g,
+            'smartTransactionsOptInStatus:!0',
+          )
+          .replace(
+            /smartTransactionsOptInStatus\)\?\?!1/g,
+            'smartTransactionsOptInStatus)??!0',
+          ),
     },
     {
       fileName: 'common-14.js',
-      transform: (content) =>
-        content.replace(optInDefaultPattern, 'smartTransactionsOptInStatus:!1'),
+      description: 'STX opt-in defaults',
+      transform: content =>
+        content.replace(optInPattern, 'smartTransactionsOptInStatus:!1'),
+      reverseTransform: content =>
+        content.replace(
+          /smartTransactionsOptInStatus:!1/g,
+          'smartTransactionsOptInStatus:!0',
+        ),
     },
+    // common-16.js only has a string key reference ("smartTransactionsOptInStatus"),
+    // not a value to patch — skipped.
     {
       fileName: 'background-1.js',
-      transform: (content) =>
+      description: 'STX opt-in + tx simulations defaults',
+      transform: content =>
         content
-          .replace(optInDefaultPattern, 'smartTransactionsOptInStatus:!1')
+          .replace(optInPattern, 'smartTransactionsOptInStatus:!1')
           .replace(txSimulationsPattern, 'useTransactionSimulations:!1'),
+      reverseTransform: content =>
+        content
+          .replace(
+            /smartTransactionsOptInStatus:!1/g,
+            'smartTransactionsOptInStatus:!0',
+          )
+          .replace(
+            /useTransactionSimulations:!1/g,
+            'useTransactionSimulations:!0',
+          ),
     },
     {
       fileName: 'background-7.js',
-      transform: (content) =>
-        content.replace(optInDefaultPattern, 'smartTransactionsOptInStatus:!1'),
+      description: 'STX opt-in defaults',
+      transform: content =>
+        content.replace(optInPattern, 'smartTransactionsOptInStatus:!1'),
+      reverseTransform: content =>
+        content.replace(
+          /smartTransactionsOptInStatus:!1/g,
+          'smartTransactionsOptInStatus:!0',
+        ),
     },
-    // Hard-disable STX routing in tx publish hook for MetaMask v13.18.1.
-    // Onboarding can override preference defaults in storage, so this patch
-    // guarantees direct publish path for tx submission.
+    // Hard-disable STX routing in BOTH publish hooks (single-tx + batch).
+    // Onboarding can override preference defaults in storage, so these patches
+    // guarantee the direct publish path for tx submission.
     {
       fileName: 'background-5.js',
-      transform: (content) =>
-        content.replace(stxPublishHookPattern, stxPublishHookReplacement),
+      description: 'STX publish hooks (single-tx + batch)',
+      transform: content =>
+        content
+          .replace(singleTxHookRegex, singleTxHookReplacement)
+          .replace(batchTxHookRegex, batchTxHookReplacement),
+      reverseTransform: content =>
+        content
+          .replace(singleTxHookPatchedRegex, singleTxHookReverse)
+          .replace(batchTxHookPatchedRegex, batchTxHookReverse),
     },
-  ];
+  ]
 
-  for (const { fileName, transform } of filePatchers) {
-    const filePath = path.join(extensionPath, fileName);
-    if (!fs.existsSync(filePath)) continue;
+  console.log('[anvil-fixture] Patching MetaMask extension for STX disable...')
 
-    const original = fs.readFileSync(filePath, 'utf-8');
-    const patched = transform(original);
+  for (const {
+    fileName,
+    description,
+    transform,
+    reverseTransform,
+  } of filePatchers) {
+    const filePath = path.join(extensionPath, fileName)
+    if (!fs.existsSync(filePath)) {
+      console.log(
+        `[anvil-fixture] ${fileName}: ${description} - FILE NOT FOUND (skipped)`,
+      )
+      continue
+    }
 
-    if (patched !== original) {
-      stxPatchedFiles.push({ path: filePath, original });
-      fs.writeFileSync(filePath, patched);
+    const content = fs.readFileSync(filePath, 'utf-8')
+
+    // First, reverse any stale patches left from a previous un-restored run.
+    // This recovers the "true original" so we can cleanly re-apply ALL patches.
+    const trueOriginal = reverseTransform(content)
+    const patched = transform(trueOriginal)
+
+    if (patched !== content) {
+      // Something changed — either fresh patches applied, or stale patches
+      // were reversed and re-applied cleanly. Record the true original.
+      stxPatchedFiles.push({ path: filePath, original: trueOriginal })
+      fs.writeFileSync(filePath, patched)
+      if (trueOriginal !== content) {
+        console.log(
+          `[anvil-fixture] ${fileName}: ${description} - RE-PATCHED (recovered stale patches + applied fresh)`,
+        )
+      } else {
+        console.log(`[anvil-fixture] ${fileName}: ${description} - PATCHED`)
+      }
+    } else if (trueOriginal !== content) {
+      // File is already fully patched — record the true original for restore.
+      stxPatchedFiles.push({ path: filePath, original: trueOriginal })
+      console.log(
+        `[anvil-fixture] ${fileName}: ${description} - ALREADY PATCHED (recorded original for restore)`,
+      )
+    } else {
+      console.log(
+        `[anvil-fixture] ${fileName}: ${description} - NO MATCH (pattern not found)`,
+      )
     }
   }
+
+  console.log(
+    `[anvil-fixture] STX patch complete: ${stxPatchedFiles.length} file(s) recorded for restore`,
+  )
 }
 
 /** Restore all files patched by disableSmartTransactionsInFiles */
@@ -530,8 +749,10 @@ export const test = walletTest.extend<{ anvilRpc: AnvilRpcHelper }>({
     const getChainIdByHostname = (url: string): number | null => {
       try {
         const hostname = new URL(url).hostname;
-        if (KNOWN_MAINNET_HOSTS.some((h) => hostname.includes(h))) return 1;
+        // Check Linea FIRST — 'linea-mainnet.infura.io' contains 'mainnet.infura.io'
+        // as a substring, so checking mainnet first would misclassify Linea URLs.
         if (KNOWN_LINEA_HOSTS.some((h) => hostname.includes(h))) return 59144;
+        if (KNOWN_MAINNET_HOSTS.some((h) => hostname.includes(h))) return 1;
       } catch {}
       return null;
     };
@@ -691,16 +912,6 @@ export const test = walletTest.extend<{ anvilRpc: AnvilRpcHelper }>({
     });
 
     const page = await extensionContext.newPage();
-
-    // Debug: capture Hub page errors and warnings for diagnosis
-    page.on('pageerror', (error) => {
-      console.log(`[HUB PAGE ERROR] ${error.message}`);
-    });
-    page.on('console', (msg) => {
-      if (msg.type() === 'error' || msg.type() === 'warning') {
-        console.log(`[HUB ${msg.type().toUpperCase()}] ${msg.text()}`);
-      }
-    });
 
     await page.goto(env.BASE_URL);
     await page.waitForLoadState('domcontentloaded');

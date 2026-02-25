@@ -35,16 +35,6 @@ export class NotificationPage {
     }
   }
 
-  /** Find an already-open notification/popup page without waiting for content. */
-  private findOpenNotificationPage(): Page | null {
-    for (const p of this.context.pages()) {
-      if (this.isMetaMaskPopup(p) && !p.isClosed()) {
-        return p
-      }
-    }
-    return null
-  }
-
   /**
    * Build a locator that matches any MetaMask v13 confirmation submit button.
    * MetaMask v13.18.1 uses multiple test IDs depending on the confirmation type:
@@ -163,7 +153,7 @@ export class NotificationPage {
    * (gas estimation, fee calculation, Blockaid security simulation).
    */
   private async waitForNotificationPage(
-    contentTimeout = NOTIFICATION_TIMEOUTS.NOTIFICATION_CONTENT,
+    contentTimeout: number = NOTIFICATION_TIMEOUTS.NOTIFICATION_CONTENT,
   ): Promise<Page> {
     // Check if there's already an open notification page with content
     for (const p of this.context.pages()) {
@@ -260,7 +250,7 @@ export class NotificationPage {
 
   /** Approve a transaction (Confirm button) */
   async approveTransaction(
-    contentTimeout = NOTIFICATION_TIMEOUTS.NOTIFICATION_CONTENT,
+    contentTimeout: number = NOTIFICATION_TIMEOUTS.NOTIFICATION_CONTENT,
   ): Promise<void> {
     const deadline = Date.now() + contentTimeout
     let page: Page | null = null
@@ -291,7 +281,24 @@ export class NotificationPage {
         continue
       }
 
-      await confirm.click({ timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM })
+      // MetaMask may re-render the confirmation page while loading gas estimates
+      // or transaction simulations. This causes the DOM element to detach between
+      // visibility check and click. The click event may still reach MetaMask before
+      // the DOM detaches, so check activity state before assuming failure.
+      try {
+        await confirm.click({ timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM })
+      } catch {
+        // The click may have succeeded even though Playwright reported DOM detachment.
+        // Wait for MetaMask to process, then check activity for confirmation.
+        await page.waitForTimeout(2_000)
+        const confirmedAfterError = !(await this.hasUnapprovedActivityEntry())
+        if (confirmedAfterError) {
+          if (!page.isClosed()) await page.close()
+          return
+        }
+        await page.waitForTimeout(500)
+        continue
+      }
       await page.waitForTimeout(1_200)
 
       // MetaMask v13 can use a two-step flow: Next -> Confirm.
