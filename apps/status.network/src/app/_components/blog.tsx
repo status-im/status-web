@@ -1,53 +1,17 @@
-'use client'
-
-import avatarImage from '~public/blog/avatar.webp'
-import consortiumImage from '~public/blog/consortium.png'
-import gaslessImage from '~public/blog/gasless.png'
-import stakingImage from '~public/blog/staking.jpg'
-import { useLocale, useTranslations } from 'next-intl'
-import Image, { type StaticImageData } from 'next/image'
-import { formatDate } from '../_utils/format-date'
+import { getTranslations } from 'next-intl/server'
+import { getLatestPostsByTag } from '../blog/_lib/ghost'
+import { BlogCard } from './blog-card'
 import { ButtonLink } from './button-link'
-import { Link } from './link'
 
-const Blog = () => {
-  const t = useTranslations()
+const Blog = async () => {
+  const [t, posts] = await Promise.all([
+    getTranslations(),
+    getLatestPostsByTag('status-network', 3),
+  ])
 
-  const POSTS: BlogPost[] = [
-    {
-      category: t('blog.category'),
-      title: t('blog.post_1.title'),
-      author: {
-        name: t('blog.author'),
-        avatar: avatarImage,
-      },
-      date: '2025-07-29',
-      image: consortiumImage,
-      link: '/blog/status-steps-up-as-founding-member-of-linea-consortium',
-    },
-    {
-      category: t('blog.category'),
-      title: t('blog.post_2.title'),
-      author: {
-        name: t('blog.author'),
-        avatar: avatarImage,
-      },
-      date: '2025-07-09',
-      image: gaslessImage,
-      link: '/blog/status-network-first-gasless-l2',
-    },
-    {
-      category: t('blog.category'),
-      title: t('blog.post_3.title'),
-      author: {
-        name: t('blog.author'),
-        avatar: avatarImage,
-      },
-      date: '2024-07-30',
-      image: stakingImage,
-      link: '/blog/snt-staking-and-status-network',
-    },
-  ]
+  if (posts.length === 0) {
+    return null
+  }
 
   return (
     <section className="w-full" id="blog">
@@ -59,8 +23,17 @@ const Blog = () => {
           </ButtonLink>
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {POSTS.map(post => (
-            <BlogCard key={post.title} {...post} />
+          {posts.map(post => (
+            <BlogCard
+              key={post.id}
+              category={post.primary_tag?.name ?? null}
+              title={post.title}
+              authorName={post.primary_author?.name ?? null}
+              authorAvatar={post.primary_author?.profile_image ?? null}
+              date={post.published_at ?? new Date().toISOString()}
+              image={post.feature_image ?? '/blog/linea.jpg'}
+              link={`/blog/${post.slug}`}
+            />
           ))}
         </div>
       </div>
@@ -69,61 +42,3 @@ const Blog = () => {
 }
 
 export { Blog }
-
-type BlogPost = {
-  category: string
-  title: string
-  author: {
-    name: string
-    avatar: string | StaticImageData
-  }
-  date: Date | string
-  image: string | StaticImageData
-  link: string
-}
-
-const BlogCard = (props: BlogPost) => {
-  const { author, category, date, image, link, title } = props
-  const locale = useLocale()
-  const t = useTranslations()
-
-  return (
-    <Link
-      href={link}
-      className="flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-2"
-    >
-      <div className="flex grow flex-col gap-2 p-4">
-        <div className="w-fit overflow-hidden rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500">
-          {category}
-        </div>
-
-        <p className="text-19 font-600">{title}</p>
-
-        <div className="mt-auto flex h-5 items-center gap-1">
-          <Image
-            src={author.avatar}
-            alt={author.name}
-            width={20}
-            height={20}
-            className="rounded-full"
-          />
-          <p className="text-15 font-600">{author.name}</p>
-          <p className="text-15 text-neutral-50">
-            {t('blog.on_date') && `${t('blog.on_date')} `}
-            {formatDate(date, 'medium', locale)}
-          </p>
-        </div>
-      </div>
-
-      <div className="w-full px-2 pb-2">
-        <Image
-          className="aspect-[334/188] size-full rounded-16 object-cover"
-          src={image}
-          alt={title}
-          width={334}
-          height={188}
-        />
-      </div>
-    </Link>
-  )
-}

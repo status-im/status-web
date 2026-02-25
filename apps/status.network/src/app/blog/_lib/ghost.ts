@@ -122,6 +122,20 @@ export async function getPostSlugs(): Promise<string[]> {
   return response.posts.map(post => post.slug)
 }
 
+export async function getLatestPostsByTag(
+  tag: string,
+  limit: number = 3,
+): Promise<GhostPost[]> {
+  const response = await fetchPosts({
+    include: 'tags,authors',
+    limit: String(limit),
+    order: 'published_at DESC',
+    filter: `tag:${tag}+visibility:public+${DISALLOWED_TAGS_FILTER}`,
+  })
+
+  return response.posts
+}
+
 export async function getPostsByTagSlug(
   slug: string,
   limit: number = 4,
