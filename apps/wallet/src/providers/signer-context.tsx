@@ -24,7 +24,6 @@ type SignerContextValue = {
   signMessage: (message: Hex) => Promise<Hex>
   signTypedData: (typedData: string) => Promise<Hex>
   requestUnlock: () => Promise<string | null>
-  setUnlockHandler: (handler: () => Promise<string | null>) => void
 }
 
 const SignerContext = createContext<SignerContextValue | undefined>(undefined)
@@ -296,14 +295,6 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
     [currentWallet?.id, address, ensureUnlocked],
   )
 
-  const handleSetUnlockHandler = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    (_handler: () => Promise<string | null>) => {
-      // No-op: PasswordContext handles password requests via requestPassword()
-    },
-    [],
-  )
-
   const value: SignerContextValue = useMemo(
     () => ({
       address,
@@ -314,7 +305,6 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
       signMessage,
       signTypedData,
       requestUnlock,
-      setUnlockHandler: handleSetUnlockHandler,
     }),
     [
       address,
@@ -325,7 +315,6 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
       signMessage,
       signTypedData,
       requestUnlock,
-      handleSetUnlockHandler,
     ],
   )
 
