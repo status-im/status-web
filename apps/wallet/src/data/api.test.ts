@@ -12,6 +12,10 @@ const createChromeMock = () => {
   const handlerPortOnConnectListeners: OnConnectListener[] = []
 
   return {
+    alarms: {
+      create: vi.fn(),
+      clear: vi.fn(),
+    },
     runtime: {
       connect: vi.fn(() => {
         const handlerPort = {
