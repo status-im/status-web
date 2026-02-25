@@ -1,0 +1,110 @@
+name: E2E Tests
+
+on:
+  deployment_status:
+  push:
+    branches: ['main']
+    paths:
+      - 'e2e/**'
+      - 'apps/hub/**'
+      - 'packages/colors/**'
+      - 'packages/icons/**'
+      - 'packages/components/**'
+      - 'packages/wallet/**'
+      - 'packages/status-network/**'
+      - 'packages/sitemap-utils/**'
+      - 'patches/**'
+      - 'package.json'
+      - 'turbo.json'
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: 'Base URL to test against'
+        required: false
+        default: 'https://hub.status.network'
+
+env:
+  METAMASK_VERSION: '13.18.1'
+
+jobs:
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: >
+      (github.event_name == 'deployment_status'
+        && github.event.deployment_status.state == 'success'
+        && contains(github.event.deployment_status.target_url, 'status-network-hub'))
+      || github.event_name == 'push'
+      || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Determine BASE_URL
+        id: url
+        run: |
+          if [ "${{ github.event_name }}" = "deployment_status" ]; then
+            echo "url=${{ github.event.deployment_status.target_url }}" >> $GITHUB_OUTPUT
+            echo "Testing Vercel preview: ${{ github.event.deployment_status.target_url }}"
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "url=${{ inputs.base_url }}" >> $GITHUB_OUTPUT
+            echo "Testing manual URL: ${{ inputs.base_url }}"
+          else
+            echo "url=https://hub.status.network" >> $GITHUB_OUTPUT
+            echo "Testing production"
+          fi
+
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.17.0
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: cd e2e && pnpm exec playwright install chromium --with-deps
+
+      - name: Cache MetaMask extension
+        id: metamask-cache
+        uses: actions/cache@v4
+        with:
+          path: e2e/.extensions/metamask
+          key: metamask-v${{ env.METAMASK_VERSION }}-${{ hashFiles('e2e/download-metamask-extension.ts') }}
+
+      - name: Download MetaMask extension
+        if: steps.metamask-cache.outputs.cache-hit != 'true'
+        run: cd e2e && pnpm setup:metamask
+
+      - name: Run E2E tests
+        run: cd e2e && xvfb-run --auto-servernum -- pnpm test
+        env:
+          WALLET_SEED_PHRASE: ${{ secrets.E2E_WALLET_SEED_PHRASE }}
+          WALLET_PASSWORD: ${{ secrets.E2E_WALLET_PASSWORD }}
+          BASE_URL: ${{ steps.url.outputs.url }}
+          CI: true
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-report
+          path: e2e/test-results/
+          retention-days: 14
+
+      - name: Upload test artifacts
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: e2e-artifacts
+          path: |
+            e2e/test-results/artifacts/
+          retention-days: 7
