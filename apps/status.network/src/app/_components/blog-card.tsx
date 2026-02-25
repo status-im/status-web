@@ -1,6 +1,7 @@
 'use client'
 
 import { useLocale } from 'next-intl'
+import { useEffect, useState } from 'react'
 import { formatDate } from '../_utils/format-date'
 import { Link } from './link'
 
@@ -14,9 +15,16 @@ type BlogCardProps = {
   link: string
 }
 
+const FALLBACK_IMAGE = '/opengraph-image.png'
+
 const BlogCard = (props: BlogCardProps) => {
   const { category, title, authorName, authorAvatar, date, image, link } = props
   const locale = useLocale()
+  const [imageSrc, setImageSrc] = useState(image || FALLBACK_IMAGE)
+
+  useEffect(() => {
+    setImageSrc(image || FALLBACK_IMAGE)
+  }, [image])
 
   return (
     <Link
@@ -54,10 +62,13 @@ const BlogCard = (props: BlogCardProps) => {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           className="aspect-[334/188] size-full rounded-16 object-cover"
-          src={image}
+          src={imageSrc}
           alt={title}
           width={334}
           height={188}
+          onError={() => {
+            setImageSrc(FALLBACK_IMAGE)
+          }}
         />
       </div>
     </Link>
