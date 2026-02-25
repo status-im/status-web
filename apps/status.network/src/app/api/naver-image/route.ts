@@ -1,24 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server'
+import {
+  createNaverImageKey,
+  extractNaverImageURLFromDescription,
+  isNaverImageKey,
+  NAVER_RSS_URL,
+} from '../../_lib/naver-image'
 
 const REVALIDATE_SECONDS = 3600
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
-  const sourceUrl = request.nextUrl.searchParams.get('url')
+  const key = request.nextUrl.searchParams.get('key')
 
-  if (!sourceUrl) {
+  if (!key) {
     return NextResponse.json(
-      { error: 'Missing url query parameter' },
+      { error: 'Missing key query parameter' },
       { status: 400 },
     )
   }
 
-  const normalizedUrl = normalizeAndValidateSourceURL(sourceUrl)
-  if (!normalizedUrl) {
-    return NextResponse.json({ error: 'Invalid image URL' }, { status: 400 })
+  if (!isNaverImageKey(key)) {
+    return NextResponse.json({ error: 'Invalid image key' }, { status: 400 })
+  }
+
+  const sourceUrl = await resolveImageUrlFromKey(key)
+  if (!sourceUrl) {
+    return NextResponse.json({ error: 'Image key not found' }, { status: 404 })
   }
 
   try {
-    const upstream = await fetch(normalizedUrl, {
+    const upstream = await fetch(sourceUrl, {
       next: { revalidate: REVALIDATE_SECONDS },
       headers: {
         accept: 'image/*,*/*;q=0.8',
@@ -59,33 +69,49 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   }
 }
 
-function normalizeAndValidateSourceURL(sourceUrl: string): string | null {
+async function resolveImageUrlFromKey(key: string): Promise<string | null> {
   try {
-    const url = new URL(sourceUrl)
-
-    if (url.protocol === 'http:') {
-      url.protocol = 'https:'
-    }
-
-    if (url.protocol !== 'https:') {
+    const response = await fetch(NAVER_RSS_URL, {
+      next: { revalidate: REVALIDATE_SECONDS },
+    })
+    if (!response.ok) {
       return null
     }
 
-    if (!isAllowedNaverImageHost(url.hostname)) {
-      return null
-    }
+    const xml = await response.text()
+    const itemRegex = /<item>([\s\S]*?)<\/item>/g
 
-    return url.toString()
+    let match: RegExpExecArray | null
+    while ((match = itemRegex.exec(xml)) !== null) {
+      const itemXml = match[1]
+      const description = extractCDATA(itemXml, 'description')
+      const imageUrl = extractNaverImageURLFromDescription(description)
+
+      if (!imageUrl) {
+        continue
+      }
+
+      if (createNaverImageKey(imageUrl) === key) {
+        return imageUrl
+      }
+    }
+    return null
   } catch {
     return null
   }
 }
 
-function isAllowedNaverImageHost(hostname: string): boolean {
-  return (
-    hostname === 'pstatic.net' ||
-    hostname.endsWith('.pstatic.net') ||
-    hostname === 'phinf.naver.net' ||
-    hostname.endsWith('.phinf.naver.net')
+function extractCDATA(xml: string, tag: string): string | null {
+  const cdataRegex = new RegExp(
+    `<${tag}>\\s*<!\\[CDATA\\[([\\s\\S]*?)\\]\\]>\\s*</${tag}>`,
   )
+  const plainRegex = new RegExp(`<${tag}>([^<]*)</${tag}>`)
+
+  const cdataMatch = cdataRegex.exec(xml)
+  if (cdataMatch) return cdataMatch[1].trim()
+
+  const plainMatch = plainRegex.exec(xml)
+  if (plainMatch) return plainMatch[1].trim()
+
+  return null
 }

@@ -1,4 +1,8 @@
 import 'server-only'
+import {
+  createNaverImageKey,
+  extractNaverImageURLFromDescription,
+} from './naver-image'
 
 const NAVER_RSS_URL = 'https://rss.blog.naver.com/status_korea.xml'
 const REVALIDATE_SECONDS = 3600
@@ -90,63 +94,16 @@ function extractTag(xml: string, tag: string): string | null {
 }
 
 function extractImageFromHTML(html: string | null): string | null {
-  if (!html) return null
-  const match = /<img[^>]+src=(["'])(.*?)\1/i.exec(html)
-  if (!match) return null
-
-  const normalizedImageUrl = normalizeNaverImageURL(
-    decodeHTMLAttribute(match[2]),
-  )
+  const normalizedImageUrl = extractNaverImageURLFromDescription(html)
   if (!normalizedImageUrl) return null
 
-  return `${NAVER_IMAGE_PROXY_PATH}?url=${encodeURIComponent(normalizedImageUrl)}`
-}
-
-function normalizeNaverImageURL(imageUrl: string): string | null {
-  try {
-    const url = new URL(imageUrl)
-
-    if (url.protocol === 'http:') {
-      url.protocol = 'https:'
-    }
-
-    if (!isAllowedNaverImageHost(url.hostname)) {
-      return null
-    }
-
-    // RSS thumbnails use ?type=s3 (365x365 square crop).
-    // Replace with ?type=w2 for a wider image suitable for cards.
-    if (url.searchParams.get('type') === 's3') {
-      url.searchParams.set('type', 'w2')
-    }
-
-    return url.toString()
-  } catch {
-    return null
-  }
-}
-
-function decodeHTMLAttribute(value: string): string {
-  return value
-    .replaceAll('&amp;', '&')
-    .replaceAll('&quot;', '"')
-    .replaceAll('&#39;', "'")
-    .replaceAll('&lt;', '<')
-    .replaceAll('&gt;', '>')
+  const key = createNaverImageKey(normalizedImageUrl)
+  return `${NAVER_IMAGE_PROXY_PATH}?key=${encodeURIComponent(key)}`
 }
 
 function normalizeCategory(category: string | null): string | null {
   if (!category) return null
   return category.replaceAll('\u00A0', ' ').trim()
-}
-
-function isAllowedNaverImageHost(hostname: string): boolean {
-  return (
-    hostname === 'pstatic.net' ||
-    hostname.endsWith('.pstatic.net') ||
-    hostname === 'phinf.naver.net' ||
-    hostname.endsWith('.phinf.naver.net')
-  )
 }
 
 function cleanNaverLink(link: string): string {
