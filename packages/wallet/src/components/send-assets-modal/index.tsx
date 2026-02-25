@@ -5,7 +5,12 @@ import { useEffect, useMemo, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Avatar, Button, Input, useToast } from '@status-im/components'
-import { AlertIcon, CloseIcon, ExternalIcon } from '@status-im/icons/20'
+import {
+  AlertIcon,
+  CloseIcon,
+  ExternalIcon,
+  InfoIcon,
+} from '@status-im/icons/20'
 import { cx } from 'cva'
 import { Controller, useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -53,6 +58,10 @@ type Props = {
 }
 
 type TransactionState = 'idle' | 'signing' | 'pending' | 'success' | 'error'
+
+const TOAST_PROCESSING_DURATION_MS = 30_000
+const TOAST_SUCCESS_DURATION_MS = 2_000
+const ERROR_STATE_RESET_DELAY_MS = 3_000
 
 const createFormSchema = (
   balance: number,
@@ -230,20 +239,25 @@ const SendAssetsModal = (props: Props) => {
     setTransactionState('signing')
 
     try {
-      toast.positive('Transaction signed and sent', {
-        duration: 2000,
-      })
-
       handleOnOpenChange(false)
 
+      toast.custom('Processing transaction...', <InfoIcon />, {
+        duration: TOAST_PROCESSING_DURATION_MS,
+      })
       await signTransaction(data)
+      toast.positive('Transaction signed and sent', {
+        duration: TOAST_SUCCESS_DURATION_MS,
+      })
 
-      setTransactionState('pending')
+      // State should be pending but setting success
+      // so "Sign Transaction" button is not disabled after tx sent
+      // TODO?: check for tx success on chain
+      setTransactionState('success')
     } catch (error) {
       setTransactionState('error')
       setTimeout(() => {
         setTransactionState('idle')
-      }, 3000)
+      }, ERROR_STATE_RESET_DELAY_MS)
       throw error
     }
   }
