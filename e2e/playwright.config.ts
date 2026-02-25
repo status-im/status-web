@@ -1,11 +1,11 @@
-import { defineConfig, devices } from '@playwright/test';
-import dotenv from 'dotenv';
-import path from 'node:path';
+import { defineConfig, devices } from '@playwright/test'
+import dotenv from 'dotenv'
+import path from 'node:path'
 
-dotenv.config({ path: path.resolve(import.meta.dirname, '.env.local') });
-dotenv.config({ path: path.resolve(import.meta.dirname, '.env') });
+dotenv.config({ path: path.resolve(import.meta.dirname, '.env.local') })
+dotenv.config({ path: path.resolve(import.meta.dirname, '.env') })
 
-const baseURL = process.env.BASE_URL ?? 'https://hub.status.network';
+const baseURL = process.env.BASE_URL ?? 'https://hub.status.network'
 
 export default defineConfig({
   testDir: './tests',
@@ -55,4 +55,4 @@ export default defineConfig({
       },
     },
   ],
-});
+})

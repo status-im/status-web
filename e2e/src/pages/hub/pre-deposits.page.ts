@@ -1,34 +1,34 @@
-import { expect, type Page } from '@playwright/test';
-import { BasePage } from '@pages/base.page.js';
-import { HUB_TIMEOUTS } from '@constants/timeouts.js';
+import { HUB_TIMEOUTS } from '@constants/timeouts.js'
+import { BasePage } from '@pages/base.page.js'
+import { expect, type Page } from '@playwright/test'
 
 export class PreDepositsPage extends BasePage {
   readonly heading = this.page.getByRole('heading', {
     name: /pre-deposit vaults/i,
-  });
-  readonly tvlValue = this.page.locator('text=/\\$[\\d,.]+/').first();
+  })
+  readonly tvlValue = this.page.locator('text=/\\$[\\d,.]+/').first()
   readonly learnMoreLink = this.page
     .getByRole('link', { name: /learn more/i })
-    .first();
-  readonly faqHeading = this.page.getByRole('heading', { name: /faq/i });
+    .first()
+  readonly faqHeading = this.page.getByRole('heading', { name: /faq/i })
 
   /** All vault name headings on the page */
   get vaultHeadings() {
     return this.page
       .getByRole('heading', { level: 3 })
-      .filter({ hasText: /vault/i });
+      .filter({ hasText: /vault/i })
   }
 
   constructor(page: Page) {
-    super(page);
+    super(page)
   }
 
   async goto(): Promise<void> {
-    await this.page.goto('/pre-deposits');
+    await this.page.goto('/pre-deposits')
   }
 
   async waitForReady(): Promise<void> {
-    await expect(this.heading).toBeVisible({ timeout: HUB_TIMEOUTS.PAGE_READY });
+    await expect(this.heading).toBeVisible({ timeout: HUB_TIMEOUTS.PAGE_READY })
   }
 
   /** Click deposit on a specific vault by token symbol */
@@ -36,7 +36,7 @@ export class PreDepositsPage extends BasePage {
     const depositButton = this.page
       .locator(`text=${symbol}`)
       .locator('..')
-      .getByRole('button', { name: /deposit/i });
-    await depositButton.click();
+      .getByRole('button', { name: /deposit/i })
+    await depositButton.click()
   }
 }

@@ -16,7 +16,8 @@
       "apps/connector",
       "apps/portfolio",
       "apps/wallet",
-      "apps/api"
+      "apps/api",
+      "e2e"
     ]
   },
   "keywords": [],
@@ -27,7 +28,7 @@
     "predev": "pnpm install",
     "dev": "turbo run dev dev:next dev:content --filter=@status-im/* --filter=./apps/*",
     "build": "turbo run build --filter=@status-im/* --filter=./apps/*",
-    "lint": "turbo run lint --filter=@status-im/* --filter=./apps/*",
+    "lint": "turbo run lint --filter=@status-im/* --filter=./apps/* --filter=./e2e",
     "typecheck": "turbo run typecheck",
     "format": "prettier --write .",
     "clean": "turbo run clean && rimraf node_modules .turbo",

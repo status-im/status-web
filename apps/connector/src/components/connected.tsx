@@ -1,7 +1,6 @@
 import { useLocalStorage } from '~hooks/use-local-storage'
 import { getFaviconUrl } from '~lib/get-favicon-url'
 
-import { Network } from './network'
 import { Switch } from './switch'
 
 const Connected = () => {
@@ -29,8 +28,6 @@ const Connected = () => {
       </div>
 
       <div className="flex flex-col gap-3">
-        <Network />
-
         <div className="flex items-center gap-2 rounded-2xl border border-neutral-20 bg-neutral-2.5 px-4 py-3">
           <div className="flex-1">
             <div className="text-15 font-medium text-neutral-100">

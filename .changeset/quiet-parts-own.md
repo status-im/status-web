@@ -1,5 +1,6 @@
 ---
 'hub': patch
+'e2e': patch
 ---
 
 test(hub): add E2E testing framework with MetaMask integration

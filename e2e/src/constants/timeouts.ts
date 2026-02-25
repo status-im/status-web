@@ -2,7 +2,7 @@
 export const VIEWPORT = {
   WIDTH: 1440,
   HEIGHT: 900,
-} as const;
+} as const
 
 /** Timeouts for browser extension service workers and pages */
 export const EXTENSION_TIMEOUTS = {
@@ -10,7 +10,7 @@ export const EXTENSION_TIMEOUTS = {
   SERVICE_WORKER: 30_000,
   /** Time to wait for MetaMask extension page to appear */
   EXTENSION_PAGE: 10_000,
-} as const;
+} as const
 
 /** Timeouts for MetaMask notification popup interactions */
 export const NOTIFICATION_TIMEOUTS = {
@@ -24,7 +24,7 @@ export const NOTIFICATION_TIMEOUTS = {
   TRANSACTION_CONFIRM: 15_000,
   /** Time to wait for optional UI elements (e.g., "Use default" button) */
   OPTIONAL_ELEMENT: 3_000,
-} as const;
+} as const
 
 /** Timeouts for MetaMask onboarding flow */
 export const ONBOARDING_TIMEOUTS = {
@@ -32,16 +32,16 @@ export const ONBOARDING_TIMEOUTS = {
   SEED_PHRASE_TYPING_DELAY: 30,
   /** Time to wait for post-onboarding popups */
   POPUP_DISMISS: 3_000,
-} as const;
+} as const
 
 /** Timeouts for hub page interactions */
 export const HUB_TIMEOUTS = {
   /** Time to wait for page heading to become visible */
   PAGE_READY: 15_000,
-} as const;
+} as const
 
 /** Timeouts used in test specs */
 export const TEST_TIMEOUTS = {
   /** Time to wait for MetaMask onboarding UI elements */
   ONBOARDING_ELEMENT: 15_000,
-} as const;
+} as const

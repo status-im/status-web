@@ -1,5 +1,6 @@
-import type { BrowserContext, Page } from '@playwright/test';
-import { NOTIFICATION_TIMEOUTS } from '@constants/timeouts.js';
+import { NOTIFICATION_TIMEOUTS } from '@constants/timeouts.js'
+
+import type { BrowserContext, Page } from '@playwright/test'
 
 export class NotificationPage {
   constructor(
@@ -7,141 +8,135 @@ export class NotificationPage {
     private readonly extensionId: string,
   ) {}
 
-  private isMetaMaskPopup(page: Page): boolean {
+  private isNotificationPage(page: Page): boolean {
     try {
-      const parsed = new URL(page.url());
+      const parsed = new URL(page.url())
       return (
         parsed.protocol === 'chrome-extension:' &&
         parsed.host === this.extensionId &&
-        (parsed.pathname.includes('notification.html') ||
-          parsed.pathname.includes('popup.html'))
-      );
+        parsed.pathname.includes('notification.html')
+      )
     } catch {
-      return false;
+      return false
     }
   }
 
-  /**
-   * Get the MetaMask notification page.
-   * Checks for an already-open notification page first,
-   * then manually opens notification.html.
-   *
-   * MetaMask does not auto-open popups in automated (Playwright) contexts,
-   * so we always open notification.html directly.
-   */
+  /** Wait for the MetaMask notification popup to appear and return its page */
   private async waitForNotificationPage(): Promise<Page> {
-    // Check if already open
-    const existing = this.context
-      .pages()
-      .find(p => this.isMetaMaskPopup(p));
+    let notifPage = this.context.pages().find(p => this.isNotificationPage(p))
 
-    if (existing) {
-      await existing.waitForLoadState('domcontentloaded');
-      return existing;
+    if (!notifPage) {
+      notifPage = await this.context.waitForEvent('page', {
+        timeout: NOTIFICATION_TIMEOUTS.POPUP_APPEAR,
+        predicate: p => this.isNotificationPage(p),
+      })
     }
 
-    // Open notification.html directly
-    const page = await this.context.newPage();
-    await page.goto(
-      `chrome-extension://${this.extensionId}/notification.html`,
-      { waitUntil: 'domcontentloaded' },
-    );
-    return page;
+    await notifPage.waitForLoadState('domcontentloaded')
+    return notifPage
   }
 
   /** Approve a dApp connection request */
   async approveConnection(): Promise<void> {
-    const page = await this.waitForNotificationPage();
+    const page = await this.waitForNotificationPage()
 
-    const connectButton = page.getByRole('button', { name: /^connect$/i });
-    await connectButton.click({ timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION });
+    // MetaMask connection approval may have multiple steps
+    const nextButton = page.getByTestId('page-container-footer-next')
+    if (
+      await nextButton
+        .isVisible({ timeout: NOTIFICATION_TIMEOUTS.ELEMENT_VISIBLE })
+        .catch(() => false)
+    ) {
+      await nextButton.click()
+      // Wait for the button to become disabled (transition started)…
+      await page.waitForFunction(
+        () => {
+          const btn = document.querySelector(
+            '[data-testid="page-container-footer-next"]',
+          ) as HTMLButtonElement | null
+          return (
+            !btn || btn.disabled || btn.getAttribute('aria-disabled') === 'true'
+          )
+        },
+        { timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION },
+      )
+      // …then wait for it to be ready again (next step loaded)
+      await page.waitForFunction(
+        () => {
+          const btn = document.querySelector(
+            '[data-testid="page-container-footer-next"]',
+          ) as HTMLButtonElement | null
+          return (
+            btn && !btn.disabled && btn.getAttribute('aria-disabled') !== 'true'
+          )
+        },
+        { timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION },
+      )
+    }
+
+    const confirmButton = page.getByTestId('page-container-footer-next')
+    await confirmButton.click()
   }
 
   /** Approve a transaction (Confirm button) */
   async approveTransaction(): Promise<void> {
-    const page = await this.waitForNotificationPage();
+    const page = await this.waitForNotificationPage()
 
     const confirmButton = page
       .getByTestId('page-container-footer-next')
-      .or(page.getByRole('button', { name: /confirm/i }));
-    await confirmButton.click({ timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM });
+      .or(page.getByRole('button', { name: /confirm/i }))
+    await confirmButton.click({
+      timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM,
+    })
   }
 
   /** Reject a transaction (Cancel button) */
   async rejectTransaction(): Promise<void> {
-    const page = await this.waitForNotificationPage();
+    const page = await this.waitForNotificationPage()
 
     const cancelButton = page.getByRole('button', {
       name: /reject|cancel/i,
-    });
-    await cancelButton.click();
+    })
+    await cancelButton.click()
   }
 
   /** Approve adding/switching to a new network */
   async approveNetworkSwitch(): Promise<void> {
-    const page = await this.waitForNotificationPage();
+    const page = await this.waitForNotificationPage()
 
-    const actionButton = page.getByRole('button', {
-      name: /^(approve|confirm|switch network)$/i,
-    });
-    await actionButton.click({ timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION });
-  }
-
-  /**
-   * Dismiss a pending "Add network" request queued by the hub on page load.
-   * Approves the request so the network is added and MetaMask switches to it.
-   * Safe to call when there are no pending requests (returns early).
-   */
-  async dismissPendingAddNetwork(): Promise<void> {
-    // Reuse an existing notification page if MetaMask kept one open
-    // after the connection step (MetaMask reuses it for the next pending request).
-    const page = await this.waitForNotificationPage();
-
-    // MetaMask notification.html is a React SPA — buttons render after JS hydration.
-    // Wait for the hub's wallet_addEthereumChain request to arrive and render.
-    const confirmButton = page.getByRole('button', { name: /^confirm$/i });
-    const hasPending = await confirmButton
-      .isVisible({ timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION })
-      .catch(() => false);
-
-    if (!hasPending) {
-      if (!page.isClosed()) await page.close();
-      return;
-    }
-
-    await confirmButton.click();
-
-    // Wait for MetaMask to finish processing, then close the page.
-    // MetaMask adds the network without auto-switching in this version.
-    await page.waitForLoadState('load').catch(() => {});
-    if (!page.isClosed()) await page.close();
+    const approveButton = page.getByRole('button', {
+      name: /approve|switch network/i,
+    })
+    await approveButton.click()
   }
 
   /** Approve a token spending allowance */
   async approveTokenSpend(): Promise<void> {
-    const page = await this.waitForNotificationPage();
+    const page = await this.waitForNotificationPage()
 
     // There may be a "Use default" or custom amount step
     const useDefaultButton = page.getByRole('button', {
       name: /use default/i,
-    });
+    })
     if (
-      await useDefaultButton.isVisible({ timeout: NOTIFICATION_TIMEOUTS.OPTIONAL_ELEMENT }).catch(() => false)
+      await useDefaultButton
+        .isVisible({ timeout: NOTIFICATION_TIMEOUTS.OPTIONAL_ELEMENT })
+        .catch(() => false)
     ) {
-      await useDefaultButton.click();
+      await useDefaultButton.click()
     }
 
-    const nextButton = page.getByTestId('page-container-footer-next');
-    await nextButton.click();
+    const nextButton = page.getByTestId('page-container-footer-next')
+    await nextButton.click()
   }
 
   /** Sign a message (SIWE or EIP-712) */
   async signMessage(): Promise<void> {
-    const page = await this.waitForNotificationPage();
+    const page = await this.waitForNotificationPage()
 
     const signButton = page
       .getByTestId('page-container-footer-next')
-      .or(page.getByRole('button', { name: /sign/i }));
-    await signButton.click();
+      .or(page.getByRole('button', { name: /sign/i }))
+    await signButton.click()
   }
 }
