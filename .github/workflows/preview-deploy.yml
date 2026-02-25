@@ -7,6 +7,7 @@ on:
 permissions:
   contents: read
   pull-requests: write
+  deployments: write
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -161,6 +162,44 @@ jobs:
           echo "url=$url" >> $GITHUB_OUTPUT
         env:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_COMPONENTS }}
+
+      - name: Report deployment statuses
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const apps = [
+              { name: 'status.app', url: '${{ steps.deploy-status-app.outputs.url }}' },
+              { name: 'hub', url: '${{ steps.deploy-hub.outputs.url }}' },
+              { name: 'portfolio', url: '${{ steps.deploy-portfolio.outputs.url }}' },
+              { name: 'api', url: '${{ steps.deploy-api.outputs.url }}' },
+              { name: 'status.network', url: '${{ steps.deploy-status-network.outputs.url }}' },
+              { name: 'components', url: '${{ steps.deploy-components.outputs.url }}' },
+            ];
+
+            for (const app of apps) {
+              if (!app.url?.trim()) continue;
+
+              const { data: deployment } = await github.rest.repos.createDeployment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: '${{ github.event.pull_request.head.sha }}',
+                environment: `preview/${app.name}`,
+                auto_merge: false,
+                required_contexts: [],
+                transient_environment: true,
+                production_environment: false,
+              });
+
+              await github.rest.repos.createDeploymentStatus({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                deployment_id: deployment.id,
+                state: 'success',
+                target_url: app.url,
+                environment_url: app.url,
+              });
+            }
 
       - name: Comment PR
         if: always()
