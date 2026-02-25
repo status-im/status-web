@@ -1,9 +1,9 @@
-import { expect } from '@playwright/test'
-import { test } from '@fixtures/wallet-connected.fixture.js'
-import { PreDepositsPage } from '@pages/hub/pre-deposits.page.js'
-import { PreDepositModalComponent } from '@pages/hub/components/pre-deposit-modal.component.js'
-import { TEST_VAULTS, TEST_AMOUNTS } from '@constants/vaults.js'
+import { TEST_AMOUNTS, TEST_VAULTS } from '@constants/hub/vaults.js'
 import { NOTIFICATION_TIMEOUTS } from '@constants/timeouts.js'
+import { test } from '@fixtures/hub/wallet-connected.fixture.js'
+import { PreDepositModalComponent } from '@pages/hub/components/pre-deposit-modal.component.js'
+import { PreDepositsPage } from '@pages/hub/pre-deposits.page.js'
+import { expect } from '@playwright/test'
 
 // MetaMask defaults to Ethereum Mainnet on a fresh profile.
 const METAMASK_DEFAULT_CHAIN_ID = 1
@@ -24,36 +24,36 @@ test.describe('Pre-Deposit validation - Exceed balance', () => {
 
         // For vaults on a different chain we must first put MetaMask on a
         // known wrong network, using the exact same 3-step setup as
-        // deposit-network-switch.spec.ts.  The crucial part is step 3:
-        // approveNetworkSwitch() leaves notification.html OPEN, which
-        // allows MetaMask to auto-process subsequent chain-switch requests.
+        // deposit-network-switch.spec.ts.
         if (vault.chainId !== METAMASK_DEFAULT_CHAIN_ID) {
-          await test.step(
-            'Set up MetaMask on Status Network Sepolia (wrong network)',
-            async () => {
-              // 1. Approve the pending "Add Status Network Sepolia" from hub
-              await metamask.dismissPendingAddNetwork()
+          await test.step('Set up MetaMask on Status Network Sepolia (wrong network)', async () => {
+            // 1. Approve the pending "Add Status Network Sepolia" from hub
+            await metamask.dismissPendingAddNetwork()
 
-              // 2. Force-switch to Status Network Sepolia
-              await hubPage.evaluate((chainId) => {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                ;(window as any).ethereum?.request({
+            // 2. Force-switch to Status Network Sepolia
+            await hubPage.evaluate(chainId => {
+              ;(window as any).ethereum
+                ?.request({
                   method: 'wallet_switchEthereumChain',
                   params: [{ chainId }],
-                }).catch(() => {})
-              }, STATUS_SEPOLIA_CHAIN_ID)
+                })
+                .catch(() => {})
+            }, STATUS_SEPOLIA_CHAIN_ID)
 
-              // 3. Approve the switch — leaves notification page OPEN
-              await metamask.switchNetwork()
-            },
-          )
+            // 3. Approve the switch — leaves notification page OPEN
+            await metamask.switchNetwork()
+          })
 
           await test.step('Dismiss SIWE dialog if present', async () => {
             const siweClose = hubPage.locator(
               'button[aria-label="Close"], [data-testid="connectkit-close"]',
             )
             if (
-              await siweClose.isVisible({ timeout: NOTIFICATION_TIMEOUTS.OPTIONAL_ELEMENT }).catch(() => false)
+              await siweClose
+                .isVisible({
+                  timeout: NOTIFICATION_TIMEOUTS.OPTIONAL_ELEMENT,
+                })
+                .catch(() => false)
             ) {
               await siweClose.click()
             }
@@ -97,9 +97,7 @@ test.describe('Pre-Deposit validation - Exceed balance', () => {
         })
 
         await test.step('Verify insufficient balance error', async () => {
-          await depositModal.expectErrorMessageMatching(
-            /insufficient balance/i,
-          )
+          await depositModal.expectErrorMessageMatching(/insufficient balance/i)
         })
 
         await test.step('Verify action button is disabled', async () => {
