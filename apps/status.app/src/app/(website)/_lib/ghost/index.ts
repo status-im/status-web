@@ -21,6 +21,12 @@ const DISALLOWED_TAGS_FILTER = DISALLOWED_TAGS.map(tag => `tag:-${tag}`).join(
   '+'
 )
 
+function hasDisallowedTag(post: { tags?: Array<{ slug?: string | null }> }) {
+  return post.tags?.some(
+    tag => !!tag.slug && DISALLOWED_TAGS.includes(tag.slug)
+  )
+}
+
 export const getPosts = async (params: Params = {}) => {
   const { page = 1, limit = 7, tag } = params
 
@@ -31,7 +37,7 @@ export const getPosts = async (params: Params = {}) => {
       limit,
       page,
       ...(tag
-        ? { filter: `tag:${tag}+visibility:public` }
+        ? { filter: `tag:${tag}+visibility:public+${DISALLOWED_TAGS_FILTER}` }
         : { filter: `visibility:public+${DISALLOWED_TAGS_FILTER}` }),
     })
 
@@ -56,12 +62,18 @@ export const getPosts = async (params: Params = {}) => {
 
 export const getPostBySlug = async (slug: string) => {
   try {
-    return await ghost.posts.read(
+    const post = await ghost.posts.read(
       { slug },
       {
         include: ['tags', 'authors'],
       }
     )
+
+    if (hasDisallowedTag(post)) {
+      return
+    }
+
+    return post
   } catch {
     return
   }
@@ -130,7 +142,11 @@ export const getTagSlugs = async (): Promise<string[]> => {
       filter: `visibility:public`,
     })
 
-    return tags.map(tag => tag.slug)
+    return tags
+      .map(tag => tag.slug)
+      .filter(
+        (slug): slug is string => !!slug && !DISALLOWED_TAGS.includes(slug)
+      )
   } catch (error) {
     console.error('Failed to fetch tag slugs from Ghost API:', error)
     return []
