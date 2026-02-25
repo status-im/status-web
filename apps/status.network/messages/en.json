@@ -48,7 +48,7 @@
       "notes": "common::new"
     },
     "testnet_live": {
-      "translation": "Testnet is live!",
+      "translation": "Testnet v2 is live!",
       "notes": "common::testnet_live"
     },
     "promo_message": {
