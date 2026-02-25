@@ -168,15 +168,13 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            // Use same environment names as Vercel bot so conditions like
-            // contains(deployment_status.environment, 'status-network-hub') match
             const apps = [
-              { name: 'status.app', env: 'Preview - status-website', url: '${{ steps.deploy-status-app.outputs.url }}' },
-              { name: 'hub', env: 'Preview - status-network-hub', url: '${{ steps.deploy-hub.outputs.url }}' },
-              { name: 'portfolio', env: 'Preview - status-portfolio', url: '${{ steps.deploy-portfolio.outputs.url }}' },
-              { name: 'api', env: 'Preview - status-api', url: '${{ steps.deploy-api.outputs.url }}' },
-              { name: 'status.network', env: 'Preview - status-network-website', url: '${{ steps.deploy-status-network.outputs.url }}' },
-              { name: 'components', env: 'Preview - status-web-components', url: '${{ steps.deploy-components.outputs.url }}' },
+              { name: 'status.app', url: '${{ steps.deploy-status-app.outputs.url }}' },
+              { name: 'hub', url: '${{ steps.deploy-hub.outputs.url }}' },
+              { name: 'portfolio', url: '${{ steps.deploy-portfolio.outputs.url }}' },
+              { name: 'api', url: '${{ steps.deploy-api.outputs.url }}' },
+              { name: 'status.network', url: '${{ steps.deploy-status-network.outputs.url }}' },
+              { name: 'components', url: '${{ steps.deploy-components.outputs.url }}' },
             ];
 
             for (const app of apps) {
@@ -186,7 +184,7 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 ref: '${{ github.event.pull_request.head.sha }}',
-                environment: app.env,
+                environment: `preview/${app.name}`,
                 auto_merge: false,
                 required_contexts: [],
                 transient_environment: true,
