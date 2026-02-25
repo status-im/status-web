@@ -159,6 +159,45 @@ function buildServiceWorkerPatch(mainnetRpc: string, lineaRpc: string): string {
              : (input && input.url) ? input.url : '' + input;
     if (_url.indexOf('transaction.api') !== -1
         || _url.indexOf('smart-transactions') !== -1) {
+      // Extract raw txs from STX submitTransactions and forward to Anvil.
+      // MetaMask's STX fallback to direct RPC works on mainnet but NOT on
+      // Linea (chain 59144) — the deposit tx is lost. By proactively
+      // submitting to Anvil, we ensure the tx is mined regardless of
+      // MetaMask's fallback behavior.
+      //
+      // IMPORTANT: never default unknown STX network ids to mainnet. That can
+      // misroute Linea txs and cause flaky "modal didn't close"/stuck approval
+      // failures. If the chain cannot be inferred, forward to both forks and
+      // let the wrong-chain fork reject the tx.
+      try {
+        var _stxBody = (init && init.body && typeof init.body === 'string') ? init.body : '';
+        if (_stxBody && _stxBody.indexOf('rawTxs') !== -1) {
+          var _cidMatch = _url.match(/\\/networks\\/(\\d+)\\//);
+          var _cidQueryMatch = _url.match(/[?&]chainId=(\\d+)/);
+          var _stxChainId = _cidMatch ? _cidMatch[1] : (_cidQueryMatch ? _cidQueryMatch[1] : null);
+          var _stxTargets = [];
+          if (_stxChainId && _m[_stxChainId]) {
+            _stxTargets.push(_m[_stxChainId]);
+          } else {
+            if (_m['1']) _stxTargets.push(_m['1']);
+            if (_m['59144'] && _m['59144'] !== _m['1']) _stxTargets.push(_m['59144']);
+          }
+          var _txListMatch = _stxBody.match(/"rawTxs"\\s*:\\s*\\[([^\\]]+)\\]/);
+          if (_txListMatch && _stxTargets.length) {
+            var _hexRegex = /"(0x[a-fA-F0-9]+)"/g;
+            var _hm;
+            while ((_hm = _hexRegex.exec(_txListMatch[1])) !== null) {
+              for (var _ti = 0; _ti < _stxTargets.length; _ti++) {
+                _fwd(_stxTargets[_ti], {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: '{"jsonrpc":"2.0","method":"eth_sendRawTransaction","params":["' + _hm[1] + '"],"id":99997}'
+                }).catch(function() {});
+              }
+            }
+          }
+        }
+      } catch (_stxErr) {}
       return _f('http://localhost:1/__stx_blocked__').catch(function() {
         throw new TypeError('Network request failed');
       });
@@ -469,9 +508,34 @@ export const test = walletTest.extend<{ anvilRpc: AnvilRpcHelper }>({
     // MetaMask's service worker requests are handled by Layer 1 (the file-
     // level fetch patch applied before browser launch).
     //
-    // Chain discovery uses two strategies:
+    // Chain discovery uses three strategies:
     //   1. Parse ?chainId= query param (tRPC proxy: /api/trpc/rpc.proxy?chainId=1)
-    //   2. Probe with eth_chainId (direct RPC endpoints like Infura)
+    //   2. Hostname-based lookup for known RPC providers (no network needed)
+    //   3. Probe with eth_chainId as fallback (with one retry on failure)
+    // Known RPC hostname → chainId mapping. Eliminates the need for
+    // eth_chainId probes on well-known providers, preventing transient
+    // network failures from permanently caching null (which would leak
+    // requests to the real chain and cause flaky balance reads).
+    const KNOWN_MAINNET_HOSTS = [
+      'mainnet.infura.io',
+      'eth.merkle.io',
+      'ethereum-rpc.publicnode.com',
+      'cloudflare-eth.com',
+      'eth-mainnet.g.alchemy.com',
+      'rpc.ankr.com',
+      '1rpc.io',
+    ];
+    const KNOWN_LINEA_HOSTS = ['rpc.linea.build', 'linea-mainnet.infura.io'];
+
+    const getChainIdByHostname = (url: string): number | null => {
+      try {
+        const hostname = new URL(url).hostname;
+        if (KNOWN_MAINNET_HOSTS.some((h) => hostname.includes(h))) return 1;
+        if (KNOWN_LINEA_HOSTS.some((h) => hostname.includes(h))) return 59144;
+      } catch {}
+      return null;
+    };
+
     // Result is cached per URL for the lifetime of the context.
     const rpcRedirectCache = new Map<string, string | null>();
     const txReceiptMethodPattern = /"method"\s*:\s*"eth_getTransactionReceipt"/;
@@ -530,27 +594,47 @@ export const test = walletTest.extend<{ anvilRpc: AnvilRpcHelper }>({
             rpcRedirectCache.set(url, env.ANVIL_LINEA_RPC);
           else rpcRedirectCache.set(url, null);
         } else {
-          // Strategy 2: probe with eth_chainId (direct RPC endpoints)
-          try {
-            const probe = await fetch(url, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                jsonrpc: '2.0',
-                method: 'eth_chainId',
-                params: [],
-                id: 1,
-              }),
-            });
-            const json = (await probe.json()) as { result: string };
-            const chainId = parseInt(json.result, 16);
-            if (chainId === 1) rpcRedirectCache.set(url, env.ANVIL_MAINNET_RPC);
-            else if (chainId === 59144)
+          // Strategy 2: hostname-based lookup (no network needed)
+          const knownChainId = getChainIdByHostname(url);
+          if (knownChainId !== null) {
+            if (knownChainId === 1) rpcRedirectCache.set(url, env.ANVIL_MAINNET_RPC);
+            else if (knownChainId === 59144)
               rpcRedirectCache.set(url, env.ANVIL_LINEA_RPC);
             else rpcRedirectCache.set(url, null);
-          } catch (err) {
-            console.warn(`[anvil-intercept] Probe failed for ${url}: ${err}`);
-            rpcRedirectCache.set(url, null);
+          } else {
+            // Strategy 3: probe with eth_chainId (retry once on failure)
+            let probeResult: string | null = null;
+            for (let attempt = 0; attempt < 2; attempt++) {
+              try {
+                const probe = await fetch(url, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    jsonrpc: '2.0',
+                    method: 'eth_chainId',
+                    params: [],
+                    id: 1,
+                  }),
+                });
+                const json = (await probe.json()) as { result: string };
+                const chainId = parseInt(json.result, 16);
+                if (chainId === 1) probeResult = env.ANVIL_MAINNET_RPC;
+                else if (chainId === 59144) probeResult = env.ANVIL_LINEA_RPC;
+                break;
+              } catch (err) {
+                if (attempt === 0) {
+                  console.warn(
+                    `[anvil-intercept] Probe attempt 1 failed for ${url}, retrying...`,
+                  );
+                  await new Promise((r) => setTimeout(r, 500));
+                } else {
+                  console.warn(
+                    `[anvil-intercept] Probe failed permanently for ${url}: ${err}`,
+                  );
+                }
+              }
+            }
+            rpcRedirectCache.set(url, probeResult);
           }
         }
       }
