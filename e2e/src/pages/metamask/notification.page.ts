@@ -8,32 +8,44 @@ export class NotificationPage {
     private readonly extensionId: string,
   ) {}
 
-  private isNotificationPage(page: Page): boolean {
+  private isMetaMaskPopup(page: Page): boolean {
     try {
       const parsed = new URL(page.url())
       return (
         parsed.protocol === 'chrome-extension:' &&
         parsed.host === this.extensionId &&
-        parsed.pathname.includes('notification.html')
+        (parsed.pathname.includes('notification.html') ||
+          parsed.pathname.includes('popup.html'))
       )
     } catch {
       return false
     }
   }
 
-  /** Wait for the MetaMask notification popup to appear and return its page */
+  /**
+   * Get the MetaMask notification page.
+   * Checks for an already-open notification page first,
+   * then manually opens notification.html.
+   *
+   * MetaMask does not auto-open popups in automated (Playwright) contexts,
+   * so we always open notification.html directly.
+   */
   private async waitForNotificationPage(): Promise<Page> {
-    let notifPage = this.context.pages().find(p => this.isNotificationPage(p))
+    // Check if already open
+    const existing = this.context.pages().find(p => this.isMetaMaskPopup(p))
 
-    if (!notifPage) {
-      notifPage = await this.context.waitForEvent('page', {
-        timeout: NOTIFICATION_TIMEOUTS.POPUP_APPEAR,
-        predicate: p => this.isNotificationPage(p),
-      })
+    if (existing) {
+      await existing.waitForLoadState('domcontentloaded')
+      return existing
     }
 
-    await notifPage.waitForLoadState('domcontentloaded')
-    return notifPage
+    // Open notification.html directly
+    const page = await this.context.newPage()
+    await page.goto(
+      `chrome-extension://${this.extensionId}/notification.html`,
+      { waitUntil: 'domcontentloaded' },
+    )
+    return page
   }
 
   /** Approve a dApp connection request */
@@ -105,9 +117,40 @@ export class NotificationPage {
     const page = await this.waitForNotificationPage()
 
     const approveButton = page.getByRole('button', {
-      name: /approve|switch network/i,
+      name: /^(approve|confirm|switch network)$/i,
     })
-    await approveButton.click()
+    await approveButton.click({
+      timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION,
+    })
+  }
+
+  /**
+   * Dismiss a pending "Add network" request queued by the hub on page load.
+   * Approves the request so the network is added and MetaMask switches to it.
+   * Safe to call when there are no pending requests (returns early).
+   */
+  async dismissPendingAddNetwork(): Promise<void> {
+    // Reuse an existing notification page if MetaMask kept one open
+    // after the connection step (MetaMask reuses it for the next pending request).
+    const page = await this.waitForNotificationPage()
+
+    // MetaMask notification.html is a React SPA — buttons render after JS hydration.
+    // Wait for the hub's wallet_addEthereumChain request to arrive and render.
+    const confirmButton = page.getByRole('button', { name: /^confirm$/i })
+    const hasPending = await confirmButton
+      .isVisible({ timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION })
+      .catch(() => false)
+
+    if (!hasPending) {
+      if (!page.isClosed()) await page.close()
+      return
+    }
+
+    await confirmButton.click()
+
+    // Wait for MetaMask to finish processing, then close the page.
+    await page.waitForLoadState('load').catch(() => {})
+    if (!page.isClosed()) await page.close()
   }
 
   /** Approve a token spending allowance */
