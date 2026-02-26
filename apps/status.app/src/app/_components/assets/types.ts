@@ -379,7 +379,10 @@ export type ImageType =
       id: 'Platforms/Screens/Mobile Screens/Messenger/Messenger_02:750:1624'
       alt: 'Mobile app screenshot showing the messenger feature included in the Status app'
     }
-  | { id: 'Non Beta Release/Icons/Payment_Icons:648:96'; alt: '' }
+  | {
+      id: 'Non Beta Release/Icons/Payment_Icons:648:96'
+      alt: 'Payment method icons including credit card and Apple Pay'
+    }
   | {
       id: 'Platforms/Screens/Mobile Screens/Wallet/Wallet_02:750:1624'
       alt: 'Mobile app screenshot showing the wallet feature included in the Status app'
