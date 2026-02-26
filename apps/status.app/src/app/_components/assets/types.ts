@@ -1,5 +1,9 @@
 export type ImageType =
   | {
+      id: 'Platforms/Screens/Extension Screens/Connector_04:1102:1012'
+      alt: ''
+    }
+  | {
       id: 'Platforms/Screens/Extension Screens/Connector_03:1102:1012'
       alt: ''
     }
@@ -26,7 +30,10 @@ export type ImageType =
   | { id: 'Wallet/Icons/Logos/moonpay-bigger:144:144'; alt: '' }
   | { id: 'Wallet/Icons/Logos/mercuryo:64:64'; alt: '' }
   | { id: 'Wallet/Icons/Logos/moonpay:64:64'; alt: '' }
-  | { id: 'Homepage/Screens/Extension Section/Extension_01:2127:2390'; alt: '' }
+  | {
+      id: 'Homepage/Screens/Extension Section/Extension_01:2127:2390'
+      alt: 'Status Portfolio Wallet browser extension interface showing portfolio tracking features'
+    }
   | {
       id: 'Help/Documentation Screens/Wallet/1532/1532_1_Screen_Light:1872:1208'
       alt: 'A diagram showing the relationship between wallet accounts, keys, and derivation paths'
@@ -455,7 +462,10 @@ export type ImageType =
       id: 'Non Beta Release/Scribbles and Notes/Communities_05:440:111'
       alt: ''
     }
-  | { id: 'Non Beta Release/Stickers/01:455:455'; alt: '' }
+  | {
+      id: 'Non Beta Release/Stickers/01:455:455'
+      alt: 'A sticker showing the Status logo'
+    }
   | { id: 'Non Beta Release/Scribbles and Notes/01_Beta:154:41'; alt: '' }
   | { id: 'Non Beta Release/Icons/09:144:144'; alt: '' }
   | { id: 'Non Beta Release/Icons/08:144:144'; alt: '' }
@@ -767,7 +777,10 @@ export type ImageType =
     }
   | { id: 'Jobs/Top Section/Jobs_01_Mobile:1745:1867'; alt: '' }
   | { id: 'Jobs/Top Section/Jobs_01:5113:2971'; alt: '' }
-  | { id: 'Team/Photos/Team_01:6400:2501'; alt: '' }
+  | {
+      id: 'Team/Photos/Team_01:6400:2501'
+      alt: 'Status team photo showing core contributors'
+    }
   | { id: 'Team/Scribbles and Notes/Scribble_02:772:196'; alt: '' }
   | {
       id: 'Help/Documentation Screens/Communities/108/108_2_Screen_Dark:1480:1280'
