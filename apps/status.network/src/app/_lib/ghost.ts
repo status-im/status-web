@@ -55,10 +55,11 @@ type GhostTagsResponse = {
 }
 
 const DEFAULT_GHOST_URL = 'https://our.status.im'
-const GHOST_URL = (
-  process.env.NEXT_PUBLIC_GHOST_API_URL ?? DEFAULT_GHOST_URL
-).replace(/\/+$/, '')
-const GHOST_API_KEY = process.env.NEXT_PUBLIC_GHOST_API_KEY
+const GHOST_URL = (process.env.GHOST_API_URL ?? DEFAULT_GHOST_URL).replace(
+  /\/+$/,
+  '',
+)
+const GHOST_API_KEY = process.env.GHOST_API_KEY
 const REVALIDATE_SECONDS = 3600
 const DISALLOWED_TAGS = ['desktop-news', 'mobile-news']
 const DISALLOWED_TAGS_FILTER = DISALLOWED_TAGS.map(tag => `tag:-${tag}`).join(

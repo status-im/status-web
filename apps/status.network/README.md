@@ -18,12 +18,10 @@ pnpm dev
 
 Set these environment variables (for local/dev/prod as needed):
 
-* `NEXT_PUBLIC_GHOST_API_URL` (optional, defaults to `https://our.status.im`)
-* `NEXT_PUBLIC_GHOST_API_KEY`
+* `GHOST_API_URL` (optional, defaults to `https://our.status.im`)
+* `GHOST_API_KEY`
 
-Example (`apps/status.app/.env.development` naming):
+Example (`apps/status.network/.env.local`):
 
-```bash
-NEXT_PUBLIC_GHOST_API_URL=
-NEXT_PUBLIC_GHOST_API_KEY=
-```
+* `GHOST_API_URL=https://demo.ghost.io`
+* `GHOST_API_KEY=22444f78447824223cefc48062`
