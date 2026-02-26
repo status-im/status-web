@@ -511,6 +511,38 @@
       "translation": "",
       "notes": "blog::on_date"
     },
+    "page_title": {
+      "translation": "블로그.",
+      "notes": "blog::page_title"
+    },
+    "page_description": {
+      "translation": "심층 분석 아티클, 생각, 그리고 아이디어.",
+      "notes": "blog::page_description"
+    },
+    "share_article_on": {
+      "translation": "공유하기:",
+      "notes": "blog::share_article_on"
+    },
+    "related_articles": {
+      "translation": "관련 글",
+      "notes": "blog::related_articles"
+    },
+    "breadcrumb_blog": {
+      "translation": "블로그",
+      "notes": "blog::breadcrumb_blog"
+    },
+    "no_posts": {
+      "translation": "아직 게시글이 없습니다.",
+      "notes": "blog::no_posts"
+    },
+    "home": {
+      "translation": "홈",
+      "notes": "blog::home"
+    },
+    "get_started": {
+      "translation": "시작하기",
+      "notes": "blog::get_started"
+    },
     "post_1": {
       "title": {
         "translation": "Status, Linea 컨소시엄 창립 멤버로 참여",

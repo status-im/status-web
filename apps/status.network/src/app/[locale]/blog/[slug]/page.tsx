@@ -1,14 +1,14 @@
+import { getPostFAQItems } from '~app/_lib/faq'
+import { getPostBySlug, getPostsByTagSlug, getPostSlugs } from '~app/_lib/ghost'
 import { Metadata } from '~app/_metadata'
 import { formatDate } from '~app/_utils/format-date'
 import { jsonLD, JSONLDScript } from '~app/_utils/json-ld'
 import { Link } from '~components/link'
+import { getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
-import { PostAuthor } from '../_components/post-author'
-import { PostCard } from '../_components/post-card'
-import { getPostBySlug, getPostsByTagSlug, getPostSlugs } from '../_lib/ghost'
-import { getPostFAQItems } from '../_utils/faq'
+import { PostAuthor } from '../../../_components/blog/post-author'
+import { PostCard } from '../../../_components/blog/post-card'
 
-export const revalidate = 3600 // 1 hour
 export const dynamicParams = true
 
 type Props = {
@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function BlogDetailPage({ params }: Props) {
   const { slug } = await params
-  const post = await getPostBySlug(slug)
+  const [post, t] = await Promise.all([getPostBySlug(slug), getTranslations()])
 
   if (!post) {
     return notFound()
@@ -107,7 +107,7 @@ export default async function BlogDetailPage({ params }: Props) {
       <div className="mx-auto w-full max-w-[1184px] px-5 pb-16 pt-10 xl:pb-24 xl:pt-16">
         <div className="mb-8 text-13 text-neutral-50">
           <Link href="/blog" className="hover:text-neutral-100">
-            Blog
+            {t('blog.breadcrumb_blog')}
           </Link>
           <span className="mx-2">/</span>
           <span>{post.title}</span>
@@ -128,7 +128,9 @@ export default async function BlogDetailPage({ params }: Props) {
             <PostAuthor author={post.primary_author} compact />
           )}
           <span>
-            on {formatDate(post.published_at ?? new Date().toISOString())}
+            {t('blog.on_date')}
+            {t('blog.on_date') ? ' ' : ''}
+            {formatDate(post.published_at ?? new Date().toISOString())}
           </span>
         </div>
 
@@ -180,7 +182,7 @@ export default async function BlogDetailPage({ params }: Props) {
 
         <div className="mt-10">
           <span className="text-13 font-500 text-neutral-50">
-            Share article on:
+            {t('blog.share_article_on')}
           </span>
           <div className="mt-2 flex gap-4 text-15 text-neutral-80/60">
             <a
@@ -214,7 +216,9 @@ export default async function BlogDetailPage({ params }: Props) {
       {relatedPosts.length > 0 && (
         <div className="border-t border-neutral-10 bg-neutral-10 px-5 pb-16 pt-10 xl:pb-24">
           <div className="mx-auto w-full max-w-[1184px]">
-            <h2 className="mb-6 text-27 font-600">Related articles</h2>
+            <h2 className="mb-6 text-27 font-600">
+              {t('blog.related_articles')}
+            </h2>
             <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
               {relatedPosts.slice(0, 4).map(item => (
                 <PostCard key={item.id} post={item} />

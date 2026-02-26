@@ -1,5 +1,5 @@
 import { About } from '../_components/about'
-import { Blog } from '../_components/blog'
+import { Blog } from '../_components/blog/blog-section'
 import { Divider } from '../_components/divider'
 import { Features } from '../_components/features'
 import { Footer } from '../_components/footer'

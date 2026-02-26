@@ -1,5 +1,5 @@
+import type { GhostPost } from '~app/_lib/ghost'
 import Image from 'next/image'
-import type { GhostPost } from '../_lib/ghost'
 
 type Author = NonNullable<GhostPost['primary_author']>
 

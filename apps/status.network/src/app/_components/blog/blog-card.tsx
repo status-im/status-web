@@ -1,9 +1,9 @@
 'use client'
 
+import { Link } from '~app/_components/link'
+import { formatDate } from '~app/_utils/format-date'
 import { useLocale } from 'next-intl'
 import { useEffect, useState } from 'react'
-import { formatDate } from '../_utils/format-date'
-import { Link } from './link'
 
 type BlogCardProps = {
   category: string | null

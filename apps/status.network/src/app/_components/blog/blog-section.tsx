@@ -1,8 +1,8 @@
 import { getLocale, getTranslations } from 'next-intl/server'
-import { getNaverPosts } from '../_lib/naver'
-import { getLatestPostsByTag } from '../blog/_lib/ghost'
+import { getLatestPostsByTag } from '../../_lib/ghost'
+import { getNaverPosts } from '../../_lib/naver'
+import { ButtonLink } from '../button-link'
 import { BlogCard } from './blog-card'
-import { ButtonLink } from './button-link'
 
 const NAVER_BLOG_URL = 'https://blog.naver.com/status_korea'
 const STATUS_APP_BLOG_URL = 'https://status.app/blog'

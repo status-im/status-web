@@ -1,9 +1,11 @@
 import { ButtonLink } from '~app/_components/button-link'
 import { Divider } from '~app/_components/divider'
 import { Link } from '~components/link'
+import { getTranslations } from 'next-intl/server'
 import Image from 'next/image'
 
-export function BlogHeader() {
+export async function BlogHeader() {
+  const t = await getTranslations()
   return (
     <header className="sticky top-0 z-[60] w-full bg-white-90 backdrop-blur supports-[backdrop-filter]:bg-white-80">
       <div className="mx-auto flex h-16 items-center justify-between px-4">
@@ -22,10 +24,10 @@ export function BlogHeader() {
             size="32"
             className="hidden sm:block"
           >
-            Home
+            {t('blog.home')}
           </ButtonLink>
           <ButtonLink href="https://hub.status.network/" size="32">
-            Get started
+            {t('blog.get_started')}
           </ButtonLink>
         </div>
       </div>

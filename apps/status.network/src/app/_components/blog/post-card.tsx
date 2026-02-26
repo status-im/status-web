@@ -1,6 +1,7 @@
+import type { GhostPost } from '~app/_lib/ghost'
 import { formatDate } from '~app/_utils/format-date'
 import { Link } from '~components/link'
-import type { GhostPost } from '../_lib/ghost'
+import { getTranslations } from 'next-intl/server'
 import { PostAuthor } from './post-author'
 
 type PostCardProps = {
@@ -9,11 +10,12 @@ type PostCardProps = {
   showAuthor?: boolean
 }
 
-export function PostCard({
+export async function PostCard({
   post,
   showTag = true,
   showAuthor = true,
 }: PostCardProps) {
+  const t = await getTranslations()
   const author = post.primary_author
   const tag = post.primary_tag
   const image = post.feature_image ?? '/blog/linea.jpg'
@@ -40,7 +42,9 @@ export function PostCard({
           <div className="mt-auto flex items-center gap-1">
             <PostAuthor author={author} />
             <p className="text-15 text-neutral-50">
-              on {formatDate(post.published_at ?? new Date().toISOString())}
+              {t('blog.on_date')}
+              {t('blog.on_date') ? ' ' : ''}
+              {formatDate(post.published_at ?? new Date().toISOString())}
             </p>
           </div>
         ) : (
@@ -68,7 +72,8 @@ type HighlightedPostCardProps = {
   post: GhostPost
 }
 
-export function HighlightedPostCard({ post }: HighlightedPostCardProps) {
+export async function HighlightedPostCard({ post }: HighlightedPostCardProps) {
+  const t = await getTranslations()
   const author = post.primary_author
   const tag = post.primary_tag
   const image = post.feature_image ?? '/blog/linea.jpg'
@@ -105,7 +110,9 @@ export function HighlightedPostCard({ post }: HighlightedPostCardProps) {
           <div className="mt-auto flex items-center gap-1">
             <PostAuthor author={author} />
             <p className="text-15 text-neutral-50">
-              on {formatDate(post.published_at ?? new Date().toISOString())}
+              {t('blog.on_date')}
+              {t('blog.on_date') ? ' ' : ''}
+              {formatDate(post.published_at ?? new Date().toISOString())}
             </p>
           </div>
         )}
