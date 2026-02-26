@@ -70,3 +70,21 @@ export type {
   QuotaResponse,
   SiweSession,
 } from './types'
+
+// === Class-based SDK ===
+export { KarmaSDK } from './sdk'
+export type {
+  KarmaSDKConfig,
+  ChainPreset,
+  SDKMode,
+  ChainConfig,
+  EIP1193Provider,
+} from './types/config'
+export type { Address, Hex, Hash } from './types/common'
+export { RewardsDistributor } from './modules/rewards'
+export { StatusKarmaDistributor } from './modules/status-rewards'
+export { KarmaModule } from './modules/karma'
+export { TiersModule } from './modules/tiers'
+export { AirdropModule } from './modules/airdrop'
+export { SybilModule } from './modules/sybil'
+export { CHAIN_PRESETS } from './contracts/addresses'

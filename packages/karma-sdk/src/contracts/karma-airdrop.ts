@@ -2,6 +2,7 @@ import { erc20Abi, parseSignature } from 'viem'
 
 import { karmaAirdropAbi } from '../abis/karma-airdrop'
 
+import type { Address } from '../types/common'
 import type { PublicClient, WalletClient } from 'viem'
 
 const ZERO_BYTES32 =
@@ -99,8 +100,8 @@ const pausedAbi = [
 
 async function readOwnerIfAvailable(
   client: PublicClient,
-  address: `0x${string}`,
-): Promise<`0x${string}` | null> {
+  address: Address,
+): Promise<Address | null> {
   try {
     return await client.readContract({
       address,
@@ -114,7 +115,7 @@ async function readOwnerIfAvailable(
 
 async function readAllowUpdateIfAvailable(
   client: PublicClient,
-  address: `0x${string}`,
+  address: Address,
 ): Promise<boolean | null> {
   try {
     return await client.readContract({
@@ -137,7 +138,7 @@ async function readAllowUpdateIfAvailable(
 
 async function readPausedIfAvailable(
   client: PublicClient,
-  address: `0x${string}`,
+  address: Address,
 ): Promise<boolean | null> {
   try {
     return await client.readContract({
@@ -152,8 +153,8 @@ async function readPausedIfAvailable(
 
 async function readTokenAddress(
   client: PublicClient,
-  address: `0x${string}`,
-): Promise<`0x${string}`> {
+  address: Address,
+): Promise<Address> {
   try {
     return await client.readContract({
       address,
@@ -171,8 +172,8 @@ async function readTokenAddress(
 
 async function readDefaultDelegatee(
   client: PublicClient,
-  address: `0x${string}`,
-): Promise<`0x${string}`> {
+  address: Address,
+): Promise<Address> {
   try {
     return await client.readContract({
       address,
@@ -190,7 +191,7 @@ async function readDefaultDelegatee(
 
 export async function isAirdropClaimed(
   client: PublicClient,
-  params: { airdropAddress: `0x${string}`; index: bigint },
+  params: { airdropAddress: Address; index: bigint },
 ): Promise<boolean> {
   return client.readContract({
     address: params.airdropAddress,
@@ -204,13 +205,13 @@ export async function claimAirdrop(
   walletClient: WalletClient,
   publicClient: PublicClient,
   params: {
-    airdropAddress: `0x${string}`
+    airdropAddress: Address
     index: bigint
-    account: `0x${string}`
+    account: Address
     amount: bigint
-    proof: `0x${string}`[]
+    proof: Address[]
   },
-): Promise<`0x${string}`> {
+): Promise<Address> {
   try {
     const { request } = await publicClient.simulateContract({
       address: params.airdropAddress,
@@ -321,8 +322,8 @@ export async function claimAirdrop(
 
 export async function getAirdropMerkleRoot(
   client: PublicClient,
-  params: { airdropAddress: `0x${string}` },
-): Promise<`0x${string}`> {
+  params: { airdropAddress: Address },
+): Promise<Address> {
   return client.readContract({
     address: params.airdropAddress,
     abi: karmaAirdropAbi,
@@ -334,11 +335,11 @@ export async function setAirdropMerkleRoot(
   walletClient: WalletClient,
   publicClient: PublicClient,
   params: {
-    airdropAddress: `0x${string}`
-    root: `0x${string}`
-    account: `0x${string}`
+    airdropAddress: Address
+    root: Address
+    account: Address
   },
-): Promise<`0x${string}`> {
+): Promise<Address> {
   const [owner, allowUpdate, currentRoot, isPaused] = await Promise.all([
     readOwnerIfAvailable(publicClient, params.airdropAddress),
     readAllowUpdateIfAvailable(publicClient, params.airdropAddress),
