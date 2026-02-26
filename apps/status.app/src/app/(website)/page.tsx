@@ -79,7 +79,7 @@ export default async function HomePage() {
             <h1 className="mb-4 text-48 font-bold text-white-100 lg:mb-6 lg:text-88">
               Make the
               <br />
-              jump to web3
+              jump to web2
             </h1>
 
             <p className="text-27 text-white-100">
