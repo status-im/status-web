@@ -12,6 +12,12 @@ export type JSONLDSchema =
   | FAQPageSchema
   | SoftwareApplicationSchema
 
+type ThingReference = {
+  '@type': string
+  name: string
+  url?: string
+}
+
 export type OrganizationSchema = {
   '@context': 'https://schema.org'
   '@type': 'Organization'
@@ -21,6 +27,7 @@ export type OrganizationSchema = {
   logo?: string
   description?: string
   sameAs?: string[]
+  knowsAbout?: ThingReference[]
   contactPoint?: {
     '@type': 'ContactPoint'
     contactType: string
@@ -36,6 +43,7 @@ export type WebSiteSchema = {
   name: string
   url: string
   description?: string
+  about?: ThingReference[]
   publisher?: {
     '@id'?: string
   }
@@ -107,11 +115,16 @@ export type FAQPageSchema = {
 export type SoftwareApplicationSchema = {
   '@context': 'https://schema.org'
   '@type': 'SoftwareApplication'
+  '@id'?: string
   name: string
   applicationCategory: string
   operatingSystem: string
   url: string
   description?: string
+  about?: ThingReference[]
+  featureList?: string[]
+  inLanguage?: string
+  isAccessibleForFree?: boolean
 }
 
 type CreateJSONLDConfig = {
@@ -139,6 +152,7 @@ export function createJSONLD(config: CreateJSONLDConfig) {
       logo?: string
       description?: string
       sameAs?: string[]
+      knowsAbout?: ThingReference[]
     }): OrganizationSchema =>
       createOrganizationSchemaWithDefaults(orgConfig, defaultSocialLinks),
 
@@ -147,6 +161,7 @@ export function createJSONLD(config: CreateJSONLDConfig) {
       url: string
       description?: string
       searchUrl?: string
+      about?: ThingReference[]
     }): WebSiteSchema => createWebsiteSchemaBasic(websiteConfig),
 
     article: createArticleSchema,
@@ -167,6 +182,7 @@ function createOrganizationSchemaWithDefaults(
     logo?: string
     description?: string
     sameAs?: string[]
+    knowsAbout?: ThingReference[]
   },
   defaultSocialLinks: string[],
 ): OrganizationSchema {
@@ -178,6 +194,7 @@ function createOrganizationSchemaWithDefaults(
     ...(orgConfig.logo && { logo: orgConfig.logo }),
     ...(orgConfig.description && { description: orgConfig.description }),
     sameAs: orgConfig.sameAs ?? defaultSocialLinks,
+    ...(orgConfig.knowsAbout && { knowsAbout: orgConfig.knowsAbout }),
   }
 }
 
@@ -186,6 +203,7 @@ function createWebsiteSchemaBasic(websiteConfig: {
   url: string
   description?: string
   searchUrl?: string
+  about?: ThingReference[]
 }): WebSiteSchema {
   return {
     '@context': 'https://schema.org',
@@ -195,6 +213,7 @@ function createWebsiteSchemaBasic(websiteConfig: {
     ...(websiteConfig.description && {
       description: websiteConfig.description,
     }),
+    ...(websiteConfig.about && { about: websiteConfig.about }),
     ...(websiteConfig.searchUrl && {
       potentialAction: {
         '@type': 'SearchAction',
@@ -252,6 +271,7 @@ function createOrganizationSchema(orgConfig: {
   description?: string
   logo?: string
   sameAs?: string[]
+  knowsAbout?: ThingReference[]
 }): OrganizationSchema {
   const { '@id': id, ...restConfig } = orgConfig
   const schema: OrganizationSchema = {
@@ -264,6 +284,9 @@ function createOrganizationSchema(orgConfig: {
       description: restConfig.description,
     }),
     sameAs: restConfig.sameAs ?? [],
+    ...(restConfig.knowsAbout && {
+      knowsAbout: restConfig.knowsAbout,
+    }),
   }
   return id ? { ...schema, '@id': id } : schema
 }
@@ -274,6 +297,7 @@ function createWebsiteSchema(websiteConfig: {
   url: string
   description?: string
   searchUrl?: string
+  about?: ThingReference[]
   publisher?: {
     '@id'?: string
   }
@@ -287,6 +311,7 @@ function createWebsiteSchema(websiteConfig: {
     ...(restConfig.description && {
       description: restConfig.description,
     }),
+    ...(restConfig.about && { about: restConfig.about }),
     ...(restConfig.searchUrl && {
       potentialAction: {
         '@type': 'SearchAction',
@@ -403,20 +428,34 @@ function createWebpageSchema(webpageConfig: {
 }
 
 function createSoftwareApplicationSchema(appConfig: {
+  '@id'?: string
   name: string
   applicationCategory: string
   operatingSystem: string
   url: string
   description?: string
+  about?: ThingReference[]
+  featureList?: string[]
+  inLanguage?: string
+  isAccessibleForFree?: boolean
 }): SoftwareApplicationSchema {
+  const { '@id': id, ...restConfig } = appConfig
+
   return {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: appConfig.name,
-    applicationCategory: appConfig.applicationCategory,
-    operatingSystem: appConfig.operatingSystem,
-    url: appConfig.url,
-    ...(appConfig.description && { description: appConfig.description }),
+    ...(id && { '@id': id }),
+    name: restConfig.name,
+    applicationCategory: restConfig.applicationCategory,
+    operatingSystem: restConfig.operatingSystem,
+    url: restConfig.url,
+    ...(restConfig.description && { description: restConfig.description }),
+    ...(restConfig.about && { about: restConfig.about }),
+    ...(restConfig.featureList && { featureList: restConfig.featureList }),
+    ...(restConfig.inLanguage && { inLanguage: restConfig.inLanguage }),
+    ...(typeof restConfig.isAccessibleForFree === 'boolean' && {
+      isAccessibleForFree: restConfig.isAccessibleForFree,
+    }),
   }
 }
 

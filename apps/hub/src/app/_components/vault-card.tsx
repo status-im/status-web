@@ -248,7 +248,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
           <span className="text-purple">
             <KarmaCircleIcon />
           </span>
-          <span className="text-neutral-100">TKARMA</span>
+          <span className="text-neutral-100">KARMA</span>
         </li>
         <li className="flex items-center gap-2 text-15">
           <span className="text-neutral-50">

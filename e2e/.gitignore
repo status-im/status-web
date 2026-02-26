@@ -1,0 +1,10 @@
+# Test results
+test-results/
+playwright-report/
+
+# MetaMask extension (downloaded at setup)
+.extensions/
+extensions/
+
+# Browser profiles
+.pw-chromium-profile/

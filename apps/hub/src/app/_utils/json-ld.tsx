@@ -29,6 +29,11 @@ export const jsonLD = {
     description?: string
     logo?: string
     sameAs?: string[]
+    knowsAbout?: Array<{
+      '@type': string
+      name: string
+      url?: string
+    }>
   }) => {
     const { sameAs, ...restConfig } = config ?? {}
     return baseJsonLD.organization({
