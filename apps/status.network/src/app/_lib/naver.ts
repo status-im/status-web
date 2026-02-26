@@ -2,9 +2,9 @@ import 'server-only'
 import {
   createNaverImageKey,
   extractNaverImageURLFromDescription,
+  NAVER_RSS_URL,
 } from './naver-image'
 
-const NAVER_RSS_URL = 'https://rss.blog.naver.com/status_korea.xml'
 const REVALIDATE_SECONDS = 3600
 const NAVER_IMAGE_PROXY_PATH = '/api/naver-image'
 

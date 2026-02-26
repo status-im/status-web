@@ -3,7 +3,7 @@
 import { Link } from '~app/_components/link'
 import { formatDate } from '~app/_utils/format-date'
 import { useLocale } from 'next-intl'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 type BlogCardProps = {
   category: string | null
@@ -21,10 +21,6 @@ const BlogCard = (props: BlogCardProps) => {
   const { category, title, authorName, authorAvatar, date, image, link } = props
   const locale = useLocale()
   const [imageSrc, setImageSrc] = useState(image || FALLBACK_IMAGE)
-
-  useEffect(() => {
-    setImageSrc(image || FALLBACK_IMAGE)
-  }, [image])
 
   return (
     <Link

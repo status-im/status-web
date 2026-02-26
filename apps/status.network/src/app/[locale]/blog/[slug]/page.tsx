@@ -96,6 +96,7 @@ export default async function BlogDetailPage({ params }: Props) {
   const encodedUrl = encodeURIComponent(
     `https://status.network/blog/${post.slug}`,
   )
+  const encodedTitle = encodeURIComponent(post.title)
   const image = post.feature_image ?? '/blog/linea.jpg'
 
   return (
@@ -186,7 +187,7 @@ export default async function BlogDetailPage({ params }: Props) {
           </span>
           <div className="mt-2 flex gap-4 text-15 text-neutral-80/60">
             <a
-              href={`https://twitter.com/intent/tweet?text=${post.title}&url=${encodedUrl}`}
+              href={`https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`}
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-neutral-100"
