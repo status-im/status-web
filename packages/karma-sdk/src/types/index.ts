@@ -1,3 +1,5 @@
+import type { Address } from './common'
+
 export interface KarmaTier {
   id: number
   minKarma: bigint
@@ -19,7 +21,7 @@ export interface CurrentUser {
 }
 
 export interface SiweSession {
-  address: `0x${string}`
+  address: Address
   chainId: number
 }
 
