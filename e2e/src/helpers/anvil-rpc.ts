@@ -33,6 +33,8 @@ const SNT_CONTROLLER = '0x52aE2B53C847327f95A5084a7C38c0adb12fD302';
 const SELECTORS = {
   // ERC20.balanceOf(address)
   BALANCE_OF: '0x70a08231',
+  // ERC20.approve(address,uint256)
+  APPROVE: '0x095ea7b3',
   // MiniMeToken.generateTokens(address,uint256)
   GENERATE_TOKENS: '0x827f32c0',
 } as const;
@@ -323,6 +325,26 @@ export class AnvilRpcHelper {
   /** Fund USDS (18 decimals) via storage */
   async fundUsds(amount: bigint): Promise<void> {
     await this.fundErc20ViaStorage(CONTRACTS.USDS, amount, this.mainnetRpc);
+  }
+
+  /**
+   * Reset ERC-20 allowance to 0 for a specific spender.
+   * Uses impersonation to call approve(spender, 0) from the wallet.
+   * Needed when the fork state has pre-existing allowances that cause the Hub
+   * to skip the approve step (showing "Deposit" instead of "Approve Deposit").
+   */
+  async resetAllowance(token: string, spender: string, rpc?: string): Promise<void> {
+    const targetRpc = rpc ?? this.mainnetRpc;
+    const data = SELECTORS.APPROVE + encodeAddress(spender) + encodeUint256(0n);
+
+    await this.call(targetRpc, 'anvil_impersonateAccount', [this.walletAddress]);
+    await this.call(targetRpc, 'eth_sendTransaction', [{
+      from: this.walletAddress,
+      to: token,
+      data,
+    }]);
+    await this.mineBlock(targetRpc);
+    await this.call(targetRpc, 'anvil_stopImpersonatingAccount', [this.walletAddress]);
   }
 
   /**
