@@ -18,7 +18,7 @@ export async function PostCard({
   const t = await getTranslations()
   const author = post.primary_author
   const tag = post.primary_tag
-  const image = post.feature_image ?? '/blog/linea.jpg'
+  const image = post.feature_image ?? '/opengraph-image.png'
 
   return (
     <Link
@@ -76,7 +76,7 @@ export async function HighlightedPostCard({ post }: HighlightedPostCardProps) {
   const t = await getTranslations()
   const author = post.primary_author
   const tag = post.primary_tag
-  const image = post.feature_image ?? '/blog/linea.jpg'
+  const image = post.feature_image ?? '/opengraph-image.png'
 
   return (
     <Link

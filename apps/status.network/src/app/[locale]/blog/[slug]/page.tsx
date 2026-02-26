@@ -97,7 +97,7 @@ export default async function BlogDetailPage({ params }: Props) {
     `https://status.network/blog/${post.slug}`,
   )
   const encodedTitle = encodeURIComponent(post.title)
-  const image = post.feature_image ?? '/blog/linea.jpg'
+  const image = post.feature_image ?? '/opengraph-image.png'
 
   return (
     <>
