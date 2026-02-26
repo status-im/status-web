@@ -1,17 +1,13 @@
+import {
+  METAMASK_DEFAULT_CHAIN_ID,
+  STATUS_SEPOLIA_CHAIN_ID_HEX,
+} from '@constants/hub/chains.js'
 import { TEST_AMOUNTS, TEST_VAULTS } from '@constants/hub/vaults.js'
 import { NOTIFICATION_TIMEOUTS } from '@constants/timeouts.js'
 import { test } from '@fixtures/hub/wallet-connected.fixture.js'
 import { PreDepositModalComponent } from '@pages/hub/components/pre-deposit-modal.component.js'
 import { PreDepositsPage } from '@pages/hub/pre-deposits.page.js'
 import { expect } from '@playwright/test'
-
-// MetaMask defaults to Ethereum Mainnet on a fresh profile.
-const METAMASK_DEFAULT_CHAIN_ID = 1
-
-// Status Network Sepolia chain ID (hex) — used to put MetaMask on a
-// wrong network so the deposit modal's "Switch Network" flow can be
-// exercised. Same constant as deposit-network-switch.spec.ts.
-const STATUS_SEPOLIA_CHAIN_ID = '0x6300b5ea'
 
 test.describe('Pre-Deposit validation - Exceed balance', () => {
   for (const vault of Object.values(TEST_VAULTS)) {
@@ -38,7 +34,7 @@ test.describe('Pre-Deposit validation - Exceed balance', () => {
                   params: [{ chainId }],
                 })
                 .catch(() => {})
-            }, STATUS_SEPOLIA_CHAIN_ID)
+            }, STATUS_SEPOLIA_CHAIN_ID_HEX)
 
             // 3. Approve the switch — leaves notification page OPEN
             await metamask.switchNetwork()
