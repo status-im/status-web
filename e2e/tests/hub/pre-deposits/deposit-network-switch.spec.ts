@@ -1,12 +1,9 @@
+import { STATUS_SEPOLIA_CHAIN_ID_HEX } from '@constants/hub/chains.js'
 import { TEST_VAULTS } from '@constants/hub/vaults.js'
 import { NOTIFICATION_TIMEOUTS } from '@constants/timeouts.js'
 import { test } from '@fixtures/hub/wallet-connected.fixture.js'
 import { PreDepositModalComponent } from '@pages/hub/components/pre-deposit-modal.component.js'
 import { PreDepositsPage } from '@pages/hub/pre-deposits.page.js'
-
-// Status Network Sepolia chain ID (hex) — a network that no vault uses,
-// ensuring all vaults show "Switch Network to Deposit".
-const STATUS_SEPOLIA_CHAIN_ID = '0x6300b5ea'
 
 test.describe('Pre-Deposit - Network switch', () => {
   for (const vault of Object.values(TEST_VAULTS)) {
@@ -29,7 +26,7 @@ test.describe('Pre-Deposit - Network switch', () => {
                 params: [{ chainId }],
               })
               .catch(() => {})
-          }, STATUS_SEPOLIA_CHAIN_ID)
+          }, STATUS_SEPOLIA_CHAIN_ID_HEX)
 
           // 3. Approve the switch in MetaMask
           await metamask.switchNetwork()
