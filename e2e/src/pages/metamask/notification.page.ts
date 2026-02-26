@@ -283,34 +283,51 @@ export class NotificationPage {
 
       // MetaMask may re-render the confirmation page while loading gas estimates
       // or transaction simulations. This causes the DOM element to detach between
-      // visibility check and click. The click event may still reach MetaMask before
-      // the DOM detaches, so check activity state before assuming failure.
+      // visibility check and click. force:true skips Playwright's actionability
+      // re-check (the exact check that fails on detachment). Only retry on
+      // timeout/detachment errors; rethrow unexpected errors immediately.
       try {
-        await confirm.click({ timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM })
-      } catch {
-        // The click may have succeeded even though Playwright reported DOM detachment.
-        // Wait for MetaMask to process, then check activity for confirmation.
-        await page.waitForTimeout(2_000)
-        const confirmedAfterError = !(await this.hasUnapprovedActivityEntry())
-        if (confirmedAfterError) {
-          if (!page.isClosed()) await page.close()
-          return
-        }
+        await confirm.click({ timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM, force: true })
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : ''
+        if (!msg.includes('Timeout') && !msg.includes('detach')) throw err
+
+        // The click may have succeeded despite the error. Check cheaply first:
+        // if the Confirm button disappeared, MetaMask likely processed the click.
         await page.waitForTimeout(500)
+        const stillVisible = await this.confirmButton(page)
+          .isVisible({ timeout: 1_000 })
+          .catch(() => false)
+        if (!stillVisible) {
+          await page.waitForTimeout(1_000)
+          const confirmedAfterError = !(await this.hasUnapprovedActivityEntry())
+          if (confirmedAfterError) {
+            if (!page.isClosed()) await page.close()
+            return
+          }
+        }
         continue
       }
       await page.waitForTimeout(1_200)
 
       // MetaMask v13 can use a two-step flow: Next -> Confirm.
+      // Protect this click with the same force + error handling pattern.
       const secondConfirm = this.confirmButton(page)
       if (
         await secondConfirm
           .isVisible({ timeout: 5_000 })
           .catch(() => false)
       ) {
-        await secondConfirm.click({
-          timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM,
-        })
+        try {
+          await secondConfirm.click({
+            timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM,
+            force: true,
+          })
+        } catch (err) {
+          const msg = err instanceof Error ? err.message : ''
+          if (!msg.includes('Timeout') && !msg.includes('detach')) throw err
+          // Second step failure — will be caught by the Activity check below
+        }
         await page.waitForTimeout(1_000)
       }
 
@@ -537,6 +554,11 @@ export class NotificationPage {
     // If the first click was "Next", we need to click the actual submit button.
     // If it was already the final "Approve" (1-step flow), the page transitions
     // to "submitted" state with no second Confirm — the wait simply times out.
+    //
+    // IMPORTANT: On Anvil, approvals confirm instantly and the Hub fires the
+    // deposit tx immediately. MetaMask pushes the deposit confirmation onto this
+    // same open page, so a Confirm button may appear that belongs to the DEPOSIT,
+    // not a second approval step. Only click if it is still a spending-cap page.
     await page.waitForTimeout(2_000)
     const secondConfirm = this.confirmButton(page)
     if (
@@ -544,9 +566,11 @@ export class NotificationPage {
         .isVisible({ timeout: 5_000 })
         .catch(() => false)
     ) {
-      await secondConfirm.click({
-        timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM,
-      })
+      if (await this.isSpendingCapConfirmation(page)) {
+        await secondConfirm.click({
+          timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM,
+        })
+      }
     }
 
     // Do NOT close the page. The Hub fires the deposit tx immediately after

@@ -62,6 +62,19 @@ function buildServiceWorkerPatch(mainnetRpc: string, lineaRpc: string): string {
   var _stxCounter = 0;
   var _stxHashes = {};  // STX uuid → mined tx hash (from Anvil)
 
+  // Mock linea_estimateGas to return instant fixed values.
+  // MetaMask fires this to the real Linea RPC during the confirmation page;
+  // the async response arrival triggers a re-render that detaches the Confirm
+  // button DOM element mid-click. Returning instantly eliminates the race.
+  function _mockLineaEstimateGas(body) {
+    var idMatch = body.match(/"id"\s*:\s*(\d+)/);
+    var id = idMatch ? idMatch[1] : '1';
+    return Promise.resolve(new _R(
+      '{"jsonrpc":"2.0","id":' + id + ',"result":{"baseFeePerGas":"0x7","priorityFeePerGas":"0x3b9aca00","gasLimit":"0x7A120"}}',
+      { status: 200, headers: { 'Content-Type': 'application/json' } }
+    ));
+  }
+
   // Hostname-based chain detection — avoids eth_chainId probes that can fail
   // on Infura/Alchemy URLs with API keys in path segments.
   var _mainnetHosts = ['mainnet.infura.io','eth.merkle.io','ethereum-rpc.publicnode.com',
@@ -104,22 +117,19 @@ function buildServiceWorkerPatch(mainnetRpc: string, lineaRpc: string): string {
   }
 
   // Forward a request to an Anvil fork URL. After eth_sendRawTransaction calls,
-  // fire an evm_mine to ensure the tx is mined. Anvil's auto-mining has a timing
-  // issue where txs submitted in rapid succession (e.g. wrap → approve → deposit)
-  // can get stuck in the mempool. The explicit mine guarantees mining.
+  // fire-and-forget evm_mine as a safety net (Anvil auto-mines, but this ensures
+  // mining even if auto-mine is somehow disabled). Fire-and-forget is critical:
+  // awaiting evm_mine blocks the service worker fetch response, causing MetaMask
+  // timeouts across the board.
+  var _mineInit = { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: '{"jsonrpc":"2.0","method":"evm_mine","params":[],"id":99998}' };
   function _fwd(anvilUrl, init) {
-    var p = _f(anvilUrl, init).catch(function(err) {
-      throw err;
-    });
+    var p = _f(anvilUrl, init);
     if (init && init.body && typeof init.body === 'string'
         && init.body.indexOf('eth_sendRawTransaction') !== -1) {
       return p.then(function(res) {
         return _rememberTxHash(anvilUrl, res).then(function(r) {
-          _f(anvilUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: '{"jsonrpc":"2.0","method":"evm_mine","params":[],"id":99998}'
-          }).catch(function() {});
+          _f(anvilUrl, _mineInit).catch(function() {});
           return r;
         });
       });
@@ -143,7 +153,8 @@ function buildServiceWorkerPatch(mainnetRpc: string, lineaRpc: string): string {
 
   // Receipt polling may hit the wrong fork after network switches.
   // Query preferred fork first, then fall back to the other fork when
-  // receipt/tx lookup returns {"result": null}.
+  // receipt/tx lookup returns {"result": null}. If both return null,
+  // return the original response (MetaMask will retry on its own).
   function _fwdReceiptWithFallback(init, preferredAnvilUrl) {
     var main = _m['1'];
     var linea = _m['59144'];
@@ -291,6 +302,7 @@ function buildServiceWorkerPatch(mainnetRpc: string, lineaRpc: string): string {
       var _ini = init;
       return _inp.clone().text().then(function(body) {
         if (body.indexOf('"jsonrpc"') === -1) return _f(_inp, _ini);
+        if (body.indexOf('"method":"linea_estimateGas"') !== -1) return _mockLineaEstimateGas(body);
         if (body.indexOf('"method":"linea_') !== -1) return _f(_inp, _ini);
         var isReceipt = _isReceiptRequest(body);
         var txh = _txHashFromBody(body);
@@ -321,8 +333,13 @@ function buildServiceWorkerPatch(mainnetRpc: string, lineaRpc: string): string {
       return _fwdReceiptWithFallback(init, _rxPref);
     }
 
-    // Keep Linea custom RPC methods on the upstream provider.
-    // Mapping them to eth_* breaks fee calculations for tx submissions.
+    // Mock linea_estimateGas to return instant fixed values (eliminates
+    // MetaMask re-render race condition). Other linea_* methods still
+    // pass through to the upstream provider — mapping them to eth_*
+    // breaks fee calculations for tx submissions.
+    if (init.body.indexOf('"method":"linea_estimateGas"') !== -1) {
+      return _mockLineaEstimateGas(init.body);
+    }
     if (init.body.indexOf('"method":"linea_') !== -1) {
       return _f.apply(globalThis, arguments);
     }
@@ -699,8 +716,22 @@ export const test = walletTest.extend<{ anvilRpc: AnvilRpcHelper }>({
       await helper.requireHealthy();
       baseSnapshots = await helper.snapshotBoth();
     } else {
-      // Subsequent tests: revert to clean state
-      await helper.revertBoth(baseSnapshots);
+      // Subsequent tests: revert to clean state.
+      // If revert fails (snapshot consumed/invalid), re-establish base state
+      // from the current (dirty) Anvil state to prevent cascading failures.
+      try {
+        await helper.revertBoth(baseSnapshots);
+      } catch (err) {
+        console.log(
+          `[anvil-fixture] revertBoth failed: ${err instanceof Error ? err.message : err}. ` +
+          `Re-establishing base state from current Anvil state.`,
+        );
+        // Re-fund ETH on both forks (same as setup-anvil.sh base_setup)
+        await Promise.all([
+          helper.setEthBalance(10n * 10n ** 18n),
+          helper.setEthBalance(10n * 10n ** 18n, helper.lineaRpc),
+        ]);
+      }
       // Re-snapshot immediately (revert consumes the snapshot)
       baseSnapshots = await helper.snapshotBoth();
     }
