@@ -52,42 +52,13 @@ export class NotificationPage {
   async approveConnection(): Promise<void> {
     const page = await this.waitForNotificationPage()
 
-    // MetaMask connection approval may have multiple steps
-    const nextButton = page.getByTestId('page-container-footer-next')
-    if (
-      await nextButton
-        .isVisible({ timeout: NOTIFICATION_TIMEOUTS.ELEMENT_VISIBLE })
-        .catch(() => false)
-    ) {
-      await nextButton.click()
-      // Wait for the button to become disabled (transition started)…
-      await page.waitForFunction(
-        () => {
-          const btn = document.querySelector(
-            '[data-testid="page-container-footer-next"]',
-          ) as HTMLButtonElement | null
-          return (
-            !btn || btn.disabled || btn.getAttribute('aria-disabled') === 'true'
-          )
-        },
-        { timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION },
-      )
-      // …then wait for it to be ready again (next step loaded)
-      await page.waitForFunction(
-        () => {
-          const btn = document.querySelector(
-            '[data-testid="page-container-footer-next"]',
-          ) as HTMLButtonElement | null
-          return (
-            btn && !btn.disabled && btn.getAttribute('aria-disabled') !== 'true'
-          )
-        },
-        { timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION },
-      )
-    }
+    const connectButton = page
+      .getByRole('button', { name: /^connect$/i })
+      .or(page.getByTestId('page-container-footer-next'))
 
-    const confirmButton = page.getByTestId('page-container-footer-next')
-    await confirmButton.click()
+    await connectButton.click({
+      timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM,
+    })
   }
 
   /** Approve a transaction (Confirm button) */
