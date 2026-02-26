@@ -511,6 +511,38 @@
       "translation": "on",
       "notes": "blog::on_date"
     },
+    "page_title": {
+      "translation": "Blog.",
+      "notes": "blog::page_title"
+    },
+    "page_description": {
+      "translation": "Long form articles, thoughts, and ideas.",
+      "notes": "blog::page_description"
+    },
+    "share_article_on": {
+      "translation": "Share article on:",
+      "notes": "blog::share_article_on"
+    },
+    "related_articles": {
+      "translation": "Related articles",
+      "notes": "blog::related_articles"
+    },
+    "breadcrumb_blog": {
+      "translation": "Blog",
+      "notes": "blog::breadcrumb_blog"
+    },
+    "no_posts": {
+      "translation": "No posts available yet.",
+      "notes": "blog::no_posts"
+    },
+    "home": {
+      "translation": "Home",
+      "notes": "blog::home"
+    },
+    "get_started": {
+      "translation": "Get started",
+      "notes": "blog::get_started"
+    },
     "post_1": {
       "title": {
         "translation": "Status Steps Up as Founding Member of Linea Consortium",
@@ -542,6 +574,10 @@
     "terms_of_use": {
       "translation": "Terms of Use",
       "notes": "footer::terms_of_use"
+    },
+    "blog": {
+      "translation": "Blog",
+      "notes": "footer::blog"
     },
     "brand": {
       "translation": "Brand assets",
