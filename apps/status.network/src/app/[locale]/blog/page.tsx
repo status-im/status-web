@@ -4,8 +4,6 @@ import { jsonLD, JSONLDScript } from '~app/_utils/json-ld'
 import { getTranslations } from 'next-intl/server'
 import { HighlightedPostCard, PostCard } from '../../_components/blog/post-card'
 
-export const revalidate = 3600 // 1 hour
-
 export const metadata = Metadata({
   title: 'Blog',
   description: 'Long form articles, thoughts, and ideas.',
