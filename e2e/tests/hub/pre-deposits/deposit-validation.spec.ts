@@ -5,6 +5,10 @@ import {
 import { TEST_AMOUNTS, TEST_VAULTS } from '@constants/hub/vaults.js'
 import { NOTIFICATION_TIMEOUTS } from '@constants/timeouts.js'
 import { test } from '@fixtures/hub/wallet-connected.fixture.js'
+import {
+  dismissSiweDialogIfPresent,
+  switchMetaMaskToChain,
+} from '@helpers/hub-test-helpers.js'
 import { PreDepositModalComponent } from '@pages/hub/components/pre-deposit-modal.component.js'
 import { PreDepositsPage } from '@pages/hub/pre-deposits.page.js'
 import { expect } from '@playwright/test'
@@ -23,36 +27,15 @@ test.describe('Pre-Deposit validation - Exceed balance', () => {
         // deposit-network-switch.spec.ts.
         if (vault.chainId !== METAMASK_DEFAULT_CHAIN_ID) {
           await test.step('Set up MetaMask on Status Network Sepolia (wrong network)', async () => {
-            // 1. Approve the pending "Add Status Network Sepolia" from hub
-            await metamask.dismissPendingAddNetwork()
-
-            // 2. Force-switch to Status Network Sepolia
-            await hubPage.evaluate(chainId => {
-              ;(window as any).ethereum
-                ?.request({
-                  method: 'wallet_switchEthereumChain',
-                  params: [{ chainId }],
-                })
-                .catch(() => {})
-            }, STATUS_SEPOLIA_CHAIN_ID_HEX)
-
-            // 3. Approve the switch — leaves notification page OPEN
-            await metamask.switchNetwork()
+            await switchMetaMaskToChain(
+              hubPage,
+              metamask,
+              STATUS_SEPOLIA_CHAIN_ID_HEX,
+            )
           })
 
           await test.step('Dismiss SIWE dialog if present', async () => {
-            const siweClose = hubPage.locator(
-              'button[aria-label="Close"], [data-testid="connectkit-close"]',
-            )
-            if (
-              await siweClose
-                .isVisible({
-                  timeout: NOTIFICATION_TIMEOUTS.OPTIONAL_ELEMENT,
-                })
-                .catch(() => false)
-            ) {
-              await siweClose.click()
-            }
+            await dismissSiweDialogIfPresent(hubPage)
           })
         }
 
