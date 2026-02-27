@@ -45,13 +45,13 @@ export const ExchangeDrawer = (props: ExchangeDrawerProps) => {
         return
       }
 
-      const password = await requestPassword({
+      const isUnlocked = await requestPassword({
         title: 'Enter password',
         description: 'To use exchange feature',
         buttonLabel: 'Unlock & Exchange',
       })
 
-      if (password) {
+      if (isUnlocked) {
         setOpen(true)
       }
     },

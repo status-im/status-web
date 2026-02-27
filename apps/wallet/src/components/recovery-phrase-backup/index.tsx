@@ -31,13 +31,13 @@ export function RecoveryPhraseBackup() {
     }
 
     try {
-      const password = await requestPassword({
+      const isUnlocked = await requestPassword({
         title: 'Enter password',
         description: 'To view recovery phrase',
         requireFreshPassword: true,
       })
 
-      if (!password) {
+      if (!isUnlocked) {
         return
       }
 

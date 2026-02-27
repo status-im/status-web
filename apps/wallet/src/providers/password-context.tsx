@@ -26,7 +26,7 @@ export type PasswordModalOptions = {
 export type PasswordContext = {
   hasActiveSession: boolean
   clearSession: () => void
-  requestPassword: (options?: PasswordModalOptions) => Promise<string | null>
+  requestPassword: (options?: PasswordModalOptions) => Promise<boolean>
 }
 
 const PasswordContext = createContext<PasswordContext | undefined>(undefined)
@@ -45,7 +45,7 @@ export function PasswordProvider({ children }: { children: React.ReactNode }) {
     PasswordModalOptions | undefined
   >()
   const [isVerifying, setIsVerifying] = useState(false)
-  const passwordResolveRef = useRef<((password: string | null) => void) | null>(
+  const passwordResolveRef = useRef<((isUnlocked: boolean) => void) | null>(
     null,
   )
   const walletIdRef = useRef<string | undefined>(undefined)
@@ -65,17 +65,17 @@ export function PasswordProvider({ children }: { children: React.ReactNode }) {
 
   const cancelPendingModal = useCallback(() => {
     if (isModalOpenRef.current && passwordResolveRef.current) {
-      passwordResolveRef.current(null)
+      passwordResolveRef.current(false)
       passwordResolveRef.current = null
     }
   }, [])
 
   const requestPassword = useCallback(
-    async (options?: PasswordModalOptions): Promise<string | null> => {
+    async (options?: PasswordModalOptions): Promise<boolean> => {
       if (options?.requireFreshPassword) {
         cancelPendingModal()
 
-        return new Promise<string | null>(resolve => {
+        return new Promise<boolean>(resolve => {
           passwordResolveRef.current = resolve
           walletIdRef.current = currentWallet?.id
           setModalOptions(options)
@@ -85,12 +85,12 @@ export function PasswordProvider({ children }: { children: React.ReactNode }) {
       }
 
       if (hasActiveSession) {
-        return 'unlocked'
+        return true
       }
 
       cancelPendingModal()
 
-      return new Promise<string | null>(resolve => {
+      return new Promise<boolean>(resolve => {
         passwordResolveRef.current = resolve
         walletIdRef.current = currentWallet?.id
         setModalOptions(options)
@@ -108,7 +108,7 @@ export function PasswordProvider({ children }: { children: React.ReactNode }) {
         setIsModalOpen(false)
         isModalOpenRef.current = false
         if (passwordResolveRef.current) {
-          passwordResolveRef.current(null)
+          passwordResolveRef.current(false)
           passwordResolveRef.current = null
         }
         throw new Error('No wallet available')
@@ -118,7 +118,7 @@ export function PasswordProvider({ children }: { children: React.ReactNode }) {
         setIsModalOpen(false)
         isModalOpenRef.current = false
         if (passwordResolveRef.current) {
-          passwordResolveRef.current(null)
+          passwordResolveRef.current(false)
           passwordResolveRef.current = null
         }
         throw new Error('Wallet changed during password request')
@@ -130,7 +130,7 @@ export function PasswordProvider({ children }: { children: React.ReactNode }) {
         setIsModalOpen(false)
         isModalOpenRef.current = false
         if (passwordResolveRef.current) {
-          passwordResolveRef.current('unlocked')
+          passwordResolveRef.current(true)
           passwordResolveRef.current = null
         }
       } finally {
@@ -144,7 +144,7 @@ export function PasswordProvider({ children }: { children: React.ReactNode }) {
     setIsModalOpen(open)
     isModalOpenRef.current = open
     if (!open && passwordResolveRef.current) {
-      passwordResolveRef.current(null)
+      passwordResolveRef.current(false)
       passwordResolveRef.current = null
       walletIdRef.current = undefined
     }
@@ -153,7 +153,7 @@ export function PasswordProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     return () => {
       if (passwordResolveRef.current) {
-        passwordResolveRef.current(null)
+        passwordResolveRef.current(false)
         passwordResolveRef.current = null
       }
     }

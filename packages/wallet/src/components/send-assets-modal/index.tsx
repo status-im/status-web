@@ -46,7 +46,7 @@ type Props = {
     title?: string
     description?: string
     buttonLabel?: string
-  }) => Promise<string | null>
+  }) => Promise<boolean>
   gasFees?: {
     maxFeeEur: number
     feeEur: number

@@ -23,7 +23,7 @@ type SignerContextValue = {
   }) => Promise<Hex>
   signMessage: (message: Hex) => Promise<Hex>
   signTypedData: (typedData: string) => Promise<Hex>
-  requestUnlock: () => Promise<string | null>
+  requestUnlock: () => Promise<boolean>
 }
 
 const SignerContext = createContext<SignerContextValue | undefined>(undefined)
@@ -46,26 +46,26 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
 
   const unlock = useCallback(async (): Promise<boolean> => {
     if (!currentWallet?.id) return false
-    const password = await requestPassword({
+    const isUnlocked = await requestPassword({
       title: 'Enter password',
       description: 'To allow for signing transactions',
     })
-    return password !== null
+    return isUnlocked
   }, [currentWallet?.id, requestPassword])
 
   const lock = useCallback(() => {
     clearSession()
   }, [clearSession])
 
-  const requestUnlock = useCallback(async (): Promise<string | null> => {
-    if (hasActiveSession) return 'unlocked'
+  const requestUnlock = useCallback(async (): Promise<boolean> => {
+    if (hasActiveSession) return true
     return requestPassword()
   }, [hasActiveSession, requestPassword])
 
   const ensureUnlocked = useCallback(async (): Promise<void> => {
     if (hasActiveSession) return
-    const password = await requestPassword()
-    if (!password) throw new Error('Wallet not unlocked')
+    const isUnlocked = await requestPassword()
+    if (!isUnlocked) throw new Error('Wallet not unlocked')
   }, [hasActiveSession, requestPassword])
 
   const parseInsufficientFundsError = useCallback(
