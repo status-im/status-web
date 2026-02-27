@@ -119,7 +119,6 @@ const SendAssetsModal = (props: Props) => {
     hasActiveSession,
     requestPassword,
     gasFees,
-    isLoadingFees,
   } = props
   const [open, setOpen] = useState(false)
   const [hasInsufficientEth, setHasInsufficientEth] = useState(false)
@@ -275,6 +274,10 @@ const SendAssetsModal = (props: Props) => {
     watchedAmount &&
     Number.parseFloat(watchedAmount) > balance &&
     Number.parseFloat(watchedAmount) > 0
+
+  const submitButtonLabel = hasActiveSession
+    ? 'Send transaction'
+    : 'Sign & Send transaction'
 
   return (
     <>
@@ -581,12 +584,11 @@ const SendAssetsModal = (props: Props) => {
                       !watchedAmount ||
                       !watchedTo ||
                       !gasFees ||
-                      isLoadingFees ||
                       transactionState === 'signing' ||
                       transactionState === 'pending'
                     }
                   >
-                    Sign Transaction
+                    {submitButtonLabel}
                   </Button>
                 </div>
               </form>
