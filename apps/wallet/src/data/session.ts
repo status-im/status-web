@@ -1,3 +1,4 @@
+import { getKeystore } from './keystore'
 import {
   clearSession,
   decryptWithPassword,
@@ -30,19 +31,37 @@ type LegacyWallet = {
 }
 
 export async function unlock(password: string): Promise<void> {
-  if (await hasVault()) {
+  const vaultExists = await hasVault()
+  if (vaultExists) {
     await decryptWithPassword(password)
-  } else {
-    await migrateFromLegacy(password)
+  }
+
+  // try migrating legacy wallets if there are any
+  try {
+    await migrateFromLegacy(password, vaultExists)
+  } catch (err) {
+    if (!vaultExists) throw err
+    console.error('Legacy wallet migration failed:', err)
   }
   await resetInactivityTimer()
 }
 
-async function migrateFromLegacy(password: string): Promise<void> {
-  const { getKeystore } = await import('./keystore')
+async function migrateFromLegacy(
+  password: string,
+  vaultExists: boolean,
+): Promise<void> {
   const keyStore = await getKeystore()
   const wallets = (await keyStore.loadAll()) as LegacyWallet[]
-  const secrets: VaultSecrets = { wallets: {} }
+
+  if (wallets.length === 0) {
+    if (!vaultExists) throw new Error('No vault found')
+    return
+  }
+
+  const secrets: VaultSecrets = vaultExists
+    ? await decryptWithSession()
+    : { wallets: {} }
+
   for (const w of wallets) {
     try {
       const secret = (await keyStore.export(w.id, password)) as string
@@ -61,19 +80,22 @@ async function migrateFromLegacy(password: string): Promise<void> {
         type: 'mnemonic',
         activeAccounts,
       })
-    } catch {
+      await keyStore.delete(w.id, password)
+    } catch (err) {
       // skip wallet if export fails (e.g. wrong password)
+      console.error(`Failed migrating wallet ${w.id}:`, err)
     }
   }
+
   if (Object.keys(secrets.wallets).length === 0)
     throw new Error('No vault found')
-  await encryptAndStore(password, secrets)
-  // todo?: uncomment following lines - optional cleanup for legacy wallets
-  // const { storage } = await import('@wxt-dev/storage')
-  // await storage.removeItem('local:status:all-wallet-ids')
-  // for (const w of wallets) {
-  //   await storage.removeItem(`local:status:${w.id}`)
-  // }
+
+  if (vaultExists) {
+    await reEncryptWithSession(secrets)
+  } else {
+    // ensure we have a vault
+    await encryptAndStore(password, secrets)
+  }
 }
 
 export async function lock(): Promise<void> {
