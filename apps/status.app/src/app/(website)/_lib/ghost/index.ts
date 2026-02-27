@@ -2,6 +2,8 @@ import { clientEnv } from '~/config/env.client.mjs'
 
 import { GhostContentAPI } from './client'
 
+import type { PostOrPage } from '@tryghost/content-api'
+
 /** @see https://ghost.org/docs/content-api# */
 const ghost = GhostContentAPI({
   url: clientEnv.NEXT_PUBLIC_GHOST_API_URL,
@@ -58,6 +60,24 @@ export const getPosts = async (params: Params = {}) => {
       },
     }
   }
+}
+
+const RELEASE_TITLE_PATTERN = /^v\d+\.\d+/
+
+export function findLatestReleasePost(
+  posts: PostOrPage[]
+): { post: PostOrPage; isRelease: boolean } | null {
+  if (posts.length === 0) return null
+
+  const releasePost = posts.find(
+    p => p.title && RELEASE_TITLE_PATTERN.test(p.title)
+  )
+
+  if (releasePost) {
+    return { post: releasePost, isRelease: true }
+  }
+
+  return { post: posts[0], isRelease: false }
 }
 
 export const getPostBySlug = async (slug: string) => {
