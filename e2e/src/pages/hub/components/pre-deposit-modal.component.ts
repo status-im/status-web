@@ -6,7 +6,6 @@ import {
 import { expect, type Locator, type Page } from '@playwright/test'
 
 export class PreDepositModalComponent {
-  private readonly page: Page
   readonly dialog: Locator
   readonly title: Locator
   readonly amountInput: Locator
@@ -17,7 +16,6 @@ export class PreDepositModalComponent {
   readonly closeButton: Locator
 
   constructor(page: Page) {
-    this.page = page
     this.dialog = page.getByRole('dialog')
     this.title = this.dialog.getByText('Deposit funds', { exact: true })
     this.amountInput = page.locator('#deposit-amount')
@@ -102,11 +100,11 @@ export class PreDepositModalComponent {
     const dropdownTrigger = this.dialog
       .locator('button[type="button"]')
       .filter({
-        has: this.page.locator('.text-15'),
+        has: this.dialog.page().locator('.text-15'),
       })
       .first()
     await dropdownTrigger.click()
-    await this.page.getByRole('menuitem', { name: tokenLabel }).click()
+    await this.dialog.page().getByRole('menuitem', { name: tokenLabel }).click()
   }
 
   async expectModalClosed(): Promise<void> {

@@ -1,8 +1,8 @@
+import { DEPOSIT_AMOUNTS, TEST_VAULTS } from '@constants/hub/vaults.js'
 import { test } from '@fixtures/anvil.fixture.js'
-import { PreDepositsPage } from '@pages/hub/pre-deposits.page.js'
-import { PreDepositModalComponent } from '@pages/hub/components/pre-deposit-modal.component.js'
-import { DEPOSIT_AMOUNTS, TEST_VAULTS } from '@constants/vaults.js'
 import { CONTRACTS, FUNDING_PRESETS } from '@helpers/anvil-rpc.js'
+import { PreDepositModalComponent } from '@pages/hub/components/pre-deposit-modal.component.js'
+import { PreDepositsPage } from '@pages/hub/pre-deposits.page.js'
 
 const GUSD_TOKENS = [
   {
@@ -40,9 +40,12 @@ test.describe('GUSD Vault - Happy path deposits', () => {
         await test.step(`Fund wallet with ${token.symbol}`, async () => {
           await anvilRpc.fund(FUNDING_PRESETS[token.preset])
         })
-        
+
         await test.step('Reset token allowance for GUSD vault', async () => {
-          await anvilRpc.resetAllowance(token.contract, TEST_VAULTS.GUSD.address)
+          await anvilRpc.resetAllowance(
+            token.contract,
+            TEST_VAULTS.GUSD.address,
+          )
         })
 
         const preDepositsPage = new PreDepositsPage(hubPage)

@@ -82,6 +82,7 @@ export function requireAnvilLineaRpc(): string {
   return config.ANVIL_LINEA_RPC
 }
 
+
 function resolveExtensionPath(rootDir: string): string {
   const envPath = process.env.METAMASK_EXTENSION_PATH
   if (envPath) {

@@ -1,8 +1,8 @@
+import { BELOW_MIN_AMOUNTS } from '@constants/hub/vaults.js'
 import { test } from '@fixtures/anvil.fixture.js'
-import { PreDepositsPage } from '@pages/hub/pre-deposits.page.js'
-import { PreDepositModalComponent } from '@pages/hub/components/pre-deposit-modal.component.js'
-import { BELOW_MIN_AMOUNTS } from '@constants/vaults.js'
 import { FUNDING_PRESETS } from '@helpers/anvil-rpc.js'
+import { PreDepositModalComponent } from '@pages/hub/components/pre-deposit-modal.component.js'
+import { PreDepositsPage } from '@pages/hub/pre-deposits.page.js'
 
 test.describe('LINEA Vault - Below minimum validation', () => {
   test(
@@ -31,9 +31,11 @@ test.describe('LINEA Vault - Below minimum validation', () => {
       })
 
       await test.step('Verify below minimum error message', async () => {
-        await depositModal.expectErrorMessageMatching(/below minimum deposit\. min: 1/i)
+        await depositModal.expectErrorMessageMatching(
+          /below minimum deposit\. min: 1/i,
+        )
       })
-      
+
       await test.step('Verify deposit is blocked (switch network required)', async () => {
         await depositModal.expectSwitchNetworkButtonVisible()
       })

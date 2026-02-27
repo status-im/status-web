@@ -1,8 +1,8 @@
+import { DEPOSIT_AMOUNTS } from '@constants/hub/vaults.js'
 import { test } from '@fixtures/anvil.fixture.js'
-import { PreDepositsPage } from '@pages/hub/pre-deposits.page.js'
-import { PreDepositModalComponent } from '@pages/hub/components/pre-deposit-modal.component.js'
-import { DEPOSIT_AMOUNTS } from '@constants/vaults.js'
 import { FUNDING_PRESETS } from '@helpers/anvil-rpc.js'
+import { PreDepositModalComponent } from '@pages/hub/components/pre-deposit-modal.component.js'
+import { PreDepositsPage } from '@pages/hub/pre-deposits.page.js'
 
 const FALLBACK_WRAP_WETH_AMOUNT = 1n * 10n ** 18n
 

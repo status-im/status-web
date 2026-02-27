@@ -1,11 +1,12 @@
-import { test as walletTest } from './wallet-connected.fixture.js';
-import { chromium } from '@playwright/test';
-import fs from 'node:fs';
-import os from 'node:os';
-import path from 'node:path';
-import { loadEnvConfig } from '@config/env.js';
-import { AnvilRpcHelper } from '@helpers/anvil-rpc.js';
-import { VIEWPORT } from '@constants/timeouts.js';
+import { loadEnvConfig } from '@config/env.js'
+import { VIEWPORT } from '@constants/timeouts.js'
+import { AnvilRpcHelper } from '@helpers/anvil-rpc.js'
+import { chromium } from '@playwright/test'
+import fs from 'node:fs'
+import os from 'node:os'
+import path from 'node:path'
+
+import { test as walletTest } from './hub/wallet-connected.fixture.js'
 
 /**
  * Anvil fixture — extends wallet-connected for deposit tests against Anvil forks.
@@ -40,7 +41,7 @@ import { VIEWPORT } from '@constants/timeouts.js';
  * - ANVIL_MAINNET_RPC + ANVIL_LINEA_RPC in e2e/.env
  */
 
-const PATCH_MARKER = '/* __ANVIL_RPC_PATCH__ */';
+const PATCH_MARKER = '/* __ANVIL_RPC_PATCH__ */'
 
 /**
  * Generate the JavaScript patch to prepend to MetaMask's service worker.
@@ -67,7 +68,7 @@ function buildServiceWorkerPatch(mainnetRpc: string, lineaRpc: string): string {
   // the async response arrival triggers a re-render that detaches the Confirm
   // button DOM element mid-click. Returning instantly eliminates the race.
   function _mockLineaEstimateGas(body) {
-    var idMatch = body.match(/"id"\s*:\s*(\d+)/);
+    var idMatch = body.match(/"id"\\s*:\\s*(\\d+)/);
     var id = idMatch ? idMatch[1] : '1';
     return Promise.resolve(new _R(
       '{"jsonrpc":"2.0","id":' + id + ',"result":{"baseFeePerGas":"0x7","priorityFeePerGas":"0x3b9aca00","gasLimit":"0x7A120"}}',
@@ -392,19 +393,19 @@ function buildServiceWorkerPatch(mainnetRpc: string, lineaRpc: string): string {
     });
   };
 })();
-`;
+`
 }
 
 // Module-level snapshot storage — persists across tests within the same worker.
 // Safe because workers: 1 (MetaMask extension is singleton).
-let baseSnapshots: { mainnet: string; linea: string } | null = null;
+let baseSnapshots: { mainnet: string; linea: string } | null = null
 
 // Track original service worker content for cleanup
-let originalSwContent: string | null = null;
-let swFilePath: string | null = null;
+let originalSwContent: string | null = null
+let swFilePath: string | null = null
 
 // Track files patched for Smart Transactions disabling
-const stxPatchedFiles: Array<{ path: string; original: string }> = [];
+const stxPatchedFiles: Array<{ path: string; original: string }> = []
 
 /**
  * Disable MetaMask's Smart Transactions by patching extension source files.
@@ -429,7 +430,7 @@ function disableSmartTransactionsInFiles(extensionPath: string): void {
 
   // Regex-based patterns for the STX publish hooks in background-5.js.
   // Uses capture groups for variable names so it works regardless of minification.
-  
+
   const singleTxHookRegex =
     /const\{isSmartTransaction:(\w+),featureFlags:(\w+)\}=\(0,(\w+)\.getSmartTransactionCommonParams\)\((\w+),(\w+)\.chainId\),(\w+)=await\(0,(\w+)\.isSendBundleSupported\)/g
   const singleTxHookReplacement =
@@ -613,9 +614,9 @@ function disableSmartTransactionsInFiles(extensionPath: string): void {
 /** Restore all files patched by disableSmartTransactionsInFiles */
 function restoreSmartTransactionsFiles(): void {
   for (const { path: filePath, original } of stxPatchedFiles) {
-    fs.writeFileSync(filePath, original);
+    fs.writeFileSync(filePath, original)
   }
-  stxPatchedFiles.length = 0;
+  stxPatchedFiles.length = 0
 }
 
 export const test = walletTest.extend<{ anvilRpc: AnvilRpcHelper }>({
@@ -624,45 +625,46 @@ export const test = walletTest.extend<{ anvilRpc: AnvilRpcHelper }>({
   // loaded, but we need to modify the extension files BEFORE the browser reads
   // them. This requires duplicating the browser launch logic.
   extensionContext: async ({}, use) => {
-    const env = loadEnvConfig();
-    const extensionPath = env.METAMASK_EXTENSION_PATH;
+    const env = loadEnvConfig()
+    const extensionPath = env.METAMASK_EXTENSION_PATH
 
     if (!fs.existsSync(extensionPath)) {
       throw new Error(
         `MetaMask extension not found at ${extensionPath}. Run "pnpm setup:metamask" first.`,
-      );
+      )
     }
 
     // ── Patch MetaMask's service worker before browser launch ──
-    swFilePath = path.join(extensionPath, 'scripts', 'app-init.js');
-    const currentContent = fs.readFileSync(swFilePath, 'utf-8');
+    swFilePath = path.join(extensionPath, 'scripts', 'app-init.js')
+    const currentContent = fs.readFileSync(swFilePath, 'utf-8')
 
     if (currentContent.includes(PATCH_MARKER)) {
       // Already patched (previous run didn't clean up) — strip old patch
       // Find the end of the IIFE: })();\n
-      const patchEnd = currentContent.indexOf('})();\n');
+      const patchEnd = currentContent.indexOf('})();\n')
       if (patchEnd !== -1) {
-        originalSwContent = currentContent.slice(patchEnd + '})();\n'.length);
+        originalSwContent = currentContent.slice(patchEnd + '})();\n'.length)
       } else {
-        originalSwContent = currentContent;
+        originalSwContent = currentContent
       }
     } else {
-      originalSwContent = currentContent;
+      originalSwContent = currentContent
     }
 
     if (env.ANVIL_MAINNET_RPC && env.ANVIL_LINEA_RPC) {
-      const patch = buildServiceWorkerPatch(env.ANVIL_MAINNET_RPC, env.ANVIL_LINEA_RPC);
-      fs.writeFileSync(swFilePath, patch + originalSwContent);
+      const patch = buildServiceWorkerPatch(
+        env.ANVIL_MAINNET_RPC,
+        env.ANVIL_LINEA_RPC,
+      )
+      fs.writeFileSync(swFilePath, patch + originalSwContent)
     }
 
     // ── Disable Smart Transactions in MetaMask's compiled files ──
     // Must happen BEFORE browser launch so MetaMask reads the patched defaults.
-    disableSmartTransactionsInFiles(extensionPath);
+    disableSmartTransactionsInFiles(extensionPath)
 
     // ── Launch browser (same as parent metamask.fixture) ──
-    const profileDir = fs.mkdtempSync(
-      path.join(os.tmpdir(), 'pw-metamask-'),
-    );
+    const profileDir = fs.mkdtempSync(path.join(os.tmpdir(), 'pw-metamask-'))
 
     const context = await chromium.launchPersistentContext(profileDir, {
       headless: false,
@@ -673,81 +675,82 @@ export const test = walletTest.extend<{ anvilRpc: AnvilRpcHelper }>({
         '--disable-default-apps',
       ],
       viewport: { width: VIEWPORT.WIDTH, height: VIEWPORT.HEIGHT },
-    });
+    })
 
-    await use(context);
+    await use(context)
 
-    await context.close();
-    fs.rmSync(profileDir, { recursive: true, force: true });
+    await context.close()
+    fs.rmSync(profileDir, { recursive: true, force: true })
 
     // ── Restore patched extension files ──
     if (originalSwContent !== null && swFilePath) {
-      fs.writeFileSync(swFilePath, originalSwContent);
+      fs.writeFileSync(swFilePath, originalSwContent)
     }
-    restoreSmartTransactionsFiles();
+    restoreSmartTransactionsFiles()
   },
 
   anvilRpc: async ({}, use) => {
-    const env = loadEnvConfig();
+    const env = loadEnvConfig()
 
     if (!env.ANVIL_MAINNET_RPC || !env.ANVIL_LINEA_RPC) {
       throw new Error(
         'ANVIL_MAINNET_RPC and ANVIL_LINEA_RPC must be set for anvil-deposits tests. ' +
-        'Run: ./scripts/setup-anvil.sh and configure e2e/.env',
-      );
+          'Run: ./scripts/setup-anvil.sh and configure e2e/.env',
+      )
     }
 
-    const walletAddress = env.WALLET_ADDRESS;
+    const walletAddress = env.WALLET_ADDRESS
     if (!walletAddress) {
       throw new Error(
         'WALLET_ADDRESS must be set for anvil-deposits tests. ' +
-        'Derive it with: cast wallet address --mnemonic "$WALLET_SEED_PHRASE" --mnemonic-index 0',
-      );
+          'Derive it with: cast wallet address --mnemonic "$WALLET_SEED_PHRASE" --mnemonic-index 0',
+      )
     }
 
     const helper = new AnvilRpcHelper(
       env.ANVIL_MAINNET_RPC,
       env.ANVIL_LINEA_RPC,
       walletAddress,
-    );
+    )
 
     // First test in the run: verify Anvil is healthy and take base snapshots
     if (!baseSnapshots) {
-      await helper.requireHealthy();
-      baseSnapshots = await helper.snapshotBoth();
+      await helper.requireHealthy()
+      baseSnapshots = await helper.snapshotBoth()
     } else {
       // Subsequent tests: revert to clean state.
       // If revert fails (snapshot consumed/invalid), re-establish base state
       // from the current (dirty) Anvil state to prevent cascading failures.
       try {
-        await helper.revertBoth(baseSnapshots);
+        await helper.revertBoth(baseSnapshots)
       } catch (err) {
         console.log(
           `[anvil-fixture] revertBoth failed: ${err instanceof Error ? err.message : err}. ` +
-          `Re-establishing base state from current Anvil state.`,
-        );
+            `Re-establishing base state from current Anvil state.`,
+        )
         // Re-fund ETH on both forks (same as setup-anvil.sh base_setup)
         await Promise.all([
           helper.setEthBalance(10n * 10n ** 18n),
           helper.setEthBalance(10n * 10n ** 18n, helper.lineaRpc),
-        ]);
+        ])
       }
       // Re-snapshot immediately (revert consumes the snapshot)
-      baseSnapshots = await helper.snapshotBoth();
+      baseSnapshots = await helper.snapshotBoth()
     }
 
     // Force auto-mining on both forks before each test.
     // We observed intermittent cases where interval mining leaves the second
     // tx (approve -> deposit flow) pending with null receipt indefinitely.
     // Auto-mining keeps transaction confirmation deterministic for UI polling.
-    await helper.enableAutoMining();
-    await helper.enableAutoMining(helper.lineaRpc);
+    await helper.enableAutoMining()
+    await helper.enableAutoMining(helper.lineaRpc)
 
-    await use(helper);
+    await use(helper)
   },
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   hubPage: async ({ extensionContext, metamask, anvilRpc: _anvilRpc }, use) => {
-    const env = loadEnvConfig();
+    const env = loadEnvConfig()
 
     // ── Context-level route for Hub page requests ──────────────────────
     //
@@ -774,88 +777,93 @@ export const test = walletTest.extend<{ anvilRpc: AnvilRpcHelper }>({
       'eth-mainnet.g.alchemy.com',
       'rpc.ankr.com',
       '1rpc.io',
-    ];
-    const KNOWN_LINEA_HOSTS = ['rpc.linea.build', 'linea-mainnet.infura.io'];
+    ]
+    const KNOWN_LINEA_HOSTS = ['rpc.linea.build', 'linea-mainnet.infura.io']
 
     const getChainIdByHostname = (url: string): number | null => {
       try {
-        const hostname = new URL(url).hostname;
+        const hostname = new URL(url).hostname
         // Check Linea FIRST — 'linea-mainnet.infura.io' contains 'mainnet.infura.io'
         // as a substring, so checking mainnet first would misclassify Linea URLs.
-        if (KNOWN_LINEA_HOSTS.some((h) => hostname.includes(h))) return 59144;
-        if (KNOWN_MAINNET_HOSTS.some((h) => hostname.includes(h))) return 1;
-      } catch {}
-      return null;
-    };
+        if (KNOWN_LINEA_HOSTS.some(h => hostname.includes(h))) return 59144
+        if (KNOWN_MAINNET_HOSTS.some(h => hostname.includes(h))) return 1
+      } catch {
+        // ignore URL parsing errors
+      }
+      return null
+    }
 
     // Result is cached per URL for the lifetime of the context.
-    const rpcRedirectCache = new Map<string, string | null>();
-    const txReceiptMethodPattern = /"method"\s*:\s*"eth_getTransactionReceipt"/;
+    const rpcRedirectCache = new Map<string, string | null>()
+    const txReceiptMethodPattern = /"method"\s*:\s*"eth_getTransactionReceipt"/
 
     const hasNonNullRpcResult = (responseBody: string): boolean => {
       try {
         const parsed = JSON.parse(responseBody) as
           | { result?: unknown }
-          | Array<{ result?: unknown }>;
+          | Array<{ result?: unknown }>
         if (Array.isArray(parsed)) {
-          return parsed.some((item) => item && item.result !== null && item.result !== undefined);
+          return parsed.some(
+            item => item && item.result !== null && item.result !== undefined,
+          )
         }
-        return parsed.result !== null && parsed.result !== undefined;
+        return parsed.result !== null && parsed.result !== undefined
       } catch {
-        return false;
+        return false
       }
-    };
+    }
 
     const forwardRpcToAnvil = async (anvilUrl: string, body: string) => {
       const res = await fetch(anvilUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body,
-      });
+      })
       return {
         status: res.status,
         body: await res.text(),
-      };
-    };
+      }
+    }
 
-    await extensionContext.route('**/*', async (route) => {
-      const request = route.request();
-      if (request.method() !== 'POST') return route.continue();
+    await extensionContext.route('**/*', async route => {
+      const request = route.request()
+      if (request.method() !== 'POST') return route.continue()
 
-      const postData = request.postData();
-      if (!postData?.includes('"jsonrpc"')) return route.continue();
+      const postData = request.postData()
+      if (!postData?.includes('"jsonrpc"')) return route.continue()
       // Keep Linea-specific RPC methods on upstream providers to preserve
       // provider-specific response format used for fee calculation.
-      if (postData.includes('"method":"linea_')) return route.continue();
+      if (postData.includes('"method":"linea_')) return route.continue()
 
-      const url = request.url();
+      const url = request.url()
       // Never intercept extension-internal or localhost requests
       if (url.startsWith('chrome-extension:') || url.includes('localhost')) {
-        return route.continue();
+        return route.continue()
       }
 
       // Lazy-discover which chain this endpoint serves
       if (!rpcRedirectCache.has(url)) {
         // Strategy 1: extract chainId from URL query parameter
         // (e.g. tRPC proxy: /api/trpc/rpc.proxy?chainId=1)
-        const chainIdParam = new URL(url).searchParams.get('chainId');
+        const chainIdParam = new URL(url).searchParams.get('chainId')
         if (chainIdParam) {
-          const chainId = Number(chainIdParam);
-          if (chainId === 1) rpcRedirectCache.set(url, env.ANVIL_MAINNET_RPC);
+          const chainId = Number(chainIdParam)
+          if (chainId === 1) rpcRedirectCache.set(url, env.ANVIL_MAINNET_RPC)
           else if (chainId === 59144)
-            rpcRedirectCache.set(url, env.ANVIL_LINEA_RPC);
-          else rpcRedirectCache.set(url, null);
+            rpcRedirectCache.set(url, env.ANVIL_LINEA_RPC)
+          else rpcRedirectCache.set(url, null)
         } else {
           // Strategy 2: hostname-based lookup (no network needed)
-          const knownChainId = getChainIdByHostname(url);
+          const knownChainId = getChainIdByHostname(url)
           if (knownChainId !== null) {
-            if (knownChainId === 1) rpcRedirectCache.set(url, env.ANVIL_MAINNET_RPC);
+            if (knownChainId === 1)
+              rpcRedirectCache.set(url, env.ANVIL_MAINNET_RPC)
             else if (knownChainId === 59144)
-              rpcRedirectCache.set(url, env.ANVIL_LINEA_RPC);
-            else rpcRedirectCache.set(url, null);
+              rpcRedirectCache.set(url, env.ANVIL_LINEA_RPC)
+            else rpcRedirectCache.set(url, null)
           } else {
             // Strategy 3: probe with eth_chainId (retry once on failure)
-            let probeResult: string | null = null;
+            let probeResult: string | null = null
             for (let attempt = 0; attempt < 2; attempt++) {
               try {
                 const probe = await fetch(url, {
@@ -867,49 +875,51 @@ export const test = walletTest.extend<{ anvilRpc: AnvilRpcHelper }>({
                     params: [],
                     id: 1,
                   }),
-                });
-                const json = (await probe.json()) as { result: string };
-                const chainId = parseInt(json.result, 16);
-                if (chainId === 1) probeResult = env.ANVIL_MAINNET_RPC;
-                else if (chainId === 59144) probeResult = env.ANVIL_LINEA_RPC;
-                break;
+                })
+                const json = (await probe.json()) as { result: string }
+                const chainId = parseInt(json.result, 16)
+                if (chainId === 1) probeResult = env.ANVIL_MAINNET_RPC
+                else if (chainId === 59144) probeResult = env.ANVIL_LINEA_RPC
+                break
               } catch (err) {
                 if (attempt === 0) {
                   console.warn(
                     `[anvil-intercept] Probe attempt 1 failed for ${url}, retrying...`,
-                  );
-                  await new Promise((r) => setTimeout(r, 500));
+                  )
+                  await new Promise(r => setTimeout(r, 500))
                 } else {
                   console.warn(
                     `[anvil-intercept] Probe failed permanently for ${url}: ${err}`,
-                  );
+                  )
                 }
               }
             }
-            rpcRedirectCache.set(url, probeResult);
+            rpcRedirectCache.set(url, probeResult)
           }
         }
       }
 
-      const anvilUrl = rpcRedirectCache.get(url);
-      if (!anvilUrl) return route.continue();
+      const anvilUrl = rpcRedirectCache.get(url)
+      if (!anvilUrl) return route.continue()
 
       // eth_getTransactionReceipt requests can be misrouted after network
       // switches. If the primary fork returns null, fall back to the other
       // fork before returning the response.
-      const isTxReceiptRequest = txReceiptMethodPattern.test(postData);
+      const isTxReceiptRequest = txReceiptMethodPattern.test(postData)
       const fallbackAnvilUrl =
-        anvilUrl === env.ANVIL_LINEA_RPC ? env.ANVIL_MAINNET_RPC : env.ANVIL_LINEA_RPC;
+        anvilUrl === env.ANVIL_LINEA_RPC
+          ? env.ANVIL_MAINNET_RPC
+          : env.ANVIL_LINEA_RPC
 
       try {
-        const primary = await forwardRpcToAnvil(anvilUrl, postData);
+        const primary = await forwardRpcToAnvil(anvilUrl, postData)
 
         if (!isTxReceiptRequest) {
           return route.fulfill({
             status: primary.status,
             contentType: 'application/json',
             body: primary.body,
-          });
+          })
         }
 
         if (primary.status === 200 && hasNonNullRpcResult(primary.body)) {
@@ -917,16 +927,16 @@ export const test = walletTest.extend<{ anvilRpc: AnvilRpcHelper }>({
             status: 200,
             contentType: 'application/json',
             body: primary.body,
-          });
+          })
         }
 
-        const fallback = await forwardRpcToAnvil(fallbackAnvilUrl, postData);
+        const fallback = await forwardRpcToAnvil(fallbackAnvilUrl, postData)
         if (fallback.status === 200 && hasNonNullRpcResult(fallback.body)) {
           return route.fulfill({
             status: 200,
             contentType: 'application/json',
             body: fallback.body,
-          });
+          })
         }
 
         // Preserve original semantics when both forks return null/pending.
@@ -934,18 +944,18 @@ export const test = walletTest.extend<{ anvilRpc: AnvilRpcHelper }>({
           status: primary.status,
           contentType: 'application/json',
           body: primary.body,
-        });
+        })
       } catch {
         // Anvil unreachable — abort so the test fails loudly instead of
         // silently falling through to the real RPC (where balances are 0).
-        return route.abort('connectionrefused');
+        return route.abort('connectionrefused')
       }
-    });
+    })
 
-    const page = await extensionContext.newPage();
+    const page = await extensionContext.newPage()
 
-    await page.goto(env.BASE_URL);
-    await page.waitForLoadState('domcontentloaded');
+    await page.goto(env.BASE_URL)
+    await page.waitForLoadState('domcontentloaded')
 
     // Block wallet_addEthereumChain requests BEFORE connecting to MetaMask.
     // The Hub sends these immediately after connection (for Status Network Sepolia).
@@ -955,30 +965,39 @@ export const test = walletTest.extend<{ anvilRpc: AnvilRpcHelper }>({
     // pending transactions. Blocking at the provider level prevents them from
     // ever reaching MetaMask.
     await page.evaluate(() => {
-      const provider = (window as unknown as Record<string, unknown>).ethereum as {
-        request: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
-      };
-      if (!provider) return;
-      const originalRequest = provider.request.bind(provider);
-      provider.request = async (args: { method: string; params?: unknown[] }) => {
+      const provider = (window as unknown as Record<string, unknown>)
+        .ethereum as {
+        request: (args: {
+          method: string
+          params?: unknown[]
+        }) => Promise<unknown>
+      }
+      if (!provider) return
+      const originalRequest = provider.request.bind(provider)
+      provider.request = async (args: {
+        method: string
+        params?: unknown[]
+      }) => {
         if (args.method === 'wallet_addEthereumChain') {
-          console.warn('[anvil-fixture] Blocked wallet_addEthereumChain request');
+          console.warn(
+            '[anvil-fixture] Blocked wallet_addEthereumChain request',
+          )
           // Resolve silently — MetaMask spec says null = already added
-          return null;
+          return null
         }
-        return originalRequest(args);
-      };
-    });
+        return originalRequest(args)
+      }
+    })
 
-    await metamask.connectToDApp(page);
+    await metamask.connectToDApp(page)
 
     // The Hub may still have queued wallet_addEthereumChain before the provider
     // patch took effect (race during DOMContentLoaded). Dismiss any stragglers.
-    await metamask.dismissPendingAddNetwork();
+    await metamask.dismissPendingAddNetwork()
 
-    await use(page);
+    await use(page)
 
     // Clean up context-level route when test finishes
-    await extensionContext.unrouteAll({ behavior: 'ignoreErrors' });
+    await extensionContext.unrouteAll({ behavior: 'ignoreErrors' })
   },
-});
+})

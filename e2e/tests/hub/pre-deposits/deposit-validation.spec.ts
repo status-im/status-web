@@ -9,6 +9,7 @@ import {
   dismissSiweDialogIfPresent,
   switchMetaMaskToChain,
 } from '@helpers/hub-test-helpers.js'
+
 import { PreDepositModalComponent } from '@pages/hub/components/pre-deposit-modal.component.js'
 import { PreDepositsPage } from '@pages/hub/pre-deposits.page.js'
 import { expect } from '@playwright/test'

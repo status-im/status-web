@@ -63,7 +63,9 @@ export class NotificationPage {
   /** Token allowance approvals contain "spending cap" phrasing in MetaMask UI. */
   private async isSpendingCapConfirmation(page: Page): Promise<boolean> {
     return page
-      .getByText(/spending cap|permission to withdraw|allow this site to spend/i)
+      .getByText(
+        /spending cap|permission to withdraw|allow this site to spend/i,
+      )
       .isVisible({ timeout: 500 })
       .catch(() => false)
   }
@@ -81,10 +83,9 @@ export class NotificationPage {
 
     if (!homePage) {
       homePage = await this.context.newPage()
-      await homePage.goto(
-        `chrome-extension://${this.extensionId}/home.html`,
-        { waitUntil: 'load' },
-      )
+      await homePage.goto(`chrome-extension://${this.extensionId}/home.html`, {
+        waitUntil: 'load',
+      })
     }
 
     // Activity entries are not visible on the default Tokens tab.
@@ -98,7 +99,10 @@ export class NotificationPage {
         .isVisible({ timeout: 2_000 })
         .catch(() => false)
     ) {
-      await activityTab.first().click().catch(() => {})
+      await activityTab
+        .first()
+        .click()
+        .catch(() => {})
       await homePage.waitForTimeout(300)
     }
 
@@ -239,12 +243,9 @@ export class NotificationPage {
   async approveConnection(): Promise<void> {
     const page = await this.waitForNotificationPage()
 
-    const connectButton = page
-      .getByRole('button', { name: /^connect$/i })
-      .or(page.getByTestId('page-container-footer-next'))
-
+    const connectButton = page.getByRole('button', { name: /^connect$/i })
     await connectButton.click({
-      timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM,
+      timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION,
     })
   }
 
@@ -287,7 +288,10 @@ export class NotificationPage {
       // re-check (the exact check that fails on detachment). Only retry on
       // timeout/detachment errors; rethrow unexpected errors immediately.
       try {
-        await confirm.click({ timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM, force: true })
+        await confirm.click({
+          timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM,
+          force: true,
+        })
       } catch (err) {
         const msg = err instanceof Error ? err.message : ''
         if (!msg.includes('Timeout') && !msg.includes('detach')) throw err
@@ -314,9 +318,7 @@ export class NotificationPage {
       // Protect this click with the same force + error handling pattern.
       const secondConfirm = this.confirmButton(page)
       if (
-        await secondConfirm
-          .isVisible({ timeout: 5_000 })
-          .catch(() => false)
+        await secondConfirm.isVisible({ timeout: 5_000 }).catch(() => false)
       ) {
         try {
           await secondConfirm.click({
@@ -425,7 +427,7 @@ export class NotificationPage {
     page: Page,
     maxAttempts = 10,
   ): Promise<Page> {
-    let currentPage = page
+    const currentPage = page
     for (let i = 0; i < maxAttempts; i++) {
       // Wait for any actionable content to render
       const anyButton = currentPage.locator('button')
@@ -561,11 +563,7 @@ export class NotificationPage {
     // not a second approval step. Only click if it is still a spending-cap page.
     await page.waitForTimeout(2_000)
     const secondConfirm = this.confirmButton(page)
-    if (
-      await secondConfirm
-        .isVisible({ timeout: 5_000 })
-        .catch(() => false)
-    ) {
+    if (await secondConfirm.isVisible({ timeout: 5_000 }).catch(() => false)) {
       if (await this.isSpendingCapConfirmation(page)) {
         await secondConfirm.click({
           timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM,

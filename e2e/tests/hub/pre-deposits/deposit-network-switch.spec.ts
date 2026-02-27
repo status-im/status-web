@@ -5,6 +5,7 @@ import {
   dismissSiweDialogIfPresent,
   switchMetaMaskToChain,
 } from '@helpers/hub-test-helpers.js'
+
 import { PreDepositModalComponent } from '@pages/hub/components/pre-deposit-modal.component.js'
 import { PreDepositsPage } from '@pages/hub/pre-deposits.page.js'
 
@@ -27,6 +28,7 @@ test.describe('Pre-Deposit - Network switch', () => {
 
         await test.step('Navigate to Pre-Deposits page', async () => {
           await dismissSiweDialogIfPresent(hubPage)
+
           await preDepositsPage.goto()
           await preDepositsPage.waitForReady()
         })
