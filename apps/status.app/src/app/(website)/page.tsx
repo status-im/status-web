@@ -105,12 +105,7 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {releaseResult && (
-              <NewsTag
-                post={releaseResult.post}
-                isRelease={releaseResult.isRelease}
-              />
-            )}
+            {releaseResult && <NewsTag post={releaseResult.post} />}
           </div>
 
           <div className="relative hidden xl:block">
