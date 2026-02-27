@@ -1,5 +1,5 @@
 import { getPostFAQItems } from '~app/_lib/faq'
-import { getPostBySlug, getPostsByTagSlug, getPostSlugs } from '~app/_lib/ghost'
+import { getPostBySlug, getPostsByTagSlug } from '~app/_lib/ghost'
 import { Metadata } from '~app/_metadata'
 import { formatDate } from '~app/_utils/format-date'
 import { jsonLD, JSONLDScript } from '~app/_utils/json-ld'
@@ -9,15 +9,10 @@ import { notFound } from 'next/navigation'
 import { PostAuthor } from '../../../_components/blog/post-author'
 import { PostCard } from '../../../_components/blog/post-card'
 
-export const dynamicParams = true
+export const dynamic = 'force-dynamic'
 
 type Props = {
   params: Promise<{ slug: string }>
-}
-
-export async function generateStaticParams() {
-  const slugs = await getPostSlugs()
-  return slugs.map(slug => ({ slug }))
 }
 
 export async function generateMetadata({ params }: Props) {
