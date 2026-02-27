@@ -1,7 +1,10 @@
 import { STATUS_SEPOLIA_CHAIN_ID_HEX } from '@constants/hub/chains.js'
 import { TEST_VAULTS } from '@constants/hub/vaults.js'
-import { NOTIFICATION_TIMEOUTS } from '@constants/timeouts.js'
 import { test } from '@fixtures/hub/wallet-connected.fixture.js'
+import {
+  dismissSiweDialogIfPresent,
+  switchMetaMaskToChain,
+} from '@helpers/hub-test-helpers.js'
 import { PreDepositModalComponent } from '@pages/hub/components/pre-deposit-modal.component.js'
 import { PreDepositsPage } from '@pages/hub/pre-deposits.page.js'
 
@@ -15,36 +18,15 @@ test.describe('Pre-Deposit - Network switch', () => {
         const depositModal = new PreDepositModalComponent(hubPage)
 
         await test.step('Switch MetaMask to Status Network Sepolia (wrong network for all vaults)', async () => {
-          // 1. Approve the pending "Add Status Network Sepolia" request from the hub
-          await metamask.dismissPendingAddNetwork()
-
-          // 2. Force-switch to Status Network Sepolia (now that it's added)
-          await hubPage.evaluate(chainId => {
-            ;(window as any).ethereum
-              ?.request({
-                method: 'wallet_switchEthereumChain',
-                params: [{ chainId }],
-              })
-              .catch(() => {})
-          }, STATUS_SEPOLIA_CHAIN_ID_HEX)
-
-          // 3. Approve the switch in MetaMask
-          await metamask.switchNetwork()
+          await switchMetaMaskToChain(
+            hubPage,
+            metamask,
+            STATUS_SEPOLIA_CHAIN_ID_HEX,
+          )
         })
 
         await test.step('Navigate to Pre-Deposits page', async () => {
-          // Dismiss SIWE dialog if it appeared (ConnectKit may prompt after network change)
-          const siweClose = hubPage.locator(
-            'button[aria-label="Close"], [data-testid="connectkit-close"]',
-          )
-          if (
-            await siweClose
-              .isVisible({ timeout: NOTIFICATION_TIMEOUTS.OPTIONAL_ELEMENT })
-              .catch(() => false)
-          ) {
-            await siweClose.click()
-          }
-
+          await dismissSiweDialogIfPresent(hubPage)
           await preDepositsPage.goto()
           await preDepositsPage.waitForReady()
         })
