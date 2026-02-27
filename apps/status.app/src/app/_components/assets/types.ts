@@ -1,5 +1,13 @@
 export type ImageType =
   | {
+      id: 'Homepage/Hero/device-mockups-mobile:1267:770'
+      alt: 'Status app showing wallet and messenger on devices'
+    }
+  | {
+      id: 'Homepage/Hero/device-mockups:2128:1292'
+      alt: 'Status app showing wallet and messenger on devices'
+    }
+  | {
       id: 'Platforms/Screens/Extension Screens/Connector_04:1102:1012'
       alt: ''
     }
