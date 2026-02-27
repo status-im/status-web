@@ -50,7 +50,7 @@ export default async function HomePage() {
       >
         <div className="container mx-auto grid grid-cols-1 gap-8 px-5 xl:grid-cols-2 xl:gap-0">
           <div className="relative z-10 mx-auto flex max-w-[636px] flex-col items-center text-center xl:mx-0 xl:min-w-[640px] xl:items-start xl:text-left">
-            <h1 className="mb-4 text-48 font-bold text-white-100 lg:mb-6 lg:text-88">
+            <h1 className="mb-4 text-48 font-bold text-white-100 lg:mb-10 lg:text-88">
               Private, secure
               <br />
               by design
@@ -62,7 +62,7 @@ export default async function HomePage() {
               ...integrated into one powerful super app
             </p>
 
-            <div className="mb-6 flex max-w-full flex-col items-center gap-4 xl:items-start">
+            <div className="mb-8 flex max-w-full flex-col items-center gap-4 xl:items-start">
               <div
                 data-theme="dark"
                 className={cx(
@@ -87,7 +87,7 @@ export default async function HomePage() {
               </div>
             </div>
 
-            <div className="mb-6 flex max-w-full flex-row items-center gap-3 text-left sm:max-w-[572px]">
+            <div className="mb-20 flex max-w-full flex-row items-center gap-3 text-left sm:max-w-[572px]">
               <p className="text-13 font-medium text-white-100">
                 Still on the Status Legacy mobile app? Migrate now.
               </p>
@@ -112,7 +112,7 @@ export default async function HomePage() {
               alt="Status app showing wallet and messenger on devices"
               width={2128}
               height={1292}
-              className="absolute left-0 top-1/2 z-20 ml-[28%] w-[150%] max-w-none translate-y-[-39%]"
+              className="absolute left-0 top-1/2 z-20 ml-[18%] w-[170%] max-w-none translate-y-[-37%]"
             />
           </div>
           <div className="relative mb-[-80px] xl:hidden">
