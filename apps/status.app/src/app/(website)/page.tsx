@@ -56,13 +56,13 @@ export default async function HomePage() {
               by design
             </h1>
 
-            <p className="mb-8 text-19 font-medium text-white-100 lg:text-27 lg:font-regular">
+            <p className="mb-6 text-19 font-medium text-white-100 lg:mb-8 lg:text-27 lg:font-regular">
               Transact, Message, Browse on your Terms
               <br />
               ...integrated into one powerful super app
             </p>
 
-            <div className="mb-8 flex max-w-full flex-col items-center gap-4 xl:items-start">
+            <div className="mb-6 flex max-w-full flex-col items-center gap-4 lg:mb-8 xl:items-start">
               <div
                 data-theme="dark"
                 className={cx(
@@ -87,7 +87,7 @@ export default async function HomePage() {
               </div>
             </div>
 
-            <div className="mb-20 flex max-w-full flex-row items-center gap-3 text-left sm:max-w-[572px]">
+            <div className="mb-9 flex max-w-full flex-row items-center gap-3 text-left sm:max-w-[572px] lg:mb-20">
               <p className="text-13 font-medium text-white-100">
                 Still on the Status Legacy mobile app? Migrate now.
               </p>
@@ -112,7 +112,7 @@ export default async function HomePage() {
               alt="Status app showing wallet and messenger on devices"
               width={2128}
               height={1292}
-              className="absolute left-0 top-1/2 z-20 ml-[18%] w-[170%] max-w-none translate-y-[-37%]"
+              className="absolute left-0 top-1/2 z-20 ml-[18%] w-[170%] max-w-none translate-y-[-36%]"
             />
           </div>
           <div className="relative mb-[-80px] xl:hidden">
