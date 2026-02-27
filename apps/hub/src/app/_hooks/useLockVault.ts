@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl'
 import { type Address, type Hash } from 'viem'
 import { useAccount, useConfig, useReadContract, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
+import { statusSepolia } from 'wagmi/chains'
 
 import { vaultAbi } from '~constants/contracts'
 import { CONFIRMATION_BLOCKS, MIN_LOCK_PERIOD } from '~constants/index'
@@ -136,6 +137,7 @@ export function useLockVault(vaultAddress: Address): UseLockVaultReturn {
     abi: vaultAbi,
     address: vaultAddress,
     functionName: 'lockUntil',
+    chainId: statusSepolia.id,
   }) as { data: bigint | undefined }
 
   return useMutation({

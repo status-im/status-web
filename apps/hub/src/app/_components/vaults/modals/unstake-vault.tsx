@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 import { formatUnits, parseUnits } from 'viem'
 import { useAccount, useReadContract } from 'wagmi'
+import { statusSepolia } from 'wagmi/chains'
 import { z } from 'zod'
 
 import { SNTIcon } from '~components/icons'
@@ -73,6 +74,7 @@ export function UnstakeVaultModal(props: UnstakeVaultModalProps) {
     address: vaultAddress,
     abi: vaultAbi,
     functionName: 'amountStaked',
+    chainId: statusSepolia.id,
     query: {
       enabled: open && !!vaultAddress,
       refetchOnMount: true,
