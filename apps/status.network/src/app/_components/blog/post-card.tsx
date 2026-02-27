@@ -27,7 +27,7 @@ export async function PostCard({
     >
       <div className="flex grow flex-col gap-2 p-4">
         {showTag && (
-          <div className="h-6 overflow-hidden">
+          <div>
             {tag && (
               <span className="inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500">
                 {tag.name}
@@ -93,7 +93,7 @@ export async function HighlightedPostCard({ post }: HighlightedPostCardProps) {
       </div>
 
       <div className="flex flex-col gap-2 xl:py-5 xl:pr-5">
-        <div className="h-6 overflow-hidden">
+        <div>
           {tag && (
             <span className="inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500">
               {tag.name}

@@ -199,13 +199,13 @@ export const DownloadMobileButton = (props: Props) => {
           <div className="relative overflow-hidden max-xl:h-[30dvh]">
             <div className="absolute left-5 w-3/5 md:left-12 md:w-[calc(50%-60px)] xl:left-0 xl:top-20 xl:w-[316px]">
               <ScreenImage
-                id="Non Beta Release/Download/Screen_01:1500:3248"
+                id="Non Beta Release/Download/Screen_01:750:1624"
                 alt=""
               />
             </div>
             <div className="absolute left-[calc(60%+40px)] w-1/2 md:left-auto md:right-12 md:w-[calc(50%-60px)] xl:left-[336px] xl:top-20 xl:w-[316px]">
               <ScreenImage
-                id="Non Beta Release/Download/Screen_02:1500:3248"
+                id="Non Beta Release/Download/Screen_02:750:1624"
                 alt=""
               />
             </div>
