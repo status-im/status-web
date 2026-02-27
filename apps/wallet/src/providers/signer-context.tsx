@@ -46,11 +46,11 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
 
   const unlock = useCallback(async (): Promise<boolean> => {
     if (!currentWallet?.id) return false
-    const p = await requestPassword({
+    const password = await requestPassword({
       title: 'Enter password',
       description: 'To allow for signing transactions',
     })
-    return p !== null
+    return password !== null
   }, [currentWallet?.id, requestPassword])
 
   const lock = useCallback(() => {
@@ -64,8 +64,8 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
 
   const ensureUnlocked = useCallback(async (): Promise<void> => {
     if (hasActiveSession) return
-    const p = await requestPassword()
-    if (!p) throw new Error('Wallet not unlocked')
+    const password = await requestPassword()
+    if (!password) throw new Error('Wallet not unlocked')
   }, [hasActiveSession, requestPassword])
 
   const parseInsufficientFundsError = useCallback(
