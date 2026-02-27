@@ -87,22 +87,20 @@ export default async function HomePage() {
               </div>
             </div>
 
-            <div className="mb-6 flex max-w-full flex-row items-center gap-4 p-[6px] pl-[12px] text-left sm:max-w-[572px] lg:gap-10">
-              <p className="text-13 font-medium text-white-100 lg:text-15 lg:font-regular">
+            <div className="mb-6 flex max-w-full flex-row items-center gap-3 text-left sm:max-w-[572px]">
+              <p className="text-13 font-medium text-white-100">
                 Still on the Status Legacy mobile app? Migrate now.
               </p>
-              <div className="flex shrink-0 items-center">
-                <Button
-                  size="32"
-                  variant="darkGrey"
-                  href="https://status.app/blog/migrate-from-status-legacy-to-unified-status-mobile-app"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  iconAfter={<ExternalIcon className="text-white-100" />}
-                >
-                  Learn more
-                </Button>
-              </div>
+              <Button
+                size="32"
+                variant="darkGrey"
+                href="https://status.app/blog/migrate-from-status-legacy-to-unified-status-mobile-app"
+                target="_blank"
+                rel="noopener noreferrer"
+                iconAfter={<ExternalIcon className="text-white-100" />}
+              >
+                Learn more
+              </Button>
             </div>
 
             {releaseResult && <NewsTag post={releaseResult.post} />}

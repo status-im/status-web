@@ -62,22 +62,16 @@ export const getPosts = async (params: Params = {}) => {
   }
 }
 
-const RELEASE_TITLE_PATTERN = /^v\d+\.\d+/
+const RELEASE_TITLE_PATTERN = /\bv\d+\.\d+/
 
-export function findLatestReleasePost(
-  posts: PostOrPage[]
-): { post: PostOrPage; isRelease: boolean } | null {
+export function findLatestReleasePost(posts: PostOrPage[]): PostOrPage | null {
   if (posts.length === 0) return null
 
   const releasePost = posts.find(
-    p => p.title && RELEASE_TITLE_PATTERN.test(p.title)
+    post => post.title && RELEASE_TITLE_PATTERN.test(post.title)
   )
 
-  if (releasePost) {
-    return { post: releasePost, isRelease: true }
-  }
-
-  return { post: posts[0], isRelease: false }
+  return releasePost ?? null
 }
 
 export const getPostBySlug = async (slug: string) => {
