@@ -103,7 +103,7 @@ export default async function HomePage() {
               </Button>
             </div>
 
-            {releaseResult && <NewsTag post={releaseResult.post} />}
+            {releaseResult && <NewsTag post={releaseResult} />}
           </div>
 
           <div className="relative hidden xl:block">

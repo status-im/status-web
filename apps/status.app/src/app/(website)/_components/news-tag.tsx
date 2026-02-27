@@ -18,7 +18,7 @@ export function NewsTag({ post }: Props) {
         className="inline-flex h-6 shrink-0 items-center rounded-12 px-2 text-11 font-semibold text-white-100"
         style={{
           background:
-            'linear-gradient(90deg, #2A799B 0%, #F6B03C 25%, #FF33A3 84%)',
+            'linear-gradient(78deg, #2A799B -30%, #F6B03C 8%, #FF33A3 98%)',
         }}
       >
         NEW
