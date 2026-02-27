@@ -645,5 +645,5 @@ const Label = ({
 
 export type { FormData as SendAssetsFormData }
 export type SendAssetsModalProps = Omit<Props, 'signTransaction'> & {
-  signTransaction: (data: FormData & { password: string }) => Promise<string>
+  signTransaction: (data: FormData) => Promise<string>
 }
