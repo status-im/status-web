@@ -9,7 +9,7 @@ import {
 } from 'react'
 
 import { PasswordModal } from '@status-im/wallet/components'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { apiClient } from './api-client'
 import { useWallet } from './wallet-context'
@@ -40,6 +40,7 @@ export function usePassword() {
 }
 
 export function PasswordProvider({ children }: { children: React.ReactNode }) {
+  const queryClient = useQueryClient()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalOptions, setModalOptions] = useState<
     PasswordModalOptions | undefined
@@ -60,8 +61,14 @@ export function PasswordProvider({ children }: { children: React.ReactNode }) {
   const hasActiveSession = sessionStatus?.isUnlocked ?? false
 
   const clearSession = useCallback(() => {
-    void apiClient.session.lock.mutate()
-  }, [])
+    void (async () => {
+      try {
+        await apiClient.session.lock.mutate()
+      } finally {
+        await queryClient.invalidateQueries({ queryKey: ['session', 'status'] })
+      }
+    })()
+  }, [queryClient])
 
   const cancelPendingModal = useCallback(() => {
     if (isModalOpenRef.current && passwordResolveRef.current) {
