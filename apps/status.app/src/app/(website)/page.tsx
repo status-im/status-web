@@ -56,29 +56,28 @@ export default async function HomePage() {
               by design
             </h1>
 
-            <p className="mb-6 text-19 font-medium text-white-100 lg:mb-8 lg:text-27 lg:font-regular">
-              Transact, Message, Browse on your Terms
-              <br />
-              ...integrated into one powerful super app
+            <p className="mb-6 max-w-[320px] text-19 font-medium text-white-100 lg:mb-8 lg:max-w-[600px] lg:text-27 lg:font-regular">
+              Transact, Message, Browse on your Terms ...integrated into one
+              powerful super app
             </p>
 
             <div className="mb-6 flex max-w-full flex-col items-center gap-4 lg:mb-8 xl:items-start">
               <div
                 data-theme="dark"
                 className={cx(
-                  'hidden max-w-full flex-row flex-wrap items-stretch gap-2 rounded-20 border border-dashed border-neutral-80 p-2',
-                  'sm:w-fit sm:flex-nowrap',
+                  'hidden max-w-full flex-row flex-wrap items-stretch justify-center gap-2 rounded-20 border border-dashed border-neutral-80 p-2',
+                  'sm:w-fit sm:flex-nowrap sm:justify-start',
                   'ios:flex android:flex unknown:flex xl:unknown:hidden'
                 )}
               >
-                <DownloadDesktopButton variant="primary" show="all" />
-                <DownloadMobileButton variant="outline" />
+                <DownloadDesktopButton variant="outline" show="all" />
+                <DownloadMobileButton variant="primary" />
               </div>
               <div
                 data-theme="dark"
                 className={cx(
-                  'hidden max-w-full flex-row flex-wrap items-stretch gap-2 rounded-20 border border-dashed border-neutral-80 p-2',
-                  'sm:w-fit sm:flex-nowrap',
+                  'hidden max-w-full flex-row flex-wrap items-stretch justify-center gap-2 rounded-20 border border-dashed border-neutral-80 p-2',
+                  'sm:w-fit sm:flex-nowrap sm:justify-start',
                   'macos:flex windows:flex linux:flex xl:unknown:flex'
                 )}
               >
