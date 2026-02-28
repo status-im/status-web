@@ -1,12 +1,19 @@
-import { loadEnvConfig } from '@config/env.js'
+import {
+  loadEnvConfig,
+  requireWalletPassword,
+  requireWalletSeedPhrase,
+} from '@config/env.js'
 import { VIEWPORT } from '@constants/timeouts.js'
 import { AnvilRpcHelper } from '@helpers/anvil-rpc.js'
+import { MetaMaskPage } from '@pages/metamask/metamask.page.js'
 import { chromium } from '@playwright/test'
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 
 import { test as walletTest } from './hub/wallet-connected.fixture.js'
+
+import type { Page } from '@playwright/test'
 
 /**
  * Anvil fixture — extends wallet-connected for deposit tests against Anvil forks.
@@ -142,8 +149,16 @@ function buildServiceWorkerPatch(mainnetRpc: string, lineaRpc: string): string {
     try {
       var c = response.clone();
       return c.text().then(function(text) {
-        return text.indexOf('"result":null') === -1
-          && text.indexOf('"result" : null') === -1;
+        try {
+          var parsed = JSON.parse(text);
+          if (Array.isArray(parsed)) {
+            for (var i = 0; i < parsed.length; i++) {
+              if (parsed[i] && parsed[i].result !== null && parsed[i].result !== undefined) return true;
+            }
+            return false;
+          }
+          return parsed.result !== null && parsed.result !== undefined;
+        } catch (_) { return false; }
       }).catch(function() {
         return false;
       });
@@ -200,10 +215,10 @@ function buildServiceWorkerPatch(mainnetRpc: string, lineaRpc: string): string {
       // A. submitTransactions — forward raw txs to Anvil, return fake uuid
       try {
         var _stxBody = (init && init.body && typeof init.body === 'string') ? init.body : '';
-        if (_stxBody && _stxBody.indexOf('rawTxs') !== -1) {
+        if (_stxBody && (_stxBody.indexOf('rawTxs') !== -1 || _stxBody.indexOf('transactions') !== -1)) {
           var _cidMatch = _url.match(/\\/networks\\/(\\d+)\\//);
           var _cidQueryMatch = _url.match(/[?&]chainId=(\\d+)/);
-          var _stxChainId = _cidMatch ? _cidMatch[1] : (_cidQueryMatch ? _cidQueryMatch[1] : null);
+          var _stxChainId = _cidMatch ? _cidMatch[1] : (_cidQueryMatch ? _cidQueryMatch[1] : _chainByHost(_url));
           var _stxTargets = [];
           if (_stxChainId && _m[_stxChainId]) {
             _stxTargets.push(_m[_stxChainId]);
@@ -211,22 +226,39 @@ function buildServiceWorkerPatch(mainnetRpc: string, lineaRpc: string): string {
             if (_m['1']) _stxTargets.push(_m['1']);
             if (_m['59144'] && _m['59144'] !== _m['1']) _stxTargets.push(_m['59144']);
           }
-          var _txListMatch = _stxBody.match(/"rawTxs"\\s*:\\s*\\[([^\\]]+)\\]/);
+          // Extract raw tx list via JSON.parse — handles both payload formats:
+          //   Format 1: { rawTxs: ["0x..."] }
+          //   Format 2: { transactions: [{ rawTx: "0x..." }] }
+          var _rawTxList = [];
+          try {
+            var _parsed = JSON.parse(_stxBody);
+            if (Array.isArray(_parsed.rawTxs) && _parsed.rawTxs.length) {
+              _rawTxList = _parsed.rawTxs;
+            } else if (Array.isArray(_parsed.transactions) && _parsed.transactions.length) {
+              for (var _pi = 0; _pi < _parsed.transactions.length; _pi++) {
+                if (_parsed.transactions[_pi].rawTx) _rawTxList.push(_parsed.transactions[_pi].rawTx);
+              }
+            }
+          } catch (_parseErr) {
+            console.warn('[anvil-stx] Failed to parse STX body: ' + _parseErr);
+          }
+          if (_rawTxList.length === 0) {
+            console.warn('[anvil-stx] No raw txs extracted from STX body');
+          }
+          console.log('[anvil-stx] submitTx chainId=' + _stxChainId + ' txCount=' + _rawTxList.length);
           var _fakeUuid = 'anvil-stx-' + Date.now() + '-' + (++_stxCounter);
-          if (_txListMatch && _stxTargets.length) {
+          if (_rawTxList.length && _stxTargets.length) {
             // Forward raw txs to Anvil and capture the mined tx hash.
             // We wait for Anvil to respond so the hash is available when
             // MetaMask polls batchStatus (which it does immediately after).
-            var _hexRegex = /"(0x[a-fA-F0-9]+)"/g;
-            var _hm;
             var _fwdPromises = [];
-            while ((_hm = _hexRegex.exec(_txListMatch[1])) !== null) {
+            for (var _ri = 0; _ri < _rawTxList.length; _ri++) {
               for (var _ti = 0; _ti < _stxTargets.length; _ti++) {
                 _fwdPromises.push(
                   _fwd(_stxTargets[_ti], {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: '{"jsonrpc":"2.0","method":"eth_sendRawTransaction","params":["' + _hm[1] + '"],"id":99997}'
+                    body: '{"jsonrpc":"2.0","method":"eth_sendRawTransaction","params":["' + _rawTxList[_ri] + '"],"id":99997}'
                   }).then(function(res) {
                     return res.clone().text().then(function(text) {
                       var hm = text.match(/"result"\\s*:\\s*"(0x[a-fA-F0-9]{64})"/);
@@ -269,6 +301,7 @@ function buildServiceWorkerPatch(mainnetRpc: string, lineaRpc: string): string {
               if (_si > 0) _statusJson += ',';
               var _uid = _uuidList[_si];
               var _hash = _stxHashes[_uid];
+              console.log('[anvil-stx] batchStatus uuid=' + _uid + ' hasHash=' + !!_hash);
               if (_hash) {
                 _statusJson += '"' + _uid + '":{"minedTx":"success","minedHash":"' + _hash + '","cancellationReason":"not_cancelled"}';
               } else {
@@ -673,12 +706,18 @@ export const test = walletTest.extend<{ anvilRpc: AnvilRpcHelper }>({
         `--load-extension=${extensionPath}`,
         '--no-first-run',
         '--disable-default-apps',
+        '--disable-gpu',
+        '--disable-software-rasterizer',
+        '--disable-dev-shm-usage',
       ],
       viewport: { width: VIEWPORT.WIDTH, height: VIEWPORT.HEIGHT },
     })
 
     await use(context)
 
+    for (const page of context.pages()) {
+      await page.close().catch(() => {})
+    }
     await context.close()
     fs.rmSync(profileDir, { recursive: true, force: true })
 
@@ -687,6 +726,37 @@ export const test = walletTest.extend<{ anvilRpc: AnvilRpcHelper }>({
       fs.writeFileSync(swFilePath, originalSwContent)
     }
     restoreSmartTransactionsFiles()
+  },
+
+  // Override metamask fixture to add retry around importWallet.
+  // The inherited wallet-connected fixture calls importWallet without a timeout
+  // guard, and on resource-constrained runs (4th+ test), onboarding can hang.
+  metamask: async ({ extensionContext, extensionId }, use) => {
+    const metamask = new MetaMaskPage(extensionContext, extensionId)
+    const seedPhrase = requireWalletSeedPhrase()
+    const password = requireWalletPassword()
+
+    const MAX_ATTEMPTS = 2
+
+    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+      try {
+        await metamask.onboarding.importWallet(seedPhrase, password)
+        break
+      } catch (err) {
+        console.warn(
+          `[anvil-fixture] Onboarding attempt ${attempt}/${MAX_ATTEMPTS} failed: ${err}`,
+        )
+        if (attempt === MAX_ATTEMPTS) throw err
+        // Close all extension pages and retry onboarding from scratch
+        for (const page of extensionContext.pages()) {
+          if (page.url().includes('chrome-extension:'))
+            await page.close().catch(() => {})
+        }
+        await new Promise(r => setTimeout(r, 2_000))
+      }
+    }
+
+    await use(metamask)
   },
 
   anvilRpc: async ({}, use) => {
@@ -962,50 +1032,67 @@ export const test = walletTest.extend<{ anvilRpc: AnvilRpcHelper }>({
       }
     })
 
-    const page = await extensionContext.newPage()
+    // ── Page creation + connection with retry ──
+    const MAX_CONNECT_ATTEMPTS = 2
+    let connectedPage: Page | null = null
 
-    await page.goto(env.BASE_URL)
-    await page.waitForLoadState('domcontentloaded')
+    for (let attempt = 1; attempt <= MAX_CONNECT_ATTEMPTS; attempt++) {
+      let page: Page | null = null
+      try {
+        page = await extensionContext.newPage()
+        await page.goto(env.BASE_URL)
+        await page.waitForLoadState('domcontentloaded')
 
-    // Block wallet_addEthereumChain requests BEFORE connecting to MetaMask.
-    // The Hub sends these immediately after connection (for Status Network Sepolia).
-    // These queue up as "Add Network" popups in MetaMask and interfere with
-    // transaction approvals — MetaMask shows them ahead of actual txs, and
-    // handling them (cancel/navigate) can cause port disconnects that auto-reject
-    // pending transactions. Blocking at the provider level prevents them from
-    // ever reaching MetaMask.
-    await page.evaluate(() => {
-      const provider = (window as unknown as Record<string, unknown>)
-        .ethereum as {
-        request: (args: {
-          method: string
-          params?: unknown[]
-        }) => Promise<unknown>
+        // Block wallet_addEthereumChain requests BEFORE connecting to MetaMask.
+        // The Hub sends these immediately after connection (for Status Network Sepolia).
+        // These queue up as "Add Network" popups in MetaMask and interfere with
+        // transaction approvals — MetaMask shows them ahead of actual txs, and
+        // handling them (cancel/navigate) can cause port disconnects that auto-reject
+        // pending transactions. Blocking at the provider level prevents them from
+        // ever reaching MetaMask.
+        await page.evaluate(() => {
+          const provider = (window as unknown as Record<string, unknown>)
+            .ethereum as {
+            request: (args: {
+              method: string
+              params?: unknown[]
+            }) => Promise<unknown>
+          }
+          if (!provider) return
+          const originalRequest = provider.request.bind(provider)
+          provider.request = async (args: {
+            method: string
+            params?: unknown[]
+          }) => {
+            if (args.method === 'wallet_addEthereumChain') {
+              console.warn(
+                '[anvil-fixture] Blocked wallet_addEthereumChain request',
+              )
+              // Resolve silently — MetaMask spec says null = already added
+              return null
+            }
+            return originalRequest(args)
+          }
+        })
+
+        await metamask.connectToDApp(page)
+        connectedPage = page
+        break
+      } catch (err) {
+        console.warn(
+          `[anvil-fixture] Connect attempt ${attempt}/${MAX_CONNECT_ATTEMPTS} failed: ${err}`,
+        )
+        if (page) await page.close().catch(() => {})
+        if (attempt === MAX_CONNECT_ATTEMPTS) throw err
+        await new Promise(r => setTimeout(r, 2_000))
       }
-      if (!provider) return
-      const originalRequest = provider.request.bind(provider)
-      provider.request = async (args: {
-        method: string
-        params?: unknown[]
-      }) => {
-        if (args.method === 'wallet_addEthereumChain') {
-          console.warn(
-            '[anvil-fixture] Blocked wallet_addEthereumChain request',
-          )
-          // Resolve silently — MetaMask spec says null = already added
-          return null
-        }
-        return originalRequest(args)
-      }
-    })
-
-    await metamask.connectToDApp(page)
+    }
 
     // The Hub may still have queued wallet_addEthereumChain before the provider
     // patch took effect (race during DOMContentLoaded). Dismiss any stragglers.
     await metamask.dismissPendingAddNetwork()
 
-    await use(page)
+    await use(connectedPage!)
 
     // Clean up context-level route when test finishes
     await extensionContext.unrouteAll({ behavior: 'ignoreErrors' })

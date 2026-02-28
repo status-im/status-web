@@ -151,6 +151,30 @@ export class AnvilRpcHelper {
     ])
   }
 
+  /**
+   * Wait until eth_chainId returns the expected value.
+   * Useful after network switches to confirm Anvil fork is responsive.
+   */
+  async waitForChain(
+    expectedChainId: number,
+    rpc?: string,
+    timeoutMs = 15_000,
+  ): Promise<void> {
+    const target = rpc ?? this.mainnetRpc
+    const hex = '0x' + expectedChainId.toString(16)
+    const deadline = Date.now() + timeoutMs
+    while (Date.now() < deadline) {
+      const result = await this.call(target, 'eth_chainId', []).catch(
+        () => null,
+      )
+      if (result === hex) return
+      await new Promise(r => setTimeout(r, 500))
+    }
+    throw new Error(
+      `Chain ${expectedChainId} not ready on ${target} within ${timeoutMs}ms`,
+    )
+  }
+
   /** Enable auto-mining — transactions are mined immediately when received. */
   async enableAutoMining(rpc?: string): Promise<void> {
     await this.call(rpc ?? this.mainnetRpc, 'evm_setAutomine', [true])

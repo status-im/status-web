@@ -13,6 +13,9 @@ test.describe('WETH Vault - Happy path deposits', () => {
     async ({ hubPage, anvilRpc, metamask }) => {
       await test.step('Fund wallet with ETH only (no WETH)', async () => {
         await anvilRpc.fund(FUNDING_PRESETS.WETH_DEPOSIT_WRAP)
+        // Zero out any pre-existing WETH from the fork state so the UI
+        // shows "Wrap ETH to WETH" instead of "Approve Deposit".
+        await anvilRpc.fundWeth(0n)
       })
 
       const preDepositsPage = new PreDepositsPage(hubPage)

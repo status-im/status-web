@@ -3,6 +3,7 @@ import { test } from '@fixtures/anvil.fixture.js'
 import { FUNDING_PRESETS } from '@helpers/anvil-rpc.js'
 import { PreDepositModalComponent } from '@pages/hub/components/pre-deposit-modal.component.js'
 import { PreDepositsPage } from '@pages/hub/pre-deposits.page.js'
+import { expect } from '@playwright/test'
 
 test.describe('LINEA Vault - Happy path deposit', () => {
   test(
@@ -35,6 +36,29 @@ test.describe('LINEA Vault - Happy path deposit', () => {
         await depositModal.expectSwitchNetworkButtonVisible()
         await depositModal.clickSwitchNetwork()
         await depositModal.expectSwitchNetworkButtonGone()
+      })
+
+      await test.step('Verify Linea chain is active in browser provider', async () => {
+        await expect
+          .poll(
+            async () => {
+              return hubPage.evaluate(() => {
+                const eth = (
+                  window as {
+                    ethereum?: {
+                      request: (a: { method: string }) => Promise<string>
+                    }
+                  }
+                ).ethereum
+                return (
+                  eth?.request({ method: 'eth_chainId' }).catch(() => null) ??
+                  null
+                )
+              })
+            },
+            { timeout: 15_000, intervals: [500] },
+          )
+          .toBe('0xe708')
       })
 
       await test.step('Enter deposit amount', async () => {
