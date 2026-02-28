@@ -37,7 +37,7 @@ import { test as walletTest } from './hub/wallet-connected.fixture.js'
  * Use the `anvil-deposits` Playwright project (not runtime skip).
  *
  * Prerequisites:
- * - Anvil forks running: ./scripts/setup-anvil.sh
+ * - Anvil forks running: cd e2e && pnpm anvil:up
  * - ANVIL_MAINNET_RPC + ANVIL_LINEA_RPC in e2e/.env
  */
 
@@ -695,15 +695,16 @@ export const test = walletTest.extend<{ anvilRpc: AnvilRpcHelper }>({
     if (!env.ANVIL_MAINNET_RPC || !env.ANVIL_LINEA_RPC) {
       throw new Error(
         'ANVIL_MAINNET_RPC and ANVIL_LINEA_RPC must be set for anvil-deposits tests. ' +
-          'Run: ./scripts/setup-anvil.sh and configure e2e/.env',
+          'Run: cd e2e && pnpm anvil:up',
       )
     }
 
     const walletAddress = env.WALLET_ADDRESS
     if (!walletAddress) {
       throw new Error(
-        'WALLET_ADDRESS must be set for anvil-deposits tests. ' +
-          'Derive it with: cast wallet address --mnemonic "$WALLET_SEED_PHRASE" --mnemonic-index 0',
+        'WALLET_ADDRESS could not be determined. ' +
+          'Set WALLET_SEED_PHRASE in .env (address is auto-derived), ' +
+          'or set WALLET_ADDRESS explicitly.',
       )
     }
 
@@ -713,9 +714,17 @@ export const test = walletTest.extend<{ anvilRpc: AnvilRpcHelper }>({
       walletAddress,
     )
 
-    // First test in the run: verify Anvil is healthy and take base snapshots
+    // First test in the run: base setup + snapshots.
+    // Replaces the shell script's base_setup (ETH funding + vault enabling).
     if (!baseSnapshots) {
       await helper.requireHealthy()
+
+      await Promise.all([
+        helper.setEthBalance(10n * 10n ** 18n),
+        helper.setEthBalance(10n * 10n ** 18n, helper.lineaRpc),
+      ])
+      await helper.enableAllVaults()
+
       baseSnapshots = await helper.snapshotBoth()
     } else {
       // Subsequent tests: revert to clean state.
@@ -728,11 +737,12 @@ export const test = walletTest.extend<{ anvilRpc: AnvilRpcHelper }>({
           `[anvil-fixture] revertBoth failed: ${err instanceof Error ? err.message : err}. ` +
             `Re-establishing base state from current Anvil state.`,
         )
-        // Re-fund ETH on both forks (same as setup-anvil.sh base_setup)
+        // Re-establish base state: fund ETH + enable vaults
         await Promise.all([
           helper.setEthBalance(10n * 10n ** 18n),
           helper.setEthBalance(10n * 10n ** 18n, helper.lineaRpc),
         ])
+        await helper.enableAllVaults()
       }
       // Re-snapshot immediately (revert consumes the snapshot)
       baseSnapshots = await helper.snapshotBoth()

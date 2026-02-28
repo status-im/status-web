@@ -12,14 +12,19 @@
 
 // Well-known contract addresses
 export const CONTRACTS = {
-  // Mainnet
+  // Mainnet tokens
   SNT: '0x744d70FDBE2Ba4CF95131626614a1763DF805B9E',
   WETH: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
   USDT: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
   USDC: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
   USDS: '0xdC035D45d973E3EC169d2276DDab16f1e407384F',
-  // Linea chain
+  // Linea token
   LINEA: '0x1789e0043623282D5DCc7F213d703C6D8BAfBB04',
+  // Vault contracts (mainnet unless noted)
+  WETH_VAULT: '0xc71Ec84Ee70a54000dB3370807bfAF4309a67a1f',
+  SNT_VAULT: '0x493957E168aCCdDdf849913C3d60988c652935Cd',
+  GUSD_VAULT: '0x79B4cDb14A31E8B0e21C0120C409Ac14Af35f919',
+  LINEA_VAULT: '0xb223cA53A53A5931426b601Fa01ED2425D8540fB', // Linea chain
 } as const
 
 // OpenZeppelin v5 ERC20Upgradeable namespaced storage slot for _balances.
@@ -55,8 +60,24 @@ function toHex(value: bigint): string {
   return '0x' + value.toString(16)
 }
 
+/** Transient RPC failure (network, 5xx, 429) — safe to retry */
+export class TransientRpcError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = 'TransientRpcError'
+  }
+}
+
+/** Deterministic RPC failure (invalid params, reverts) — do NOT retry */
+export class RpcError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = 'RpcError'
+  }
+}
+
 export interface FundingPreset {
-  /** ETH amount on mainnet fork (for gas). Linea ETH comes from setup-anvil.sh base snapshot. */
+  /** ETH amount on mainnet fork (for gas). Linea ETH comes from base snapshot. */
   eth?: bigint
   snt?: bigint
   linea?: bigint
@@ -141,6 +162,35 @@ export class AnvilRpcHelper {
   }
 
   // ---------------------------------------------------------------------------
+  // Vault state
+  // ---------------------------------------------------------------------------
+
+  /** Vault state storage slot (slot 8 = vault enabled flag) */
+  private static readonly VAULT_STATE_SLOT =
+    '0x0000000000000000000000000000000000000000000000000000000000000008'
+  private static readonly VAULT_ENABLED_VALUE =
+    '0x0000000000000000000000000000000000000000000000000000000000000001'
+
+  /** Enable a vault by setting its state storage slot to "enabled" */
+  async enableVault(vaultAddress: string, rpc?: string): Promise<void> {
+    await this.call(rpc ?? this.mainnetRpc, 'anvil_setStorageAt', [
+      vaultAddress,
+      AnvilRpcHelper.VAULT_STATE_SLOT,
+      AnvilRpcHelper.VAULT_ENABLED_VALUE,
+    ])
+  }
+
+  /** Enable all test vaults on their respective forks */
+  async enableAllVaults(): Promise<void> {
+    await Promise.all([
+      this.enableVault(CONTRACTS.WETH_VAULT),
+      this.enableVault(CONTRACTS.SNT_VAULT),
+      this.enableVault(CONTRACTS.GUSD_VAULT),
+      this.enableVault(CONTRACTS.LINEA_VAULT, this.lineaRpc),
+    ])
+  }
+
+  // ---------------------------------------------------------------------------
   // ETH balance
   // ---------------------------------------------------------------------------
 
@@ -209,13 +259,14 @@ export class AnvilRpcHelper {
     return this.call(rpc, 'web3_sha3', [hexData])
   }
 
-  /** Read ERC-20 balanceOf via eth_call */
+  /** Read ERC-20 balanceOf via eth_call (retries transient failures) */
   async getErc20Balance(token: string, rpc?: string): Promise<bigint> {
     const data = SELECTORS.BALANCE_OF + encodeAddress(this.walletAddress)
-    const result = await this.call(rpc ?? this.mainnetRpc, 'eth_call', [
-      { to: token, data },
-      'latest',
-    ])
+    const result = await this.callWithRetry(
+      rpc ?? this.mainnetRpc,
+      'eth_call',
+      [{ to: token, data }, 'latest'],
+    )
     return BigInt(result)
   }
 
@@ -413,17 +464,35 @@ export class AnvilRpcHelper {
   // Health check
   // ---------------------------------------------------------------------------
 
-  /** Check if an Anvil RPC endpoint is reachable */
+  /** Check if an Anvil RPC endpoint is reachable (retries transient failures) */
   async healthCheck(rpc?: string): Promise<boolean> {
     try {
-      await this.call(rpc ?? this.mainnetRpc, 'eth_blockNumber', [])
+      await this.callWithRetry(
+        rpc ?? this.mainnetRpc,
+        'eth_blockNumber',
+        [],
+        3,
+        500,
+      )
       return true
     } catch {
       return false
     }
   }
 
-  /** Check both forks are reachable. Throws with a clear message if not. */
+  /** Check if a contract exists at the given address (has deployed bytecode) */
+  async contractExists(address: string, rpc?: string): Promise<boolean> {
+    const code = await this.callWithRetry(
+      rpc ?? this.mainnetRpc,
+      'eth_getCode',
+      [address, 'latest'],
+      3,
+      500,
+    )
+    return code !== '0x' && code !== '0x0'
+  }
+
+  /** Check both forks are reachable and key contracts exist. Throws with a clear message if not. */
   async requireHealthy(): Promise<void> {
     const [mainnetOk, lineaOk] = await Promise.all([
       this.healthCheck(this.mainnetRpc),
@@ -440,7 +509,29 @@ export class AnvilRpcHelper {
 
       throw new Error(
         `Anvil fork(s) not reachable: ${down}. ` +
-          'Start them with: cd e2e && ./scripts/setup-anvil.sh',
+          'Start them with: cd e2e && pnpm anvil:up',
+      )
+    }
+
+    // Verify key contracts exist on the fork (catches stale/incomplete forks)
+    const keyContracts = [
+      { address: CONTRACTS.SNT, name: 'SNT', rpc: this.mainnetRpc },
+      { address: CONTRACTS.WETH, name: 'WETH', rpc: this.mainnetRpc },
+      { address: CONTRACTS.LINEA, name: 'LINEA', rpc: this.lineaRpc },
+    ]
+
+    const results = await Promise.all(
+      keyContracts.map(async ({ address, name, rpc }) => ({
+        name,
+        address,
+        exists: await this.contractExists(address, rpc),
+      })),
+    )
+    const missing = results.filter(r => !r.exists)
+    if (missing.length > 0) {
+      throw new Error(
+        `Contracts not found on fork: ${missing.map(m => `${m.name} (${m.address})`).join(', ')}. ` +
+          'The fork state may be stale or incomplete.',
       )
     }
   }
@@ -456,27 +547,76 @@ export class AnvilRpcHelper {
   ): Promise<any> {
     const id = ++this.rpcIdCounter
 
-    const response = await fetch(rpc, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ jsonrpc: '2.0', id, method, params }),
-    })
-
-    if (!response.ok) {
-      throw new Error(
-        `Anvil RPC HTTP ${response.status}: ${await response.text()}`,
+    let response: Response
+    try {
+      response = await fetch(rpc, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jsonrpc: '2.0', id, method, params }),
+      })
+    } catch (error) {
+      // Network-level failure (DNS, connection refused, timeout) — transient
+      throw new TransientRpcError(
+        `Anvil RPC network error (${method}): ${error instanceof Error ? error.message : error}`,
       )
     }
 
-    const json = await response.json()
+    if (!response.ok) {
+      const body = await response.text()
+      // 5xx and 429 are transient; other HTTP errors are not
+      if (response.status >= 500 || response.status === 429) {
+        throw new TransientRpcError(
+          `Anvil RPC HTTP ${response.status} (${method}): ${body}`,
+        )
+      }
+      throw new RpcError(
+        `Anvil RPC HTTP ${response.status} (${method}): ${body}`,
+      )
+    }
+
+    let json: any
+    try {
+      json = await response.json()
+    } catch {
+      throw new TransientRpcError(
+        `Anvil RPC invalid JSON response (${method}): status ${response.status}`,
+      )
+    }
 
     if (json.error) {
-      throw new Error(
+      // JSON-RPC semantic error — deterministic, do not retry
+      throw new RpcError(
         `Anvil RPC error (${method}): ${json.error.message ?? JSON.stringify(json.error)}`,
       )
     }
 
     return json.result
+  }
+
+  /**
+   * RPC call with retry for transient failures only.
+   * Network errors, HTTP 5xx, and 429 are retried.
+   * JSON-RPC semantic errors (invalid params, reverts) throw immediately.
+   */
+  private async callWithRetry(
+    rpc: string,
+    method: string,
+    params: unknown[],
+    maxRetries = 5,
+    delayMs = 200,
+  ): Promise<any> {
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        return await this.call(rpc, method, params)
+      } catch (error) {
+        if (!(error instanceof TransientRpcError)) throw error
+        if (attempt === maxRetries) throw error
+        await new Promise(resolve => setTimeout(resolve, delayMs))
+      }
+    }
+    throw new Error(
+      `callWithRetry: maxRetries must be >= 1 (got ${maxRetries})`,
+    )
   }
 }
 
@@ -519,7 +659,7 @@ export const FUNDING_PRESETS = {
   /** S-1: SNT deposit. */
   SNT_DEPOSIT: { eth: 1n * ETH, snt: 100n * ETH } satisfies FundingPreset,
 
-  /** L-1: LINEA deposit. ETH on Linea comes from setup-anvil.sh base snapshot. */
+  /** L-1: LINEA deposit. ETH on Linea comes from base snapshot. */
   LINEA_DEPOSIT: { linea: 100n * ETH } satisfies FundingPreset,
 
   /** G-1: GUSD via USDT. */

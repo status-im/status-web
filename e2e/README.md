@@ -26,6 +26,9 @@ pnpm test:smoke
 pnpm test              # All tests
 pnpm test:smoke        # Smoke tests (@smoke tag, headless)
 pnpm test:wallet       # Wallet tests (@wallet tag, headed + MetaMask)
+pnpm test:anvil        # Anvil deposit tests (starts Docker, runs tests, stops)
+pnpm anvil:up          # Start Anvil Docker forks only
+pnpm anvil:down        # Stop Anvil Docker forks
 pnpm test:headed       # All tests with visible browser
 pnpm test:debug        # Step-by-step debug mode
 pnpm test:ui           # Interactive Playwright UI
