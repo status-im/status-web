@@ -69,7 +69,7 @@ jobs:
 
       - name: Read MetaMask version
         id: metamask
-        run: echo "version=$(node -p "require('./e2e/package.json').config.metamaskVersion")" >> $GITHUB_OUTPUT
+        run: echo "version=$(node -p 'require("./e2e/package.json").config.metamaskVersion')" >> "$GITHUB_OUTPUT"
 
       - name: Install Playwright browsers
         run: cd e2e && pnpm exec playwright install chromium --with-deps
