@@ -1,9 +1,3 @@
-/** Browser viewport dimensions */
-export const VIEWPORT = {
-  WIDTH: 1440,
-  HEIGHT: 900,
-} as const
-
 /** Timeouts for browser extension service workers and pages */
 export const EXTENSION_TIMEOUTS = {
   /** Time to wait for MetaMask service worker to register */
@@ -31,6 +25,18 @@ export const NOTIFICATION_TIMEOUTS = {
    * the confirmation UI appears. This can take 10-60 seconds.
    */
   NOTIFICATION_CONTENT: 45_000,
+  /** Quick DOM settle after tab click or minor re-render */
+  DOM_SETTLE: 300,
+  /** Short wait for MetaMask service worker port release or DOM re-render */
+  SHORT_SETTLE: 500,
+  /** Medium wait for page reopen or port reconnection */
+  PAGE_REOPEN: 1_000,
+  /** Settle time after clicking Confirm before checking next step */
+  POST_CLICK: 1_200,
+  /** Wait for UI content to render or MetaMask queue to process */
+  CONTENT_CHECK: 2_000,
+  /** Polling interval in confirmation page scan loops */
+  POLL_INTERVAL: 250,
 } as const
 
 /** Timeouts for MetaMask onboarding flow */

@@ -39,6 +39,9 @@
       "prettier --write"
     ]
   },
+  "config": {
+    "metamaskVersion": "13.18.1"
+  },
   "engines": {
     "node": "22.x"
   }

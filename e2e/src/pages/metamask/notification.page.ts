@@ -3,6 +3,9 @@ import { NOTIFICATION_TIMEOUTS } from '@constants/timeouts.js'
 import type { BrowserContext, Locator, Page } from '@playwright/test'
 
 export class NotificationPage {
+  /** Cached MetaMask home page for Activity tab checks */
+  private cachedHomePage: Page | null = null
+
   constructor(
     private readonly context: BrowserContext,
     private readonly extensionId: string,
@@ -66,7 +69,7 @@ export class NotificationPage {
       .getByText(
         /spending cap|permission to withdraw|allow this site to spend/i,
       )
-      .isVisible({ timeout: 500 })
+      .isVisible({ timeout: NOTIFICATION_TIMEOUTS.SHORT_SETTLE })
       .catch(() => false)
   }
 
@@ -75,18 +78,36 @@ export class NotificationPage {
    * Used to ensure approveTransaction() doesn't return after confirming
    * the wrong request while the target tx remains pending user approval.
    */
-  private async hasUnapprovedActivityEntry(): Promise<boolean> {
-    let homePage = this.context
+  /**
+   * Get or create a MetaMask home page for Activity tab checks.
+   * Reuses a cached page across calls to avoid opening a new tab each time.
+   */
+  private async getOrCreateHomePage(): Promise<Page> {
+    // Check if cached page is still usable
+    if (this.cachedHomePage && !this.cachedHomePage.isClosed()) {
+      return this.cachedHomePage
+    }
+
+    // Try to find an existing home page
+    const existing = this.context
       .pages()
       .find(p => this.isMetaMaskHome(p) && !p.isClosed())
-    const openedTemporarily = !homePage
-
-    if (!homePage) {
-      homePage = await this.context.newPage()
-      await homePage.goto(`chrome-extension://${this.extensionId}/home.html`, {
-        waitUntil: 'load',
-      })
+    if (existing) {
+      this.cachedHomePage = existing
+      return existing
     }
+
+    // Create a new one
+    const page = await this.context.newPage()
+    await page.goto(`chrome-extension://${this.extensionId}/home.html`, {
+      waitUntil: 'load',
+    })
+    this.cachedHomePage = page
+    return page
+  }
+
+  private async hasUnapprovedActivityEntry(): Promise<boolean> {
+    const homePage = await this.getOrCreateHomePage()
 
     // Activity entries are not visible on the default Tokens tab.
     const activityTab = homePage
@@ -96,27 +117,21 @@ export class NotificationPage {
     if (
       await activityTab
         .first()
-        .isVisible({ timeout: 2_000 })
+        .isVisible({ timeout: NOTIFICATION_TIMEOUTS.CONTENT_CHECK })
         .catch(() => false)
     ) {
       await activityTab
         .first()
         .click()
         .catch(() => {})
-      await homePage.waitForTimeout(300)
+      await homePage.waitForTimeout(NOTIFICATION_TIMEOUTS.DOM_SETTLE)
     }
 
-    const hasUnapproved = await homePage
+    return homePage
       .getByText(/unapproved/i)
       .first()
-      .isVisible({ timeout: 2_000 })
+      .isVisible({ timeout: NOTIFICATION_TIMEOUTS.CONTENT_CHECK })
       .catch(() => false)
-
-    if (openedTemporarily && !homePage.isClosed()) {
-      await homePage.close().catch(() => {})
-    }
-
-    return hasUnapproved
   }
 
   /**
@@ -136,7 +151,9 @@ export class NotificationPage {
     // before opening a new notification page. Without this delay, the new
     // page may connect to a stale port and never receive content.
     if (closed) {
-      await new Promise(resolve => setTimeout(resolve, 500))
+      await new Promise(resolve =>
+        setTimeout(resolve, NOTIFICATION_TIMEOUTS.SHORT_SETTLE),
+      )
     }
   }
 
@@ -165,7 +182,7 @@ export class NotificationPage {
         const hasContent = await p
           .locator('button')
           .first()
-          .isVisible({ timeout: 2_000 })
+          .isVisible({ timeout: NOTIFICATION_TIMEOUTS.CONTENT_CHECK })
           .catch(() => false)
         if (hasContent) return p
       }
@@ -191,7 +208,9 @@ export class NotificationPage {
       // a previous notification page was closed. A new page establishes
       // a fresh port connection to MetaMask's service worker.
       if (!page.isClosed()) await page.close()
-      await new Promise(resolve => setTimeout(resolve, 1_000))
+      await new Promise(resolve =>
+        setTimeout(resolve, NOTIFICATION_TIMEOUTS.PAGE_REOPEN),
+      )
 
       const freshPage = await this.context.newPage()
       await freshPage.goto(
@@ -221,7 +240,7 @@ export class NotificationPage {
       for (const p of this.context.pages()) {
         if (!this.isMetaMaskPopup(p) || p.isClosed()) continue
         const hasConfirm = await this.confirmButton(p)
-          .isVisible({ timeout: 300 })
+          .isVisible({ timeout: NOTIFICATION_TIMEOUTS.DOM_SETTLE })
           .catch(() => false)
         if (hasConfirm) return p
       }
@@ -233,7 +252,9 @@ export class NotificationPage {
         openedFallbackPage = true
       }
 
-      await new Promise(resolve => setTimeout(resolve, 250))
+      await new Promise(resolve =>
+        setTimeout(resolve, NOTIFICATION_TIMEOUTS.POLL_INTERVAL),
+      )
     }
 
     throw new Error('MetaMask transaction confirmation button did not appear')
@@ -257,7 +278,10 @@ export class NotificationPage {
     let page: Page | null = null
 
     while (Date.now() < deadline) {
-      const remaining = Math.max(1_000, deadline - Date.now())
+      const remaining = Math.max(
+        NOTIFICATION_TIMEOUTS.PAGE_REOPEN,
+        deadline - Date.now(),
+      )
       page = await this.waitForConfirmablePopupPage(remaining)
       page = await this.clearAddNetworkQueue(page)
 
@@ -266,19 +290,19 @@ export class NotificationPage {
       // (e.g. deposit), otherwise we can "confirm" the wrong request and exit
       // while the deposit remains unapproved.
       if (await this.isSpendingCapConfirmation(page)) {
-        await page.waitForTimeout(500)
+        await page.waitForTimeout(NOTIFICATION_TIMEOUTS.SHORT_SETTLE)
         continue
       }
 
       const confirm = this.confirmButton(page)
       const hasConfirm = await confirm
-        .isVisible({ timeout: 2_000 })
+        .isVisible({ timeout: NOTIFICATION_TIMEOUTS.CONTENT_CHECK })
         .catch(() => false)
 
       // Queue may still be transitioning (e.g. canceled Add Network just now).
       // Keep waiting instead of returning early without approving anything.
       if (!hasConfirm) {
-        await page.waitForTimeout(500)
+        await page.waitForTimeout(NOTIFICATION_TIMEOUTS.SHORT_SETTLE)
         continue
       }
 
@@ -298,12 +322,12 @@ export class NotificationPage {
 
         // The click may have succeeded despite the error. Check cheaply first:
         // if the Confirm button disappeared, MetaMask likely processed the click.
-        await page.waitForTimeout(500)
+        await page.waitForTimeout(NOTIFICATION_TIMEOUTS.SHORT_SETTLE)
         const stillVisible = await this.confirmButton(page)
-          .isVisible({ timeout: 1_000 })
+          .isVisible({ timeout: NOTIFICATION_TIMEOUTS.PAGE_REOPEN })
           .catch(() => false)
         if (!stillVisible) {
-          await page.waitForTimeout(1_000)
+          await page.waitForTimeout(NOTIFICATION_TIMEOUTS.PAGE_REOPEN)
           const confirmedAfterError = !(await this.hasUnapprovedActivityEntry())
           if (confirmedAfterError) {
             if (!page.isClosed()) await page.close()
@@ -312,13 +336,15 @@ export class NotificationPage {
         }
         continue
       }
-      await page.waitForTimeout(1_200)
+      await page.waitForTimeout(NOTIFICATION_TIMEOUTS.POST_CLICK)
 
       // MetaMask v13 can use a two-step flow: Next -> Confirm.
       // Protect this click with the same force + error handling pattern.
       const secondConfirm = this.confirmButton(page)
       if (
-        await secondConfirm.isVisible({ timeout: 5_000 }).catch(() => false)
+        await secondConfirm
+          .isVisible({ timeout: NOTIFICATION_TIMEOUTS.ELEMENT_VISIBLE })
+          .catch(() => false)
       ) {
         try {
           await secondConfirm.click({
@@ -330,15 +356,17 @@ export class NotificationPage {
           if (!msg.includes('Timeout') && !msg.includes('detach')) throw err
           // Second step failure — will be caught by the Activity check below
         }
-        await page.waitForTimeout(1_000)
+        await page.waitForTimeout(NOTIFICATION_TIMEOUTS.PAGE_REOPEN)
       }
 
       // Let MetaMask service worker dispatch tx before closing the page.
-      await page.waitForTimeout(2_000)
+      await page.waitForTimeout(NOTIFICATION_TIMEOUTS.CONTENT_CHECK)
       const stillUnapproved = await this.hasUnapprovedActivityEntry()
       if (stillUnapproved) {
         if (!page.isClosed()) await page.close()
-        await new Promise(resolve => setTimeout(resolve, 500))
+        await new Promise(resolve =>
+          setTimeout(resolve, NOTIFICATION_TIMEOUTS.SHORT_SETTLE),
+        )
         continue
       }
 
@@ -442,7 +470,7 @@ export class NotificationPage {
       // MetaMask shows "A site is suggesting additional network details."
       const isAddNetwork = await currentPage
         .getByText(/suggesting additional network/i)
-        .isVisible({ timeout: 2_000 })
+        .isVisible({ timeout: NOTIFICATION_TIMEOUTS.CONTENT_CHECK })
         .catch(() => false)
 
       if (!isAddNetwork) return currentPage // Found the transaction — done
@@ -454,12 +482,12 @@ export class NotificationPage {
         .getByTestId('confirm-nav__next-confirmation')
         .or(currentPage.getByTestId('confirm_nav__right_btn'))
       const hasNext = await nextBtn
-        .isVisible({ timeout: 1_000 })
+        .isVisible({ timeout: NOTIFICATION_TIMEOUTS.PAGE_REOPEN })
         .catch(() => false)
 
       if (hasNext) {
         await nextBtn.click().catch(() => {})
-        await currentPage.waitForTimeout(500)
+        await currentPage.waitForTimeout(NOTIFICATION_TIMEOUTS.SHORT_SETTLE)
         continue
       }
 
@@ -471,14 +499,14 @@ export class NotificationPage {
       // pending requests (including the deposit tx we want to approve).
       const cancel = this.cancelButton(currentPage)
       try {
-        await cancel.click({ timeout: 5_000 })
+        await cancel.click({ timeout: NOTIFICATION_TIMEOUTS.ELEMENT_VISIBLE })
       } catch {
         // Button detached from DOM — MetaMask re-rendered. Retry.
-        await currentPage.waitForTimeout(500)
+        await currentPage.waitForTimeout(NOTIFICATION_TIMEOUTS.SHORT_SETTLE)
         continue
       }
       // Wait for MetaMask to process and show the next queued request
-      await currentPage.waitForTimeout(2_000)
+      await currentPage.waitForTimeout(NOTIFICATION_TIMEOUTS.CONTENT_CHECK)
     }
     return currentPage
   }
@@ -501,14 +529,16 @@ export class NotificationPage {
       /spending cap|permission to withdraw/i,
     )
     const contentVisible = await spendingCapText
-      .isVisible({ timeout: 5_000 })
+      .isVisible({ timeout: NOTIFICATION_TIMEOUTS.ELEMENT_VISIBLE })
       .catch(() => false)
 
     if (!contentVisible) {
       // Close and reopen with a fresh page — the messaging port may be stale
       // from a previous notification page (e.g. after wrap tx approval).
       if (!page.isClosed()) await page.close()
-      await new Promise(resolve => setTimeout(resolve, 1_000))
+      await new Promise(resolve =>
+        setTimeout(resolve, NOTIFICATION_TIMEOUTS.PAGE_REOPEN),
+      )
 
       page = await this.context.newPage()
       await page.goto(
@@ -561,9 +591,13 @@ export class NotificationPage {
     // deposit tx immediately. MetaMask pushes the deposit confirmation onto this
     // same open page, so a Confirm button may appear that belongs to the DEPOSIT,
     // not a second approval step. Only click if it is still a spending-cap page.
-    await page.waitForTimeout(2_000)
+    await page.waitForTimeout(NOTIFICATION_TIMEOUTS.CONTENT_CHECK)
     const secondConfirm = this.confirmButton(page)
-    if (await secondConfirm.isVisible({ timeout: 5_000 }).catch(() => false)) {
+    if (
+      await secondConfirm
+        .isVisible({ timeout: NOTIFICATION_TIMEOUTS.ELEMENT_VISIBLE })
+        .catch(() => false)
+    ) {
       if (await this.isSpendingCapConfirmation(page)) {
         await secondConfirm.click({
           timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM,

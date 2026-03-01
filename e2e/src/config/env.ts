@@ -14,6 +14,11 @@ export function loadEnvConfig(): EnvConfig {
   dotenv.config({ path: path.join(rootDir, '.env.local') })
   dotenv.config({ path: path.join(rootDir, '.env') })
 
+  // Read default MetaMask version from package.json (single source of truth)
+  const pkg = JSON.parse(
+    fs.readFileSync(path.join(rootDir, 'package.json'), 'utf-8'),
+  ) as { config: { metamaskVersion: string } }
+
   // Build Anvil RPC URLs from port env vars (same vars as docker-compose.anvil.yml)
   const mainnetPort = process.env.MAINNET_FORK_PORT ?? '8547'
   const lineaPort = process.env.LINEA_FORK_PORT ?? '8546'
@@ -30,7 +35,8 @@ export function loadEnvConfig(): EnvConfig {
     WALLET_SEED_PHRASE: seedPhrase,
     WALLET_PASSWORD: process.env.WALLET_PASSWORD ?? '',
     METAMASK_EXTENSION_PATH: resolveExtensionPath(rootDir),
-    METAMASK_VERSION: process.env.METAMASK_VERSION ?? '13.18.1',
+    METAMASK_VERSION:
+      process.env.METAMASK_VERSION ?? pkg.config.metamaskVersion,
     ANVIL_MAINNET_RPC:
       process.env.ANVIL_MAINNET_RPC || `http://localhost:${mainnetPort}`,
     ANVIL_LINEA_RPC:

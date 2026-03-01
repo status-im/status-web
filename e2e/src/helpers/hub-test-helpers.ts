@@ -6,19 +6,46 @@ import type { Page } from '@playwright/test'
 /**
  * Force-switch MetaMask to a specific chain via the hub page.
  *
- * 1. Dismiss any pending "Add Network" request from the hub
- * 2. Request `wallet_switchEthereumChain` through the hub page's injected provider
- * 3. Approve the network switch in MetaMask
+ * 1. Query the current chain — if already on the target chain, return early
+ * 2. Dismiss any pending "Add Network" request from the hub
+ * 3. Request `wallet_switchEthereumChain` through the hub page's injected provider
+ * 4. Approve the network switch in MetaMask
  */
 export async function switchMetaMaskToChain(
   hubPage: Page,
   metamask: MetaMaskPage,
   chainIdHex: string,
 ): Promise<void> {
+  const currentChainId = await hubPage
+    .evaluate(() => {
+      const eth = (window as unknown as Record<string, unknown>).ethereum as
+        | {
+            request: (args: {
+              method: string
+              params?: unknown[]
+            }) => Promise<unknown>
+          }
+        | undefined
+      return eth?.request({ method: 'eth_chainId' })
+    })
+    .catch(() => null)
+
+  if (currentChainId === chainIdHex) {
+    return
+  }
+
   await metamask.dismissPendingAddNetwork()
 
   await hubPage.evaluate(chainId => {
-    ;(window as any).ethereum
+    const eth = (window as unknown as Record<string, unknown>).ethereum as
+      | {
+          request: (args: {
+            method: string
+            params?: unknown[]
+          }) => Promise<unknown>
+        }
+      | undefined
+    eth
       ?.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId }],

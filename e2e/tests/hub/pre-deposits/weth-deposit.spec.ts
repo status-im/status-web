@@ -1,8 +1,6 @@
 import { DEPOSIT_AMOUNTS } from '@constants/hub/vaults.js'
 import { test } from '@fixtures/anvil.fixture.js'
 import { FUNDING_PRESETS } from '@helpers/anvil-rpc.js'
-import { PreDepositModalComponent } from '@pages/hub/components/pre-deposit-modal.component.js'
-import { PreDepositsPage } from '@pages/hub/pre-deposits.page.js'
 
 const FALLBACK_WRAP_WETH_AMOUNT = 1n * 10n ** 18n
 
@@ -10,7 +8,7 @@ test.describe('WETH Vault - Happy path deposits', () => {
   test(
     'W-1: wrap ETH then deposit into WETH vault (no existing WETH)',
     { tag: '@anvil' },
-    async ({ hubPage, anvilRpc, metamask }) => {
+    async ({ hubPage, anvilRpc, metamask, preDepositsPage, depositModal }) => {
       await test.step('Fund wallet with ETH only (no WETH)', async () => {
         await anvilRpc.fund(FUNDING_PRESETS.WETH_DEPOSIT_WRAP)
         // Zero out any pre-existing WETH from the fork state so the UI
@@ -18,16 +16,9 @@ test.describe('WETH Vault - Happy path deposits', () => {
         await anvilRpc.fundWeth(0n)
       })
 
-      const preDepositsPage = new PreDepositsPage(hubPage)
-      const depositModal = new PreDepositModalComponent(hubPage)
-
       await test.step('Navigate to Pre-Deposits page', async () => {
         await preDepositsPage.goto()
         await preDepositsPage.waitForReady()
-      })
-
-      await test.step('Dismiss any pending MetaMask network popups', async () => {
-        await metamask.dismissPendingAddNetwork()
       })
 
       await test.step('Open deposit modal for WETH vault', async () => {
@@ -76,21 +67,14 @@ test.describe('WETH Vault - Happy path deposits', () => {
   test(
     'W-2: deposit with sufficient WETH (skip wrap)',
     { tag: '@anvil' },
-    async ({ hubPage, anvilRpc, metamask }) => {
+    async ({ anvilRpc, metamask, preDepositsPage, depositModal }) => {
       await test.step('Fund wallet with WETH + gas ETH', async () => {
         await anvilRpc.fund(FUNDING_PRESETS.WETH_DEPOSIT_DIRECT)
       })
 
-      const preDepositsPage = new PreDepositsPage(hubPage)
-      const depositModal = new PreDepositModalComponent(hubPage)
-
       await test.step('Navigate to Pre-Deposits page', async () => {
         await preDepositsPage.goto()
         await preDepositsPage.waitForReady()
-      })
-
-      await test.step('Dismiss any pending MetaMask network popups', async () => {
-        await metamask.dismissPendingAddNetwork()
       })
 
       await test.step('Open deposit modal for WETH vault', async () => {
@@ -124,21 +108,14 @@ test.describe('WETH Vault - Happy path deposits', () => {
   test(
     'W-3: partial wrap then deposit (has some WETH, needs more)',
     { tag: '@anvil' },
-    async ({ hubPage, anvilRpc, metamask }) => {
+    async ({ hubPage, anvilRpc, metamask, preDepositsPage, depositModal }) => {
       await test.step('Fund wallet with partial WETH + ETH', async () => {
         await anvilRpc.fund(FUNDING_PRESETS.WETH_DEPOSIT_PARTIAL)
       })
 
-      const preDepositsPage = new PreDepositsPage(hubPage)
-      const depositModal = new PreDepositModalComponent(hubPage)
-
       await test.step('Navigate to Pre-Deposits page', async () => {
         await preDepositsPage.goto()
         await preDepositsPage.waitForReady()
-      })
-
-      await test.step('Dismiss any pending MetaMask network popups', async () => {
-        await metamask.dismissPendingAddNetwork()
       })
 
       await test.step('Open deposit modal for WETH vault', async () => {

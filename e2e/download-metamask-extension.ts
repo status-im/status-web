@@ -3,7 +3,12 @@ import os from 'node:os'
 import path from 'node:path'
 import { spawnSync } from 'node:child_process'
 
-const METAMASK_VERSION = process.env.METAMASK_VERSION ?? '13.18.1'
+// Read default version from package.json (single source of truth)
+const pkg = JSON.parse(
+  fs.readFileSync(path.resolve(import.meta.dirname, 'package.json'), 'utf-8'),
+) as { config: { metamaskVersion: string } }
+const METAMASK_VERSION =
+  process.env.METAMASK_VERSION ?? pkg.config.metamaskVersion
 
 const defaultDest = path.resolve(process.cwd(), '.extensions', 'metamask')
 const envPath = process.env.METAMASK_EXTENSION_PATH

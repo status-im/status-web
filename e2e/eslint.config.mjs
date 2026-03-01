@@ -22,7 +22,6 @@ export default [
     },
     rules: {
       'no-restricted-globals': 'off',
-      '@typescript-eslint/no-explicit-any': 'off',
       'react-hooks/rules-of-hooks': 'off',
       'no-empty-pattern': 'off',
     },

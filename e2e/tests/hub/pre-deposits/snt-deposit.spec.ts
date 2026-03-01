@@ -1,31 +1,19 @@
 import { DEPOSIT_AMOUNTS } from '@constants/hub/vaults.js'
 import { test } from '@fixtures/anvil.fixture.js'
 import { FUNDING_PRESETS } from '@helpers/anvil-rpc.js'
-import { PreDepositModalComponent } from '@pages/hub/components/pre-deposit-modal.component.js'
-import { PreDepositsPage } from '@pages/hub/pre-deposits.page.js'
 
 test.describe('SNT Vault - Happy path deposit', () => {
   test(
     'S-1: deposit SNT tokens',
     { tag: '@anvil' },
-    async ({ hubPage, anvilRpc, metamask }) => {
+    async ({ anvilRpc, metamask, preDepositsPage, depositModal }) => {
       await test.step('Fund wallet with SNT + gas ETH', async () => {
         await anvilRpc.fund(FUNDING_PRESETS.SNT_DEPOSIT)
       })
 
-      const preDepositsPage = new PreDepositsPage(hubPage)
-      const depositModal = new PreDepositModalComponent(hubPage)
-
       await test.step('Navigate to Pre-Deposits page', async () => {
         await preDepositsPage.goto()
         await preDepositsPage.waitForReady()
-      })
-
-      // Dismiss any wallet_addEthereumChain requests queued during navigation.
-      // The provider patch in the fixture blocks future ones, but navigation
-      // may trigger them before the page's JS fully loads.
-      await test.step('Dismiss any pending MetaMask network popups', async () => {
-        await metamask.dismissPendingAddNetwork()
       })
 
       await test.step('Open deposit modal for SNT vault', async () => {

@@ -286,7 +286,7 @@ export class AnvilRpcHelper {
   /** Read ERC-20 balanceOf via eth_call (retries transient failures) */
   async getErc20Balance(token: string, rpc?: string): Promise<bigint> {
     const data = SELECTORS.BALANCE_OF + encodeAddress(this.walletAddress)
-    const result = await this.callWithRetry(
+    const result = await this.callWithRetry<string>(
       rpc ?? this.mainnetRpc,
       'eth_call',
       [{ to: token, data }, 'latest'],
@@ -564,11 +564,11 @@ export class AnvilRpcHelper {
   // Raw RPC
   // ---------------------------------------------------------------------------
 
-  private async call(
+  private async call<T = unknown>(
     rpc: string,
     method: string,
     params: unknown[],
-  ): Promise<any> {
+  ): Promise<T> {
     const id = ++this.rpcIdCounter
 
     let response: Response
@@ -598,7 +598,7 @@ export class AnvilRpcHelper {
       )
     }
 
-    let json: any
+    let json: { result?: T; error?: { message?: string } }
     try {
       json = await response.json()
     } catch {
@@ -614,7 +614,7 @@ export class AnvilRpcHelper {
       )
     }
 
-    return json.result
+    return json.result as T
   }
 
   /**
@@ -622,16 +622,16 @@ export class AnvilRpcHelper {
    * Network errors, HTTP 5xx, and 429 are retried.
    * JSON-RPC semantic errors (invalid params, reverts) throw immediately.
    */
-  private async callWithRetry(
+  private async callWithRetry<T = unknown>(
     rpc: string,
     method: string,
     params: unknown[],
     maxRetries = 5,
     delayMs = 200,
-  ): Promise<any> {
+  ): Promise<T> {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        return await this.call(rpc, method, params)
+        return await this.call<T>(rpc, method, params)
       } catch (error) {
         if (!(error instanceof TransientRpcError)) throw error
         if (attempt === maxRetries) throw error

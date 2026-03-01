@@ -1,8 +1,6 @@
 import { DEPOSIT_AMOUNTS, TEST_VAULTS } from '@constants/hub/vaults.js'
 import { test } from '@fixtures/anvil.fixture.js'
 import { CONTRACTS, FUNDING_PRESETS } from '@helpers/anvil-rpc.js'
-import { PreDepositModalComponent } from '@pages/hub/components/pre-deposit-modal.component.js'
-import { PreDepositsPage } from '@pages/hub/pre-deposits.page.js'
 
 const GUSD_TOKENS = [
   {
@@ -36,7 +34,7 @@ test.describe('GUSD Vault - Happy path deposits', () => {
     test(
       `${token.id}: deposit via ${token.symbol}`,
       { tag: '@anvil' },
-      async ({ hubPage, anvilRpc, metamask }) => {
+      async ({ anvilRpc, metamask, preDepositsPage, depositModal }) => {
         await test.step(`Fund wallet with ${token.symbol}`, async () => {
           await anvilRpc.fund(FUNDING_PRESETS[token.preset])
         })
@@ -48,17 +46,9 @@ test.describe('GUSD Vault - Happy path deposits', () => {
           )
         })
 
-        const preDepositsPage = new PreDepositsPage(hubPage)
-        const depositModal = new PreDepositModalComponent(hubPage)
-
         await test.step('Navigate to Pre-Deposits page', async () => {
           await preDepositsPage.goto()
           await preDepositsPage.waitForReady()
-        })
-
-        await test.step('Dismiss any pending MetaMask network popups', async () => {
-          await metamask.dismissPendingAddNetwork()
-          await metamask.dismissPendingAddNetwork()
         })
 
         await test.step('Open deposit modal for GUSD vault', async () => {
