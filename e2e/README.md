@@ -127,7 +127,7 @@ Tests run with `workers: 1` because:
 ### Prerequisites
 
 - **Docker** (Docker Desktop or Docker Engine)
-- **Apple Silicon (M1/M2/M3)**: The Anvil Docker image defaults to `linux/amd64`, which requires Rosetta emulation. This is handled automatically by Docker Desktop with Rosetta enabled. If you experience issues:
+- **Apple Silicon**: The Anvil Docker image defaults to `linux/amd64`, which requires Rosetta emulation. This is handled automatically by Docker Desktop with Rosetta enabled. If you experience issues:
   ```bash
   # Option 1: Enable Rosetta in Docker Desktop
   # Settings → General → "Use Rosetta for x86_64/amd64 emulation on Apple Silicon"

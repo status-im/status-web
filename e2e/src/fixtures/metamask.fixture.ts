@@ -27,8 +27,6 @@ export interface LaunchMetaMaskOptions {
 
 /**
  * Launch a persistent Chromium context with MetaMask loaded.
- * Shared between metamask.fixture and anvil.fixture to avoid duplicating
- * ~40 lines of browser launch logic.
  */
 export async function launchMetaMaskContext(
   use: (context: BrowserContext) => Promise<void>,

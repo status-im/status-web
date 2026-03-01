@@ -3,14 +3,6 @@ import { NOTIFICATION_TIMEOUTS } from '@constants/timeouts.js'
 import type { MetaMaskPage } from '@pages/metamask/metamask.page.js'
 import type { Page } from '@playwright/test'
 
-/**
- * Force-switch MetaMask to a specific chain via the hub page.
- *
- * 1. Query the current chain — if already on the target chain, return early
- * 2. Dismiss any pending "Add Network" request from the hub
- * 3. Request `wallet_switchEthereumChain` through the hub page's injected provider
- * 4. Approve the network switch in MetaMask
- */
 export async function switchMetaMaskToChain(
   hubPage: Page,
   metamask: MetaMaskPage,
@@ -56,9 +48,6 @@ export async function switchMetaMaskToChain(
   await metamask.switchNetwork()
 }
 
-/**
- * Dismiss the SIWE / ConnectKit dialog if it appeared after a network change.
- */
 export async function dismissSiweDialogIfPresent(
   page: Page,
   timeout = NOTIFICATION_TIMEOUTS.OPTIONAL_ELEMENT,

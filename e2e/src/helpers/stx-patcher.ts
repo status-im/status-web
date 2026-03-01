@@ -1,39 +1,18 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-/**
- * A pattern that can be applied to MetaMask compiled JS files to disable
- * Smart Transactions. Each pattern has a forward transform (apply patch)
- * and a reverse transform (recover true original from already-patched files).
- */
 interface StxPatchPattern {
-  /** Human-readable name for logging */
   name: string
-  /** Detect whether this pattern is present (original or already-patched form) */
   detect: RegExp
-  /** Apply the patch: original → patched */
   transform: (content: string) => string
-  /** Reverse the patch: patched → original (for idempotent re-patching) */
   reverseTransform: (content: string) => string
 }
 
-// Track files patched for Smart Transactions disabling
 const stxPatchedFiles: Array<{ path: string; original: string }> = []
 
-/**
- * STX patch patterns.
- *
- * Category A — Property value patterns (STABLE):
- *   Use full MetaMask preference key names (`smartTransactionsOptInStatus`,
- *   `useTransactionSimulations`). These survive minification because they are
- *   serialized state keys persisted to extension storage.
- *
- * Category B — Publish hook patterns (FRAGILE-STRUCTURE):
- *   Match the code structure of MetaMask's STX publish hooks. Use capture
- *   groups for minified variable names, but depend on the exact Terser output
- *   shape. If these fail to match on a MetaMask update, the SW fetch
- *   interceptor (service-worker-patch.ts) serves as a complete fallback.
- */
+// Category A: property value patterns (stable — these are serialized storage keys).
+// Category B: publish hook patterns (fragile — depend on Terser output shape).
+// If B breaks on MetaMask update, SW fetch interceptor handles STX as fallback.
 const STX_PATTERNS: StxPatchPattern[] = [
   // --- Category A: Property value patterns ---
   {
@@ -80,10 +59,6 @@ const STX_PATTERNS: StxPatchPattern[] = [
   },
 
   // --- Category B: Publish hook patterns ---
-  // These match the destructuring of getSmartTransactionCommonParams and force
-  // isSmartTransaction to false. Method names are semantic (from
-  // @metamask/smart-transactions-controller) but the code structure is fragile.
-  // If these break on a MetaMask update, the SW fetch interceptor handles STX.
   {
     name: 'STX single-tx publish hook',
     detect:
@@ -117,37 +92,17 @@ const STX_PATTERNS: StxPatchPattern[] = [
 ]
 
 /**
- * Disable MetaMask's Smart Transactions by patching extension source files.
- * Smart Transactions routes txs through MetaMask's relay service, which breaks
- * Anvil-based testing (txs confirmed on Anvil appear as "Pending" forever).
- *
- * We can't use MetaMask's UI to toggle the setting because:
- * - page.goto() causes MetaMask to lock (shows "Enter your password")
- * - page.evaluate() is blocked by LavaMoat's scuttling mode
- *
- * Instead, we patch the compiled JS files to set the default opt-in to false
- * BEFORE the browser reads them. Files are restored in cleanup.
- *
- * **Resilience:** Instead of targeting hardcoded chunk filenames (which change
- * between MetaMask versions), we scan ALL .js files in the extension directory
- * and apply patterns to every file that matches. Even if ALL patterns fail to
- * match (e.g. after a major MetaMask update), the SW fetch interceptor in
- * service-worker-patch.ts intercepts STX API traffic as a complete fallback.
- *
- * Patches are idempotent: they match both the original (!0) and already-patched
- * (!1) values. If a previous run crashed without restoring, the file is already
- * in the target state and the "true original" is recovered via reverse transform.
+ * Disable Smart Transactions by patching extension JS files.
+ * STX routes txs through MetaMask's relay → breaks Anvil (txs stay "Pending" forever).
  */
 export function disableSmartTransactionsInFiles(extensionPath: string): void {
   console.log('[anvil-fixture] Patching MetaMask extension for STX disable...')
 
-  // Scan all JS files in the extension root (MetaMask puts compiled chunks here)
   const jsFiles = fs
     .readdirSync(extensionPath)
     .filter(f => f.endsWith('.js'))
     .sort()
 
-  // Track which patterns matched at least once (for diagnostics)
   const patternMatchCounts = new Map<string, number>(
     STX_PATTERNS.map(p => [p.name, 0]),
   )
@@ -156,11 +111,10 @@ export function disableSmartTransactionsInFiles(extensionPath: string): void {
     const filePath = path.join(extensionPath, fileName)
     const content = fs.readFileSync(filePath, 'utf-8')
 
-    // Find which patterns apply to this file
     const applicable = STX_PATTERNS.filter(p => p.detect.test(content))
     if (applicable.length === 0) continue
 
-    // Reverse any stale patches, then re-apply fresh ones
+    // Reverse stale patches → re-apply fresh (idempotent)
     let trueOriginal = content
     for (const p of applicable) {
       trueOriginal = p.reverseTransform(trueOriginal)
@@ -201,7 +155,6 @@ export function disableSmartTransactionsInFiles(extensionPath: string): void {
     }
   }
 
-  // Warn about patterns that didn't match any file
   for (const [name, count] of patternMatchCounts) {
     if (count === 0) {
       console.warn(
@@ -216,7 +169,6 @@ export function disableSmartTransactionsInFiles(extensionPath: string): void {
   )
 }
 
-/** Restore all files patched by disableSmartTransactionsInFiles */
 export function restoreSmartTransactionsFiles(): void {
   for (const { path: filePath, original } of stxPatchedFiles) {
     fs.writeFileSync(filePath, original)

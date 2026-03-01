@@ -3,32 +3,26 @@ import { KNOWN_LINEA_HOSTS, KNOWN_MAINNET_HOSTS } from '@constants/rpc-hosts.js'
 export const PATCH_MARKER = '/* __ANVIL_RPC_PATCH__ */'
 
 /**
- * Generate the JavaScript patch to prepend to MetaMask's service worker.
- * This wraps globalThis.fetch to redirect mainnet/Linea RPC requests to Anvil.
- * Must run BEFORE LavaMoat's lockdown (which scuttles unused globals).
+ * Generate JS patch for MetaMask's service worker (prepended to app-init.js).
+ * Wraps globalThis.fetch to redirect RPC to Anvil. Runs BEFORE LavaMoat lockdown —
+ * must not reference any scuttled globals (URL, Intl, etc.), only primitives + fetch.
  */
 export function buildServiceWorkerPatch(
   mainnetRpc: string,
   lineaRpc: string,
 ): string {
-  // IMPORTANT: This code runs in MetaMask's service worker BEFORE LavaMoat.
-  // LavaMoat scuttles many globalThis properties (URL, Intl, etc.) after loading.
-  // We MUST NOT reference any potentially-scuttled globals — use only primitives,
-  // string operations, and the fetch reference captured before LavaMoat runs.
   return `${PATCH_MARKER}
 (function() {
   var _f = globalThis.fetch;
-  var _R = globalThis.Response;  // capture before LavaMoat scuttles it
+  var _R = globalThis.Response;
   var _c = {};
   var _m = { '1': '${mainnetRpc}', '59144': '${lineaRpc}' };
   var _tx = {};
   var _stxCounter = 0;
-  var _stxHashes = {};  // STX uuid → mined tx hash (from Anvil)
+  var _stxHashes = {};
 
-  // Mock linea_estimateGas to return instant fixed values.
-  // MetaMask fires this to the real Linea RPC during the confirmation page;
-  // the async response arrival triggers a re-render that detaches the Confirm
-  // button DOM element mid-click. Returning instantly eliminates the race.
+  // Mock linea_estimateGas — returning instantly prevents MetaMask from
+  // re-rendering the confirmation page mid-click (async response race).
   function _mockLineaEstimateGas(body) {
     var idMatch = body.match(/"id"\\s*:\\s*(\\d+)/);
     var id = idMatch ? idMatch[1] : '1';
@@ -38,14 +32,11 @@ export function buildServiceWorkerPatch(
     ));
   }
 
-  // Hostname-based chain detection — avoids eth_chainId probes that can fail
-  // on Infura/Alchemy URLs with API keys in path segments.
-  // Lists are interpolated from constants/rpc-hosts.ts (single source of truth).
+  // Hostname-based chain detection (from constants/rpc-hosts.ts).
   var _mainnetHosts = [${KNOWN_MAINNET_HOSTS.map(h => `'${h}'`).join(',')}];
   var _lineaHosts = [${KNOWN_LINEA_HOSTS.map(h => `'${h}'`).join(',')}];
   function _chainByHost(u) {
-    // Check Linea FIRST — 'linea-mainnet.infura.io' contains 'mainnet.infura.io'
-    // as a substring, so checking mainnet first would misclassify Linea URLs.
+    // Linea first: 'linea-mainnet.infura.io' contains 'mainnet.infura.io'
     for (var j = 0; j < _lineaHosts.length; j++) { if (u.indexOf(_lineaHosts[j]) !== -1) return '59144'; }
     for (var i = 0; i < _mainnetHosts.length; i++) { if (u.indexOf(_mainnetHosts[i]) !== -1) return '1'; }
     return null;
@@ -78,11 +69,8 @@ export function buildServiceWorkerPatch(
     }
   }
 
-  // Forward a request to an Anvil fork URL. After eth_sendRawTransaction calls,
-  // fire-and-forget evm_mine as a safety net (Anvil auto-mines, but this ensures
-  // mining even if auto-mine is somehow disabled). Fire-and-forget is critical:
-  // awaiting evm_mine blocks the service worker fetch response, causing MetaMask
-  // timeouts across the board.
+  // Forward to Anvil. After sendRawTransaction, fire-and-forget evm_mine
+  // (must NOT await — blocking the fetch response causes MetaMask timeouts).
   var _mineInit = { method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: '{"jsonrpc":"2.0","method":"evm_mine","params":[],"id":99998}' };
   function _fwd(anvilUrl, init) {
@@ -121,10 +109,7 @@ export function buildServiceWorkerPatch(
     }
   }
 
-  // Receipt polling may hit the wrong fork after network switches.
-  // Query preferred fork first, then fall back to the other fork when
-  // receipt/tx lookup returns {"result": null}. If both return null,
-  // return the original response (MetaMask will retry on its own).
+  // Receipt may be on either fork after network switch — try both.
   function _fwdReceiptWithFallback(init, preferredAnvilUrl) {
     var main = _m['1'];
     var linea = _m['59144'];
@@ -146,26 +131,13 @@ export function buildServiceWorkerPatch(
   }
 
   globalThis.fetch = function(input, init) {
-    // Intercept MetaMask Smart Transactions relay API.
-    // MetaMask may route txs through its relay (transaction.api.cx.metamask.io)
-    // even when STX opt-in is patched to false (onboarding overrides in storage).
-    // The relay submits to real mainnet, not Anvil, so txs never mine locally.
-    //
-    // Strategy: instead of blocking (which causes MetaMask to mark txs as failed
-    // without falling back to direct RPC), we REDIRECT tx submissions to Anvil
-    // and return fake success responses. This ensures txs are mined locally
-    // regardless of whether MetaMask uses STX or direct RPC.
+    // Intercept STX relay API — redirect tx submissions to Anvil instead of
+    // blocking (blocking causes MetaMask to mark txs as failed without fallback).
     var _url = (typeof input === 'string') ? input
              : (input && input.url) ? input.url : '' + input;
     if (_url.indexOf('transaction.api') !== -1
         || _url.indexOf('smart-transactions') !== -1
         || _url.indexOf('tx-sentinel') !== -1) {
-      // Intercept MetaMask Smart Transactions API requests.
-      // Instead of blocking (which causes MetaMask to mark txs as "Failed"
-      // without falling back to direct RPC on Linea), return fake success
-      // responses for all STX endpoints. Raw txs are forwarded to Anvil
-      // so they get mined locally.
-
       // A. submitTransactions — forward raw txs to Anvil, return fake uuid
       try {
         var _stxBody = (init && init.body && typeof init.body === 'string') ? init.body : '';
@@ -180,9 +152,7 @@ export function buildServiceWorkerPatch(
             if (_m['1']) _stxTargets.push(_m['1']);
             if (_m['59144'] && _m['59144'] !== _m['1']) _stxTargets.push(_m['59144']);
           }
-          // Extract raw tx list via JSON.parse — handles both payload formats:
-          //   Format 1: { rawTxs: ["0x..."] }
-          //   Format 2: { transactions: [{ rawTx: "0x..." }] }
+          // Handles { rawTxs: ["0x..."] } and { transactions: [{ rawTx: "0x..." }] }
           var _rawTxList = [];
           try {
             var _parsed = JSON.parse(_stxBody);
@@ -202,9 +172,7 @@ export function buildServiceWorkerPatch(
           console.log('[anvil-stx] submitTx chainId=' + _stxChainId + ' txCount=' + _rawTxList.length);
           var _fakeUuid = 'anvil-stx-' + Date.now() + '-' + (++_stxCounter);
           if (_rawTxList.length && _stxTargets.length) {
-            // Forward raw txs to Anvil and capture the mined tx hash.
-            // We wait for Anvil to respond so the hash is available when
-            // MetaMask polls batchStatus (which it does immediately after).
+            // Wait for Anvil response so hash is ready for batchStatus poll
             var _fwdPromises = [];
             for (var _ri = 0; _ri < _rawTxList.length; _ri++) {
               for (var _ti = 0; _ti < _stxTargets.length; _ti++) {
@@ -222,7 +190,7 @@ export function buildServiceWorkerPatch(
                 );
               }
             }
-            // Wait for all Anvil responses, store the first valid tx hash
+            // Store the first valid tx hash for batchStatus lookups
             return Promise.all(_fwdPromises).then(function(hashes) {
               for (var _hi = 0; _hi < hashes.length; _hi++) {
                 if (hashes[_hi]) { _stxHashes[_fakeUuid] = hashes[_hi]; break; }
@@ -233,7 +201,7 @@ export function buildServiceWorkerPatch(
               });
             });
           }
-          // No raw txs found — return uuid immediately
+          // No raw txs found
           return Promise.resolve(new _R('{"uuid":"' + _fakeUuid + '"}', {
             status: 200,
             headers: { 'Content-Type': 'application/json' }
@@ -241,10 +209,7 @@ export function buildServiceWorkerPatch(
         }
       } catch (_stxErr) {}
 
-      // B. batchStatus — return fake status for all queried uuids.
-      // MetaMask polls this to check STX tx status after submission.
-      // Response MUST be an object keyed by UUID (MetaMask uses Object.entries).
-      // Each value needs minedTx + minedHash for MetaMask to confirm the tx.
+      // B. batchStatus — return fake status keyed by UUID
       if (_url.indexOf('batchStatus') !== -1) {
         var _uuidsMatch = _url.match(/[?&]uuids=([^&]+)/);
         if (_uuidsMatch) {
@@ -259,7 +224,7 @@ export function buildServiceWorkerPatch(
               if (_hash) {
                 _statusJson += '"' + _uid + '":{"minedTx":"success","minedHash":"' + _hash + '","cancellationReason":"not_cancelled"}';
               } else {
-                // Hash not ready yet — return pending so MetaMask retries
+                // Not ready — MetaMask will retry
                 _statusJson += '"' + _uid + '":{"minedTx":"not_mined","cancellationReason":"not_cancelled"}';
               }
             }
@@ -272,17 +237,14 @@ export function buildServiceWorkerPatch(
         }
       }
 
-      // C. All other STX API calls (liveness, fees, network info) —
-      // return empty success to prevent MetaMask from erroring out.
+      // C. All other STX API calls — empty success
       return Promise.resolve(new _R('{}', {
         status: 200,
         headers: { 'Content-Type': 'application/json' }
       }));
     }
 
-    // Handle Request objects: MetaMask may call fetch(request) or
-    // fetch(request, { signal }) where method/body are in the Request,
-    // not in the init object. Decompose into (url, init) form.
+    // Handle fetch(Request) — decompose into (url, init) form
     if (typeof input !== 'string' && input && typeof input.clone === 'function') {
       var reqMethod = (init && init.method) || input.method || 'GET';
       if (reqMethod !== 'POST') return _f.apply(globalThis, arguments);
@@ -321,10 +283,7 @@ export function buildServiceWorkerPatch(
       return _fwdReceiptWithFallback(init, _rxPref);
     }
 
-    // Mock linea_estimateGas to return instant fixed values (eliminates
-    // MetaMask re-render race condition). Other linea_* methods still
-    // pass through to the upstream provider — mapping them to eth_*
-    // breaks fee calculations for tx submissions.
+    // linea_estimateGas → mock; other linea_* → passthrough (needed for fee calc)
     if (init.body.indexOf('"method":"linea_estimateGas"') !== -1) {
       return _mockLineaEstimateGas(init.body);
     }
@@ -355,7 +314,7 @@ export function buildServiceWorkerPatch(
       return _c[url] ? _fwd(_c[url], init) : _f.apply(globalThis, arguments);
     }
 
-    // Hostname-based chain detection — no network needed
+    // Hostname-based lookup
     var _hc = _chainByHost(url);
     if (_hc) {
       _c[url] = _m[_hc] || null;
@@ -374,8 +333,7 @@ export function buildServiceWorkerPatch(
         return target;
       })
       .catch(function() {
-        // Don't cache null on probe failure — allows retry on next request.
-        // Permanent null would leak all future requests to the real chain.
+        // Don't cache null — permanent null leaks requests to real chain
         delete _c[url];
         return null;
       });
