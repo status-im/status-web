@@ -31,11 +31,6 @@ export function loadEnvConfig(): EnvConfig {
     WALLET_PASSWORD: process.env.WALLET_PASSWORD ?? '',
     METAMASK_EXTENSION_PATH: resolveExtensionPath(rootDir),
     METAMASK_VERSION: process.env.METAMASK_VERSION ?? '13.18.1',
-    STATUS_SEPOLIA_RPC_URL:
-      process.env.STATUS_SEPOLIA_RPC_URL ??
-      'https://public.sepolia.rpc.status.network',
-    STATUS_SEPOLIA_CHAIN_ID:
-      process.env.STATUS_SEPOLIA_CHAIN_ID ?? '1660990954',
     ANVIL_MAINNET_RPC:
       process.env.ANVIL_MAINNET_RPC || `http://localhost:${mainnetPort}`,
     ANVIL_LINEA_RPC:
@@ -66,34 +61,6 @@ export function requireWalletSeedPhrase(): string {
 /** Require WALLET_PASSWORD — only called when wallet tests actually run */
 export function requireWalletPassword(): string {
   return requireEnv('WALLET_PASSWORD')
-}
-
-/** Check if Anvil RPC URLs are configured */
-export function isAnvilConfigured(): boolean {
-  const config = loadEnvConfig()
-  return Boolean(config.ANVIL_MAINNET_RPC && config.ANVIL_LINEA_RPC)
-}
-
-/** Get Anvil mainnet RPC URL or throw */
-export function requireAnvilMainnetRpc(): string {
-  const config = loadEnvConfig()
-  if (!config.ANVIL_MAINNET_RPC) {
-    throw new Error(
-      'ANVIL_MAINNET_RPC is not set. Start Anvil with: cd e2e && pnpm anvil:up',
-    )
-  }
-  return config.ANVIL_MAINNET_RPC
-}
-
-/** Get Anvil Linea RPC URL or throw */
-export function requireAnvilLineaRpc(): string {
-  const config = loadEnvConfig()
-  if (!config.ANVIL_LINEA_RPC) {
-    throw new Error(
-      'ANVIL_LINEA_RPC is not set. Start Anvil with: cd e2e && pnpm anvil:up',
-    )
-  }
-  return config.ANVIL_LINEA_RPC
 }
 
 function resolveExtensionPath(rootDir: string): string {

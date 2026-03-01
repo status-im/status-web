@@ -5,8 +5,6 @@ interface E2EEnvConfig {
   WALLET_PASSWORD: string
   METAMASK_EXTENSION_PATH: string
   METAMASK_VERSION: string
-  STATUS_SEPOLIA_RPC_URL: string
-  STATUS_SEPOLIA_CHAIN_ID: string
   ANVIL_MAINNET_RPC: string
   ANVIL_LINEA_RPC: string
   WALLET_ADDRESS: string

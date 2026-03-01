@@ -12,9 +12,10 @@ services:
       - --chain-id=1
       - --silent
     ports:
-      - "${MAINNET_FORK_PORT:-8547}:8545"
+      - '${MAINNET_FORK_PORT:-8547}:8545'
     healthcheck:
-      test: ["CMD", "cast", "block-number", "--rpc-url", "http://localhost:8545"]
+      test:
+        ['CMD', 'cast', 'block-number', '--rpc-url', 'http://localhost:8545']
       start_period: 5s
       interval: 2s
       timeout: 5s
@@ -31,9 +32,10 @@ services:
       - --chain-id=59144
       - --silent
     ports:
-      - "${LINEA_FORK_PORT:-8546}:8545"
+      - '${LINEA_FORK_PORT:-8546}:8545'
     healthcheck:
-      test: ["CMD", "cast", "block-number", "--rpc-url", "http://localhost:8545"]
+      test:
+        ['CMD', 'cast', 'block-number', '--rpc-url', 'http://localhost:8545']
       start_period: 5s
       interval: 2s
       timeout: 5s

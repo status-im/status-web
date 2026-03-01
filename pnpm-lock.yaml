@@ -1956,9 +1956,15 @@ importers:
       prettier:
         specifier: ^3.3.3
         version: 3.6.2
+      rimraf:
+        specifier: ^5.0.0
+        version: 5.0.10
       tsx:
         specifier: ^4.19.0
         version: 4.20.6
+      typescript:
+        specifier: ^5.7.0
+        version: 5.9.3
       viem:
         specifier: ^2.46.3
         version: 2.46.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@6.0.3)(zod@4.3.6)
@@ -19133,6 +19139,10 @@ packages:
   rimraf@4.4.1:
     resolution: {integrity: sha512-Gk8NlF062+T9CqNGn6h4tls3k6T1+/nXdOcSZVikNVtlRdYpA7wRJJMoXmuvOnLW844rPjdQ7JgXCYM6PPC/og==}
     engines: {node: '>=14'}
+    hasBin: true
+
+  rimraf@5.0.10:
+    resolution: {integrity: sha512-l0OE8wL34P4nJH/H2ffoaniAokM2qSmrtXHmlpvYr5AVVX8msAyW0l8NVJFDxlSK4u3Uh/f41cQheDVdnYijwQ==}
     hasBin: true
 
   ripemd160@2.0.3:
@@ -46933,6 +46943,10 @@ snapshots:
   rimraf@4.4.1:
     dependencies:
       glob: 9.3.5
+
+  rimraf@5.0.10:
+    dependencies:
+      glob: 10.4.5
 
   ripemd160@2.0.3:
     dependencies:

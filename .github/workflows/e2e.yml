@@ -44,6 +44,9 @@ jobs:
       - name: Download MetaMask extension
         run: cd e2e && pnpm setup:metamask
 
+      - name: Start Anvil forks
+        run: cd e2e && pnpm anvil:up
+
       - name: Run E2E tests
         run: cd e2e && xvfb-run --auto-servernum -- pnpm test
         env:
@@ -51,6 +54,10 @@ jobs:
           WALLET_PASSWORD: ${{ secrets.E2E_WALLET_PASSWORD }}
           BASE_URL: https://hub.status.network
           CI: true
+
+      - name: Stop Anvil forks
+        if: always()
+        run: cd e2e && pnpm anvil:down
 
       - name: Upload test report
         uses: actions/upload-artifact@v4
