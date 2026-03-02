@@ -271,7 +271,11 @@ export type NFTFloorPriceResponseBody = {
   }
 }
 
-export type SendRawTransactionResponseBody = string
+export type SendRawTransactionResponseBody = {
+  jsonrpc: string
+  id: number
+  result: string
+}
 
 export type GasPriceResponseBody = string
 
