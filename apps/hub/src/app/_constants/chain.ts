@@ -17,10 +17,15 @@ export const getDefaultWagmiConfig = () =>
       [statusSepolia.id]: http(statusSepolia.rpcUrls.default.http[0]),
       [mainnet.id]: http(
         clientEnv.NEXT_PUBLIC_MAINNET_RPC_URL ||
-          'https://mainnet.infura.io/v3/6291a6aa45c94fd79bda6770b58153dd'
+          (clientEnv.NEXT_PUBLIC_STATUS_API_URL
+            ? `${clientEnv.NEXT_PUBLIC_STATUS_API_URL}/api/trpc/rpc.proxy?chainId=${mainnet.id}`
+            : mainnet.rpcUrls.default.http[0])
       ),
       [linea.id]: http(
-        clientEnv.NEXT_PUBLIC_LINEA_RPC_URL || linea.rpcUrls.default.http[0]
+        clientEnv.NEXT_PUBLIC_LINEA_RPC_URL ||
+          (clientEnv.NEXT_PUBLIC_STATUS_API_URL
+            ? `${clientEnv.NEXT_PUBLIC_STATUS_API_URL}/api/trpc/rpc.proxy?chainId=${linea.id}`
+            : linea.rpcUrls.default.http[0])
       ),
     },
     walletConnectProjectId:

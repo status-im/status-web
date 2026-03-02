@@ -164,6 +164,17 @@ MAINNET_FORK_URL=https://eth-mainnet.g.alchemy.com/v2/YOUR_KEY
 LINEA_FORK_URL=https://linea-mainnet.g.alchemy.com/v2/YOUR_KEY
 ```
 
+### Hub RPC Configuration
+
+The Hub app (`apps/hub`) uses the Status API proxy as the default RPC transport. For Anvil E2E tests, the MetaMask service worker is patched to redirect RPC calls to local forks — no changes to Hub env vars are needed.
+
+If you need to point the Hub app itself at a custom RPC (e.g. for local development without the proxy), set these optional env vars in `apps/hub/.env.local`:
+
+```bash
+NEXT_PUBLIC_MAINNET_RPC_URL=https://mainnet.infura.io/v3/YOUR_KEY
+NEXT_PUBLIC_LINEA_RPC_URL=https://rpc.linea.build
+```
+
 ## CI Setup
 
 ### GitHub Secrets
