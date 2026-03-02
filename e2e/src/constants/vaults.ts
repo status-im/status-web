@@ -27,7 +27,7 @@ export const TEST_VAULTS = {
     address: '0x79B4cDb14A31E8B0e21C0120C409Ac14Af35f919',
     chainId: 1,
   },
-} as const;
+} as const
 
 export const TEST_AMOUNTS = {
   SMALL_DEPOSIT: '0.001',
@@ -35,4 +35,4 @@ export const TEST_AMOUNTS = {
   LARGE_DEPOSIT: '0.1',
   STAKE_AMOUNT: '100',
   EXCEED_BALANCE: '999999999',
-} as const;
+} as const

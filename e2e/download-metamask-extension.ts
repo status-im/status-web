@@ -1,7 +1,7 @@
+import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
-import { spawnSync } from 'node:child_process'
 
 // Read default version from package.json (single source of truth)
 const pkg = JSON.parse(
@@ -45,9 +45,7 @@ const unzip = spawnSync('unzip', ['-o', zipPath, '-d', destDir], {
 })
 
 if (unzip.status !== 0) {
-  throw new Error(
-    'Failed to unzip extension. Make sure `unzip` is installed.',
-  )
+  throw new Error('Failed to unzip extension. Make sure `unzip` is installed.')
 }
 
 fs.rmSync(tmpDir, { recursive: true, force: true })
