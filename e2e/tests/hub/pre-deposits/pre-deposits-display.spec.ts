@@ -1,4 +1,4 @@
-import { TEST_VAULTS } from '@constants/vaults.js'
+import { TEST_VAULTS } from '@constants/hub/vaults.js'
 import { expect, test } from '@fixtures/base.fixture.js'
 
 test.describe('Pre-Deposits page', () => {

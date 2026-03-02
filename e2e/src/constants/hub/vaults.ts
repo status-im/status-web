@@ -7,7 +7,7 @@ import { CONTRACTS } from '@helpers/anvil-rpc.js'
 export const TEST_VAULTS = {
   WETH: {
     id: 'WETH',
-    name: 'WETH Vault',
+    name: 'WETH vault',
     token: 'WETH',
     address: CONTRACTS.WETH_VAULT,
     chainId: 1,
