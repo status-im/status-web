@@ -3,7 +3,6 @@ import {
   STATUS_SEPOLIA_CHAIN_ID_HEX,
 } from '@constants/hub/chains.js'
 import { TEST_AMOUNTS, TEST_VAULTS } from '@constants/hub/vaults.js'
-import { NOTIFICATION_TIMEOUTS } from '@constants/timeouts.js'
 import { test } from '@fixtures/hub/wallet-connected.fixture.js'
 import {
   dismissSiweDialogIfPresent,
@@ -11,7 +10,6 @@ import {
 } from '@helpers/hub-test-helpers.js'
 import { PreDepositModalComponent } from '@pages/hub/components/pre-deposit-modal.component.js'
 import { PreDepositsPage } from '@pages/hub/pre-deposits.page.js'
-import { expect } from '@playwright/test'
 
 test.describe('Pre-Deposit validation - Exceed balance', () => {
   for (const vault of Object.values(TEST_VAULTS)) {
@@ -61,14 +59,10 @@ test.describe('Pre-Deposit validation - Exceed balance', () => {
         }
 
         // Fail-safe: ensure we ended up on the correct network and the
-        // action button has rendered.
+        // action button has rendered. Uses retry-aware wait because the hub
+        // UI re-renders when wagmi detects a chain change.
         await test.step('Verify wallet is on the correct network', async () => {
-          await expect(depositModal.switchNetworkButton).not.toBeVisible({
-            timeout: NOTIFICATION_TIMEOUTS.OPTIONAL_ELEMENT,
-          })
-          await expect(depositModal.actionButton).toBeVisible({
-            timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION,
-          })
+          await depositModal.waitForNetworkReady()
         })
 
         await test.step('Enter amount exceeding balance', async () => {

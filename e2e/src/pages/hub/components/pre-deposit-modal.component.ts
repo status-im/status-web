@@ -83,6 +83,20 @@ export class PreDepositModalComponent {
     })
   }
 
+  /**
+   * Wait for the modal to settle after a network switch.
+   * The hub UI re-renders when wagmi detects a chain change, which can
+   * briefly unmount the action button.
+   */
+  async waitForNetworkReady(): Promise<void> {
+    await expect(this.switchNetworkButton).not.toBeVisible({
+      timeout: NOTIFICATION_TIMEOUTS.OPTIONAL_ELEMENT,
+    })
+    await expect(this.actionButton).toBeVisible({
+      timeout: HUB_TIMEOUTS.PAGE_READY,
+    })
+  }
+
   async clickActionButton(): Promise<void> {
     await this.actionButton.click()
   }
