@@ -2,6 +2,8 @@ import { clientEnv } from '~/config/env.client.mjs'
 
 import { GhostContentAPI } from './client'
 
+import type { PostOrPage } from '@tryghost/content-api'
+
 /** @see https://ghost.org/docs/content-api# */
 const ghost = GhostContentAPI({
   url: clientEnv.NEXT_PUBLIC_GHOST_API_URL,
@@ -11,11 +13,21 @@ const ghost = GhostContentAPI({
 
 type Params = { page?: number; limit?: number; tag?: string }
 
-export const DISALLOWED_TAGS = ['desktop-news', 'mobile-news']
+export const DISALLOWED_TAGS = [
+  'desktop-news',
+  'mobile-news',
+  'status-network-blog',
+]
 
 const DISALLOWED_TAGS_FILTER = DISALLOWED_TAGS.map(tag => `tag:-${tag}`).join(
   '+'
 )
+
+function hasDisallowedTag(post: { tags?: Array<{ slug?: string | null }> }) {
+  return post.tags?.some(
+    tag => !!tag.slug && DISALLOWED_TAGS.includes(tag.slug)
+  )
+}
 
 export const getPosts = async (params: Params = {}) => {
   const { page = 1, limit = 7, tag } = params
@@ -27,7 +39,7 @@ export const getPosts = async (params: Params = {}) => {
       limit,
       page,
       ...(tag
-        ? { filter: `tag:${tag}+visibility:public` }
+        ? { filter: `tag:${tag}+visibility:public+${DISALLOWED_TAGS_FILTER}` }
         : { filter: `visibility:public+${DISALLOWED_TAGS_FILTER}` }),
     })
 
@@ -50,14 +62,32 @@ export const getPosts = async (params: Params = {}) => {
   }
 }
 
+const RELEASE_TITLE_PATTERN = /\bv\d+\.\d+/
+
+export function findLatestReleasePost(posts: PostOrPage[]): PostOrPage | null {
+  if (posts.length === 0) return null
+
+  const releasePost = posts.find(
+    post => post.title && RELEASE_TITLE_PATTERN.test(post.title)
+  )
+
+  return releasePost ?? null
+}
+
 export const getPostBySlug = async (slug: string) => {
   try {
-    return await ghost.posts.read(
+    const post = await ghost.posts.read(
       { slug },
       {
         include: ['tags', 'authors'],
       }
     )
+
+    if (hasDisallowedTag(post)) {
+      return
+    }
+
+    return post
   } catch {
     return
   }
@@ -126,7 +156,11 @@ export const getTagSlugs = async (): Promise<string[]> => {
       filter: `visibility:public`,
     })
 
-    return tags.map(tag => tag.slug)
+    return tags
+      .map(tag => tag.slug)
+      .filter(
+        (slug): slug is string => !!slug && !DISALLOWED_TAGS.includes(slug)
+      )
   } catch (error) {
     console.error('Failed to fetch tag slugs from Ghost API:', error)
     return []

@@ -1,4 +1,5 @@
 import { Button, Text } from '@status-im/components'
+import { ExternalIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
 
 import { ROUTES } from '~/config/routes'
@@ -6,7 +7,7 @@ import { jsonLD, JSONLDScript } from '~/utils/json-ld'
 import { Image, Video } from '~components/assets'
 import { Body } from '~components/body'
 import { ColorTheme } from '~website/_components/color-theme'
-import { getPosts } from '~website/_lib/ghost'
+import { findLatestReleasePost, getPosts } from '~website/_lib/ghost'
 import { PostGrid } from '~website/blog/_components/post-grid'
 
 import { CopyrightSymbol } from './_components/copyright-symbol'
@@ -17,6 +18,7 @@ import { DownloadMobileButton } from './_components/download-mobile-button'
 import { FeatureList } from './_components/feature-list'
 import { FeatureTag } from './_components/feature-tag'
 import { HandsSection } from './_components/hands-section'
+import { NewsTag } from './_components/news-tag'
 import { ParallaxCircle } from './_components/parallax-circle'
 
 import type { FeatureListProps } from './_components/feature-list'
@@ -24,123 +26,103 @@ import type { FeatureListProps } from './_components/feature-list'
 export const revalidate = 3600 // 1 hour
 
 export default async function HomePage() {
-  const { posts } = await getPosts({ limit: 3 })
+  const { posts: allPosts } = await getPosts({ limit: 10 })
+  const releaseResult = findLatestReleasePost(allPosts)
+  const posts = allPosts.slice(0, 3)
 
   const organizationSchema = jsonLD.organization({
     description:
-      'The open-source, decentralised wallet and messenger. Make the jump to web3.',
+      'Private, secure by design. Transact, Message, Browse on your Terms.',
   })
 
   const websiteSchema = jsonLD.website({
     description:
-      'The open-source, decentralised wallet and messenger. Make the jump to web3.',
+      'Private, secure by design. Transact, Message, Browse on your Terms.',
   })
 
   return (
     <>
       <JSONLDScript schema={[organizationSchema, websiteSchema]} />
-      <div className="relative flex w-full justify-center">
-        <Image
-          id="Non Beta Release/Illustrations/hero-1:930:1424"
-          alt=""
-          aria-hidden
-          width={465}
-          height={712}
-          className="absolute top-0 z-10 hidden xl:left-[-150px] xl:block 2xl:left-[-75px] 3xl:left-0"
-          priority
-        />
-        <Image
-          id="Non Beta Release/Illustrations/hero-2:950:1424"
-          alt=""
-          aria-hidden
-          width={475}
-          height={712}
-          className="absolute top-0 z-10 hidden xl:right-[-150px] xl:block 2xl:right-[-75px] 3xl:right-0"
-          priority
-        />
-        {/* HERO */}
-        <div
-          data-theme="dark"
-          className="flex flex-col items-center bg-neutral-100 px-5 pb-[386px] pt-16 lg:pt-44 xl:pb-24"
-        >
-          <div className="relative z-20 mb-6 grid max-w-[582px] place-items-center text-center lg:mb-8">
-            {/* {latestPost && (
-              <Link
-                href={`/blog/${latestPost.slug}`}
-                className="mb-4 inline-flex h-8 select-none items-center rounded-[56px] border border-white-10 bg-white-5 pl-2 pr-[6px]"
-              >
-                <p className="line-clamp-1 text-left text-15 font-medium text-white-100">
-                  {latestPost.title}
-                </p>
-                <ChevronRightIcon className="ml-[2px] text-white-40" />
-              </Link>
-            )} */}
-
-            <h1 className="mb-4 text-48 font-bold text-white-100 lg:mb-6 lg:text-88">
-              Make the
+      {/* HERO */}
+      <div
+        data-theme="dark"
+        className="relative w-full overflow-x-clip bg-neutral-100 pb-8 pt-16 lg:pb-16 lg:pt-24"
+      >
+        <div className="container mx-auto grid grid-cols-1 gap-8 px-5 xl:grid-cols-2 xl:gap-0">
+          <div className="relative z-10 mx-auto flex max-w-[636px] flex-col items-center text-center xl:mx-0 xl:min-w-[640px] xl:items-start xl:text-left">
+            <h1 className="mb-4 text-48 font-bold text-white-100 lg:mb-10 lg:text-88">
+              Private, secure
               <br />
-              jump to web3
+              by design
             </h1>
 
-            <p className="text-27 text-white-100">
-              Use the open-source, decentralised wallet and messenger.
+            <p className="mb-6 max-w-[320px] text-19 font-medium text-white-100 lg:mb-8 lg:max-w-[600px] lg:text-27 lg:font-regular">
+              Transact, Message, Browse on your Terms ...integrated into one
+              powerful super app
             </p>
-          </div>
 
-          <div className="relative z-20 inline-flex w-[237px] flex-col items-center gap-6 text-center md:w-full">
-            <div
-              data-theme="dark"
-              className={cx(
-                'hidden w-fit flex-row items-stretch gap-2 rounded-20 border border-dashed border-neutral-80 p-2',
-                'md:w-fit md:flex-row md:items-center',
-                'ios:flex android:flex unknown:flex xl:unknown:hidden'
-              )}
-            >
-              <DownloadDesktopButton variant="primary" show="all" />
-              <DownloadMobileButton variant="outline" />
+            <div className="mb-6 flex max-w-full flex-col items-center gap-4 lg:mb-8 xl:items-start">
+              <div
+                data-theme="dark"
+                className={cx(
+                  'hidden max-w-full flex-row flex-wrap items-stretch justify-center gap-2 rounded-20 border border-dashed border-neutral-80 p-2',
+                  'sm:w-fit sm:flex-nowrap sm:justify-start',
+                  'ios:flex android:flex unknown:flex xl:unknown:hidden'
+                )}
+              >
+                <DownloadDesktopButton variant="outline" show="all" />
+                <DownloadMobileButton variant="primary" />
+              </div>
+              <div
+                data-theme="dark"
+                className={cx(
+                  'hidden max-w-full flex-row flex-wrap items-stretch justify-center gap-2 rounded-20 border border-dashed border-neutral-80 p-2',
+                  'sm:w-fit sm:flex-nowrap sm:justify-start',
+                  'macos:flex windows:flex linux:flex xl:unknown:flex'
+                )}
+              >
+                <DownloadDesktopButton variant="primary" show="all" />
+                <DownloadMobileButton variant="outline" />
+              </div>
             </div>
-          </div>
-          <div
-            data-theme="dark"
-            className={cx(
-              'hidden w-fit flex-row items-stretch gap-2 rounded-20 border border-dashed border-neutral-80 p-2',
-              'md:w-fit md:flex-row md:items-center',
-              'macos:flex windows:flex linux:flex xl:unknown:flex'
-            )}
-          >
-            <DownloadDesktopButton variant="primary" show="all" />
-            <DownloadMobileButton variant="outline" />
-          </div>
-          <div
-            data-theme="dark"
-            className="mt-6 flex max-w-[572px] flex-row items-center gap-4 rounded-16 border border-solid border-white-10 bg-white-5 p-[6px] pl-[12px] text-left lg:flex-row lg:gap-10"
-          >
-            <div className="flex text-left">
-              <p className="text-15 font-400 text-white-100">
+
+            <div className="mb-9 flex max-w-full flex-row items-center gap-3 text-left sm:max-w-[572px] lg:mb-20">
+              <p className="text-13 font-medium text-white-100">
                 Still on the Status Legacy mobile app? Migrate now.
               </p>
-            </div>
-            <div className="flex shrink-0 items-center">
               <Button
                 size="32"
-                variant="outline"
+                variant="darkGrey"
                 href="https://status.app/blog/migrate-from-status-legacy-to-unified-status-mobile-app"
                 target="_blank"
                 rel="noopener noreferrer"
+                iconAfter={<ExternalIcon className="text-white-100" />}
               >
                 Learn more
               </Button>
             </div>
+
+            {releaseResult && <NewsTag post={releaseResult} />}
           </div>
-          <Image
-            id="Non Beta Release/Illustrations/Hero_Non_Beta_Release_Mobile_Long-optimized:1470:813"
-            alt=""
-            aria-hidden
-            width={735}
-            height={406}
-            className="absolute bottom-[-200px] left-[-70px] block max-w-[735px] -translate-y-40 md:left-1/2 md:-translate-x-1/2 xl:hidden"
-            priority
-          />
+
+          <div className="relative hidden xl:block">
+            <Image
+              id="Homepage/Hero/device-mockups:2128:1292"
+              alt="Status app showing wallet and messenger on devices"
+              width={2128}
+              height={1292}
+              className="absolute left-0 top-1/2 z-20 ml-[18%] w-[170%] max-w-none translate-y-[-36%]"
+            />
+          </div>
+          <div className="relative mb-[-80px] xl:hidden">
+            <Image
+              id="Homepage/Hero/device-mockups-mobile:1267:770"
+              alt="Status app showing wallet and messenger on devices"
+              width={1267}
+              height={770}
+              className="relative z-20 w-[130%] max-w-none"
+            />
+          </div>
         </div>
       </div>
 

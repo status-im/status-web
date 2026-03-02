@@ -1,21 +1,12 @@
-import { getPathname } from '@status-im/status-network/utils'
+import { routing } from '~/i18n/routing'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
-import { Metadata } from '../_metadata'
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>
-}) {
-  const { locale } = await params
-  const pathname = await getPathname()
-
-  return Metadata({
-    pathname,
-    locale,
-  })
+export function generateStaticParams() {
+  return routing.locales.map(locale => ({ locale }))
 }
+
+export const dynamicParams = false
 
 type Props = {
   children: React.ReactNode
