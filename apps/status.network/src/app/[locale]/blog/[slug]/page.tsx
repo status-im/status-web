@@ -108,14 +108,17 @@ export default async function BlogDetailPage({ params }: Props) {
       <JSONLDScript
         schema={faqSchema ? [articleSchema, faqSchema] : articleSchema}
       />
-      {customJsonLd.map((jsonLd, index) => (
-        <script
-          key={`custom-jsonld-${index}`}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: jsonLd }}
-        />
-      ))}
+      {customJsonLd.map((jsonLd, index) => {
+        const safeJsonLd = jsonLd.replace(/</g, '\\u003c')
 
+        return (
+          <script
+            key={`custom-jsonld-${index}`}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: safeJsonLd }}
+          />
+        )
+      })}
       <div className="mx-auto w-full max-w-[1184px] px-5 pb-16 pt-10 xl:pb-24 xl:pt-16">
         <div className="mb-8 text-13 text-neutral-50">
           <Link href="/blog" className="hover:text-neutral-100">
