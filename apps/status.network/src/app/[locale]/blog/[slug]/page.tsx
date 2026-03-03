@@ -1,4 +1,4 @@
-import { getPostFAQItems } from '~app/_lib/faq'
+import { getCodeInjectionJsonLd, getPostFAQItems } from '~app/_lib/faq'
 import { getPostBySlug, getPostsByTagSlug } from '~app/_lib/ghost'
 import { Metadata } from '~app/_metadata'
 import { formatDate } from '~app/_utils/format-date'
@@ -29,13 +29,17 @@ export async function generateMetadata({ params }: Props) {
   }
 
   return Metadata({
-    title: post.title,
-    description: post.excerpt ?? undefined,
+    title: post.meta_title ?? post.title,
+    description: post.meta_description ?? post.excerpt ?? undefined,
     pathname: `/blog/${slug}`,
     openGraph: {
       type: 'article',
       title: post.og_title ?? post.title,
-      description: post.og_description ?? post.excerpt ?? undefined,
+      description:
+        post.og_description ??
+        post.meta_description ??
+        post.excerpt ??
+        undefined,
       images: post.og_image ?? post.feature_image ?? undefined,
     },
   })
@@ -54,6 +58,11 @@ export default async function BlogDetailPage({ params }: Props) {
     post.codeinjection_foot,
   )
 
+  const customJsonLd = getCodeInjectionJsonLd(
+    post.codeinjection_head,
+    post.codeinjection_foot,
+  )
+
   const relatedPosts = post.primary_tag?.slug
     ? (await getPostsByTagSlug(post.primary_tag.slug, 5)).filter(
         item => item.slug !== post.slug,
@@ -62,7 +71,7 @@ export default async function BlogDetailPage({ params }: Props) {
 
   const articleSchema = jsonLD.article({
     headline: post.title,
-    description: post.excerpt ?? undefined,
+    description: post.meta_description ?? post.excerpt ?? undefined,
     image: post.feature_image ?? undefined,
     datePublished: post.published_at ?? undefined,
     dateModified: post.updated_at ?? post.published_at ?? undefined,
@@ -99,7 +108,17 @@ export default async function BlogDetailPage({ params }: Props) {
       <JSONLDScript
         schema={faqSchema ? [articleSchema, faqSchema] : articleSchema}
       />
+      {customJsonLd.map((jsonLd, index) => {
+        const safeJsonLd = jsonLd.replace(/</g, '\\u003c')
 
+        return (
+          <script
+            key={`custom-jsonld-${index}`}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: safeJsonLd }}
+          />
+        )
+      })}
       <div className="mx-auto w-full max-w-[1184px] px-5 pb-16 pt-10 xl:pb-24 xl:pt-16">
         <div className="mb-8 text-13 text-neutral-50">
           <Link href="/blog" className="hover:text-neutral-100">
