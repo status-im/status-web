@@ -113,9 +113,6 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 // Extract JSON-LD from Ghost code injection.
-// Supports both:
-//   1. <script type="application/ld+json">{...}</script>
-//   2. Raw JSON objects with "@context" and "@type" (pasted directly in Ghost)
 const JSON_LD_SCRIPT_PATTERN =
   /<script[^>]*type=(["'])application\/ld\+json\1[^>]*>([\s\S]*?)<\/script>/gi
 
@@ -154,6 +151,7 @@ export function getCodeInjectionJsonLd(
           }
         } catch {
           // not valid JSON
+          console.log('Invalid JSON-LD in code injection:', trimmed)
         }
       }
     }
