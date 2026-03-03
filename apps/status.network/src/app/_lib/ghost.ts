@@ -24,6 +24,8 @@ export type GhostPost = {
   feature_image_alt: string | null
   published_at: string | null
   updated_at: string | null
+  meta_title: string | null
+  meta_description: string | null
   og_title: string | null
   og_description: string | null
   og_image: string | null
