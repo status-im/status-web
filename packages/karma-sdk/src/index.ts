@@ -72,7 +72,7 @@ export type {
 } from './types'
 
 // === Class-based SDK ===
-export { KarmaSDK } from './sdk'
+export { KarmaSDK, PRESET_API_URLS } from './sdk'
 export type {
   KarmaSDKConfig,
   ChainPreset,

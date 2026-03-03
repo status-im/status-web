@@ -1,5 +1,6 @@
 import type { Address } from './common'
 
+/** Built-in chain presets for Status Network deployments. Use 'custom' in KarmaSDKConfig for other chains. */
 export type ChainPreset = 'sn-hoodi' | 'sn-mainnet'
 
 export type SDKMode = 'read-only' | 'read-write'
@@ -11,11 +12,17 @@ export interface EIP1193Provider {
 
 export interface ChainConfig {
   chainId: number
+  /** Human-readable chain name. Defaults to "Karma Chain (<chainId>)". */
+  name?: string
+  /** Native currency definition. Defaults to ETH (18 decimals). */
+  nativeCurrency?: { name: string; symbol: string; decimals: number }
   contracts: {
     karma: Address
-    statusRewardsDistributor: Address
+    rewardsDistributor: Address
     karmaTier: Address
     karmaAirdrop?: Address
+    /** @deprecated Use rewardsDistributor. Will be removed in v1.0. */
+    statusRewardsDistributor?: Address
   }
 }
 
@@ -34,4 +41,6 @@ export interface KarmaSDKConfig {
   fetch?: typeof globalThis.fetch
   /** Required when chain='custom' */
   customChain?: ChainConfig
+  /** Custom RewardsDistributor instance. Defaults to StatusKarmaDistributor. */
+  rewardsDistributor?: import('../modules/rewards').RewardsDistributor
 }

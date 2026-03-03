@@ -4,16 +4,26 @@ import { getKarmaAddresses } from './addresses'
 import type { Address } from '../types/common'
 import type { PublicClient, WalletClient } from 'viem'
 
+function resolveDistributorAddress(
+  chainId: number | undefined,
+  contractAddress?: Address,
+): Address {
+  if (contractAddress) return contractAddress
+  if (!chainId) throw new Error('Chain ID or contractAddress required')
+  return getKarmaAddresses(chainId).rewardsDistributor
+}
+
 export async function getRewardsBalance(
   client: PublicClient,
-  params: { account: Address; chainId?: number },
+  params: { account: Address; chainId?: number; contractAddress?: Address },
 ): Promise<bigint> {
-  const chainId = params.chainId ?? client.chain?.id
-  if (!chainId) throw new Error('Chain ID required')
-  const addresses = getKarmaAddresses(chainId)
+  const address = resolveDistributorAddress(
+    params.chainId ?? client.chain?.id,
+    params.contractAddress,
+  )
 
   return client.readContract({
-    address: addresses.rewardsDistributor,
+    address,
     abi: rewardsDistributorAbi,
     functionName: 'rewardsBalanceOf',
     args: [params.account],
@@ -22,14 +32,15 @@ export async function getRewardsBalance(
 
 export async function getRewardsBalanceOfAccount(
   client: PublicClient,
-  params: { account: Address; chainId?: number },
+  params: { account: Address; chainId?: number; contractAddress?: Address },
 ): Promise<bigint> {
-  const chainId = params.chainId ?? client.chain?.id
-  if (!chainId) throw new Error('Chain ID required')
-  const addresses = getKarmaAddresses(chainId)
+  const address = resolveDistributorAddress(
+    params.chainId ?? client.chain?.id,
+    params.contractAddress,
+  )
 
   return client.readContract({
-    address: addresses.rewardsDistributor,
+    address,
     abi: rewardsDistributorAbi,
     functionName: 'rewardsBalanceOfAccount',
     args: [params.account],
@@ -39,14 +50,15 @@ export async function getRewardsBalanceOfAccount(
 export async function redeemRewards(
   walletClient: WalletClient,
   publicClient: PublicClient,
-  params: { account: Address; chainId?: number },
+  params: { account: Address; chainId?: number; contractAddress?: Address },
 ): Promise<Address> {
-  const chainId = params.chainId ?? walletClient.chain?.id
-  if (!chainId) throw new Error('Chain ID required')
-  const addresses = getKarmaAddresses(chainId)
+  const address = resolveDistributorAddress(
+    params.chainId ?? walletClient.chain?.id,
+    params.contractAddress,
+  )
 
   const { request } = await publicClient.simulateContract({
-    address: addresses.rewardsDistributor,
+    address,
     abi: rewardsDistributorAbi,
     functionName: 'redeemRewards',
     args: [params.account],
@@ -58,14 +70,15 @@ export async function redeemRewards(
 
 export async function getAvailableSupply(
   client: PublicClient,
-  params?: { chainId?: number },
+  params?: { chainId?: number; contractAddress?: Address },
 ): Promise<bigint> {
-  const chainId = params?.chainId ?? client.chain?.id
-  if (!chainId) throw new Error('Chain ID required')
-  const addresses = getKarmaAddresses(chainId)
+  const address = resolveDistributorAddress(
+    params?.chainId ?? client.chain?.id,
+    params?.contractAddress,
+  )
 
   return client.readContract({
-    address: addresses.rewardsDistributor,
+    address,
     abi: rewardsDistributorAbi,
     functionName: 'availableSupply',
   })
@@ -73,14 +86,15 @@ export async function getAvailableSupply(
 
 export async function getMintedSupply(
   client: PublicClient,
-  params?: { chainId?: number },
+  params?: { chainId?: number; contractAddress?: Address },
 ): Promise<bigint> {
-  const chainId = params?.chainId ?? client.chain?.id
-  if (!chainId) throw new Error('Chain ID required')
-  const addresses = getKarmaAddresses(chainId)
+  const address = resolveDistributorAddress(
+    params?.chainId ?? client.chain?.id,
+    params?.contractAddress,
+  )
 
   return client.readContract({
-    address: addresses.rewardsDistributor,
+    address,
     abi: rewardsDistributorAbi,
     functionName: 'mintedSupply',
   })
@@ -88,14 +102,15 @@ export async function getMintedSupply(
 
 export async function getTotalRewardsSupply(
   client: PublicClient,
-  params?: { chainId?: number },
+  params?: { chainId?: number; contractAddress?: Address },
 ): Promise<bigint> {
-  const chainId = params?.chainId ?? client.chain?.id
-  if (!chainId) throw new Error('Chain ID required')
-  const addresses = getKarmaAddresses(chainId)
+  const address = resolveDistributorAddress(
+    params?.chainId ?? client.chain?.id,
+    params?.contractAddress,
+  )
 
   return client.readContract({
-    address: addresses.rewardsDistributor,
+    address,
     abi: rewardsDistributorAbi,
     functionName: 'totalRewardsSupply',
   })
@@ -108,14 +123,16 @@ export async function setRewardsSupplier(
     rewardsSupplier: Address
     account: Address
     chainId?: number
+    contractAddress?: Address
   },
 ): Promise<Address> {
-  const chainId = params.chainId ?? walletClient.chain?.id
-  if (!chainId) throw new Error('Chain ID required')
-  const addresses = getKarmaAddresses(chainId)
+  const address = resolveDistributorAddress(
+    params.chainId ?? walletClient.chain?.id,
+    params.contractAddress,
+  )
 
   const { request } = await publicClient.simulateContract({
-    address: addresses.rewardsDistributor,
+    address,
     abi: rewardsDistributorAbi,
     functionName: 'setRewardsSupplier',
     args: [params.rewardsSupplier],
@@ -133,14 +150,16 @@ export async function setReward(
     duration: bigint
     account: Address
     chainId?: number
+    contractAddress?: Address
   },
 ): Promise<Address> {
-  const chainId = params.chainId ?? walletClient.chain?.id
-  if (!chainId) throw new Error('Chain ID required')
-  const addresses = getKarmaAddresses(chainId)
+  const address = resolveDistributorAddress(
+    params.chainId ?? walletClient.chain?.id,
+    params.contractAddress,
+  )
 
   const { request } = await publicClient.simulateContract({
-    address: addresses.rewardsDistributor,
+    address,
     abi: rewardsDistributorAbi,
     functionName: 'setReward',
     args: [params.amount, params.duration],
@@ -158,14 +177,16 @@ export async function mintRewards(
     amount: bigint
     account: Address
     chainId?: number
+    contractAddress?: Address
   },
 ): Promise<Address> {
-  const chainId = params.chainId ?? walletClient.chain?.id
-  if (!chainId) throw new Error('Chain ID required')
-  const addresses = getKarmaAddresses(chainId)
+  const address = resolveDistributorAddress(
+    params.chainId ?? walletClient.chain?.id,
+    params.contractAddress,
+  )
 
   const { request } = await publicClient.simulateContract({
-    address: addresses.rewardsDistributor,
+    address,
     abi: rewardsDistributorAbi,
     functionName: 'mint',
     args: [params.recipient, params.amount],
@@ -182,6 +203,7 @@ export async function distributeRewardsBatch(
     distributions: Array<{ recipient: Address; amount: bigint }>
     account: Address
     chainId?: number
+    contractAddress?: Address
   },
 ): Promise<Address[]> {
   const txHashes: Address[] = []
@@ -192,6 +214,7 @@ export async function distributeRewardsBatch(
       amount: distribution.amount,
       account: params.account,
       chainId: params.chainId,
+      contractAddress: params.contractAddress,
     })
     txHashes.push(txHash)
   }
