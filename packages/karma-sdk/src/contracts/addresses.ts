@@ -14,14 +14,14 @@ export const KARMA_ADDRESSES: Record<
   KarmaChainId,
   {
     karma: Address
-    statusRewardsDistributor: Address
+    rewardsDistributor: Address
     karmaTier: Address
     karmaAirdrop?: Address
   }
 > = {
   [KARMA_CHAIN_IDS.STATUS_SEPOLIA]: {
     karma: '0x7ec5Dc75D09fAbcD55e76077AFa5d4b77D112fde',
-    statusRewardsDistributor: '0xAEF19bbbe490Ad9C083EcE40c835A2f21B720de8',
+    rewardsDistributor: '0xAEF19bbbe490Ad9C083EcE40c835A2f21B720de8',
     karmaTier: '0xc7fCD786a161f42bDaF66E18a67C767C23cFd30C',
   },
 } as const
@@ -29,10 +29,12 @@ export const KARMA_ADDRESSES: Record<
 export const CHAIN_PRESETS: Record<ChainPreset, ChainConfig> = {
   'sn-hoodi': {
     chainId: KARMA_CHAIN_IDS.STATUS_SEPOLIA,
+    name: 'Status Network (Hoodi)',
     contracts: KARMA_ADDRESSES[KARMA_CHAIN_IDS.STATUS_SEPOLIA],
   },
   'sn-mainnet': {
     chainId: KARMA_CHAIN_IDS.STATUS_SEPOLIA, // TODO: replace with mainnet chain ID
+    name: 'Status Network',
     contracts: KARMA_ADDRESSES[KARMA_CHAIN_IDS.STATUS_SEPOLIA],
   },
 }
@@ -44,7 +46,7 @@ export function getKarmaAddresses(chainId: number) {
   }
   return {
     ...addresses,
-    /** @deprecated Use statusRewardsDistributor instead */
-    rewardsDistributor: addresses.statusRewardsDistributor,
+    /** @deprecated Use rewardsDistributor instead */
+    statusRewardsDistributor: addresses.rewardsDistributor,
   }
 }

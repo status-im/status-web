@@ -2,6 +2,7 @@ import { buildPublicClient, buildWalletClient } from './client/client-factory'
 import { CHAIN_PRESETS } from './contracts/addresses'
 import { KarmaApiClient } from './api/client'
 import { KarmaModule } from './modules/karma'
+import { RewardsDistributor } from './modules/rewards'
 import { StatusKarmaDistributor } from './modules/status-rewards'
 import { TiersModule } from './modules/tiers'
 import { AirdropModule } from './modules/airdrop'
@@ -17,12 +18,26 @@ import {
 import { getPowCaptchaEndpoint, isValidCaptchaToken } from './api/captcha'
 
 import type { PublicClient, WalletClient } from 'viem'
-import type { KarmaSDKConfig, ChainConfig } from './types/config'
+import type { KarmaSDKConfig, ChainConfig, ChainPreset } from './types/config'
 import type { CurrentUser, QuotaResponse, SiweSession } from './types'
 
-const DEFAULT_API_URLS: Record<string, string> = {
+export const PRESET_API_URLS: Record<ChainPreset, string> = {
   'sn-hoodi': 'https://karma.hoodi.status.network',
   'sn-mainnet': 'https://karma.status.network',
+}
+
+function normalizeChainConfig(config: ChainConfig): ChainConfig {
+  const contracts = config.contracts
+  if (contracts.statusRewardsDistributor && !contracts.rewardsDistributor) {
+    return {
+      ...config,
+      contracts: {
+        ...contracts,
+        rewardsDistributor: contracts.statusRewardsDistributor,
+      },
+    }
+  }
+  return config
 }
 
 export class KarmaSDK {
@@ -32,7 +47,7 @@ export class KarmaSDK {
   private _chainConfig: ChainConfig
 
   readonly karma: KarmaModule
-  readonly rewards: StatusKarmaDistributor
+  readonly rewards: RewardsDistributor
   readonly tiers: TiersModule
   readonly airdrop: AirdropModule
   readonly sybil: SybilModule
@@ -43,7 +58,7 @@ export class KarmaSDK {
       if (!config.customChain) {
         throw new Error("customChain is required when chain is 'custom'")
       }
-      this._chainConfig = config.customChain
+      this._chainConfig = normalizeChainConfig(config.customChain)
     } else {
       const preset = CHAIN_PRESETS[config.chain]
       if (!preset) {
@@ -58,7 +73,7 @@ export class KarmaSDK {
     const apiUrl =
       config.apiUrl ??
       (config.chain !== 'custom'
-        ? DEFAULT_API_URLS[config.chain]
+        ? PRESET_API_URLS[config.chain]
         : undefined)
     if (!apiUrl) {
       throw new Error(
@@ -75,11 +90,12 @@ export class KarmaSDK {
     const getWallet = () => this._walletClient
 
     this.karma = new KarmaModule(getPublic, getWallet, this._chainConfig)
-    this.rewards = new StatusKarmaDistributor(
-      getPublic,
-      getWallet,
-      this._chainConfig.contracts.statusRewardsDistributor,
-    )
+    this.rewards = config.rewardsDistributor
+      ?? new StatusKarmaDistributor(
+        getPublic,
+        getWallet,
+        this._chainConfig.contracts.rewardsDistributor,
+      )
     this.tiers = new TiersModule(getPublic, this._chainConfig)
     this.airdrop = new AirdropModule(getPublic, getWallet)
     this.sybil = new SybilModule(this._apiClient)

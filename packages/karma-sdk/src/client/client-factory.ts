@@ -14,8 +14,8 @@ import type { Hex } from '../types/common'
 export function buildChain(chainConfig: ChainConfig) {
   return defineChain({
     id: chainConfig.chainId,
-    name: `Status Network (${chainConfig.chainId})`,
-    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+    name: chainConfig.name ?? `Karma Chain (${chainConfig.chainId})`,
+    nativeCurrency: chainConfig.nativeCurrency ?? { name: 'Ether', symbol: 'ETH', decimals: 18 },
     rpcUrls: { default: { http: [] } },
   })
 }
