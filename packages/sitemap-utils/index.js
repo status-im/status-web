@@ -2,9 +2,8 @@
 const fs = require('fs')
 const path = require('path')
 
-function buildLocalizedPaths(locales, pages, changefreq = 'monthly') {
+function buildLocalizedPaths(locales, pages) {
   const result = []
-  const lastmod = new Date().toISOString()
 
   for (const locale of locales) {
     for (const page of pages) {
@@ -15,11 +14,7 @@ function buildLocalizedPaths(locales, pages, changefreq = 'monthly') {
         loc = locale === 'en' ? `/${page}` : `/${locale}/${page}`
       }
 
-      result.push({
-        loc,
-        changefreq,
-        lastmod,
-      })
+      result.push({ loc })
     }
   }
 
