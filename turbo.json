@@ -31,6 +31,11 @@
       "dependsOn": ["^build:content"],
       "persistent": true
     },
+    "status.network#build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**"],
+      "passThroughEnv": ["GHOST_API_URL", "GHOST_API_KEY"]
+    },
     "comment_build:content": {
       "cache": true,
       "persistent": true,
