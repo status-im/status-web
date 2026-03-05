@@ -7,6 +7,7 @@ import {
   redirect,
 } from '@tanstack/react-router'
 
+import { ConnectedDApps } from '../components/connected-dapps'
 import { Link } from '../components/link'
 import { apiClient } from '../providers/api-client'
 import { PendingTransactionsProvider } from '../providers/pending-transactions-context'
@@ -129,7 +130,11 @@ function RootComponent() {
             <WagmiConfigProvider>
               <PendingTransactionsProvider>
                 <div className="flex min-h-[56px] items-center px-2">
-                  <Navbar hasFeedback linkComponent={Link} />
+                  <Navbar
+                    hasFeedback
+                    linkComponent={Link}
+                    rightSlot={<ConnectedDApps />}
+                  />
                 </div>
                 <div className="px-1">
                   <div className="flex-1 flex-col 2md:flex xl:pb-1">

@@ -11,6 +11,7 @@ import { createAPI } from '../data/api'
 import { encoder } from '../data/encoder'
 import { getKeystore } from '../data/keystore'
 import { getWalletCore } from '../data/wallet'
+import { handleRpcRequest } from '../lib/rpc-handler'
 
 export default defineBackground({
   type: 'module',
@@ -67,6 +68,37 @@ export default defineBackground({
       }
     })
 
-    // debugger
+    // dApp RPC message handler
+    chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+      if (message?.type !== 'status:rpc') {
+        return false
+      }
+
+      const { method, params, origin, title, favicon } = message.data
+
+      handleRpcRequest(method, params, origin, { title, favicon })
+        .then(result => {
+          sendResponse({ type: 'status:proxy:success', data: result })
+        })
+        .catch(error => {
+          sendResponse({
+            type: 'status:proxy:error',
+            error: {
+              code:
+                error && typeof error === 'object' && 'code' in error
+                  ? error.code
+                  : -32603,
+              message:
+                error instanceof Error
+                  ? error.message
+                  : error && typeof error === 'object' && 'message' in error
+                    ? error.message
+                    : 'Internal error',
+            },
+          })
+        })
+
+      return true
+    })
   },
 })

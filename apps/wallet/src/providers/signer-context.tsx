@@ -2,6 +2,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react'
@@ -52,9 +53,25 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
     return currentWallet?.activeAccounts[0]?.address as Address | undefined
   }, [currentWallet])
 
+  useEffect(() => {
+    if (address) {
+      chrome.storage.session.set({ dappAddress: address })
+    } else {
+      chrome.storage.session.remove('dappAddress')
+    }
+  }, [address])
+
+  useEffect(() => {
+    if (currentWallet?.id) {
+      chrome.storage.session.set({ dappWalletId: currentWallet.id })
+    } else {
+      chrome.storage.session.remove('dappWalletId')
+    }
+  }, [currentWallet?.id])
+
   const unlock = useCallback(
     async (password: string): Promise<boolean> => {
-      if (!currentWallet?.id) return false
+      if (!currentWallet?.id || !address) return false
       try {
         await apiClient.wallet.get.query({
           walletId: currentWallet.id,
@@ -66,7 +83,7 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
         return false
       }
     },
-    [currentWallet?.id],
+    [currentWallet?.id, address],
   )
 
   const lock = useCallback(() => {
