@@ -383,6 +383,10 @@
       "translation": "새 금고 만들기",
       "notes": "stake::create_new_vault"
     },
+    "max_vaults_reached": {
+      "translation": "최대 금고 수에 도달했습니다 ({max})",
+      "notes": "stake::max_vaults_reached"
+    },
     "dont_lock": {
       "translation": "잠그지 않기",
       "notes": "stake::dont_lock"

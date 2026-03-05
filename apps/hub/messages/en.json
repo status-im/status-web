@@ -383,6 +383,10 @@
       "translation": "Create new vault",
       "notes": "stake::create_new_vault"
     },
+    "max_vaults_reached": {
+      "translation": "Max vaults reached ({max})",
+      "notes": "stake::max_vaults_reached"
+    },
     "dont_lock": {
       "translation": "Don't lock",
       "notes": "stake::dont_lock"

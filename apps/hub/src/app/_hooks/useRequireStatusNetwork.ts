@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useAccount, useChainId, useSwitchChain } from 'wagmi'
-import { statusSepolia } from 'wagmi/chains'
+
+import { statusHoodi } from '~constants/chain'
 
 /**
  * Hook that auto-switches to Status Network when connected to wrong chain.
@@ -15,7 +16,7 @@ export function useRequireStatusNetwork() {
   const [errorDismissed, setErrorDismissed] = useState(false)
   const wasConnectedRef = useRef(isConnected)
 
-  const isCorrectChain = chainId === statusSepolia.id
+  const isCorrectChain = chainId === statusHoodi.id
 
   useEffect(() => {
     if (error && !errorDismissed) {
@@ -47,7 +48,7 @@ export function useRequireStatusNetwork() {
       !hasSwitchError &&
       !errorDismissed
     ) {
-      switchChain({ chainId: statusSepolia.id })
+      switchChain({ chainId: statusHoodi.id })
     }
   }, [
     isConnected,

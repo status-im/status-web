@@ -4,8 +4,8 @@ import { useTranslations } from 'next-intl'
 import { type Address } from 'viem'
 import { useAccount, useChainId, useConfig } from 'wagmi'
 import { readContract } from 'wagmi/actions'
-import { statusSepolia } from 'wagmi/chains'
 
+import { statusHoodi } from '~constants/chain'
 import { CACHE_CONFIG, KARMA } from '~constants/index'
 
 // ============================================================================
@@ -164,10 +164,10 @@ export function useKarmaBalance(
 
   // Use provided address or fall back to connected address
   const targetAddress = queryAddress ?? connectedAddress
-  const isStatusNetworkSepolia = chainId === statusSepolia.id
+  const isStatusNetworkHoodi = chainId === statusHoodi.id
 
   return useQuery<KarmaBalanceData>({
-    queryKey: [QUERY_KEY_PREFIX, targetAddress, statusSepolia.id] as const,
+    queryKey: [QUERY_KEY_PREFIX, targetAddress, statusHoodi.id] as const,
     queryFn: async (): Promise<KarmaBalanceData> => {
       if (!targetAddress) {
         throw new Error(t('errors.no_address_provided'))
@@ -176,7 +176,7 @@ export function useKarmaBalance(
       try {
         const balance = await fetchKarmaBalance(
           config,
-          statusSepolia.id,
+          statusHoodi.id,
           targetAddress
         )
 
@@ -193,7 +193,7 @@ export function useKarmaBalance(
         throw error
       }
     },
-    enabled: enabled && !!targetAddress && isStatusNetworkSepolia,
+    enabled: enabled && !!targetAddress && isStatusNetworkHoodi,
     staleTime,
     refetchInterval,
     retry: 3,
