@@ -47,7 +47,9 @@
       "@status-im/status-js": ["./packages/status-js/src"],
       "@status-im/status-js/*": ["./packages/status-js/src/*"],
       "@status-im/status-network": ["./packages/status-network/src"],
-      "@status-im/status-network/*": ["./packages/status-network/src/*"]
+      "@status-im/status-network/*": ["./packages/status-network/src/*"],
+      "@status-im/karma-sdk": ["./packages/karma-sdk/src"],
+      "@status-im/karma-sdk/*": ["./packages/karma-sdk/src/*"]
       // "@status-im/eslint-config": ["./packages/eslint-config/src"],
       // "@status-im/eslint-config/*": ["./packages/eslint-config/src/*"]
     }
