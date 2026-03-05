@@ -5,14 +5,18 @@ import { useEffect, useMemo, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Avatar, Button, Input, useToast } from '@status-im/components'
-import { AlertIcon, CloseIcon, ExternalIcon } from '@status-im/icons/20'
+import {
+  AlertIcon,
+  CloseIcon,
+  ExternalIcon,
+  InfoIcon,
+} from '@status-im/icons/20'
 import { cx } from 'cva'
 import { Controller, useForm } from 'react-hook-form'
 import * as z from 'zod'
 
 import { CurrencyAmount } from '../currency-amount'
 import { NetworkLogo } from '../network-logo'
-import { PasswordModal } from '../password-modal'
 import { TokenAmount } from '../token-amount'
 import { TokenIcon } from '../token-icon'
 
@@ -35,9 +39,14 @@ type Props = {
     network: NetworkType
     decimals: number
   }
-  signTransaction: (data: FormData & { password: string }) => Promise<string>
-  verifyPassword: (inputPassword: string) => Promise<boolean>
+  signTransaction: (data: FormData) => Promise<string>
   onEstimateGas: (to: string, value: string) => void
+  hasActiveSession: boolean
+  requestPassword: (options?: {
+    title?: string
+    description?: string
+    buttonLabel?: string
+  }) => Promise<boolean>
   gasFees?: {
     maxFeeEur: number
     feeEur: number
@@ -49,6 +58,10 @@ type Props = {
 }
 
 type TransactionState = 'idle' | 'signing' | 'pending' | 'success' | 'error'
+
+const TOAST_PROCESSING_DURATION_MS = 30_000
+const TOAST_SUCCESS_DURATION_MS = 2_000
+const ERROR_STATE_RESET_DELAY_MS = 3_000
 
 const createFormSchema = (
   balance: number,
@@ -102,18 +115,15 @@ const SendAssetsModal = (props: Props) => {
     asset,
     account,
     signTransaction,
-    verifyPassword,
     onEstimateGas,
+    hasActiveSession,
+    requestPassword,
     gasFees,
-    isLoadingFees,
   } = props
   const [open, setOpen] = useState(false)
   const [hasInsufficientEth, setHasInsufficientEth] = useState(false)
   const [transactionState, setTransactionState] =
     useState<TransactionState>('idle')
-  const [showPasswordModal, setShowPasswordModal] = useState(false)
-  const [pendingTransactionData, setPendingTransactionData] =
-    useState<FormData | null>(null)
 
   const toast = useToast()
   const balance = asset.totalBalance
@@ -216,54 +226,39 @@ const SendAssetsModal = (props: Props) => {
   ])
 
   const onSubmit = async (data: FormData) => {
-    setPendingTransactionData(data)
-    setShowPasswordModal(true)
-  }
+    if (!hasActiveSession) {
+      const unlocked = await requestPassword({
+        title: 'Enter password',
+        description: 'To send transaction',
+        buttonLabel: 'Send Transaction',
+      })
+      if (!unlocked) return
+    }
 
-  const handlePasswordConfirm = async (password: string) => {
     setTransactionState('signing')
 
     try {
-      const isValid = await verifyPassword(password)
+      handleOnOpenChange(false)
 
-      if (!isValid) {
-        setTransactionState('idle')
-        throw new Error('Invalid password')
-      }
+      toast.custom('Processing transaction...', <InfoIcon />, {
+        duration: TOAST_PROCESSING_DURATION_MS,
+      })
+      await signTransaction(data)
+      toast.positive('Transaction signed and sent', {
+        duration: TOAST_SUCCESS_DURATION_MS,
+      })
 
-      setShowPasswordModal(false)
-      setTransactionState('pending')
-
-      if (pendingTransactionData) {
-        toast.positive('Transaction signed and sent', {
-          duration: 2000,
-        })
-
-        handleOnOpenChange(false)
-
-        await signTransaction({
-          ...pendingTransactionData,
-          password,
-        })
-      }
+      // State should be pending but setting success
+      // so "Sign Transaction" button is not disabled after tx sent
+      // TODO?: check for tx success on chain
+      setTransactionState('success')
     } catch (error) {
       setTransactionState('error')
-      if (error instanceof Error && error.message !== 'Invalid password') {
-        setShowPasswordModal(false)
-      }
-
       setTimeout(() => {
         setTransactionState('idle')
-      }, 3000)
-
+      }, ERROR_STATE_RESET_DELAY_MS)
       throw error
     }
-  }
-
-  const handlePasswordModalClose = () => {
-    setShowPasswordModal(false)
-    setTransactionState('idle')
-    setPendingTransactionData(null)
   }
 
   const handleOnOpenChange = (open: boolean) => {
@@ -272,8 +267,6 @@ const SendAssetsModal = (props: Props) => {
       reset()
       setHasInsufficientEth(false)
       setTransactionState('idle')
-      setShowPasswordModal(false)
-      setPendingTransactionData(null)
     }
   }
 
@@ -282,7 +275,9 @@ const SendAssetsModal = (props: Props) => {
     Number.parseFloat(watchedAmount) > balance &&
     Number.parseFloat(watchedAmount) > 0
 
-  const isTransactionSigning = transactionState === 'signing'
+  const submitButtonLabel = hasActiveSession
+    ? 'Send transaction'
+    : 'Sign & Send transaction'
 
   return (
     <>
@@ -589,10 +584,11 @@ const SendAssetsModal = (props: Props) => {
                       !watchedAmount ||
                       !watchedTo ||
                       !gasFees ||
-                      isLoadingFees
+                      transactionState === 'signing' ||
+                      transactionState === 'pending'
                     }
                   >
-                    Sign Transaction
+                    {submitButtonLabel}
                   </Button>
                 </div>
               </form>
@@ -600,15 +596,6 @@ const SendAssetsModal = (props: Props) => {
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
-
-      {/* Password Verification Modal */}
-      <PasswordModal
-        open={showPasswordModal}
-        onOpenChange={handlePasswordModalClose}
-        onConfirm={handlePasswordConfirm}
-        isLoading={isTransactionSigning}
-        buttonLabel="Send Transaction"
-      />
     </>
   )
 }
@@ -660,5 +647,5 @@ const Label = ({
 
 export type { FormData as SendAssetsFormData }
 export type SendAssetsModalProps = Omit<Props, 'signTransaction'> & {
-  signTransaction: (data: FormData & { password: string }) => Promise<string>
+  signTransaction: (data: FormData) => Promise<string>
 }

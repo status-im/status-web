@@ -12,9 +12,12 @@ import { useQuery } from '@tanstack/react-query'
 import { useSynchronizedRefetch } from '../hooks/use-synchronized-refetch'
 import { apiClient } from './api-client'
 
-import type { KeyStore } from '@trustwallet/wallet-core'
+import type { WalletMeta } from '../data/wallet-metadata'
 
-type Wallet = KeyStore.Wallet
+const WALLET_LIST_STALE_TIME_MS = 5 * 60 * 1000 // 5 minutes
+const WALLET_LIST_GC_TIME_MS = 60 * 60 * 1000 // 1 hour
+
+type Wallet = WalletMeta
 
 type WalletContext = {
   currentWallet: Wallet | null
@@ -40,8 +43,8 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
   const { data: wallets = [], isLoading } = useQuery({
     queryKey: ['wallets'],
     queryFn: () => apiClient.wallet.all.query(),
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 60 * 60 * 1000, // 1 hour
+    staleTime: WALLET_LIST_STALE_TIME_MS,
+    gcTime: WALLET_LIST_GC_TIME_MS,
   })
 
   const hasWallets = wallets.length > 0
