@@ -1,5 +1,23 @@
 # api
 
+## 0.2.2
+
+### Patch Changes
+
+- 1100022: chore: update docs
+- 06ceddc: Fix React Server Components CVE vulnerabilities
+- 5975aae: fix: zod version resolution
+- 81599fa: use `/api/trpc/rpc.proxy` in `apps/hub`
+- Updated dependencies [b6eb665]
+- Updated dependencies [03d2511]
+- Updated dependencies [e0179d3]
+- Updated dependencies [06ceddc]
+- Updated dependencies [28bbe54]
+- Updated dependencies [5975aae]
+- Updated dependencies [4614fcc]
+- Updated dependencies [81599fa]
+  - @status-im/wallet@0.1.2
+
 ## 0.2.1
 
 ### Patch Changes
