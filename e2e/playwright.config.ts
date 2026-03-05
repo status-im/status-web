@@ -54,5 +54,13 @@ export default defineConfig({
         headless: false,
       },
     },
+    {
+      name: 'anvil-deposits',
+      grep: /@anvil/,
+      timeout: 180_000,
+      use: {
+        headless: false,
+      },
+    },
   ],
 })
