@@ -107,16 +107,10 @@ module.exports = {
     // Add blog posts with actual publish dates
     const posts = await fetchAllBlogPosts()
     for (const post of posts) {
-      for (const locale of LOCALES) {
-        const loc =
-          locale === 'en'
-            ? `/blog/${post.slug}`
-            : `/${locale}/blog/${post.slug}`
-        result.push({
-          loc,
-          lastmod: post.published_at,
-        })
-      }
+      result.push({
+        loc: `/blog/${post.slug}`,
+        lastmod: post.published_at,
+      })
     }
 
     return result
