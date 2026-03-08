@@ -1,3 +1,4 @@
+import type { RewardsDistributor } from '../modules/rewards'
 import type { Address } from './common'
 
 /** Built-in chain presets for Status Network deployments. Use 'custom' in KarmaSDKConfig for other chains. */
@@ -42,5 +43,5 @@ export interface KarmaSDKConfig {
   /** Required when chain='custom' */
   customChain?: ChainConfig
   /** Custom RewardsDistributor instance. Defaults to StatusKarmaDistributor. */
-  rewardsDistributor?: import('../modules/rewards').RewardsDistributor
+  rewardsDistributor?: RewardsDistributor
 }

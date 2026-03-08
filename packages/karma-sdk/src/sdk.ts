@@ -1,25 +1,25 @@
-import { buildPublicClient, buildWalletClient } from './client/client-factory'
-import { CHAIN_PRESETS } from './contracts/addresses'
-import { KarmaApiClient } from './api/client'
-import { KarmaModule } from './modules/karma'
-import { RewardsDistributor } from './modules/rewards'
-import { StatusKarmaDistributor } from './modules/status-rewards'
-import { TiersModule } from './modules/tiers'
-import { AirdropModule } from './modules/airdrop'
-import { SybilModule } from './modules/sybil'
 import {
-  verifyMessage,
-  getSession,
-  signOut,
+  createSiweAuthHandlers,
   getCurrentUser,
   getQuota,
-  createSiweAuthHandlers,
+  getSession,
+  signOut,
+  verifyMessage,
 } from './api/auth'
 import { getPowCaptchaEndpoint, isValidCaptchaToken } from './api/captcha'
+import { KarmaApiClient } from './api/client'
+import { buildPublicClient, buildWalletClient } from './client/client-factory'
+import { CHAIN_PRESETS } from './contracts/addresses'
+import { AirdropModule } from './modules/airdrop'
+import { KarmaModule } from './modules/karma'
+import { StatusKarmaDistributor } from './modules/status-rewards'
+import { SybilModule } from './modules/sybil'
+import { TiersModule } from './modules/tiers'
 
-import type { PublicClient, WalletClient } from 'viem'
-import type { KarmaSDKConfig, ChainConfig, ChainPreset } from './types/config'
+import type { RewardsDistributor } from './modules/rewards'
 import type { CurrentUser, QuotaResponse, SiweSession } from './types'
+import type { ChainConfig, ChainPreset, KarmaSDKConfig } from './types/config'
+import type { PublicClient, WalletClient } from 'viem'
 
 export const PRESET_API_URLS: Record<ChainPreset, string> = {
   'sn-hoodi': 'https://karma.hoodi.status.network',
@@ -72,13 +72,9 @@ export class KarmaSDK {
 
     const apiUrl =
       config.apiUrl ??
-      (config.chain !== 'custom'
-        ? PRESET_API_URLS[config.chain]
-        : undefined)
+      (config.chain !== 'custom' ? PRESET_API_URLS[config.chain] : undefined)
     if (!apiUrl) {
-      throw new Error(
-        "apiUrl is required when chain is 'custom'",
-      )
+      throw new Error("apiUrl is required when chain is 'custom'")
     }
 
     this._apiClient = new KarmaApiClient({
@@ -90,8 +86,9 @@ export class KarmaSDK {
     const getWallet = () => this._walletClient
 
     this.karma = new KarmaModule(getPublic, getWallet, this._chainConfig)
-    this.rewards = config.rewardsDistributor
-      ?? new StatusKarmaDistributor(
+    this.rewards =
+      config.rewardsDistributor ??
+      new StatusKarmaDistributor(
         getPublic,
         getWallet,
         this._chainConfig.contracts.rewardsDistributor,

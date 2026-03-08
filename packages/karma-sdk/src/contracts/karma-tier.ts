@@ -1,8 +1,8 @@
 import { karmaTierAbi } from '../abis/karma-tier'
 import { getKarmaAddresses } from './addresses'
 
-import type { Address } from '../types/common'
 import type { KarmaTier } from '../types'
+import type { Address } from '../types/common'
 import type { PublicClient } from 'viem'
 
 function resolveTierAddress(

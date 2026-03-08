@@ -72,19 +72,19 @@ export type {
 } from './types'
 
 // === Class-based SDK ===
-export { KarmaSDK, PRESET_API_URLS } from './sdk'
-export type {
-  KarmaSDKConfig,
-  ChainPreset,
-  SDKMode,
-  ChainConfig,
-  EIP1193Provider,
-} from './types/config'
-export type { Address, Hex, Hash } from './types/common'
+export { CHAIN_PRESETS } from './contracts/addresses'
+export { AirdropModule } from './modules/airdrop'
+export { KarmaModule } from './modules/karma'
 export { RewardsDistributor } from './modules/rewards'
 export { StatusKarmaDistributor } from './modules/status-rewards'
-export { KarmaModule } from './modules/karma'
-export { TiersModule } from './modules/tiers'
-export { AirdropModule } from './modules/airdrop'
 export { SybilModule } from './modules/sybil'
-export { CHAIN_PRESETS } from './contracts/addresses'
+export { TiersModule } from './modules/tiers'
+export { KarmaSDK, PRESET_API_URLS } from './sdk'
+export type { Address, Hash, Hex } from './types/common'
+export type {
+  ChainConfig,
+  ChainPreset,
+  EIP1193Provider,
+  KarmaSDKConfig,
+  SDKMode,
+} from './types/config'

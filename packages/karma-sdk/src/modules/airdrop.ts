@@ -1,17 +1,17 @@
 import { erc20Abi, parseSignature } from 'viem'
 
-import { karmaAirdropAbi } from '../abis/karma-airdrop'
 import {
-  ownableOwnerAbi,
   allowMerkleRootUpdateAbi,
   allowMerkleRootUpdateUpperAbi,
-  tokenGetterAbi,
-  tokenUpperGetterAbi,
   defaultDelegateeGetterAbi,
   defaultDelegateeUpperGetterAbi,
-  tokenNoncesAbi,
+  ownableOwnerAbi,
   pausedAbi,
+  tokenGetterAbi,
+  tokenNoncesAbi,
+  tokenUpperGetterAbi,
 } from '../abis/common-fragments'
+import { karmaAirdropAbi } from '../abis/karma-airdrop'
 
 import type { Address, Hash, Hex } from '../types/common'
 import type { PublicClient, WalletClient } from 'viem'
@@ -65,8 +65,7 @@ export class AirdropModule {
       })
       return walletClient.writeContract(request) as Promise<Hash>
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message.toLowerCase() : ''
+      const message = error instanceof Error ? error.message.toLowerCase() : ''
       const shouldSkipFallback =
         message.includes('already claimed') ||
         message.includes('invalid proof') ||

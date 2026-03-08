@@ -1,21 +1,29 @@
 import {
   createPublicClient as viemCreatePublicClient,
   createWalletClient as viemCreateWalletClient,
+  custom,
   defineChain,
   http,
-  custom,
 } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 
-import type { PublicClient, WalletClient } from 'viem'
-import type { KarmaSDKConfig, EIP1193Provider, ChainConfig } from '../types/config'
 import type { Hex } from '../types/common'
+import type {
+  ChainConfig,
+  EIP1193Provider,
+  KarmaSDKConfig,
+} from '../types/config'
+import type { PublicClient, WalletClient } from 'viem'
 
 export function buildChain(chainConfig: ChainConfig) {
   return defineChain({
     id: chainConfig.chainId,
     name: chainConfig.name ?? `Karma Chain (${chainConfig.chainId})`,
-    nativeCurrency: chainConfig.nativeCurrency ?? { name: 'Ether', symbol: 'ETH', decimals: 18 },
+    nativeCurrency: chainConfig.nativeCurrency ?? {
+      name: 'Ether',
+      symbol: 'ETH',
+      decimals: 18,
+    },
     rpcUrls: { default: { http: [] } },
   })
 }
@@ -41,9 +49,7 @@ export function buildWalletClient(
   if (config.mode === 'read-only') return null
 
   if (!config.privateKeyOrSigner) {
-    throw new Error(
-      'privateKeyOrSigner is required when mode is "read-write"',
-    )
+    throw new Error('privateKeyOrSigner is required when mode is "read-write"')
   }
 
   const chain = buildChain(chainConfig)
