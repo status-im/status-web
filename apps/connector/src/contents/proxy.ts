@@ -1,5 +1,3 @@
-import { Storage } from '@plasmohq/storage'
-
 import { getFaviconUrl } from '~lib/get-favicon-url'
 import { logger } from '~lib/logger'
 import { MainMessage } from '~messages/main-message'
@@ -10,8 +8,6 @@ import { DesktopClient } from '../lib/desktop-client'
 import type { ProxyMessage } from '~messages/proxy-message'
 import type { EthersError } from 'ethers'
 import type { PlasmoCSConfig } from 'plasmo'
-
-const storage = new Storage()
 
 export const config: PlasmoCSConfig = {
   run_at: 'document_start',
@@ -54,9 +50,6 @@ const handleProviderMessage = async (event: MessageEvent) => {
       iconUrl: getFaviconUrl() ?? '',
     })
 
-    // Clear connection error on success
-    storage.set('status:desktop:connection_error', false)
-
     logger.info('response::', response)
 
     event.ports[0].postMessage({
@@ -64,9 +57,6 @@ const handleProviderMessage = async (event: MessageEvent) => {
       data: response,
     } satisfies ProxyMessage)
   } catch (error) {
-    // Store connection error for UI to display
-    storage.set('status:desktop:connection_error', true)
-
     let proxyError = {
       code: -32603,
       message: isError(error) ? error.message : 'Internal error',
