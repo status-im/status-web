@@ -2,7 +2,7 @@
 
 import { type FC, useEffect, useRef, useState } from 'react'
 
-import { Skeleton } from '@status-im/components'
+import { Skeleton, useToast } from '@status-im/components'
 import { Button } from '@status-im/status-network/components'
 import { ConnectKitButton } from 'connectkit'
 import { cva } from 'cva'
@@ -14,10 +14,12 @@ import { formatCurrency, formatTokenAmount } from '~/utils/currency'
 import { isGUSDVault, type Vault } from '~constants/address'
 import { useGUSDStablecoinBreakdown } from '~hooks/useGUSDStablecoinBreakdown'
 import { useGUSDTVL } from '~hooks/useGUSDTVL'
-import { useGUSDUserBalance } from '~hooks/useGUSDUserBalance'
+import { useLineaBridgeMessageStatus } from '~hooks/useLineaBridgeMessageStatus'
 import { usePreDepositTVL } from '~hooks/usePreDepositTVL'
 import { usePreDepositTVLInUSD } from '~hooks/usePreDepositTVLInUSD'
-import { useUserVaultDeposit } from '~hooks/useUserVaultDeposit'
+import { useUnlockTxHash } from '~hooks/useUnlockTxHash'
+import { useVaultBalanceReadiness } from '~hooks/useVaultBalanceReadiness'
+import { useVaultCardCta, type VaultCardAction } from '~hooks/useVaultCardCta'
 import { useVaultsAPY } from '~hooks/useVaultsAPY'
 
 import {
@@ -34,8 +36,12 @@ import { VaultImage } from './vault-image'
 type Props = {
   vault: Vault
   onDeposit: () => void
+  onUnlock?: () => void
+  onClaim?: () => void
   registerRefetch?: (vaultId: string, refetch: () => void) => void
 }
+
+type PendingVaultAction = Exclude<VaultCardAction, 'none'> | null
 
 const vaultCardStyles = cva({
   base: 'relative flex size-full flex-col rounded-32 border border-neutral-20 bg-white-100 p-4 shadow-1 lg:p-8',
@@ -108,16 +114,18 @@ const VaultCardSkeleton: FC<VaultCardSkeletonProps> = ({
 type VaultCardContentProps = Props & {
   show?: () => void
   isConnected: boolean
-  pendingDepositRef: React.MutableRefObject<boolean>
+  pendingActionRef: React.MutableRefObject<PendingVaultAction>
 }
 
 const VaultCardContent: FC<VaultCardContentProps> = ({
   vault,
   onDeposit,
+  onUnlock,
+  onClaim,
   registerRefetch,
   show,
   isConnected,
-  pendingDepositRef,
+  pendingActionRef,
 }) => {
   const { rewards, icon, token } = vault
   const isGUSD = isGUSDVault(vault)
@@ -130,24 +138,64 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
   const { data: gusdBreakdown, isLoading: isGUSDBreakdownLoading } =
     useGUSDStablecoinBreakdown({ enabled: isGUSD })
   const { data: apyMap, isLoading: isApyLoading } = useVaultsAPY()
-  const { data: depositedBalance, isLoading: isDepositedBalanceLoading } =
-    useUserVaultDeposit({ vault, registerRefetch })
-  const { data: gusdBalance, isLoading: isGUSDBalanceLoading } =
-    useGUSDUserBalance({ registerRefetch })
+  const { txHash: unlockTxHash, clearTxHash: clearUnlockTxHash } =
+    useUnlockTxHash(vault.id)
+  const {
+    l1Balance,
+    l2PendingAmount,
+    isL1BalanceLoading,
+    vaultState,
+    refetchL1Balance,
+  } = useVaultBalanceReadiness({
+    vault,
+    registerRefetch,
+    pollL2: !!unlockTxHash,
+  })
+  const { data: bridgeStatus } = useLineaBridgeMessageStatus({
+    vault,
+    unlockTxHash,
+  })
 
-  useEffect(() => {
-    if (isConnected && pendingDepositRef.current) {
-      pendingDepositRef.current = false
-      onDeposit()
-    }
-  }, [isConnected, onDeposit, pendingDepositRef])
-
+  const toast = useToast()
   const t = useTranslations()
 
+  // Clear stored unlock tx once L2 pending amount appears (bridge complete)
+  useEffect(() => {
+    if ((l2PendingAmount ?? 0n) > 0n && unlockTxHash) {
+      clearUnlockTxHash()
+      // Refetch L1 balance to clear stale cache (balance is 0 on-chain after unlock)
+      refetchL1Balance()
+      toast.positive(t('vault.bridge_arrived', { vault: vault.name }))
+    }
+  }, [
+    l2PendingAmount,
+    unlockTxHash,
+    clearUnlockTxHash,
+    refetchL1Balance,
+    toast,
+    t,
+    vault.name,
+  ])
+
+  useEffect(() => {
+    if (!isConnected || !pendingActionRef.current) return
+
+    switch (pendingActionRef.current) {
+      case 'claim':
+        onClaim?.()
+        break
+      case 'unlock':
+        onUnlock?.()
+        break
+      case 'deposit':
+        onDeposit()
+        break
+    }
+
+    pendingActionRef.current = null
+  }, [isConnected, onClaim, onDeposit, onUnlock, pendingActionRef])
+
   const vaultAddressLower = vault.address.toLowerCase()
-  const isVaultInApi = apyMap !== undefined && vaultAddressLower in apyMap
-  // If the query inside useVaultsAPY fails, all vaults are disabled even though they might technically work
-  const isDisabled = !isVaultInApi
   const dynamicApy = apyMap?.[vaultAddressLower]
   const apyValue = dynamicApy !== undefined ? String(dynamicApy) : null
   const rewardsLine = rewards
@@ -165,8 +213,8 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
         tokenDecimals: 18,
         tvlRaw: gusdTvl,
         tvlUSD: gusdTvl ? Number(formatUnits(gusdTvl, 18)) : 0,
-        balance: gusdBalance,
-        isBalanceLoading: isGUSDBalanceLoading,
+        balance: l1Balance,
+        isBalanceLoading: isL1BalanceLoading,
         isTvlLoading: isGUSDTvlLoading,
       }
     : {
@@ -175,19 +223,27 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
         tokenDecimals: token.decimals,
         tvlRaw: totalAssets,
         tvlUSD: tvlData?.tvlUSD ?? 0,
-        balance: depositedBalance,
-        isBalanceLoading: isDepositedBalanceLoading,
+        balance: l1Balance,
+        isBalanceLoading: isL1BalanceLoading,
         isTvlLoading: isTvlLoading,
       }
 
-  const formattedTVL = !isDisabled
+  const cta = useVaultCardCta({
+    vaultState,
+    l1Balance: vaultDisplay.balance,
+    l2PendingAmount,
+    bridgeStatus,
+    hasUnlockTxHash: !!unlockTxHash,
+  })
+
+  const formattedTVL = !cta.isDisabled
     ? formatCurrency(vaultDisplay.tvlUSD, {
         compact: true,
         roundDown: true,
       }).replace('$', '')
     : null
 
-  const formattedTokenAmount = !isDisabled
+  const formattedTokenAmount = !cta.isDisabled
     ? formatTokenAmount(vaultDisplay.tvlRaw ?? 0n, vaultDisplay.symbol, {
         tokenDecimals: vaultDisplay.tokenDecimals,
         decimals: vaultDisplay.decimals,
@@ -198,16 +254,31 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
     : null
 
   const handleClick = () => {
-    if (isConnected) {
-      onDeposit()
-    } else {
-      pendingDepositRef.current = true
+    if (!isConnected) {
+      if (cta.action !== 'none') {
+        pendingActionRef.current = cta.action
+      }
       show?.()
+      return
+    }
+
+    switch (cta.action) {
+      case 'claim':
+        onClaim?.()
+        break
+      case 'unlock':
+        onUnlock?.()
+        break
+      case 'deposit':
+        onDeposit()
+        break
+      case 'none':
+        break
     }
   }
 
   return (
-    <div className={vaultCardStyles({ disabled: isDisabled })}>
+    <div className={vaultCardStyles({ disabled: cta.isDisabled })}>
       {/* header */}
       <div className="mb-6 flex items-start justify-between">
         <div className="flex items-center gap-4">
@@ -218,7 +289,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
 
       <h3 className="mb-2 text-19 font-600 lg:text-27">{vault.name}</h3>
 
-      {!isDisabled && isConnected && (
+      {!cta.isDisabled && isConnected && (
         <div className="mb-4">
           <p className="text-15 font-400 text-neutral-50">
             {t('vault.your_deposit')}
@@ -227,16 +298,12 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
             {vaultDisplay.isBalanceLoading ? (
               <Skeleton width={120} height={32} className="rounded-8" />
             ) : (
-              formatTokenAmount(
-                vaultDisplay.balance ?? 0n,
-                vaultDisplay.symbol,
-                {
-                  tokenDecimals: vaultDisplay.tokenDecimals,
-                  decimals: vaultDisplay.decimals,
-                  includeSymbol: true,
-                  roundDown: true,
-                }
-              )
+              formatTokenAmount(cta.displayBalance, vaultDisplay.symbol, {
+                tokenDecimals: vaultDisplay.tokenDecimals,
+                decimals: vaultDisplay.decimals,
+                includeSymbol: true,
+                roundDown: true,
+              })
             )}
           </div>
         </div>
@@ -292,7 +359,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
             </span>
           )}
         </li>
-        {!isDisabled && (
+        {!cta.isDisabled && (
           <li className="flex items-center gap-2 text-15">
             <span className="text-neutral-50">
               <SumIcon />
@@ -327,17 +394,17 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
       <Button
         size="40"
         onClick={handleClick}
-        disabled={isDisabled}
+        disabled={cta.isDisabled}
         className="mt-auto w-full justify-center lg:w-fit"
       >
-        {isDisabled ? t('vault.coming_soon') : t('vault.deposit')}
+        {t(cta.labelKey)}
       </Button>
     </div>
   )
 }
 
 const VaultCard: FC<Props> = props => {
-  const pendingDepositRef = useRef(false)
+  const pendingActionRef = useRef<PendingVaultAction>(null)
   const [isMounted, setIsMounted] = useState(false)
   const { isLoading: isApyLoading } = useVaultsAPY()
   const { isConnected } = useAccount()
@@ -359,7 +426,7 @@ const VaultCard: FC<Props> = props => {
           {...props}
           show={show}
           isConnected={isConnected}
-          pendingDepositRef={pendingDepositRef}
+          pendingActionRef={pendingActionRef}
         />
       )}
     </ConnectKitButton.Custom>

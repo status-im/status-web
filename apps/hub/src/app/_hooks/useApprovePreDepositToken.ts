@@ -5,6 +5,8 @@ import { type Address, BaseError, parseUnits, zeroAddress } from 'viem'
 import { useAccount, useConfig, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 
+import { isUserRejection } from '~utils/wallet'
+
 import { usePreDepositStateContext } from './usePreDepositStateContext'
 
 import type { Token } from '~constants/index'
@@ -152,22 +154,25 @@ export function useApproveToken(): UseApprovePreDepositTokenReturn {
         const { status } = await waitForTransactionReceipt(config, {
           hash,
           confirmations: TRANSACTION_CONFIG.CONFIRMATION_BLOCKS,
+          timeout: 90_000,
         })
 
         if (status === 'reverted') {
           throw new Error(t('errors.transaction_reverted'))
         }
 
-        sendPreDepositEvent({ type: 'COMPLETE', amount })
+        sendPreDepositEvent({ type: 'COMPLETE' })
         toast.positive(t('success.token_allowance_increased'))
       } catch (error) {
-        console.error('Failed to approve tokens:', error)
-        const message =
-          error instanceof BaseError
-            ? error.shortMessage
-            : t('errors.transaction_failed')
-        toast.negative(message)
-        sendPreDepositEvent({ type: 'REJECT' })
+        const isRejected = isUserRejection(error)
+        sendPreDepositEvent({ type: isRejected ? 'REJECT' : 'FAIL' })
+        if (!isRejected) {
+          const message =
+            error instanceof BaseError
+              ? error.shortMessage
+              : t('errors.transaction_failed')
+          toast.negative(message)
+        }
         throw error
       }
     },

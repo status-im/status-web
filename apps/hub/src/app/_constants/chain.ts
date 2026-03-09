@@ -10,15 +10,19 @@ import type {
   Transport,
 } from 'wagmi'
 
+export const RPC_URLS = {
+  [mainnet.id]: 'https://mainnet.infura.io/v3/6291a6aa45c94fd79bda6770b58153dd',
+  [linea.id]: linea.rpcUrls.default.http[0],
+  [statusSepolia.id]: statusSepolia.rpcUrls.default.http[0],
+} as const
+
 export const getDefaultWagmiConfig = () =>
   getDefaultConfig({
     chains: [statusSepolia, mainnet, linea],
     transports: {
-      [statusSepolia.id]: http(statusSepolia.rpcUrls.default.http[0]),
-      [mainnet.id]: http(
-        'https://mainnet.infura.io/v3/6291a6aa45c94fd79bda6770b58153dd'
-      ),
-      [linea.id]: http(linea.rpcUrls.default.http[0]),
+      [statusSepolia.id]: http(RPC_URLS[statusSepolia.id]),
+      [mainnet.id]: http(RPC_URLS[mainnet.id]),
+      [linea.id]: http(RPC_URLS[linea.id]),
     },
     walletConnectProjectId:
       clientEnv.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID as string,

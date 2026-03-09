@@ -52,6 +52,7 @@ export type BaseVault = {
   chainId: number
   network: (typeof mainnet | typeof linea)['name']
   abi: typeof PreDepositVaultAbi
+  l2ClaimVaultAddress?: Address
 }
 
 export type GUSDVault = BaseVault & {
@@ -200,6 +201,7 @@ export const SNT_VAULT: Vault = {
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
   network: mainnet.name,
+  l2ClaimVaultAddress: '0x162A433068F51e18b7d13932F27e66a3f99E6890',
 } as const
 
 export const LINEA_VAULT: Vault = {
@@ -213,6 +215,7 @@ export const LINEA_VAULT: Vault = {
   abi: PreDepositVaultAbi,
   chainId: linea.id,
   network: linea.name,
+  l2ClaimVaultAddress: '0x04C89607413713Ec9775E14b954286519d836FEf',
 } as const
 
 export const WETH_VAULT: Vault = {
@@ -226,6 +229,7 @@ export const WETH_VAULT: Vault = {
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
   network: mainnet.name,
+  l2ClaimVaultAddress: '0x5081a39b8A5f0E35a8D959395a630b68B74Dd30f',
 } as const
 
 export const GUSD_VAULT: GUSDVault = {
