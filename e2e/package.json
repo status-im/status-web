@@ -1,0 +1,39 @@
+{
+  "name": "e2e",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:smoke": "playwright test --project=smoke",
+    "test:wallet": "playwright test --project=wallet-flows",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report test-results/html-report",
+    "setup:metamask": "tsx download-metamask-extension.ts",
+    "lint": "eslint src tests",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write . --ignore-path .gitignore",
+    "clean": "rimraf test-results .pw-chromium-profile .extensions"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.50.0",
+    "@status-im/eslint-config": "workspace:*",
+    "@types/node": "^22.0.0",
+    "dotenv": "^16.4.7",
+    "eslint": "^9.14.0",
+    "globals": "^15.12.0",
+    "prettier": "^3.3.3",
+    "tsx": "^4.19.0"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "engines": {
+    "node": "22.x"
+  }
+}

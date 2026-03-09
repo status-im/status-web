@@ -113,7 +113,7 @@ export default function BrandPage() {
             logos={[
               {
                 id: 'Brand/Logo Section/Mark/Mark_01:480:480',
-                alt: 'Status logo mark',
+                alt: '',
               },
               { id: 'Brand/Logo Section/Mark/Mark_02:480:480', alt: '' },
               { id: 'Brand/Logo Section/Mark/Mark_03:480:480', alt: '' },
@@ -131,27 +131,27 @@ export default function BrandPage() {
             logos={[
               {
                 id: 'Brand/Logo Section/Variants/Logo/Logo_01:1640:480',
-                alt: 'Status logo variant 1',
+                alt: '',
               },
               {
                 id: 'Brand/Logo Section/Variants/Mark/Mark_01:480:480',
-                alt: 'Status logo mark variant 1',
+                alt: '',
               },
               {
                 id: 'Brand/Logo Section/Variants/Logo/Logo_02:1640:480',
-                alt: 'Status logo variant 2',
+                alt: '',
               },
               {
                 id: 'Brand/Logo Section/Variants/Mark/Mark_02:480:480',
-                alt: 'Status logo mark variant 2',
+                alt: '',
               },
               {
                 id: 'Brand/Logo Section/Variants/Logo/Logo_03:1640:480',
-                alt: 'Status logo variant 3',
+                alt: '',
               },
               {
                 id: 'Brand/Logo Section/Variants/Mark/Mark_03:480:480',
-                alt: 'Status logo mark variant 3',
+                alt: '',
               },
             ]}
           />

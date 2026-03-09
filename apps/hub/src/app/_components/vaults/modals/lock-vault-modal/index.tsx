@@ -1,6 +1,7 @@
 'use client'
 
 import { useReadContract } from 'wagmi'
+import { statusSepolia } from 'wagmi/chains'
 
 import { vaultAbi } from '~constants/contracts'
 import { useLockVault } from '~hooks/useLockVault'
@@ -57,6 +58,7 @@ export function LockVaultModal(props: LockVaultModalProps) {
     abi: vaultAbi,
     address: vaultAddress,
     functionName: 'lockUntil',
+    chainId: statusSepolia.id,
   }) as { data: bigint }
 
   // Calculate initial values based on current lockUntil for extensions
