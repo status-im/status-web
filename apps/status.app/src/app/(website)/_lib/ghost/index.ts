@@ -13,13 +13,15 @@ const ghost = GhostContentAPI({
 
 type Params = { page?: number; limit?: number; tag?: string }
 
-export const DISALLOWED_TAGS = [
-  'desktop-news',
-  'mobile-news',
-  'status-network-blog',
-]
+// Tags hidden from blog list but accessible by direct URL
+export const HIDDEN_FROM_LIST_TAGS = ['desktop-news', 'mobile-news']
 
-const DISALLOWED_TAGS_FILTER = DISALLOWED_TAGS.map(tag => `tag:-${tag}`).join(
+// Tags completely blocked (list + URL)
+export const DISALLOWED_TAGS = ['status-network-blog']
+
+const ALL_EXCLUDED_TAGS = [...HIDDEN_FROM_LIST_TAGS, ...DISALLOWED_TAGS]
+
+const EXCLUDED_TAGS_FILTER = ALL_EXCLUDED_TAGS.map(tag => `tag:-${tag}`).join(
   '+'
 )
 
@@ -39,8 +41,8 @@ export const getPosts = async (params: Params = {}) => {
       limit,
       page,
       ...(tag
-        ? { filter: `tag:${tag}+visibility:public+${DISALLOWED_TAGS_FILTER}` }
-        : { filter: `visibility:public+${DISALLOWED_TAGS_FILTER}` }),
+        ? { filter: `tag:${tag}+visibility:public+${EXCLUDED_TAGS_FILTER}` }
+        : { filter: `visibility:public+${EXCLUDED_TAGS_FILTER}` }),
     })
 
     return { posts: [...response], meta: response.meta }
@@ -96,7 +98,7 @@ export const getPostBySlug = async (slug: string) => {
 export const getPostsByTagSlug = async (slug: string, page = 1) => {
   try {
     const response = await ghost.posts.browse({
-      filter: `tag:${slug}+visibility:public+${DISALLOWED_TAGS_FILTER}`,
+      filter: `tag:${slug}+visibility:public+${EXCLUDED_TAGS_FILTER}`,
       include: ['tags', 'authors'],
       limit: 6,
       order: 'published_at DESC',
@@ -116,7 +118,7 @@ export const getPostsByTagSlug = async (slug: string, page = 1) => {
 export const getPostsByAuthorSlug = async (slug: string, page = 1) => {
   try {
     const response = await ghost.posts.browse({
-      filter: `author:${slug}+visibility:public+${DISALLOWED_TAGS_FILTER}`,
+      filter: `author:${slug}+visibility:public+${EXCLUDED_TAGS_FILTER}`,
       include: ['tags', 'authors'],
       limit: 6,
       order: 'published_at DESC',
@@ -138,7 +140,7 @@ export const getPostSlugs = async (): Promise<string[]> => {
     const posts = await ghost.posts.browse({
       limit: 7,
       fields: 'slug',
-      filter: `visibility:public+${DISALLOWED_TAGS_FILTER}`,
+      filter: `visibility:public+${EXCLUDED_TAGS_FILTER}`,
     })
 
     return posts.map(post => post.slug)
@@ -159,7 +161,7 @@ export const getTagSlugs = async (): Promise<string[]> => {
     return tags
       .map(tag => tag.slug)
       .filter(
-        (slug): slug is string => !!slug && !DISALLOWED_TAGS.includes(slug)
+        (slug): slug is string => !!slug && !ALL_EXCLUDED_TAGS.includes(slug)
       )
   } catch (error) {
     console.error('Failed to fetch tag slugs from Ghost API:', error)
