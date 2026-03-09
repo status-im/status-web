@@ -1,5 +1,24 @@
 # @status-im/wallet
 
+## 0.1.2
+
+### Patch Changes
+
+- b6eb665: fix: wallet QA fixes
+- 03d2511: Fix collectibles NFT API and normalize display ID
+- e0179d3: Update wallet package with token metadata improvements
+- 06ceddc: Fix React Server Components CVE vulnerabilities
+- 28bbe54: feat: implement rate limit for proxy APIs
+- 5975aae: fix: zod version resolution
+- 4614fcc: feat: integrate li.fi widget to swap tokens on ETH network
+- 81599fa: use `/api/trpc/rpc.proxy` in `apps/hub`
+- Updated dependencies [ff8dd31]
+- Updated dependencies [be3d8dc]
+- Updated dependencies [d292620]
+- Updated dependencies [ccc91d5]
+- Updated dependencies [55cb107]
+  - @status-im/components@1.2.0
+
 ## 0.1.1
 
 ### Patch Changes
