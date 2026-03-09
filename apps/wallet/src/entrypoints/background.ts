@@ -1,4 +1,5 @@
 // todo!: keep-alive
+//^ 2026-02-13 - Jules: I don't think this is a good idea, or even necessary anymore
 
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="../../.wxt/wxt.d.ts" />
@@ -9,7 +10,7 @@ import { defineBackground } from 'wxt/sandbox'
 // import { browser as wxtBrowser } from 'wxt/browser'
 import { createAPI } from '../data/api'
 import { encoder } from '../data/encoder'
-import { getKeystore } from '../data/keystore'
+import { INACTIVITY_ALARM_NAME, lock } from '../data/session'
 import { getWalletCore } from '../data/wallet'
 
 export default defineBackground({
@@ -24,11 +25,6 @@ export default defineBackground({
     // Encoder
     globalThis.encoder = encoder
 
-    // Storage
-    getKeystore().then(keystore => {
-      globalThis.storage = keystore
-    })
-
     // Wallet
     getWalletCore().then(walletCore => {
       globalThis.wallet = walletCore
@@ -37,6 +33,10 @@ export default defineBackground({
     // API
     createAPI().then(api => {
       globalThis.api = api
+    })
+
+    chrome.alarms.onAlarm.addListener(alarm => {
+      if (alarm.name === INACTIVITY_ALARM_NAME) lock()
     })
 
     chrome.runtime.onInstalled.addListener(() => {

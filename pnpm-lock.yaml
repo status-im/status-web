@@ -1748,6 +1748,9 @@ importers:
       '@lifi/widget':
         specifier: ^3.40.1
         version: 3.40.1(qu7olvpw3uftui3b6gznystkq4)
+      '@metamask/browser-passworder':
+        specifier: ^6.0.0
+        version: 6.0.0
       '@radix-ui/react-dialog':
         specifier: ^1.1.1
         version: 1.1.15(@types/react-dom@19.1.2(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
@@ -5065,6 +5068,10 @@ packages:
     peerDependencies:
       '@types/react': 19.1.2
       react: 19.1.2
+
+  '@metamask/browser-passworder@6.0.0':
+    resolution: {integrity: sha512-/LhNSOu8ThLtIOLKrHhXS4D0SuseK731tWH+1GxI6FO9j0XQtJvPdMw89EEXwCd8mA5iFUK/cU6kxsszfH7GaQ==}
+    engines: {node: ^18.18 || ^20.14 || >=22}
 
   '@metamask/eth-json-rpc-provider@1.0.1':
     resolution: {integrity: sha512-whiUMPlAOrVGmX8aKYVPvlKyG4CpQXiNNyt74vE1xb5sPvmx5oA7B/kOi/JdBvhGQq97U1/AVdXEdk2zkP8qyA==}
@@ -25021,6 +25028,12 @@ snapshots:
       '@types/react': 19.1.2
       react: 19.1.2
 
+  '@metamask/browser-passworder@6.0.0':
+    dependencies:
+      '@metamask/utils': 11.8.1
+    transitivePeerDependencies:
+      - supports-color
+
   '@metamask/eth-json-rpc-provider@1.0.1':
     dependencies:
       '@metamask/json-rpc-engine': 7.3.3
@@ -25274,7 +25287,6 @@ snapshots:
       uuid: 9.0.1
     transitivePeerDependencies:
       - supports-color
-    optional: true
 
   '@metamask/utils@5.0.2':
     dependencies:
