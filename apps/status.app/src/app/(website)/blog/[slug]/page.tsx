@@ -185,14 +185,16 @@ export default async function BlogDetailPage(props: Props) {
           </div>
         </div>
 
-        <div className="mx-auto w-full max-w-[1504px] px-1 py-6 xl:px-6 xl:py-10">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={post.feature_image!}
-            className="aspect-[374/182] size-full rounded-20 object-cover xl:aspect-[1456/470]"
-            alt={post.feature_image_alt!}
-          />
-        </div>
+        {post.feature_image && (
+          <div className="mx-auto w-full max-w-[1504px] px-1 py-6 xl:px-6 xl:py-10">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={post.feature_image}
+              className="aspect-[374/182] size-full rounded-20 object-cover xl:aspect-[1456/470]"
+              alt={post.feature_image_alt ?? ''}
+            />
+          </div>
+        )}
 
         {/* Content */}
         <div className="root-content container-blog py-6">{content}</div>
