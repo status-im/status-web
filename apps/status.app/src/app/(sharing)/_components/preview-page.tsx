@@ -13,8 +13,6 @@ import {
   Tag,
   useToast,
 } from '@status-im/components'
-import { DownloadIcon } from '@status-im/icons/12'
-import { ExternalIcon } from '@status-im/icons/16'
 import { InfoIcon, MembersIcon, QrCodeIcon } from '@status-im/icons/20'
 import {
   type ChannelInfo,
@@ -24,7 +22,6 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import { cx } from 'class-variance-authority'
 
-import { LEARN_MORE_MOBILE_APP_URL } from '~/config/routes'
 import { Image } from '~components/assets'
 import { ERROR_CODES } from '~sharing/_error-codes'
 import { useURLData } from '~sharing/_hooks/use-url-data'
@@ -466,33 +463,21 @@ export function PreviewPage(props: PreviewPageProps) {
                   </h3>
                   <ul>
                     <ListItem order={1} alignment="top">
-                      <div className="flex flex-wrap gap-2">
+                      <div className="hidden flex-wrap items-center gap-2 ios:flex android:flex unknown:flex">
+                        <DownloadMobileButton size="24" variant="primary" />
+                        <DownloadDesktopButton
+                          size="24"
+                          variant="outline"
+                          show="all"
+                        />
+                      </div>
+                      <div className="hidden flex-wrap items-center gap-2 macos:flex windows:flex linux:flex">
                         <DownloadDesktopButton
                           size="24"
                           variant="primary"
                           show="all"
                         />
-                        <span>Our next-gen mobile app is in the works</span>
-                        <div className="flex flex-wrap gap-2">
-                          <Button
-                            size="24"
-                            variant="outline"
-                            href={LEARN_MORE_MOBILE_APP_URL}
-                            iconAfter={<ExternalIcon className="ml-[2px]" />}
-                          >
-                            Learn more
-                          </Button>
-
-                          <DownloadMobileButton>
-                            <Button
-                              size="24"
-                              variant="outline"
-                              iconAfter={<DownloadIcon className="ml-[2px]" />}
-                            >
-                              Current Mobile App
-                            </Button>
-                          </DownloadMobileButton>
-                        </div>
+                        <DownloadMobileButton size="24" variant="outline" />
                       </div>
                     </ListItem>
                     <ListItem order={2}>

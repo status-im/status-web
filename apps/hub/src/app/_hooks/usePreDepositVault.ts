@@ -141,12 +141,15 @@ export function usePreDepositVault(): UsePreDepositVaultReturn {
 
         sendPreDepositEvent({ type: 'EXECUTE' })
 
-        const { status } = await waitForTransactionReceipt(config, {
+        const receipt = await waitForTransactionReceipt(config, {
           hash,
           chainId: vault.chainId,
           confirmations: TRANSACTION_CONFIG.CONFIRMATION_BLOCKS,
           timeout: 90_000,
+          pollingInterval: 2000,
         })
+
+        const { status } = receipt
 
         if (status === 'reverted') {
           throw new Error(t('errors.transaction_reverted'))

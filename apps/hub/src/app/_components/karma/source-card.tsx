@@ -145,8 +145,8 @@ const KarmaSourceCard = ({
 
   if (isComplete && isConnected && isSignedIn) {
     return (
-      <div className="w-full overflow-hidden rounded-20 border border-neutral-20 bg-white-100">
-        <div className="flex flex-col">
+      <div className="flex size-full flex-col overflow-hidden rounded-20 border border-neutral-20 bg-white-100">
+        <div className="flex min-h-0 flex-1 flex-col">
           <div className="flex flex-col gap-6 p-4">
             <div className="flex w-full flex-col gap-0.5">
               <p className="text-15 font-regular text-neutral-50">{title}</p>
@@ -155,7 +155,7 @@ const KarmaSourceCard = ({
                   {formatAmount(Number(amount))}
                 </p>
                 <p className="text-15 font-medium uppercase text-neutral-50">
-                  Karma
+                  TKARMA
                 </p>
               </div>
             </div>
@@ -171,19 +171,19 @@ const KarmaSourceCard = ({
               </Button>
             </div>
           </div>
+        </div>
 
-          <div className="flex items-center gap-2 border-t border-neutral-20 bg-neutral-2.5 px-4 py-2.5">
-            <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-customisation-orange-50/20">
-              <div className="size-4 rounded-full bg-customisation-orange-50/30" />
-            </div>
-            <div className="flex flex-1 flex-col">
-              <p className="text-13 font-semibold text-neutral-100">
-                {defaultBadgeTitle}
-              </p>
-              <p className="text-13 font-regular text-neutral-100">
-                {defaultBadgeDescription}
-              </p>
-            </div>
+        <div className="flex shrink-0 items-center gap-2 border-t border-neutral-20 bg-neutral-2.5 px-4 py-2.5">
+          <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-customisation-orange-50/20">
+            <div className="size-4 rounded-full bg-customisation-orange-50/30" />
+          </div>
+          <div className="flex flex-1 flex-col">
+            <p className="text-13 font-semibold text-neutral-100">
+              {defaultBadgeTitle}
+            </p>
+            <p className="text-13 font-regular text-neutral-100">
+              {defaultBadgeDescription}
+            </p>
           </div>
         </div>
       </div>

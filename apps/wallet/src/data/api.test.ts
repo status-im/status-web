@@ -12,6 +12,10 @@ const createChromeMock = () => {
   const handlerPortOnConnectListeners: OnConnectListener[] = []
 
   return {
+    alarms: {
+      create: vi.fn(),
+      clear: vi.fn(),
+    },
     runtime: {
       connect: vi.fn(() => {
         const handlerPort = {
@@ -115,7 +119,6 @@ test('should get wallet', async () => {
 
   const returnedWallet = await apiClient.wallet.get.query({
     walletId: importedWallet.id,
-    password,
   })
 
   expect(returnedWallet.mnemonic).toBe(mnemonic)

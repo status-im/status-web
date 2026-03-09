@@ -1,6 +1,7 @@
 import { Skeleton } from '@status-im/components'
 import { useTranslations } from 'next-intl'
 import { useAccount, useReadContract } from 'wagmi'
+import { statusSepolia } from 'wagmi/chains'
 
 import { SNTIcon } from '~components/icons'
 import { STAKE_PAGE_CONSTANTS, STAKING_MANAGER } from '~constants/index'
@@ -34,6 +35,7 @@ const TotalStakedCard = () => {
     address: STAKING_MANAGER.address,
     abi: STAKING_MANAGER.abi,
     functionName: 'totalStaked',
+    chainId: statusSepolia.id,
   })
   const { data: emergencyModeEnabled } = useEmergencyModeEnabled()
 
