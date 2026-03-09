@@ -130,4 +130,3 @@ export async function isPaused(
     functionName: 'isPaused',
   })
 }
-
