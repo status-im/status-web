@@ -1,13 +1,13 @@
-import { rewardsDistributorAbi } from '../abis/rewards-distributor'
+import { rewardDistributorAbi } from '../abis/rewards-distributor'
 
 import type { Address, Hash } from '../types/common'
 import type { PublicClient, WalletClient } from 'viem'
 
 /**
- * Base class mirroring the IRewardDistributor Solidity interface.
- * Can be extended for specific distributor implementations.
+ * Abstract base class mirroring the IRewardDistributor Solidity interface.
+ * Extend this class to implement specific distributor types.
  */
-export class RewardsDistributor {
+export abstract class RewardsDistributor {
   constructor(
     protected getPublicClient: () => PublicClient,
     protected getWalletClient: () => WalletClient | null,
@@ -17,7 +17,7 @@ export class RewardsDistributor {
   async totalRewardsSupply(): Promise<bigint> {
     return this.getPublicClient().readContract({
       address: this.contractAddress,
-      abi: rewardsDistributorAbi,
+      abi: rewardDistributorAbi,
       functionName: 'totalRewardsSupply',
     })
   }
@@ -25,7 +25,7 @@ export class RewardsDistributor {
   async rewardsBalanceOf(account: Address): Promise<bigint> {
     return this.getPublicClient().readContract({
       address: this.contractAddress,
-      abi: rewardsDistributorAbi,
+      abi: rewardDistributorAbi,
       functionName: 'rewardsBalanceOf',
       args: [account],
     })
@@ -34,7 +34,7 @@ export class RewardsDistributor {
   async rewardsBalanceOfAccount(user: Address): Promise<bigint> {
     return this.getPublicClient().readContract({
       address: this.contractAddress,
-      abi: rewardsDistributorAbi,
+      abi: rewardDistributorAbi,
       functionName: 'rewardsBalanceOfAccount',
       args: [user],
     })
@@ -48,7 +48,7 @@ export class RewardsDistributor {
     const walletClient = this.requireWalletClient()
     const { request } = await this.getPublicClient().simulateContract({
       address: this.contractAddress,
-      abi: rewardsDistributorAbi,
+      abi: rewardDistributorAbi,
       functionName: 'setReward',
       args: [params.amount, params.duration],
       account: params.account,
@@ -60,12 +60,20 @@ export class RewardsDistributor {
     const walletClient = this.requireWalletClient()
     const { request } = await this.getPublicClient().simulateContract({
       address: this.contractAddress,
-      abi: rewardsDistributorAbi,
+      abi: rewardDistributorAbi,
       functionName: 'redeemRewards',
       args: [account],
       account,
     })
     return walletClient.writeContract(request) as Promise<Hash>
+  }
+
+  async isPaused(): Promise<boolean> {
+    return this.getPublicClient().readContract({
+      address: this.contractAddress,
+      abi: rewardDistributorAbi,
+      functionName: 'isPaused',
+    })
   }
 
   protected requireWalletClient(): WalletClient {

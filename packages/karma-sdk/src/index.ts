@@ -3,7 +3,8 @@ export {
   karmaAbi,
   karmaAirdropAbi,
   karmaTierAbi,
-  rewardsDistributorAbi,
+  rewardDistributorAbi,
+  statusRewardsDistributorAbi,
 } from './abis'
 
 // Contract addresses & constants
@@ -30,16 +31,12 @@ export {
 } from './contracts/karma-airdrop'
 export { getKarmaTiers, getTierIdByBalance } from './contracts/karma-tier'
 export {
-  distributeRewardsBatch,
-  getAvailableSupply,
-  getMintedSupply,
   getRewardsBalance,
   getRewardsBalanceOfAccount,
   getTotalRewardsSupply,
-  mintRewards,
+  isPaused,
   redeemRewards,
   setReward,
-  setRewardsSupplier,
 } from './contracts/rewards-distributor'
 
 // API Client

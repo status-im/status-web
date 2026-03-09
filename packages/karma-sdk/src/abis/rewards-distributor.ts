@@ -1,4 +1,60 @@
-export const rewardsDistributorAbi = [
+/**
+ * Base ABI matching the IRewardDistributor Solidity interface.
+ * Contains only the 6 standard functions that all distributors implement.
+ */
+export const rewardDistributorAbi = [
+  {
+    inputs: [],
+    name: 'totalRewardsSupply',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'address', name: 'account', type: 'address' }],
+    name: 'rewardsBalanceOf',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'address', name: 'user', type: 'address' }],
+    name: 'rewardsBalanceOfAccount',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'uint256', name: 'amount', type: 'uint256' },
+      { internalType: 'uint256', name: '', type: 'uint256' },
+    ],
+    name: 'setReward',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'address', name: 'account', type: 'address' }],
+    name: 'redeemRewards',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'isPaused',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+] as const
+
+/**
+ * Full ABI for the Status Karma Distributor (SimpleKarmaDistributor).
+ * Extends the base IRewardDistributor with Status-specific functions.
+ */
+export const statusRewardsDistributorAbi = [
   { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
   {
     inputs: [],
@@ -252,6 +308,13 @@ export const rewardsDistributorAbi = [
     name: 'initialize',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'isPaused',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    stateMutability: 'view',
     type: 'function',
   },
   {

@@ -1,4 +1,4 @@
-import { rewardsDistributorAbi } from '../abis/rewards-distributor'
+import { statusRewardsDistributorAbi } from '../abis/rewards-distributor'
 import { RewardsDistributor } from './rewards'
 
 import type { Address, Hash } from '../types/common'
@@ -11,7 +11,7 @@ export class StatusKarmaDistributor extends RewardsDistributor {
   async getAvailableSupply(): Promise<bigint> {
     return this.getPublicClient().readContract({
       address: this.contractAddress,
-      abi: rewardsDistributorAbi,
+      abi: statusRewardsDistributorAbi,
       functionName: 'availableSupply',
     })
   }
@@ -19,7 +19,7 @@ export class StatusKarmaDistributor extends RewardsDistributor {
   async getMintedSupply(): Promise<bigint> {
     return this.getPublicClient().readContract({
       address: this.contractAddress,
-      abi: rewardsDistributorAbi,
+      abi: statusRewardsDistributorAbi,
       functionName: 'mintedSupply',
     })
   }
@@ -32,7 +32,7 @@ export class StatusKarmaDistributor extends RewardsDistributor {
     const walletClient = this.requireWalletClient()
     const { request } = await this.getPublicClient().simulateContract({
       address: this.contractAddress,
-      abi: rewardsDistributorAbi,
+      abi: statusRewardsDistributorAbi,
       functionName: 'mint',
       args: [params.recipient, params.amount],
       account: params.account,
@@ -47,7 +47,7 @@ export class StatusKarmaDistributor extends RewardsDistributor {
     const walletClient = this.requireWalletClient()
     const { request } = await this.getPublicClient().simulateContract({
       address: this.contractAddress,
-      abi: rewardsDistributorAbi,
+      abi: statusRewardsDistributorAbi,
       functionName: 'setRewardsSupplier',
       args: [params.rewardsSupplier],
       account: params.account,

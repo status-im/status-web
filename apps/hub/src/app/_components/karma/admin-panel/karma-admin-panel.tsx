@@ -6,17 +6,15 @@ import { useMemo, useState } from 'react'
 import { useToast } from '@status-im/components'
 import {
   buildMerkleTree,
-  distributeRewardsBatch,
-  getAvailableSupply,
-  getMintedSupply,
+  getKarmaAddresses,
   getRewardDistributors,
   getTotalRewardsSupply,
   KARMA_CHAIN_IDS,
-  mintRewards,
   parseMerkleTreeOutput,
   serializeMerkleTreeOutput,
   setAirdropMerkleRoot,
   setKarmaReward,
+  StatusKarmaDistributor,
 } from '@status-im/karma-sdk'
 import { useQuery } from '@tanstack/react-query'
 import { useAccount, usePublicClient, useWalletClient } from 'wagmi'
@@ -66,21 +64,32 @@ export function KarmaPartnersPanel({
   const [merkleRootToPost, setMerkleRootToPost] = useState('')
   const [isPending, setIsPending] = useState(false)
 
+  const statusDistributor = useMemo(() => {
+    if (!publicClient) return null
+    const addresses = getKarmaAddresses(KARMA_CHAIN_IDS.STATUS_SEPOLIA)
+    return new StatusKarmaDistributor(
+      () => publicClient as any,
+      () => walletClient ?? null,
+      addresses.statusRewardsDistributor
+    )
+  }, [publicClient, walletClient])
+
   const { data: supplyData, refetch: refetchSupply } =
     useQuery<RewardSupplyData>({
       queryKey: ['karma-admin-supply'],
       queryFn: async () => {
-        if (!publicClient) throw new Error('No public client')
+        if (!publicClient || !statusDistributor)
+          throw new Error('No public client')
         const [
           availableSupply,
           mintedSupply,
           totalRewardsSupply,
           distributors,
         ] = await Promise.all([
-          getAvailableSupply(publicClient),
-          getMintedSupply(publicClient),
-          getTotalRewardsSupply(publicClient),
-          getRewardDistributors(publicClient),
+          statusDistributor.getAvailableSupply(),
+          statusDistributor.getMintedSupply(),
+          getTotalRewardsSupply(publicClient as any),
+          getRewardDistributors(publicClient as any),
         ])
 
         return {
@@ -90,7 +99,7 @@ export function KarmaPartnersPanel({
           distributors,
         }
       },
-      enabled: !!publicClient,
+      enabled: !!publicClient && !!statusDistributor,
     })
 
   const parsedMerkle = useMemo(() => {
@@ -163,20 +172,17 @@ export function KarmaPartnersPanel({
   const handleMintReward = () =>
     runAction(async () => {
       const clients = requireClients()
+      if (!statusDistributor) throw new Error('Distributor not ready')
       const recipient = mintRecipient
       if (!isAddress(recipient)) {
         throw new Error('Invalid recipient address')
       }
 
-      const txHash = await mintRewards(
-        clients.walletClient,
-        clients.publicClient,
-        {
-          account: clients.address,
-          recipient,
-          amount: parseBigIntInput(mintAmount, 'Amount'),
-        }
-      )
+      const txHash = await statusDistributor.mintRewards({
+        account: clients.address,
+        recipient,
+        amount: parseBigIntInput(mintAmount, 'Amount'),
+      })
 
       toast.positive(`Submitted: ${txHash}`)
     })
@@ -184,16 +190,13 @@ export function KarmaPartnersPanel({
   const handleBatchDistribute = () =>
     runAction(async () => {
       const clients = requireClients()
+      if (!statusDistributor) throw new Error('Distributor not ready')
       const distributions = parseBatchDistributions(batchJson)
 
-      const txHashes = await distributeRewardsBatch(
-        clients.walletClient,
-        clients.publicClient,
-        {
-          account: clients.address,
-          distributions,
-        }
-      )
+      const txHashes = await statusDistributor.distributeRewardsBatch({
+        account: clients.address,
+        distributions,
+      })
 
       toast.positive(`Submitted ${txHashes.length} tx`)
     })
