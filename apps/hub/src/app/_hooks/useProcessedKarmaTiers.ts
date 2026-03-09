@@ -8,6 +8,8 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import { usePublicClient } from 'wagmi'
 
+const STALE_TIME = 5 * 60 * 1_000
+
 export interface UseProcessedKarmaTiersReturn {
   karmaLevels: KarmaLevel[]
   isLoading: boolean
@@ -22,10 +24,11 @@ export function useProcessedKarmaTiers(): UseProcessedKarmaTiersReturn {
     queryKey: ['karma-tiers'],
     queryFn: async () => {
       if (!publicClient) throw new Error('No client')
-      return getKarmaTiers(publicClient)
+
+      return getKarmaTiers(publicClient as any)
     },
     enabled: !!publicClient,
-    staleTime: 5 * 60 * 1000,
+    staleTime: STALE_TIME,
     retry: 2,
   })
 
