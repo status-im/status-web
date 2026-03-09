@@ -8,11 +8,11 @@ describe('@status-im/karma-sdk smoke', () => {
     const addresses = getKarmaAddresses(chainId)
 
     expect(addresses.karma).toMatch(/^0x[a-fA-F0-9]{40}$/)
-    expect(addresses.rewardsDistributor).toMatch(/^0x[a-fA-F0-9]{40}$/)
+    expect(addresses.statusRewardsDistributor).toMatch(/^0x[a-fA-F0-9]{40}$/)
     expect(addresses.karmaTier).toMatch(/^0x[a-fA-F0-9]{40}$/)
     // Deprecated alias still works
-    expect(addresses.statusRewardsDistributor).toBe(
-      addresses.rewardsDistributor,
+    expect(addresses.rewardsDistributor).toBe(
+      addresses.statusRewardsDistributor,
     )
   })
 })

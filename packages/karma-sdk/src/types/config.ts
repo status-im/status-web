@@ -19,11 +19,11 @@ export interface ChainConfig {
   nativeCurrency?: { name: string; symbol: string; decimals: number }
   contracts: {
     karma: Address
-    rewardsDistributor: Address
+    statusRewardsDistributor: Address
     karmaTier: Address
     karmaAirdrop?: Address
-    /** @deprecated Use rewardsDistributor. Will be removed in v1.0. */
-    statusRewardsDistributor?: Address
+    /** @deprecated Use statusRewardsDistributor. Will be removed in v1.0. */
+    rewardsDistributor?: Address
   }
 }
 

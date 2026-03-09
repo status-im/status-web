@@ -10,7 +10,7 @@ function resolveDistributorAddress(
 ): Address {
   if (contractAddress) return contractAddress
   if (!chainId) throw new Error('Chain ID or contractAddress required')
-  return getKarmaAddresses(chainId).rewardsDistributor
+  return getKarmaAddresses(chainId).statusRewardsDistributor
 }
 
 export async function getRewardsBalance(

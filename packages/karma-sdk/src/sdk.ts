@@ -28,12 +28,12 @@ export const PRESET_API_URLS: Record<ChainPreset, string> = {
 
 function normalizeChainConfig(config: ChainConfig): ChainConfig {
   const contracts = config.contracts
-  if (contracts.statusRewardsDistributor && !contracts.rewardsDistributor) {
+  if (contracts.rewardsDistributor && !contracts.statusRewardsDistributor) {
     return {
       ...config,
       contracts: {
         ...contracts,
-        rewardsDistributor: contracts.statusRewardsDistributor,
+        statusRewardsDistributor: contracts.rewardsDistributor,
       },
     }
   }
@@ -91,7 +91,7 @@ export class KarmaSDK {
       new StatusKarmaDistributor(
         getPublic,
         getWallet,
-        this._chainConfig.contracts.rewardsDistributor,
+        this._chainConfig.contracts.statusRewardsDistributor,
       )
     this.tiers = new TiersModule(getPublic, this._chainConfig)
     this.airdrop = new AirdropModule(getPublic, getWallet)
