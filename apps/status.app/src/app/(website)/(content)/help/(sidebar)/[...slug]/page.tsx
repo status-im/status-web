@@ -3,6 +3,7 @@ import { CrownIcon, GavelIcon, TokenMasterIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
+import { getTranslations } from 'next-intl/server'
 
 import config from '~/config/help/config.json'
 import { METADATA } from '~/config/help/metadata'
@@ -66,6 +67,8 @@ export default async function HelpDetailPage(props: Props) {
   const { params } = props
   const slug = (await params).slug
   const doc = allHelpDocs.find(d => d.slug.join('/') === slug.join('/'))
+  const t = await getTranslations('help')
+  const tc = await getTranslations('common')
 
   if (!doc) {
     return notFound()
@@ -74,7 +77,7 @@ export default async function HelpDetailPage(props: Props) {
   // root
   const breadcrumbs = [
     {
-      label: 'Help',
+      label: t('title'),
       href: '/help',
     },
   ]
@@ -217,12 +220,12 @@ export default async function HelpDetailPage(props: Props) {
               )}
             >
               <AnchorLink id={doc.titleSlug}>{doc.title}</AnchorLink>
-              {doc.beta && <Tag size="32" label="Beta" />}
+              {doc.beta && <Tag size="32" label={tc('beta')} />}
             </h1>
             {doc.roles && doc.roles.length > 0 && (
               <div className="-mt-1 mb-5 flex items-center gap-2">
                 <span className="text-13 font-medium text-neutral-50">
-                  Only relevant to:
+                  {t('onlyRelevantTo')}
                 </span>
                 <div className="flex items-center justify-center gap-1 align-middle">
                   {doc.roles.map(role => (

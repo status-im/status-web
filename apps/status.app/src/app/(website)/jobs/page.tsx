@@ -2,6 +2,7 @@ import { Button, Tag, Text } from '@status-im/components'
 import { ExternalIcon } from '@status-im/icons/16'
 import { ArrowDownIcon, ArrowRightIcon } from '@status-im/icons/20'
 import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
 import { match } from 'ts-pattern'
 
 import { groupBy } from '~/utils/group-by'
@@ -27,6 +28,8 @@ export const metadata = Metadata({
 })
 
 export default async function JobsPage() {
+  const t = await getTranslations('jobs')
+
   const [statusJobs, logosJobs] = await Promise.all([
     getStatusJobs(),
     getLogosJobs(),
@@ -49,18 +52,66 @@ export default async function JobsPage() {
       'Join us in our mission to build the open-source, decentralised wallet and messenger.',
   })
 
+  const PERKS: FeatureListProps['list'] = [
+    {
+      title: t('fullyRemote'),
+      description: t('fullyRemoteDescription'),
+      icon: 'Jobs/Icons/Icon Section/01_Fully_Remote:144:144',
+    },
+    {
+      title: t('unlimitedTimeOff'),
+      description: t('unlimitedTimeOffDescription'),
+      icon: 'Jobs/Icons/Icon Section/02_Unlimited_Time_Off:145:144',
+    },
+    {
+      title: t('cryptoPay'),
+      description: t('cryptoPayDescription'),
+      icon: 'Jobs/Icons/Icon Section/03_Crypto_Pay:145:144',
+    },
+    {
+      title: t('hardwareProvided'),
+      description: t('hardwareProvidedDescription'),
+      icon: 'Jobs/Icons/Icon Section/04_Hardware_Provided:144:144',
+    },
+    {
+      title: t('coworkingBudget'),
+      description: t('coworkingBudgetDescription'),
+      icon: 'Jobs/Icons/Icon Section/05_Coworking_Budget:145:144',
+    },
+    {
+      title: t('paidOffsites'),
+      description: t('paidOffsitesDescription'),
+      icon: 'Jobs/Icons/Icon Section/06_Paid_Offsites:145:144',
+    },
+    {
+      title: t('sntAllocation'),
+      description: t('sntAllocationDescription'),
+      icon: 'Jobs/Icons/Icon Section/07_SNT_Bonus:144:144',
+    },
+    {
+      title: t('referralFee'),
+      description: t('referralFeeDescription'),
+      icon: 'Jobs/Icons/Icon Section/08_Referral_Fee:145:144',
+    },
+    {
+      title: t('mentalCalibration'),
+      description: t('mentalCalibrationDescription'),
+      icon: 'Jobs/Icons/Icon Section/09_Mental_Calibration:145:144',
+    },
+  ]
+
   return (
     <>
       <JSONLDScript schema={organizationSchema} />
       <Body>
         <div className="container relative flex flex-col items-start pt-16 xl:pt-40">
           <div className="relative mb-4">
-            <Tag size="32" label="Jobs" />
+            <Tag size="32" label={t('metaTitle')} />
           </div>
           <h1 className="relative z-20 mb-6 text-48 font-bold xl:mb-8 xl:text-88">
-            Join us in
+            {t('title')}
             <br />
-            our mission
+            {t('titleHighlight')}
           </h1>
 
           {Object.keys(statusJobsByDepartment).length > 0 && (
@@ -70,18 +121,16 @@ export default async function JobsPage() {
             >
               <div className="flex flex-col">
                 <Text size={13} weight="semibold">
-                  We’re hiring!
+                  {t('hiring')}
                 </Text>
-                <Text size={13}>
-                  {total} remote opening{total !== 1 && 's'}
-                </Text>
+                <Text size={13}>{t('remoteOpenings', { count: total })}</Text>
               </div>
               <Button
                 variant="outline"
                 iconAfter={<ArrowDownIcon />}
                 href="/jobs#open-roles"
               >
-                View opening{total === 1 ? '' : 's'}
+                {t('viewOpenings', { count: total })}
               </Button>
             </div>
           )}
@@ -124,53 +173,27 @@ export default async function JobsPage() {
           />
           <div className="relative mx-auto max-w-[740px] px-5">
             <div className="mb-7">
-              <Text size={19}>
-                Want to join an organisation dedicated to building a 100% open
-                source fully decentralised platform that aims to uphold human
-                rights? At Status, we’re always on the lookout for great people
-                who align with our principles and aren’t shy about embracing
-                their authenticity.
-              </Text>
+              <Text size={19}>{t('introText')}</Text>
             </div>
             <div className="mb-7">
-              <Text size={19}>
-                We have created an environment that allows our core contributors
-                to work with freedom and flexibility. We believe working this
-                way builds trust and encourages each individual to find a
-                favorable work/life balance.
-              </Text>
+              <Text size={19}>{t('flexibilityText')}</Text>
             </div>
             <div className="mb-7">
-              <Text size={19}>
-                All positions are remote. You may work from any location (as
-                long as you can be online every day in your team’s crossover
-                hours) and choose your working times. We care about getting the
-                job done, not about traditional corporate models with fixed
-                office hours and locations.
-              </Text>
+              <Text size={19}>{t('remoteText')}</Text>
             </div>
             <div className="mb-7">
-              <Text size={19}>
-                We regularly survey core contributors to gather insights on
-                their satisfaction with Status, and the most common responses of
-                why they enjoy working with us are: our mission, values,
-                flexibility, friendly environment, non-corporate culture, and
-                our entrepreneurial spirit.
-              </Text>
+              <Text size={19}>{t('surveyText')}</Text>
             </div>
-            <Text size={19}>
-              If working at Status resonates with you, check out our open roles
-              below.
-            </Text>
+            <Text size={19}>{t('checkRolesText')}</Text>
           </div>
         </section>
 
         <div className="relative border-b border-dashed border-neutral-80/20 bg-white-100 py-24 xl:py-40">
           <div className="container mb-12 xl:mb-20">
             <h2 className="text-40 font-bold xl:text-64">
-              Status supports
+              {t('supportsTitle')}
               <br />
-              its contributors
+              {t('supportsHighlight')}
             </h2>
           </div>
           <FeatureList list={PERKS} />
@@ -185,7 +208,7 @@ export default async function JobsPage() {
             <div className="mb-12 xl:mb-20">
               <h2 className="text-40 font-bold xl:text-64">
                 <span className="relative">
-                  Open roles
+                  {t('openRoles')}
                   <Image
                     id="Jobs/Scribbles and Notes/Scribble_01:536:161"
                     alt=""
@@ -227,12 +250,12 @@ export default async function JobsPage() {
                           <Text size={19} weight="semibold">
                             {job.title}
                           </Text>
-                          <Text size={19}>Remote</Text>
+                          <Text size={19}>{t('remote')}</Text>
                         </div>
                         <Button
                           variant="outline"
                           icon={<ArrowRightIcon />}
-                          aria-label="View job"
+                          aria-label={t('viewJob')}
                         />
                       </Link>
                     ))}
@@ -250,20 +273,10 @@ export default async function JobsPage() {
                   <div className="flex flex-1 flex-row items-center justify-between gap-4">
                     <div className="flex flex-col">
                       <Text size={15} weight="semibold">
-                        No open roles
-                        {/* {Object.keys(statusJobsByDepartment).length > 0
-                      ? 'Nothing for you?'
-                      : 'No open roles'} */}
+                        {t('noOpenRoles')}
                       </Text>
-                      {/* <Text size={15}>Don’t be shy, self-apply.</Text> */}
                     </div>
-                    <div className="">
-                      {/* <Button
-                    variant="outline"
-                    size={40}
-                    icon={<ArrowRightIcon  />}
-                  /> */}
-                    </div>
+                    <div className=""></div>
                   </div>
                 </div>
               ) : null}
@@ -277,9 +290,7 @@ export default async function JobsPage() {
             <div className="container py-24 xl:py-40">
               <div className="mb-20">
                 <h3 className="text-40 font-semibold">
-                  Open roles
-                  <br />
-                  in our network
+                  {t('openRolesNetwork')}
                 </h3>
               </div>
               <div className="grid gap-12">
@@ -325,57 +336,3 @@ export default async function JobsPage() {
     </>
   )
 }
-
-const PERKS: FeatureListProps['list'] = [
-  {
-    title: 'Fully remote',
-    description:
-      'Work autonomously from wherever you want, unleash your full potential.',
-    icon: 'Jobs/Icons/Icon Section/01_Fully_Remote:144:144',
-  },
-  {
-    title: 'Unlimited time-off',
-    description:
-      'Take time off you need when you need it and prioritise your well-being.',
-    icon: 'Jobs/Icons/Icon Section/02_Unlimited_Time_Off:145:144',
-  },
-  {
-    title: 'Crypto pay',
-    description:
-      'Get paid in all fiat, or all crypto, or a split between the two.',
-    icon: 'Jobs/Icons/Icon Section/03_Crypto_Pay:145:144',
-  },
-  {
-    title: 'Hardware provided',
-    description: 'Need a laptop? Status will cover you.',
-    icon: 'Jobs/Icons/Icon Section/04_Hardware_Provided:144:144',
-  },
-  {
-    title: 'Coworking budget',
-    description: 'Get up to $270 coworking allowance.',
-    icon: 'Jobs/Icons/Icon Section/05_Coworking_Budget:145:144',
-  },
-  {
-    title: 'Paid offsites',
-    description: 'Come work with and meet the team.',
-    icon: 'Jobs/Icons/Icon Section/06_Paid_Offsites:145:144',
-  },
-  {
-    title: 'SNT allocation',
-    description:
-      'Get an allocation of SNT to further incentivise your contributions.',
-    icon: 'Jobs/Icons/Icon Section/07_SNT_Bonus:144:144',
-  },
-  {
-    title: 'Referral fee',
-    description:
-      'Receive $5000 SNT referral fee for bringing your friends onboard.',
-    icon: 'Jobs/Icons/Icon Section/08_Referral_Fee:145:144',
-  },
-  {
-    title: 'Mental calibration',
-    description:
-      'Enjoy a free Headspace subscription to focus and ease your mind.',
-    icon: 'Jobs/Icons/Icon Section/09_Mental_Calibration:145:144',
-  },
-]

@@ -2,6 +2,7 @@
 
 import { Button } from '@status-im/components'
 import { ChromeIcon, CloseIcon } from '@status-im/icons/20'
+import { useTranslations } from 'next-intl'
 
 import { STATUS_CONNECTOR_CHROME_URL } from '~/config/routes'
 import { trackEvent } from '~app/_utils/track'
@@ -15,6 +16,7 @@ type Props = {
 
 export const DownloadConnectorDialog = (props: Props) => {
   const { children } = props
+  const t = useTranslations('download')
 
   return (
     <Dialog>
@@ -27,20 +29,19 @@ export const DownloadConnectorDialog = (props: Props) => {
               variant="outline"
               size="32"
               icon={<CloseIcon />}
-              aria-label="Close"
+              aria-label={t('close')}
             />
           </Dialog.Close>
         </div>
         <DownloadConnectorSection afterDownload>
           <div className="pb-2 text-19 font-600 xl:text-27">
-            Thanks for downloading!&nbsp;🎉
+            {t('connectorThanks')}
           </div>
           <Dialog.Title className="mb-3 mt-4 text-27 font-700 xl:text-40">
-            Want to improve your Status experience?
+            {t('connectorTitle')}
           </Dialog.Title>
           <p className="mb-6 text-19 font-400 xl:text-27">
-            Connect to your favourite dapps with the Status Wallet Connector
-            browser extension.
+            {t('connectorDescription')}
           </p>
 
           <Button
@@ -55,7 +56,7 @@ export const DownloadConnectorDialog = (props: Props) => {
               window.open(STATUS_CONNECTOR_CHROME_URL, '_blank')
             }}
           >
-            Download for Chrome
+            {t('downloadForChrome')}
           </Button>
         </DownloadConnectorSection>
       </Dialog.Content>

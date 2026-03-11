@@ -12,6 +12,7 @@ import { Logo } from '~components/logo'
 import { DownloadDesktopButton } from '../download-desktop-button'
 import { DownloadMobileButton } from '../download-mobile-button'
 import { AccordionMenu } from './accordion-menu'
+import { LanguageSelector } from './language-selector'
 
 type Props = {
   open: boolean
@@ -33,11 +34,14 @@ const FloatingMobile = (props: Props) => {
           </Link>
         </div>
 
-        <IconButton
-          icon={open ? <CloseIcon /> : <MenuIcon />}
-          variant="outline"
-          onPress={() => setOpen(!open)}
-        />
+        <div className="flex items-center gap-2">
+          <LanguageSelector />
+          <IconButton
+            icon={open ? <CloseIcon /> : <MenuIcon />}
+            variant="outline"
+            onPress={() => setOpen(!open)}
+          />
+        </div>
       </div>
 
       <animated.div

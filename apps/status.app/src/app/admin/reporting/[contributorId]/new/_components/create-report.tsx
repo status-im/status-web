@@ -4,6 +4,7 @@ import { useTransition } from 'react'
 
 import { useToast } from '@status-im/components'
 import { notFound, useRouter, useSearchParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import { createReport } from '~admin/reporting/_actions'
 
@@ -24,6 +25,7 @@ const CreateReport = (props: Props) => {
 
   const router = useRouter()
   const toast = useToast()
+  const t = useTranslations('admin')
   const [isPending, startTransition] = useTransition()
 
   const startOfWeekParam = searchParams?.get('startOfWeek')
@@ -43,7 +45,9 @@ const CreateReport = (props: Props) => {
   return (
     <div className="w-full max-w-[462px]">
       <div className="mb-4 flex flex-col gap-1">
-        <h2 className="text-19 font-semibold text-neutral-100">Add report</h2>
+        <h2 className="text-19 font-semibold text-neutral-100">
+          {t('addReport')}
+        </h2>
         <ReportsDateHeader size={15} startOfWeek={startOfWeek} />
       </div>
       <ReportsForm
@@ -64,12 +68,12 @@ const CreateReport = (props: Props) => {
                   milestone => milestone.timeSpent > 0
                 ),
               })
-              toast.positive('Report created successfully')
+              toast.positive(t('reportCreated'))
               router.push(`/admin/reporting/${contributorId}`)
             })
           } catch (error) {
             console.error(error)
-            toast.negative('Something went wrong. Please try again later.')
+            toast.negative(t('genericError'))
           }
         }}
       />

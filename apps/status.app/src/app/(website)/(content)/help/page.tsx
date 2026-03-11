@@ -1,9 +1,10 @@
 import { Button, Tag, Text } from '@status-im/components'
 import { ArrowRightIcon, ExternalIcon } from '@status-im/icons/20'
 import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
 
 import { METADATA } from '~/config/help/metadata'
-import { ROUTES } from '~/config/routes'
+import { DISCUSS_URL } from '~/config/routes'
 import { Metadata } from '~app/_metadata'
 import { Icon } from '~components/assets'
 import { Body } from '~components/body'
@@ -18,16 +19,16 @@ export const metadata = Metadata({
   },
 })
 
-export default function HelpPage() {
+export default async function HelpPage() {
+  const t = await getTranslations('help')
+  const tc = await getTranslations('common')
   return (
     <Body>
       <div className="container pb-5 pt-12 xl:pb-12 xl:pt-20">
         <div className="mb-10 flex flex-col items-start justify-between gap-5 xl:mb-20 xl:flex-row xl:items-end xl:gap-0">
           <div className="flex flex-col gap-2">
-            <h1 className="text-40 font-bold xl:text-64">Let’s help you</h1>
-            <Text size={19}>
-              Short-form guides on how to set up and use the app
-            </Text>
+            <h1 className="text-40 font-bold xl:text-64">{t('title')}</h1>
+            <Text size={19}>{t('description')}</Text>
           </div>
           <SearchButton type="help" size={38} />
         </div>
@@ -49,7 +50,7 @@ export default function HelpPage() {
                       <Text size={19} weight="semibold">
                         {title}
                       </Text>
-                      {beta && <Tag size="24" label="Beta" />}
+                      {beta && <Tag size="24" label={tc('beta')} />}
                     </div>
                     <Text size={15}>{description}</Text>
                   </div>
@@ -60,7 +61,7 @@ export default function HelpPage() {
                       size="32"
                       iconAfter={<ArrowRightIcon />}
                     >
-                      Learn more
+                      {t('learnMore')}
                     </Button>
                   </div>
                 </Link>
@@ -74,18 +75,18 @@ export default function HelpPage() {
         <div className="container flex flex-col items-start">
           <div className="mb-4 flex flex-col">
             <Text size={19} weight="semibold">
-              {'Didn’t find answers?'}
+              {t('noAnswers')}
             </Text>
-            <Text size={15}>Ask around in our forum!</Text>
+            <Text size={15}>{t('askForum')}</Text>
           </div>
 
           <Button
             variant="outline"
             size="32"
             iconAfter={<ExternalIcon />}
-            href={ROUTES.Collaborate.find(r => r.name === 'Discuss')!.href}
+            href={DISCUSS_URL}
           >
-            Go to Discuss
+            {t('goToDiscuss')}
           </Button>
         </div>
       </div>

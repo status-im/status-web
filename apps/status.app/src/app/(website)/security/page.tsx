@@ -1,3 +1,5 @@
+import { getTranslations } from 'next-intl/server'
+
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
 import { Metadata } from '~app/_metadata'
 import { formatDate } from '~app/_utils/format-date'
@@ -13,7 +15,9 @@ export const metadata = Metadata({
   },
 })
 
-export default function SecurityPage() {
+export default async function SecurityPage() {
+  const t = await getTranslations('security')
+
   const organizationSchema = jsonLD.organization({
     description:
       'Status takes security seriously. Please report any security incidents via security@status.im.',
@@ -25,18 +29,16 @@ export default function SecurityPage() {
       <Body className="pb-24 pt-16 xl:pb-40 xl:pt-32">
         <div className="container max-w-[742px]">
           <div className="mb-12">
-            <h1 className="mb-3 text-40 font-bold xl:text-64">
-              Status - Security
-            </h1>
+            <h1 className="mb-3 text-40 font-bold xl:text-64">{t('title')}</h1>
             <p className="text-19 text-neutral-50">
               Last update: {formatDate('2024-05-15', 'long')}
             </p>
           </div>
 
           <div className="py-6">
-            <p className="text-19">We take security seriously at Status.</p>
+            <p className="text-19">{t('description')}</p>
             <p className="text-19">
-              Please report any security incidents via{' '}
+              {t('reportIncidents')}{' '}
               <Link
                 href="mailto:security@status.im"
                 className="text-customisation-blue-50 hover:text-customisation-blue-60"
@@ -49,15 +51,14 @@ export default function SecurityPage() {
 
           <div className="py-6">
             <p className="text-19">
-              Please report any discovered vulnerabilities in our bounty
-              programme at{' '}
+              {t('reportVulnerabilities')}{' '}
               <Link
                 href="https://hackenproof.com/ift/status"
                 className="text-customisation-blue-50 hover:text-customisation-blue-60"
               >
-                HackenProof
+                {t('hackenProof')}
               </Link>{' '}
-              to help ensure our protocols and software remain secure.
+              {t('ensureSecure')}
             </p>
           </div>
         </div>

@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { customisation, neutral, white } from '@status-im/colors'
 import { SegmentedControl } from '@status-im/components'
 import { ParentSize } from '@visx/responsive'
+import { useTranslations } from 'next-intl'
 import { match } from 'ts-pattern'
 
 import { formatNumber } from '~admin/_utils'
@@ -37,6 +38,7 @@ export const colors = {
 } as const
 
 const DevicesChart = (props: Props) => {
+  const t = useTranslations('admin')
   const { cumulativeData, monthlyData } = props
   const [activeSegment, setActiveSegment] = useState<Segment>('cumulative')
 
@@ -66,7 +68,9 @@ const DevicesChart = (props: Props) => {
             <div className="flex flex-col content-between">
               <div>
                 <div className="flex items-center justify-between">
-                  <p className="text-15 font-semibold">Verified devices</p>
+                  <p className="text-15 font-semibold">
+                    {t('verifiedDevices')}
+                  </p>
                   <div className="inline-flex">
                     <SegmentedControl.Root
                       value={activeSegment}

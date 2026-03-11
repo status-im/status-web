@@ -1,4 +1,5 @@
 import { Button, Text } from '@status-im/components'
+import { useTranslations } from 'next-intl'
 
 import { Image } from '~components/assets'
 import { ERROR_CODES } from '~sharing/_error-codes'
@@ -9,6 +10,7 @@ type Props = {
 
 export const ErrorPage = (props: Props) => {
   const { errorCode } = props
+  const t = useTranslations('error')
 
   switch (errorCode) {
     // todo!: design review, not in designs
@@ -27,15 +29,15 @@ export const ErrorPage = (props: Props) => {
 
           <div className="mb-3 flex flex-col gap-2 py-3">
             <Text size={27} weight="semibold">
-              Oh no! Something went wrong!
+              {t('title')}
             </Text>
             <Text size={19} weight="regular">
-              Try to reload the page or come back later!
+              {t('description')}
             </Text>
           </div>
 
           <Button variant="outline" href="/">
-            Go to status.app homepage
+            {t('goHome')}
           </Button>
         </div>
       )

@@ -1,6 +1,7 @@
 import { Button, Text } from '@status-im/components'
 import { ArrowRightIcon } from '@status-im/icons/20'
 import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
 
 import { METADATA } from '~/config/specs/metadata'
 import { Metadata } from '~app/_metadata'
@@ -18,16 +19,15 @@ export const metadata = Metadata({
   },
 })
 
-export default function SpecsPage() {
+export default async function SpecsPage() {
+  const t = await getTranslations('specs')
   return (
     <Body>
       <div className="container pb-5 pt-12 xl:pb-12 xl:pt-20">
         <div className="mb-10 flex flex-col items-start justify-between gap-5 xl:mb-20 xl:flex-row xl:items-end xl:gap-0">
           <div className="flex flex-col gap-2">
-            <h1 className="text-40 font-bold xl:text-64">Specs</h1>
-            <Text size={19}>
-              Technical deep dives into the inner workings of the Status apps
-            </Text>
+            <h1 className="text-40 font-bold xl:text-64">{t('title')}</h1>
+            <Text size={19}>{t('description')}</Text>
           </div>
           <SearchButton type="specs" size={38} />
         </div>
@@ -61,7 +61,7 @@ export default function SpecsPage() {
                       size="32"
                       iconAfter={<ArrowRightIcon />}
                     >
-                      Read
+                      {t('read')}
                     </Button>
                   </div>
                 </Link>

@@ -1,4 +1,5 @@
 import { Text } from '@status-im/components'
+import { getTranslations } from 'next-intl/server'
 
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
 import { Metadata } from '~app/_metadata'
@@ -21,6 +22,7 @@ export const metadata = Metadata({
 })
 
 export default async function BlogPage() {
+  const t = await getTranslations('blog')
   const { posts: initialPosts, meta } = await getPosts()
 
   const highlightedPost = initialPosts[0]
@@ -28,7 +30,7 @@ export default async function BlogPage() {
   const websiteSchema = jsonLD.website({
     name: 'Status Blog',
     url: 'https://status.app/blog',
-    description: 'Long form articles, thoughts, and ideas.',
+    description: t('description'),
   })
 
   return (
@@ -38,8 +40,8 @@ export default async function BlogPage() {
         <div className="px-5">
           <div className="mx-auto max-w-[1184px] pb-24 pt-12 xl:pb-32 xl:pt-20">
             <div className="mb-10 grid gap-2">
-              <h1 className="text-40 font-bold xl:text-64">Blog.</h1>
-              <Text size={19}>Long form articles, thoughts, and ideas.</Text>
+              <h1 className="text-40 font-bold xl:text-64">{t('title')}</h1>
+              <Text size={19}>{t('description')}</Text>
             </div>
 
             <div className="-ml-5 -mr-8 flex gap-2 overflow-x-scroll pb-12 pl-5 pr-8 scrollbar-none">

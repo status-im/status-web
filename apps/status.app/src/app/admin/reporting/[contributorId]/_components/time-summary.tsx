@@ -2,6 +2,7 @@ import * as Tooltip from '@radix-ui/react-tooltip'
 import { InfoIcon, WarningIcon } from '@status-im/icons/16'
 import { TimeOffIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
+import { useTranslations } from 'next-intl'
 
 import { InsightsAppIcon } from '~admin/insights/_components/insights-app-icon'
 
@@ -27,6 +28,7 @@ const appColors = {
 
 const TimeSummary = (props: Props) => {
   const { milestones, values, allocation } = props
+  const t = useTranslations('admin')
 
   const bars = milestones.map(milestone => {
     const timeSpent =
@@ -39,8 +41,8 @@ const TimeSummary = (props: Props) => {
   })
 
   const timeOffBar = {
-    name: 'Member has been OOO',
-    projectName: 'Time Off',
+    name: t('memberHasBeenOOO'),
+    projectName: t('timeOff'),
     app: 'timeOff' as TooltipSummaryProps['app'],
     timeSpent: values.timeOff,
   }
@@ -48,9 +50,9 @@ const TimeSummary = (props: Props) => {
   return (
     <div className="flex flex-col rounded-16 border border-neutral-10 p-3 text-13">
       <span className="text-15 font-semibold text-neutral-100">
-        Time Summary
+        {t('timeSummary')}
       </span>
-      <span className="text-neutral-50">Where member spent their time</span>
+      <span className="text-neutral-50">{t('timeSummaryDescription')}</span>
       <div className="my-3 flex h-2 w-full gap-px overflow-hidden rounded-8 bg-neutral-20 bg-gradient-hatching">
         {[...bars, timeOffBar].map(bar => {
           return (
@@ -67,15 +69,15 @@ const TimeSummary = (props: Props) => {
       </div>
       {allocation <= 100 && (
         <div className="flex items-center justify-center gap-2 rounded-12 border border-neutral-20 bg-neutral-5 px-4 py-3">
-          <InfoIcon className="text-neutral-50" /> {100 - allocation}% of time
-          remaining to allocate
+          <InfoIcon className="text-neutral-50" />{' '}
+          {t('timeRemainingToAllocate', { remaining: 100 - allocation })}
         </div>
       )}
 
       {allocation > 100 && (
         <div className="flex items-center justify-center gap-2 rounded-12 border border-danger-50/10 bg-danger-50/5 px-4 py-3 text-danger-50">
-          <WarningIcon className="text-danger-50" /> You&apos;re{' '}
-          {allocation - 100}% over 100%, this doesn&apos;t make sense 😅
+          <WarningIcon className="text-danger-50" />{' '}
+          {t('timeOverAllocated', { over: allocation - 100 })}
         </div>
       )}
     </div>

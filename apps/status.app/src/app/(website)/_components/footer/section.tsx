@@ -1,5 +1,6 @@
 import { Text } from '@status-im/components'
 import { ExternalIcon } from '@status-im/icons/16'
+import { getTranslations } from 'next-intl/server'
 
 import { Link } from '~components/link'
 
@@ -10,8 +11,9 @@ type Props = {
   routes: Routes
 }
 
-const Section = (props: Props) => {
+const Section = async (props: Props) => {
   const { title, routes } = props
+  const t = await getTranslations('nav')
 
   return (
     <div className="relative">
@@ -31,10 +33,10 @@ const Section = (props: Props) => {
             const external = route.href.startsWith('http')
 
             return (
-              <li key={route.name}>
+              <li key={route.nameKey}>
                 <Link href={route.href} className="group flex items-center">
                   <span className="text-15 font-medium text-white-100 transition-colors group-data-[active='true']:text-neutral-40 group-hover:text-neutral-50">
-                    {route.name}
+                    {t(route.nameKey)}
                   </span>
                   {external && (
                     <ExternalIcon className="-mb-0.5 text-neutral-40 transition-transform group-hover:-translate-y-px group-hover:translate-x-px" />

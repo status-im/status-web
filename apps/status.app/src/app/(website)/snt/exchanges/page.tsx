@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
 
 import { LEGAL } from '~/config/routes'
 import { getCoins, getMarket } from '~/server/services/coingecko'
@@ -65,10 +66,12 @@ export const metadata = Metadata({
 })
 
 export default async function ExchangesPage() {
+  const t = await getTranslations('snt')
+  const tn = await getTranslations('nav')
   const tickers = await getExchangeData()
 
   const organizationSchema = jsonLD.organization({
-    description: 'List of exchanges where you can find SNT',
+    description: t('exchangesMetaDescription'),
   })
 
   return (
@@ -77,21 +80,18 @@ export default async function ExchangesPage() {
       <Body>
         <div className="relative">
           <HeroSection
-            tag="Exchanges"
-            title="Where you can find SNT"
+            tag={tn('exchanges')}
+            title={t('exchangesTitle')}
             description={
               <>
-                SNT is available on a number of exchanges. The list below is for
-                informational purposes only and should not be considered an
-                endorsement by Status, investment advice, or solicitation to buy
-                or sell SNT or any other token.
+                {t('exchangesDescription')}
                 <span className="block pt-5 text-15 text-neutral-50">
-                  For more details, please refer to disclaimers in our{' '}
+                  {t('exchangesDisclaimer')}{' '}
                   <Link
                     className="underline decoration-1 underline-offset-4"
                     href={LEGAL.termsOfUse.href}
                   >
-                    {LEGAL.termsOfUse.name}
+                    {tn(LEGAL.termsOfUse.nameKey)}
                   </Link>
                   .
                 </span>
@@ -107,12 +107,12 @@ export default async function ExchangesPage() {
         <div className="container px-5 pb-40 pt-10 xl:pt-0">
           <ExchangesTable tickers={tickers} />
           <p className="mt-6 flex flex-row items-center gap-[6px] text-13 font-medium text-neutral-50">
-            Powered by
+            {t('poweredBy')}
             <a
               href="https://www.coingecko.com/en/coins/status"
               rel="noreferrer"
             >
-              <span className="sr-only">CoinGecko</span>
+              <span className="sr-only">{t('coinGecko')}</span>
               <CoinGeckoIcon aria-hidden />
             </a>
           </p>

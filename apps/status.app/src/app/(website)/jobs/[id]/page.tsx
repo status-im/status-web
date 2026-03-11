@@ -1,6 +1,7 @@
 import { Button, Tag, Text } from '@status-im/components'
 import { cx } from 'class-variance-authority'
 import { redirect } from 'next/navigation'
+import { getTranslations } from 'next-intl/server'
 import production from 'react/jsx-runtime'
 import rehypeParse from 'rehype-parse'
 import rehypeReact, { type Options } from 'rehype-react'
@@ -47,6 +48,8 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function JobsDetailPage(props: Props) {
   const { params } = props
+  const t = await getTranslations('jobs')
+  const tn = await getTranslations('nav')
 
   const { id: jobId } = await params
   const job = await getStatusJob(jobId)
@@ -78,7 +81,7 @@ export default async function JobsDetailPage(props: Props) {
       <Breadcrumbs
         items={[
           {
-            label: 'Jobs',
+            label: tn('jobs'),
             href: '/jobs',
           },
           {
@@ -109,13 +112,13 @@ export default async function JobsDetailPage(props: Props) {
         >
           <div className="flex flex-col">
             <Text size={19} weight="semibold">
-              Apply for this job
+              {t('applyForJob')}
             </Text>
-            <Text size={15}>Submit your application here</Text>
+            <Text size={15}>{t('submitApplication')}</Text>
           </div>
 
           <ApplicationFormDialog job={job}>
-            <Button size="32">Apply now</Button>
+            <Button size="32">{t('applyNow')}</Button>
           </ApplicationFormDialog>
         </div>
       </div>

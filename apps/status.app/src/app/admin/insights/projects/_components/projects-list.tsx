@@ -6,6 +6,7 @@ import { arrayMove } from '@dnd-kit/sortable'
 import * as colors from '@status-im/colors'
 import { matchSorter } from 'match-sorter'
 import { usePathname, useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { match } from 'ts-pattern'
 
 import { AddNewButton } from '~admin/_components/add-new-button'
@@ -15,73 +16,19 @@ import { SearchInput } from '~admin/_components/search-input'
 import { useLayoutContext } from '~admin/_contexts/layout-context'
 import { useUserContext } from '~admin/_contexts/user-context'
 import { AdminLayoutList } from '~admin/_layouts/admin-layout-list'
-import { projectSchema } from '~server/api/validation/projects'
+import {
+  getAdminAppLabel,
+  getAdminStatusLabel,
+  getProjectAppOptions,
+  getProjectStatusOptions,
+} from '~admin/insights/_utils/i18n'
 
 import { InsightsAppIcon } from '../../_components/insights-app-icon'
 import { InsightsStatusIcon } from '../../_components/insights-status-icon'
 import { updateProjectPosition } from '../_actions'
 import { TableSortable } from './table-sortable'
 
-import type { MultiselectOption } from '~admin/_components/multiselect-filter'
 import type { ApiOutput } from '~server/api/types'
-
-const appType = projectSchema.shape.app
-
-export const projectAppOptions = [
-  {
-    id: appType.Enum.shell,
-    label: 'Shell',
-    icon: <InsightsAppIcon type={appType.Enum.shell} />,
-  },
-  {
-    id: appType.Enum.communities,
-    label: 'Communities',
-    icon: <InsightsAppIcon type={appType.Enum.communities} />,
-  },
-  {
-    id: appType.Enum.messenger,
-    label: 'Messenger',
-    icon: <InsightsAppIcon type={appType.Enum.messenger} />,
-  },
-  {
-    id: appType.Enum.wallet,
-    label: 'Wallet',
-    icon: <InsightsAppIcon type={appType.Enum.wallet} />,
-  },
-  {
-    id: appType.Enum.browser,
-    label: 'Browser',
-    icon: <InsightsAppIcon type={appType.Enum.browser} />,
-  },
-  {
-    id: appType.Enum.node,
-    label: 'Node',
-    icon: <InsightsAppIcon type={appType.Enum.node} />,
-  },
-]
-
-export const projectStatusOptions: MultiselectOption[] = [
-  {
-    id: 'not-started',
-    label: 'Not started',
-    icon: <InsightsStatusIcon status="not-started" />,
-  },
-  {
-    id: 'in-progress',
-    label: 'In progress',
-    icon: <InsightsStatusIcon status="in-progress" />,
-  },
-  {
-    id: 'done',
-    label: 'Done',
-    icon: <InsightsStatusIcon status="done" />,
-  },
-  {
-    id: 'paused',
-    label: 'Paused',
-    icon: <InsightsStatusIcon status="paused" />,
-  },
-]
 
 type Props = {
   projects: ApiOutput['projects']['all']
@@ -90,6 +37,7 @@ type Props = {
 
 export const ProjectsList = (props: Props) => {
   const { projects, isAdmin } = props
+  const t = useTranslations('admin')
 
   const router = useRouter()
   const pathname = usePathname()
@@ -105,6 +53,8 @@ export const ProjectsList = (props: Props) => {
   const [statusFilter, setStatusFilter] = useState<string[]>([])
 
   const { showRightView } = useLayoutContext()
+  const projectAppOptions = getProjectAppOptions(t)
+  const projectStatusOptions = getProjectStatusOptions(t)
 
   const clearFilter = () => {
     setSearchFilter('')
@@ -148,24 +98,24 @@ export const ProjectsList = (props: Props) => {
         <div className="flex flex-col gap-6">
           {user.canEditInsights && (
             <AddNewButton href="/admin/insights/projects/new">
-              New project
+              {t('newProject')}
             </AddNewButton>
           )}
 
           <AdminLayoutList.Filters>
             <SearchInput
-              placeholder="Find projects"
+              placeholder={t('findProjects')}
               value={searchFilter}
               onChange={setSearchFilter}
             />
             <MultiselectFilter
-              label="App"
+              label={t('app')}
               options={projectAppOptions}
               selection={appFilter}
               onSelectionChange={setAppFilter}
             />
             <MultiselectFilter
-              label="Status"
+              label={t('status')}
               options={projectStatusOptions}
               selection={statusFilter}
               onSelectionChange={setStatusFilter}
@@ -178,7 +128,7 @@ export const ProjectsList = (props: Props) => {
               return (
                 <FilterTag.Item
                   key={status}
-                  title="Status"
+                  title={t('status')}
                   label={
                     projectStatusOptions.find(p => p.id === status)?.label || ''
                   }
@@ -192,8 +142,8 @@ export const ProjectsList = (props: Props) => {
               return (
                 <FilterTag.Item
                   key={app}
-                  title="App"
-                  label={app}
+                  title={t('app')}
+                  label={projectAppOptions.find(p => p.id === app)?.label || ''}
                   onRemove={() => {
                     setAppFilter(appFilter.filter(f => f !== app))
                   }}
@@ -213,9 +163,9 @@ export const ProjectsList = (props: Props) => {
           onSort={handleSort}
         >
           <TableSortable.Header>
-            <TableSortable.HeaderCell>Project</TableSortable.HeaderCell>
-            <TableSortable.HeaderCell>App</TableSortable.HeaderCell>
-            <TableSortable.HeaderCell>Status</TableSortable.HeaderCell>
+            <TableSortable.HeaderCell>{t('project')}</TableSortable.HeaderCell>
+            <TableSortable.HeaderCell>{t('app')}</TableSortable.HeaderCell>
+            <TableSortable.HeaderCell>{t('status')}</TableSortable.HeaderCell>
           </TableSortable.Header>
           <TableSortable.Body>
             {filteredProjects.map(project => {
@@ -223,19 +173,19 @@ export const ProjectsList = (props: Props) => {
 
               const { statusLabel, statusColor } = match(project.status)
                 .with('not-started', () => ({
-                  statusLabel: 'Not started',
+                  statusLabel: getAdminStatusLabel(t, 'not-started'),
                   statusColor: colors.neutral[50],
                 }))
                 .with('in-progress', () => ({
-                  statusLabel: 'In progress',
+                  statusLabel: getAdminStatusLabel(t, 'in-progress'),
                   statusColor: colors.customisation.orange[50],
                 }))
                 .with('done', () => ({
-                  statusLabel: 'Done',
+                  statusLabel: getAdminStatusLabel(t, 'done'),
                   statusColor: colors.success[50],
                 }))
                 .with('paused', () => ({
-                  statusLabel: 'Paused',
+                  statusLabel: getAdminStatusLabel(t, 'paused'),
                   statusColor: colors.neutral[50],
                 }))
                 .exhaustive()
@@ -257,7 +207,7 @@ export const ProjectsList = (props: Props) => {
                     <div />
                     <span className="flex items-center gap-1 capitalize">
                       <InsightsAppIcon type={project.app} />
-                      <span>{project.app}</span>
+                      <span>{getAdminAppLabel(t, project.app)}</span>
                     </span>
                   </TableSortable.Cell>
                   <TableSortable.Cell size={36} className="w-40">

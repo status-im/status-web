@@ -1,6 +1,7 @@
 import { Tabs, Tag } from '@status-im/components'
 import { DesktopIcon, MobileIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
+import { getTranslations } from 'next-intl/server'
 
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
 import { Metadata } from '~app/_metadata'
@@ -28,11 +29,31 @@ export const metadata = Metadata({
   },
 })
 
-export default function AppsPage() {
+export default async function AppsPage() {
+  const t = await getTranslations('apps')
+
   const organizationSchema = jsonLD.organization({
     description:
       'Use Status on the go with our mobile app or enjoy the full suite of features in our desktop version.',
   })
+
+  const DESKTOP_FEATURE_LIST: FeatureListProps['list'] = [
+    {
+      title: t('createCommunityTitle'),
+      description: t('createCommunityDescription'),
+      icon: 'Platforms/Icons/Icon Section/01_Create_Your_Community:144:144',
+    },
+    {
+      title: t('p2pTitle'),
+      description: t('p2pDescription'),
+      icon: 'Platforms/Icons/Icon Section/02_Support_p2p_Messaging:145:144',
+    },
+    {
+      title: t('fullSuiteTitle'),
+      description: t('fullSuiteDescription'),
+      icon: 'Platforms/Icons/Icon Section/03_Full_Suite_of_Apps:145:144',
+    },
+  ]
 
   return (
     <>
@@ -52,8 +73,8 @@ export default function AppsPage() {
                 />
               </>
             }
-            title="Enjoy the Status apps"
-            description="Use Status on the go with our mobile app or enjoy the full suite of features in our desktop version."
+            title={t('title')}
+            description={t('description')}
             action={
               <>
                 <div
@@ -105,11 +126,11 @@ export default function AppsPage() {
           />
           <PlatformSection
             platform="mobile"
-            title="Status mobile"
+            title={t('statusMobile')}
             showScribble={false}
             screenshots={[
               {
-                label: 'Wallet',
+                label: t('wallet'),
                 images: [
                   {
                     id: 'Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624',
@@ -142,10 +163,10 @@ export default function AppsPage() {
           />
           <PlatformSection
             platform="desktop"
-            title="Status for desktop"
+            title={t('statusDesktop')}
             screenshots={[
               {
-                label: 'Wallet',
+                label: t('wallet'),
                 images: [
                   {
                     id: 'Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800',
@@ -154,7 +175,7 @@ export default function AppsPage() {
                 ],
               },
               {
-                label: 'Messenger',
+                label: t('messenger'),
                 images: [
                   {
                     id: 'Platforms/Screens/Desktop Screens/Messenger/Messenger:2880:1800',
@@ -163,7 +184,7 @@ export default function AppsPage() {
                 ],
               },
               {
-                label: 'Communities',
+                label: t('communities'),
                 images: [
                   {
                     id: 'Platforms/Screens/Desktop Screens/Communities/Communities:2880:1800',
@@ -227,7 +248,7 @@ const PlatformSection = (props: PlatformSectionProps) => {
         </div>
       </div>
 
-      <Tabs.Root defaultValue={screenshots[0]!.label} variant="grey" size="32">
+      <Tabs.Root defaultValue={`${platform}-0`} variant="grey" size="32">
         <CenteredDiv
           className={cx([
             'mx-auto flex w-full snap-x snap-mandatory overflow-x-auto overflow-y-hidden scrollbar-none xl:overflow-visible',
@@ -235,8 +256,11 @@ const PlatformSection = (props: PlatformSectionProps) => {
           ])}
         >
           {wideScreenshots ? (
-            screenshots.map(({ label, images }) => (
-              <Tabs.Content key={label} value={label}>
+            screenshots.map(({ images }, index) => (
+              <Tabs.Content
+                key={`${platform}-${index}`}
+                value={`${platform}-${index}`}
+              >
                 <div className="px-5">
                   {images.map(image => (
                     <ScreenImage
@@ -250,10 +274,10 @@ const PlatformSection = (props: PlatformSectionProps) => {
             ))
           ) : (
             <div>
-              {screenshots.map(({ label, images }) => (
+              {screenshots.map(({ images }, index) => (
                 <Tabs.Content
-                  key={label}
-                  value={label}
+                  key={`${platform}-${index}`}
+                  value={`${platform}-${index}`}
                   className="flex gap-4 px-5 2xl:gap-12"
                 >
                   {images.map(image => (
@@ -274,8 +298,11 @@ const PlatformSection = (props: PlatformSectionProps) => {
             <div className="relative mx-5 flex lg:justify-center">
               <Tabs.List>
                 {screenshots.length > 1 &&
-                  screenshots.map(({ label }) => (
-                    <Tabs.Trigger key={label} value={label}>
+                  screenshots.map(({ label }, index) => (
+                    <Tabs.Trigger
+                      key={`${platform}-${index}`}
+                      value={`${platform}-${index}`}
+                    >
                       {label}
                     </Tabs.Trigger>
                   ))}
@@ -303,24 +330,3 @@ const PlatformSection = (props: PlatformSectionProps) => {
     </div>
   )
 }
-
-const DESKTOP_FEATURE_LIST: FeatureListProps['list'] = [
-  {
-    title: 'Create your Community',
-    description:
-      'Use Status Desktop to create Communities, run control nodes and administer your Community.',
-    icon: 'Platforms/Icons/Icon Section/01_Create_Your_Community:144:144',
-  },
-  {
-    title: 'Support p2p messaging',
-    description:
-      'By running Status Desktop you contribute to keeping Status’ Waku p2p messaging network decentralised.',
-    icon: 'Platforms/Icons/Icon Section/02_Support_p2p_Messaging:145:144',
-  },
-  {
-    title: 'Full suite of features',
-    description:
-      'Status Desktop contains the full suite of Status features - everything you can do in Status Mobile and more.',
-    icon: 'Platforms/Icons/Icon Section/03_Full_Suite_of_Apps:145:144',
-  },
-]

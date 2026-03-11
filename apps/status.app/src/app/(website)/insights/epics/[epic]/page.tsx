@@ -4,8 +4,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { format, isDate, subDays } from 'date-fns'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 
+import { useRouter } from '~/i18n/navigation'
 import { Breadcrumbs } from '~components/breadcrumbs'
 import { useDebounce } from '~hooks/use-debounce'
 import { useIntersectionObserver } from '~hooks/use-intersection-observer'

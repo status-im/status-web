@@ -106,8 +106,15 @@ export const useSearchEngine = (
 
   const query = useCallback(
     async (term: string) => {
+      const normalizedTerm = term.trim()
+
+      if (normalizedTerm === '') {
+        setResults([])
+        return
+      }
+
       const searchResults = (await engine)
-        .search(term)
+        .search(normalizedTerm)
         .slice(0, limit) as SearchResult[]
 
       const results: Result[] = []

@@ -5,6 +5,7 @@ import { useTransition } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useToast } from '@status-im/components'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 
 import { ColorPicker } from '~admin/_components/color-picker'
@@ -32,6 +33,7 @@ const WorkstreamForm = (props: Props) => {
   const [isPending, startTransition] = useTransition()
 
   const toast = useToast()
+  const t = useTranslations('admin')
 
   const form = useForm<FormValues>({
     resolver: zodResolver(workstreamSchema),
@@ -46,11 +48,11 @@ const WorkstreamForm = (props: Props) => {
       startTransition(async () => {
         await onSubmit(data)
         router.push('/admin/insights/workstreams')
-        toast.positive('Workstream added successfully')
+        toast.positive(t('workstreamAdded'))
       })
     } catch (error) {
       console.error(error)
-      toast.negative('Something went wrong. Please try again later.')
+      toast.negative(t('genericError'))
     }
   }
 
@@ -59,15 +61,15 @@ const WorkstreamForm = (props: Props) => {
       <div className="grid gap-4">
         <EmojiPickerInput name="emoji" />
         <TextInput
-          label="Name"
+          label={t('name')}
           name="name"
-          placeholder="Workstream name"
+          placeholder={t('workstreamName')}
           maxLength={30}
         />
         <TextArea
-          label="Description"
+          label={t('description')}
           name="description"
-          placeholder="Set a workstream description"
+          placeholder={t('workstreamDescriptionPlaceholder')}
           rows={6}
         />
         <ColorPicker name="color" />

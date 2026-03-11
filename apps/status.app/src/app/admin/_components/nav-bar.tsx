@@ -4,6 +4,7 @@ import { ExternalIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import { INTERNAL_ROUTES } from '../_constants'
 import { UserPopover } from './user-popover'
@@ -16,6 +17,7 @@ type Props = {
 
 export const Navbar = ({ user }: Props) => {
   const pathname = usePathname()
+  const t = useTranslations('admin')
 
   return (
     <div className="sticky top-0 z-20 flex h-14 items-center justify-between bg-neutral-100">
@@ -61,7 +63,7 @@ export const Navbar = ({ user }: Props) => {
                 })}
               >
                 <p className="text-15 font-semibold text-white-100">
-                  {route.title}
+                  {t(route.titleKey)}
                 </p>
                 {external && (
                   <ExternalIcon

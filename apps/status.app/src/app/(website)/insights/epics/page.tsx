@@ -12,8 +12,10 @@ import {
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { format, isDate, subDays } from 'date-fns'
 import Link from 'next/link'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
+import { usePathname, useRouter } from '~/i18n/navigation'
 import { useDebounce } from '~hooks/use-debounce'
 import { useIntersectionObserver } from '~hooks/use-intersection-observer'
 import { RenderIfVisible } from '~hooks/use-render-if-visible'
@@ -46,18 +48,8 @@ import type { DateRange } from 'react-day-picker'
 
 const LIMIT = 3
 
-const sortOptions: DropdownSortProps['data'] = [
-  {
-    id: Order_By.Asc,
-    name: 'Ascending',
-  },
-  {
-    id: Order_By.Desc,
-    name: 'Descending',
-  },
-]
-
 export default function EpicsPage() {
+  const t = useTranslations('insights')
   const [selectedFilters, setSelectedFilters] = useState<string[]>([
     'In Progress',
   ])
@@ -236,6 +228,17 @@ export default function EpicsPage() {
     return data?.pages.flatMap(page => page) || []
   }, [data])
 
+  const sortOptions: DropdownSortProps['data'] = [
+    {
+      id: Order_By.Asc,
+      name: t('ascending'),
+    },
+    {
+      id: Order_By.Desc,
+      name: t('descending'),
+    },
+  ]
+
   const endOfPageRef = useRef<HTMLDivElement | null>(null)
   const entry = useIntersectionObserver(endOfPageRef, {})
   const isVisible = !!entry?.isIntersecting
@@ -250,28 +253,28 @@ export default function EpicsPage() {
     <div className="relative flex h-full flex-1 flex-col justify-between">
       <div className="relative space-y-4 p-10">
         <Text size={27} weight="semibold">
-          Epics
+          {t('epics')}
         </Text>
 
         <div className="flex justify-between">
           <div className="flex gap-2">
             <Tag
               size="32"
-              label="In Progress"
+              label={t('inProgress')}
               icon={<OpenIcon />}
               selected={selectedFilters.includes('In Progress')}
               onPress={() => handleFilter('In Progress')}
             />
             <Tag
               size="32"
-              label="Closed"
+              label={t('closed')}
               icon={<DoneIcon />}
               selected={selectedFilters.includes('Closed')}
               onPress={() => handleFilter('Closed')}
             />
             <Tag
               size="32"
-              label="Not Started"
+              label={t('notStarted')}
               icon={<NotStartedIcon />}
               selected={selectedFilters.includes('Not Started')}
               onPress={() => handleFilter('Not Started')}
@@ -282,7 +285,7 @@ export default function EpicsPage() {
             <Input
               // direction="rtl"
               // variant="retractable"
-              placeholder="Search"
+              placeholder={t('search')}
               icon={<SearchIcon />}
               size="32"
               value={searchFilter}
