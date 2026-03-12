@@ -8,10 +8,10 @@
   },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "predev": "pnpm install",
     "dev:next": "next dev --turbopack --port 3001",
     "dev:content": "contentlayer2 dev",
     "watch:content": "node --watch-path=./content --watch-preserve-output ./scripts/trigger-content-compilation.cjs",
+    "prebuild": "pnpm install --frozen-lockfile",
     "build": "pnpm lint && next build",
     "build:content": "contentlayer2 build && :",
     "postbuild": "next-sitemap",
