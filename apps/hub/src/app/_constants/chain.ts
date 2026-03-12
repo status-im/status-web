@@ -10,19 +10,22 @@ import type {
   Transport,
 } from 'wagmi'
 
+const rpcProxy = (chainId: number) =>
+  `${clientEnv.NEXT_PUBLIC_STATUS_API_URL}/api/trpc/rpc.proxy?chainId=${chainId}`
+
+export const RPC_URLS = {
+  [mainnet.id]: rpcProxy(mainnet.id),
+  [linea.id]: rpcProxy(linea.id),
+  [statusSepolia.id]: rpcProxy(statusSepolia.id),
+} as const
+
 export const getDefaultWagmiConfig = () =>
   getDefaultConfig({
     chains: [statusSepolia, mainnet, linea],
     transports: {
-      [statusSepolia.id]: http(
-        `${clientEnv.NEXT_PUBLIC_STATUS_API_URL}/api/trpc/rpc.proxy?chainId=${statusSepolia.id}`
-      ),
-      [mainnet.id]: http(
-        `${clientEnv.NEXT_PUBLIC_STATUS_API_URL}/api/trpc/rpc.proxy?chainId=${mainnet.id}`
-      ),
-      [linea.id]: http(
-        `${clientEnv.NEXT_PUBLIC_STATUS_API_URL}/api/trpc/rpc.proxy?chainId=${linea.id}`
-      ),
+      [statusSepolia.id]: http(RPC_URLS[statusSepolia.id]),
+      [mainnet.id]: http(RPC_URLS[mainnet.id]),
+      [linea.id]: http(RPC_URLS[linea.id]),
     },
     walletConnectProjectId:
       clientEnv.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID as string,

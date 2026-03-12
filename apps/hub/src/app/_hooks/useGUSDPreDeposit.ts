@@ -1,9 +1,9 @@
 import { useToast } from '@status-im/components'
 import { useMutation, type UseMutationResult } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
-import { parseUnits } from 'viem'
+import { BaseError, parseUnits } from 'viem'
 import { mainnet } from 'viem/chains'
-import { BaseError, useAccount, usePublicClient, useWriteContract } from 'wagmi'
+import { useAccount, usePublicClient, useWriteContract } from 'wagmi'
 
 import {
   GENERIC_DEPOSITOR,
@@ -11,6 +11,7 @@ import {
   STATUS_L2_CHAIN_NICKNAME,
 } from '~constants/address'
 import { usePreDepositStateContext } from '~hooks/usePreDepositStateContext'
+import { isUserRejection } from '~utils/wallet'
 
 import { addressToBytes32 } from './useGUSDUserBalance'
 
@@ -104,7 +105,7 @@ export function useGUSDPreDeposit(): UseGUSDPreDepositReturn {
       const remoteRecipient = addressToBytes32(address)
 
       sendPreDepositEvent({
-        type: 'START_APPROVE_TOKEN',
+        type: 'START_PRE_DEPOSIT',
         amount,
       })
 
@@ -145,13 +146,14 @@ export function useGUSDPreDeposit(): UseGUSDPreDepositReturn {
         const receipt = await publicClient?.waitForTransactionReceipt({
           hash,
           confirmations: TRANSACTION_CONFIG.CONFIRMATION_BLOCKS,
+          timeout: 90_000,
         })
 
         if (receipt?.status === 'reverted') {
           throw new Error(t('errors.transaction_reverted'))
         }
 
-        sendPreDepositEvent({ type: 'COMPLETE', amount })
+        sendPreDepositEvent({ type: 'COMPLETE' })
         toast.positive(
           t('vault.gusd_deposit_successful', {
             amount,
@@ -159,13 +161,15 @@ export function useGUSDPreDeposit(): UseGUSDPreDepositReturn {
           })
         )
       } catch (error) {
-        console.error('Failed to deposit into GUSD vault:', error)
-        sendPreDepositEvent({ type: 'REJECT' })
-        const message =
-          error instanceof BaseError
-            ? error.shortMessage
-            : t('errors.transaction_failed')
-        toast.negative(message)
+        const isRejected = isUserRejection(error)
+        sendPreDepositEvent({ type: isRejected ? 'REJECT' : 'FAIL' })
+        if (!isRejected) {
+          const message =
+            error instanceof BaseError
+              ? error.shortMessage
+              : t('errors.transaction_failed')
+          toast.negative(message)
+        }
         throw error
       }
     },
