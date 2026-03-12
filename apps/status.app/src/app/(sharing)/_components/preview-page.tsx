@@ -89,16 +89,16 @@ type ProfileData = {
 
 export type Data = CommunityData | ChannelData | ProfileData
 
+const actionLabelKeyByType = {
+  community: 'joinCommunityButton',
+  channel: 'viewChannelButton',
+  profile: 'openProfileButton',
+} satisfies Record<Type, string>
+
 export function PreviewPage(props: PreviewPageProps) {
   const { type, decodedData, encodedData } = props
   const t = useTranslations('sharing')
-  const actionLabel = t(
-    type === 'community'
-      ? 'joinCommunityButton'
-      : type === 'channel'
-        ? 'viewChannelButton'
-        : 'openProfileButton'
-  )
+  const actionLabel = t(actionLabelKeyByType[type])
 
   const toast = useToast()
 
