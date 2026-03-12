@@ -1,5 +1,12 @@
 # hub
 
+## 1.1.1
+
+### Patch Changes
+
+- Updated dependencies [ca76e7d]
+  - @status-im/wallet@0.1.3
+
 ## 1.1.0
 
 ### Minor Changes
