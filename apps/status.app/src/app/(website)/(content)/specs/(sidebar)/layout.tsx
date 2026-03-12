@@ -1,6 +1,7 @@
 'use client'
 
 import { useParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import { capitalizeFirstLetter } from '~app/_utils/capitalize-first-letter'
 import { Body } from '~components/body'
@@ -25,6 +26,7 @@ const specsMetadata: Record<string, SpecMetadata> = specsMetadataJson
 
 export default function SpecsLayout({ children }: Props) {
   const params = useParams() as { slug: string[] }
+  const t = useTranslations('specs')
 
   const spec = (Object.values(specsMetadata) as SpecMetadata[]).find(
     spec => spec.href === '/specs/' + params.slug.join('/')
@@ -36,7 +38,7 @@ export default function SpecsLayout({ children }: Props) {
       <Breadcrumbs
         items={[
           {
-            label: 'Specs',
+            label: t('title'),
             href: '/specs',
           },
           {

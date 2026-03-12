@@ -16,15 +16,20 @@ import { CopyHexButton } from './_components/copy-hex-button'
 import { DownloadImageButton } from './_components/download-image-button'
 import { DownloadZipButton } from './_components/download-zip-button'
 
-import type { ImageType, ZipFileId } from '~components/assets'
+import type { ImageAlt, ImageType, ZipFileId } from '~components/assets'
+import type { Metadata as NextMetadata } from 'next'
 
-export const metadata = Metadata({
-  title: 'Brand',
-  description: 'Get Status brand assets.',
-  alternates: {
-    canonical: '/brand',
-  },
-})
+export async function generateMetadata(): Promise<NextMetadata> {
+  const t = await getTranslations('brand')
+
+  return Metadata({
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+    alternates: {
+      canonical: '/brand',
+    },
+  })
+}
 
 const transformColor = (name: string, rgba: string, invert = false) => {
   const [r, g, b] = rgba.match(/\d+/g)!.map(Number)
@@ -41,7 +46,7 @@ export default async function BrandPage() {
   const tn = await getTranslations('nav')
 
   const organizationSchema = jsonLD.organization({
-    description: 'Get Status brand assets.',
+    description: t('metaDescription'),
   })
 
   return (
@@ -173,25 +178,25 @@ export default async function BrandPage() {
             title={t('mainColors')}
             description={t('mainColorsPalette')}
             colors={[
-              transformColor('Dark', neutral['100']),
-              transformColor('White', white['100'], true),
-              transformColor('Blue', customisation.blue['50']),
+              transformColor(t('dark'), neutral['100']),
+              transformColor(t('white'), white['100'], true),
+              transformColor(t('blue'), customisation.blue['50']),
             ]}
           />
           <ColorSection
             title={t('customColors')}
             description={t('accentColors')}
             colors={[
-              transformColor('Purple', customisation.purple['50']),
-              transformColor('Orange', customisation.orange['50']),
-              transformColor('Army', customisation.army['50']),
-              transformColor('Turquoise', customisation.turquoise['50']),
-              transformColor('Sky', customisation.sky['50']),
-              transformColor('Yellow', customisation.yellow['50']),
-              transformColor('Pink', customisation.pink['50']),
-              transformColor('Copper', customisation.copper['50']),
-              transformColor('Camel', customisation.camel['50']),
-              transformColor('Magenta', customisation.magenta['50']),
+              transformColor(t('purple'), customisation.purple['50']),
+              transformColor(t('orange'), customisation.orange['50']),
+              transformColor(t('army'), customisation.army['50']),
+              transformColor(t('turquoise'), customisation.turquoise['50']),
+              transformColor(t('sky'), customisation.sky['50']),
+              transformColor(t('yellow'), customisation.yellow['50']),
+              transformColor(t('pink'), customisation.pink['50']),
+              transformColor(t('copper'), customisation.copper['50']),
+              transformColor(t('camel'), customisation.camel['50']),
+              transformColor(t('magenta'), customisation.magenta['50']),
             ]}
           />
           <ParallaxCircle
@@ -212,15 +217,21 @@ export default async function BrandPage() {
             assets={[
               {
                 id: 'Brand/Product Assets/Other/Asset_Other_04:750:1624',
-                alt: 'Mobile app screenshot showing the profile assets in the Status app',
+                alt: t(
+                  'profileAssetsAlt'
+                ) as ImageAlt['Brand/Product Assets/Other/Asset_Other_04:750:1624'],
               },
               {
                 id: 'Brand/Product Assets/Communities/Asset_Communities_02:750:1624',
-                alt: 'Mobile app screenshot showing the community feature assets in the Status app',
+                alt: t(
+                  'communityAssetsAlt'
+                ) as ImageAlt['Brand/Product Assets/Communities/Asset_Communities_02:750:1624'],
               },
               {
                 id: 'Brand/Product Assets/Wallet/Asset_Wallet_05:750:1624',
-                alt: 'Mobile app screenshot showing the wallet feature assets in the Status app',
+                alt: t(
+                  'walletAssetsAlt'
+                ) as ImageAlt['Brand/Product Assets/Wallet/Asset_Wallet_05:750:1624'],
               },
             ]}
           />

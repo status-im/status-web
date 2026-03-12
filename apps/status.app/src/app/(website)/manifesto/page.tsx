@@ -13,20 +13,25 @@ import { LogoStatus } from './_components/logo-status'
 import { Prefooter } from './_components/pre-footer'
 import { Principle } from './_components/principle'
 
+import type { Metadata as NextMetadata } from 'next'
+
 const caveat = Caveat({
   variable: '--font-caveat',
   weight: ['700'],
   subsets: ['latin'],
 })
 
-export const metadata = Metadata({
-  title: 'Manifesto',
-  description:
-    'Create an open decentralised platform that defends human rights, enables free speech, protects privacy and promotes sovereignty.',
-  alternates: {
-    canonical: '/manifesto',
-  },
-})
+export async function generateMetadata(): Promise<NextMetadata> {
+  const t = await getTranslations('manifesto')
+
+  return Metadata({
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+    alternates: {
+      canonical: '/manifesto',
+    },
+  })
+}
 
 export default async function ManifestoPage() {
   const t = await getTranslations('manifesto')
@@ -35,8 +40,7 @@ export default async function ManifestoPage() {
   const jobsCount = meta?.total ?? 0
 
   const organizationSchema = jsonLD.organization({
-    description:
-      'Create an open decentralised platform that defends human rights, enables free speech, protects privacy and promotes sovereignty.',
+    description: t('metaDescription'),
   })
 
   const PRINCIPLES = [

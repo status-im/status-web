@@ -11,6 +11,7 @@ import { HeroSection } from '../../_components/hero-section'
 import { ExchangesTable } from './_components/exchanges-table'
 
 import type { Ticker } from '~/server/services/coingecko'
+import type { Metadata as NextMetadata } from 'next'
 
 async function getExchangeData() {
   const coins = await getCoins()
@@ -57,13 +58,17 @@ async function getExchangeData() {
 
 export const revalidate = 3600 // 1 hour
 
-export const metadata = Metadata({
-  title: 'Exchanges',
-  description: 'List of exchanges where you can find SNT',
-  alternates: {
-    canonical: '/snt/exchanges',
-  },
-})
+export async function generateMetadata(): Promise<NextMetadata> {
+  const t = await getTranslations('snt')
+
+  return Metadata({
+    title: t('exchangesMetaTitle'),
+    description: t('exchangesMetaDescription'),
+    alternates: {
+      canonical: '/snt/exchanges',
+    },
+  })
+}
 
 export default async function ExchangesPage() {
   const t = await getTranslations('snt')

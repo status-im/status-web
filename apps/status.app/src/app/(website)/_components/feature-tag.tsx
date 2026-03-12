@@ -1,4 +1,5 @@
 import { customisation } from '@status-im/colors'
+import { useTranslations } from 'next-intl'
 
 import { features } from '~website/_features'
 
@@ -9,7 +10,8 @@ type Props = {
 }
 
 const FeatureTag = (props: Props) => {
-  const { icon, theme, name } = features[props.type]
+  const t = useTranslations('features')
+  const { icon, theme, nameKey } = features[props.type]
 
   return (
     <div
@@ -21,7 +23,7 @@ const FeatureTag = (props: Props) => {
       }}
     >
       {icon}
-      <span className="text-15 font-medium">{name}</span>
+      <span className="text-15 font-medium">{t(nameKey)}</span>
     </div>
   )
 }

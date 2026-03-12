@@ -16,16 +16,21 @@ import { getLogosJobs, getStatusJobs } from '~website/_lib/greenhouse'
 
 import type { ImageId } from '~components/assets'
 import type { FeatureListProps } from '~website/_components/feature-list'
+import type { Metadata as NextMetadata } from 'next'
 
 export const revalidate = 3600 // 1 hour
 
-export const metadata = Metadata({
-  title: 'Jobs',
-  description: 'Join us in our mission.',
-  alternates: {
-    canonical: '/jobs',
-  },
-})
+export async function generateMetadata(): Promise<NextMetadata> {
+  const t = await getTranslations('jobs')
+
+  return Metadata({
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+    alternates: {
+      canonical: '/jobs',
+    },
+  })
+}
 
 export default async function JobsPage() {
   const t = await getTranslations('jobs')

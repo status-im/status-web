@@ -6,21 +6,25 @@ import { formatDate } from '~app/_utils/format-date'
 import { Body } from '~components/body'
 import { Link } from '~components/link'
 
-export const metadata = Metadata({
-  title: 'Security',
-  description:
-    'Status takes security seriously. Please report any security incidents via security@status.im.',
-  alternates: {
-    canonical: '/security',
-  },
-})
+import type { Metadata as NextMetadata } from 'next'
+
+export async function generateMetadata(): Promise<NextMetadata> {
+  const t = await getTranslations('security')
+
+  return Metadata({
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+    alternates: {
+      canonical: '/security',
+    },
+  })
+}
 
 export default async function SecurityPage() {
   const t = await getTranslations('security')
 
   const organizationSchema = jsonLD.organization({
-    description:
-      'Status takes security seriously. Please report any security incidents via security@status.im.',
+    description: t('metaDescription'),
   })
 
   return (
@@ -31,7 +35,7 @@ export default async function SecurityPage() {
           <div className="mb-12">
             <h1 className="mb-3 text-40 font-bold xl:text-64">{t('title')}</h1>
             <p className="text-19 text-neutral-50">
-              Last update: {formatDate('2024-05-15', 'long')}
+              {t('lastUpdate')} {formatDate('2024-05-15', 'long')}
             </p>
           </div>
 

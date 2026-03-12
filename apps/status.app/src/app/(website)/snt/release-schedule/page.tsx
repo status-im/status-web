@@ -6,13 +6,19 @@ import { Metadata } from '~app/_metadata'
 import { formatDate } from '~app/_utils/format-date'
 import { Body } from '~components/body'
 
-export const metadata = Metadata({
-  title: 'SNT Release Schedule',
-  description: 'SNT token release schedule and allocation information.',
-  alternates: {
-    canonical: '/snt/release-schedule',
-  },
-})
+import type { Metadata as NextMetadata } from 'next'
+
+export async function generateMetadata(): Promise<NextMetadata> {
+  const t = await getTranslations('snt')
+
+  return Metadata({
+    title: t('releaseScheduleMetaTitle'),
+    description: t('releaseScheduleMetaDescription'),
+    alternates: {
+      canonical: '/snt/release-schedule',
+    },
+  })
+}
 
 export default async function ReleaseSchedule() {
   const t = await getTranslations('snt')

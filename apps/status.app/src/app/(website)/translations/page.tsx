@@ -10,21 +10,25 @@ import { ParallaxCircle } from '~website/_components/parallax-circle'
 import { DiscussCTA } from './_components/discuss-cta'
 import { WordAnimation } from './_components/word-animation'
 
-export const metadata = Metadata({
-  title: 'Translations',
-  description:
-    'We need your help to translate Status, so that together we can bring privacy and free speech to the people everywhere, including those who need it most.',
-  alternates: {
-    canonical: '/translations',
-  },
-})
+import type { Metadata as NextMetadata } from 'next'
+
+export async function generateMetadata(): Promise<NextMetadata> {
+  const t = await getTranslations('translations')
+
+  return Metadata({
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+    alternates: {
+      canonical: '/translations',
+    },
+  })
+}
 
 export default async function TranslationsPage() {
   const t = await getTranslations('translations')
 
   const organizationSchema = jsonLD.organization({
-    description:
-      'We need your help to translate Status, so that together we can bring privacy and free speech to the people everywhere, including those who need it most.',
+    description: t('metaDescription'),
   })
 
   return (
@@ -32,7 +36,7 @@ export default async function TranslationsPage() {
       <JSONLDScript schema={organizationSchema} />
       <Body>
         <HeroSection
-          tag="Translations"
+          tag={t('tag')}
           title={t('title')}
           description={t('description')}
           action={<DiscussCTA />}

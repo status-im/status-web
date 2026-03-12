@@ -18,23 +18,27 @@ import { VideoSection } from '~website/_components/video-section'
 
 import { HeroSection } from '../_components/hero-section'
 
+import type { ImageAlt } from '~components/assets'
 import type { FeatureListProps } from '~website/_components/feature-list'
+import type { Metadata as NextMetadata } from 'next'
 
-export const metadata = Metadata({
-  title: {
-    absolute: 'Keycard by Status',
-  },
-  description: 'A secure contactless hardware wallet.',
-  alternates: {
-    canonical: '/keycard',
-  },
-})
+export async function generateMetadata(): Promise<NextMetadata> {
+  const t = await getTranslations('keycard')
+
+  return Metadata({
+    title: t('getKeycard'),
+    description: t('description'),
+    alternates: {
+      canonical: '/keycard',
+    },
+  })
+}
 
 export default async function KeycardPage() {
   const t = await getTranslations('keycard')
 
   const organizationSchema = jsonLD.organization({
-    description: 'A secure contactless hardware wallet for Status.',
+    description: t('description'),
   })
 
   const featureList: FeatureListProps['list'] = [
@@ -200,7 +204,9 @@ export default async function KeycardPage() {
               ]}
               image={{
                 id: 'Keycard/Screens/Keycard_01:750:1624',
-                alt: 'Mobile app screenshot showing how the keycard feature works: the user can protect their assets using the Status wallet, knowing that keys never actually leave their Keycard',
+                alt: t(
+                  'protectAssetsAlt'
+                ) as ImageAlt['Keycard/Screens/Keycard_01:750:1624'],
               }}
             />
 
@@ -225,7 +231,9 @@ export default async function KeycardPage() {
               ]}
               image={{
                 id: 'Keycard/Screens/Keycard_02:750:1624',
-                alt: 'Mobile app screenshot showing how the keycard feature works: the user can protect their identity signing in to Status Desktop and Mobile securely using their Keycard',
+                alt: t(
+                  'protectIdentityAlt'
+                ) as ImageAlt['Keycard/Screens/Keycard_02:750:1624'],
               }}
             />
             <div className="mask-image absolute left-1/2 top-0 h-[calc(100%+80px)] w-screen -translate-x-1/2 bg-[url('/texture-gradient.png')] bg-[length:420px]" />

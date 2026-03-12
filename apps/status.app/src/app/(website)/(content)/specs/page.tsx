@@ -10,14 +10,19 @@ import specsMetadata from '~content/metadata/specs.metadata.json'
 
 import { SearchButton } from '../_components/search-button'
 
-export const metadata = Metadata({
-  title: 'Specs',
-  description:
-    'Technical deep dives into the inner workings of the Status apps.',
-  alternates: {
-    canonical: '/specs',
-  },
-})
+import type { Metadata as NextMetadata } from 'next'
+
+export async function generateMetadata(): Promise<NextMetadata> {
+  const t = await getTranslations('specs')
+
+  return Metadata({
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+    alternates: {
+      canonical: '/specs',
+    },
+  })
+}
 
 export default async function SpecsPage() {
   const t = await getTranslations('specs')

@@ -4,25 +4,15 @@ import * as Select from '@radix-ui/react-select'
 import { CheckIcon, ChevronDownIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
 import { useParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import { routing } from '~/i18n/routing'
 
-const languages = [
-  {
-    value: 'en',
-    label: 'English (EN)',
-    nativeLabel: 'English',
-  },
-  {
-    value: 'ko',
-    label: 'Korean (KO)',
-    nativeLabel: '한국어',
-  },
-] satisfies Array<{
+type Language = {
   value: (typeof routing.locales)[number]
   label: string
   nativeLabel: string
-}>
+}
 
 const localeCookieName = 'NEXT_LOCALE'
 const localeCookieMaxAge = 60 * 60 * 24 * 365
@@ -42,7 +32,20 @@ const getLocalizedHref = (locale: (typeof routing.locales)[number]) => {
 }
 
 const LanguageSelector = () => {
+  const t = useTranslations('languageSelector')
   const params = useParams()
+  const languages: Language[] = [
+    {
+      value: 'en',
+      label: t('englishLabel'),
+      nativeLabel: t('englishNativeLabel'),
+    },
+    {
+      value: 'ko',
+      label: t('koreanLabel'),
+      nativeLabel: t('koreanNativeLabel'),
+    },
+  ]
 
   const localeParam =
     typeof params['locale'] === 'string' ? params['locale'] : undefined

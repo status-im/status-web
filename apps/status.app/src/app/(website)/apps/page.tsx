@@ -17,24 +17,27 @@ import { HeroSection } from '../_components/hero-section'
 import { CenteredDiv } from './_components/centered-div'
 import { ConnectorSection } from './_components/connector-section'
 
-import type { ImageType } from '~components/assets'
+import type { ImageAlt, ImageType } from '~components/assets'
 import type { FeatureListProps } from '~website/_components/feature-list'
+import type { Metadata as NextMetadata } from 'next'
 
-export const metadata = Metadata({
-  title: 'Apps',
-  description:
-    'Use Status on the go with our mobile app or enjoy the full suite of features in our desktop version.',
-  alternates: {
-    canonical: '/apps',
-  },
-})
+export async function generateMetadata(): Promise<NextMetadata> {
+  const t = await getTranslations('apps')
+
+  return Metadata({
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+    alternates: {
+      canonical: '/apps',
+    },
+  })
+}
 
 export default async function AppsPage() {
   const t = await getTranslations('apps')
 
   const organizationSchema = jsonLD.organization({
-    description:
-      'Use Status on the go with our mobile app or enjoy the full suite of features in our desktop version.',
+    description: t('metaDescription'),
   })
 
   const DESKTOP_FEATURE_LIST: FeatureListProps['list'] = [
@@ -134,15 +137,21 @@ export default async function AppsPage() {
                 images: [
                   {
                     id: 'Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624',
-                    alt: 'Mobile app screenshot showing the wallet feature included in the Status app',
+                    alt: t(
+                      'mobileWalletScreenshotAlt'
+                    ) as ImageAlt['Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624'],
                   },
                   {
                     id: 'Platforms/Screens/Mobile Screens/New_Mobile_Chat:750:1624',
-                    alt: 'Mobile app screenshot showing the messenger feature included in the Status app',
+                    alt: t(
+                      'mobileMessengerScreenshotAlt'
+                    ) as ImageAlt['Platforms/Screens/Mobile Screens/New_Mobile_Chat:750:1624'],
                   },
                   {
                     id: 'Platforms/Screens/Mobile Screens/New_Mobile_Communities:750:1624',
-                    alt: 'Mobile app screenshot showing the community feature included in the Status app',
+                    alt: t(
+                      'mobileCommunityScreenshotAlt'
+                    ) as ImageAlt['Platforms/Screens/Mobile Screens/New_Mobile_Communities:750:1624'],
                   },
                 ],
               },
@@ -170,7 +179,9 @@ export default async function AppsPage() {
                 images: [
                   {
                     id: 'Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800',
-                    alt: 'Desktop screenshot showing the wallet feature included in the Status app',
+                    alt: t(
+                      'desktopWalletScreenshotAlt'
+                    ) as ImageAlt['Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800'],
                   },
                 ],
               },
@@ -179,7 +190,9 @@ export default async function AppsPage() {
                 images: [
                   {
                     id: 'Platforms/Screens/Desktop Screens/Messenger/Messenger:2880:1800',
-                    alt: 'Desktop screenshot showing the messenger feature included in the Status app',
+                    alt: t(
+                      'desktopMessengerScreenshotAlt'
+                    ) as ImageAlt['Platforms/Screens/Desktop Screens/Messenger/Messenger:2880:1800'],
                   },
                 ],
               },
@@ -188,7 +201,9 @@ export default async function AppsPage() {
                 images: [
                   {
                     id: 'Platforms/Screens/Desktop Screens/Communities/Communities:2880:1800',
-                    alt: 'Desktop screenshot showing the community feature included in the Status app',
+                    alt: t(
+                      'desktopCommunityScreenshotAlt'
+                    ) as ImageAlt['Platforms/Screens/Desktop Screens/Communities/Communities:2880:1800'],
                   },
                 ],
               },

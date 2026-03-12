@@ -9,13 +9,19 @@ import { ParallaxCircle } from '~website/_components/parallax-circle'
 
 import { HeroSection } from '../_components/hero-section'
 
-export const metadata = Metadata({
-  title: 'SNT',
-  description: "SNT is Status' community token",
-  alternates: {
-    canonical: '/snt',
-  },
-})
+import type { Metadata as NextMetadata } from 'next'
+
+export async function generateMetadata(): Promise<NextMetadata> {
+  const t = await getTranslations('snt')
+
+  return Metadata({
+    title: t('metaTitle'),
+    description: t('description'),
+    alternates: {
+      canonical: '/snt',
+    },
+  })
+}
 
 export default async function TokenPage() {
   const t = await getTranslations('snt')

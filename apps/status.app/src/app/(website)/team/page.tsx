@@ -12,24 +12,27 @@ import { ParallaxCircle } from '~website/_components/parallax-circle'
 import { CircleWord } from '../_components/circle-word'
 import { OrgChart } from './_components/org-chart'
 
-import type { ImageType } from '~components/assets'
+import type { ImageAlt, ImageType } from '~components/assets'
+import type { Metadata as NextMetadata } from 'next'
 
-export const metadata = Metadata({
-  title: 'Team',
-  description:
-    'Founded in 2017, Status has grown to over 90 core contributors. Meet the team behind the open-source, decentralised wallet and messenger.',
-  alternates: {
-    canonical: '/team',
-  },
-})
+export async function generateMetadata(): Promise<NextMetadata> {
+  const t = await getTranslations('team')
+
+  return Metadata({
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+    alternates: {
+      canonical: '/team',
+    },
+  })
+}
 
 export default async function TeamPage() {
   const t = await getTranslations('team')
   const tn = await getTranslations('nav')
 
   const organizationSchema = jsonLD.organization({
-    description:
-      'Founded in 2017, Status has grown to over 90 core contributors building the open-source, decentralised wallet and messenger.',
+    description: t('schemaDescription'),
   })
 
   const ABOUT_LIST = [
@@ -68,13 +71,19 @@ export default async function TeamPage() {
 
   const NETWORK_LIST = [
     {
-      image: { id: 'Team/Network Section/Logos:96:96', alt: 'Logos logo' },
+      image: {
+        id: 'Team/Network Section/Logos:96:96',
+        alt: t('logosAlt') as ImageAlt['Team/Network Section/Logos:96:96'],
+      },
       title: t('logos'),
       description: t('logosDescription'),
       url: 'https://logos.co',
     },
     {
-      image: { id: 'Team/Network Section/Vac:96:96', alt: 'Vac logo' },
+      image: {
+        id: 'Team/Network Section/Vac:96:96',
+        alt: t('vacAlt') as ImageAlt['Team/Network Section/Vac:96:96'],
+      },
       title: t('vac'),
       description: t('vacDescription'),
       url: 'https://vac.dev',

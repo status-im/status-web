@@ -11,15 +11,21 @@ import { HighlightedPostCard } from './_components/highlighted-post-card'
 import { InfinitePostGrid } from './_components/infinite-post-grid'
 import { TAGS } from './_tags'
 
+import type { Metadata as NextMetadata } from 'next'
+
 export const revalidate = 3600 // 1 hour
 
-export const metadata = Metadata({
-  title: 'Blog',
-  description: 'Long form articles, thoughts, and ideas.',
-  alternates: {
-    canonical: '/blog',
-  },
-})
+export async function generateMetadata(): Promise<NextMetadata> {
+  const t = await getTranslations('blog')
+
+  return Metadata({
+    title: t('breadcrumb'),
+    description: t('description'),
+    alternates: {
+      canonical: '/blog',
+    },
+  })
+}
 
 export default async function BlogPage() {
   const t = await getTranslations('blog')

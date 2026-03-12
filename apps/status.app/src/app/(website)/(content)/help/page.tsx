@@ -11,13 +11,19 @@ import { Body } from '~components/body'
 
 import { SearchButton } from '../_components/search-button'
 
-export const metadata = Metadata({
-  title: 'Help',
-  description: 'Short-form guides on how to set up and use the app.',
-  alternates: {
-    canonical: '/help',
-  },
-})
+import type { Metadata as NextMetadata } from 'next'
+
+export async function generateMetadata(): Promise<NextMetadata> {
+  const t = await getTranslations('help')
+
+  return Metadata({
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+    alternates: {
+      canonical: '/help',
+    },
+  })
+}
 
 export default async function HelpPage() {
   const t = await getTranslations('help')

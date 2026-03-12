@@ -47,11 +47,16 @@ import { EpicOverview } from './_components/epic-overview'
 import type { DateRange } from 'react-day-picker'
 
 const LIMIT = 3
+const EPIC_STATUS_VALUES = {
+  inProgress: 'In Progress',
+  closed: 'Closed',
+  notStarted: 'Not Started',
+} as const
 
 export default function EpicsPage() {
   const t = useTranslations('insights')
   const [selectedFilters, setSelectedFilters] = useState<string[]>([
-    'In Progress',
+    EPIC_STATUS_VALUES.inProgress,
   ])
 
   const [orderByValue, setOrderByValue] = useState<Order_By>(Order_By.Asc)
@@ -125,7 +130,7 @@ export default function EpicsPage() {
             _in:
               selectedFilters.length > 0
                 ? selectedFilters
-                : ['In Progress', 'Closed'],
+                : [EPIC_STATUS_VALUES.inProgress, EPIC_STATUS_VALUES.closed],
           },
           epic_name: { _ilike: `%${debouncedSearchFilter}%` },
         },
@@ -262,22 +267,22 @@ export default function EpicsPage() {
               size="32"
               label={t('inProgress')}
               icon={<OpenIcon />}
-              selected={selectedFilters.includes('In Progress')}
-              onPress={() => handleFilter('In Progress')}
+              selected={selectedFilters.includes(EPIC_STATUS_VALUES.inProgress)}
+              onPress={() => handleFilter(EPIC_STATUS_VALUES.inProgress)}
             />
             <Tag
               size="32"
               label={t('closed')}
               icon={<DoneIcon />}
-              selected={selectedFilters.includes('Closed')}
-              onPress={() => handleFilter('Closed')}
+              selected={selectedFilters.includes(EPIC_STATUS_VALUES.closed)}
+              onPress={() => handleFilter(EPIC_STATUS_VALUES.closed)}
             />
             <Tag
               size="32"
               label={t('notStarted')}
               icon={<NotStartedIcon />}
-              selected={selectedFilters.includes('Not Started')}
-              onPress={() => handleFilter('Not Started')}
+              selected={selectedFilters.includes(EPIC_STATUS_VALUES.notStarted)}
+              onPress={() => handleFilter(EPIC_STATUS_VALUES.notStarted)}
             />
           </div>
 
