@@ -1,5 +1,11 @@
 # @status-im/wallet
 
+## 0.1.3
+
+### Patch Changes
+
+- ca76e7d: feat(wallet): add password context
+
 ## 0.1.2
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # wallet
 
+## 0.1.3
+
+### Patch Changes
+
+- ca76e7d: feat(wallet): add password context
+- Updated dependencies [ca76e7d]
+  - @status-im/wallet@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes
