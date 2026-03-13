@@ -7,6 +7,9 @@
     "test": "playwright test",
     "test:smoke": "playwright test --project=smoke",
     "test:wallet": "playwright test --project=wallet-flows",
+    "anvil:up": "test -f .env.local && ENV_FILES='--env-file .env --env-file .env.local' || ENV_FILES='--env-file .env'; docker compose $ENV_FILES -f docker-compose.anvil.yml up -d --wait",
+    "anvil:down": "test -f .env.local && ENV_FILES='--env-file .env --env-file .env.local' || ENV_FILES='--env-file .env'; docker compose $ENV_FILES -f docker-compose.anvil.yml down",
+    "test:anvil": "pnpm anvil:up && playwright test --project=anvil-deposits; EXIT=$?; pnpm anvil:down; exit $EXIT",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
     "test:ui": "playwright test --ui",
@@ -25,13 +28,19 @@
     "eslint": "^9.14.0",
     "globals": "^15.12.0",
     "prettier": "^3.3.3",
-    "tsx": "^4.19.0"
+    "rimraf": "^5.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "viem": "^2.46.3"
   },
   "lint-staged": {
     "*.ts": [
       "eslint --fix",
       "prettier --write"
     ]
+  },
+  "config": {
+    "metamaskVersion": "13.18.1"
   },
   "engines": {
     "node": "22.x"

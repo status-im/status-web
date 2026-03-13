@@ -1,9 +1,3 @@
-/** Browser viewport dimensions */
-export const VIEWPORT = {
-  WIDTH: 1440,
-  HEIGHT: 900,
-} as const
-
 /** Timeouts for browser extension service workers and pages */
 export const EXTENSION_TIMEOUTS = {
   /** Time to wait for MetaMask service worker to register */
@@ -24,6 +18,25 @@ export const NOTIFICATION_TIMEOUTS = {
   TRANSACTION_CONFIRM: 15_000,
   /** Time to wait for optional UI elements (e.g., "Use default" button) */
   OPTIONAL_ELEMENT: 3_000,
+  /**
+   * Time to wait for notification page content to appear after opening.
+   * MetaMask v13 processes transactions asynchronously: gas estimation,
+   * fee calculation, and Blockaid security simulation must complete before
+   * the confirmation UI appears. This can take 10-60 seconds.
+   */
+  NOTIFICATION_CONTENT: 45_000,
+  /** Quick DOM settle after tab click or minor re-render */
+  DOM_SETTLE: 300,
+  /** Short wait for MetaMask service worker port release or DOM re-render */
+  SHORT_SETTLE: 500,
+  /** Medium wait for page reopen or port reconnection */
+  PAGE_REOPEN: 1_000,
+  /** Settle time after clicking Confirm before checking next step */
+  POST_CLICK: 1_200,
+  /** Wait for UI content to render or MetaMask queue to process */
+  CONTENT_CHECK: 2_000,
+  /** Polling interval in confirmation page scan loops */
+  POLL_INTERVAL: 250,
 } as const
 
 /** Timeouts for MetaMask onboarding flow */
@@ -44,4 +57,12 @@ export const HUB_TIMEOUTS = {
 export const TEST_TIMEOUTS = {
   /** Time to wait for MetaMask onboarding UI elements */
   ONBOARDING_ELEMENT: 15_000,
+} as const
+
+/** Timeouts for deposit transaction flows */
+export const DEPOSIT_TIMEOUTS = {
+  /** Time to wait for action button text to change after a tx confirms */
+  BUTTON_STATE_CHANGE: 30_000,
+  /** Time to wait for modal to close after successful deposit */
+  MODAL_CLOSE: 30_000,
 } as const

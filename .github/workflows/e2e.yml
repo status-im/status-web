@@ -23,9 +23,6 @@ on:
         required: false
         default: 'https://hub.status.network'
 
-env:
-  METAMASK_VERSION: '13.18.1'
-
 jobs:
   e2e:
     name: E2E Tests
@@ -64,11 +61,15 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22.17.0
+          node-version: 22.x
           cache: pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Read MetaMask version
+        id: metamask
+        run: echo "version=$(node -p 'require("./e2e/package.json").config.metamaskVersion')" >> "$GITHUB_OUTPUT"
 
       - name: Install Playwright browsers
         run: cd e2e && pnpm exec playwright install chromium --with-deps
@@ -78,11 +79,17 @@ jobs:
         uses: actions/cache@v4
         with:
           path: e2e/.extensions/metamask
-          key: metamask-v${{ env.METAMASK_VERSION }}-${{ hashFiles('e2e/download-metamask-extension.ts') }}
+          key: metamask-v${{ steps.metamask.outputs.version }}-${{ hashFiles('e2e/download-metamask-extension.ts') }}
 
       - name: Download MetaMask extension
         if: steps.metamask-cache.outputs.cache-hit != 'true'
         run: cd e2e && pnpm setup:metamask
+
+      - name: Lint and typecheck E2E
+        run: cd e2e && pnpm lint && pnpm typecheck
+
+      - name: Start Anvil forks
+        run: cd e2e && pnpm anvil:up
 
       - name: Run E2E tests
         run: cd e2e && xvfb-run --auto-servernum -- pnpm test
@@ -91,6 +98,10 @@ jobs:
           WALLET_PASSWORD: ${{ secrets.E2E_WALLET_PASSWORD }}
           BASE_URL: ${{ steps.url.outputs.url }}
           CI: true
+
+      - name: Stop Anvil forks
+        if: always()
+        run: cd e2e && pnpm anvil:down
 
       - name: Upload test report
         uses: actions/upload-artifact@v4

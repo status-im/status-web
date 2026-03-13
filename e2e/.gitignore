@@ -1,3 +1,6 @@
+# Dependencies
+node_modules/
+
 # Test results
 test-results/
 playwright-report/
@@ -8,3 +11,17 @@ extensions/
 
 # Browser profiles
 .pw-chromium-profile/
+
+# Environment files
+.env
+.env.local
+
+# TypeScript build
+*.tsbuildinfo
+dist/
+
+# npm lockfile (project uses pnpm)
+package-lock.json
+
+# OS files
+.DS_Store

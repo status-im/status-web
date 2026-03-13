@@ -1,0 +1,42 @@
+name: status-web-anvil
+
+services:
+  anvil-mainnet:
+    image: ghcr.io/foundry-rs/foundry:v1.4.0
+    platform: ${DOCKER_PLATFORM:-linux/amd64}
+    entrypoint: anvil
+    command:
+      - --host=0.0.0.0
+      - --port=8545
+      - --fork-url=${MAINNET_FORK_URL:-https://ethereum-rpc.publicnode.com}
+      - --chain-id=1
+      - --silent
+    ports:
+      - '${MAINNET_FORK_PORT:-8547}:8545'
+    healthcheck:
+      test:
+        ['CMD', 'cast', 'block-number', '--rpc-url', 'http://localhost:8545']
+      start_period: 5s
+      interval: 2s
+      timeout: 5s
+      retries: 15
+
+  anvil-linea:
+    image: ghcr.io/foundry-rs/foundry:v1.4.0
+    platform: ${DOCKER_PLATFORM:-linux/amd64}
+    entrypoint: anvil
+    command:
+      - --host=0.0.0.0
+      - --port=8545
+      - --fork-url=${LINEA_FORK_URL:-https://rpc.linea.build}
+      - --chain-id=59144
+      - --silent
+    ports:
+      - '${LINEA_FORK_PORT:-8546}:8545'
+    healthcheck:
+      test:
+        ['CMD', 'cast', 'block-number', '--rpc-url', 'http://localhost:8545']
+      start_period: 5s
+      interval: 2s
+      timeout: 5s
+      retries: 15
