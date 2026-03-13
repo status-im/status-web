@@ -4,12 +4,14 @@ import { useEffect, useState } from 'react'
 
 import { Button } from '@status-im/components'
 import { CheckIcon, CopyIcon } from '@status-im/icons/20'
+import { useTranslations } from 'next-intl'
 import { onlyText } from 'react-children-utilities'
 
 import { useCopyToClipboard } from '../../_hooks/use-copy-to-clipboard'
 
 export function CodeBlock(props: React.ComponentProps<'div'>) {
   const [, copy] = useCopyToClipboard()
+  const t = useTranslations('common')
 
   // note: https://github.com/atomiks/rehype-pretty-code/issues/34#issuecomment-1529567170 source
   const code = onlyText(props.children)
@@ -31,7 +33,7 @@ export function CodeBlock(props: React.ComponentProps<'div'>) {
               setSuccess(true)
             }}
             icon={success ? <CheckIcon /> : <CopyIcon />}
-            aria-label="Copy code"
+            aria-label={t('copyCode')}
           />
         </div>
         {props.children}

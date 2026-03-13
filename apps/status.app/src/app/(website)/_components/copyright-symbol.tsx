@@ -1,6 +1,12 @@
+'use client'
+
+import { useTranslations } from 'next-intl'
+
 export const CopyrightSymbol = (
   props: React.ComponentPropsWithoutRef<'svg'>
 ) => {
+  const t = useTranslations('common')
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -8,7 +14,7 @@ export const CopyrightSymbol = (
       height="16"
       viewBox="0 0 16 16"
       fill="none"
-      aria-label="Copyright"
+      aria-label={t('copyright')}
       {...props}
     >
       <g clipPath="url(#clip0_5715_149449)">

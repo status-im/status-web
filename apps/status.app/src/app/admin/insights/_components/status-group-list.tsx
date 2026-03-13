@@ -1,5 +1,7 @@
+import { useTranslations } from 'next-intl'
 import { match } from 'ts-pattern'
 
+import { getAdminStatusLabel } from '../_utils/i18n'
 import { InsightsStatusIcon } from './insights-status-icon'
 
 type Props = {
@@ -19,22 +21,19 @@ type StatusGroupItemProps = {
 
 const StatusGroupItem = (props: StatusGroupItemProps) => {
   const { status, children } = props
+  const t = useTranslations('admin')
 
-  const { title, textColor } = match(status)
+  const { textColor } = match(status)
     .with('not-started', () => ({
-      title: 'Not started',
       textColor: 'text-neutral-100',
     }))
     .with('in-progress', () => ({
-      title: 'In progress',
       textColor: 'text-customisation-orange-50',
     }))
     .with('done', () => ({
-      title: 'Done',
       textColor: 'text-success-50',
     }))
     .with('paused', () => ({
-      title: 'Paused',
       textColor: 'text-neutral-100',
     }))
     .exhaustive()
@@ -43,7 +42,9 @@ const StatusGroupItem = (props: StatusGroupItemProps) => {
     <div>
       <div className="mb-3 flex items-center gap-1">
         <InsightsStatusIcon status={status} />
-        <span className={`text-13 font-medium ${textColor}`}>{title}</span>
+        <span className={`text-13 font-medium ${textColor}`}>
+          {getAdminStatusLabel(t, status)}
+        </span>
       </div>
       <div className="flex flex-col gap-2">{children}</div>
     </div>

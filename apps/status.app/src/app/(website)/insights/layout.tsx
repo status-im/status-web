@@ -4,6 +4,7 @@ import { useState } from 'react'
 
 import { Text } from '@status-im/components'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
 
 import { Body } from '~components/body'
 import { useMediaQuery } from '~hooks/use-media-query'
@@ -17,6 +18,7 @@ type Props = {
 
 export default function InsightsLayout({ children }: Props) {
   const [queryClient] = useState(() => new QueryClient())
+  const t = useTranslations('insights')
 
   const matchesLG = useMediaQuery('xl')
 
@@ -37,17 +39,17 @@ export default function InsightsLayout({ children }: Props) {
               <div
                 className="inline-block size-6 animate-spin rounded-full border-[3px] border-t-transparent text-neutral-80"
                 role="status"
-                aria-label="loading"
+                aria-label={t('loading')}
               >
-                <span className="sr-only">Loading...</span>
+                <span className="sr-only">{t('loading')}</span>
               </div>
               <div className="pb-3" />
               <Text size={15} weight="semibold">
-                Loading insights...
+                {t('loading')}
               </Text>
               <div className="pb-1" />
               <Text size={13} color="$neutral-50">
-                Please stand by!
+                {t('standBy')}
               </Text>
             </div>
           </Body>

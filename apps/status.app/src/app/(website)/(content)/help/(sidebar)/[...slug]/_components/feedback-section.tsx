@@ -4,6 +4,7 @@ import { useState } from 'react'
 
 import { Button, useToast } from '@status-im/components'
 import { HeartBreakIcon, HeartIcon } from '@status-im/icons/20'
+import { useTranslations } from 'next-intl'
 import { match } from 'ts-pattern'
 
 import { trackEvent } from '~app/_utils/track'
@@ -17,6 +18,7 @@ const FeedbackSection = (props: Props) => {
   const [feedback, setFeedback] = useState<'like' | 'dislike' | 'none'>('none')
 
   const toast = useToast()
+  const t = useTranslations('feedback')
 
   const submitFeedback = async (
     articleUrl: string,
@@ -30,22 +32,22 @@ const FeedbackSection = (props: Props) => {
 
       setFeedback(type)
     } catch {
-      toast.negative('Something went wrong. Please try again later.')
+      toast.negative(t('errorMessage'))
     }
   }
 
   const { title, text } = match(feedback)
     .with('like', () => ({
-      title: 'Thank you for your feedback. 😎',
-      text: 'Your feedback was successfully submitted!',
+      title: t('thankYou'),
+      text: t('successMessage'),
     }))
     .with('dislike', () => ({
-      title: "We're sorry to hear that. 🙏",
-      text: "We'll do our best to improve this article.",
+      title: t('sorryTitle'),
+      text: t('sorryMessage'),
     }))
     .with('none', () => ({
-      title: 'Was this article helpful?',
-      text: 'Every feedback takes us closer to helping you!',
+      title: t('question'),
+      text: t('encouragement'),
     }))
     .exhaustive()
 
@@ -61,7 +63,7 @@ const FeedbackSection = (props: Props) => {
             iconBefore={<HeartBreakIcon />}
             onPress={() => submitFeedback(articleUrl, 'dislike')}
           >
-            Not really
+            {t('notReally')}
           </Button>
           <Button
             variant="positive"
@@ -69,7 +71,7 @@ const FeedbackSection = (props: Props) => {
             iconBefore={<HeartIcon />}
             onPress={() => submitFeedback(articleUrl, 'like')}
           >
-            Of course
+            {t('ofCourse')}
           </Button>
         </div>
       )}

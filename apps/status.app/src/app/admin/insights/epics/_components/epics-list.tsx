@@ -5,6 +5,7 @@ import { useState } from 'react'
 import * as colors from '@status-im/colors'
 import { DoneIcon, NotStartedIcon, OpenIcon } from '@status-im/icons/20'
 import { usePathname, useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import { AddNewButton } from '~admin/_components/add-new-button'
 import { FilterTag } from '~admin/_components/filter-tag'
@@ -15,6 +16,7 @@ import { useUserContext } from '~admin/_contexts/user-context'
 import { useTableFilters } from '~admin/_hooks/use-table-filters'
 import { useTableSort } from '~admin/_hooks/use-table-sort'
 import { AdminLayoutList } from '~admin/_layouts/admin-layout-list'
+import { getAdminStatusLabel } from '~admin/insights/_utils/i18n'
 import { getColorWithOpacity } from '~app/_utils/get-color-with-opacity'
 import { Table } from '~components/table'
 
@@ -31,42 +33,24 @@ type StatusItem = {
   icon: React.FC<React.SVGProps<SVGSVGElement>>
 }
 
-const statusFilterOptions: MultiselectOption[] = [
-  {
-    id: 'not-started',
-    label: 'Not started',
-    icon: <InsightsStatusIcon status="not-started" />,
-  },
-  {
-    id: 'in-progress',
-    label: 'In progress',
-    icon: <InsightsStatusIcon status="in-progress" />,
-  },
-  {
-    id: 'done',
-    label: 'Done',
-    icon: <InsightsStatusIcon status="done" />,
-  },
-]
-
 const renderedStatusList: StatusItem[] = [
   {
     id: 'not-started',
-    label: 'Not started',
+    label: '',
     color: 'text-neutral-50',
     textColor: colors.neutral[50],
     icon: NotStartedIcon,
   },
   {
     id: 'in-progress',
-    label: 'In progress',
+    label: '',
     color: 'text-orange-50',
     textColor: colors.customisation.orange[50],
     icon: OpenIcon,
   },
   {
     id: 'done',
-    label: 'Done',
+    label: '',
     color: 'text-success-50',
     textColor: colors.success[50],
     icon: DoneIcon,
@@ -79,6 +63,7 @@ type Props = {
 
 export const EpicsList = (props: Props) => {
   const { epics } = props
+  const t = useTranslations('admin')
 
   const router = useRouter()
   const pathname = usePathname()
@@ -89,6 +74,23 @@ export const EpicsList = (props: Props) => {
   const [statusFilter, setStatusFilter] = useState<string[]>([])
 
   const { showRightView } = useLayoutContext()
+  const statusFilterOptions: MultiselectOption[] = [
+    {
+      id: 'not-started',
+      label: getAdminStatusLabel(t, 'not-started'),
+      icon: <InsightsStatusIcon status="not-started" />,
+    },
+    {
+      id: 'in-progress',
+      label: getAdminStatusLabel(t, 'in-progress'),
+      icon: <InsightsStatusIcon status="in-progress" />,
+    },
+    {
+      id: 'done',
+      label: getAdminStatusLabel(t, 'done'),
+      icon: <InsightsStatusIcon status="done" />,
+    },
+  ]
 
   const clearFilter = () => {
     setSearchFilter('')
@@ -118,17 +120,17 @@ export const EpicsList = (props: Props) => {
         <div className="flex flex-col gap-6">
           {user.canEditInsights && (
             <AddNewButton href="/admin/insights/epics/new">
-              New epic
+              {t('newEpic')}
             </AddNewButton>
           )}
           <AdminLayoutList.Filters>
             <SearchInput
               value={searchFilter}
               onChange={setSearchFilter}
-              placeholder="Find epics"
+              placeholder={t('findEpics')}
             />
             <MultiselectFilter
-              label="Status"
+              label={t('status')}
               options={statusFilterOptions}
               onSelectionChange={setStatusFilter}
               selection={statusFilter}
@@ -141,7 +143,7 @@ export const EpicsList = (props: Props) => {
               return (
                 <FilterTag.Item
                   key={status}
-                  title="Status"
+                  title={t('status')}
                   label={
                     statusFilterOptions.find(s => s.id === status)?.label || ''
                   }
@@ -161,14 +163,15 @@ export const EpicsList = (props: Props) => {
       >
         <Table.Root>
           <Table.Header>
-            <Table.HeaderCell className="w-full">Label</Table.HeaderCell>
-            <Table.HeaderCell minWidth={160}>Status</Table.HeaderCell>
+            <Table.HeaderCell className="w-full">{t('label')}</Table.HeaderCell>
+            <Table.HeaderCell minWidth={160}>{t('status')}</Table.HeaderCell>
           </Table.Header>
           <Table.Body>
             {filteredEpics.map(epic => {
               const epicStatus = renderedStatusList.find(
                 option => option.id === epic.status
               )
+              const epicStatusLabel = getAdminStatusLabel(t, epic.status)
               const epicRoute = `/admin/insights/epics/${epic.id}`
               return (
                 <Table.Row
@@ -202,7 +205,7 @@ export const EpicsList = (props: Props) => {
                           color: epicStatus?.textColor,
                         }}
                       >
-                        {epicStatus?.label}
+                        {epicStatusLabel}
                       </span>
                     </p>
                   </Table.Cell>

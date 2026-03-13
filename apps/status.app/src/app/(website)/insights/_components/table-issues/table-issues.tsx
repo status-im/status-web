@@ -4,8 +4,9 @@ import { Avatar, Input, Popover, Skeleton, Text } from '@status-im/components'
 import { DoneIcon, OpenIcon, SearchIcon } from '@status-im/icons/20'
 import { formatDistanceToNow } from 'date-fns'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
+import { useRouter } from '~/i18n/navigation'
 import { useMediaQuery } from '~hooks/use-media-query'
 import { Order_By } from '~website/insights/_graphql/generated/schemas'
 
@@ -20,17 +21,6 @@ import type {
   GetIssuesByEpicQuery,
   GetOrphansQuery,
 } from '~website/insights/_graphql/generated/operations'
-
-const sortOptions: DropdownSortProps['data'] = [
-  {
-    id: Order_By.Asc,
-    name: 'Ascending',
-  },
-  {
-    id: Order_By.Desc,
-    name: 'Descending',
-  },
-]
 
 type Props = {
   isLoading?: boolean
@@ -64,6 +54,7 @@ const NUMBER_OF_LABELS_TO_SHOW_IN_SMALLER_SCREENS = 1
 const TableIssues = (props: Props) => {
   const router = useRouter()
   const matches2XL = useMediaQuery('2xl')
+  const t = useTranslations('insights')
 
   const {
     data = [],
@@ -114,6 +105,17 @@ const TableIssues = (props: Props) => {
     ? NUMBER_OF_LABELS_TO_SHOW
     : NUMBER_OF_LABELS_TO_SHOW_IN_SMALLER_SCREENS
 
+  const sortOptions: DropdownSortProps['data'] = [
+    {
+      id: Order_By.Asc,
+      name: t('ascending'),
+    },
+    {
+      id: Order_By.Desc,
+      name: t('descending'),
+    },
+  ]
+
   return (
     <div className="overflow-hidden rounded-16 border border-neutral-20 shadow-1">
       <div className="flex border-b border-neutral-20 bg-neutral-5 p-3">
@@ -133,7 +135,7 @@ const TableIssues = (props: Props) => {
                 <div className="flex gap-2">
                   <div className="transition-all">
                     <Input
-                      placeholder="Find issue..."
+                      placeholder={t('findIssue')}
                       icon={<SearchIcon />}
                       size="32"
                       value={searchFilterValue}
@@ -155,8 +157,8 @@ const TableIssues = (props: Props) => {
                         }
                       }) || []
                     }
-                    label="Author"
-                    placeholder="Find author "
+                    label={t('author')}
+                    placeholder={t('findAuthor')}
                   />
                   <DropdownFilter
                     onSelectedValuesChange={handleSelectedAssignees}
@@ -170,8 +172,8 @@ const TableIssues = (props: Props) => {
                         }
                       }) || []
                     }
-                    label="Assignee"
-                    placeholder="Find assignee"
+                    label={t('assignee')}
+                    placeholder={t('findAssignee')}
                   />
                   <DropdownFilter
                     onSelectedValuesChange={handleSelectedRepos}
@@ -184,8 +186,8 @@ const TableIssues = (props: Props) => {
                         }
                       }) || []
                     }
-                    label="Repos"
-                    placeholder="Find repo"
+                    label={t('repos')}
+                    placeholder={t('findRepo')}
                   />
                 </div>
                 <div className="pl-2">

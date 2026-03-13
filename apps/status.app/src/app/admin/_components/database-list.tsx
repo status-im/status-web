@@ -4,6 +4,7 @@ import { Avatar, Button } from '@status-im/components'
 import { DownloadIcon } from '@status-im/icons/12'
 import { ExternalIcon } from '@status-im/icons/16'
 import { cx } from 'class-variance-authority'
+import { useTranslations } from 'next-intl'
 
 import { Link } from '~components/link'
 
@@ -42,6 +43,7 @@ type DatabaseListItemProps = {
 
 const DatabaseListItem = (props: DatabaseListItemProps) => {
   const { item, children, onClick, ...rest } = props
+  const t = useTranslations('admin')
 
   return (
     <li
@@ -66,7 +68,7 @@ const DatabaseListItem = (props: DatabaseListItemProps) => {
             onPress={() => console.log('download db', item.file?.url)}
             iconAfter={<DownloadIcon />}
           >
-            Download
+            {t('download')}
           </Button>
         )}
       </div>

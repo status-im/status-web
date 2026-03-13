@@ -5,6 +5,7 @@ import { useState, useTransition } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, useToast } from '@status-im/components'
 import { DeleteIcon, LoadingIcon } from '@status-im/icons/20'
+import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 
 import * as Drawer from '~admin/_components/drawer'
@@ -48,6 +49,7 @@ const EditMilestoneDrawer = (props: Props) => {
   const [isPending, startTransition] = useTransition()
 
   const toast = useToast()
+  const t = useTranslations('admin')
 
   const handleSubmit: SubmitHandler<FormValues> = async data => {
     try {
@@ -58,7 +60,7 @@ const EditMilestoneDrawer = (props: Props) => {
       })
     } catch (error) {
       console.error(error)
-      toast.negative('Something went wrong. Please try again later.')
+      toast.negative(t('genericError'))
     }
   }
 
@@ -87,6 +89,7 @@ const MilestoneForm = (
   }
 ) => {
   const { epics, defaultValues, onSubmit, milestoneId, loading } = props
+  const t = useTranslations('admin')
 
   const [isPending, startTransition] = useTransition()
 
@@ -101,15 +104,15 @@ const MilestoneForm = (
       <Drawer.Body>
         <div className="flex flex-1 flex-col gap-4">
           <TextInput
-            label="Name"
+            label={t('name')}
             name="name"
-            placeholder="Milestone name"
+            placeholder={t('milestoneName')}
             maxLength={30}
           />
           <TextArea
-            label="Description"
+            label={t('description')}
             name="description"
-            placeholder="Set a milestone description"
+            placeholder={t('milestoneDescriptionPlaceholder')}
             rows={6}
           />
           <EpicPicker name="epicIds" epics={epics} />
@@ -118,7 +121,7 @@ const MilestoneForm = (
       <Drawer.Footer>
         {milestoneId && (
           <AlertDialog
-            title="Delete milestone"
+            title={t('deleteMilestone')}
             onConfirm={async () => {
               try {
                 startTransition(async () => {
@@ -136,7 +139,7 @@ const MilestoneForm = (
               disabled={isPending}
               variant="outline"
               icon={<DeleteIcon />}
-              aria-label="Delete milestone"
+              aria-label={t('deleteMilestone')}
             />
           </AlertDialog>
         )}
@@ -150,7 +153,7 @@ const MilestoneForm = (
             {loading ? (
               <LoadingIcon className="text-white-100" />
             ) : (
-              'Save milestone'
+              t('saveMilestone')
             )}
           </button>
         </div>

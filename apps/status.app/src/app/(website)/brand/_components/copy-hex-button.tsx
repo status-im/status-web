@@ -2,6 +2,7 @@
 
 import { Button, useToast } from '@status-im/components'
 import { CopyIcon } from '@status-im/icons/20'
+import { useTranslations } from 'next-intl'
 
 import { useCopyToClipboard } from '~hooks/use-copy-to-clipboard'
 
@@ -12,6 +13,7 @@ type Props = {
 export const CopyHexButton = (props: Props) => {
   const { hex } = props
 
+  const t = useTranslations('brand')
   const [, copy] = useCopyToClipboard()
 
   const toast = useToast()
@@ -19,7 +21,7 @@ export const CopyHexButton = (props: Props) => {
   const handleCopy = (hex: string) => {
     copy(hex.toUpperCase())
 
-    toast.positive('Color copied!')
+    toast.positive(t('colorCopied'))
   }
 
   return (
@@ -28,7 +30,7 @@ export const CopyHexButton = (props: Props) => {
       onClick={() => handleCopy(hex)}
       //   variant={invert ? 'outline' : 'darkOutline'}
       icon={<CopyIcon />}
-      aria-label="Copy hex"
+      aria-label={t('copyHex')}
     />
   )
 }
