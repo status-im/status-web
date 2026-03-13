@@ -26,7 +26,8 @@
       "namespace": "android_app",
       "package_name": "app.status.mobile",
       "sha256_cert_fingerprints": [
-        "64:FD:80:52:7F:62:2E:E0:EA:0B:9E:62:96:18:EF:63:20:0C:11:4C:96:7D:79:BC:4A:C1:0B:AF:F8:85:A5:A4"
+        "64:FD:80:52:7F:62:2E:E0:EA:0B:9E:62:96:18:EF:63:20:0C:11:4C:96:7D:79:BC:4A:C1:0B:AF:F8:85:A5:A4",
+        "9D:7C:65:ED:4A:14:AD:D9:29:6B:C8:C6:23:33:62:F2:8A:A5:9A:B7:95:D2:C4:E0:4F:12:3A:88:3F:5C:B1:68"
       ]
     }
   },
