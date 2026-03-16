@@ -9,7 +9,9 @@ export const routing = defineRouting({
 
 /**
  * Paths that should not be processed by the i18n middleware.
- * Used in both middleware matcher and Link component.
+ * NOTE: These values are duplicated in the middleware config.matcher
+ *       because Next.js requires config to be static.
+ *       If you change this list, also update src/middleware.ts.
  */
 export const nonLocalizedPaths = [
   'api',
