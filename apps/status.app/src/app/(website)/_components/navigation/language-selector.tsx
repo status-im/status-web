@@ -3,9 +3,9 @@
 import * as Select from '@radix-ui/react-select'
 import { CheckIcon, ChevronDownIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
-import { useParams } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 
+import { usePathname, useRouter } from '~/i18n/navigation'
 import { routing } from '~/i18n/routing'
 
 type Language = {
@@ -14,26 +14,12 @@ type Language = {
   nativeLabel: string
 }
 
-const localeCookieName = 'NEXT_LOCALE'
-const localeCookieMaxAge = 60 * 60 * 24 * 365
-
-const getLocalizedHref = (locale: (typeof routing.locales)[number]) => {
-  const pathname = window.location.pathname
-  const search = window.location.search
-  const hash = window.location.hash
-  const pathWithoutLocale = pathname.replace(/^\/(en|ko)(?=\/|$)/, '') || '/'
-
-  const localizedPath =
-    locale === routing.defaultLocale
-      ? pathWithoutLocale
-      : `/${locale}${pathWithoutLocale === '/' ? '' : pathWithoutLocale}`
-
-  return `${localizedPath}${search}${hash}`
-}
-
 const LanguageSelector = () => {
   const t = useTranslations('languageSelector')
-  const params = useParams()
+  const locale = useLocale()
+  const router = useRouter()
+  const pathname = usePathname()
+
   const languages: Language[] = [
     {
       value: 'en',
@@ -47,12 +33,10 @@ const LanguageSelector = () => {
     },
   ]
 
-  const localeParam =
-    typeof params['locale'] === 'string' ? params['locale'] : undefined
-  const currentLocale = languages.some(
-    language => language.value === localeParam
+  const currentLocale = routing.locales.includes(
+    locale as (typeof routing.locales)[number]
   )
-    ? localeParam
+    ? locale
     : routing.defaultLocale
 
   const selectedLanguage =
@@ -61,10 +45,9 @@ const LanguageSelector = () => {
   const handleValueChange = (newLocale: string) => {
     if (newLocale === currentLocale) return
 
-    document.cookie = `${localeCookieName}=${newLocale}; Path=/; Max-Age=${localeCookieMaxAge}; SameSite=Lax`
-    window.location.replace(
-      getLocalizedHref(newLocale as (typeof routing.locales)[number])
-    )
+    router.replace(pathname, {
+      locale: newLocale as (typeof routing.locales)[number],
+    })
   }
 
   return (

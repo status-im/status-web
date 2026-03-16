@@ -3,6 +3,7 @@ import { forwardRef } from 'react'
 import NextLink from 'next/link'
 
 import { Link as IntlLink } from '~/i18n/navigation'
+import { nonLocalizedPaths } from '~/i18n/routing'
 
 const Link = (
   props: React.ComponentPropsWithRef<typeof NextLink>,
@@ -14,14 +15,9 @@ const Link = (
       ? restProps.href
       : restProps.href.pathname!
   const external = url?.startsWith('http') || url?.startsWith('/api')
-  const nonLocalized =
-    url?.startsWith('/admin') ||
-    url?.startsWith('/c') ||
-    url?.startsWith('/cc') ||
-    url?.startsWith('/u') ||
-    url?.startsWith('/rss') ||
-    url?.startsWith('/mobile-news') ||
-    url?.startsWith('/desktop-news')
+  const nonLocalized = nonLocalizedPaths.some(
+    p => url?.startsWith(`/${p}/`) || url === `/${p}`
+  )
 
   if (external) {
     return (
