@@ -3,7 +3,8 @@
 import * as Select from '@radix-ui/react-select'
 import { CheckIcon, ChevronDownIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
-import { useLocale, useTranslations } from 'next-intl'
+import { useParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import { usePathname, useRouter } from '~/i18n/navigation'
 import { routing } from '~/i18n/routing'
@@ -16,9 +17,10 @@ type Language = {
 
 const LanguageSelector = () => {
   const t = useTranslations('languageSelector')
-  const locale = useLocale()
   const router = useRouter()
   const pathname = usePathname()
+  const params = useParams()
+  const locale = (params['locale'] as string) || routing.defaultLocale
 
   const languages: Language[] = [
     {
