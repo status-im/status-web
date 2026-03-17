@@ -6,7 +6,7 @@ import { cx } from 'class-variance-authority'
 import { useParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 
-import { usePathname, useRouter } from '~/i18n/navigation'
+import { usePathname } from '~/i18n/navigation'
 import { routing } from '~/i18n/routing'
 
 type Language = {
@@ -17,7 +17,6 @@ type Language = {
 
 const LanguageSelector = () => {
   const t = useTranslations('languageSelector')
-  const router = useRouter()
   const pathname = usePathname()
   const params = useParams()
   const locale = (params['locale'] as string) || routing.defaultLocale
@@ -47,9 +46,10 @@ const LanguageSelector = () => {
   const handleValueChange = (newLocale: string) => {
     if (newLocale === currentLocale) return
 
-    router.replace(pathname, {
-      locale: newLocale as (typeof routing.locales)[number],
-    })
+    document.cookie = `NEXT_LOCALE=${newLocale};path=/;max-age=31536000;SameSite=Lax`
+
+    const prefix = newLocale === routing.defaultLocale ? '' : `/${newLocale}`
+    window.location.href = `${prefix}${pathname}`
   }
 
   return (
