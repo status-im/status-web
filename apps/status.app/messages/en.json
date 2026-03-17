@@ -79,7 +79,8 @@
     "englishLabel": "English (EN)",
     "englishNativeLabel": "English",
     "koreanLabel": "Korean (KO)",
-    "koreanNativeLabel": "한국어"
+    "koreanNativeLabel": "한국어",
+    "helpTranslate": "Help translate the website"
   },
   "common": {
     "new": "NEW",

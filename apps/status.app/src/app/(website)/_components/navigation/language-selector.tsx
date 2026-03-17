@@ -1,6 +1,7 @@
 'use client'
 
 import * as Select from '@radix-ui/react-select'
+import { ExternalIcon } from '@status-im/icons/16'
 import { CheckIcon, ChevronDownIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
 import { useParams } from 'next/navigation'
@@ -8,6 +9,7 @@ import { useTranslations } from 'next-intl'
 
 import { usePathname } from '~/i18n/navigation'
 import { routing } from '~/i18n/routing'
+import { Link } from '~components/link'
 
 type Language = {
   value: (typeof routing.locales)[number]
@@ -172,6 +174,17 @@ const LanguageSelector = () => {
               </Select.Item>
             ))}
           </Select.Viewport>
+
+          <div className="mt-2 border-t border-neutral-10 pt-2">
+            <Link
+              href="https://app.lokalise.com/public/6480087268cc0f594f8985.65010073/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex w-full items-center justify-center gap-1 rounded-8 p-2 text-13 font-medium text-neutral-50 transition-colors hover:bg-neutral-10 hover:text-neutral-100"
+            >
+              {t('helpTranslate')} <ExternalIcon />
+            </Link>
+          </div>
         </Select.Content>
       </Select.Portal>
     </Select.Root>
