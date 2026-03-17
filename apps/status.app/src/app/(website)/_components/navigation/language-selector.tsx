@@ -29,11 +29,6 @@ const LanguageSelector = () => {
       label: t('englishLabel'),
       nativeLabel: t('englishNativeLabel'),
     },
-    {
-      value: 'ko',
-      label: t('koreanLabel'),
-      nativeLabel: t('koreanNativeLabel'),
-    },
   ]
 
   const currentLocale = routing.locales.includes(
