@@ -51,7 +51,7 @@ const LanguageSelector = () => {
     document.cookie = `NEXT_LOCALE=${newLocale};path=/;max-age=31536000;SameSite=Lax`
 
     const prefix = newLocale === routing.defaultLocale ? '' : `/${newLocale}`
-    window.location.href = `${prefix}${pathname}`
+    window.location.replace(`${prefix}${pathname}`)
   }
 
   return (
