@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AddTimeOffIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
+import { useTranslations } from 'next-intl'
 import { useFieldArray, useForm } from 'react-hook-form'
 
 import { AddNewButton } from '~admin/_components/add-new-button'
@@ -44,6 +45,7 @@ const formSchema = createReportSchema.pick({
 
 const ReportsForm = (props: Props) => {
   const { projects, defaultValues, onSubmit, loading } = props
+  const t = useTranslations('admin')
 
   const [timeOffVisible, setTimeOffVisible] = useState(
     () => defaultValues.timeOff > 0
@@ -96,18 +98,18 @@ const ReportsForm = (props: Props) => {
     <div>
       <div className="flex gap-2">
         <ReportsDrawer
-          title="Add project milestone"
+          title={t('addProjectMilestone')}
           projects={projects}
           selection={selection}
           onSelectionChange={ids =>
             replace(ids.map(id => ({ id, timeSpent: 0 })))
           }
         >
-          <AddNewButton>Add project milestones</AddNewButton>
+          <AddNewButton>{t('addProjectMilestones')}</AddNewButton>
         </ReportsDrawer>
 
         {!timeOffVisible && (
-          <Tooltip label="Add time off" side="bottom">
+          <Tooltip label={t('addTimeOff')} side="bottom">
             <button
               className={cx(
                 'flex size-10 items-center justify-center rounded-12 border border-dashed border-neutral-30 px-[10px] py-[9px] text-center text-15 font-medium text-neutral-100',

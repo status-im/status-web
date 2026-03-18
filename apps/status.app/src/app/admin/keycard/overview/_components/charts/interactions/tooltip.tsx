@@ -1,6 +1,7 @@
 import { animated } from '@react-spring/web'
 import { DoneIcon, FirmwareIcon, FolderIcon } from '@status-im/icons/16'
 import { defaultStyles, TooltipWithBounds } from '@visx/tooltip'
+import { useTranslations } from 'next-intl'
 
 import { formatNumber } from '~admin/_utils'
 
@@ -34,6 +35,7 @@ const tooltipStyles: React.CSSProperties = {
 
 const ChartTooltip = (props: Props) => {
   const { tooltipData, opacityAnimation, tooltipAnimation } = props
+  const t = useTranslations('admin')
 
   return (
     <AnimatedTooltip
@@ -46,7 +48,9 @@ const ChartTooltip = (props: Props) => {
           <p className="text-19 font-semibold">
             {tooltipData.totalInteractions}
           </p>
-          <p className="pt-1 text-15 font-semibold">interactions</p>
+          <p className="pt-1 text-15 font-semibold">
+            {t('interactionsLowercase')}
+          </p>
         </div>
       </div>
       <div className="pb-4">

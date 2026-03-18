@@ -3,13 +3,14 @@
 import * as Accordion from '@radix-ui/react-accordion'
 import { Text } from '@status-im/components'
 import { ChevronRightIcon } from '@status-im/icons/20'
-import { usePathname } from 'next/navigation'
 
+import { usePathname } from '~/i18n/navigation'
 import { Link } from '~components/link'
 
 import { appendDateQueryParams, decodeUriComponent } from './utils'
 
 type NavLinkProps = {
+  value: string
   label: string
   links: Array<{
     label: string
@@ -22,12 +23,12 @@ type NavLinkProps = {
 }
 
 const NavNestedLinks = (props: NavLinkProps) => {
-  const { label, links } = props
+  const { value, label, links } = props
 
   const pathname = usePathname()!
 
   return (
-    <Accordion.Item value={label}>
+    <Accordion.Item value={value}>
       <div>
         <Accordion.Trigger className="group flex w-full items-center gap-0.5">
           <ChevronRightIcon className="transition-transform group-aria-expanded:rotate-90" />

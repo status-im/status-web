@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react'
 
 import { DropdownButton } from '@status-im/components'
 import { usePathname, useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import { AddNewButton } from '~admin/_components/add-new-button'
 import { AdminDropdownSort } from '~admin/_components/dropdown-sort'
@@ -19,11 +20,6 @@ import { InsightsAppIcon } from '~admin/insights/_components/insights-app-icon'
 import { Table } from '~components/table'
 
 import type { ApiOutput } from '~server/api/types'
-
-const orderByData = {
-  name: 'Alphabetical',
-  createdAt: 'Created date',
-}
 
 type Props = {
   workstreams: ApiOutput['workstreams']['all']
@@ -41,6 +37,11 @@ const APP_COLORS = {
 
 export const WorkstreamsList = (props: Props) => {
   const { workstreams, projects } = props
+  const t = useTranslations('admin')
+  const orderByData = {
+    name: t('alphabetical'),
+    createdAt: t('createdDate'),
+  }
 
   const router = useRouter()
   const pathname = usePathname()
@@ -93,14 +94,14 @@ export const WorkstreamsList = (props: Props) => {
         <div className="flex flex-col gap-6">
           {user.canEditInsights && (
             <AddNewButton href="/admin/insights/workstreams/new">
-              New workstream
+              {t('newWorkstream')}
             </AddNewButton>
           )}
           <AdminLayoutList.Filters>
             <SearchInput
               value={searchFilter}
               onChange={setSearchFilter}
-              placeholder="Find workstreams"
+              placeholder={t('findWorkstreams')}
             />
             <InsightsCombobox
               items={projectsComboboxOptions}
@@ -108,7 +109,7 @@ export const WorkstreamsList = (props: Props) => {
               onSelectionChange={setProjectsFilter}
             >
               <DropdownButton variant="outline" size="32">
-                Projects
+                {t('projects')}
               </DropdownButton>
             </InsightsCombobox>
 
@@ -126,7 +127,7 @@ export const WorkstreamsList = (props: Props) => {
               return (
                 <FilterTag.Item
                   key={project}
-                  title="Projects"
+                  title={t('projects')}
                   label={projects.find(p => p.id === project)?.name || ''}
                   onRemove={() => {
                     setProjectsFilter(projectsFilter.filter(f => f !== project))
@@ -145,8 +146,8 @@ export const WorkstreamsList = (props: Props) => {
       >
         <Table.Root>
           <Table.Header>
-            <Table.HeaderCell>Workstream</Table.HeaderCell>
-            <Table.HeaderCell minWidth={160}>Projects</Table.HeaderCell>
+            <Table.HeaderCell>{t('workstream')}</Table.HeaderCell>
+            <Table.HeaderCell minWidth={160}>{t('projects')}</Table.HeaderCell>
             {/* <Table.HeaderCell>Date</Table.HeaderCell> */}
           </Table.Header>
           <Table.Body>

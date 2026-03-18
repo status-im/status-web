@@ -1,8 +1,11 @@
+'use client'
+
 import { forwardRef } from 'react'
 
 import * as Dialog from '@radix-ui/react-dialog'
 import { CloseIcon } from '@status-im/icons/20'
 import { cva, cx, type VariantProps } from 'class-variance-authority'
+import { useTranslations } from 'next-intl'
 
 const Root = Dialog.Root
 
@@ -54,6 +57,8 @@ const Content = forwardRef<
   React.ComponentRef<typeof Dialog.Content>,
   ContentProps
 >(({ side, className, children, ...props }, ref) => {
+  const t = useTranslations('common')
+
   return (
     <Portal>
       <Overlay />
@@ -64,7 +69,7 @@ const Content = forwardRef<
       >
         {children}
         <Dialog.Close className="absolute right-3 top-3 z-40 rounded-10 border border-neutral-30 p-1.5 transition-colors active:border-neutral-50 hover:border-neutral-40 disabled:pointer-events-none">
-          <span className="sr-only">Close</span>
+          <span className="sr-only">{t('close')}</span>
           <CloseIcon className="text-neutral-100" />
         </Dialog.Close>
       </Dialog.Content>

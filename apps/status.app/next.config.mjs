@@ -6,7 +6,11 @@ import './src/config/env.client.mjs'
 
 import { withContentlayer } from 'next-contentlayer2'
 // eslint-disable-next-line import/no-unresolved
+import createNextIntlPlugin from 'next-intl/plugin'
+// eslint-disable-next-line import/no-unresolved
 import withVercelToolbar from '@vercel/toolbar/plugins/next'
+
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
 /** @type {import('next').NextConfig} */
 let config = {
@@ -169,7 +173,7 @@ let config = {
   },
 }
 
-const plugins = [withVercelToolbar(), withContentlayer]
+const plugins = [withNextIntl, withVercelToolbar(), withContentlayer]
 
 export default () => {
   for (const plugin of plugins) {

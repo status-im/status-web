@@ -2,6 +2,7 @@
 
 import { Button } from '@status-im/components'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import { AlertDialog } from '~admin/_components/alert-dialog'
 import { DataItem } from '~admin/_components/data-item'
@@ -39,6 +40,7 @@ const DEFAULT_DATA = {
 const ViewDevice = (props: Props) => {
   const { uid, data = DEFAULT_DATA } = props
   const router = useRouter()
+  const t = useTranslations('admin')
 
   const user = useUserContext()
 
@@ -51,17 +53,17 @@ const ViewDevice = (props: Props) => {
   return (
     <div className="max-w-[462px]">
       <div className="flex w-full flex-col gap-3 py-4">
-        <DataItem label="Public key" mono>
+        <DataItem label={t('publicKey')} mono>
           {data.publicKey}
         </DataItem>
         <div className="flex gap-3">
-          <DataItem label="Imported" className="w-1/3">
+          <DataItem label={t('imported')} className="w-1/3">
             {shortDate(new Date(data.importedAt || ''))}
           </DataItem>
-          <DataItem label="First Verified" className="w-1/3">
+          <DataItem label={t('firstVerified')} className="w-1/3">
             {shortDate(new Date(data.firstVerifiedAt || ''))}
           </DataItem>
-          <DataItem label="Verifications" className="w-1/3">
+          <DataItem label={t('verifications')} className="w-1/3">
             {data.verifications}
           </DataItem>
         </div>
@@ -69,17 +71,17 @@ const ViewDevice = (props: Props) => {
       {/* Divider */}
       <hr className="my-2 h-0.5 border-neutral-10" />
       <div className="flex flex-col gap-3 py-4">
-        <p className="text-15 font-semibold">Manufacturing details</p>
+        <p className="text-15 font-semibold">{t('manufacturingDetails')}</p>
         <div className="flex gap-3">
           <DataItem
-            label="Firmware"
+            label={t('firmware')}
             href={`/admin/keycard/firmwares/${data.firmware}`}
           >
             {data.firmware}
           </DataItem>
 
           <DataItem
-            label="Database"
+            label={t('database')}
             href={`/admin/keycard/databases/${data.database}`}
           >
             {data.database}
@@ -89,7 +91,7 @@ const ViewDevice = (props: Props) => {
       {/* Divider */}
       <hr className="my-2 h-0.5 border-neutral-10" />
       <div className="flex flex-col gap-3 py-4">
-        <p className="text-15 font-semibold">History</p>
+        <p className="text-15 font-semibold">{t('history')}</p>
         <div className="flex flex-col gap-2">
           {data.history?.map((item, index) => (
             <div key={index} className="flex gap-4">
@@ -106,14 +108,12 @@ const ViewDevice = (props: Props) => {
           {/* Divider */}
           <hr className="my-2 h-0.5 border-neutral-10" />
           <div className="flex flex-col py-4">
-            <p className="text-15 font-semibold">Danger zone</p>
-            <p className="text-13 text-neutral-50">
-              Please be sure. This action cannot be reverted
-            </p>
+            <p className="text-15 font-semibold">{t('dangerZone')}</p>
+            <p className="text-13 text-neutral-50">{t('cannotBeReverted')}</p>
             <div className="pt-3">
-              <AlertDialog title="Remove device" onConfirm={handleRemove}>
+              <AlertDialog title={t('removeDevice')} onConfirm={handleRemove}>
                 <Button size="32" variant="danger">
-                  Remove device
+                  {t('removeDevice')}
                 </Button>
               </AlertDialog>
             </div>

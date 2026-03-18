@@ -2,6 +2,7 @@ import { customisation, neutral, white } from '@status-im/colors'
 import { Text } from '@status-im/components'
 import { DownloadIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
+import { getTranslations } from 'next-intl/server'
 
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
 import { Metadata } from '~app/_metadata'
@@ -15,15 +16,20 @@ import { CopyHexButton } from './_components/copy-hex-button'
 import { DownloadImageButton } from './_components/download-image-button'
 import { DownloadZipButton } from './_components/download-zip-button'
 
-import type { ImageType, ZipFileId } from '~components/assets'
+import type { ImageAlt, ImageType, ZipFileId } from '~components/assets'
+import type { Metadata as NextMetadata } from 'next'
 
-export const metadata = Metadata({
-  title: 'Brand',
-  description: 'Get Status brand assets.',
-  alternates: {
-    canonical: '/brand',
-  },
-})
+export async function generateMetadata(): Promise<NextMetadata> {
+  const t = await getTranslations('brand')
+
+  return Metadata({
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+    alternates: {
+      canonical: '/brand',
+    },
+  })
+}
 
 const transformColor = (name: string, rgba: string, invert = false) => {
   const [r, g, b] = rgba.match(/\d+/g)!.map(Number)
@@ -35,9 +41,12 @@ const transformColor = (name: string, rgba: string, invert = false) => {
   }
 }
 
-export default function BrandPage() {
+export default async function BrandPage() {
+  const t = await getTranslations('brand')
+  const tn = await getTranslations('nav')
+
   const organizationSchema = jsonLD.organization({
-    description: 'Get Status brand assets.',
+    description: t('metaDescription'),
   })
 
   return (
@@ -61,21 +70,18 @@ export default function BrandPage() {
           className="left-[49px] right-auto top-[1300px] xl:left-auto xl:right-[100px] xl:top-[560px]"
         />
         <HeroSection
-          tag="Brand"
-          title="Get Status brand assets"
+          tag={tn('brand')}
+          title={t('heroTitle')}
           className="relative z-20 pb-12 xl:pb-30"
           action={
             <div className="flex w-full flex-col gap-3 rounded-16 border border-dashed border-neutral-80/20 bg-white-20 p-2 pl-3 sm:max-w-[462px] sm:flex-row sm:items-center sm:gap-10">
-              <Text size={13}>
-                This ZIP file contains Status logos, partnership badges, and
-                product assets.
-              </Text>
+              <Text size={13}>{t('heroDescription')}</Text>
 
               <DownloadZipButton
                 iconBefore={<DownloadIcon />}
                 zipFileId="Brand/brand-assets.zip"
               >
-                Download
+                {t('download')}
               </DownloadZipButton>
             </div>
           }
@@ -83,9 +89,11 @@ export default function BrandPage() {
 
         <div className="relative border-b border-dashed border-neutral-80/20 pb-12 xl:pb-20">
           <LogoSection
-            title="Our logo"
-            description="With typo in multiple versions"
+            title={t('ourLogo')}
+            description={t('withTypo')}
             assetName="Brand/logo-assets.zip"
+            downloadLabel={t('download')}
+            downloadAriaLabel={t('downloadImage')}
             logos={[
               {
                 id: 'Brand/Logo Section/Logo/Logo_01:1640:480',
@@ -107,9 +115,11 @@ export default function BrandPage() {
             ]}
           />
           <LogoSection
-            title="Mark only"
-            description="Without typo in multiple versions"
+            title={t('markOnly')}
+            description={t('withoutTypo')}
             assetName="Brand/mark-assets.zip"
+            downloadLabel={t('download')}
+            downloadAriaLabel={t('downloadImage')}
             logos={[
               {
                 id: 'Brand/Logo Section/Mark/Mark_01:480:480',
@@ -125,9 +135,11 @@ export default function BrandPage() {
             ]}
           />
           <LogoSection
-            title="Other variants"
-            description="With and without typo"
+            title={t('otherVariants')}
+            description={t('withAndWithoutTypo')}
             assetName="Brand/variant-assets.zip"
+            downloadLabel={t('download')}
+            downloadAriaLabel={t('downloadImage')}
             logos={[
               {
                 id: 'Brand/Logo Section/Variants/Logo/Logo_01:1640:480',
@@ -163,28 +175,28 @@ export default function BrandPage() {
 
         <div className="relative border-b border-dashed border-neutral-80/20 bg-white-100 py-12 xl:py-20">
           <ColorSection
-            title="Main colors"
-            description="Our main colors palette"
+            title={t('mainColors')}
+            description={t('mainColorsPalette')}
             colors={[
-              transformColor('Dark', neutral['100']),
-              transformColor('White', white['100'], true),
-              transformColor('Blue', customisation.blue['50']),
+              transformColor(t('dark'), neutral['100']),
+              transformColor(t('white'), white['100'], true),
+              transformColor(t('blue'), customisation.blue['50']),
             ]}
           />
           <ColorSection
-            title="Custom colors"
-            description="Our accent colors"
+            title={t('customColors')}
+            description={t('accentColors')}
             colors={[
-              transformColor('Purple', customisation.purple['50']),
-              transformColor('Orange', customisation.orange['50']),
-              transformColor('Army', customisation.army['50']),
-              transformColor('Turquoise', customisation.turquoise['50']),
-              transformColor('Sky', customisation.sky['50']),
-              transformColor('Yellow', customisation.yellow['50']),
-              transformColor('Pink', customisation.pink['50']),
-              transformColor('Copper', customisation.copper['50']),
-              transformColor('Camel', customisation.camel['50']),
-              transformColor('Magenta', customisation.magenta['50']),
+              transformColor(t('purple'), customisation.purple['50']),
+              transformColor(t('orange'), customisation.orange['50']),
+              transformColor(t('army'), customisation.army['50']),
+              transformColor(t('turquoise'), customisation.turquoise['50']),
+              transformColor(t('sky'), customisation.sky['50']),
+              transformColor(t('yellow'), customisation.yellow['50']),
+              transformColor(t('pink'), customisation.pink['50']),
+              transformColor(t('copper'), customisation.copper['50']),
+              transformColor(t('camel'), customisation.camel['50']),
+              transformColor(t('magenta'), customisation.magenta['50']),
             ]}
           />
           <ParallaxCircle
@@ -199,21 +211,27 @@ export default function BrandPage() {
 
         <div className="relative border-b border-dashed border-neutral-80/20 bg-white-100 py-12 xl:py-20">
           <AssetSection
-            title="Product assets"
-            description="Screenshots of our product"
+            title={t('productAssets')}
+            description={t('productScreenshots')}
             assetName="Brand/product-assets.zip"
             assets={[
               {
                 id: 'Brand/Product Assets/Other/Asset_Other_04:750:1624',
-                alt: 'Mobile app screenshot showing the profile assets in the Status app',
+                alt: t(
+                  'profileAssetsAlt'
+                ) as ImageAlt['Brand/Product Assets/Other/Asset_Other_04:750:1624'],
               },
               {
                 id: 'Brand/Product Assets/Communities/Asset_Communities_02:750:1624',
-                alt: 'Mobile app screenshot showing the community feature assets in the Status app',
+                alt: t(
+                  'communityAssetsAlt'
+                ) as ImageAlt['Brand/Product Assets/Communities/Asset_Communities_02:750:1624'],
               },
               {
                 id: 'Brand/Product Assets/Wallet/Asset_Wallet_05:750:1624',
-                alt: 'Mobile app screenshot showing the wallet feature assets in the Status app',
+                alt: t(
+                  'walletAssetsAlt'
+                ) as ImageAlt['Brand/Product Assets/Wallet/Asset_Wallet_05:750:1624'],
               },
             ]}
           />
@@ -223,19 +241,16 @@ export default function BrandPage() {
         <div className="container py-24 xl:py-40">
           <div className="mx-auto flex max-w-[606px] flex-col items-center">
             <h3 className="mb-4 text-center text-40 font-bold xl:text-64">
-              Download assets
+              {t('downloadAssets')}
             </h3>
             <div className="mb-8 max-w-[484px] text-center">
-              <Text size={27}>
-                This ZIP file contains Status logo, variants, and product
-                assets.
-              </Text>
+              <Text size={27}>{t('downloadAssetsDescription')}</Text>
             </div>
             <DownloadZipButton
               iconBefore={<DownloadIcon />}
               zipFileId="Brand/brand-assets.zip"
             >
-              Download
+              {t('download')}
             </DownloadZipButton>
           </div>
         </div>
@@ -303,9 +318,11 @@ type LogoImage = ImageType & {
 const LogoSection = (
   props: Omit<BrandSectionProps, 'children'> & {
     logos: LogoImage[]
+    downloadLabel: string
+    downloadAriaLabel: string
   }
 ) => {
-  const { logos, ...sectionProps } = props
+  const { logos, downloadLabel, downloadAriaLabel, ...sectionProps } = props
 
   return (
     <BrandSection {...sectionProps}>
@@ -334,7 +351,7 @@ const LogoSection = (
                 iconBefore={<DownloadIcon />}
                 imageId={imageProps.id}
               >
-                Download
+                {downloadLabel}
               </DownloadImageButton>
             </div>
             <div
@@ -345,7 +362,7 @@ const LogoSection = (
                 variant="outline"
                 icon={<DownloadIcon />}
                 imageId={imageProps.id}
-                aria-label="Download image"
+                aria-label={downloadAriaLabel}
               />
             </div>
           </div>

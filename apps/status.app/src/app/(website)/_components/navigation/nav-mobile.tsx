@@ -5,15 +5,16 @@ import { useEffect, useState } from 'react'
 import { IconButton } from '@status-im/components'
 import { CloseIcon, MenuIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
-import { usePathname } from 'next/navigation'
 import { RemoveScroll } from 'react-remove-scroll'
 
+import { usePathname } from '~/i18n/navigation'
 import { Link } from '~components/link'
 import { Logo } from '~components/logo'
 
 import { DownloadDesktopButton } from '../download-desktop-button'
 import { DownloadMobileButton } from '../download-mobile-button'
 import { AccordionMenu } from './accordion-menu'
+import { LanguageSelector } from './language-selector'
 
 const NavMobile = () => {
   const [open, setOpen] = useState(false)
@@ -37,11 +38,14 @@ const NavMobile = () => {
           </Link>
         </div>
 
-        <IconButton
-          icon={open ? <CloseIcon /> : <MenuIcon />}
-          variant="outline"
-          onPress={() => setOpen(prevOpen => !prevOpen)}
-        />
+        <div className="flex items-center gap-2">
+          <LanguageSelector />
+          <IconButton
+            icon={open ? <CloseIcon /> : <MenuIcon />}
+            variant="outline"
+            onPress={() => setOpen(prevOpen => !prevOpen)}
+          />
+        </div>
       </div>
       <div
         style={{

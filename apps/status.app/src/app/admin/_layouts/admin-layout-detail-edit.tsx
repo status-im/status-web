@@ -1,4 +1,7 @@
+'use client'
+
 import { Button } from '@status-im/components'
+import { useTranslations } from 'next-intl'
 
 import { Breadcrumbs } from '~components/breadcrumbs'
 
@@ -41,16 +44,15 @@ type DangerZoneProps = {
 
 export const DangerZone = (props: DangerZoneProps) => {
   const { actionLabel, onConfirm } = props
+  const t = useTranslations('admin')
 
   return (
     <div className="pb-16">
       <Separator />
 
       <div className="flex flex-col py-6">
-        <p className="text-15 font-semibold">Danger zone</p>
-        <p className="text-13 text-neutral-50">
-          Please be sure. This action cannot be reverted
-        </p>
+        <p className="text-15 font-semibold">{t('dangerZone')}</p>
+        <p className="text-13 text-neutral-50">{t('cannotBeReverted')}</p>
         <div className="pt-3">
           <AlertDialog title={actionLabel} onConfirm={onConfirm}>
             <Button size="32" variant="danger">
