@@ -1,6 +1,6 @@
 {
   "name": "status.app",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "repository": {
     "type": "git",
@@ -55,6 +55,7 @@
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-navigation-menu": "1.2.0",
     "@radix-ui/react-popover": "^1.1.1",
+    "@radix-ui/react-select": "^2.2.6",
     "@radix-ui/react-tooltip": "^1.1.1",
     "@react-spring/core": "^9.7.5",
     "@react-spring/shared": "^9.7.5",
@@ -111,7 +112,8 @@
     "minisearch": "^6.1.0",
     "next": "15.2.8",
     "next-contentlayer2": "^0.5.8",
-    "next-mdx-remote": "^5.0.0",
+    "next-intl": "^4.6.0",
+    "next-mdx-remote": "^6.0.0",
     "oslo": "1.0.1",
     "parallax-controller": "^1.7.1",
     "prettier-plugin-tailwindcss": "^0.6.6",

@@ -4,6 +4,7 @@ import { useMemo, useState, useTransition } from 'react'
 
 import { LoadingIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
+import { useTranslations } from 'next-intl'
 
 import * as Drawer from '~admin/_components/drawer'
 import { MultiselectFilter } from '~admin/_components/multiselect-filter'
@@ -13,9 +14,9 @@ import { matchesSearchFilter } from '~admin/_utils'
 import { InsightsAppIcon } from '~admin/insights/_components/insights-app-icon'
 import { InsightsStatusIcon } from '~admin/insights/_components/insights-status-icon'
 import {
-  projectAppOptions,
-  projectStatusOptions,
-} from '~admin/insights/projects/_components/projects-list'
+  getProjectAppOptions,
+  getProjectStatusOptions,
+} from '~admin/insights/_utils/i18n'
 
 import type { ApiOutput } from '~server/api/types'
 
@@ -59,6 +60,7 @@ const DrawerContent = (
   props: Omit<Props, 'children'> & { loading: boolean }
 ) => {
   const { projects, selection, onSelectionChange, loading, onSubmit } = props
+  const t = useTranslations('admin')
 
   const [searchFilter, setSearchFilter] = useState<string>('')
   const [appFilter, setAppFilter] = useState<string[]>([])
@@ -84,24 +86,27 @@ const DrawerContent = (
     })
   }, [searchFilter, appFilter, statusFilter, projects])
 
+  const projectAppOptions = getProjectAppOptions(t)
+  const projectStatusOptions = getProjectStatusOptions(t)
+
   return (
     <>
       <Drawer.Header>
-        <Drawer.Title>Add milestones</Drawer.Title>
+        <Drawer.Title>{t('addMilestones')}</Drawer.Title>
         <Drawer.Filters>
           <SearchInput
             value={searchFilter}
             onChange={setSearchFilter}
-            placeholder="Find milestones"
+            placeholder={t('findMilestones')}
           />
           <MultiselectFilter
-            label="App"
+            label={t('app')}
             options={projectAppOptions}
             selection={appFilter}
             onSelectionChange={setAppFilter}
           />
           <MultiselectFilter
-            label="Status"
+            label={t('status')}
             options={projectStatusOptions}
             selection={statusFilter}
             onSelectionChange={setStatusFilter}
@@ -175,7 +180,7 @@ const DrawerContent = (
           disabled={loading}
           onClick={onSubmit}
         >
-          {loading ? <LoadingIcon /> : 'Save'}
+          {loading ? <LoadingIcon /> : t('save')}
         </button>
       </Drawer.Footer>
     </>

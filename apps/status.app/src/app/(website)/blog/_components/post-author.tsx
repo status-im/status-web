@@ -1,7 +1,8 @@
 'use client'
 
 import { Avatar, Text } from '@status-im/components'
-import { useRouter } from 'next/navigation'
+
+import { useRouter } from '~/i18n/navigation'
 
 import type { PostOrPage } from '@tryghost/content-api'
 

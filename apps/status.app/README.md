@@ -9,7 +9,9 @@ This is the repository for the [https://status.app](https://status.app) – a [N
 
 ## Getting Started
 
-Clone the project:
+First, follow the [root README](../../README.md#getting-started) to clone the repo, initialize submodules, and install dependencies.
+
+Then, pull environment variables:
 
 ```bash
   git clone https://github.com/status-im/status-website.git
@@ -43,7 +45,7 @@ Pull environment variables:
 Start the development server:
 
 ```bash
-  pnpm dev
+pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -55,13 +57,13 @@ You can start editing the pages or content. Pages auto-update as you edit the fi
 Explore environment's database:
 
 ```bash
-  pnpm db:explore
+pnpm db:explore
 ```
 
 Directly modify the database and its schema:
 
 ```bash
-  pnpm db:push
+pnpm db:push
 ```
 
 On conflict, drop your migrations and generate new ones:

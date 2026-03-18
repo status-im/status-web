@@ -4,6 +4,7 @@ import * as Popover from '@radix-ui/react-popover'
 import { LogOutIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 
 import { signOut } from '../_actions'
 
@@ -16,6 +17,7 @@ type Props = {
 const UserPopover = (props: Props) => {
   const { user } = props
   const { email } = user
+  const t = useTranslations('admin')
   // todo:
   const image = null
   const [isOpen, setIsOpen] = useState(false)
@@ -80,7 +82,7 @@ const UserPopover = (props: Props) => {
                 className="flex items-center justify-center gap-2 text-danger-50"
               >
                 <LogOutIcon />
-                <p className="text-15 font-500">Log out</p>
+                <p className="text-15 font-500">{t('logOut')}</p>
               </button>
             </form>
           </div>

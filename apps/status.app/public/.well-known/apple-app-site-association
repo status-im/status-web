@@ -10,7 +10,9 @@
 					"8B5X2M6H2Y.im.status.ethereum",
 					"8B5X2M6H2Y.im.Status.NimStatusClient",
 					"8B5X2M6H2Y.im.status.ethereum.pr",
-					"8B5X2M6H2Y.im.status.ethereum.debug"
+					"8B5X2M6H2Y.im.status.ethereum.debug",
+					"8B5X2M6H2Y.app.status.mobile",
+					"8B5X2M6H2Y.app.status.mobile.pr"
 				],
 				"components": [
 					{

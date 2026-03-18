@@ -3,13 +3,14 @@ import { Navbar } from '@status-im/wallet/components'
 import {
   createRootRouteWithContext,
   HeadContent,
+  isRedirect,
   Outlet,
   redirect,
 } from '@tanstack/react-router'
 
-import { ConnectedDApps } from '../components/connected-dapps'
 import { Link } from '../components/link'
 import { apiClient } from '../providers/api-client'
+import { PasswordProvider } from '../providers/password-context'
 import { PendingTransactionsProvider } from '../providers/pending-transactions-context'
 import { SignerProvider } from '../providers/signer-context'
 import { WagmiConfigProvider } from '../providers/wagmi-provider'
@@ -28,10 +29,12 @@ import type { QueryClient } from '@tanstack/react-query'
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient
 }>()({
-  beforeLoad: async ({ location }) => {
+  beforeLoad: async ({ location, context }) => {
     try {
       const wallets = await apiClient.wallet.all.query()
       const hasWallets = Array.isArray(wallets) && wallets.length > 0
+
+      context.queryClient.setQueryData(['wallets'], wallets)
 
       if (location.pathname === '/') {
         if (hasWallets) {
@@ -49,7 +52,11 @@ export const Route = createRootRouteWithContext<{
         throw redirect({ to: '/portfolio/assets' })
       }
     } catch (error) {
-      if (error && typeof error === 'object' && 'isRedirect' in error) {
+      if (isRedirect(error)) {
+        throw error
+      }
+      // Router may represent redirect as Response (307) in some environments
+      if (error instanceof Response && [302, 303, 307].includes(error.status)) {
         throw error
       }
       console.error('Error loading wallets in beforeLoad:', error)
@@ -126,29 +133,27 @@ function RootComponent() {
 
       <div id="app" className="isolate" data-customisation="blue">
         <WalletProvider>
-          <SignerProvider>
-            <WagmiConfigProvider>
-              <PendingTransactionsProvider>
-                <div className="flex min-h-[56px] items-center px-2">
-                  <Navbar
-                    hasFeedback
-                    linkComponent={Link}
-                    rightSlot={<ConnectedDApps />}
-                  />
-                </div>
-                <div className="px-1">
-                  <div className="flex-1 flex-col 2md:flex xl:pb-1">
-                    <div className="flex h-[calc(100vh-60px)] flex-col overflow-y-hidden rounded-[24px] bg-white-100">
-                      {/* <OnboardingPage /> */}
-                      <Outlet />
-                    </div>
+          <PasswordProvider>
+            <SignerProvider>
+              <WagmiConfigProvider>
+                <PendingTransactionsProvider>
+                  <div className="flex min-h-[56px] items-center px-2">
+                    <Navbar hasFeedback linkComponent={Link} />
                   </div>
-                  {/* <NotAllowed /> */}
-                  <ToastContainer />
-                </div>
-              </PendingTransactionsProvider>
-            </WagmiConfigProvider>
-          </SignerProvider>
+                  <div className="px-1">
+                    <div className="flex-1 flex-col 2md:flex xl:pb-1">
+                      <div className="flex h-[calc(100vh-60px)] flex-col overflow-y-hidden rounded-[24px] bg-white-100">
+                        {/* <OnboardingPage /> */}
+                        <Outlet />
+                      </div>
+                    </div>
+                    {/* <NotAllowed /> */}
+                    <ToastContainer />
+                  </div>
+                </PendingTransactionsProvider>
+              </WagmiConfigProvider>
+            </SignerProvider>
+          </PasswordProvider>
         </WalletProvider>
       </div>
     </>

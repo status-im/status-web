@@ -1,3 +1,5 @@
+import { getTranslations } from 'next-intl/server'
+
 import { AdminLayoutDetailEdit } from '~admin/_layouts/admin-layout-detail-edit'
 
 import { createWorkstream } from '../_actions'
@@ -9,20 +11,21 @@ export const metadata: Metadata = {
   title: 'New workstream',
 }
 
-const breadcrumbs = [
-  {
-    label: 'Workstreams',
-    href: '/admin/insights/workstreams',
-  },
-  {
-    label: 'New workstream',
-    href: `/admin/insights/workstream/new`,
-  },
-]
-
 export default async function NewWorkstreamPage() {
+  const t = await getTranslations('admin')
+  const breadcrumbs = [
+    {
+      label: t('workstreams'),
+      href: '/admin/insights/workstreams',
+    },
+    {
+      label: t('newWorkstream'),
+      href: `/admin/insights/workstream/new`,
+    },
+  ]
+
   return (
-    <AdminLayoutDetailEdit title="New workstream" breadcrumbs={breadcrumbs}>
+    <AdminLayoutDetailEdit title={t('newWorkstream')} breadcrumbs={breadcrumbs}>
       <WorkstreamForm
         variant="create"
         defaultValues={{

@@ -1,8 +1,8 @@
 'use client'
 
 import { Text } from '@status-im/components'
-import { usePathname } from 'next/navigation'
 
+import { usePathname } from '~/i18n/navigation'
 import { Link } from '~components/link'
 
 import type { LinkProps } from 'next/link'

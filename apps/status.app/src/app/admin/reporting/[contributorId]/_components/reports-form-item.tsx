@@ -2,6 +2,7 @@ import { IconButton } from '@status-im/components'
 import { DeleteIcon } from '@status-im/icons/16'
 import { TimeOffIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
+import { useTranslations } from 'next-intl'
 import { useController } from 'react-hook-form'
 
 import { InsightsAppIcon } from '~admin/insights/_components/insights-app-icon'
@@ -25,6 +26,7 @@ type Props = {
 
 const ReportsFormItem = (props: Props) => {
   const { id, name, onRemove, type } = props
+  const t = useTranslations('admin')
 
   const { field, fieldState } = useController({ name })
 
@@ -41,8 +43,8 @@ const ReportsFormItem = (props: Props) => {
       case 'timeOff':
         return (
           <ReportsFormItemLabel
-            label="Time Off"
-            description="Member has been OOO"
+            label={t('timeOff')}
+            description={t('memberHasBeenOOO')}
             icon={<TimeOffIcon className="text-neutral-50" />}
           />
         )

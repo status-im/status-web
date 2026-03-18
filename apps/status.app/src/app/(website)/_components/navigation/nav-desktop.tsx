@@ -4,6 +4,7 @@ import * as NavigationMenu from '@radix-ui/react-navigation-menu'
 import { Text } from '@status-im/components'
 import { ExternalIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
+import { useTranslations } from 'next-intl'
 
 import { ROUTES } from '~/config/routes'
 import { Link } from '~components/link'
@@ -11,9 +12,11 @@ import { Logo } from '~components/logo'
 
 import { DownloadDesktopButton } from '../download-desktop-button'
 import { DownloadMobileButton } from '../download-mobile-button'
+import { LanguageSelector } from './language-selector'
 import { useDesktopMenu } from './use-desktop-menu'
 
 const NavDesktop = () => {
+  const t = useTranslations('nav')
   const {
     value,
     handleContentMouseEnter,
@@ -40,17 +43,17 @@ const NavDesktop = () => {
 
           <div className="flex-1">
             <NavigationMenu.List className="flex items-center">
-              {Object.entries(ROUTES).map(([name, routes]) => (
-                <NavigationMenu.Item key={name} value={name}>
+              {Object.entries(ROUTES).map(([nameKey, routes]) => (
+                <NavigationMenu.Item key={nameKey} value={nameKey}>
                   <NavigationMenu.Trigger
-                    aria-expanded={value === name}
+                    aria-expanded={value === nameKey}
                     className="px-[10px] py-4 transition-opacity aria-expanded:opacity-[50%]"
-                    onMouseEnter={handleTriggerMouseEnter}
+                    onMouseEnter={() => handleTriggerMouseEnter(nameKey)}
                     onMouseLeave={handleTriggerMouseLeave}
-                    onKeyDown={handleTriggerKeyDown}
+                    onKeyDown={event => handleTriggerKeyDown(event, nameKey)}
                   >
                     <Text size={15} weight="medium" color="$white-100">
-                      {name}
+                      {t(nameKey)}
                     </Text>
                   </NavigationMenu.Trigger>
 
@@ -62,14 +65,14 @@ const NavDesktop = () => {
                       const external = route.href.startsWith('http')
 
                       return (
-                        <NavigationMenu.Link key={route.name} asChild>
+                        <NavigationMenu.Link key={route.nameKey} asChild>
                           <Link
                             onClick={handleContentLeave}
                             href={route.href}
                             className="flex items-center gap-1 pt-3 text-white-100 transition-opacity hover:opacity-[50%]"
                           >
                             <Text size={27} weight="semibold">
-                              {route.name}
+                              {t(route.nameKey)}
                             </Text>
                             {external && <ExternalIcon />}
                           </Link>
@@ -85,20 +88,25 @@ const NavDesktop = () => {
           <div
             data-theme="dark"
             className={cx(
-              'hidden justify-end gap-2',
+              'hidden items-center justify-end gap-2',
               'macos:flex windows:flex linux:flex unknown:flex'
             )}
           >
             <DownloadDesktopButton size="32" variant="darkGrey" show="all" />
             <DownloadMobileButton size="32" variant="outline" />
+            <LanguageSelector />
           </div>
 
           <div
             data-theme="dark"
-            className={cx('hidden justify-end gap-2', 'ios:flex android:flex')}
+            className={cx(
+              'hidden items-center justify-end gap-2',
+              'ios:flex android:flex'
+            )}
           >
             <DownloadDesktopButton size="32" variant="darkGrey" show="all" />
             <DownloadMobileButton size="32" variant="outline" />
+            <LanguageSelector />
           </div>
         </div>
         <NavigationMenu.Viewport

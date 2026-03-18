@@ -1,4 +1,6 @@
-import { pluralize } from '~admin/_utils'
+import { useTranslations } from 'next-intl'
+
+import { getAdminSegmentCountKey } from '~admin/insights/_utils/i18n'
 
 import { EmptySearchResults } from '../_components/empty-search-results'
 import { ListHeader } from '../_components/list-header'
@@ -45,10 +47,12 @@ type TableResultsProps = {
 
 const TableResults = (props: TableResultsProps) => {
   const { itemsCount, segment, onClear, children } = props
+  const t = useTranslations('admin')
+
   return itemsCount > 0 ? (
     <>
       <div className="py-3 text-13 font-medium text-neutral-100">
-        {pluralize(itemsCount, segment.slice(0, -1))}
+        {t(getAdminSegmentCountKey(segment), { count: itemsCount })}
       </div>
       {children}
     </>

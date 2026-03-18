@@ -5,11 +5,13 @@ import { useState } from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
 import { Text } from '@status-im/components'
 import { ChevronRightIcon, ExternalIcon } from '@status-im/icons/20'
+import { useTranslations } from 'next-intl'
 
 import { ROUTES } from '~/config/routes'
 import { Link } from '~components/link'
 
 const AccordionMenu = () => {
+  const t = useTranslations('nav')
   const [openLink, setOpenLink] = useState('')
 
   const handleToggle = (value: string) => {
@@ -18,19 +20,19 @@ const AccordionMenu = () => {
 
   return (
     <div className="grid gap-3">
-      {Object.entries(ROUTES).map(([name, routes]) => (
+      {Object.entries(ROUTES).map(([nameKey, routes]) => (
         <Accordion.Root
-          key={name}
+          key={nameKey}
           type="single"
           collapsible
           value={openLink}
           onValueChange={handleToggle}
         >
-          <Accordion.Item key={name} value={name}>
+          <Accordion.Item key={nameKey} value={nameKey}>
             <Accordion.Trigger className="group flex w-full items-center gap-1 text-white-100">
               <ChevronRightIcon className="transition-transform group-aria-expanded:rotate-90" />
               <Text size={19} weight="medium">
-                {name}
+                {t(nameKey)}
               </Text>
             </Accordion.Trigger>
 
@@ -40,7 +42,7 @@ const AccordionMenu = () => {
                   const external = route.href.startsWith('http')
                   return (
                     <div
-                      key={route.name + index}
+                      key={route.nameKey + index}
                       className="transition-opacity hover:opacity-[50%]"
                     >
                       <Link
@@ -48,7 +50,7 @@ const AccordionMenu = () => {
                         className="flex items-center gap-1 text-white-100"
                       >
                         <Text size={15} weight="medium">
-                          {route.name}
+                          {t(route.nameKey)}
                         </Text>
                         {external && <ExternalIcon />}
                       </Link>

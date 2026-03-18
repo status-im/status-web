@@ -36,78 +36,78 @@ export const LEARN_MORE_MOBILE_APP_URL =
   'https://github.com/status-im/status-app/issues/18082'
 
 export const ROUTES = {
-  Apps: [
-    { name: 'Browser', href: '/#browser' },
-    { name: 'Desktop', href: '/apps#desktop' },
+  apps: [
+    { nameKey: 'browser', href: '/#browser' },
+    { nameKey: 'desktop', href: '/apps#desktop' },
     {
-      name: 'Mobile',
+      nameKey: 'mobile',
       href: '/apps#mobile',
     },
     {
-      name: 'Legacy mobile',
+      nameKey: 'legacyMobile',
       href: 'https://status.app/blog/migrate-from-status-legacy-to-unified-status-mobile-app',
     },
   ],
-  Ecosystem: [
-    { name: 'Keycard', href: '/keycard' },
-    { name: 'Status Network', href: 'https://status.network' },
+  ecosystem: [
+    { nameKey: 'keycard', href: '/keycard' },
+    { nameKey: 'statusNetwork', href: 'https://status.network' },
   ],
-  Organization: [
-    { name: 'Manifesto', href: '/manifesto' },
-    { name: 'Team', href: '/team' },
-    { name: 'Brand', href: '/brand' },
-    { name: 'Jobs', href: '/jobs' },
+  organization: [
+    { nameKey: 'manifesto', href: '/manifesto' },
+    { nameKey: 'team', href: '/team' },
+    { nameKey: 'brand', href: '/brand' },
+    { nameKey: 'jobs', href: '/jobs' },
   ],
-  Help: [
-    { name: 'Overview', href: '/help' },
-    { name: 'Getting started', href: '/help/getting-started' },
-    { name: 'Wallet', href: '/help/wallet' },
+  help: [
+    { nameKey: 'overview', href: '/help' },
+    { nameKey: 'gettingStarted', href: '/help/getting-started' },
+    { nameKey: 'wallet', href: '/help/wallet' },
     {
-      name: 'Profile',
+      nameKey: 'profile',
       href: '/help/profile',
     },
-    { name: 'Messaging', href: '/help/messaging' },
-    { name: 'Communities', href: '/help/communities' },
-    { name: 'Keycard', href: '/help/keycard' },
+    { nameKey: 'messaging', href: '/help/messaging' },
+    { nameKey: 'communities', href: '/help/communities' },
+    { nameKey: 'keycard', href: '/help/keycard' },
   ],
-  Collaborate: [
-    { name: 'Discuss', href: DISCUSS_URL },
+  collaborate: [
+    { nameKey: 'discuss', href: DISCUSS_URL },
     {
-      name: 'Request a feature',
+      nameKey: 'requestFeature',
       href: 'https://discuss.status.app/c/features/51',
     },
-    { name: 'Blog', href: '/blog' },
-    { name: 'Translations', href: '/translations' },
+    { nameKey: 'blog', href: '/blog' },
+    { nameKey: 'translations', href: '/translations' },
   ],
-  Developers: [
-    { name: 'Repos', href: 'https://github.com/status-im' },
-    { name: 'Insights', href: '/insights/epics' },
-    { name: 'Specs', href: '/specs' },
+  developers: [
+    { nameKey: 'repos', href: 'https://github.com/status-im' },
+    { nameKey: 'insights', href: '/insights/epics' },
+    { nameKey: 'specs', href: '/specs' },
   ],
-  SNT: [
-    { name: 'Token', href: '/snt' },
-    { name: 'Release schedule', href: '/snt/release-schedule' },
+  snt: [
+    { nameKey: 'token', href: '/snt' },
+    { nameKey: 'releaseSchedule', href: '/snt/release-schedule' },
     // todo: replace with BASE_URL after merging https://github.com/status-im/status-website/pull/1108
-    { name: 'Whitepaper', href: 'https://status.app/whitepaper.pdf' },
-    { name: 'Governance', href: 'https://governance.status.app' },
-    { name: 'Curate', href: 'https://curate.status.app' },
-    { name: 'Exchanges', href: '/snt/exchanges' },
+    { nameKey: 'whitepaper', href: 'https://status.app/whitepaper.pdf' },
+    { nameKey: 'governance', href: 'https://governance.status.app' },
+    { nameKey: 'curate', href: 'https://curate.status.app' },
+    { nameKey: 'exchanges', href: '/snt/exchanges' },
   ],
 } as const
 
 export const LEGAL = {
   termsOfUse: {
-    name: 'Terms of Use',
+    nameKey: 'termsOfUse',
     href: '/legal/terms-of-use',
   },
   privacyPolicy: {
-    name: 'Privacy Policy',
+    nameKey: 'privacyPolicy',
     href: '/legal/privacy-policy',
   },
 }
 
 export const SECURITY = {
-  name: 'Security',
+  nameKey: 'security',
   href: '/security',
 }
 
@@ -118,17 +118,17 @@ export const SOCIALS = {
   //   src: statusIcon,
   // },
   twitter: {
-    name: 'Twitter',
+    nameKey: 'twitter',
     href: 'https://twitter.com/ethstatus',
     src: twitterIcon,
   },
   youtube: {
-    name: 'YouTube',
+    nameKey: 'youTube',
     href: 'https://www.youtube.com/@Statusim',
     src: youTubeIcon,
   },
   github: {
-    name: 'GitHub',
+    nameKey: 'gitHub',
     href: 'https://github.com/status-im',
     src: gitHubIcon,
   },

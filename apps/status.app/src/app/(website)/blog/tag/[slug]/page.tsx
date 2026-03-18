@@ -2,6 +2,7 @@ import { cloneElement } from 'react'
 
 import { Text } from '@status-im/components'
 import { notFound } from 'next/navigation'
+import { getTranslations } from 'next-intl/server'
 
 import { Metadata } from '~app/_metadata'
 import { Body } from '~components/body'
@@ -26,11 +27,12 @@ type Props = {
 }
 
 export async function generateMetadata({ params }: Props) {
+  const t = await getTranslations('blog')
   const slug = (await params).slug
 
   return Metadata({
-    title: `Tag: ${slug}`,
-    description: `Blog posts tagged with ${slug}`,
+    title: t('tagTitle', { slug }),
+    description: t('tagDescription', { slug }),
     alternates: {
       canonical: `/blog/tag/${slug}`,
     },
@@ -39,6 +41,7 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function BlogTagPage(props: Props) {
   const { params } = props
+  const t = await getTranslations('blog')
 
   const response = await getPostsByTagSlug((await params).slug)
 
@@ -56,7 +59,7 @@ export default async function BlogTagPage(props: Props) {
       <Breadcrumbs
         items={[
           {
-            label: 'Blog',
+            label: t('breadcrumb'),
             href: '/blog',
           },
           {

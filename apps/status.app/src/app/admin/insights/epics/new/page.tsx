@@ -1,3 +1,5 @@
+import { getTranslations } from 'next-intl/server'
+
 import { AdminLayoutDetailEdit } from '~admin/_layouts/admin-layout-detail-edit'
 
 import { createEpic } from '../_actions'
@@ -9,20 +11,21 @@ export const metadata: Metadata = {
   title: 'New epic',
 }
 
-const breadcrumbs = [
-  {
-    label: 'Epics',
-    href: '/admin/insights/epics',
-  },
-  {
-    label: 'New epic',
-    href: `/admin/insights/epics/new`,
-  },
-]
-
 export default async function NewEpicPage() {
+  const t = await getTranslations('admin')
+  const breadcrumbs = [
+    {
+      label: t('epics'),
+      href: '/admin/insights/epics',
+    },
+    {
+      label: t('newEpic'),
+      href: `/admin/insights/epics/new`,
+    },
+  ]
+
   return (
-    <AdminLayoutDetailEdit title="New epic" breadcrumbs={breadcrumbs}>
+    <AdminLayoutDetailEdit title={t('newEpic')} breadcrumbs={breadcrumbs}>
       <EpicForm
         variant="create"
         defaultValues={{

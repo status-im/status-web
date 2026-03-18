@@ -7,7 +7,9 @@ import { Checkbox, Input, Tag } from '@status-im/components'
 import { SearchIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
 import { matchSorter } from 'match-sorter'
+import { useTranslations } from 'next-intl'
 
+import { getAdminStatusLabel } from '~admin/insights/_utils/i18n'
 import { getColorWithOpacity } from '~app/_utils/get-color-with-opacity'
 
 import type { ApiOutput } from '~server/api/types'
@@ -29,15 +31,9 @@ type Props = {
   onSelectionChange: (selection: number[]) => void
 }
 
-const TAGS_FILTERS = {
-  'not-started': 'Not started',
-  'in-progress': 'In progress',
-  paused: 'Paused',
-  done: 'Done',
-} as const
-
 const InsightsCombobox = (props: Props) => {
   const { children, items, selection, onSelectionChange, placeholder } = props
+  const t = useTranslations('admin')
 
   const [open, setOpen] = useState(false)
 
@@ -72,7 +68,7 @@ const InsightsCombobox = (props: Props) => {
         >
           <div className="sticky top-0 bg-blur-white/70 p-2 pb-1 backdrop-blur-[20px]">
             <Input
-              placeholder={placeholder || 'Search'}
+              placeholder={placeholder || t('search')}
               icon={<SearchIcon />}
               size="32"
               value={searchFilter}
@@ -81,7 +77,7 @@ const InsightsCombobox = (props: Props) => {
           </div>
           {filteredItems.length === 0 ? (
             <div className="px-3 pb-12 pt-2 text-15 font-medium text-neutral-50">
-              No results found.
+              {t('noResultsFound')}
             </div>
           ) : (
             <div className="flex flex-col overflow-y-auto p-1 pb-12">
@@ -140,7 +136,7 @@ const InsightsCombobox = (props: Props) => {
                 <Tag
                   key={status}
                   size="24"
-                  label={TAGS_FILTERS[status]}
+                  label={getAdminStatusLabel(t, status)}
                   onClick={() => setStatusFilter(status)}
                   selected={statusFilter === status}
                 />

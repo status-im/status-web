@@ -11,6 +11,7 @@ import { match } from 'ts-pattern'
 import { formatUnits, parseUnits } from 'viem'
 import { useAccount, useBalance, useConfig } from 'wagmi'
 import { readContract } from 'wagmi/actions'
+import { statusSepolia } from 'wagmi/chains'
 import { z } from 'zod'
 
 import { SNTIcon } from '~components/icons'
@@ -200,6 +201,7 @@ const StakeForm = () => {
     try {
       // Check current allowance
       const currentAllowance = (await readContract(config, {
+        chainId: statusSepolia.id,
         address: STT_TOKEN.address,
         abi: STT_TOKEN.abi,
         functionName: 'allowance',

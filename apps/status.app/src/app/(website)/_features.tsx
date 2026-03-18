@@ -20,43 +20,50 @@ export type FeatureType =
 type Feature = {
   theme: CustomisationColorType
   icon: IconElement
-  name: string
+  nameKey:
+    | 'communities'
+    | 'createCommunity'
+    | 'messenger'
+    | 'wallet'
+    | 'browser'
+    | 'keycard'
+    | 'extension'
 }
 
 export const features: Record<FeatureType, Feature> = {
   communities: {
     icon: <CommunitiesIcon className="text-customisation-turquoise-50" />,
     theme: 'turquoise',
-    name: 'Communities',
+    nameKey: 'communities',
   },
   'create-community': {
     icon: <CommunitiesIcon className="text-customisation-turquoise-60" />,
     theme: 'turquoise',
-    name: 'Create community',
+    nameKey: 'createCommunity',
   },
   messenger: {
     icon: <MessengerIcon className="text-customisation-purple-50" />,
     theme: 'purple',
-    name: 'Messenger',
+    nameKey: 'messenger',
   },
   wallet: {
     icon: <WalletIcon className="text-customisation-yellow-50" />,
     theme: 'yellow',
-    name: 'Wallet',
+    nameKey: 'wallet',
   },
   browser: {
     icon: <BrowserIcon className="text-customisation-magenta-50" />,
     theme: 'magenta',
-    name: 'Browser',
+    nameKey: 'browser',
   },
   keycard: {
     icon: <KeycardIcon className="text-customisation-army-50" />,
     theme: 'army',
-    name: 'Keycard',
+    nameKey: 'keycard',
   },
   extension: {
     icon: <BrowserIcon className="text-customisation-blue-50" />,
     theme: 'blue',
-    name: 'Extension',
+    nameKey: 'extension',
   },
 } as const

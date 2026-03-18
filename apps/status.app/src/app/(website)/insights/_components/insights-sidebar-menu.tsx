@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl'
+
 import { SidebarMenu } from '~website/_components/sidebar-menu'
 import { useGetEpicMenuLinksQuery } from '~website/insights/_graphql/generated/hooks'
 
@@ -5,16 +7,17 @@ import { getEpicDisplayName } from '../_utils'
 
 const STATIC_LINKS = [
   {
-    label: 'Orphans',
+    labelKey: 'orphans',
     href: '/insights/orphans',
   },
   {
-    label: 'Repos',
+    labelKey: 'repos',
     href: '/insights/repos',
   },
 ]
 
 export const InsightsSidebarMenu = () => {
+  const t = useTranslations('insights')
   const { data, isLoading } = useGetEpicMenuLinksQuery({})
 
   const linksFromQuery =
@@ -35,17 +38,20 @@ export const InsightsSidebarMenu = () => {
     <SidebarMenu
       items={[
         {
-          label: 'Epics',
+          label: t('epics'),
           href: '/insights/epics',
           links: [
             {
-              label: 'Overview',
+              label: t('epics'),
               href: '/insights/epics',
             },
             ...epicLinks,
           ],
         },
-        ...STATIC_LINKS,
+        ...STATIC_LINKS.map(link => ({
+          label: t(link.labelKey),
+          href: link.href,
+        })),
       ]}
       isLoading={isLoading}
     />

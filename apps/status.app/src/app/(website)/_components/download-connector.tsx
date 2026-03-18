@@ -1,6 +1,9 @@
+'use client'
+
 import { Button } from '@status-im/components'
 import { ArrowRightIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
+import { useTranslations } from 'next-intl'
 
 import { Image } from '~components/assets'
 
@@ -11,6 +14,7 @@ type Props = {
 
 const DownloadConnectorSection = (props: Props) => {
   const { children, afterDownload } = props
+  const t = useTranslations('download')
 
   return (
     <div
@@ -26,7 +30,7 @@ const DownloadConnectorSection = (props: Props) => {
         )}
       >
         <Image
-          id="Platforms/Screens/Extension Screens/Connector_02:1102:1012"
+          id="Platforms/Screens/Extension Screens/Connector_04:1102:1012"
           alt=""
           width={551}
           height={506}
@@ -35,14 +39,14 @@ const DownloadConnectorSection = (props: Props) => {
       <div className="flex w-full max-w-[450px] flex-col lg:max-w-[542px] lg:justify-between xl:max-w-[592px]">
         <div className="p-4 xl:pl-6 xl:pr-12 2xl:pl-12">{children}</div>
         <div className="px-4 pb-6 lg:pb-12 xl:pl-6 2xl:pl-12">
-          <p className="pb-3 text-19">Want to learn how it works?</p>
+          <p className="pb-3 text-19">{t('connectorDocsQuestion')}</p>
           <Button
             href="/help/wallet/install-the-status-connector-extension"
             iconAfter={<ArrowRightIcon />}
             variant="outline"
             size="32"
           >
-            Check out our docs
+            {t('connectorDocsLink')}
           </Button>
         </div>
       </div>

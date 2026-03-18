@@ -1,8 +1,10 @@
 import { Text } from '@status-im/components'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 import emptyImage from 'public/assets/chart/empty.png'
 
 const Empty = () => {
+  const t = useTranslations('insights')
   return (
     <div className="flex size-full flex-col items-center justify-center">
       <div className="relative flex size-full items-center justify-center">
@@ -15,11 +17,11 @@ const Empty = () => {
           />
           <div className="pb-3" />
           <Text size={15} weight="semibold">
-            No results found
+            {t('noResultsFound')}
           </Text>
           <div className="pb-1" />
           <Text size={13} color="$neutral-50">
-            Try adjusting your search or filter to find what you’re looking for.
+            {t('noResultsDescription')}
           </Text>
         </div>
 

@@ -1,22 +1,17 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import { createContext, useCallback, useContext, useMemo } from 'react'
 
 import { type Address, createPublicClient, type Hex, http } from 'viem'
 import { mainnet } from 'viem/chains'
+import { formatEther } from 'viem/utils'
 
 import { apiClient } from './api-client'
+import { usePassword } from './password-context'
 import { useWallet } from './wallet-context'
 
 type SignerContextValue = {
   address: Address | undefined
   isUnlocked: boolean
-  unlock: (password: string) => Promise<boolean>
+  unlock: () => Promise<boolean>
   lock: () => void
   signAndSendTransaction: (tx: {
     to: Address
@@ -28,8 +23,7 @@ type SignerContextValue = {
   }) => Promise<Hex>
   signMessage: (message: Hex) => Promise<Hex>
   signTypedData: (typedData: string) => Promise<Hex>
-  requestUnlock: () => Promise<string | null>
-  setUnlockHandler: (handler: () => Promise<string | null>) => void
+  requestUnlock: () => Promise<boolean>
 }
 
 const SignerContext = createContext<SignerContextValue | undefined>(undefined)
@@ -44,74 +38,78 @@ export function useWalletSigner() {
 
 export function SignerProvider({ children }: { children: React.ReactNode }) {
   const { currentWallet } = useWallet()
-  const [sessionPassword, setSessionPassword] = useState<string | null>(null)
-  const [unlockHandler, setUnlockHandler] = useState<
-    (() => Promise<string | null>) | null
-  >(null)
+  const { hasActiveSession, requestPassword, clearSession } = usePassword()
 
   const address = useMemo(() => {
     return currentWallet?.activeAccounts[0]?.address as Address | undefined
   }, [currentWallet])
 
-  useEffect(() => {
-    if (address) {
-      chrome.storage.session.set({ dappAddress: address })
-    } else {
-      chrome.storage.session.remove('dappAddress')
-    }
-  }, [address])
-
-  useEffect(() => {
-    if (currentWallet?.id) {
-      chrome.storage.session.set({ dappWalletId: currentWallet.id })
-    } else {
-      chrome.storage.session.remove('dappWalletId')
-    }
-  }, [currentWallet?.id])
-
-  const unlock = useCallback(
-    async (password: string): Promise<boolean> => {
-      if (!currentWallet?.id || !address) return false
-      try {
-        await apiClient.wallet.get.query({
-          walletId: currentWallet.id,
-          password,
-        })
-        setSessionPassword(password)
-        return true
-      } catch {
-        return false
-      }
-    },
-    [currentWallet?.id, address],
-  )
+  const unlock = useCallback(async (): Promise<boolean> => {
+    if (!currentWallet?.id) return false
+    const isUnlocked = await requestPassword({
+      title: 'Enter password',
+      description: 'To allow for signing transactions',
+    })
+    return isUnlocked
+  }, [currentWallet?.id, requestPassword])
 
   const lock = useCallback(() => {
-    setSessionPassword(null)
-  }, [])
+    clearSession()
+  }, [clearSession])
 
-  const requestUnlock = useCallback(async (): Promise<string | null> => {
-    if (sessionPassword) return sessionPassword
-    if (unlockHandler) {
-      const password = await unlockHandler()
-      if (password) {
-        setSessionPassword(password)
-      }
-      return password
-    }
-    return null
-  }, [sessionPassword, unlockHandler])
+  const requestUnlock = useCallback(async (): Promise<boolean> => {
+    if (hasActiveSession) return true
+    return requestPassword()
+  }, [hasActiveSession, requestPassword])
 
-  const ensurePassword = useCallback(async (): Promise<string> => {
-    let password = sessionPassword
-    if (!password) {
-      password = await requestUnlock()
-      if (!password) {
-        throw new Error('Wallet not unlocked')
-      }
-    }
-    return password
-  }, [sessionPassword, requestUnlock])
+  const ensureUnlocked = useCallback(async (): Promise<void> => {
+    if (hasActiveSession) return
+    const isUnlocked = await requestPassword()
+    if (!isUnlocked) throw new Error('Wallet not unlocked')
+  }, [hasActiveSession, requestPassword])
+
+  const parseInsufficientFundsError = useCallback(
+    (error: unknown): Error | null => {
+      const errorObj =
+        typeof error === 'object' && error !== null && 'message' in error
+          ? error
+          : null
+      const errorMessage =
+        errorObj && typeof errorObj.message === 'string'
+          ? errorObj.message
+          : typeof error === 'string'
+            ? error
+            : null
+      if (!errorMessage) return null
+      const match = errorMessage.match(
+        /insufficient funds for gas \* price \+ value: have (\d+) want (\d+)/,
+      )
+      if (!match) return null
+      const haveWei = BigInt(match[1])
+      const wantWei = BigInt(match[2])
+      const haveEth = formatEther(haveWei)
+      const wantEth = formatEther(wantWei)
+      const shortfallEth = formatEther(wantWei - haveWei)
+      return new Error(
+        `Insufficient funds for gas. Have ${haveEth} ETH, need up to ${wantEth} ETH (max fee). Short ${shortfallEth} ETH.`,
+      )
+    },
+    [],
+  )
+
+  const handleTransactionError = useCallback(
+    (error: unknown, context: string): never => {
+      console.error(`${context} error:`, error)
+      const parsedError = parseInsufficientFundsError(error)
+      if (parsedError) throw parsedError
+      throw new Error(
+        typeof error === 'object' && error !== null && 'message' in error
+          ? String(error.message)
+          : String(error),
+      )
+    },
+    [parseInsufficientFundsError],
+  )
 
   const signAndSendTransaction = useCallback(
     async (tx: {
@@ -126,7 +124,7 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
         throw new Error('No wallet connected')
       }
 
-      const password = await ensurePassword()
+      await ensureUnlocked()
 
       let maxFeePerGas = tx.maxFeePerGas?.toString(16)
       let maxPriorityFeePerGas = tx.maxPriorityFeePerGas?.toString(16)
@@ -190,7 +188,6 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
           const result =
             await apiClient.wallet.account.ethereum.sendErc20.mutate({
               walletId: currentWallet.id,
-              password,
               fromAddress: address,
               toAddress: tx.to,
               gasLimit,
@@ -198,6 +195,10 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
               maxInclusionFeePerGas: maxPriorityFeePerGas,
               data: tx.data,
             })
+
+          if (result.id.txid?.error) {
+            handleTransactionError(result.id.txid.error, 'ERC20 transfer')
+          }
 
           const txHash = extractTxHash(result.id.txid)
           if (!txHash) throw new Error('Transaction failed')
@@ -208,7 +209,6 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
         const result =
           await apiClient.wallet.account.ethereum.sendContractCall.mutate({
             walletId: currentWallet.id,
-            password,
             fromAddress: address,
             toAddress: tx.to,
             gasLimit,
@@ -219,8 +219,7 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
           })
 
         if (result.id.txid?.error) {
-          console.error('Contract call error:', result.id.txid.error)
-          throw new Error(result.id.txid.error)
+          handleTransactionError(result.id.txid.error, 'Contract call')
         }
 
         const txHash = extractTxHash(result.id.txid)
@@ -231,7 +230,6 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
       const amountHex = tx.value.toString(16)
       const result = await apiClient.wallet.account.ethereum.send.mutate({
         walletId: currentWallet.id,
-        password,
         fromAddress: address,
         toAddress: tx.to,
         amount: amountHex,
@@ -240,11 +238,15 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
         maxInclusionFeePerGas: maxPriorityFeePerGas,
       })
 
+      if (result.id.txid?.error) {
+        handleTransactionError(result.id.txid.error, 'Send transaction')
+      }
+
       const txHash = extractTxHash(result.id.txid)
       if (!txHash) throw new Error('Transaction failed')
       return txHash as Hex
     },
-    [currentWallet?.id, address, ensurePassword],
+    [currentWallet?.id, address, ensureUnlocked, handleTransactionError],
   )
 
   const signMessage = useCallback(
@@ -253,12 +255,11 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
         throw new Error('No wallet connected')
       }
 
-      const password = await ensurePassword()
+      await ensureUnlocked()
 
       const result = await apiClient.wallet.account.ethereum.signMessage.mutate(
         {
           walletId: currentWallet.id,
-          password,
           fromAddress: address,
           message,
         },
@@ -266,7 +267,7 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
 
       return result.signature as Hex
     },
-    [currentWallet?.id, address, ensurePassword],
+    [currentWallet?.id, address, ensureUnlocked],
   )
 
   const signTypedData = useCallback(
@@ -275,14 +276,13 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
         throw new Error('No wallet connected')
       }
 
-      const password = await ensurePassword()
+      await ensureUnlocked()
 
       const parsed = JSON.parse(typedData)
 
       const result =
         await apiClient.wallet.account.ethereum.signTypedData.mutate({
           walletId: currentWallet.id,
-          password,
           fromAddress: address,
           domain: parsed.domain,
           types: parsed.types,
@@ -292,38 +292,29 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
 
       return result.signature as Hex
     },
-    [currentWallet?.id, address, ensurePassword],
-  )
-
-  const handleSetUnlockHandler = useCallback(
-    (handler: () => Promise<string | null>) => {
-      setUnlockHandler(() => handler)
-    },
-    [],
+    [currentWallet?.id, address, ensureUnlocked],
   )
 
   const value: SignerContextValue = useMemo(
     () => ({
       address,
-      isUnlocked: !!sessionPassword,
+      isUnlocked: hasActiveSession,
       unlock,
       lock,
       signAndSendTransaction,
       signMessage,
       signTypedData,
       requestUnlock,
-      setUnlockHandler: handleSetUnlockHandler,
     }),
     [
       address,
-      sessionPassword,
+      hasActiveSession,
       unlock,
       lock,
       signAndSendTransaction,
       signMessage,
       signTypedData,
       requestUnlock,
-      handleSetUnlockHandler,
     ],
   )
 

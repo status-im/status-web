@@ -1,5 +1,11 @@
 # @status-im/js
 
+## 1.2.2
+
+### Patch Changes
+
+- 5975aae: fix: zod version resolution
+
 ## 1.2.1
 
 ### Patch Changes

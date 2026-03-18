@@ -1122,7 +1122,7 @@ export async function broadcastTransaction(
     )
   })
 
-  return body
+  return body.result
 }
 
 /**
@@ -1142,7 +1142,7 @@ export async function getTransactionCount(
         jsonrpc: '2.0',
         id: 1,
         method: 'eth_getTransactionCount',
-        params: [address, 'latest'],
+        params: [address, 'pending'],
       },
       STATUS_RPC_AUTH,
     )
