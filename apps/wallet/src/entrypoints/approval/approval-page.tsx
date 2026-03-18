@@ -3,11 +3,14 @@ import { useEffect, useState } from 'react'
 import { Button } from '@status-im/components'
 import { CloseIcon } from '@status-im/icons/20'
 
+import ethereumIcon from '../../assets/networks/ethereum.png'
+import statusNetworkIcon from '../../assets/networks/status-network.png'
 import {
   getPendingApproval,
   type PendingApproval,
   setApprovalResult,
 } from '../../lib/approval'
+import { apiClient } from '../../providers/api-client'
 
 const CHAIN_NAMES: Record<string, string> = {
   '0x1': 'Mainnet',
@@ -38,27 +41,95 @@ export function ApprovalPage() {
   const [approval, setApproval] = useState<PendingApproval | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [password, setPassword] = useState('')
+  const [isSessionActive, setIsSessionActive] = useState(false)
+  const [unlockError, setUnlockError] = useState<string | null>(null)
+  const [isCheckingSession, setIsCheckingSession] = useState(true)
 
   useEffect(() => {
     getPendingApproval().then(setApproval)
+    apiClient.session.status.query().then(status => {
+      setIsSessionActive(status.isUnlocked)
+      setIsCheckingSession(false)
+    })
   }, [])
+
+  if (!approval || isCheckingSession) {
+    return null
+  }
+
+  const needsPassword = !isSessionActive
+
+  const handleUnlock = async () => {
+    setIsSubmitting(true)
+    setUnlockError(null)
+    try {
+      await apiClient.session.unlock.mutate({ password })
+      setIsSessionActive(true)
+    } catch {
+      setUnlockError('Incorrect password')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  // Password gate — shown before any approval content when wallet is locked
+  if (needsPassword) {
+    return (
+      <div
+        data-customisation="blue"
+        className="flex h-screen flex-col items-center justify-center bg-white-100 p-4"
+      >
+        <h1 className="mb-4 text-19 font-semibold text-neutral-100">
+          Unlock wallet
+        </h1>
+        <input
+          type="password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          onKeyDown={e => {
+            if (e.key === 'Enter' && password) handleUnlock()
+          }}
+          placeholder="Enter password"
+          className="mb-2 h-10 w-full max-w-[280px] rounded-12 border border-neutral-20 bg-white-100 px-3 text-15 text-neutral-100 outline-none placeholder:text-neutral-40 focus:border-customisation-50"
+        />
+        {unlockError && (
+          <p className="mb-2 text-13 text-danger-50">{unlockError}</p>
+        )}
+        <div className="mt-2 grid w-full max-w-[280px] grid-cols-2 gap-3">
+          <Button
+            variant="grey"
+            onPress={() => {
+              setApprovalResult({ id: approval.id, approved: false })
+              window.close()
+            }}
+            disabled={isSubmitting}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="primary"
+            onPress={handleUnlock}
+            disabled={isSubmitting || !password}
+          >
+            Unlock
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
+  const isSign = approval.type === 'personal_sign'
 
   const respond = async (approved: boolean) => {
     if (!approval || isSubmitting) return
     setIsSubmitting(true)
+
     await setApprovalResult({
       id: approval.id,
       approved,
-      ...(approved && isSign && password ? { password } : {}),
     })
     window.close()
   }
-
-  if (!approval) {
-    return null
-  }
-
-  const isSign = approval.type === 'personal_sign'
 
   return (
     <div
@@ -101,18 +172,14 @@ export function ApprovalPage() {
       </div>
 
       {isSign ? (
-        <SignContent
-          approval={approval}
-          password={password}
-          onPasswordChange={setPassword}
-        />
+        <SignContent approval={approval} />
       ) : (
         <ConnectContent approval={approval} />
       )}
 
-      <div className="grid grid-cols-2 gap-3 py-3">
+      <div className="mt-auto grid grid-cols-2 gap-3 py-3">
         <Button
-          variant="outline"
+          variant="grey"
           onPress={() => respond(false)}
           disabled={isSubmitting}
         >
@@ -121,7 +188,7 @@ export function ApprovalPage() {
         <Button
           variant="primary"
           onPress={() => respond(true)}
-          disabled={isSubmitting || (isSign && !password)}
+          disabled={isSubmitting}
         >
           {isSign ? 'Sign' : 'Connect'}
         </Button>
@@ -130,7 +197,7 @@ export function ApprovalPage() {
   )
 }
 
-function ConnectContent({ approval }: { approval: PendingApproval }) {
+function AccountInfo({ address }: { address: string }) {
   return (
     <>
       <p className="mb-2 text-13 font-medium text-neutral-50">Account</p>
@@ -142,50 +209,54 @@ function ConnectContent({ approval }: { approval: PendingApproval }) {
           <div className="min-w-0 flex-1">
             <p className="text-15 font-semibold text-neutral-100">Account 1</p>
             <p className="text-13 text-neutral-50">
-              {truncateAddress(approval.address)}
+              {truncateAddress(address)}
             </p>
           </div>
         </div>
       </div>
+    </>
+  )
+}
 
+const CHAIN_ICONS: Record<string, string> = {
+  '0x1': ethereumIcon,
+  '0x6300b5ea': statusNetworkIcon,
+}
+
+function NetworkInfo({ chainId }: { chainId: string }) {
+  const icon = CHAIN_ICONS[chainId]
+
+  return (
+    <>
       <p className="mb-2 text-13 font-medium text-neutral-50">Network</p>
       <div className="mb-4 rounded-16 border border-neutral-10 p-3">
         <div className="flex items-center gap-2">
-          <span className="flex size-8 items-center justify-center rounded-full bg-[#627EEA]">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              className="text-white-100"
-            >
-              <path
-                d="M8 2L4 8.5L8 6.5L12 8.5L8 2Z"
-                fill="currentColor"
-                opacity="0.6"
-              />
-              <path d="M8 6.5L4 8.5L8 11L12 8.5L8 6.5Z" fill="currentColor" />
-              <path
-                d="M4 9.2L8 14L12 9.2L8 11.7L4 9.2Z"
-                fill="currentColor"
-                opacity="0.6"
-              />
-            </svg>
-          </span>
+          {icon ? (
+            <img src={icon} alt="" className="size-8 rounded-full" />
+          ) : (
+            <span className="flex size-8 items-center justify-center rounded-full bg-neutral-20 text-11 font-medium text-neutral-50">
+              ?
+            </span>
+          )}
           <p className="text-15 font-semibold text-neutral-100">
-            {getChainName(approval.chainId)}
+            {getChainName(chainId)}
           </p>
         </div>
       </div>
+    </>
+  )
+}
+
+function ConnectContent({ approval }: { approval: PendingApproval }) {
+  return (
+    <>
+      <AccountInfo address={approval.address} />
+      <NetworkInfo chainId={approval.chainId} />
       <div className="flex flex-col gap-2 rounded-16 border border-neutral-10 bg-neutral-2.5 px-4 py-3">
         <p className="text-13 text-neutral-50">dApp will be able to:</p>
-        <ul className="gap-0.5 text-13 text-neutral-100">
-          <li className="flex items-start gap-2">
-            Check your account balance and activity
-          </li>
-          <li className="flex items-start gap-2">
-            Request transactions and message signing
-          </li>
+        <ul className="list-disc gap-0.5 pl-4 text-13 text-neutral-100 marker:text-neutral-40">
+          <li>Check your account balance and activity</li>
+          <li>Request transactions and message signing</li>
         </ul>
       </div>
     </>
@@ -194,12 +265,8 @@ function ConnectContent({ approval }: { approval: PendingApproval }) {
 
 function SignContent({
   approval,
-  password,
-  onPasswordChange,
 }: {
   approval: Extract<PendingApproval, { type: 'personal_sign' }>
-  password: string
-  onPasswordChange: (value: string) => void
 }) {
   const readableMessage = hexToReadableMessage(approval.message)
 
@@ -211,15 +278,8 @@ function SignContent({
           {readableMessage}
         </pre>
       </div>
-
-      <p className="mb-2 text-13 font-medium text-neutral-50">Password</p>
-      <input
-        type="password"
-        value={password}
-        onChange={e => onPasswordChange(e.target.value)}
-        placeholder="Enter wallet password"
-        className="mb-auto h-10 rounded-12 border border-neutral-20 bg-white-100 px-3 text-15 text-neutral-100 outline-none placeholder:text-neutral-40 focus:border-customisation-50"
-      />
+      <AccountInfo address={approval.address} />
+      <NetworkInfo chainId={approval.chainId} />
     </>
   )
 }

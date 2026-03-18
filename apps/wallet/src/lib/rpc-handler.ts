@@ -15,7 +15,23 @@ const publicClient = createPublicClient({
   transport: http(),
 })
 
-let currentChainId = '0x1'
+const DEFAULT_CHAIN_ID = '0x1'
+
+async function getChainIdForOrigin(origin: string): Promise<string> {
+  const result = await chrome.storage.session.get('originChainIds')
+  const map: Record<string, string> = result.originChainIds || {}
+  return map[origin] || DEFAULT_CHAIN_ID
+}
+
+async function setChainIdForOrigin(
+  origin: string,
+  chainId: string,
+): Promise<void> {
+  const result = await chrome.storage.session.get('originChainIds')
+  const map: Record<string, string> = result.originChainIds || {}
+  map[origin] = chainId
+  await chrome.storage.session.set({ originChainIds: map })
+}
 
 async function getAddress(): Promise<string | null> {
   const result = await chrome.storage.session.get('dappAddress')
@@ -156,13 +172,14 @@ export async function handleRpcRequest(
         }
       }
 
+      const chainId = await getChainIdForOrigin(origin)
       const connectResult = await requestApproval({
         type: 'eth_requestAccounts',
         origin,
         title: metadata?.title ?? origin,
         favicon: metadata?.favicon ?? `${origin}/favicon.ico`,
         address,
-        chainId: currentChainId,
+        chainId,
       })
 
       if (!connectResult) {
@@ -179,25 +196,30 @@ export async function handleRpcRequest(
     }
 
     case 'eth_chainId': {
-      return currentChainId
+      return await getChainIdForOrigin(origin)
     }
 
     case 'net_version': {
-      return parseInt(currentChainId, 16).toString()
+      const chainId = await getChainIdForOrigin(origin)
+      return parseInt(chainId, 16).toString()
     }
 
     case 'wallet_switchEthereumChain': {
       const p = params as [{ chainId: string }] | undefined
       const requestedChainId = p?.[0]?.chainId
       if (requestedChainId) {
-        currentChainId = requestedChainId
+        await setChainIdForOrigin(origin, requestedChainId)
       }
       return null
     }
 
     case 'wallet_addEthereumChain': {
-      // Accept silently — we don't actually add chains but
-      // returning null lets wagmi's switchChain flow continue.
+      // Accept silently — store chainId if provided
+      const p = params as [{ chainId: string }] | undefined
+      const requestedChainId = p?.[0]?.chainId
+      if (requestedChainId) {
+        await setChainIdForOrigin(origin, requestedChainId)
+      }
       return null
     }
 
@@ -232,7 +254,12 @@ export async function handleRpcRequest(
     case 'personal_sign': {
       const p = params as [string, string]
       const message = p[0]
-      const signerAddress = p[1] || (await getAddress())
+      const storedAddress = await getAddress()
+      // Use our stored address for signing — dApps may change casing
+      const signerAddress =
+        p[1] && storedAddress?.toLowerCase() === p[1].toLowerCase()
+          ? storedAddress
+          : storedAddress
       if (!signerAddress) {
         throw { code: 4100, message: 'No active account' }
       }
@@ -248,17 +275,18 @@ export async function handleRpcRequest(
         throw { code: -32002, message: 'Already processing a request.' }
       }
 
+      const signChainId = await getChainIdForOrigin(origin)
       const signResult = await requestApproval({
         type: 'personal_sign',
         origin,
         title: metadata?.title ?? origin,
         favicon: metadata?.favicon ?? `${origin}/favicon.ico`,
         address: signerAddress,
-        chainId: currentChainId,
+        chainId: signChainId,
         message,
       })
 
-      if (!signResult?.password) {
+      if (!signResult) {
         throw { code: 4001, message: 'User rejected the request.' }
       }
 
@@ -270,7 +298,6 @@ export async function handleRpcRequest(
                 ethereum: {
                   signMessage: (input: {
                     walletId: string
-                    password: string
                     fromAddress: string
                     message: string
                   }) => Promise<{ signature: string }>
@@ -281,7 +308,6 @@ export async function handleRpcRequest(
         }
       ).api.wallet.account.ethereum.signMessage({
         walletId,
-        password: signResult.password,
         fromAddress: signerAddress,
         message,
       })

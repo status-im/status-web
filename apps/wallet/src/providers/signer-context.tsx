@@ -1,4 +1,10 @@
-import { createContext, useCallback, useContext, useMemo } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+} from 'react'
 
 import { type Address, createPublicClient, type Hex, http } from 'viem'
 import { mainnet } from 'viem/chains'
@@ -43,6 +49,22 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
   const address = useMemo(() => {
     return currentWallet?.activeAccounts[0]?.address as Address | undefined
   }, [currentWallet])
+
+  useEffect(() => {
+    if (address) {
+      chrome.storage.session.set({ dappAddress: address })
+    } else {
+      chrome.storage.session.remove('dappAddress')
+    }
+  }, [address])
+
+  useEffect(() => {
+    if (currentWallet?.id) {
+      chrome.storage.session.set({ dappWalletId: currentWallet.id })
+    } else {
+      chrome.storage.session.remove('dappWalletId')
+    }
+  }, [currentWallet?.id])
 
   const unlock = useCallback(async (): Promise<boolean> => {
     if (!currentWallet?.id) return false

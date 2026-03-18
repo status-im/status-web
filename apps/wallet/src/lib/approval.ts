@@ -22,7 +22,6 @@ export type PendingApproval =
 export type ApprovalResult = {
   id: string
   approved: boolean
-  password?: string
 }
 
 export async function setPendingApproval(
