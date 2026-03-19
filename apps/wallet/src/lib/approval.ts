@@ -6,6 +6,7 @@ export type PendingApproval =
       title: string
       favicon: string
       address: string
+      accountName: string
       chainId: string
     }
   | {
@@ -15,6 +16,7 @@ export type PendingApproval =
       title: string
       favicon: string
       address: string
+      accountName: string
       chainId: string
       message: string
     }

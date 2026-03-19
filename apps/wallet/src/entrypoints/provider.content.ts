@@ -1,5 +1,6 @@
 import { defineContentScript } from 'wxt/sandbox'
 
+import { ProviderRpcError } from '../lib/provider-rpc-error'
 import statusIcon from '../lib/status-icon'
 
 export default defineContentScript({
@@ -18,20 +19,11 @@ export default defineContentScript({
       | 'accountsChanged'
       | 'networkChanged'
 
+    const DEFAULT_CHAIN_ID = '0x1'
+
     type ProxyMessage =
       | { type: 'status:proxy:success'; data: unknown }
       | { type: 'status:proxy:error'; error: { code: number; message: string } }
-
-    class ProviderRpcError extends Error {
-      public code: number
-      public data: unknown
-
-      constructor(args: { code: number; message: string; data?: unknown }) {
-        super(args.message)
-        this.code = args.code
-        this.data = args.data
-      }
-    }
 
     /**
      * @see https://eips.ethereum.org/EIPS/eip-1193
@@ -114,15 +106,15 @@ export default defineContentScript({
                   message.data.length > 0
                 ) {
                   this.connected = true
-                  this.#emit('connect', { chainId: '0x1' })
-                  this.#emit('connected', { chainId: '0x1' })
+                  this.#emit('connect', { chainId: DEFAULT_CHAIN_ID })
+                  this.#emit('connected', { chainId: DEFAULT_CHAIN_ID })
                   this.#emit('accountsChanged', message.data)
                 }
 
                 if (method === 'wallet_switchEthereumChain') {
                   const switchedChainId =
                     (params as [{ chainId: string }] | undefined)?.[0]
-                      ?.chainId ?? '0x1'
+                      ?.chainId ?? DEFAULT_CHAIN_ID
                   setTimeout(() => {
                     this.#emit('chainChanged', switchedChainId)
                     this.#emit('networkChanged', switchedChainId)

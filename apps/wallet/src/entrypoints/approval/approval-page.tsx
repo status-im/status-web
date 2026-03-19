@@ -197,7 +197,7 @@ export function ApprovalPage() {
   )
 }
 
-function AccountInfo({ address }: { address: string }) {
+function AccountInfo({ address, name }: { address: string; name: string }) {
   return (
     <>
       <p className="mb-2 text-13 font-medium text-neutral-50">Account</p>
@@ -207,7 +207,7 @@ function AccountInfo({ address }: { address: string }) {
             🍑
           </span>
           <div className="min-w-0 flex-1">
-            <p className="text-15 font-semibold text-neutral-100">Account 1</p>
+            <p className="text-15 font-semibold text-neutral-100">{name}</p>
             <p className="text-13 text-neutral-50">
               {truncateAddress(address)}
             </p>
@@ -250,7 +250,7 @@ function NetworkInfo({ chainId }: { chainId: string }) {
 function ConnectContent({ approval }: { approval: PendingApproval }) {
   return (
     <>
-      <AccountInfo address={approval.address} />
+      <AccountInfo address={approval.address} name={approval.accountName} />
       <NetworkInfo chainId={approval.chainId} />
       <div className="flex flex-col gap-2 rounded-16 border border-neutral-10 bg-neutral-2.5 px-4 py-3">
         <p className="text-13 text-neutral-50">dApp will be able to:</p>
@@ -278,7 +278,7 @@ function SignContent({
           {readableMessage}
         </pre>
       </div>
-      <AccountInfo address={approval.address} />
+      <AccountInfo address={approval.address} name={approval.accountName} />
       <NetworkInfo chainId={approval.chainId} />
     </>
   )

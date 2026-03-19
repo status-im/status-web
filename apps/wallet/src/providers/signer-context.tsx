@@ -46,19 +46,23 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
   const { currentWallet } = useWallet()
   const { hasActiveSession, requestPassword, clearSession } = usePassword()
 
-  const address = useMemo(() => {
-    return currentWallet?.activeAccounts[0]?.address as Address | undefined
-  }, [currentWallet])
+  const address = currentWallet?.activeAccounts[0]?.address as
+    | Address
+    | undefined
+  const accountName = currentWallet?.name ?? 'Account 1'
 
   useEffect(() => {
     if (address) {
-      chrome.storage.session.set({ dappAddress: address })
+      chrome.storage.session.set({
+        dappAddress: address,
+        dappAccountName: accountName,
+      })
     } else {
-      chrome.storage.session.remove('dappAddress')
+      chrome.storage.session.remove(['dappAddress', 'dappAccountName'])
     }
 
     chrome.storage.session.remove(['connectedOrigins', 'originChainIds'])
-  }, [address])
+  }, [address, accountName])
 
   useEffect(() => {
     if (currentWallet?.id) {

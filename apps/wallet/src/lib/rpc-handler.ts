@@ -9,6 +9,7 @@ import {
   type PendingApproval,
   setPendingApproval,
 } from './approval'
+import { ProviderRpcError } from './provider-rpc-error'
 
 const publicClient = createPublicClient({
   chain: mainnet,
@@ -37,6 +38,11 @@ async function setChainIdForOrigin(
 async function getAddress(): Promise<string | null> {
   const result = await chrome.storage.session.get('dappAddress')
   return (result.dappAddress as string) || null
+}
+
+async function getAccountName(): Promise<string> {
+  const result = await chrome.storage.session.get('dappAccountName')
+  return (result.dappAccountName as string) || 'Account 1'
 }
 
 async function getWalletId(): Promise<string | null> {
@@ -161,7 +167,10 @@ export async function handleRpcRequest(
     case 'eth_requestAccounts': {
       const address = await getAddress()
       if (!address) {
-        throw { code: 4100, message: 'No active account' }
+        throw new ProviderRpcError({
+          code: 4100,
+          message: 'No active account',
+        })
       }
 
       if (await isOriginConnected(origin)) {
@@ -170,24 +179,29 @@ export async function handleRpcRequest(
 
       const existing = await getPendingApproval()
       if (existing) {
-        throw {
+        throw new ProviderRpcError({
           code: -32002,
           message: 'Already processing a connection request.',
-        }
+        })
       }
 
       const chainId = await getChainIdForOrigin(origin)
+      const accountName = await getAccountName()
       const connectResult = await requestApproval({
         type: 'eth_requestAccounts',
         origin,
         title: metadata?.title ?? origin,
         favicon: metadata?.favicon ?? `${origin}/favicon.ico`,
         address,
+        accountName,
         chainId,
       })
 
       if (!connectResult) {
-        throw { code: 4001, message: 'User rejected the request.' }
+        throw new ProviderRpcError({
+          code: 4001,
+          message: 'User rejected the request.',
+        })
       }
 
       await addConnectedOrigin(origin)
@@ -215,10 +229,10 @@ export async function handleRpcRequest(
       const p = params as [{ chainId: string }] | undefined
       const requestedChainId = p?.[0]?.chainId
       if (requestedChainId && !SUPPORTED_CHAIN_IDS.has(requestedChainId)) {
-        throw {
+        throw new ProviderRpcError({
           code: 4902,
           message: `Unrecognized chain ID ${requestedChainId}. Try adding the chain using wallet_addEthereumChain first.`,
-        }
+        })
       }
       if (requestedChainId) {
         await setChainIdForOrigin(origin, requestedChainId)
@@ -230,10 +244,10 @@ export async function handleRpcRequest(
       const p = params as [{ chainId: string }] | undefined
       const requestedChainId = p?.[0]?.chainId
       if (requestedChainId && !SUPPORTED_CHAIN_IDS.has(requestedChainId)) {
-        throw {
+        throw new ProviderRpcError({
           code: 4902,
           message: `Chain ${requestedChainId} is not supported`,
-        }
+        })
       }
       if (requestedChainId) {
         await setChainIdForOrigin(origin, requestedChainId)
@@ -274,41 +288,55 @@ export async function handleRpcRequest(
       const message = p[0]
       const storedAddress = await getAddress()
       if (!storedAddress) {
-        throw { code: 4100, message: 'No active account' }
+        throw new ProviderRpcError({
+          code: 4100,
+          message: 'No active account',
+        })
       }
       // Validate dApp-provided address matches the active account
       if (p[1] && storedAddress.toLowerCase() !== p[1].toLowerCase()) {
-        throw {
+        throw new ProviderRpcError({
           code: -32602,
           message: `Requested address ${p[1]} does not match the active account`,
-        }
+        })
       }
       const signerAddress = storedAddress
 
       const walletId = await getWalletId()
       if (!walletId) {
-        throw { code: 4100, message: 'No wallet available' }
+        throw new ProviderRpcError({
+          code: 4100,
+          message: 'No wallet available',
+        })
       }
 
       // Guard against concurrent approval requests
       const existingSign = await getPendingApproval()
       if (existingSign) {
-        throw { code: -32002, message: 'Already processing a request.' }
+        throw new ProviderRpcError({
+          code: -32002,
+          message: 'Already processing a request.',
+        })
       }
 
       const signChainId = await getChainIdForOrigin(origin)
+      const signAccountName = await getAccountName()
       const signResult = await requestApproval({
         type: 'personal_sign',
         origin,
         title: metadata?.title ?? origin,
         favicon: metadata?.favicon ?? `${origin}/favicon.ico`,
         address: signerAddress,
+        accountName: signAccountName,
         chainId: signChainId,
         message,
       })
 
       if (!signResult) {
-        throw { code: 4001, message: 'User rejected the request.' }
+        throw new ProviderRpcError({
+          code: 4001,
+          message: 'User rejected the request.',
+        })
       }
 
       const signed = await (
@@ -338,10 +366,10 @@ export async function handleRpcRequest(
 
     case 'eth_signTypedData_v4':
     case 'eth_sendTransaction': {
-      throw {
+      throw new ProviderRpcError({
         code: 4200,
         message: 'Not yet supported via dApp connection',
-      }
+      })
     }
 
     default: {
