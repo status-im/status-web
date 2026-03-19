@@ -1,0 +1,32 @@
+{
+  "name": "@status-im/community-contracts",
+  "description": "Smart contracts for Status Community Curation DApp",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "exports": {
+    "./abi": "./abi/index.ts"
+  },
+  "devDependencies": {
+    "prettier": "^3.0.0",
+    "solhint-community": "^3.6.0"
+  },
+  "keywords": [
+    "blockchain",
+    "ethereum",
+    "forge",
+    "foundry",
+    "smart-contracts",
+    "solidity"
+  ],
+  "scripts": {
+    "build": "echo 'No build step required. Artifacts are under ./out'",
+    "test": "forge test",
+    "clean": "rm -rf cache out",
+    "lint": "pnpm run lint:sol && pnpm run prettier:check",
+    "lint:sol": "solhint {script,src,test}/**/*.sol",
+    "lint:fix": "forge fmt && pnpm run prettier:write",
+    "prettier:check": "prettier --check **/*.{json,md,yml} --ignore-path=.prettierignore",
+    "prettier:write": "prettier --write **/*.{json,md,yml} --ignore-path=.prettierignore"
+  }
+}

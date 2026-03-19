@@ -7,6 +7,9 @@ packages:
   - 'packages/components'
   - 'packages/status-network'
   - 'packages/wallet'
+  - 'packages/community-contracts'
+  # - 'packages/community-subgraph'  # TODO: re-enable after upgrading @graphprotocol/graph-cli
+  - 'apps/community'
   - 'apps/hub'
   - 'apps/status.app'
   - 'apps/status.network'
