@@ -56,6 +56,8 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
     } else {
       chrome.storage.session.remove('dappAddress')
     }
+
+    chrome.storage.session.remove(['connectedOrigins', 'originChainIds'])
   }, [address])
 
   useEffect(() => {

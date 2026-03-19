@@ -16,6 +16,7 @@ const publicClient = createPublicClient({
 })
 
 const DEFAULT_CHAIN_ID = '0x1'
+const SUPPORTED_CHAIN_IDS = new Set(['0x1'])
 
 async function getChainIdForOrigin(origin: string): Promise<string> {
   const result = await chrome.storage.session.get('originChainIds')
@@ -117,9 +118,9 @@ function requestApproval(
 
     chrome.storage.onChanged.addListener(storageListener)
     chrome.windows.onRemoved.addListener(windowListener)
-
-    setPendingApproval({ id, ...approval } as PendingApproval).then(
-      async () => {
+    ;(async () => {
+      try {
+        await setPendingApproval({ id, ...approval } as PendingApproval)
         const popupUrl = chrome.runtime.getURL('approval.html')
         const currentWindow = await chrome.windows.getCurrent()
         const width = 390
@@ -138,8 +139,11 @@ function requestApproval(
           focused: true,
         })
         popupWindowId = popup?.id
-      },
-    )
+      } catch {
+        cleanup()
+        resolve(null)
+      }
+    })()
   })
 }
 
@@ -191,6 +195,9 @@ export async function handleRpcRequest(
     }
 
     case 'eth_accounts': {
+      if (!(await isOriginConnected(origin))) {
+        return []
+      }
       const address = await getAddress()
       return address ? [address] : []
     }
@@ -207,6 +214,12 @@ export async function handleRpcRequest(
     case 'wallet_switchEthereumChain': {
       const p = params as [{ chainId: string }] | undefined
       const requestedChainId = p?.[0]?.chainId
+      if (requestedChainId && !SUPPORTED_CHAIN_IDS.has(requestedChainId)) {
+        throw {
+          code: 4902,
+          message: `Unrecognized chain ID ${requestedChainId}. Try adding the chain using wallet_addEthereumChain first.`,
+        }
+      }
       if (requestedChainId) {
         await setChainIdForOrigin(origin, requestedChainId)
       }
@@ -214,9 +227,14 @@ export async function handleRpcRequest(
     }
 
     case 'wallet_addEthereumChain': {
-      // Accept silently — store chainId if provided
       const p = params as [{ chainId: string }] | undefined
       const requestedChainId = p?.[0]?.chainId
+      if (requestedChainId && !SUPPORTED_CHAIN_IDS.has(requestedChainId)) {
+        throw {
+          code: 4902,
+          message: `Chain ${requestedChainId} is not supported`,
+        }
+      }
       if (requestedChainId) {
         await setChainIdForOrigin(origin, requestedChainId)
       }
@@ -255,14 +273,17 @@ export async function handleRpcRequest(
       const p = params as [string, string]
       const message = p[0]
       const storedAddress = await getAddress()
-      // Use our stored address for signing — dApps may change casing
-      const signerAddress =
-        p[1] && storedAddress?.toLowerCase() === p[1].toLowerCase()
-          ? storedAddress
-          : storedAddress
-      if (!signerAddress) {
+      if (!storedAddress) {
         throw { code: 4100, message: 'No active account' }
       }
+      // Validate dApp-provided address matches the active account
+      if (p[1] && storedAddress.toLowerCase() !== p[1].toLowerCase()) {
+        throw {
+          code: -32602,
+          message: `Requested address ${p[1]} does not match the active account`,
+        }
+      }
+      const signerAddress = storedAddress
 
       const walletId = await getWalletId()
       if (!walletId) {

@@ -27,8 +27,6 @@ export default defineContentScript({
         return
       }
 
-      console.log('[Status Bridge] received:', message.type, message)
-
       if (message.type === 'status:provider:disconnect') {
         return
       }
@@ -38,15 +36,10 @@ export default defineContentScript({
       }
 
       if (!event.ports.length) {
-        console.log('[Status Bridge] no ports, dropping')
         return
       }
 
       try {
-        console.log(
-          '[Status Bridge] sending to background:',
-          message.data.method,
-        )
         const response = await chrome.runtime.sendMessage({
           type: 'status:rpc',
           data: {
@@ -58,11 +51,6 @@ export default defineContentScript({
           },
         })
 
-        console.log(
-          '[Status Bridge] background responded:',
-          message.data.method,
-          response,
-        )
         event.ports[0].postMessage(response satisfies ProxyMessage)
       } catch (error) {
         console.error('[Status Bridge] error:', message.data.method, error)

@@ -56,10 +56,6 @@ export default defineContentScript({
 
       #emit = (event: Event, ...args: unknown[]): void => {
         const handlers = this.#listeners.get(event)
-        console.log(
-          `[Status Provider] emit ${event}, ${handlers?.size ?? 0} listeners`,
-          ...args,
-        )
         if (handlers) {
           for (const handler of handlers) {
             try {
@@ -90,12 +86,9 @@ export default defineContentScript({
         return new Promise((resolve, reject) => {
           const { method, params } = args
 
-          console.log('[Status Provider] request:', method, params)
-
           const messageChannel = new MessageChannel()
 
           messageChannel.port1.onmessage = ({ data }) => {
-            console.log('[Status Provider] port response:', method, data)
             let message: ProxyMessage
             try {
               message = data as ProxyMessage
@@ -104,7 +97,6 @@ export default defineContentScript({
                 (message.type !== 'status:proxy:success' &&
                   message.type !== 'status:proxy:error')
               ) {
-                console.log('[Status Provider] invalid message, ignoring')
                 return
               }
             } catch {
@@ -181,7 +173,6 @@ export default defineContentScript({
         event: Event,
         handler: (...args: unknown[]) => void,
       ): this => {
-        console.log(`[Status Provider] on(${event})`)
         let handlers = this.#listeners.get(event)
         if (!handlers) {
           handlers = new Set()
@@ -200,7 +191,6 @@ export default defineContentScript({
         event: Event,
         handler?: (...args: unknown[]) => void,
       ): void => {
-        console.log(`[Status Provider] removeListener(${event})`)
         if (handler) {
           this.#listeners.get(event)?.delete(handler)
         } else {
@@ -281,10 +271,6 @@ export default defineContentScript({
     } catch (error) {
       console.error('[Status] Failed to inject provider:', error)
     }
-
-    window.addEventListener('unhandledrejection', e => {
-      console.error('[Status Provider] unhandled rejection:', e.reason)
-    })
 
     async function waitUntilComplete(document: Document): Promise<void> {
       return new Promise(resolve => {

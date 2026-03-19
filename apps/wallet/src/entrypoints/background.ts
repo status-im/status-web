@@ -12,6 +12,7 @@ import { createAPI } from '../data/api'
 import { encoder } from '../data/encoder'
 import { INACTIVITY_ALARM_NAME, lock } from '../data/session'
 import { getWalletCore } from '../data/wallet'
+import { RpcMessage } from '../lib/messages'
 import { handleRpcRequest } from '../lib/rpc-handler'
 
 export default defineBackground({
@@ -74,7 +75,16 @@ export default defineBackground({
         return false
       }
 
-      const { method, params, origin, title, favicon } = message.data
+      const parsed = RpcMessage.safeParse(message)
+      if (!parsed.success) {
+        sendResponse({
+          type: 'status:proxy:error',
+          error: { code: -32600, message: 'Invalid Request' },
+        })
+        return true
+      }
+
+      const { method, params, origin, title, favicon } = parsed.data.data
 
       handleRpcRequest(method, params, origin, { title, favicon })
         .then(result => {
