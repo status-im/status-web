@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ContextTag, Input } from '@status-im/components'
@@ -11,6 +11,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+import { MAX_BOOST } from '~constants/index'
 import { useSliderConfig } from '~hooks/useSliderConfig'
 
 import { DEFAULT_LOCK_PERIOD, SECONDS_PER_DAY } from './constants'
@@ -45,6 +46,12 @@ interface LockVaultFormProps {
   onValidate?: (years: string, days: string) => string | null
   /** Current lockUntil timestamp (for vault extensions) */
   currentLockUntil?: bigint
+  /** Current chain timestamp used for extension calculations */
+  currentTimestamp?: bigint
+  /** Current staked balance used for MP-cap calculations */
+  currentStakedBalance?: bigint
+  /** Current MP balance used for MP-cap calculations */
+  currentMpBalance?: bigint
 }
 
 /**
@@ -63,6 +70,9 @@ export function LockVaultForm(props: LockVaultFormProps) {
     onClose,
     actions,
     currentLockUntil,
+    currentTimestamp,
+    currentStakedBalance,
+    currentMpBalance,
   } = props
 
   const [closeAction, submitAction] = actions
@@ -79,17 +89,46 @@ export function LockVaultForm(props: LockVaultFormProps) {
 
   const sliderConfig = useMemo(() => {
     const minSeconds = sliderConfigQuery?.min || 7776000 // fallback: 90 days in seconds
-    const maxSeconds = sliderConfigQuery?.max || 126144000 // fallback: 4 years in seconds
+    const contractMaxSeconds = sliderConfigQuery?.max || 126144000 // fallback: 4 years in seconds
+    const referenceTimestamp =
+      currentTimestamp ?? BigInt(Math.floor(Date.now() / 1000))
+    const isExtending =
+      currentLockUntil && currentLockUntil > referenceTimestamp
+    const currentRemainingSeconds = isExtending
+      ? currentLockUntil - referenceTimestamp
+      : 0n
+
+    let maxSeconds = contractMaxSeconds
+
+    if (
+      isExtending &&
+      currentStakedBalance &&
+      currentStakedBalance > 0n &&
+      currentMpBalance !== undefined
+    ) {
+      const absoluteMaxMp = currentStakedBalance * BigInt(MAX_BOOST - 1)
+      const remainingGrantableMp =
+        absoluteMaxMp > currentMpBalance ? absoluteMaxMp - currentMpBalance : 0n
+      const maxAdditionalSecondsByMp =
+        absoluteMaxMp > 0n
+          ? (remainingGrantableMp * BigInt(contractMaxSeconds)) / absoluteMaxMp
+          : 0n
+      const maxTotalSecondsByMp =
+        currentRemainingSeconds + maxAdditionalSecondsByMp
+
+      maxSeconds = Math.min(maxSeconds, Number(maxTotalSecondsByMp))
+    }
 
     const minDays = Math.round(minSeconds / SECONDS_PER_DAY)
     const maxDays = Math.round(maxSeconds / SECONDS_PER_DAY)
+    const effectiveMinDays = Math.min(minDays, maxDays)
 
-    const minYears = minDays / DAYS_PER_YEAR
+    const minYears = effectiveMinDays / DAYS_PER_YEAR
     const maxYears = maxDays / DAYS_PER_YEAR
 
     const minLabel =
       minYears < 1
-        ? t('vault.days_label', { count: minDays })
+        ? t('vault.days_label', { count: effectiveMinDays })
         : t('vault.years_label', { count: minYears.toFixed(1) })
     const maxLabel =
       maxYears < 1
@@ -99,11 +138,18 @@ export function LockVaultForm(props: LockVaultFormProps) {
     return {
       minLabel,
       maxLabel,
-      minDays,
+      minDays: effectiveMinDays,
       maxDays,
       initialPosition: 50,
     }
-  }, [sliderConfigQuery, t])
+  }, [
+    currentLockUntil,
+    currentMpBalance,
+    currentStakedBalance,
+    currentTimestamp,
+    sliderConfigQuery,
+    t,
+  ])
 
   const years = watch('years')
   const days = watch('days')
@@ -115,23 +161,26 @@ export function LockVaultForm(props: LockVaultFormProps) {
 
   const [sliderValue, setSliderValue] = useState(initialSliderValue)
 
-  const calculateUnlockDate = (totalDays: number): string => {
-    const totalSeconds = totalDays * SECONDS_PER_DAY
-    // Always calculate from today for consistent UX
-    const unlockTimestamp = Math.floor(Date.now() / 1000) + totalSeconds
+  const calculateUnlockDate = useCallback(
+    (totalDays: number): string => {
+      const totalSeconds = totalDays * SECONDS_PER_DAY
+      // Always calculate from today for consistent UX
+      const unlockTimestamp = Math.floor(Date.now() / 1000) + totalSeconds
 
-    // Convert to Date for display (multiply by 1000 for milliseconds)
-    const unlockDate = new Date(unlockTimestamp * 1000)
+      // Convert to Date for display (multiply by 1000 for milliseconds)
+      const unlockDate = new Date(unlockTimestamp * 1000)
 
-    const year = unlockDate.getFullYear()
-    const month = String(unlockDate.getMonth() + 1).padStart(2, '0')
-    const day = String(unlockDate.getDate()).padStart(2, '0')
+      const year = unlockDate.getFullYear()
+      const month = String(unlockDate.getMonth() + 1).padStart(2, '0')
+      const day = String(unlockDate.getDate()).padStart(2, '0')
 
-    if (locale === 'ko') {
-      return `${year}-${month}-${day}`
-    }
-    return `${day}/${month}/${year}`
-  }
+      if (locale === 'ko') {
+        return `${year}-${month}-${day}`
+      }
+      return `${day}/${month}/${year}`
+    },
+    [locale]
+  )
 
   const calculatedUnlockDate = useMemo(() => {
     const daysValue = parseInt(
@@ -156,10 +205,13 @@ export function LockVaultForm(props: LockVaultFormProps) {
 
     if (isExtending) {
       // When extending: calculate how much additional time to add
-      // to reach the user's desired total lock time from now
-      const now = BigInt(Math.floor(Date.now() / 1000))
+      // to reach the user's desired total lock time from the latest block timestamp
+      const referenceTimestamp =
+        currentTimestamp ?? BigInt(Math.floor(Date.now() / 1000))
       const currentRemainingSeconds =
-        currentLockUntil > now ? currentLockUntil - now : 0n
+        currentLockUntil > referenceTimestamp
+          ? currentLockUntil - referenceTimestamp
+          : 0n
 
       // If user wants total lock of X seconds from now, and vault currently locked for Y seconds from now,
       // we need to add (X - Y) seconds
@@ -170,9 +222,23 @@ export function LockVaultForm(props: LockVaultFormProps) {
       if (increasedLockSeconds < 0n) {
         increasedLockSeconds = 0n
       }
+
+      console.log('[LockForm] EXTEND mode:', {
+        totalDays,
+        userDesiredTotalLockSeconds: userDesiredTotalLockSeconds.toString(),
+        currentLockUntil: currentLockUntil.toString(),
+        currentTimestamp: referenceTimestamp.toString(),
+        currentRemainingSeconds: currentRemainingSeconds.toString(),
+        increasedLockSeconds: increasedLockSeconds.toString(),
+      })
     } else {
       // New lock: just use the duration as-is
       increasedLockSeconds = userDesiredTotalLockSeconds
+      console.log('[LockForm] NEW LOCK mode:', {
+        totalDays,
+        increasedLockSeconds: increasedLockSeconds.toString(),
+        currentLockUntil: currentLockUntil?.toString() ?? 'undefined',
+      })
     }
 
     onClose()
@@ -228,7 +294,9 @@ export function LockVaultForm(props: LockVaultFormProps) {
     }
 
     if (daysValue > sliderConfig.maxDays) {
-      return t('vault.max_lock_time', { time: sliderConfig.maxLabel })
+      return currentLockUntil && currentLockUntil > 0n
+        ? t('errors.mp_overflow')
+        : t('vault.max_lock_time', { time: sliderConfig.maxLabel })
     }
 
     const minYears = sliderConfig.minDays / DAYS_PER_YEAR

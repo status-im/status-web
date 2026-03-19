@@ -1,9 +1,10 @@
 'use client'
 
-import { useReadContract } from 'wagmi'
+import { useBlock, useReadContract } from 'wagmi'
 import { statusSepolia } from 'wagmi/chains'
 
-import { vaultAbi } from '~constants/contracts'
+import { stakingManagerAbi, vaultAbi } from '~constants/contracts'
+import { STAKING_MANAGER } from '~constants/index'
 import { useLockVault } from '~hooks/useLockVault'
 
 import { BaseVaultModal } from '../base-vault-modal'
@@ -61,12 +62,40 @@ export function LockVaultModal(props: LockVaultModalProps) {
     chainId: statusSepolia.id,
   }) as { data: bigint }
 
+  const { data: latestBlock } = useBlock({
+    chainId: statusSepolia.id,
+    watch: true,
+  })
+
+  const { data: vaultData } = useReadContract({
+    abi: stakingManagerAbi,
+    address: STAKING_MANAGER.address,
+    functionName: 'getVault',
+    args: [vaultAddress],
+    chainId: statusSepolia.id,
+  }) as {
+    data:
+      | {
+          stakedBalance: bigint
+        }
+      | undefined
+  }
+
+  const { data: currentMpBalance } = useReadContract({
+    abi: stakingManagerAbi,
+    address: STAKING_MANAGER.address,
+    functionName: 'mpBalanceOf',
+    args: [vaultAddress],
+    chainId: statusSepolia.id,
+  }) as { data: bigint | undefined }
+
   // Calculate initial values based on current lockUntil for extensions
-  // Only consider it "extending" if the vault is currently locked (lockUntil > now)
-  const now = BigInt(Math.floor(Date.now() / 1000))
-  const isExtending = lockUntil && lockUntil > now
+  // Use the latest block timestamp so extension math matches contract execution.
+  const currentTimestamp =
+    latestBlock?.timestamp ?? BigInt(Math.floor(Date.now() / 1000))
+  const isExtending = lockUntil && lockUntil > currentTimestamp
   const calculatedInitialDays = isExtending
-    ? Math.ceil((Number(lockUntil) - Math.floor(Date.now() / 1000)) / 86400)
+    ? Math.ceil(Number(lockUntil - currentTimestamp) / 86400)
     : undefined
   const calculatedInitialYears = calculatedInitialDays
     ? (calculatedInitialDays / 365).toFixed(2)
@@ -116,6 +145,9 @@ export function LockVaultModal(props: LockVaultModalProps) {
         onClose={onClose}
         actions={actions}
         currentLockUntil={lockUntil as bigint | undefined}
+        currentTimestamp={currentTimestamp}
+        currentStakedBalance={vaultData?.stakedBalance}
+        currentMpBalance={currentMpBalance}
       />
     </BaseVaultModal>
   )
