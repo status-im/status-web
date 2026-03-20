@@ -67,6 +67,12 @@ export default async function RootLayout({ children }: Props) {
         />
       </head>
       <body data-customisation="blue" suppressHydrationWarning>
+        <script
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html: `(${platformScript.toString()})()`,
+          }}
+        />
         <div id="app" className="isolate">
           <NextIntlClientProvider locale={locale} messages={messages}>
             <Providers>{children}</Providers>
@@ -86,4 +92,23 @@ export default async function RootLayout({ children }: Props) {
       </body>
     </html>
   )
+}
+
+// inspired by the implementation of next-themes
+// https://github.com/pacocoursey/next-themes/blob/main/next-themes/src/index.tsx
+const platformScript = () => {
+  const userAgent = navigator.userAgent.toLowerCase()
+  if (/iphone|ipad|ipod/.test(userAgent)) {
+    document.body.setAttribute('data-platform', 'ios')
+  } else if (userAgent.includes('mac')) {
+    document.body.setAttribute('data-platform', 'macos')
+  } else if (userAgent.includes('win')) {
+    document.body.setAttribute('data-platform', 'windows')
+  } else if (userAgent.includes('android')) {
+    document.body.setAttribute('data-platform', 'android')
+  } else if (userAgent.includes('linux')) {
+    document.body.setAttribute('data-platform', 'linux')
+  } else {
+    document.body.setAttribute('data-platform', 'unknown')
+  }
 }
