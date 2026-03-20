@@ -97,18 +97,19 @@ export default async function RootLayout({ children }: Props) {
 // inspired by the implementation of next-themes
 // https://github.com/pacocoursey/next-themes/blob/main/next-themes/src/index.tsx
 const platformScript = () => {
+  const d = document.documentElement
   const userAgent = navigator.userAgent.toLowerCase()
   if (/iphone|ipad|ipod/.test(userAgent)) {
-    document.body.setAttribute('data-platform', 'ios')
+    d.setAttribute('data-platform', 'ios')
   } else if (userAgent.includes('mac')) {
-    document.body.setAttribute('data-platform', 'macos')
+    d.setAttribute('data-platform', 'macos')
   } else if (userAgent.includes('win')) {
-    document.body.setAttribute('data-platform', 'windows')
+    d.setAttribute('data-platform', 'windows')
   } else if (userAgent.includes('android')) {
-    document.body.setAttribute('data-platform', 'android')
+    d.setAttribute('data-platform', 'android')
   } else if (userAgent.includes('linux')) {
-    document.body.setAttribute('data-platform', 'linux')
+    d.setAttribute('data-platform', 'linux')
   } else {
-    document.body.setAttribute('data-platform', 'unknown')
+    d.setAttribute('data-platform', 'unknown')
   }
 }
