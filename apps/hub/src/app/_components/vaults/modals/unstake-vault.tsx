@@ -124,6 +124,11 @@ export function UnstakeVaultModal(props: UnstakeVaultModalProps) {
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
+    // Allow clearing the input
+    if (value === '') {
+      form.setValue('amount', '', { shouldValidate: true })
+      return
+    }
     // Allow only numbers and decimal point
     if (validateVaultAmount(value)) {
       // Truncate to 6 decimal places to avoid precision issues
@@ -132,6 +137,7 @@ export function UnstakeVaultModal(props: UnstakeVaultModalProps) {
         parts[1] && parts[1].length > 6
           ? `${parts[0]}.${parts[1].slice(0, 6)}`
           : value
+
       form.setValue('amount', truncated, { shouldValidate: true })
     }
   }
