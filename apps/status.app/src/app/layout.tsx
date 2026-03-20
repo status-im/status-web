@@ -7,6 +7,7 @@ import Script from 'next/script'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 
+import { PlatformDetector } from './_components/platform-detector'
 import { Metadata } from './_metadata'
 import { Providers } from './_providers'
 
@@ -73,6 +74,7 @@ export default async function RootLayout({ children }: Props) {
             __html: `(${platformScript.toString()})()`,
           }}
         />
+        <PlatformDetector />
         <div id="app" className="isolate">
           <NextIntlClientProvider locale={locale} messages={messages}>
             <Providers>{children}</Providers>
