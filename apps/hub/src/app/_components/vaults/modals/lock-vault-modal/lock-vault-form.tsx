@@ -213,10 +213,17 @@ export function LockVaultForm(props: LockVaultFormProps) {
           ? currentLockUntil - referenceTimestamp
           : 0n
 
+      // Subtract a small buffer to account for any drift between the
+      // reference timestamp and the block.timestamp the contract sees.
+      // 120 seconds is negligible relative to the 90-day minimum lock period.
+      const BLOCK_TIME_BUFFER = 120n
+
       // If user wants total lock of X seconds from now, and vault currently locked for Y seconds from now,
-      // we need to add (X - Y) seconds
+      // we need to add (X - Y - buffer) seconds
       increasedLockSeconds =
-        userDesiredTotalLockSeconds - currentRemainingSeconds
+        userDesiredTotalLockSeconds -
+        currentRemainingSeconds -
+        BLOCK_TIME_BUFFER
 
       // Ensure we're adding at least some time (can't decrease lock)
       if (increasedLockSeconds < 0n) {
