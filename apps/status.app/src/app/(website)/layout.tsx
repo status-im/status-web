@@ -1,3 +1,5 @@
+import { unstable_cache } from 'next/cache'
+
 import { getLatestRelease } from '~server/services/github'
 
 import { Footer } from './_components/footer'
@@ -15,15 +17,25 @@ type Props = {
 
 export const revalidate = 3600 // 1 hour
 
+const getCachedLatestRelease = unstable_cache(
+  async () => {
+    try {
+      return await getLatestRelease({ repo: 'status-app' })
+    } catch (error) {
+      console.error('Failed to fetch GitHub releases', error)
+      return null
+    }
+  },
+  ['status-app-latest-release'],
+  {
+    revalidate: 3600,
+  }
+)
+
 export default async function WebsiteLayout(props: Props) {
   const { children } = props
 
-  let release = null
-  try {
-    release = await getLatestRelease({ repo: 'status-app' })
-  } catch (error) {
-    console.error('Failed to fetch GitHub releases', error)
-  }
+  const release = await getCachedLatestRelease()
 
   return (
     <WebsiteProvider mobileRelease={release} desktopRelease={release}>

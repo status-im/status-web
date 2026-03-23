@@ -1,3 +1,5 @@
+import { getTranslations } from 'next-intl/server'
+
 import { PieChart } from '../../_components/pie-chart'
 import { DevicesChart } from './_components/charts/devices/chart'
 import { InteractionsChart } from './_components/charts/interactions/chart'
@@ -724,13 +726,13 @@ const INTERACTIONS_DATA = {
   ],
 }
 
-export default function KeycardOverviewPage() {
+export default async function KeycardOverviewPage() {
+  const t = await getTranslations('admin')
+
   return (
     <main className="grow overflow-x-hidden p-6 md:overflow-y-auto md:p-12">
-      <h1 className="pb-1 text-27 font-semibold">Keycard</h1>
-      <p className="text-13 md:text-15">
-        Manage keycard devices, databases, and firmwares.
-      </p>
+      <h1 className="pb-1 text-27 font-semibold">{t('keycard')}</h1>
+      <p className="text-13 md:text-15">{t('keycardManagementDescription')}</p>
       <div className="grid grid-cols-1 gap-4 pt-6 2xl:grid-cols-2">
         <DevicesChart
           cumulativeData={DEVICES_DATA.cumulative}
@@ -742,25 +744,25 @@ export default function KeycardOverviewPage() {
         <div className="flex w-full select-none flex-col rounded-16 border border-neutral-10 shadow-1">
           <PieChart
             data={PIECHART_DATA.database}
-            title="Database"
+            title={t('database')}
             url="/admin/keycard/databases"
-            hoveredCaption="devices"
+            hoveredCaption={t('devicesLowercase')}
           />
         </div>
         <div className="flex w-full select-none flex-col rounded-16 border border-neutral-10 shadow-1">
           <PieChart
             data={PIECHART_DATA.firmware}
-            title="Firmware"
+            title={t('firmware')}
             url="/admin/keycard/firmwares"
-            hoveredCaption="devices"
+            hoveredCaption={t('devicesLowercase')}
             delay={200}
           />
         </div>
         <div className="flex w-full select-none flex-col rounded-16 border border-neutral-10 shadow-1">
           <PieChart
             data={PIECHART_DATA.verificationGap}
-            title="Verification Gap"
-            hoveredCaption="devices"
+            title={t('verificationGap')}
+            hoveredCaption={t('devicesLowercase')}
             delay={400}
           />
         </div>

@@ -5,6 +5,7 @@ import { useMemo, useState, useTransition } from 'react'
 import { LoadingIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
 import { matchSorter } from 'match-sorter'
+import { useTranslations } from 'next-intl'
 
 import * as Drawer from '~admin/_components/drawer'
 import { MultiselectFilter } from '~admin/_components/multiselect-filter'
@@ -14,9 +15,10 @@ import { SelectionIndicator } from '~admin/_components/selection-indicator'
 import { InsightsAppIcon } from '../../_components/insights-app-icon'
 import { InsightsStatusIcon } from '../../_components/insights-status-icon'
 import {
-  projectAppOptions,
-  projectStatusOptions,
-} from '../../projects/_components/projects-list'
+  getAdminAppLabel,
+  getProjectAppOptions,
+  getProjectStatusOptions,
+} from '../../_utils/i18n'
 
 import type { ApiOutput } from '~server/api/types'
 
@@ -60,6 +62,9 @@ const DrawerContent = (
   props: Omit<Props, 'children'> & { loading: boolean }
 ) => {
   const { projects, selection, onSelectionChange, loading, onSubmit } = props
+  const t = useTranslations('admin')
+  const projectAppOptions = getProjectAppOptions(t)
+  const projectStatusOptions = getProjectStatusOptions(t)
 
   const [searchFilter, setSearchFilter] = useState<string>('')
   const [appFilter, setAppFilter] = useState<string[]>([])
@@ -86,21 +91,21 @@ const DrawerContent = (
   return (
     <>
       <Drawer.Header>
-        <Drawer.Title>Add Project</Drawer.Title>
+        <Drawer.Title>{t('addProject')}</Drawer.Title>
         <Drawer.Filters>
           <SearchInput
-            placeholder="Find projects"
+            placeholder={t('findProjects')}
             value={searchFilter}
             onChange={setSearchFilter}
           />
           <MultiselectFilter
-            label="App"
+            label={t('app')}
             options={projectAppOptions}
             selection={appFilter}
             onSelectionChange={setAppFilter}
           />
           <MultiselectFilter
-            label="Status"
+            label={t('status')}
             options={projectStatusOptions}
             selection={statusFilter}
             onSelectionChange={setStatusFilter}
@@ -138,7 +143,7 @@ const DrawerContent = (
                     </div>
                     <div className="flex items-center gap-1 text-13 font-medium capitalize">
                       <InsightsAppIcon type={project.app} />
-                      {project.app}
+                      {getAdminAppLabel(t, project.app)}
                     </div>
                   </div>
                   <div>
@@ -158,7 +163,7 @@ const DrawerContent = (
           onClick={onSubmit}
           disabled={loading}
         >
-          {loading ? <LoadingIcon /> : 'Save'}
+          {loading ? <LoadingIcon /> : t('save')}
         </button>
       </Drawer.Footer>
     </>

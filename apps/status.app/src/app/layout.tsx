@@ -4,6 +4,8 @@ import { ToastContainer } from '@status-im/components'
 import { Analytics } from '@vercel/analytics/next'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
+import { NextIntlClientProvider } from 'next-intl'
+import { getLocale, getMessages } from 'next-intl/server'
 
 import { Metadata } from './_metadata'
 import { Providers } from './_providers'
@@ -52,9 +54,11 @@ type Props = {
   children: React.ReactNode
 }
 
-export default function RootLayout({ children }: Props) {
+export default async function RootLayout({ children }: Props) {
+  const [locale, messages] = await Promise.all([getLocale(), getMessages()])
+
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang={locale} className={inter.variable}>
       <head>
         <link rel="preconnect" href="https://res.cloudinary.com" />
         <meta
@@ -64,7 +68,9 @@ export default function RootLayout({ children }: Props) {
       </head>
       <body data-customisation="blue" suppressHydrationWarning>
         <div id="app" className="isolate">
-          <Providers>{children}</Providers>
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            <Providers>{children}</Providers>
+          </NextIntlClientProvider>
         </div>
         <ToastContainer />
         <Analytics debug={false} />

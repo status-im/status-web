@@ -1,5 +1,6 @@
 import { Avatar } from '@status-im/components'
 import { notFound } from 'next/navigation'
+import { getTranslations } from 'next-intl/server'
 
 import { Metadata } from '~app/_metadata'
 import { Body } from '~components/body'
@@ -21,12 +22,13 @@ type Props = {
 }
 
 export async function generateMetadata({ params }: Props) {
+  const t = await getTranslations('blog')
   const slug = (await params).slug
   const response = await getPostsByAuthorSlug(slug)
 
   if (!response) {
     return Metadata({
-      title: 'Author not found',
+      title: t('authorNotFound'),
       alternates: {
         canonical: `/blog/author/${slug}`,
       },
@@ -34,11 +36,12 @@ export async function generateMetadata({ params }: Props) {
   }
 
   const { author } = response
-  const authorName = author.name ?? author.slug ?? 'Unknown Author'
+  const authorName = author.name ?? author.slug ?? t('unknownAuthor')
 
   return Metadata({
     title: authorName,
-    description: author.meta_description ?? `Blog posts by ${authorName}`,
+    description:
+      author.meta_description ?? t('postsByAuthor', { author: authorName }),
     alternates: {
       canonical: `/blog/author/${slug}`,
     },
@@ -47,6 +50,7 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function BlogAuthorPage(props: Props) {
   const { params } = props
+  const t = await getTranslations('blog')
 
   const response = await getPostsByAuthorSlug((await params).slug)
   if (!response) {
@@ -60,7 +64,7 @@ export default async function BlogAuthorPage(props: Props) {
       <Breadcrumbs
         items={[
           {
-            label: 'Blog',
+            label: t('breadcrumb'),
             href: '/blog',
           },
           {

@@ -5,6 +5,7 @@ import { useState, useTransition } from 'react'
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog'
 import { LoadingIcon } from '@status-im/icons/20'
 import { cva, cx } from 'class-variance-authority'
+import { useTranslations } from 'next-intl'
 
 // COMPONENTS FROM RADIX UI
 const AlertDialogRoot = AlertDialogPrimitive.Root
@@ -40,6 +41,7 @@ const AlertDialog = (props: {
   onConfirm: () => Promise<unknown>
 }) => {
   const { title, children, onConfirm } = props
+  const t = useTranslations('admin')
   const [open, setOpen] = useState(false)
 
   const [isPending, startTransition] = useTransition()
@@ -61,9 +63,9 @@ const AlertDialog = (props: {
             <AlertDialogTitle className="text-19 font-semibold">
               {title}
             </AlertDialogTitle>
-            <p className="mt-1 text-15">Are you sure?</p>
+            <p className="mt-1 text-15">{t('areYouSure')}</p>
             <p className="mb-1 text-15 text-neutral-50">
-              This action cannot be undone
+              {t('cannotBeUndone')}
             </p>
           </AlertDialogHeader>
 
@@ -73,7 +75,7 @@ const AlertDialog = (props: {
               className={buttonVariants({ variant: 'grey' })}
               disabled={isPending}
             >
-              Cancel
+              {t('cancel')}
             </AlertDialogCancel>
             <button
               className={buttonVariants({ variant: 'danger' })}
@@ -84,7 +86,7 @@ const AlertDialog = (props: {
               {isPending ? (
                 <LoadingIcon className="animate-spin text-white-100" />
               ) : (
-                'Confirm'
+                t('confirm')
               )}
             </button>
           </div>

@@ -3,6 +3,7 @@
 import { Avatar } from '@status-im/components'
 import { DoneIcon, NotStartedIcon } from '@status-im/icons/16'
 import { usePathname } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import { ReportsListItem } from './reports-list-item'
 
@@ -15,6 +16,7 @@ type Props = {
 
 const ReportsList = (props: Props) => {
   const { reports, contributorId } = props
+  const t = useTranslations('admin')
   const pathname = usePathname()
 
   return (
@@ -45,7 +47,7 @@ const ReportsList = (props: Props) => {
         {reports.outstanding.length > 0 && (
           <>
             <div className="mb-2 mt-5 flex items-center gap-1 text-13 font-medium text-neutral-100">
-              <NotStartedIcon className="text-neutral-50" /> Outstanding
+              <NotStartedIcon className="text-neutral-50" /> {t('outstanding')}
             </div>
 
             <ul className="flex flex-col gap-2">
@@ -69,7 +71,7 @@ const ReportsList = (props: Props) => {
         {reports.closed.length > 0 && (
           <>
             <div className="mb-2 mt-5 flex items-center gap-1 text-13 font-medium text-success-50">
-              <DoneIcon /> Closed
+              <DoneIcon /> {t('closed')}
             </div>
             <ul className="flex flex-col gap-2">
               {Array.isArray(reports.closed) &&

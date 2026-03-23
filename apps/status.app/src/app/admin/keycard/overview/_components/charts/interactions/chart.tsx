@@ -4,6 +4,7 @@ import { useState } from 'react'
 
 import { DropdownButton, DropdownMenu } from '@status-im/components'
 import { ParentSize } from '@visx/responsive'
+import { useTranslations } from 'next-intl'
 
 import { Legend } from '../legend'
 import { Chart } from './content'
@@ -67,6 +68,7 @@ const PRESET_RANGES: RangeOptionType[] = [
 ]
 
 const InteractionsChart = (props: Props) => {
+  const t = useTranslations('admin')
   const { data: dataFromProps } = props
 
   const [activeRange, setActiveRange] = useState<InteractionsTimeFrame>('1M')
@@ -111,7 +113,7 @@ const InteractionsChart = (props: Props) => {
           return (
             <>
               <div className="flex items-center justify-between">
-                <p className="text-15 font-semibold">Interactions</p>
+                <p className="text-15 font-semibold">{t('interactions')}</p>
                 <div className="flex items-center gap-2">
                   <DropdownMenu.Root
                     onOpenChange={() =>

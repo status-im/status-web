@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
 
 import type { Metadata } from 'next'
 
@@ -15,11 +16,14 @@ type Props = {
 }
 
 export default async function DatabasePage({ params }: Props) {
+  const id = (await params).id
+  const t = await getTranslations('admin')
+
   return (
     <div className="flex flex-col">
-      <h1 className="text-27">Database - {(await params).id}</h1>
+      <h1 className="text-27">{t('databaseTitle', { id })}</h1>
       <div className="flex flex-col gap-6">
-        <Link href="/admin/keycard/databases">Back to databases</Link>
+        <Link href="/admin/keycard/databases">{t('backToDatabases')}</Link>
       </div>
     </div>
   )

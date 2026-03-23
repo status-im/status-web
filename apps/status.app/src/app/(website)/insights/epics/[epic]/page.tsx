@@ -4,8 +4,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { format, isDate, subDays } from 'date-fns'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
+import { useRouter } from '~/i18n/navigation'
 import { Breadcrumbs } from '~components/breadcrumbs'
 import { useDebounce } from '~hooks/use-debounce'
 import { useIntersectionObserver } from '~hooks/use-intersection-observer'
@@ -44,6 +46,7 @@ const LIMIT = 10
 
 export default function EpicsDetailPage() {
   const { epic: epicLabel } = useParams() as { epic: string }
+  const t = useTranslations('insights')
 
   const epicName = decodeURIComponent(epicLabel)
 
@@ -85,7 +88,7 @@ export default function EpicsDetailPage() {
 
   const breadcrumbs = [
     {
-      label: 'Epics',
+      label: t('epics'),
       href: appendDateQueryParams('/insights/epics'),
     },
     {

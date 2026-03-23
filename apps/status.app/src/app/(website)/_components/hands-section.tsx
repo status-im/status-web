@@ -1,10 +1,28 @@
+'use client'
+
 import { Text } from '@status-im/components'
+import { useTranslations } from 'next-intl'
 
 import { Icon, Image } from '~components/assets'
 
 import type { ImageId } from '~components/assets'
 
 const HandsSection = () => {
+  const t = useTranslations('home')
+
+  const footerData = [
+    {
+      icon: 'Non Beta Release/Icons/03:145:144' as const satisfies ImageId,
+      title: t('multiChainSupportTitle'),
+      description: t('multiChainSupportDescription'),
+    },
+    {
+      icon: 'Non Beta Release/Icons/04:145:144' as const satisfies ImageId,
+      title: t('nftsTitle'),
+      description: t('nftsDescription'),
+    },
+  ] as const
+
   return (
     <div className="relative z-20 bg-white-100">
       <div className="container-lg relative pb-24 pt-40 xl:pb-40 xl:pt-20">
@@ -25,10 +43,11 @@ const HandsSection = () => {
           </div>
 
           <div className="relative z-10 -mt-20 max-w-[582px] text-center sm:-mt-40 2md:mt-0">
-            <h2 className="mb-2 text-27 font-bold">Own your crypto</h2>
+            <h2 className="mb-2 text-27 font-bold">
+              {t('ownYourCryptoTitle')}
+            </h2>
             <span className="text-27 font-regular">
-              No one can freeze, lock out or stop you from accessing or
-              transacting your tokens.
+              {t('ownYourCryptoDescription')}
             </span>
           </div>
         </div>
@@ -37,7 +56,7 @@ const HandsSection = () => {
         <div className="absolute bottom-0 left-1/2 z-[2] h-[1000px] w-screen -translate-x-1/2 bg-gradient-to-t from-default-customisation-yellow-50/5 to-transparent" />
 
         <div className="relative z-[2] flex flex-col items-center justify-center gap-12 pt-30 2md:flex-row 2md:gap-5">
-          {FOOTER_DATA.map(item => (
+          {footerData.map(item => (
             <div
               key={item.title}
               className="flex flex-col items-center gap-4 xl:max-w-[460px] xl:px-10"
@@ -56,20 +75,5 @@ const HandsSection = () => {
     </div>
   )
 }
-
-const FOOTER_DATA = [
-  {
-    icon: 'Non Beta Release/Icons/03:145:144' satisfies ImageId,
-    title: 'Multi-chain token support',
-    description:
-      'Access a live-updating token list synced from top DEXes across multiple chains.',
-  },
-  {
-    icon: 'Non Beta Release/Icons/04:145:144' satisfies ImageId,
-    title: 'NFTs and collectibles',
-    description:
-      'Collect and showcase any NFT or digital collectible listed on OpenSea and other major NFT platforms.',
-  },
-] as const
 
 export { HandsSection }

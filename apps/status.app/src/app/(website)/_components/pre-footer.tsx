@@ -2,8 +2,9 @@
 
 import { Text } from '@status-im/components'
 import { cx } from 'class-variance-authority'
-import { usePathname } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
+import { usePathname } from '~/i18n/navigation'
 import { Image } from '~components/assets'
 
 import { DownloadDesktopButton } from './download-desktop-button'
@@ -11,6 +12,7 @@ import { DownloadMobileButton } from './download-mobile-button'
 
 const Prefooter = () => {
   const pathname = usePathname()!
+  const t = useTranslations('prefooter')
 
   if (!['/', '/apps'].includes(pathname)) {
     return null
@@ -26,10 +28,10 @@ const Prefooter = () => {
             className="size-20"
           />
           <h1 className="py-4 pb-3 pt-5 text-40 font-bold text-white-100 lg:pb-5 lg:text-88">
-            Be unstoppable
+            {t('title')}
           </h1>
           <Text size={19} color="$white-100">
-            Use the open-source, decentralised wallet and messenger.
+            {t('description')}
           </Text>
           <div className="relative flex w-[237px] flex-col items-center justify-center pt-8 md:w-full">
             <div

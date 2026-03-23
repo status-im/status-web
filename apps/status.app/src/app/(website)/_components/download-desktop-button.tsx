@@ -9,6 +9,7 @@ import {
   LinuxIcon,
   WindowsIcon,
 } from '@status-im/icons/20'
+import { useTranslations } from 'next-intl'
 import { match } from 'ts-pattern'
 
 import {
@@ -45,12 +46,13 @@ const getDesktopEquivalent = (platform: string | null) => {
 export const DownloadDesktopButton = (props: Props) => {
   const { show = 'single', source = null, ...buttonProps } = props
   const [currentPlatform, setCurrentPlatform] = useState<string | null>(null)
+  const t = useTranslations('download')
 
-  const prefix = 'Download for'
-  const macos = 'macOS'
-  const windows = 'Windows'
-  const linux = 'Linux'
-  const desktop = 'desktop'
+  const prefix = t('prefix')
+  const macos = t('macos')
+  const windows = t('windows')
+  const linux = t('linux')
+  const desktop = t('desktop')
 
   useEffect(() => {
     const platform = document.body.getAttribute('data-platform')
@@ -151,6 +153,7 @@ type DownloadButtonProps = Pick<
 const LinuxDownloadButton = (props: DownloadButtonProps) => {
   const { source, ...buttonProps } = props
   const latestReleaseTags = useLatestReleaseTags()
+  const t = useTranslations('download')
 
   const handleClick = () => {
     trackEvent('Download', {
@@ -168,7 +171,7 @@ const LinuxDownloadButton = (props: DownloadButtonProps) => {
             {...buttonProps}
             href={STATUS_DESKTOP_DOWNLOAD_URL_LINUX}
             icon={<LinuxIcon />}
-            aria-label="Download for Linux"
+            aria-label={t('downloadForLinux')}
             onClick={handleClick}
           />
         </DownloadConnectorDialog>
@@ -181,7 +184,7 @@ const LinuxDownloadButton = (props: DownloadButtonProps) => {
             iconBefore={<LinuxIcon />}
             onClick={handleClick}
           >
-            Download for Linux
+            {t('downloadForLinux')}
           </Button>
         </DownloadConnectorDialog>
       </div>
@@ -192,6 +195,7 @@ const LinuxDownloadButton = (props: DownloadButtonProps) => {
 const WindowsDownloadButton = (props: DownloadButtonProps) => {
   const { source, ...buttonProps } = props
   const latestReleaseTags = useLatestReleaseTags()
+  const t = useTranslations('download')
 
   const handleClick = () => {
     trackEvent('Download', {
@@ -210,7 +214,7 @@ const WindowsDownloadButton = (props: DownloadButtonProps) => {
             {...buttonProps}
             href={STATUS_DESKTOP_DOWNLOAD_URL_WINDOWS}
             icon={<WindowsIcon />}
-            aria-label="Download for Windows"
+            aria-label={t('downloadForWindows')}
             onClick={handleClick}
           />
         </DownloadConnectorDialog>
@@ -223,7 +227,7 @@ const WindowsDownloadButton = (props: DownloadButtonProps) => {
             iconBefore={<WindowsIcon />}
             onClick={handleClick}
           >
-            Download for Windows
+            {t('downloadForWindows')}
           </Button>
         </DownloadConnectorDialog>
       </div>
@@ -234,6 +238,7 @@ const WindowsDownloadButton = (props: DownloadButtonProps) => {
 const MacOSDownloadButton = (props: DownloadButtonProps) => {
   const { source, ...buttonProps } = props
   const latestReleaseTags = useLatestReleaseTags()
+  const t = useTranslations('download')
 
   const handleClick = () => {
     trackEvent('Download', {
@@ -252,7 +257,7 @@ const MacOSDownloadButton = (props: DownloadButtonProps) => {
             {...buttonProps}
             href={STATUS_DESKTOP_DOWNLOAD_URL_MACOS_SILICON}
             icon={<AppleIcon />}
-            aria-label="Download for macOS"
+            aria-label={t('downloadForMacOS')}
             onClick={handleClick}
           />
         </DownloadConnectorDialog>
@@ -265,7 +270,7 @@ const MacOSDownloadButton = (props: DownloadButtonProps) => {
             iconBefore={<AppleIcon />}
             onClick={handleClick}
           >
-            Download for macOS
+            {t('downloadForMacOS')}
           </Button>
         </DownloadConnectorDialog>
       </div>
@@ -274,12 +279,13 @@ const MacOSDownloadButton = (props: DownloadButtonProps) => {
 }
 
 const DesktopDownloadButton = (props: DownloadButtonProps) => {
+  const t = useTranslations('download')
   return (
     <>
       <div className="hidden ios:contents android:contents unknown:contents">
         <Button
           {...props}
-          href={ROUTES.Apps[1].href}
+          href={ROUTES.apps[1].href}
           iconBefore={
             <DesktopIcon
               className={match(props.variant)
@@ -289,7 +295,7 @@ const DesktopDownloadButton = (props: DownloadButtonProps) => {
             />
           }
         >
-          Download for desktop
+          {t('downloadForDesktop')}
         </Button>
       </div>
     </>

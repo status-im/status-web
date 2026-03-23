@@ -1,4 +1,5 @@
 import { ChevronRightIcon } from '@status-im/icons/16'
+import { getTranslations } from 'next-intl/server'
 
 import { Link } from '~components/link'
 
@@ -8,7 +9,8 @@ type Props = {
   post: PostOrPage
 }
 
-export function NewsTag({ post }: Props) {
+export async function NewsTag({ post }: Props) {
+  const t = await getTranslations('common')
   return (
     <Link
       href={`/blog/${post.slug}`}
@@ -21,7 +23,7 @@ export function NewsTag({ post }: Props) {
             'linear-gradient(78deg, #2A799B -30%, #F6B03C 8%, #FF33A3 98%)',
         }}
       >
-        NEW
+        {t('new')}
       </span>
       <span className="line-clamp-1 min-w-0 truncate text-13 font-medium text-white-100">
         {post.title}

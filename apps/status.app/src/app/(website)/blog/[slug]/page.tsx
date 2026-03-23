@@ -7,6 +7,7 @@ import {
   TwitterIcon,
 } from '@status-im/icons/social'
 import { notFound } from 'next/navigation'
+import { getTranslations } from 'next-intl/server'
 import production from 'react/jsx-runtime'
 import rehypeParse from 'rehype-parse'
 import rehypeReact, { type Options } from 'rehype-react'
@@ -43,12 +44,13 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props) {
+  const t = await getTranslations('blog')
   const slug = (await params).slug
   const post = await getPostBySlug(slug)
 
   if (!post) {
     return Metadata({
-      title: 'Post not found',
+      title: t('postNotFound'),
     })
   }
 
@@ -73,6 +75,7 @@ type Props = {
 
 export default async function BlogDetailPage(props: Props) {
   const { params } = props
+  const t = await getTranslations('blog')
 
   const post = await getPostBySlug((await params).slug)
 
@@ -111,7 +114,7 @@ export default async function BlogDetailPage(props: Props) {
   // root
   const breadcrumbs = [
     {
-      label: 'Blog',
+      label: t('breadcrumb'),
       href: '/blog',
     },
     {
@@ -180,7 +183,9 @@ export default async function BlogDetailPage(props: Props) {
           <div className="mt-auto flex h-5 items-center gap-1">
             <PostAuthor author={author} />
             <Text size={15} color="$neutral-50">
-              on {formatDate(new Date(post.published_at!))}
+              {t('publishedOn', {
+                date: formatDate(new Date(post.published_at!)),
+              })}
             </Text>
           </div>
         </div>
@@ -202,7 +207,7 @@ export default async function BlogDetailPage(props: Props) {
         {faqItems.length > 0 && (
           <div className="container-blog py-6">
             <div className="rounded-20 border border-neutral-20 bg-neutral-5 p-5 xl:p-6">
-              <h2 className="text-27 font-semibold">FAQ</h2>
+              <h2 className="text-27 font-semibold">{t('faq')}</h2>
               <div className="mt-5 grid gap-4">
                 {faqItems.map((item, index) => (
                   <div
@@ -240,13 +245,13 @@ export default async function BlogDetailPage(props: Props) {
 
           <div className="flex gap-3">
             <span className="text-13 font-medium text-neutral-50">
-              Share article on:
+              {t('shareArticle')}
             </span>
             <a
               href={`https://twitter.com/intent/tweet?text=${post.title}&url=${shareUrl}`}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Share on Twitter"
+              aria-label={t('shareOnTwitter')}
             >
               <TwitterIcon className="text-neutral-50" />
             </a>
@@ -254,7 +259,7 @@ export default async function BlogDetailPage(props: Props) {
               href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Share on Facebook"
+              aria-label={t('shareOnFacebook')}
             >
               <FacebookIcon className="text-neutral-50" />
             </a>
@@ -262,7 +267,7 @@ export default async function BlogDetailPage(props: Props) {
               href={`https://linkedin.com/sharing/share-offsite/?url=${shareUrl}`}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Share on LinkedIn"
+              aria-label={t('shareOnLinkedIn')}
             >
               <LinkedinIcon className="text-neutral-50" />
             </a>
@@ -274,7 +279,7 @@ export default async function BlogDetailPage(props: Props) {
             <div className="container-lg">
               <div className="mb-6">
                 <Text size={27} weight="semibold">
-                  Related articles
+                  {t('relatedArticles')}
                 </Text>
               </div>
 

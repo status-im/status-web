@@ -6,6 +6,7 @@ import { Content, Portal, Root, Trigger } from '@radix-ui/react-popover'
 import { Button } from '@status-im/components'
 import { ArrowRightIcon } from '@status-im/icons/12'
 import { cva } from 'class-variance-authority'
+import { useTranslations } from 'next-intl'
 
 import { formatDate } from '../chart/utils/format-time'
 import { Calendar } from './calendar'
@@ -29,6 +30,7 @@ type Props = {
 
 const DatePicker = (props: Props) => {
   const { onSelect, selected } = props
+  const t = useTranslations('insights')
   const { from, to } = selected || {}
 
   const [selectedFromDate, setSelectedFromDate] = useState<Date | undefined>(
@@ -121,7 +123,7 @@ const DatePicker = (props: Props) => {
   return (
     <div className="flex items-center justify-center gap-1 rounded-12 border border-solid border-neutral-80/10 bg-blur-neutral-5/70 pl-3 pr-1 backdrop-blur-sm">
       <span className="mr-1 cursor-default select-none text-13 font-medium text-blur-neutral-80/80 outline-offset-0">
-        Filter between
+        {t('filterBetween')}
       </span>
       <Root open={selectedFromDateOpen}>
         <Trigger asChild>
@@ -140,7 +142,7 @@ const DatePicker = (props: Props) => {
                 setSelectedFromDateOpen(!selectedFromDateOpen)
               }}
             >
-              {selectedFromDate ? formatDate(selectedFromDate) : 'Start Date'}
+              {selectedFromDate ? formatDate(selectedFromDate) : t('startDate')}
             </Button>
           </div>
         </Trigger>
@@ -186,7 +188,7 @@ const DatePicker = (props: Props) => {
               }}
               disabled={!selectedFromDate}
             >
-              {selectedToDate ? formatDate(selectedToDate) : 'End Date'}
+              {selectedToDate ? formatDate(selectedToDate) : t('endDate')}
             </Button>
           </div>
         </Trigger>
@@ -218,7 +220,7 @@ const DatePicker = (props: Props) => {
         variant="ghost"
         disabled={!selectedFromDate}
       >
-        Reset
+        {t('reset')}
       </Button>
     </div>
   )

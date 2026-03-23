@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react'
 
 import { DropdownButton } from '@status-im/components'
 import { usePathname, useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import { AdminDropdownSort } from '~admin/_components/dropdown-sort'
 import { FilterTag } from '~admin/_components/filter-tag'
@@ -14,6 +15,7 @@ import { useLayoutContext } from '~admin/_contexts/layout-context'
 import { useTableFilters } from '~admin/_hooks/use-table-filters'
 import { useTableSort } from '~admin/_hooks/use-table-sort'
 import { AdminLayoutList } from '~admin/_layouts/admin-layout-list'
+import { getPlatformOptions } from '~admin/insights/_utils/i18n'
 import { formatDate } from '~app/_utils/format-date'
 import { Table } from '~components/table'
 
@@ -22,23 +24,13 @@ import { CircularProgress } from './circular-progress'
 
 import type { ApiOutput } from '~server/api/types'
 
-const orderByData = {
-  // version: 'Numerical (release)',
-  dueOn: 'Due date',
-}
-
-const platformsOptions = [
-  { id: 'desktop' as const, label: '🌍 Desktop' },
-  { id: 'mobile' as const, label: '📱 Mobile' },
-  // { id: 'web', label: '🍿 Web' },
-]
-
 type Props = {
   releases: ApiOutput['releases']['all']
 }
 
 export const ReleasesList = (props: Props) => {
   const { releases } = props
+  const t = useTranslations('admin')
 
   const { showRightView } = useLayoutContext()
 
@@ -48,6 +40,10 @@ export const ReleasesList = (props: Props) => {
   const [searchFilter, setSearchFilter] = useState<string>('')
   const [platformsFilter, setPlatformsFilter] = useState<string[]>([])
   const [milestonesFilter, setMilestonesFilter] = useState<number[]>([])
+  const orderByData = {
+    dueOn: t('dueDate'),
+  }
+  const platformsOptions = getPlatformOptions(t)
 
   const { items, onOrderByChange, ascending, orderByColumn } = useTableSort({
     items: releases,
@@ -103,24 +99,24 @@ export const ReleasesList = (props: Props) => {
             <SearchInput
               value={searchFilter}
               onChange={setSearchFilter}
-              placeholder="Find releases"
+              placeholder={t('findReleases')}
             />
 
             <MultiselectFilter
-              label="Platform"
+              label={t('platform')}
               options={platformsOptions}
               selection={platformsFilter}
               onSelectionChange={setPlatformsFilter}
             />
 
             <InsightsCombobox
-              placeholder="Find milestones"
+              placeholder={t('findMilestones')}
               items={milestonesComboboxOptions}
               selection={milestonesFilter}
               onSelectionChange={setMilestonesFilter}
             >
               <DropdownButton variant="outline" size="32">
-                Milestones
+                {t('milestones')}
               </DropdownButton>
             </InsightsCombobox>
 
@@ -138,7 +134,7 @@ export const ReleasesList = (props: Props) => {
               return (
                 <FilterTag.Item
                   key={platform}
-                  title="Platform"
+                  title={t('platform')}
                   label={
                     platformsOptions.find(p => p.id === platform)?.label || ''
                   }
@@ -154,7 +150,7 @@ export const ReleasesList = (props: Props) => {
               return (
                 <FilterTag.Item
                   key={milestone}
-                  title="Milestone"
+                  title={t('milestone')}
                   label={
                     milestonesComboboxOptions.find(m => m.id === milestone)
                       ?.name || ''
@@ -177,10 +173,10 @@ export const ReleasesList = (props: Props) => {
       >
         <Table.Root>
           <Table.Header>
-            <Table.HeaderCell>Release</Table.HeaderCell>
-            <Table.HeaderCell>Platform</Table.HeaderCell>
-            <Table.HeaderCell>Milestones</Table.HeaderCell>
-            <Table.HeaderCell>Due date</Table.HeaderCell>
+            <Table.HeaderCell>{t('release')}</Table.HeaderCell>
+            <Table.HeaderCell>{t('platform')}</Table.HeaderCell>
+            <Table.HeaderCell>{t('milestones')}</Table.HeaderCell>
+            <Table.HeaderCell>{t('dueDate')}</Table.HeaderCell>
           </Table.Header>
           <Table.Body>
             {filteredReleases.map(release => {

@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react'
 
 import * as Accordion from '@radix-ui/react-accordion'
-import { usePathname } from 'next/navigation'
+
+import { usePathname } from '~/i18n/navigation'
 
 import { NavLink } from './nav-link'
 import { NavNestedLinks } from './nav-nested-links'
@@ -31,7 +32,7 @@ const SidebarMenu = (props: Props) => {
 
   const pathname = usePathname()!
 
-  const [label, setLabel] = useState<string>()
+  const [value, setValue] = useState<string>()
 
   useEffect(() => {
     const match = items.find(
@@ -45,7 +46,7 @@ const SidebarMenu = (props: Props) => {
       return
     }
 
-    setLabel(match.label)
+    setValue(match.href)
   }, [pathname, items])
 
   return (
@@ -58,8 +59,8 @@ const SidebarMenu = (props: Props) => {
         <Accordion.Root
           type="single"
           collapsible
-          value={label}
-          onValueChange={value => setLabel(value)}
+          value={value}
+          onValueChange={nextValue => setValue(nextValue)}
           className="flex flex-col gap-3"
         >
           {items?.map((item, index) => {
@@ -67,6 +68,7 @@ const SidebarMenu = (props: Props) => {
               return (
                 <NavNestedLinks
                   key={index}
+                  value={item.href}
                   label={item.label}
                   links={item.links.map(link => {
                     // We need to encode the epic name in the URL due to the use of the slash character
@@ -89,8 +91,8 @@ const SidebarMenu = (props: Props) => {
             }
 
             return (
-              <Accordion.Item key={item.label} value={item.label}>
-                <Accordion.Trigger onClick={() => setLabel(item.label)}>
+              <Accordion.Item key={item.href} value={item.href}>
+                <Accordion.Trigger onClick={() => setValue(item.href)}>
                   <NavLink href={item.href}>{item.label}</NavLink>
                 </Accordion.Trigger>
               </Accordion.Item>

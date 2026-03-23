@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { Button, useToast } from '@status-im/components'
 import { DeleteIcon } from '@status-im/icons/12'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import { AddNewButton } from '~admin/_components/add-new-button'
 import { AlertDialog } from '~admin/_components/alert-dialog'
@@ -35,10 +36,11 @@ export const EditWorkstream = (props: Props) => {
 
   const router = useRouter()
   const toast = useToast()
+  const t = useTranslations('admin')
 
   const handleDelete = async () => {
     await deleteWorkstream(workstream.id)
-    toast.positive('Workstream removed successfully')
+    toast.positive(t('workstreamRemoved'))
     router.push('/admin/insights/workstreams')
   }
 
@@ -51,7 +53,10 @@ export const EditWorkstream = (props: Props) => {
   }, [workstream.projects])
 
   return (
-    <AdminLayoutDetailEdit title="Edit workstream" breadcrumbs={breadcrumbs}>
+    <AdminLayoutDetailEdit
+      title={t('editWorkstream')}
+      breadcrumbs={breadcrumbs}
+    >
       <WorkstreamForm
         variant="edit"
         defaultValues={{
@@ -66,8 +71,8 @@ export const EditWorkstream = (props: Props) => {
       <AdminLayoutDetailEdit.Separator />
 
       <StatusGroupHeader
-        title="Projects"
-        description="Add, view, and manage projects."
+        title={t('projects')}
+        description={t('manageProjects')}
       >
         <AddProjectsDrawer
           projects={projects}
@@ -77,7 +82,7 @@ export const EditWorkstream = (props: Props) => {
             await updateWorkstreamProjects({ id: workstream.id, projectIds })
           }
         >
-          <AddNewButton>Add projects</AddNewButton>
+          <AddNewButton>{t('addProjects')}</AddNewButton>
         </AddProjectsDrawer>
       </StatusGroupHeader>
 
@@ -85,7 +90,7 @@ export const EditWorkstream = (props: Props) => {
         projects={workstream.projects}
         cardAction={project => (
           <AlertDialog
-            title="Remove project"
+            title={t('removeProject')}
             onConfirm={async () => {
               await removeWorkstreamProject({
                 workstreamId: workstream.id,
@@ -97,14 +102,14 @@ export const EditWorkstream = (props: Props) => {
               variant="outline"
               size="24"
               icon={<DeleteIcon />}
-              aria-label="Remove project"
+              aria-label={t('removeProject')}
             />
           </AlertDialog>
         )}
       />
 
       <AdminLayoutDetailEdit.DangerZone
-        actionLabel="Delete workstream"
+        actionLabel={t('deleteWorkstream')}
         onConfirm={handleDelete}
       />
     </AdminLayoutDetailEdit>

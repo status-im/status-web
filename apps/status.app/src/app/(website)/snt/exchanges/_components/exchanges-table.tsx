@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 
 import { Table } from '~components/table'
 
@@ -39,7 +40,7 @@ const getRelativeTime = (date: string) => {
     return formatter.format(-Math.abs(minutes), 'minutes')
   }
 
-  return 'recently'
+  return null
 }
 
 type Props = {
@@ -50,18 +51,20 @@ type Props = {
 }
 
 export const ExchangesTable = ({ tickers }: Props) => {
+  const t = useTranslations('snt')
+
   return (
     <Table.Root>
       <Table.Header>
-        <Table.HeaderCell minWidth={140}>Exchange</Table.HeaderCell>
-        <Table.HeaderCell>Pair</Table.HeaderCell>
-        <Table.HeaderCell>Price</Table.HeaderCell>
-        <Table.HeaderCell>Spread</Table.HeaderCell>
-        <Table.HeaderCell>+2% Depth</Table.HeaderCell>
-        <Table.HeaderCell>-2% Depth</Table.HeaderCell>
-        <Table.HeaderCell>24h volume</Table.HeaderCell>
-        <Table.HeaderCell>Volume %</Table.HeaderCell>
-        <Table.HeaderCell>Last update</Table.HeaderCell>
+        <Table.HeaderCell minWidth={140}>{t('exchange')}</Table.HeaderCell>
+        <Table.HeaderCell>{t('pair')}</Table.HeaderCell>
+        <Table.HeaderCell>{t('price')}</Table.HeaderCell>
+        <Table.HeaderCell>{t('spread')}</Table.HeaderCell>
+        <Table.HeaderCell>{t('depthPositive')}</Table.HeaderCell>
+        <Table.HeaderCell>{t('depthNegative')}</Table.HeaderCell>
+        <Table.HeaderCell>{t('volume24h')}</Table.HeaderCell>
+        <Table.HeaderCell>{t('volumePercent')}</Table.HeaderCell>
+        <Table.HeaderCell>{t('lastUpdateColumn')}</Table.HeaderCell>
       </Table.Header>
       <Table.Body>
         {tickers.data.map((ticker: Ticker) => (
@@ -112,7 +115,7 @@ export const ExchangesTable = ({ tickers }: Props) => {
               %
             </Table.Cell>
             <Table.Cell className="text-neutral-50">
-              {getRelativeTime(ticker.last_fetch_at)}
+              {getRelativeTime(ticker.last_fetch_at) ?? t('recently')}
             </Table.Cell>
           </Table.Row>
         ))}

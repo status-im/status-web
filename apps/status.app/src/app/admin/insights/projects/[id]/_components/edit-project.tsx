@@ -3,6 +3,7 @@
 import { Button, useToast } from '@status-im/components'
 import { EditIcon } from '@status-im/icons/12'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import { AddNewButton } from '~admin/_components/add-new-button'
 import { AdminLayoutDetailEdit } from '~admin/_layouts/admin-layout-detail-edit'
@@ -32,15 +33,16 @@ const EditProject = (props: Props) => {
 
   const router = useRouter()
   const toast = useToast()
+  const t = useTranslations('admin')
 
   const handleDelete = async () => {
     await deleteProject(project.id)
-    toast.positive('Project removed successfully')
+    toast.positive(t('projectRemoved'))
     router.push('/admin/insights/projects')
   }
 
   return (
-    <AdminLayoutDetailEdit title="Edit project" breadcrumbs={breadcrumbs}>
+    <AdminLayoutDetailEdit title={t('editProject')} breadcrumbs={breadcrumbs}>
       <ProjectForm
         variant="edit"
         defaultValues={{
@@ -51,19 +53,19 @@ const EditProject = (props: Props) => {
         onSubmit={async values => {
           await updateProject({ id: project.id, values })
           router.push('/admin/insights/projects')
-          toast.positive('Project updated successfully')
+          toast.positive(t('projectUpdated'))
         }}
       />
 
       <AdminLayoutDetailEdit.Separator />
 
       <StatusGroupHeader
-        title="Milestones"
-        description="Add, view, and manage milestones."
+        title={t('milestones')}
+        description={t('manageMilestones')}
       >
         <EditMilestoneDrawer
           epics={epics}
-          title="Add milestone"
+          title={t('addMilestone')}
           defaultValues={{
             name: '',
             description: '',
@@ -77,9 +79,9 @@ const EditProject = (props: Props) => {
             })
             router.refresh()
           }}
-          successMessage="Milestone added successfully"
+          successMessage={t('milestoneAdded')}
         >
-          <AddNewButton>New milestone</AddNewButton>
+          <AddNewButton>{t('newMilestone')}</AddNewButton>
         </EditMilestoneDrawer>
       </StatusGroupHeader>
 
@@ -88,7 +90,7 @@ const EditProject = (props: Props) => {
         cardFooterType="epics"
         cardAction={milestone => (
           <EditMilestoneDrawer
-            title="Edit Milestone"
+            title={t('editMilestone')}
             milestoneId={milestone.id}
             onSubmit={async values => {
               await updateProjectMilestone({
@@ -96,7 +98,7 @@ const EditProject = (props: Props) => {
                 values,
               })
             }}
-            successMessage="Milestone edited successfully"
+            successMessage={t('milestoneEdited')}
             epics={epics}
             defaultValues={{
               description: milestone.description,
@@ -109,14 +111,14 @@ const EditProject = (props: Props) => {
               size="24"
               variant="outline"
               icon={<EditIcon />}
-              aria-label="Edit milestone"
+              aria-label={t('editMilestone')}
             />
           </EditMilestoneDrawer>
         )}
       />
 
       <AdminLayoutDetailEdit.DangerZone
-        actionLabel="Delete project"
+        actionLabel={t('deleteProject')}
         onConfirm={handleDelete}
       />
     </AdminLayoutDetailEdit>
