@@ -218,12 +218,16 @@ export class NotificationPage {
   async approveConnection(): Promise<void> {
     const page = await this.waitForNotificationPage()
 
-    const connectButton = page.getByRole('button', { name: /^connect$/i })
+    const connectButton = page
+      .getByRole('button', { name: /^connect$/i })
+      .or(page.getByTestId('page-container-footer-next'))
+
     await connectButton.click({
-      timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION,
+      timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM,
     })
   }
 
+  /** Approve a transaction (Confirm button) */
   async approveTransaction(
     contentTimeout: number = NOTIFICATION_TIMEOUTS.NOTIFICATION_CONTENT,
   ): Promise<void> {
@@ -333,8 +337,12 @@ export class NotificationPage {
   async approveNetworkSwitch(): Promise<void> {
     const page = await this.waitForNotificationPage()
 
-    const confirm = this.confirmButton(page)
-    await confirm.click({ timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION })
+    const approveButton = page.getByRole('button', {
+      name: /^(approve|confirm|switch network)$/i,
+    })
+    await approveButton.click({
+      timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION,
+    })
   }
 
   /**
@@ -359,6 +367,9 @@ export class NotificationPage {
     }
 
     const cancel = this.cancelButton(page)
+    // // MetaMask notification.html is a React SPA — buttons render after JS hydration.
+    // // Wait for the hub's wallet_addEthereumChain request to arrive and render.
+    // const confirmButton = page.getByRole('button', { name: /^confirm$/i })
     const hasPending = await cancel
       .isVisible({ timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION })
       .catch(() => false)
@@ -369,6 +380,9 @@ export class NotificationPage {
     }
 
     await cancel.click()
+    // await confirmButton.click()
+
+    // Wait for MetaMask to finish processing, then close the page.
     await page.waitForLoadState('load').catch(() => {})
     if (!page.isClosed()) await page.close()
   }

@@ -1,7 +1,9 @@
 import { Button, Text } from '@status-im/components'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 
 const NotAllowed = () => {
+  const t = useTranslations('insights')
   return (
     <div className="relative flex size-full min-h-[calc(100vh-56px-4px)] flex-col items-center justify-center rounded-[24px] bg-white-100">
       <div className="relative flex size-full items-center justify-center">
@@ -14,15 +16,15 @@ const NotAllowed = () => {
           />
           <div className="pb-3" />
           <Text size={15} weight="semibold">
-            Not available for mobile
+            {t('notAvailableForMobile')}
           </Text>
           <div className="pb-1" />
           <Text size={13} color="$neutral-50">
-            Try to open insights on a desktop or tablet.
+            {t('openOnDesktopOrTablet')}
           </Text>
           <div className="pt-5">
             <Button size="32" variant="outline" href="/">
-              Go to status.app
+              {t('goToStatus')}
             </Button>
           </div>
         </div>

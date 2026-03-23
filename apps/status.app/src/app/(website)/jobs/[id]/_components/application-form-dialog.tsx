@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { Button, useToast } from '@status-im/components'
 import { ExternalIcon } from '@status-im/icons/16'
 import { LoadingIcon } from '@status-im/icons/20'
+import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 
 import { Dialog } from '~components/dialog'
@@ -27,6 +28,7 @@ type Props = {
 export const ApplicationFormDialog = (props: Props) => {
   const { children, job } = props
   const { questions } = job
+  const t = useTranslations('jobs')
 
   const toast = useToast()
   const [openDialog, setOpenDialog] = useState(false)
@@ -47,16 +49,16 @@ export const ApplicationFormDialog = (props: Props) => {
       })
 
       if (!response.ok) {
-        toast.negative('Error submitting an application')
+        toast.negative(t('submitError'))
 
         return
       }
 
-      toast.positive('Thank you! Your application was submitted successfully!')
+      toast.positive(t('submitSuccess'))
       setOpenDialog(false)
     } catch (e) {
       // ideally we should use some service to catch these errors
-      toast.negative('During submission an error occurred, please try again.')
+      toast.negative(t('submitErrorMessage'))
       console.error(e)
     }
   }
@@ -64,7 +66,7 @@ export const ApplicationFormDialog = (props: Props) => {
   return (
     <Dialog onOpenChange={setOpenDialog} open={openDialog}>
       {children}
-      <Dialog.Content title="Apply for this job">
+      <Dialog.Content title={t('applyForJob')}>
         <ApplicationForm questions={questions} onSubmit={onSubmit} />
       </Dialog.Content>
     </Dialog>
@@ -78,6 +80,7 @@ type ApplicationFormProps = {
 
 const ApplicationForm = (props: ApplicationFormProps) => {
   const { questions, onSubmit } = props
+  const t = useTranslations('jobs')
 
   const form = useForm({
     defaultValues: questions.reduce(
@@ -152,7 +155,7 @@ const ApplicationForm = (props: ApplicationFormProps) => {
       <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-4 scrollbar-none">
         {questions.map(question => {
           const { required } = question
-          const label = `${question.label}${required ? '' : ' (optional)'}`
+          const label = `${question.label}${required ? '' : ` ${t('optional')}`}`
           const field = question.fields[0]
 
           switch (field.type) {
@@ -163,12 +166,12 @@ const ApplicationForm = (props: ApplicationFormProps) => {
                   label={label}
                   name={field.name}
                   rules={{
-                    required: required ? 'This field is required' : false,
+                    required: required ? t('fieldRequired') : false,
                     ...(field.name.toLowerCase().includes('email') && {
                       pattern: {
                         // @see https://github.com/colinhacks/zod/blob/master/src/types.ts#L567
                         value: /^(?!\.)(?!.*\.\.)([A-Z0-9_+-.]*)[A-Z0-9_+-]@([A-Z0-9][A-Z0-9-]*\.)+[A-Z]{2,}$/i, // prettier-ignore
-                        message: 'Please enter a valid email',
+                        message: t('invalidEmail'),
                       },
                     }),
                   }}
@@ -182,7 +185,7 @@ const ApplicationForm = (props: ApplicationFormProps) => {
                   label={label}
                   name={field.name}
                   rules={{
-                    required: required ? 'This field is required' : false,
+                    required: required ? t('fieldRequired') : false,
                   }}
                 />
               )
@@ -233,13 +236,13 @@ const ApplicationForm = (props: ApplicationFormProps) => {
       <div className="flex flex-col justify-between gap-4 border-t border-dashed border-neutral-80/20 bg-white-100 p-4 md:flex-row">
         <Checkbox name="privacyNotice" rules={{ validate: v => v === true }}>
           <p className="flex gap-1">
-            I confirm I have read the
+            {t('privacyConfirm')}
             <Link
               href="/legal/privacy-notice"
               className="group flex flex-row items-center font-medium hover:opacity-[50%]"
               target="_blank"
             >
-              Privacy Notice{' '}
+              {t('privacyNotice')}{' '}
               <ExternalIcon className="transition-transform group-hover:translate-x-[2px] group-hover:translate-y-[-2px]" />
             </Link>
           </p>
@@ -255,7 +258,7 @@ const ApplicationForm = (props: ApplicationFormProps) => {
               ),
             })}
           >
-            Submit
+            {t('submit')}
           </Button>
         </div>
       </div>

@@ -1,6 +1,9 @@
+'use client'
+
 import { animated } from '@react-spring/web'
 import { DoneIcon, OpenIcon } from '@status-im/icons/16'
 import { defaultStyles, TooltipWithBounds } from '@visx/tooltip'
+import { useTranslations } from 'next-intl'
 
 import type { TooltipData } from '../hooks/use-chart-tooltip'
 import type { ElementType, SpringValue } from '@react-spring/web'
@@ -32,6 +35,7 @@ const tooltipStyles: React.CSSProperties = {
 
 const ChartTooltip = (props: Props) => {
   const { tooltipData, opacityAnimation, tooltipAnimation } = props
+  const t = useTranslations('insights')
   return (
     <AnimatedTooltip
       top={tooltipAnimation.y}
@@ -42,7 +46,7 @@ const ChartTooltip = (props: Props) => {
       <div className="flex flex-row items-center">
         <span className="text-19 font-semibold">{tooltipData.totalIssues}</span>
         <div className="ml-3 flex items-center">
-          <span className="text-15 font-medium">issues</span>
+          <span className="text-15 font-medium">{t('issues')}</span>
         </div>
       </div>
       <div className="pb-3">
@@ -61,7 +65,7 @@ const ChartTooltip = (props: Props) => {
         <OpenIcon className="text-neutral-40" />
         <div className="px-1">
           <span className="text-13 font-medium">
-            {tooltipData.openIssues} open
+            {tooltipData.openIssues} {t('open')}
           </span>
         </div>
         <div className="flex min-w-[36px] items-center justify-center rounded-full bg-danger-50/30 px-1.5 py-0.5">
@@ -74,7 +78,7 @@ const ChartTooltip = (props: Props) => {
         <DoneIcon className="text-neutral-40" />
         <div className="px-1">
           <span className="text-13 font-medium">
-            {tooltipData.closedIssues} closed
+            {tooltipData.closedIssues} {t('closedLowercase')}
           </span>
         </div>
         <div className="flex min-w-[36px] items-center justify-center rounded-full bg-success-50/30 px-1.5 py-0.5">

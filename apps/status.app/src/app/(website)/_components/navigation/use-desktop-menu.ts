@@ -5,20 +5,14 @@ const useDesktopMenu = () => {
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const contentHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  const handleTriggerMouseEnter = (e?: React.MouseEvent<HTMLElement>) => {
-    const target = e?.target as HTMLElement
-    const menuItemText = target.textContent || ''
-
+  const handleTriggerMouseEnter = (nextValue: string) => {
     hoverTimeoutRef.current = setTimeout(() => {
-      setValue(menuItemText)
+      setValue(nextValue)
     }, 130)
   }
 
-  const handleTriggerWithKeyboard = (e: React.KeyboardEvent<HTMLElement>) => {
-    const target = e.target as HTMLElement
-    const menuItemText = target.textContent || ''
-
-    setValue(menuItemText)
+  const handleTriggerWithKeyboard = (nextValue: string) => {
+    setValue(nextValue)
   }
 
   const handleTriggerMouseLeave = () => {
@@ -40,10 +34,11 @@ const useDesktopMenu = () => {
   }
 
   const handleTriggerKeyDown = (
-    event: React.KeyboardEvent<HTMLButtonElement>
+    event: React.KeyboardEvent<HTMLButtonElement>,
+    nextValue: string
   ) => {
     if (event.key === 'Enter' || event.key === ' ') {
-      handleTriggerWithKeyboard(event)
+      handleTriggerWithKeyboard(nextValue)
     }
 
     if (event.key === 'Escape') {

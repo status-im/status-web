@@ -2,8 +2,8 @@ import { Button, Tag } from '@status-im/components'
 import { MilestonesIcon, TimeOffIcon } from '@status-im/icons/12'
 import { EditIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
+import { useTranslations } from 'next-intl'
 
-import { pluralize } from '~admin/_utils'
 import { Link } from '~components/link'
 
 import { ReportsDateHeader } from './reports-date-header'
@@ -29,6 +29,7 @@ const ReportsListItem = (props: Props) => {
     timeOff = false,
     ...rest
   } = props
+  const t = useTranslations('admin')
 
   return (
     <li
@@ -48,12 +49,12 @@ const ReportsListItem = (props: Props) => {
                 variant="outline"
                 size="24"
                 icon={<EditIcon />}
-                aria-label="Edit report"
+                aria-label={t('editReport')}
                 disabled={disabled}
               />
             ) : (
               <Button variant="outline" size="24" disabled={disabled}>
-                Add
+                {t('add')}
               </Button>
             )}
           </div>
@@ -63,13 +64,13 @@ const ReportsListItem = (props: Props) => {
               {milestones.length > 0 && (
                 <Tag
                   size="24"
-                  label={pluralize(milestones.length, 'milestone')}
+                  label={t('milestoneCount', { count: milestones.length })}
                   icon={<MilestonesIcon />}
                 />
               )}
 
               {timeOff ? (
-                <Tag size="24" label="Time off" icon={<TimeOffIcon />} />
+                <Tag size="24" label={t('timeOff')} icon={<TimeOffIcon />} />
               ) : null}
             </div>
           )}

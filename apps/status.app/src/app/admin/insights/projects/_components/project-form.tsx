@@ -4,6 +4,7 @@ import { useTransition } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useToast } from '@status-im/components'
+import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 
 import { FloatingActions } from '~admin/_components/floating-actions'
@@ -13,7 +14,7 @@ import { TextArea } from '~components/forms/text-area'
 import { TextInput } from '~components/forms/text-input'
 import { projectSchema } from '~server/api/validation/projects'
 
-import { InsightsAppIcon } from '../../_components/insights-app-icon'
+import { getProjectAppSelectOptions } from '../../_utils/i18n'
 
 import type { SubmitHandler } from 'react-hook-form'
 import type { z } from 'zod'
@@ -26,47 +27,14 @@ type Props = {
 
 type FormValues = z.infer<typeof projectSchema>
 
-const appType = projectSchema.shape.app
-
-const appTypeOptions = [
-  {
-    value: appType.Enum.shell,
-    label: 'Shell',
-    icon: <InsightsAppIcon type={appType.Enum.shell} />,
-  },
-  {
-    value: appType.Enum.communities,
-    label: 'Communities',
-    icon: <InsightsAppIcon type={appType.Enum.communities} />,
-  },
-  {
-    value: appType.Enum.messenger,
-    label: 'Messenger',
-    icon: <InsightsAppIcon type={appType.Enum.messenger} />,
-  },
-  {
-    value: appType.Enum.wallet,
-    label: 'Wallet',
-    icon: <InsightsAppIcon type={appType.Enum.wallet} />,
-  },
-  {
-    value: appType.Enum.browser,
-    label: 'Browser',
-    icon: <InsightsAppIcon type={appType.Enum.browser} />,
-  },
-  {
-    value: appType.Enum.node,
-    label: 'Node',
-    icon: <InsightsAppIcon type={appType.Enum.node} />,
-  },
-]
-
 const ProjectForm = (props: Props) => {
   const { defaultValues, onSubmit, variant } = props
 
   const [isPending, startTransition] = useTransition()
 
   const toast = useToast()
+  const t = useTranslations('admin')
+  const appTypeOptions = getProjectAppSelectOptions(t)
 
   const form = useForm<FormValues>({
     resolver: zodResolver(projectSchema),
@@ -81,7 +49,7 @@ const ProjectForm = (props: Props) => {
       })
     } catch (error) {
       console.error(error)
-      toast.negative('Something went wrong. Please try again later.')
+      toast.negative(t('genericError'))
     }
   }
 
@@ -89,19 +57,19 @@ const ProjectForm = (props: Props) => {
     <Form {...form} onSubmit={handleSubmit}>
       <div className="grid gap-4">
         <TextInput
-          label="Name"
+          label={t('name')}
           name="name"
-          placeholder="Project name"
+          placeholder={t('projectName')}
           maxLength={30}
         />
 
         <TextArea
-          label="Description"
+          label={t('description')}
           name="description"
-          placeholder="Set a project description"
+          placeholder={t('projectDescriptionPlaceholder')}
           rows={6}
         />
-        <Select label="App" name="app" options={appTypeOptions} required />
+        <Select label={t('app')} name="app" options={appTypeOptions} required />
       </div>
       {form.formState.isDirty && (
         <FloatingActions

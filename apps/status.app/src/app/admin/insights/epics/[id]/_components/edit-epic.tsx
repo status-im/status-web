@@ -2,6 +2,7 @@
 
 import { useToast } from '@status-im/components'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import { AdminLayoutDetailEdit } from '~admin/_layouts/admin-layout-detail-edit'
 
@@ -21,15 +22,16 @@ export const EditEpic = (props: Props) => {
 
   const router = useRouter()
   const toast = useToast()
+  const t = useTranslations('admin')
 
   const handleDelete = async () => {
     await deleteEpic(epic.id)
-    toast.positive('Epic removed successfully')
+    toast.positive(t('epicRemoved'))
     router.push('/admin/insights/epics')
   }
 
   return (
-    <AdminLayoutDetailEdit title="Edit epic" breadcrumbs={breadcrumbs}>
+    <AdminLayoutDetailEdit title={t('editEpic')} breadcrumbs={breadcrumbs}>
       <EpicForm
         variant="edit"
         defaultValues={{
@@ -41,7 +43,7 @@ export const EditEpic = (props: Props) => {
         onSubmit={values => updateEpic({ id: epic.id, values })}
       />
       <AdminLayoutDetailEdit.DangerZone
-        actionLabel="Delete epic"
+        actionLabel={t('deleteEpic')}
         onConfirm={handleDelete}
       />
     </AdminLayoutDetailEdit>

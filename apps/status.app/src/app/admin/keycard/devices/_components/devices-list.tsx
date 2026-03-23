@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { Button } from '@status-im/components'
 import { ImportIcon } from '@status-im/icons/20'
 import { usePathname, useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import { AddNewButton } from '~admin/_components/add-new-button'
 import { AdminDropdownSort } from '~admin/_components/dropdown-sort'
@@ -175,13 +176,8 @@ const fakeDevices = [
   },
 ]
 
-const orderByData = {
-  uid: 'Alphabetical',
-  imported: 'Imported date',
-  verified: 'First verified date',
-}
-
 const DevicesList = () => {
+  const t = useTranslations('admin')
   const router = useRouter()
   const pathname = usePathname()
 
@@ -207,6 +203,12 @@ const DevicesList = () => {
     setSearchFilter('')
   }
 
+  const orderByData = {
+    uid: t('alphabetical'),
+    imported: t('importedDate'),
+    verified: t('firstVerifiedDate'),
+  }
+
   return (
     <AdminLayoutList
       segment="devices"
@@ -218,7 +220,7 @@ const DevicesList = () => {
             onPress={() => console.log('import csv')}
             iconBefore={<ImportIcon />}
           >
-            Import CSV
+            {t('importCsv')}
           </Button>
         )
       }
@@ -226,14 +228,14 @@ const DevicesList = () => {
       <div className="flex flex-col gap-6">
         {user.canEditKeycard && (
           <AddNewButton href="/admin/keycard/devices/new">
-            New device
+            {t('newDevice')}
           </AddNewButton>
         )}
         <AdminLayoutList.Filters>
           <SearchInput
             value={searchFilter}
             onChange={setSearchFilter}
-            placeholder="Find devices"
+            placeholder={t('findDevices')}
           />
           <AdminDropdownSort
             data={orderByData}
@@ -251,10 +253,10 @@ const DevicesList = () => {
       >
         <Table.Root>
           <Table.Header>
-            <Table.HeaderCell minWidth={140}>UID</Table.HeaderCell>
-            <Table.HeaderCell>Imported</Table.HeaderCell>
-            <Table.HeaderCell>First verified</Table.HeaderCell>
-            <Table.HeaderCell>Verifications</Table.HeaderCell>
+            <Table.HeaderCell minWidth={140}>{t('uid')}</Table.HeaderCell>
+            <Table.HeaderCell>{t('imported')}</Table.HeaderCell>
+            <Table.HeaderCell>{t('firstVerified')}</Table.HeaderCell>
+            <Table.HeaderCell>{t('verifications')}</Table.HeaderCell>
           </Table.Header>
           <Table.Body>
             {sortedDevices.map(device => {

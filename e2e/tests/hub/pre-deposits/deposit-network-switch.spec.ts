@@ -27,7 +27,6 @@ test.describe('Pre-Deposit - Network switch', () => {
 
         await test.step('Navigate to Pre-Deposits page', async () => {
           await dismissSiweDialogIfPresent(hubPage)
-
           await preDepositsPage.goto()
           await preDepositsPage.waitForReady()
         })

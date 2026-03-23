@@ -44,10 +44,11 @@ const TIME_INTERVAL_STEP = 50
 
 const FeaturesAccordion = (props: Props) => {
   const { items } = props
-  const [value, setValue] = useState(items[0].title)
+  const [value, setValue] = useState('0')
   const [width, setWidth] = useState(0)
 
-  const selected = items.find(item => item.title === value)!
+  const selectedIndex = parseInt(value, 10) || 0
+  const selected = items[selectedIndex]!
 
   // Make the accordion change the selected item with a time interval of 5 seconds
   useEffect(() => {
@@ -55,11 +56,10 @@ const FeaturesAccordion = (props: Props) => {
 
     const interval = setInterval(() => {
       if (counter >= TIME_INTERVAL) {
-        const index = items.findIndex(item => item.title === value)
-        if (index === items.length - 1) {
-          setValue(items[0].title)
+        if (selectedIndex === items.length - 1) {
+          setValue('0')
         } else {
-          setValue(items[index + 1].title)
+          setValue((selectedIndex + 1).toString())
         }
         counter = 0
         setWidth(0)
@@ -72,7 +72,7 @@ const FeaturesAccordion = (props: Props) => {
     }, TIME_INTERVAL_STEP)
 
     return () => clearInterval(interval)
-  }, [items, value])
+  }, [items, selectedIndex])
 
   return (
     <ColorTheme
@@ -103,14 +103,15 @@ const FeaturesAccordion = (props: Props) => {
           }}
           className="flex flex-col gap-5 pt-24 xl:flex-1 xl:gap-5 xl:pt-0"
         >
-          {items.map(item => {
-            const isOpen = value === item.title
+          {items.map((item, itemIndex) => {
+            const itemValue = itemIndex.toString()
+            const isOpen = value === itemValue
 
             return (
-              <Accordion.Item key={item.title} value={item.title}>
+              <Accordion.Item key={item.title} value={itemValue}>
                 <Accordion.Trigger disabled={isOpen}>
                   <div className="relative flex items-center justify-center">
-                    {selected.title === item.title && (
+                    {selectedIndex === itemIndex && (
                       <Icon
                         id={item.iconId}
                         className="absolute left-0 top-0 hidden translate-x-[calc(-100%-20px)] min-[1440px]:block"
