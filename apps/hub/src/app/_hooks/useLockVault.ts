@@ -259,7 +259,9 @@ export function useLockVault(vaultAddress: Address): UseLockVaultReturn {
         // after a successful lock transaction (prevents stale cache issues)
         await queryClient.invalidateQueries({
           predicate: query => {
-            const key = JSON.stringify(query.queryKey)
+            const key = JSON.stringify(query.queryKey, (_k, v) =>
+              typeof v === 'bigint' ? v.toString() : v
+            )
             return (
               key.includes('lockUntil') ||
               key.includes('getVault') ||
