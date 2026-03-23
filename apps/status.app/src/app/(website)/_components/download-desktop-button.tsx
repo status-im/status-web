@@ -55,7 +55,7 @@ export const DownloadDesktopButton = (props: Props) => {
   const desktop = t('desktop')
 
   useEffect(() => {
-    const platform = document.body.getAttribute('data-platform')
+    const platform = document.documentElement.getAttribute('data-platform')
     setCurrentPlatform(platform)
   }, [])
 
