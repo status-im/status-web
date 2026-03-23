@@ -11,7 +11,7 @@
       "packages/wallet",
       "packages/status-network",
       "packages/community-contracts",
-      "apps/community",
+      "apps/community-dapp",
       "apps/hub",
       "apps/status.app",
       "apps/status.network",
