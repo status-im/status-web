@@ -103,7 +103,7 @@ export function LockVaultModal(props: LockVaultModalProps) {
     lockUntil && lockUntil > displayTimestamp
       ? Number(lockUntil - displayTimestamp)
       : 0
-  const remainingDays = Math.ceil(remainingSeconds / 86400)
+  const remainingDays = Math.floor(remainingSeconds / 86400)
   // Only treat as extension if remaining lock time >= minimum (90 days)
   // Otherwise, the lock is nearly expired and should use new-lock defaults
   const minInitialDays = parseInt(DEFAULT_LOCK_PERIOD.INITIAL_DAYS)

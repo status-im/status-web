@@ -11,7 +11,6 @@ import { useLocale, useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { MAX_BOOST } from '~constants/index'
 import { useSliderConfig } from '~hooks/useSliderConfig'
 
 import { DEFAULT_LOCK_PERIOD, SECONDS_PER_DAY } from './constants'
@@ -58,11 +57,6 @@ interface LockVaultFormProps {
  * Form component for vault lock configuration
  */
 export function LockVaultForm(props: LockVaultFormProps) {
-  console.log('[DEBUG-FORM-MOUNT]', {
-    initialYears: props.initialYears,
-    initialDays: props.initialDays,
-    currentLockUntil: props.currentLockUntil?.toString(),
-  })
   const t = useTranslations()
   const locale = useLocale()
   const {
@@ -76,13 +70,11 @@ export function LockVaultForm(props: LockVaultFormProps) {
     actions,
     currentLockUntil,
     currentTimestamp,
-    currentStakedBalance,
-    currentMpBalance,
   } = props
 
   const [closeAction, submitAction] = actions
 
-  const { watch, setValue, handleSubmit } = useForm<FormValues>({
+  const { watch, setValue, getValues, handleSubmit } = useForm<FormValues>({
     resolver: zodResolver(createFormSchema()),
     defaultValues: {
       years: initialYears || DEFAULT_LOCK_PERIOD.INITIAL_YEARS,
@@ -95,45 +87,16 @@ export function LockVaultForm(props: LockVaultFormProps) {
   const sliderConfig = useMemo(() => {
     const minSeconds = sliderConfigQuery?.min || 7776000 // fallback: 90 days in seconds
     const contractMaxSeconds = sliderConfigQuery?.max || 126144000 // fallback: 4 years in seconds
-    const referenceTimestamp =
-      currentTimestamp ?? BigInt(Math.floor(Date.now() / 1000))
-    const isExtending =
-      currentLockUntil && currentLockUntil > referenceTimestamp
-    const currentRemainingSeconds = isExtending
-      ? currentLockUntil - referenceTimestamp
-      : 0n
-
-    let maxSeconds = contractMaxSeconds
-
-    if (
-      isExtending &&
-      currentStakedBalance &&
-      currentStakedBalance > 0n &&
-      currentMpBalance !== undefined
-    ) {
-      const absoluteMaxMp = currentStakedBalance * BigInt(MAX_BOOST - 1)
-      const remainingGrantableMp =
-        absoluteMaxMp > currentMpBalance ? absoluteMaxMp - currentMpBalance : 0n
-      const maxAdditionalSecondsByMp =
-        absoluteMaxMp > 0n
-          ? (remainingGrantableMp * BigInt(contractMaxSeconds)) / absoluteMaxMp
-          : 0n
-      const maxTotalSecondsByMp =
-        currentRemainingSeconds + maxAdditionalSecondsByMp
-
-      maxSeconds = Math.min(maxSeconds, Number(maxTotalSecondsByMp))
-    }
 
     const minDays = Math.round(minSeconds / SECONDS_PER_DAY)
-    const maxDays = Math.round(maxSeconds / SECONDS_PER_DAY)
-    const effectiveMinDays = Math.min(minDays, maxDays)
+    const maxDays = Math.round(contractMaxSeconds / SECONDS_PER_DAY)
 
-    const minYears = effectiveMinDays / DAYS_PER_YEAR
+    const minYears = minDays / DAYS_PER_YEAR
     const maxYears = maxDays / DAYS_PER_YEAR
 
     const minLabel =
       minYears < 1
-        ? t('vault.days_label', { count: effectiveMinDays })
+        ? t('vault.days_label', { count: minDays })
         : t('vault.years_label', { count: minYears.toFixed(1) })
     const maxLabel =
       maxYears < 1
@@ -143,18 +106,11 @@ export function LockVaultForm(props: LockVaultFormProps) {
     return {
       minLabel,
       maxLabel,
-      minDays: effectiveMinDays,
+      minDays,
       maxDays,
       initialPosition: 50,
     }
-  }, [
-    currentLockUntil,
-    currentMpBalance,
-    currentStakedBalance,
-    currentTimestamp,
-    sliderConfigQuery,
-    t,
-  ])
+  }, [sliderConfigQuery, t])
 
   const years = watch('years')
   const days = watch('days')
@@ -245,7 +201,6 @@ export function LockVaultForm(props: LockVaultFormProps) {
   }
 
   const handleSliderChange = (inputDays: number) => {
-    console.log('[DEBUG-SLIDER-CHANGE]', { inputDays })
     setSliderValue(inputDays)
 
     const yearsValue = (inputDays / DAYS_PER_YEAR).toFixed(2)
@@ -255,10 +210,7 @@ export function LockVaultForm(props: LockVaultFormProps) {
   }
 
   const handleYearsChange = (value: string) => {
-    console.log('[DEBUG-YEARS-CHANGE]', {
-      value,
-      stack: new Error().stack?.split('\n').slice(1, 5).join(' | '),
-    })
+    if (value === getValues('years')) return
     setValue('years', value)
 
     const yearsValue = parseFloat(value || '0')
@@ -275,10 +227,7 @@ export function LockVaultForm(props: LockVaultFormProps) {
   }
 
   const handleDaysChange = (value: string) => {
-    console.log('[DEBUG-DAYS-CHANGE]', {
-      value,
-      stack: new Error().stack?.split('\n').slice(1, 5).join(' | '),
-    })
+    if (value === getValues('days')) return
     setValue('days', value)
 
     const inputDays = parseInt(value || DEFAULT_LOCK_PERIOD.INITIAL_DAYS)
