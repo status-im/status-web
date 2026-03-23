@@ -205,7 +205,16 @@ export function LockVaultForm(props: LockVaultFormProps) {
 
     if (isExtending) {
       // When extending: calculate how much additional time to add
-      // to reach the user's desired total lock time from the latest block timestamp
+      // to reach the user's desired total lock time.
+      //
+      // The contract computes: dt_lock = (lockUntil - block.timestamp) + delta
+      // We need dt_lock <= MAX_LOCKUP_PERIOD, so:
+      //   delta <= MAX - (lockUntil - block.timestamp)
+      //         = MAX - remaining_at_block
+      //
+      // Use block timestamp when available (precise), Date.now() with larger
+      // buffer when not (e.g. during RPC rate limiting).
+      const hasBlockTimestamp = currentTimestamp !== undefined
       const referenceTimestamp =
         currentTimestamp ?? BigInt(Math.floor(Date.now() / 1000))
       const currentRemainingSeconds =
@@ -213,39 +222,20 @@ export function LockVaultForm(props: LockVaultFormProps) {
           ? currentLockUntil - referenceTimestamp
           : 0n
 
-      // Subtract a small buffer to account for any drift between the
-      // reference timestamp and the block.timestamp the contract sees.
-      // 120 seconds is negligible relative to the 90-day minimum lock period.
-      const BLOCK_TIME_BUFFER = 120n
+      // Buffer accounts for drift between referenceTimestamp and actual block.timestamp.
+      // With block timestamp: drift is ~1 block time (use 120s to be safe).
+      // With Date.now() fallback: drift can be larger (use 600s / 10min).
+      const buffer = hasBlockTimestamp ? 120n : 600n
 
-      // If user wants total lock of X seconds from now, and vault currently locked for Y seconds from now,
-      // we need to add (X - Y - buffer) seconds
       increasedLockSeconds =
-        userDesiredTotalLockSeconds -
-        currentRemainingSeconds -
-        BLOCK_TIME_BUFFER
+        userDesiredTotalLockSeconds - currentRemainingSeconds - buffer
 
-      // Ensure we're adding at least some time (can't decrease lock)
       if (increasedLockSeconds < 0n) {
         increasedLockSeconds = 0n
       }
-
-      console.log('[LockForm] EXTEND mode:', {
-        totalDays,
-        userDesiredTotalLockSeconds: userDesiredTotalLockSeconds.toString(),
-        currentLockUntil: currentLockUntil.toString(),
-        currentTimestamp: referenceTimestamp.toString(),
-        currentRemainingSeconds: currentRemainingSeconds.toString(),
-        increasedLockSeconds: increasedLockSeconds.toString(),
-      })
     } else {
       // New lock: just use the duration as-is
       increasedLockSeconds = userDesiredTotalLockSeconds
-      console.log('[LockForm] NEW LOCK mode:', {
-        totalDays,
-        increasedLockSeconds: increasedLockSeconds.toString(),
-        currentLockUntil: currentLockUntil?.toString() ?? 'undefined',
-      })
     }
 
     onClose()

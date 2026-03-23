@@ -64,7 +64,6 @@ export function LockVaultModal(props: LockVaultModalProps) {
 
   const { data: latestBlock } = useBlock({
     chainId: statusSepolia.id,
-    watch: true,
   })
 
   const { data: vaultData } = useReadContract({
@@ -90,12 +89,15 @@ export function LockVaultModal(props: LockVaultModalProps) {
   }) as { data: bigint | undefined }
 
   // Calculate initial values based on current lockUntil for extensions
-  // Use the latest block timestamp so extension math matches contract execution.
-  const currentTimestamp =
+  // Display timestamp uses Date.now() fallback (only for UI slider position)
+  const displayTimestamp =
     latestBlock?.timestamp ?? BigInt(Math.floor(Date.now() / 1000))
-  const isExtending = lockUntil && lockUntil > currentTimestamp
+  // Contract-critical timestamp: undefined when block data unavailable
+  // so the form can apply a larger safety buffer in that case
+  const currentTimestamp = latestBlock?.timestamp
+  const isExtending = lockUntil && lockUntil > displayTimestamp
   const calculatedInitialDays = isExtending
-    ? Math.ceil(Number(lockUntil - currentTimestamp) / 86400)
+    ? Math.ceil(Number(lockUntil - displayTimestamp) / 86400)
     : undefined
   const calculatedInitialYears = calculatedInitialDays
     ? (calculatedInitialDays / 365).toFixed(2)

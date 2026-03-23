@@ -191,11 +191,6 @@ export function useLockVault(vaultAddress: Address): UseLockVaultReturn {
         throw new Error(t('errors.lock_period_greater_than_zero'))
       }
 
-      console.log(
-        '[useLockVault] lockPeriodInSeconds:',
-        lockPeriodInSeconds.toString()
-      )
-
       // Notify state machine of lock start
       sendVaultEvent({ type: 'START_LOCK' })
 
