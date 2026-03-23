@@ -100,7 +100,7 @@ module.exports = () => {
       historyApiFallback: true,
       host: '0.0.0.0',
       hot: true,
-      server: 'https',
+      server: 'http',
       client: {
         overlay: true,
       },
