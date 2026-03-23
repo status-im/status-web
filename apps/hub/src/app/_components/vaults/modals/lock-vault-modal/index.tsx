@@ -55,12 +55,12 @@ export function LockVaultModal(props: LockVaultModalProps) {
 
   const { mutate: lockVault } = useLockVault(vaultAddress)
 
-  const { data: lockUntil } = useReadContract({
+  const { data: lockUntil, isLoading: isLockUntilLoading } = useReadContract({
     abi: vaultAbi,
     address: vaultAddress,
     functionName: 'lockUntil',
     chainId: statusSepolia.id,
-  }) as { data: bigint }
+  }) as { data: bigint; isLoading: boolean }
 
   const { data: latestBlock } = useBlock({
     chainId: statusSepolia.id,
@@ -145,7 +145,13 @@ export function LockVaultModal(props: LockVaultModalProps) {
         onValidate={onValidate}
         onSubmit={handleSubmit}
         onClose={onClose}
-        actions={actions}
+        actions={[
+          actions[0],
+          {
+            ...actions[1],
+            disabled: actions[1].disabled || isLockUntilLoading,
+          },
+        ]}
         currentLockUntil={lockUntil as bigint | undefined}
         currentTimestamp={currentTimestamp}
         currentStakedBalance={vaultData?.stakedBalance}
