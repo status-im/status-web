@@ -20,7 +20,7 @@
     "solidity"
   ],
   "scripts": {
-    "build": "echo 'No build step required. Artifacts are under ./out'",
+    "build": "forge build",
     "test": "forge test",
     "clean": "rm -rf cache out",
     "lint": "pnpm run lint:sol && pnpm run prettier:check",
