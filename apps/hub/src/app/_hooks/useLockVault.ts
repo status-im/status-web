@@ -1,5 +1,9 @@
 import { useToast } from '@status-im/components'
-import { useMutation, type UseMutationResult } from '@tanstack/react-query'
+import {
+  useMutation,
+  type UseMutationResult,
+  useQueryClient,
+} from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
 import {
   type Address,
@@ -165,6 +169,7 @@ export function useLockVault(vaultAddress: Address): UseLockVaultReturn {
   const config = useConfig()
   const { send: sendVaultEvent, reset: resetVault } = useVaultStateContext()
   const { refetch: refetchStakingVaults } = useStakingVaults()
+  const queryClient = useQueryClient()
   const toast = useToast()
   const t = useTranslations()
 
@@ -249,6 +254,20 @@ export function useLockVault(vaultAddress: Address): UseLockVaultReturn {
         toast.positive(
           formatLockSuccessMessage(vaultAddress, !!wasAlreadyLocked, t)
         )
+
+        // Invalidate all contract read queries to ensure fresh lockUntil/vault data
+        // after a successful lock transaction (prevents stale cache issues)
+        await queryClient.invalidateQueries({
+          predicate: query => {
+            const key = JSON.stringify(query.queryKey)
+            return (
+              key.includes('lockUntil') ||
+              key.includes('getVault') ||
+              key.includes('mpBalanceOf') ||
+              key.includes(vaultAddress)
+            )
+          },
+        })
 
         // Reset state machine and refetch vaults
         resetVault()

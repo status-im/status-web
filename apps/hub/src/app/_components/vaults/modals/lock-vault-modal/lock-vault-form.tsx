@@ -58,6 +58,11 @@ interface LockVaultFormProps {
  * Form component for vault lock configuration
  */
 export function LockVaultForm(props: LockVaultFormProps) {
+  console.log('[DEBUG-FORM-MOUNT]', {
+    initialYears: props.initialYears,
+    initialDays: props.initialDays,
+    currentLockUntil: props.currentLockUntil?.toString(),
+  })
   const t = useTranslations()
   const locale = useLocale()
   const {
@@ -199,32 +204,25 @@ export function LockVaultForm(props: LockVaultFormProps) {
   const handleVaultLockOrExtend = async (data: FormValues) => {
     const totalDays = parseInt(data.days || DEFAULT_LOCK_PERIOD.INITIAL_DAYS)
     const userDesiredTotalLockSeconds = BigInt(totalDays * SECONDS_PER_DAY)
-    const isExtending = currentLockUntil && currentLockUntil > 0n
+    const contractMin = BigInt(sliderConfigQuery?.min || 7776000)
+    const contractMax = BigInt(sliderConfigQuery?.max || 126144000)
+
+    // Determine if this is a meaningful extension (remaining >= MIN period)
+    // or effectively a new lock (expired / nearly expired)
+    const referenceTimestamp =
+      currentTimestamp ?? BigInt(Math.floor(Date.now() / 1000))
+    const currentRemainingSeconds =
+      currentLockUntil && currentLockUntil > referenceTimestamp
+        ? currentLockUntil - referenceTimestamp
+        : 0n
+    const isExtending = currentRemainingSeconds >= contractMin
 
     let increasedLockSeconds: bigint
 
     if (isExtending) {
-      // When extending: calculate how much additional time to add
-      // to reach the user's desired total lock time.
-      //
-      // The contract computes: dt_lock = (lockUntil - block.timestamp) + delta
-      // We need dt_lock <= MAX_LOCKUP_PERIOD, so:
-      //   delta <= MAX - (lockUntil - block.timestamp)
-      //         = MAX - remaining_at_block
-      //
-      // Use block timestamp when available (precise), Date.now() with larger
-      // buffer when not (e.g. during RPC rate limiting).
+      // Extending: contract computes dt_lock = (lockUntil - block.timestamp) + delta
+      // Use block timestamp when available (precise), Date.now() with larger buffer.
       const hasBlockTimestamp = currentTimestamp !== undefined
-      const referenceTimestamp =
-        currentTimestamp ?? BigInt(Math.floor(Date.now() / 1000))
-      const currentRemainingSeconds =
-        currentLockUntil > referenceTimestamp
-          ? currentLockUntil - referenceTimestamp
-          : 0n
-
-      // Buffer accounts for drift between referenceTimestamp and actual block.timestamp.
-      // With block timestamp: drift is ~1 block time (use 120s to be safe).
-      // With Date.now() fallback: drift can be larger (use 600s / 10min).
       const buffer = hasBlockTimestamp ? 120n : 600n
 
       increasedLockSeconds =
@@ -234,8 +232,12 @@ export function LockVaultForm(props: LockVaultFormProps) {
         increasedLockSeconds = 0n
       }
     } else {
-      // New lock: just use the duration as-is
-      increasedLockSeconds = userDesiredTotalLockSeconds
+      // New lock (or nearly-expired lock): dt_lock = delta exactly.
+      // Contract rejects dt_lock >= MAX_LOCKUP_PERIOD, so cap just below MAX.
+      increasedLockSeconds =
+        userDesiredTotalLockSeconds >= contractMax
+          ? contractMax - 1n
+          : userDesiredTotalLockSeconds
     }
 
     onClose()
@@ -243,6 +245,7 @@ export function LockVaultForm(props: LockVaultFormProps) {
   }
 
   const handleSliderChange = (inputDays: number) => {
+    console.log('[DEBUG-SLIDER-CHANGE]', { inputDays })
     setSliderValue(inputDays)
 
     const yearsValue = (inputDays / DAYS_PER_YEAR).toFixed(2)
@@ -252,6 +255,10 @@ export function LockVaultForm(props: LockVaultFormProps) {
   }
 
   const handleYearsChange = (value: string) => {
+    console.log('[DEBUG-YEARS-CHANGE]', {
+      value,
+      stack: new Error().stack?.split('\n').slice(1, 5).join(' | '),
+    })
     setValue('years', value)
 
     const yearsValue = parseFloat(value || '0')
@@ -268,6 +275,10 @@ export function LockVaultForm(props: LockVaultFormProps) {
   }
 
   const handleDaysChange = (value: string) => {
+    console.log('[DEBUG-DAYS-CHANGE]', {
+      value,
+      stack: new Error().stack?.split('\n').slice(1, 5).join(' | '),
+    })
     setValue('days', value)
 
     const inputDays = parseInt(value || DEFAULT_LOCK_PERIOD.INITIAL_DAYS)
