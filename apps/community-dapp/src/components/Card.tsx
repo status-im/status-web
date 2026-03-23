@@ -17,7 +17,7 @@ export const Card = styled.div`
     padding-bottom: 16px;
   }
 
-  &:not:first-child {
+  &:not(:first-child) {
     @media (max-width: 768px) {
       border-top: 1px solid #e0e0e0;
     }
