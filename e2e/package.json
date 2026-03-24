@@ -2,6 +2,11 @@
   "name": "e2e",
   "version": "0.1.1",
   "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/eslint-config"
+    ]
+  },
   "type": "module",
   "scripts": {
     "test": "playwright test",
