@@ -5,7 +5,7 @@ import { clientEnv } from '~constants/env.client.mjs'
 
 export interface VaultAPRData {
   vaultAddress: string
-  apr: number
+  apy: number
 }
 
 interface VaultsAPRResponse {
@@ -40,7 +40,7 @@ export function useVaultsAPR(): UseQueryResult<VaultsAPRMap, Error> {
 
       const aprMap: VaultsAPRMap = {}
       for (const vault of data.result) {
-        aprMap[vault.vaultAddress.toLowerCase()] = vault.apr
+        aprMap[vault.vaultAddress.toLowerCase()] = vault.apy
       }
 
       return aprMap
