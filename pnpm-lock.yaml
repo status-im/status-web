@@ -283,6 +283,9 @@ importers:
       '@eslint/eslintrc':
         specifier: ^3.1.0
         version: 3.3.1
+      '@eslint/js':
+        specifier: 8.57.1
+        version: 8.57.1
       '@testing-library/react-hooks':
         specifier: ^7.0.0
         version: 7.0.2(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
@@ -28379,6 +28382,23 @@ snapshots:
       - supports-color
     optional: true
 
+  '@metamask/sdk-communication-layer@0.33.1(cross-fetch@4.1.0)(eciesjs@0.4.16)(eventemitter2@6.4.9)(readable-stream@3.6.2)(socket.io-client@4.8.1(bufferutil@4.0.9)(utf-8-validate@6.0.3))':
+    dependencies:
+      '@metamask/sdk-analytics': 0.0.5
+      bufferutil: 4.0.9
+      cross-fetch: 4.1.0
+      date-fns: 2.30.0
+      debug: 4.3.4
+      eciesjs: 0.4.16
+      eventemitter2: 6.4.9
+      readable-stream: 3.6.2
+      socket.io-client: 4.8.1(bufferutil@4.0.9)(utf-8-validate@6.0.3)
+      utf-8-validate: 5.0.10
+      uuid: 8.3.2
+    transitivePeerDependencies:
+      - supports-color
+    optional: true
+
   '@metamask/sdk-install-modal-web@0.32.0':
     dependencies:
       '@paulmillr/qr': 0.2.1
@@ -28450,7 +28470,7 @@ snapshots:
       '@metamask/onboarding': 1.0.1
       '@metamask/providers': 16.1.0
       '@metamask/sdk-analytics': 0.0.5
-      '@metamask/sdk-communication-layer': 0.33.1(cross-fetch@4.1.0)(eciesjs@0.4.16)(eventemitter2@6.4.9)(readable-stream@3.6.2)(socket.io-client@4.8.1(bufferutil@4.0.9)(utf-8-validate@5.0.10))
+      '@metamask/sdk-communication-layer': 0.33.1(cross-fetch@4.1.0)(eciesjs@0.4.16)(eventemitter2@6.4.9)(readable-stream@3.6.2)(socket.io-client@4.8.1(bufferutil@4.0.9)(utf-8-validate@6.0.3))
       '@metamask/sdk-install-modal-web': 0.32.1
       '@paulmillr/qr': 0.2.1
       bowser: 2.12.1
