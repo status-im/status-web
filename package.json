@@ -94,6 +94,28 @@
       "@types/react-router-dom>@types/react": "^17.0.8",
       "react-countup>react": "^17.0.2"
     },
+    "packageExtensions": {
+      "@waku/sdk": {
+        "dependencies": {
+          "@libp2p/interface": "^2.10.4"
+        }
+      },
+      "@waku/core": {
+        "dependencies": {
+          "@libp2p/interface": "^2.10.4"
+        }
+      },
+      "@waku/discovery": {
+        "dependencies": {
+          "@libp2p/interface": "^2.10.4"
+        }
+      },
+      "@waku/utils": {
+        "dependencies": {
+          "@libp2p/interface": "^2.10.4"
+        }
+      }
+    },
     "patchedDependencies": {
       "it-length-prefixed@9.0.3": "patches/it-length-prefixed@9.0.3.patch",
       "arctic@1.2.0": "patches/arctic@1.2.0.patch",
