@@ -6,6 +6,11 @@ import { formatUnits, parseUnits } from 'viem'
 
 export interface FormatTokenOptions {
   /**
+   * Whether to dynamically expand the decimals up to the first non-zero digit
+   * @default false
+   */
+  dynamicFractionDigits?: boolean
+  /**
    * Number of decimal places to display
    * @default 2
    */
@@ -115,6 +120,30 @@ function roundDownToDecimals(value: number, decimals: number): number {
 // ============================================================================
 
 /**
+ * Find the first non-zero decimal place
+ */
+function getFirstNonZeroDecimal(value: number, maxDecimals = 18): number {
+  if (value === 0) return 0
+
+  const str = Math.abs(value).toString()
+  if (str.includes('e-')) {
+    const parts = str.split('e-')
+    return Math.min(parseInt(parts[1], 10), maxDecimals)
+  }
+
+  if (str.includes('.')) {
+    const fraction = str.split('.')[1]
+    for (let i = 0; i < fraction.length; i++) {
+      if (fraction[i] !== '0') {
+        return Math.min(i + 1, maxDecimals)
+      }
+    }
+  }
+
+  return 0
+}
+
+/**
  * Format a token amount with proper decimal handling using viem utilities
  *
  * @param amount - Token amount (supports bigint, number, or string)
@@ -145,20 +174,45 @@ export function formatTokenAmount(
     compact = false,
     roundDown = false,
     tokenDecimals = DEFAULT_TOKEN_DECIMALS,
+    dynamicFractionDigits = false,
   } = options
 
   // Convert to numeric value
   let numericAmount = toNumericAmount(amount, tokenDecimals)
 
+  let finalMaxDigits = maximumFractionDigits
+  let finalMinDigits = minimumFractionDigits
+
+  if (dynamicFractionDigits && numericAmount !== 0) {
+    let firstNonZero = getFirstNonZeroDecimal(numericAmount, tokenDecimals)
+
+    const str = Math.abs(numericAmount).toString()
+    if (str.includes('.')) {
+      const fraction = str.split('.')[1]
+      for (let i = finalMaxDigits; i < fraction.length; i++) {
+        if (fraction[i] !== '0') {
+          firstNonZero = Math.max(firstNonZero, Math.min(i + 1, tokenDecimals))
+          break
+        }
+      }
+    }
+
+    if (firstNonZero > finalMaxDigits) {
+      finalMaxDigits = firstNonZero
+      // Also increase minimum fraction digits if we are dynamically expanding
+      finalMinDigits = firstNonZero
+    }
+  }
+
   // Apply rounding down if requested
   if (roundDown) {
-    numericAmount = roundDownToDecimals(numericAmount, maximumFractionDigits)
+    numericAmount = roundDownToDecimals(numericAmount, finalMaxDigits)
   }
 
   // Format using Intl.NumberFormat
   const formatter = new Intl.NumberFormat(locale, {
-    minimumFractionDigits,
-    maximumFractionDigits,
+    minimumFractionDigits: finalMinDigits,
+    maximumFractionDigits: finalMaxDigits,
     notation: compact ? 'compact' : 'standard',
     compactDisplay: compact ? 'short' : undefined,
   })
