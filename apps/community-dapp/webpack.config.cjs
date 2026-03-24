@@ -23,6 +23,12 @@ module.exports = () => {
     devtool: 'source-map',
     resolve: {
       extensions: ['.ts', '.tsx', '.js', '.json'],
+      alias: {
+        '@libp2p/interface$': path.resolve(
+          __dirname,
+          '../../node_modules/.pnpm/@libp2p+interface@2.10.4/node_modules/@libp2p/interface/dist/src/index.js'
+        ),
+      },
       fallback: {
         buffer: require.resolve('buffer/'),
         crypto: require.resolve('crypto-browserify'),
