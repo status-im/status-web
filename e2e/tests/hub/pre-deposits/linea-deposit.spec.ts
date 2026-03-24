@@ -68,6 +68,10 @@ test.describe('LINEA Vault - Happy path deposit', () => {
         await metamask.approveTransaction()
       })
 
+      await test.step('Ensure deposit tx is mined on Linea fork', async () => {
+        await anvilRpc.mineBlock(anvilRpc.lineaRpc)
+      })
+
       await test.step('Verify deposit success (modal closes)', async () => {
         await depositModal.expectModalClosed()
       })

@@ -42,7 +42,7 @@ pnpm clean             # Remove test artifacts and extensions
 Run a specific file:
 
 ```bash
-npx playwright test tests/pre-deposits/pre-deposits-display.spec.ts
+npx playwright test tests/hub/pre-deposits/pre-deposits-display.spec.ts
 ```
 
 ## Tags
