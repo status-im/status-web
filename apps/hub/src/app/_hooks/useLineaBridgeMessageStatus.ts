@@ -72,7 +72,7 @@ function getMessageServiceConfig(
       }
     case linea.id:
       return {
-        l1ContractAddress: '0x508Ca82Df566dCD1B0DE8296e70a96332cD644ec',
+        l1ContractAddress: '0xd19d4B5d358258f05D7B411E21A1460D11B0876F',
         l2ContractAddress: '0x508Ca82Df566dCD1B0DE8296e70a96332cD644ec',
         l1RpcUrl: RPC_URLS[linea.id],
         l2RpcUrl: RPC_URLS[statusSepolia.id],

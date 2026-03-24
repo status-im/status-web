@@ -2,7 +2,11 @@ import { isGUSDVault, type Vault } from '~constants/address'
 
 import { useGUSDUserBalance } from './useGUSDUserBalance'
 import { useL2PendingWithdrawal } from './useL2PendingWithdrawal'
-import { usePreDepositVaultState, VAULT_STATE } from './usePreDepositVaultState'
+import {
+  usePreDepositVaultState,
+  VAULT_STATE,
+  type VaultState,
+} from './usePreDepositVaultState'
 import { useUserVaultDeposit } from './useUserVaultDeposit'
 
 type Params = {
@@ -60,7 +64,7 @@ export function useVaultBalanceReadiness({
 
   return {
     isGUSD,
-    vaultState,
+    vaultState: vaultState as VaultState | undefined,
     l1Balance,
     l2PendingAmount,
     isL1BalanceLoading,
