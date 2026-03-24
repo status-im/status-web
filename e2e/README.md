@@ -4,9 +4,12 @@ Playwright + TypeScript E2E tests for [Status Network Hub](https://hub.status.ne
 
 **Supported platforms:** macOS, Linux. Windows is supported only via [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install) — run all commands inside a WSL2 distro (Ubuntu recommended). Native Windows is not supported because the test suite relies on Chromium extension loading, POSIX paths, and Docker `linux/amd64` images.
 
-## Quick Start
+## Getting Started
+
+First, follow the [root README](../../README.md#getting-started) to clone the repo, initialize submodules, and install dependencies.
 
 ```bash
+pnpm dev
 cd e2e
 pnpm install
 npx playwright install chromium
