@@ -1294,7 +1294,7 @@
       "notes": "errors::invalid_price_value"
     },
     "failed_fetch_vaults_apr": {
-      "translation": "금고 APR를 불러오지 못했습니다: {error}",
+      "translation": "금고 APR을 불러오지 못했습니다: {error}",
       "notes": "errors::failed_fetch_vaults_apr"
     }
   },
