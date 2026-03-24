@@ -21,7 +21,7 @@
   ],
   "scripts": {
     "build": "forge build",
-    "test": "forge test",
+    "test": "bash -c 'forge test'",
     "clean": "rm -rf cache out",
     "lint": "pnpm run lint:sol && pnpm run prettier:check",
     "lint:sol": "solhint {script,src,test}/**/*.sol",

@@ -195,6 +195,9 @@ importers:
       '@libp2p/bootstrap':
         specifier: ^9.0.10
         version: 9.0.12
+      '@libp2p/interface':
+        specifier: ^0.1.6
+        version: 0.1.6
       '@status-im/community-contracts':
         specifier: workspace:*
         version: link:../../packages/community-contracts
