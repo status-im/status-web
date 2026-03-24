@@ -7,7 +7,6 @@ import {
   isGUSDVault,
   type StablecoinToken,
   type Vault,
-  WETH_VAULT,
 } from '~constants/address'
 import { allowanceAbi } from '~constants/contracts/AllowanceAbi'
 import { usePreDepositLimits } from '~hooks/usePreDepositLimits'
@@ -36,7 +35,7 @@ export function useDepositFlow({
   address,
   selectedStablecoin,
 }: UseDepositFlowParams) {
-  const isWETHVault = vault.id === WETH_VAULT.id
+  const isWETHVault = vault.token.symbol === 'WETH'
   const isGUSD = isGUSDVault(vault)
 
   const tokenAddress =

@@ -1,4 +1,5 @@
 import { match } from 'ts-pattern'
+import { mainnet } from 'viem/chains'
 import { useReadContract } from 'wagmi'
 
 import { lidoStETHAbi } from '~constants/contracts'
@@ -25,7 +26,8 @@ export function useVaultSharesValidation({
   depositAmount,
   enabled = true,
 }: UseVaultSharesValidationParams): UseVaultSharesValidationReturn {
-  const isWETHVault = vault.token.symbol.toLowerCase() === 'weth'
+  const isWETHVault =
+    vault.token.symbol.toLowerCase() === 'weth' && vault.chainId === mainnet.id
 
   const lidoQuery = useReadContract({
     address: stETH_TOKEN.address,

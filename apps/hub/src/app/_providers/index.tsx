@@ -11,6 +11,7 @@ import { siweConfig } from '~constants/siwe'
 import { PreDepositStateProvider } from '~hooks/usePreDepositStateContext'
 import { VaultStateProvider } from '~hooks/useVaultStateContext'
 
+import { PreDepositProvider } from './pre-deposit-provider'
 import { VaultProvider } from './vault-provider'
 
 interface ProvidersProps {
@@ -40,6 +41,7 @@ const queryClient = new QueryClient({
  * 5. PreDepositStateProvider - Pre-deposit state machine
  * 6. VaultStateProvider - Vault operation state machine
  * 7. VaultProvider - Vault-specific features
+ * 8. PreDepositProvider - Pre-deposit status orchestration
  */
 export function Providers({ children }: ProvidersProps) {
   return (
@@ -54,8 +56,10 @@ export function Providers({ children }: ProvidersProps) {
             <PreDepositStateProvider>
               <VaultStateProvider>
                 <VaultProvider>
-                  {children}
-                  <ToastContainer />
+                  <PreDepositProvider>
+                    {children}
+                    <ToastContainer />
+                  </PreDepositProvider>
                 </VaultProvider>
               </VaultStateProvider>
             </PreDepositStateProvider>

@@ -15,6 +15,8 @@ export interface UserVaultDepositParams {
   vault: Vault
   /** Optional: override the user address (defaults to connected wallet) */
   userAddress?: `0x${string}`
+  /** Optional: disable contract reads */
+  enabled?: boolean
   /** Optional: callback to register refetch function for external triggering */
   registerRefetch?: (vaultId: string, refetch: () => void) => void
 }
@@ -39,6 +41,7 @@ export interface UserVaultDepositParams {
 export function useUserVaultDeposit({
   vault,
   userAddress,
+  enabled = true,
   registerRefetch,
 }: UserVaultDepositParams) {
   const { address: connectedAddress } = useAccount()
@@ -55,7 +58,7 @@ export function useUserVaultDeposit({
     functionName: 'balanceOf',
     args: ownerAddress ? [ownerAddress] : undefined,
     query: {
-      enabled: !!ownerAddress,
+      enabled: enabled && !!ownerAddress,
     },
   })
 
@@ -70,7 +73,7 @@ export function useUserVaultDeposit({
     functionName: 'convertToAssets',
     args: shares !== undefined ? [shares] : undefined,
     query: {
-      enabled: shares !== undefined && shares > 0n,
+      enabled: enabled && shares !== undefined && shares > 0n,
     },
   })
 
@@ -82,8 +85,9 @@ export function useUserVaultDeposit({
   }, [refetchShares, refetchAssets])
 
   useEffect(() => {
+    if (!enabled) return
     registerRefetch?.(vault.id, refetch)
-  }, [vault.id, registerRefetch, refetch])
+  }, [enabled, vault.id, registerRefetch, refetch])
 
   return {
     data,

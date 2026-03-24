@@ -6,7 +6,9 @@ import Image from 'next/image'
 import { useLocale, useTranslations } from 'next-intl'
 
 import { HubLayout } from '~components/hub-layout'
+import { PreDepositClaimModal } from '~components/pre-deposit-claim-modal'
 import { PreDepositModal } from '~components/pre-deposit-modal'
+import { PreDepositUnlockModal } from '~components/pre-deposit-unlock-modal'
 import { VaultCard } from '~components/vault-card'
 import { VAULTS } from '~constants/index'
 import { useVaultSelection } from '~hooks/useVaultSelection'
@@ -54,13 +56,22 @@ const softwareApplicationSchema = {
 
 export default function HomePage() {
   const {
-    selectedVault,
-    setSelectedVault,
+    depositVault,
     defaultVault,
     activeVaults,
     registerRefetch,
     handleDepositSuccess,
-    isModalOpen,
+    isDepositModalOpen,
+    openDepositModal,
+    closeModal,
+    unlockVault,
+    openUnlockModal,
+    isUnlockModalOpen,
+    handleUnlockSuccess,
+    claimVault,
+    openClaimModal,
+    isClaimModalOpen,
+    handleClaimSuccess,
   } = useVaultSelection()
   const t = useTranslations()
   const locale = useLocale()
@@ -106,7 +117,9 @@ export default function HomePage() {
                   >
                     <VaultCard
                       vault={vault}
-                      onDeposit={() => setSelectedVault(vault)}
+                      onDeposit={() => openDepositModal(vault)}
+                      onUnlock={() => openUnlockModal(vault)}
+                      onClaim={() => openClaimModal(vault)}
                       registerRefetch={registerRefetch}
                     />
                   </div>
@@ -170,13 +183,30 @@ export default function HomePage() {
         </div>
       </div>
       <PreDepositModal
-        open={isModalOpen}
-        onOpenChange={open => !open && setSelectedVault(null)}
-        vault={selectedVault ?? defaultVault}
+        open={isDepositModalOpen}
+        onOpenChange={open => !open && closeModal()}
+        vault={depositVault ?? defaultVault}
         vaults={activeVaults}
-        setActiveVault={setSelectedVault}
+        setActiveVault={openDepositModal}
         onDepositSuccess={handleDepositSuccess}
+        onRequestOpen={openDepositModal}
       />
+      {unlockVault && (
+        <PreDepositUnlockModal
+          open={isUnlockModalOpen}
+          onOpenChange={open => !open && closeModal()}
+          vault={unlockVault}
+          onUnlockSuccess={handleUnlockSuccess}
+        />
+      )}
+      {claimVault && (
+        <PreDepositClaimModal
+          open={isClaimModalOpen}
+          onOpenChange={open => !open && closeModal()}
+          vault={claimVault}
+          onClaimSuccess={handleClaimSuccess}
+        />
+      )}
     </HubLayout>
   )
 }

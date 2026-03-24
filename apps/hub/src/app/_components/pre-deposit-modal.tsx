@@ -1,15 +1,8 @@
 'use client'
 
-import {
-  type Dispatch,
-  type SetStateAction,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useToast } from '@status-im/components'
 import { DropdownIcon } from '@status-im/icons/20'
 import { Button, DropdownMenu } from '@status-im/status-network/components'
 import { cva } from 'cva'
@@ -85,8 +78,9 @@ type PreDepositModalProps = {
   onOpenChange: (open: boolean) => void
   vault: Vault
   vaults: Vault[]
-  setActiveVault: Dispatch<SetStateAction<Vault | null>>
+  setActiveVault: (vault: Vault) => void
   onDepositSuccess?: () => void
+  onRequestOpen?: (vault: Vault) => void
 }
 
 const createDepositFormSchema = (t: ReturnType<typeof useTranslations>) =>
@@ -95,6 +89,12 @@ const createDepositFormSchema = (t: ReturnType<typeof useTranslations>) =>
   })
 
 type FormValues = z.infer<ReturnType<typeof createDepositFormSchema>>
+
+type WrapDraft = {
+  vaultId: string
+  stablecoinSymbol?: string
+  amount: string
+}
 
 const inputContainerStyles = cva({
   base: 'rounded-16 border bg-white-100 px-4 py-3 transition-colors',
@@ -129,13 +129,14 @@ const PreDepositModal = ({
   vaults,
   setActiveVault,
   onDepositSuccess,
+  onRequestOpen,
 }: PreDepositModalProps) => {
   const t = useTranslations()
-  const toast = useToast()
   const { address } = useAccount()
   const chainId = useChainId()
   const { switchChain, isPending: isSwitchingChain } = useSwitchChain()
   const [hasSwitchError, setHasSwitchError] = useState(false)
+  const [wrapDraft, setWrapDraft] = useState<WrapDraft | null>(null)
 
   const tokenOptions = useMemo(() => buildTokenOptions(vaults), [vaults])
   const [selectedStablecoin, setSelectedStablecoin] = useState<StablecoinToken>(
@@ -237,6 +238,31 @@ const PreDepositModal = ({
     }
   }, [isWrongChain, hasSwitchError])
 
+  useEffect(() => {
+    if (!open || !wrapDraft) return
+    if (wrapDraft.vaultId !== vault.id) return
+
+    if (wrapDraft.stablecoinSymbol) {
+      const stablecoinOption = tokenOptions.find(
+        option => option.stablecoin?.symbol === wrapDraft.stablecoinSymbol
+      )
+
+      if (stablecoinOption) {
+        setActiveVault(stablecoinOption.vault)
+        if (stablecoinOption.stablecoin) {
+          setSelectedStablecoin(stablecoinOption.stablecoin)
+        }
+      }
+    }
+
+    form.setValue('amount', wrapDraft.amount, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    })
+    setWrapDraft(null)
+  }, [open, wrapDraft, vault.id, tokenOptions, setActiveVault, form])
+
   if (!vault) return null
 
   const performDeposit = (amount: string) => {
@@ -246,11 +272,6 @@ const PreDepositModal = ({
         {
           onSuccess: () => {
             onDepositSuccess?.()
-            onOpenChange(false)
-          },
-          onError: () => {
-            toast.negative(t('vault.deposit_failed'))
-            form.reset()
           },
         }
       )
@@ -260,11 +281,6 @@ const PreDepositModal = ({
         {
           onSuccess: () => {
             onDepositSuccess?.()
-            onOpenChange(false)
-          },
-          onError: () => {
-            toast.negative(t('vault.deposit_failed'))
-            form.reset()
           },
         }
       )
@@ -278,21 +294,34 @@ const PreDepositModal = ({
       .with('needs-wrap', () => {
         const wethNeeded = amountWei > balance ? amountWei - balance : 0n
         const ethToWrap = ethBalance > wethNeeded ? wethNeeded : ethBalance
+        const draft: WrapDraft = {
+          vaultId: vault.id,
+          amount: data.amount,
+          stablecoinSymbol: isGUSD ? selectedStablecoin.symbol : undefined,
+        }
+
+        setWrapDraft(draft)
+        onOpenChange(false)
 
         wrapETH(
-          { amountWei: ethToWrap },
+          {
+            amountWei: ethToWrap,
+            wethAddress: vault.token.address,
+            chainId: vault.chainId,
+          },
           {
             onSuccess: async () => {
               await refetchBalances()
-              toast.positive(t('vault.eth_wrapped_success'))
+              onRequestOpen?.(vault)
             },
             onError: () => {
-              toast.negative(t('vault.eth_wrap_failed'))
+              setWrapDraft(null)
             },
           }
         )
       })
       .with('approve', () => {
+        onOpenChange(false)
         approveToken(
           {
             token: currentToken,
@@ -300,14 +329,15 @@ const PreDepositModal = ({
             spenderAddress: vaultAddress,
           },
           {
-            onSuccess: async () => {
-              await refetchAllowance()
+            onSuccess: () => {
+              void refetchAllowance()
               performDeposit(data.amount)
             },
           }
         )
       })
       .with('deposit', () => {
+        onOpenChange(false)
         performDeposit(data.amount)
       })
       .otherwise(() => {})
@@ -338,7 +368,7 @@ const PreDepositModal = ({
   const errorMessage = match(actionState)
     .with('invalid-balance', () => {
       const totalBalance =
-        vault.id === 'WETH'
+        vault.token.symbol === 'WETH'
           ? (balance ?? 0n) + (ethBalance ?? 0n)
           : (balance ?? 0n)
       return t('vault.insufficient_balance', {
@@ -500,7 +530,7 @@ const PreDepositModal = ({
                     })}
                   </button>
                 </div>
-                {vault.id === 'WETH' && (
+                {vault.token.symbol === 'WETH' && (
                   <div className="text-right">
                     <span>
                       {t('vault.available_eth_to_wrap')}{' '}
@@ -614,22 +644,10 @@ const PreDepositModal = ({
                 className="w-full justify-center"
                 disabled={isPending || isInputError || actionState === 'idle'}
               >
-                {match({
-                  action: actionState,
-                  isApproving,
-                  isDepositing,
-                  isGUSDDepositing,
-                  isWrapping,
-                })
-                  .with({ isWrapping: true }, () => t('vault.wrapping_eth'))
-                  .with({ isApproving: true }, () => t('vault.approving'))
-                  .with({ isDepositing: true }, () => t('vault.depositing'))
-                  .with({ isGUSDDepositing: true }, () => t('vault.depositing'))
-                  .with({ action: 'needs-wrap' }, () =>
-                    t('vault.wrap_eth_to_weth')
-                  )
-                  .with({ action: 'approve' }, () => t('vault.approve_deposit'))
-                  .with({ action: 'deposit' }, () => t('vault.deposit'))
+                {match(actionState)
+                  .with('needs-wrap', () => t('vault.wrap_eth_to_weth'))
+                  .with('approve', () => t('vault.approve_deposit'))
+                  .with('deposit', () => t('vault.deposit'))
                   .otherwise(() => t('vault.enter_amount'))}
               </Button>
             )}

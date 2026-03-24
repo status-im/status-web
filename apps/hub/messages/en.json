@@ -881,6 +881,10 @@
       "translation": "Unlock",
       "notes": "vault::unlock_label"
     },
+    "bridging": {
+      "translation": "Bridging...",
+      "notes": "vault::bridging"
+    },
     "native_apps_points": {
       "translation": "native apps points",
       "notes": "vault::native_apps_points"
@@ -952,6 +956,118 @@
     "gusd_deposit_successful": {
       "translation": "Successfully deposited {amount} {symbol}",
       "notes": "vault::gusd_deposit_successful"
+    },
+    "unlock_title": {
+      "translation": "Vault is ready to be unlocked",
+      "notes": "vault::unlock_title"
+    },
+    "unlock_description": {
+      "translation": "Unlocking the vault will make your funds available in 20-30 minutes on Status L2, and your yield and rewards will be ready to claim.",
+      "notes": "vault::unlock_description"
+    },
+    "vault_to_unlock": {
+      "translation": "Vault to unlock",
+      "notes": "vault::vault_to_unlock"
+    },
+    "amount_to_unlock": {
+      "translation": "Amount to be unlocked",
+      "notes": "vault::amount_to_unlock"
+    },
+    "receiver_address": {
+      "translation": "Input receiver address",
+      "notes": "vault::receiver_address"
+    },
+    "receiver_placeholder": {
+      "translation": "Type or paste an address",
+      "notes": "vault::receiver_placeholder"
+    },
+    "invalid_address": {
+      "translation": "Address is not valid",
+      "notes": "vault::invalid_address"
+    },
+    "unlock_confirmation": {
+      "translation": "I confirm the receiving address exists on the Status L2 Network, that I have sole or authorized control over it. In case of it being a multisig wallet, I confirm it's been separately deployed and verified on L2 prior to this transfer.",
+      "notes": "vault::unlock_confirmation"
+    },
+    "unlocking": {
+      "translation": "Unlocking...",
+      "notes": "vault::unlocking"
+    },
+    "unlock_vault": {
+      "translation": "Unlock vault",
+      "notes": "vault::unlock_vault"
+    },
+    "unlock_successful": {
+      "translation": "{vault} unlock submitted — bridging to L2",
+      "notes": "vault::unlock_successful"
+    },
+    "bridge_arrived": {
+      "translation": "{vault} bridge complete — ready to allocate funds",
+      "notes": "vault::bridge_arrived"
+    },
+    "no_balance_to_unlock": {
+      "translation": "No balance available to unlock",
+      "notes": "vault::no_balance_to_unlock"
+    },
+    "switch_network_to_unlock": {
+      "translation": "Switch Network to Unlock",
+      "notes": "vault::switch_network_to_unlock"
+    },
+    "allocate_title": {
+      "translation": "Allocate your funds",
+      "notes": "vault::allocate_title"
+    },
+    "allocate_description": {
+      "translation": "Please choose an option.",
+      "notes": "vault::allocate_description"
+    },
+    "amount_to_allocate": {
+      "translation": "Amount to allocate",
+      "notes": "vault::amount_to_allocate"
+    },
+    "withdraw": {
+      "translation": "Withdraw",
+      "notes": "vault::withdraw"
+    },
+    "withdraw_option_description": {
+      "translation": "Withdraw your tokens directly to your wallet.",
+      "notes": "vault::withdraw_option_description"
+    },
+    "provide_liquidity": {
+      "translation": "Provide liquidity",
+      "notes": "vault::provide_liquidity"
+    },
+    "provide_liquidity_description": {
+      "translation": "Short description of the option. Pros and cons. Learn more.",
+      "notes": "vault::provide_liquidity_description"
+    },
+    "lend_mint": {
+      "translation": "Lend SNT, mint USF",
+      "notes": "vault::lend_mint"
+    },
+    "lend_mint_description": {
+      "translation": "Short description of the option. Pros and cons. Learn more.",
+      "notes": "vault::lend_mint_description"
+    },
+    "continue": {
+      "translation": "Continue",
+      "notes": "vault::continue"
+    },
+    "switch_network_to_claim": {
+      "translation": "Switch Network",
+      "notes": "vault::switch_network_to_claim"
+    },
+    "claiming": {
+      "translation": "Processing...",
+      "notes": "vault::claiming"
+    },
+    "claim_successful": {
+      "translation": "Your funds have been allocated",
+      "notes": "vault::claim_successful"
+    },
+    "allocate_funds": {
+      "translation": "Allocate funds",
+      "notes": "vault::allocate_funds"
     }
   },
   "action_status": {
@@ -971,9 +1087,17 @@
       "translation": "Request was rejected",
       "notes": "action_status::request_rejected"
     },
+    "request_failed": {
+      "translation": "Request failed",
+      "notes": "action_status::request_failed"
+    },
     "rejected_by_user": {
       "translation": "Request was rejected by user",
       "notes": "action_status::rejected_by_user"
+    },
+    "transaction_failed_retry": {
+      "translation": "Transaction failed. Please try again.",
+      "notes": "action_status::transaction_failed_retry"
     },
     "ready_to_create_vault": {
       "translation": "Ready to create new vault",
@@ -990,6 +1114,42 @@
     "increasing_allowance": {
       "translation": "Increasing token allowance",
       "notes": "action_status::increasing_allowance"
+    },
+    "ready_to_deposit": {
+      "translation": "Ready to deposit your funds",
+      "notes": "action_status::ready_to_deposit"
+    },
+    "depositing_funds": {
+      "translation": "Depositing your funds",
+      "notes": "action_status::depositing_funds"
+    },
+    "ready_to_wrap_eth": {
+      "translation": "Ready to wrap ETH",
+      "notes": "action_status::ready_to_wrap_eth"
+    },
+    "wrapping_eth": {
+      "translation": "Wrapping ETH",
+      "notes": "action_status::wrapping_eth"
+    },
+    "ready_to_unlock_vault": {
+      "translation": "Ready to unlock the vault",
+      "notes": "action_status::ready_to_unlock_vault"
+    },
+    "unlocking_vault": {
+      "translation": "Unlocking your vault",
+      "notes": "action_status::unlocking_vault"
+    },
+    "unlock_processing_description": {
+      "translation": "May take around 20-30 minutes, you can close this window and return later.",
+      "notes": "action_status::unlock_processing_description"
+    },
+    "ready_to_claim": {
+      "translation": "Ready to allocate your funds",
+      "notes": "action_status::ready_to_claim"
+    },
+    "claiming": {
+      "translation": "Allocating your funds",
+      "notes": "action_status::claiming"
     },
     "ready_to_stake": {
       "translation": "Ready to stake {amount}",

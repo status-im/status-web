@@ -10,8 +10,10 @@ import { formatCurrency } from '~/utils/currency'
 
 import { HubLayout } from '../../_components/hub-layout'
 import { InfoTooltip } from '../../_components/info-tooltip'
+import { PreDepositClaimModal } from '../../_components/pre-deposit-claim-modal'
 import { getFaqItems, PreDepositFaq } from '../../_components/pre-deposit-faq'
 import { PreDepositModal } from '../../_components/pre-deposit-modal'
+import { PreDepositUnlockModal } from '../../_components/pre-deposit-unlock-modal'
 import { RewardsSection } from '../../_components/rewards-section'
 import { VaultCard } from '../../_components/vault-card'
 import { VAULTS } from '../../_constants/address'
@@ -43,13 +45,22 @@ export default function PreDepositPage() {
   const t = useTranslations()
   const { data: totalTVL, isLoading: isLoadingTVL } = useTotalTVL()
   const {
-    selectedVault,
-    setSelectedVault,
+    depositVault,
     defaultVault,
     activeVaults,
     registerRefetch,
     handleDepositSuccess,
-    isModalOpen,
+    isDepositModalOpen,
+    openDepositModal,
+    closeModal,
+    unlockVault,
+    openUnlockModal,
+    isUnlockModalOpen,
+    handleUnlockSuccess,
+    claimVault,
+    openClaimModal,
+    isClaimModalOpen,
+    handleClaimSuccess,
   } = useVaultSelection()
 
   const formattedTVL = totalTVL ? formatCurrency(totalTVL) : '$0'
@@ -107,7 +118,9 @@ export default function PreDepositPage() {
             <VaultCard
               key={vault.id}
               vault={vault}
-              onDeposit={() => setSelectedVault(vault)}
+              onDeposit={() => openDepositModal(vault)}
+              onUnlock={() => openUnlockModal(vault)}
+              onClaim={() => openClaimModal(vault)}
               registerRefetch={registerRefetch}
             />
           ))}
@@ -128,13 +141,30 @@ export default function PreDepositPage() {
         />
       </div>
       <PreDepositModal
-        open={isModalOpen}
-        onOpenChange={open => !open && setSelectedVault(null)}
-        vault={selectedVault ?? defaultVault}
+        open={isDepositModalOpen}
+        onOpenChange={open => !open && closeModal()}
+        vault={depositVault ?? defaultVault}
         vaults={activeVaults}
-        setActiveVault={setSelectedVault}
+        setActiveVault={openDepositModal}
         onDepositSuccess={handleDepositSuccess}
+        onRequestOpen={openDepositModal}
       />
+      {unlockVault && (
+        <PreDepositUnlockModal
+          open={isUnlockModalOpen}
+          onOpenChange={open => !open && closeModal()}
+          vault={unlockVault}
+          onUnlockSuccess={handleUnlockSuccess}
+        />
+      )}
+      {claimVault && (
+        <PreDepositClaimModal
+          open={isClaimModalOpen}
+          onOpenChange={open => !open && closeModal()}
+          vault={claimVault}
+          onClaimSuccess={handleClaimSuccess}
+        />
+      )}
     </HubLayout>
   )
 }
