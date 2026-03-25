@@ -11,7 +11,6 @@ import { useLocale, useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { MAX_BOOST } from '~constants/staking'
 import { useSliderConfig } from '~hooks/useSliderConfig'
 
 import { DEFAULT_LOCK_PERIOD, SECONDS_PER_DAY } from './constants'
@@ -71,8 +70,6 @@ export function LockVaultForm(props: LockVaultFormProps) {
     actions,
     currentLockUntil,
     currentTimestamp,
-    currentStakedBalance,
-    currentMpBalance,
   } = props
 
   const [closeAction, submitAction] = actions
@@ -114,48 +111,6 @@ export function LockVaultForm(props: LockVaultFormProps) {
       initialPosition: 50,
     }
   }, [sliderConfigQuery, t])
-
-  // Compute the max total lock days allowed by MP cap (for validation only, not slider)
-  const maxDaysByMp = useMemo(() => {
-    const contractMaxSeconds = sliderConfigQuery?.max || 126144000
-    const referenceTimestamp =
-      currentTimestamp ?? BigInt(Math.floor(Date.now() / 1000))
-    const isExt = currentLockUntil && currentLockUntil > referenceTimestamp
-    const currentRemainingSeconds = isExt
-      ? Number(currentLockUntil - referenceTimestamp)
-      : 0
-
-    if (
-      isExt &&
-      currentStakedBalance &&
-      currentStakedBalance > 0n &&
-      currentMpBalance !== undefined
-    ) {
-      const absoluteMaxMp = currentStakedBalance * BigInt(MAX_BOOST - 1)
-      const remainingGrantableMp =
-        absoluteMaxMp > currentMpBalance ? absoluteMaxMp - currentMpBalance : 0n
-      const maxAdditionalSecondsByMp =
-        absoluteMaxMp > 0n
-          ? Number(
-              (remainingGrantableMp * BigInt(contractMaxSeconds)) /
-                absoluteMaxMp
-            )
-          : 0
-      const maxTotalSecondsByMp =
-        currentRemainingSeconds + maxAdditionalSecondsByMp
-      return Math.floor(
-        Math.min(contractMaxSeconds, maxTotalSecondsByMp) / SECONDS_PER_DAY
-      )
-    }
-
-    return null // no MP cap applies
-  }, [
-    sliderConfigQuery,
-    currentTimestamp,
-    currentLockUntil,
-    currentStakedBalance,
-    currentMpBalance,
-  ])
 
   const years = watch('years')
   const days = watch('days')
@@ -304,11 +259,6 @@ export function LockVaultForm(props: LockVaultFormProps) {
 
     if (daysValue > sliderConfig.maxDays) {
       return t('vault.max_lock_time', { time: sliderConfig.maxLabel })
-    }
-
-    // MP-cap validation: selected duration would exceed max grantable MP
-    if (maxDaysByMp !== null && daysValue > maxDaysByMp) {
-      return t('errors.mp_overflow')
     }
 
     const minYears = sliderConfig.minDays / DAYS_PER_YEAR
