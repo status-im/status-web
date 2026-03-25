@@ -37,10 +37,17 @@ export const statusHoodi = defineChain({
   testnet: true,
   fees: {
     async estimateFeesPerGas({ client, request }) {
+      const account = request?.account
+      if (!account) {
+        return {
+          maxFeePerGas: FALLBACK_MAX_FEE_PER_GAS,
+          maxPriorityFeePerGas: FALLBACK_MAX_PRIORITY_FEE_PER_GAS,
+        }
+      }
       try {
         const response = await estimateGas(client, {
           ...request,
-          account: request?.account,
+          account,
         })
         const maxPriorityFeePerGas = response.priorityFeePerGas
         const baseFeePerGas = response.baseFeePerGas
