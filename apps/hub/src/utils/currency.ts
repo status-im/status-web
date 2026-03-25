@@ -6,7 +6,11 @@ import { formatUnits, parseUnits } from 'viem'
 
 export interface FormatTokenOptions {
   /**
-   * Whether to dynamically expand the decimals up to the first non-zero digit
+   * Whether to dynamically increase displayed fractional digits beyond
+   * `maximumFractionDigits` to show significant non-zero digits. When enabled,
+   * if the value has non-zero fractional digits beyond `maximumFractionDigits`,
+   * the formatter expands to include the first such non-zero digit (and any
+   * following non-zero digits on the same pass).
    * @default false
    */
   dynamicFractionDigits?: boolean
@@ -206,7 +210,20 @@ export function formatTokenAmount(
 
   // Apply rounding down if requested
   if (roundDown) {
-    numericAmount = roundDownToDecimals(numericAmount, finalMaxDigits)
+    if (typeof amount === 'bigint') {
+      // Round down in integer space to avoid floating-point precision issues
+      // when finalMaxDigits is large (e.g. 18) and the amount is substantial.
+      const decimalsToDrop = Math.max(0, tokenDecimals - finalMaxDigits)
+      if (decimalsToDrop > 0) {
+        const factor = 10n ** BigInt(decimalsToDrop)
+        const roundedRaw = (amount / factor) * factor
+        numericAmount = Number(formatUnits(roundedRaw, tokenDecimals))
+      } else {
+        numericAmount = Number(formatUnits(amount, tokenDecimals))
+      }
+    } else {
+      numericAmount = roundDownToDecimals(numericAmount, finalMaxDigits)
+    }
   }
 
   // Format using Intl.NumberFormat

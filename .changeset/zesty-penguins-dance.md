@@ -2,4 +2,4 @@
 'hub': patch
 ---
 
-fix(hub): fix bug with hub predeposit min/max values
+fix(hub): fix bug with hub pre-deposit min/max values
