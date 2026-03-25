@@ -1,12 +1,12 @@
+/* eslint-disable no-var */
+
 import type { createAPI } from './src/data/api'
 import type { encoder } from './src/data/encoder'
 import type { getKeystore } from './src/data/keystore'
 import type { getWalletCore } from './src/data/wallet'
-import type { Buffer as NodeBuffer } from 'buffer'
 
 declare global {
   // todo?: limit to background script
-  var Buffer: typeof NodeBuffer
   var api: Awaited<ReturnType<typeof createAPI>>
   var storage: Awaited<ReturnType<typeof getKeystore>>
   var wallet: Awaited<ReturnType<typeof getWalletCore>>

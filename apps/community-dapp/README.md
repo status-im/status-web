@@ -180,6 +180,6 @@ forge test
 forge fmt
 ```
 
-## Community publick key
+## Community public key
 
 - zQ3shhxxHeXxc1jb72h6LK6jSz4HfNLELYBKyhaDfZRji8cMa
