@@ -1,6 +1,7 @@
 import { getDefaultConfig } from 'connectkit'
-import { defineChain } from 'viem'
+import { defineChain, parseGwei } from 'viem'
 import { linea as lineaChainConfig } from 'viem/chains'
+import { estimateGas } from 'viem/linea'
 import { createConfig, http } from 'wagmi'
 import { type Chain, linea, mainnet } from 'wagmi/chains'
 
@@ -11,6 +12,9 @@ import type {
   CreateConnectorFn,
   Transport,
 } from 'wagmi'
+
+const FALLBACK_MAX_FEE_PER_GAS = parseGwei('100')
+const FALLBACK_MAX_PRIORITY_FEE_PER_GAS = parseGwei('100')
 
 export const statusHoodi = defineChain({
   // https://github.com/wevm/viem/blob/main/src/chains/definitions/statusNetworkSepolia.ts
@@ -31,6 +35,27 @@ export const statusHoodi = defineChain({
   },
   contracts: {},
   testnet: true,
+  fees: {
+    async estimateFeesPerGas({ client, request }) {
+      try {
+        const response = await estimateGas(client, {
+          ...request,
+          account: request?.account,
+        })
+        const maxPriorityFeePerGas = response.priorityFeePerGas
+        const baseFeePerGas = response.baseFeePerGas
+        return {
+          maxFeePerGas: baseFeePerGas + maxPriorityFeePerGas,
+          maxPriorityFeePerGas,
+        }
+      } catch {
+        return {
+          maxFeePerGas: FALLBACK_MAX_FEE_PER_GAS,
+          maxPriorityFeePerGas: FALLBACK_MAX_PRIORITY_FEE_PER_GAS,
+        }
+      }
+    },
+  },
 })
 
 export const getDefaultWagmiConfig = () =>

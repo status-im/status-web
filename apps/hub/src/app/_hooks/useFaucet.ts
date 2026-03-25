@@ -6,7 +6,6 @@ import {
   type UseQueryResult,
 } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
-import { parseGwei } from 'viem'
 import { useAccount, useChainId, useConfig, useWriteContract } from 'wagmi'
 import { readContracts, waitForTransactionReceipt } from 'wagmi/actions'
 
@@ -116,8 +115,6 @@ export function useFaucetMutation(): UseMutationResult<
         abi: FAUCET.abi,
         functionName: 'requestTokens',
         args: [amount ?? 0n, address],
-        maxFeePerGas: parseGwei('100'),
-        maxPriorityFeePerGas: parseGwei('100'),
       })
 
       // Wait for transaction confirmation
