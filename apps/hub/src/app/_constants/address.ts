@@ -66,7 +66,7 @@ export function isGUSDVault(vault: Vault): vault is GUSDVault {
 }
 
 export const STAKING_MANAGER = {
-  address: '0x15C931e51C63b6c85C65E550BF8B592ac2379FB7' as Address,
+  address: '0x2Bc5b2a5F580064aaB6fbC1ee30113CD808582aC' as Address,
   abi: stakingManagerAbi as Abi,
 } as const
 
@@ -253,7 +253,7 @@ export const GUSD_VAULT: GUSDVault = {
 export const VAULTS: Vault[] = [WETH_VAULT, GUSD_VAULT, SNT_VAULT, LINEA_VAULT]
 
 export const KARMA = {
-  address: '0x7bE5E09a5ff7E9e77af4C00baFbA1be7e1cdd5c5' as Address,
+  address: '0x0700bE6f329cC48C38144f71c898b72795dB6C1b' as Address,
   abi: karmaAbi as Abi,
 } as const
 
