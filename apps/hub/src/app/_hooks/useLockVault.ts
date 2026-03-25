@@ -255,21 +255,8 @@ export function useLockVault(vaultAddress: Address): UseLockVaultReturn {
           formatLockSuccessMessage(vaultAddress, !!wasAlreadyLocked, t)
         )
 
-        // Invalidate all contract read queries to ensure fresh lockUntil/vault data
-        // after a successful lock transaction (prevents stale cache issues)
-        await queryClient.invalidateQueries({
-          predicate: query => {
-            const key = JSON.stringify(query.queryKey, (_k, v) =>
-              typeof v === 'bigint' ? v.toString() : v
-            )
-            return (
-              key.includes('lockUntil') ||
-              key.includes('getVault') ||
-              key.includes('mpBalanceOf') ||
-              key.includes(vaultAddress)
-            )
-          },
-        })
+        // Invalidate all queries to ensure fresh data after lock transaction
+        await queryClient.invalidateQueries()
 
         // Reset state machine and refetch vaults
         resetVault()

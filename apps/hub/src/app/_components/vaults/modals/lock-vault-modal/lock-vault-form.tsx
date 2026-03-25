@@ -232,6 +232,13 @@ export function LockVaultForm(props: LockVaultFormProps) {
       if (increasedLockSeconds < 0n) {
         increasedLockSeconds = 0n
       }
+
+      // Safety cap: ensure dt_lock = remaining + delta < MAX
+      // remaining ≈ currentRemainingSeconds, so cap delta accordingly
+      const maxDelta = contractMax - 1n - currentRemainingSeconds
+      if (maxDelta > 0n && increasedLockSeconds > maxDelta) {
+        increasedLockSeconds = maxDelta
+      }
     } else {
       // New lock (or nearly-expired lock): dt_lock = delta exactly.
       // Contract rejects dt_lock >= MAX_LOCKUP_PERIOD, so cap just below MAX.
