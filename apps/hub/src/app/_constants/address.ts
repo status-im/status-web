@@ -76,7 +76,7 @@ export const VAULT_FACTORY = {
 } as const
 
 export const FAUCET = {
-  address: '0x4Fb609F4a457f47B41D35Dd060447271F000120A' as Address,
+  address: '0x2673840A768893dbD8F6398B0E985dDC8cfC9C6C' as Address,
   abi: faucetAbi as Abi,
 } as const
 
@@ -105,9 +105,9 @@ export const SNT_TOKEN: Token = {
   abi: tokenAbi,
 } as const
 
-// Testnet token for staking on Status Sepolia
+// Testnet token for staking on Status Hoodi
 export const STT_TOKEN: Token = {
-  address: '0x1C3Ac2a186c6149Ae7Cb4D716eBbD0766E4f898a',
+  address: '0x14c847ce7ab6c8002616176478b32C237fdF0cBb',
   name: 'Status Test Token',
   symbol: 'STT',
   decimals: 18,
@@ -253,7 +253,7 @@ export const GUSD_VAULT: GUSDVault = {
 export const VAULTS: Vault[] = [WETH_VAULT, GUSD_VAULT, SNT_VAULT, LINEA_VAULT]
 
 export const KARMA = {
-  address: '0x5C95Bcd50E6D1B4E3CDC478484C9030Ff0a7D493' as Address,
+  address: '0x01448FEa4c33FB43f6774C6FC35BD3CaB5056579' as Address,
   abi: karmaAbi as Abi,
 } as const
 
@@ -263,6 +263,6 @@ export const REWARDS = {
 } as const
 
 export const KARMA_TIER = {
-  address: '0x5D7F9C0249F82277699DDd94cEFD9b0D1C56BC30' as Address,
+  address: '0x92868A5760232764a70101fEf229Df805635c366' as Address,
   abi: karmaTierAbi as Abi,
 } as const

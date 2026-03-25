@@ -20,15 +20,16 @@ export const statusHoodi = defineChain({
   nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
   rpcUrls: {
     default: {
-      http: [],
+      http: ['https://rpc.status-network-testnet-hoodi.gateway.fm'],
     },
   },
   blockExplorers: {
     default: {
       name: 'Blockscout',
-      url: '',
+      url: 'https://explorer.status-network-testnet-hoodi.gateway.fm',
     },
   },
+  contracts: {},
   testnet: true,
 })
 
@@ -36,15 +37,13 @@ export const getDefaultWagmiConfig = () =>
   getDefaultConfig({
     chains: [statusHoodi, mainnet, linea],
     transports: {
+      // TODO: switch back to proxy once Andrey adds status/hoodi route
       [statusHoodi.id]: http(
-        `${clientEnv.NEXT_PUBLIC_STATUS_API_URL}/api/trpc/rpc.proxy?chainId=${statusHoodi.id}`
+        'https://rpc.status-network-testnet-hoodi.gateway.fm'
       ),
-      [mainnet.id]: http(
-        `${clientEnv.NEXT_PUBLIC_STATUS_API_URL}/api/trpc/rpc.proxy?chainId=${mainnet.id}`
-      ),
-      [linea.id]: http(
-        `${clientEnv.NEXT_PUBLIC_STATUS_API_URL}/api/trpc/rpc.proxy?chainId=${linea.id}`
-      ),
+      // TODO: switch back to proxy once rpc proxy is available in dev
+      [mainnet.id]: http(),
+      [linea.id]: http(),
     },
     walletConnectProjectId:
       clientEnv.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID as string,
