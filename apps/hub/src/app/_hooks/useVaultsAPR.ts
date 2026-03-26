@@ -3,23 +3,23 @@ import { useTranslations } from 'next-intl'
 
 import { clientEnv } from '~constants/env.client.mjs'
 
-export interface VaultAPYData {
+export interface VaultAPRData {
   vaultAddress: string
   apy: number
 }
 
-interface VaultsAPYResponse {
-  result: VaultAPYData[]
+interface VaultsAPRResponse {
+  result: VaultAPRData[]
 }
 
-export type VaultsAPYMap = Record<string, number | undefined>
+export type VaultsAPRMap = Record<string, number | undefined>
 
-export function useVaultsAPY(): UseQueryResult<VaultsAPYMap, Error> {
+export function useVaultsAPR(): UseQueryResult<VaultsAPRMap, Error> {
   const t = useTranslations()
 
   return useQuery({
-    queryKey: ['vaults-apy'],
-    queryFn: async (): Promise<VaultsAPYMap> => {
+    queryKey: ['vaults-apr'],
+    queryFn: async (): Promise<VaultsAPRMap> => {
       const response = await fetch(
         `${clientEnv.NEXT_PUBLIC_STATUS_NETWORK_API_URL}/predeposit/vaults`,
         {
@@ -32,18 +32,18 @@ export function useVaultsAPY(): UseQueryResult<VaultsAPYMap, Error> {
 
       if (!response.ok) {
         throw new Error(
-          t('errors.failed_fetch_vaults_apy', { error: response.statusText })
+          t('errors.failed_fetch_vaults_apr', { error: response.statusText })
         )
       }
 
-      const data: VaultsAPYResponse = await response.json()
+      const data: VaultsAPRResponse = await response.json()
 
-      const apyMap: VaultsAPYMap = {}
+      const aprMap: VaultsAPRMap = {}
       for (const vault of data.result) {
-        apyMap[vault.vaultAddress.toLowerCase()] = vault.apy
+        aprMap[vault.vaultAddress.toLowerCase()] = vault.apy
       }
 
-      return apyMap
+      return aprMap
     },
   })
 }
