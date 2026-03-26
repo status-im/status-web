@@ -45,7 +45,7 @@ export type BaseVault = {
   id: string
   name: string
   address: Address
-  apy: string
+  apr: string
   rewards: string[]
   icon: string
   token: Token
@@ -192,7 +192,7 @@ export const STATUS_L2_CHAIN_NICKNAME = keccak256(stringToHex('Status_L2'))
 export const SNT_VAULT: Vault = {
   id: 'SNT',
   name: 'SNT Vault',
-  apy: '',
+  apr: '',
   rewards: ['LINEA', 'vault.native_apps_points'],
   icon: 'SNT',
   address: '0x493957E168aCCdDdf849913C3d60988c652935Cd',
@@ -205,7 +205,7 @@ export const SNT_VAULT: Vault = {
 export const LINEA_VAULT: Vault = {
   id: 'LINEA',
   name: 'LINEA Vault',
-  apy: '',
+  apr: '',
   rewards: ['SNT', 'vault.native_apps_points'],
   icon: 'LINEA',
   address: '0xb223cA53A53A5931426b601Fa01ED2425D8540fB',
@@ -218,7 +218,7 @@ export const LINEA_VAULT: Vault = {
 export const WETH_VAULT: Vault = {
   id: 'WETH',
   name: 'WETH vault',
-  apy: '',
+  apr: '',
   rewards: ['SNT, LINEA', 'vault.native_apps_points'],
   icon: 'WETH',
   address: '0xc71Ec84Ee70a54000dB3370807bfAF4309a67a1f',
@@ -231,7 +231,7 @@ export const WETH_VAULT: Vault = {
 export const GUSD_VAULT: GUSDVault = {
   id: 'GUSD',
   name: 'GUSD Vault',
-  apy: '',
+  apr: '',
   rewards: ['SNT, LINEA', 'vault.native_apps_points'],
   icon: 'GUSD',
   address: GENERIC_DEPOSITOR.address,
