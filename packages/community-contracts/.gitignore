@@ -1,13 +1,15 @@
 # directories
 cache
 node_modules
-out
-# Allow ABI JSON files needed by the DApp
+out/*
 !out/VotingContract.sol/
-!out/VotingContract.sol/VotingContract.json
 !out/Directory.sol/
-!out/Directory.sol/Directory.json
 !out/FeaturedVotingContract.sol/
+out/VotingContract.sol/*
+out/Directory.sol/*
+out/FeaturedVotingContract.sol/*
+!out/VotingContract.sol/VotingContract.json
+!out/Directory.sol/Directory.json
 !out/FeaturedVotingContract.sol/FeaturedVotingContract.json
 
 # files
