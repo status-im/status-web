@@ -501,6 +501,7 @@ const PreDepositModal = ({
                     {formatTokenAmount(balance, currentToken.symbol, {
                       includeSymbol: true,
                       tokenDecimals: currentToken.decimals,
+                      dynamicFractionDigits: true,
                       roundDown: true,
                     })}
                   </button>
@@ -510,6 +511,7 @@ const PreDepositModal = ({
                     <span>
                       {t('vault.available_eth_to_wrap')}{' '}
                       {formatTokenAmount(ethBalance, 'ETH', {
+                        dynamicFractionDigits: true,
                         roundDown: true,
                       })}
                     </span>
