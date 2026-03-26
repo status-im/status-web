@@ -82,6 +82,10 @@ module.exports = () => {
       new HtmlWebpackPlugin({
         template: 'index.html',
       }),
+      new HtmlWebpackPlugin({
+        template: 'index.html',
+        filename: '404.html',
+      }),
       new webpack.DefinePlugin({
         'process.env.ENV': JSON.stringify(environment),
         'process.env.VOTING_CONTRACT': JSON.stringify(process.env.VOTING_CONTRACT),
