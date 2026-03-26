@@ -285,7 +285,11 @@ export class NotificationPage {
         }
         continue
       }
+      if (page.isClosed()) return
+
       await page.waitForTimeout(NOTIFICATION_TIMEOUTS.POST_CLICK)
+
+      if (page.isClosed()) return
 
       // MetaMask v13 two-step flow: Next → Confirm
       const secondConfirm = this.confirmButton(page)
@@ -303,8 +307,11 @@ export class NotificationPage {
           const msg = err instanceof Error ? err.message : ''
           if (!msg.includes('Timeout') && !msg.includes('detach')) throw err
         }
-        await page.waitForTimeout(NOTIFICATION_TIMEOUTS.PAGE_REOPEN)
+        if (!page.isClosed())
+          await page.waitForTimeout(NOTIFICATION_TIMEOUTS.PAGE_REOPEN)
       }
+
+      if (page.isClosed()) return
 
       // Let service worker dispatch the tx before closing
       await page.waitForTimeout(NOTIFICATION_TIMEOUTS.CONTENT_CHECK)
