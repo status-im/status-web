@@ -107,3 +107,6 @@ web-build/
 
 # IDE
 .idea
+
+# Foundry dependencies
+packages/community-contracts/lib/
