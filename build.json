@@ -1,15 +1,15 @@
 {
-    "timestamp": "2026-03-26T08:01:54Z",
+    "timestamp": "2026-03-27T07:52:54Z",
     "git": {
-        "commit": "24ac65d958ea440aa215bbd1b6a3d4d4e8122a34",
+        "commit": "20f4729bfba3b866aba6f677548fb9e0a55c996e",
         "branch": "origin/main",
         "url": "git@github.com:status-im/status-web.git"
     },
     "build": {
-        "id": "55",
-        "number": "55",
+        "id": "56",
+        "number": "56",
         "name": "website/hub.status.network",
         "slave": "linux-01",
-        "url": "https://ci.infra.status.im/job/website/job/hub.status.network/55/"
+        "url": "https://ci.infra.status.im/job/website/job/hub.status.network/56/"
     }
 }
