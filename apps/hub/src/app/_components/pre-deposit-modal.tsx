@@ -344,6 +344,8 @@ const PreDepositModal = ({
       return t('vault.insufficient_balance', {
         max: formatTokenAmount(totalBalance, currentToken.symbol, {
           tokenDecimals: currentToken.decimals,
+          dynamicFractionDigits: true,
+          roundDown: true,
         }),
       })
     })
@@ -351,6 +353,8 @@ const PreDepositModal = ({
       t('vault.exceeds_vault_limit', {
         max: formatTokenAmount(maxDeposit ?? 0n, currentToken.symbol, {
           tokenDecimals: currentToken.decimals,
+          dynamicFractionDigits: true,
+          roundDown: true,
         }),
       })
     )
@@ -358,6 +362,7 @@ const PreDepositModal = ({
       t('vault.below_minimum_deposit', {
         min: formatTokenAmount(minDeposit ?? 0n, currentToken.symbol, {
           tokenDecimals: currentToken.decimals,
+          dynamicFractionDigits: true,
         }),
       })
     )
@@ -496,6 +501,7 @@ const PreDepositModal = ({
                     {formatTokenAmount(balance, currentToken.symbol, {
                       includeSymbol: true,
                       tokenDecimals: currentToken.decimals,
+                      dynamicFractionDigits: true,
                       roundDown: true,
                     })}
                   </button>
@@ -505,6 +511,7 @@ const PreDepositModal = ({
                     <span>
                       {t('vault.available_eth_to_wrap')}{' '}
                       {formatTokenAmount(ethBalance, 'ETH', {
+                        dynamicFractionDigits: true,
                         roundDown: true,
                       })}
                     </span>
