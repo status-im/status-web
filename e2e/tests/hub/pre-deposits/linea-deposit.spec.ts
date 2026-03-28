@@ -3,6 +3,9 @@ import { test } from '@fixtures/anvil.fixture.js'
 import { FUNDING_PRESETS } from '@helpers/anvil-rpc.js'
 import { expect } from '@playwright/test'
 
+const NETWORK_SWITCH_TIMEOUT = 15_000
+const NETWORK_SWITCH_POLL_INTERVAL = 500
+
 test.describe('LINEA Vault - Happy path deposit', () => {
   test(
     'L-1: deposit LINEA tokens with network switch',
@@ -46,7 +49,10 @@ test.describe('LINEA Vault - Happy path deposit', () => {
                 )
               })
             },
-            { timeout: 15_000, intervals: [500] },
+            {
+              timeout: NETWORK_SWITCH_TIMEOUT,
+              intervals: [NETWORK_SWITCH_POLL_INTERVAL],
+            },
           )
           .toBe('0xe708')
       })

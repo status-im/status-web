@@ -12,7 +12,7 @@ First, follow the [root README](../../README.md#getting-started) to clone the re
 pnpm dev
 cd e2e
 pnpm install
-npx playwright install chromium
+pnpm dlx playwright install chromium
 
 # Configure environment
 cp .env.example .env
@@ -45,7 +45,7 @@ pnpm clean             # Remove test artifacts and extensions
 Run a specific file:
 
 ```bash
-npx playwright test tests/hub/pre-deposits/pre-deposits-display.spec.ts
+pnpm dlx playwright test tests/hub/pre-deposits/pre-deposits-display.spec.ts
 ```
 
 ## Tags
@@ -243,10 +243,3 @@ curl -s -X POST http://localhost:8547 \
 | Tests timeout on Apple Silicon | Enable Rosetta in Docker Desktop (see above) |
 | `wallet_addEthereumChain` popup | The fixture blocks this via `addInitScript`; if it appears, check fixture setup |
 | Smart Transactions interfering | STX is disabled via file patching; update patterns if MetaMask version changes |
-
-## Adding a New Vault
-
-1. **`src/constants/hub/vaults.ts`** — add to `TEST_VAULTS`, `BELOW_MIN_AMOUNTS`, `DEPOSIT_AMOUNTS`
-2. **`src/helpers/anvil-rpc.ts`** — add contract address to `CONTRACTS`, funding method, `FUNDING_PRESETS` entry
-3. **`src/helpers/anvil-rpc.ts`** — add to `enableAllVaults()`
-4. Create test spec files in `tests/hub/pre-deposits/`

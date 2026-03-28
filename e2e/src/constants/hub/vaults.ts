@@ -1,3 +1,4 @@
+import { CHAIN_ID_LINEA, CHAIN_ID_MAINNET } from '@constants/chain-ids.js'
 import { CONTRACTS } from '@helpers/anvil-rpc.js'
 
 /**
@@ -10,28 +11,28 @@ export const TEST_VAULTS = {
     name: 'WETH vault',
     token: 'WETH',
     address: CONTRACTS.WETH_VAULT,
-    chainId: 1,
+    chainId: CHAIN_ID_MAINNET,
   },
   SNT: {
     id: 'SNT',
     name: 'SNT Vault',
     token: 'SNT',
     address: CONTRACTS.SNT_VAULT,
-    chainId: 1,
+    chainId: CHAIN_ID_MAINNET,
   },
   LINEA: {
     id: 'LINEA',
     name: 'LINEA Vault',
     token: 'LINEA',
     address: CONTRACTS.LINEA_VAULT,
-    chainId: 59144,
+    chainId: CHAIN_ID_LINEA,
   },
   GUSD: {
     id: 'GUSD',
     name: 'GUSD Vault',
     token: 'GUSD',
     address: CONTRACTS.GUSD_VAULT,
-    chainId: 1,
+    chainId: CHAIN_ID_MAINNET,
   },
 } as const
 

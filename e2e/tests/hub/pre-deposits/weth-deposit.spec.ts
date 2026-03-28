@@ -3,6 +3,7 @@ import { test } from '@fixtures/anvil.fixture.js'
 import { FUNDING_PRESETS } from '@helpers/anvil-rpc.js'
 
 const FALLBACK_WRAP_WETH_AMOUNT = 1n * 10n ** 18n
+const UI_SETTLE_DELAY = 1_500
 
 test.describe('WETH Vault - Happy path deposits', () => {
   test(
@@ -38,7 +39,7 @@ test.describe('WETH Vault - Happy path deposits', () => {
         // TODO: Restore real wrap tx confirmation once MetaMask STX routing is
         // fully stable on local Anvil forks.
         await anvilRpc.fundWeth(FALLBACK_WRAP_WETH_AMOUNT)
-        await hubPage.waitForTimeout(1_500)
+        await hubPage.waitForTimeout(UI_SETTLE_DELAY)
         await depositModal.close()
         await preDepositsPage.clickDepositForVault('WETH')
         await depositModal.waitForOpen()
@@ -135,7 +136,7 @@ test.describe('WETH Vault - Happy path deposits', () => {
         // TODO: Restore real partial-wrap tx confirmation once MetaMask STX
         // routing is fully stable on local Anvil forks.
         await anvilRpc.fundWeth(FALLBACK_WRAP_WETH_AMOUNT)
-        await hubPage.waitForTimeout(1_500)
+        await hubPage.waitForTimeout(UI_SETTLE_DELAY)
         await depositModal.close()
         await preDepositsPage.clickDepositForVault('WETH')
         await depositModal.waitForOpen()

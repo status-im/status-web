@@ -3,6 +3,7 @@ import {
   requireWalletPassword,
   requireWalletSeedPhrase,
 } from '@config/env.js'
+import { CHAIN_ID_LINEA, CHAIN_ID_MAINNET } from '@constants/chain-ids.js'
 import { KNOWN_LINEA_HOSTS, KNOWN_MAINNET_HOSTS } from '@constants/rpc-hosts.js'
 import { AnvilRpcHelper } from '@helpers/anvil-rpc.js'
 import {
@@ -214,8 +215,10 @@ export const test = walletTest.extend<AnvilFixtures>({
     const getChainIdByHostname = (url: string): number | null => {
       try {
         const hostname = new URL(url).hostname
-        if (KNOWN_LINEA_HOSTS.some(h => hostname.includes(h))) return 59144
-        if (KNOWN_MAINNET_HOSTS.some(h => hostname.includes(h))) return 1
+        if (KNOWN_LINEA_HOSTS.some(h => hostname.includes(h)))
+          return CHAIN_ID_LINEA
+        if (KNOWN_MAINNET_HOSTS.some(h => hostname.includes(h)))
+          return CHAIN_ID_MAINNET
       } catch {
         // ignore URL parsing errors
       }
@@ -270,16 +273,17 @@ export const test = walletTest.extend<AnvilFixtures>({
         const chainIdParam = new URL(url).searchParams.get('chainId')
         if (chainIdParam) {
           const chainId = Number(chainIdParam)
-          if (chainId === 1) rpcRedirectCache.set(url, env.ANVIL_MAINNET_RPC)
-          else if (chainId === 59144)
+          if (chainId === CHAIN_ID_MAINNET)
+            rpcRedirectCache.set(url, env.ANVIL_MAINNET_RPC)
+          else if (chainId === CHAIN_ID_LINEA)
             rpcRedirectCache.set(url, env.ANVIL_LINEA_RPC)
           else rpcRedirectCache.set(url, null)
         } else {
           const knownChainId = getChainIdByHostname(url)
           if (knownChainId !== null) {
-            if (knownChainId === 1)
+            if (knownChainId === CHAIN_ID_MAINNET)
               rpcRedirectCache.set(url, env.ANVIL_MAINNET_RPC)
-            else if (knownChainId === 59144)
+            else if (knownChainId === CHAIN_ID_LINEA)
               rpcRedirectCache.set(url, env.ANVIL_LINEA_RPC)
             else rpcRedirectCache.set(url, null)
           } else {
@@ -298,8 +302,10 @@ export const test = walletTest.extend<AnvilFixtures>({
                 })
                 const json = (await probe.json()) as { result: string }
                 const chainId = parseInt(json.result, 16)
-                if (chainId === 1) probeResult = env.ANVIL_MAINNET_RPC
-                else if (chainId === 59144) probeResult = env.ANVIL_LINEA_RPC
+                if (chainId === CHAIN_ID_MAINNET)
+                  probeResult = env.ANVIL_MAINNET_RPC
+                else if (chainId === CHAIN_ID_LINEA)
+                  probeResult = env.ANVIL_LINEA_RPC
                 break
               } catch (err) {
                 if (attempt === 0) {
