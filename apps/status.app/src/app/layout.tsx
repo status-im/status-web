@@ -7,6 +7,7 @@ import Script from 'next/script'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 
+import { PlatformDetector } from './_components/platform-detector'
 import { Metadata } from './_metadata'
 import { Providers } from './_providers'
 
@@ -67,6 +68,13 @@ export default async function RootLayout({ children }: Props) {
         />
       </head>
       <body data-customisation="blue" suppressHydrationWarning>
+        <script
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html: `(${platformScript.toString()})()`,
+          }}
+        />
+        <PlatformDetector />
         <div id="app" className="isolate">
           <NextIntlClientProvider locale={locale} messages={messages}>
             <Providers>{children}</Providers>
@@ -86,4 +94,24 @@ export default async function RootLayout({ children }: Props) {
       </body>
     </html>
   )
+}
+
+// inspired by the implementation of next-themes
+// https://github.com/pacocoursey/next-themes/blob/main/next-themes/src/index.tsx
+const platformScript = () => {
+  const d = document.documentElement
+  const userAgent = navigator.userAgent.toLowerCase()
+  if (/iphone|ipad|ipod/.test(userAgent)) {
+    d.setAttribute('data-platform', 'ios')
+  } else if (userAgent.includes('mac')) {
+    d.setAttribute('data-platform', 'macos')
+  } else if (userAgent.includes('win')) {
+    d.setAttribute('data-platform', 'windows')
+  } else if (userAgent.includes('android')) {
+    d.setAttribute('data-platform', 'android')
+  } else if (userAgent.includes('linux')) {
+    d.setAttribute('data-platform', 'linux')
+  } else {
+    d.setAttribute('data-platform', 'unknown')
+  }
 }

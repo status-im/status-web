@@ -765,17 +765,17 @@
       "translation": "예치금",
       "notes": "vault::your_deposit"
     },
-    "liquid_apy": {
-      "translation": "유동 APY",
-      "notes": "vault::liquid_apy"
+    "liquid_apr": {
+      "translation": "유동 APR",
+      "notes": "vault::liquid_apr"
     },
-    "liquid_apy_tbd": {
-      "translation": "유동 APY 추후 공지",
-      "notes": "vault::liquid_apy_tbd"
+    "liquid_apr_tbd": {
+      "translation": "유동 APR 추후 공지",
+      "notes": "vault::liquid_apr_tbd"
     },
-    "apy_tooltip": {
-      "translation": "TVL을 기반으로 한 추정 APY 및 모든 금고의 총 유동 토큰 보상: 15M SNT + 20M LINEA",
-      "notes": "vault::apy_tooltip"
+    "apr_tooltip": {
+      "translation": "TVL을 기반으로 한 추정 APR 및 모든 금고의 총 유동 토큰 보상: 15M SNT + 20M LINEA",
+      "notes": "vault::apr_tooltip"
     },
     "tvl": {
       "translation": "TVL",
@@ -1293,9 +1293,9 @@
       "translation": "{token}의 가격 값이 유효하지 않습니다: {price}",
       "notes": "errors::invalid_price_value"
     },
-    "failed_fetch_vaults_apy": {
-      "translation": "금고 APY를 불러오지 못했습니다: {error}",
-      "notes": "errors::failed_fetch_vaults_apy"
+    "failed_fetch_vaults_apr": {
+      "translation": "금고 APR을 불러오지 못했습니다: {error}",
+      "notes": "errors::failed_fetch_vaults_apr"
     }
   },
   "not_found": {

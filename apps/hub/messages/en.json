@@ -765,17 +765,17 @@
       "translation": "Your deposit",
       "notes": "vault::your_deposit"
     },
-    "liquid_apy": {
-      "translation": "Liquid APY",
-      "notes": "vault::liquid_apy"
+    "liquid_apr": {
+      "translation": "Liquid APR",
+      "notes": "vault::liquid_apr"
     },
-    "liquid_apy_tbd": {
-      "translation": "Liquid APY TBD",
-      "notes": "vault::liquid_apy_tbd"
+    "liquid_apr_tbd": {
+      "translation": "Liquid APR TBD",
+      "notes": "vault::liquid_apr_tbd"
     },
-    "apy_tooltip": {
-      "translation": "Estimated APY based on TVL and total available liquid token rewards across all vaults: 15M SNT + 20M LINEA",
-      "notes": "vault::apy_tooltip"
+    "apr_tooltip": {
+      "translation": "Estimated APR based on TVL and total available liquid token rewards across all vaults: 15M SNT + 20M LINEA",
+      "notes": "vault::apr_tooltip"
     },
     "tvl": {
       "translation": "TVL",
@@ -1293,9 +1293,9 @@
       "translation": "Invalid price value for {token}: {price}",
       "notes": "errors::invalid_price_value"
     },
-    "failed_fetch_vaults_apy": {
-      "translation": "Failed to fetch vaults APY: {error}",
-      "notes": "errors::failed_fetch_vaults_apy"
+    "failed_fetch_vaults_apr": {
+      "translation": "Failed to fetch vaults APR: {error}",
+      "notes": "errors::failed_fetch_vaults_apr"
     }
   },
   "not_found": {
