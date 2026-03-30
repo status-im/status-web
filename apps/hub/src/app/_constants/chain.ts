@@ -15,8 +15,14 @@ import type {
 const tRpcProxyUrl = (chainId: number) =>
   `${clientEnv.NEXT_PUBLIC_STATUS_API_URL}/api/trpc/rpc.proxy?chainId=${chainId}`
 
+const rpcProxyPaths: Record<number, string> = {
+  [mainnet.id]: '/ethereum/mainnet',
+  [linea.id]: '/linea/mainnet',
+  [statusSepolia.id]: '/status/sepolia',
+}
+
 const rpcProxyUrl = (chainId: number) =>
-  `${clientEnv.NEXT_PUBLIC_RPC_PROXY_URL}?chainId=${chainId}`
+  `${clientEnv.NEXT_PUBLIC_RPC_PROXY_URL}${rpcProxyPaths[chainId]}`
 
 const createPuzzleAuthHooks = () => {
   const origin = new URL(clientEnv.NEXT_PUBLIC_RPC_PROXY_URL!).origin
