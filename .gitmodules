@@ -5,3 +5,12 @@
 [submodule "apps/status.network/content/legal-external"]
 	path = apps/status.network/content/legal-external
 	url = https://github.com/status-im/status-software-legal-documents.git
+[submodule "packages/community-contracts/lib/forge-std"]
+	path = packages/community-contracts/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "packages/community-contracts/lib/minime"]
+	path = packages/community-contracts/lib/minime
+	url = https://github.com/vacp2p/minime
+[submodule "packages/community-contracts/lib/openzeppelin-contracts"]
+	path = packages/community-contracts/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
