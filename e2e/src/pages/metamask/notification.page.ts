@@ -165,23 +165,18 @@ export class NotificationPage {
       .catch(() => false)
 
     if (!hasContent) {
-      // New page = fresh messaging port (reload keeps the stale one)
-      if (!page.isClosed()) await page.close()
-      await new Promise(resolve =>
-        setTimeout(resolve, NOTIFICATION_TIMEOUTS.PAGE_REOPEN),
-      )
-
-      const freshPage = await this.context.newPage()
-      await freshPage.goto(
-        `chrome-extension://${this.extensionId}/notification.html`,
-        { waitUntil: 'load' },
-      )
-      await freshPage
+      await page.reload({ waitUntil: 'load' })
+      const hasContentAfterReload = await page
         .locator('button')
         .first()
         .isVisible({ timeout: contentTimeout })
         .catch(() => false)
-      return freshPage
+      if (!hasContentAfterReload) {
+        console.warn(
+          '[notification] No content after reload — returning page as-is',
+        )
+      }
+      return page
     }
 
     return page
@@ -449,7 +444,6 @@ export class NotificationPage {
   }
 
   async approveTokenSpend(): Promise<void> {
-    // Stale notification pages hold the messaging port — new pages won't receive content
     await this.closeStaleNotificationPages()
 
     let page = await this.waitForNotificationPage()
@@ -465,21 +459,14 @@ export class NotificationPage {
       .catch(() => false)
 
     if (!contentVisible) {
-      if (!page.isClosed()) await page.close()
-      await new Promise(resolve =>
-        setTimeout(resolve, NOTIFICATION_TIMEOUTS.PAGE_REOPEN),
-      )
-
-      page = await this.context.newPage()
-      await page.goto(
-        `chrome-extension://${this.extensionId}/notification.html`,
-        { waitUntil: 'load' },
-      )
-      await page
-        .locator('button')
-        .first()
-        .isVisible({ timeout: NOTIFICATION_TIMEOUTS.NOTIFICATION_CONTENT })
-        .catch(() => false)
+      if (!page.isClosed()) {
+        await page.reload({ waitUntil: 'load' })
+        await page
+          .locator('button')
+          .first()
+          .isVisible({ timeout: NOTIFICATION_TIMEOUTS.NOTIFICATION_CONTENT })
+          .catch(() => false)
+      }
       page = await this.clearAddNetworkQueue(page)
 
       const freshSpendingCapText = page.getByText(
