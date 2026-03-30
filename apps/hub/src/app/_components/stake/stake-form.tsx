@@ -108,7 +108,7 @@ type FormValues = z.infer<ReturnType<typeof createStakeFormSchema>>
 const StakeForm = () => {
   const t = useTranslations()
   const { mutate: createVault } = useCreateVault()
-  const { address, isConnected, isConnecting } = useAccount()
+  const { address, isConnected } = useAccount()
   const { mutateAsync: approveToken } = useApproveToken()
   const { mutateAsync: stakeVault } = useVaultTokenStake()
   const { isSignedIn, isLoading: isLoadingSIWE, signIn } = useSIWE()
@@ -232,8 +232,7 @@ const StakeForm = () => {
     }
   }
 
-  const showLoadingSkeleton =
-    isConnecting || (isConnected && (isLoading || isLoadingSIWE))
+  const showLoadingSkeleton = isConnected && (isLoading || isLoadingSIWE)
 
   if (showLoadingSkeleton) {
     return <StakeFormSkeleton />

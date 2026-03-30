@@ -20,7 +20,7 @@ export default async function BlogPage({ searchParams }: Props) {
     typeof resolvedParams.tag === 'string' ? resolvedParams.tag : undefined
 
   const [{ posts }, t] = await Promise.all([
-    getPosts({ limit: 12, tag: selectedTag }),
+    getPosts({ limit: 'all', tag: selectedTag }),
     getTranslations(),
   ])
 

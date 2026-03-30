@@ -66,7 +66,7 @@ const FaucetCard = () => {
   const { isSignedIn, isLoading: isLoadingSIWE } = useSIWE()
   const { mutate: claimTokens, isPending: isClaimingTokens } =
     useFaucetMutation()
-  const { address, isConnected, isConnecting } = useAccount()
+  const { address, isConnected } = useAccount()
   const { data: emergencyModeEnabled } = useEmergencyModeEnabled()
 
   const { refetch: refetchBalance } = useBalance({
@@ -91,7 +91,7 @@ const FaucetCard = () => {
     return hasExceededLimit && isWithinResetWindow
   }, [faucetData])
 
-  if (isLoading || isConnecting || isLoadingSIWE) {
+  if (isLoading || isLoadingSIWE) {
     return <FaucetCardSkeleton />
   }
 
