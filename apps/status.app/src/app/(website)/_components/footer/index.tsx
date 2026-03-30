@@ -1,4 +1,5 @@
 import NextImage from 'next/image'
+import { getTranslations } from 'next-intl/server'
 
 import { LEGAL, MESSARI_URL, ROUTES, SECURITY, SOCIALS } from '~/config/routes'
 import { Link } from '~components/link'
@@ -7,7 +8,9 @@ import { Logo } from '~components/logo'
 import { AccordionMenu } from '../navigation/accordion-menu'
 import { Section } from './section'
 
-export const Footer = () => {
+export const Footer = async () => {
+  const t = await getTranslations('footer')
+  const tn = await getTranslations('nav')
   return (
     <footer>
       {/* MENU DESKTOP */}
@@ -17,8 +20,8 @@ export const Footer = () => {
             <Logo />
           </Link>
         </div>
-        {Object.entries(ROUTES).map(([title, links]) => (
-          <Section key={title} title={title} routes={links} />
+        {Object.entries(ROUTES).map(([titleKey, links]) => (
+          <Section key={titleKey} title={tn(titleKey)} routes={links} />
         ))}
       </div>
       {/* MENU MOBILE */}
@@ -31,29 +34,27 @@ export const Footer = () => {
       {/* FOOTER LINKS */}
       <div className="grid gap-5 px-6 pb-12 pt-6 lg:grid-cols-[1fr,auto,auto] lg:pb-6">
         <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-3">
-          <span className="text-13 text-neutral-50">
-            © Status Research & Development GmbH
-          </span>
+          <span className="text-13 text-neutral-50">{t('copyright')}</span>
           <Dot className="hidden text-neutral-50 lg:block" />
           <div className="flex items-center gap-2 2md:gap-3">
             <Link
               href={LEGAL.termsOfUse.href}
               className="text-13 text-neutral-40 transition-colors hover:text-neutral-50"
             >
-              {LEGAL.termsOfUse.name}
+              {tn(LEGAL.termsOfUse.nameKey)}
             </Link>
             <Dot className="text-neutral-50 2md:hidden" />
             <Link
               href={LEGAL.privacyPolicy.href}
               className="text-13 text-neutral-40 transition-colors hover:text-neutral-50"
             >
-              {LEGAL.privacyPolicy.name}
+              {tn(LEGAL.privacyPolicy.nameKey)}
             </Link>
             <Link
               href={SECURITY.href}
               className="text-13 text-neutral-40 transition-colors hover:text-neutral-50"
             >
-              {SECURITY.name}
+              {tn(SECURITY.nameKey)}
             </Link>
           </div>
         </div>
@@ -63,7 +64,7 @@ export const Footer = () => {
           className="flex items-center gap-3 text-neutral-50 transition-colors hover:text-neutral-30"
         >
           <MessariLogo />
-          <span className="text-13">Messari Transparency Verified</span>
+          <span className="text-13">{t('messari')}</span>
         </Link>
 
         <div className="flex gap-6 lg:gap-3">
@@ -71,12 +72,12 @@ export const Footer = () => {
             return (
               <Link
                 href={social.href}
-                key={social.name}
+                key={social.nameKey}
                 className="transition-opacity hover:opacity-[60%]"
               >
                 <NextImage
                   src={social.src}
-                  alt={social.name}
+                  alt={tn(social.nameKey)}
                   width={20}
                   height={20}
                 />

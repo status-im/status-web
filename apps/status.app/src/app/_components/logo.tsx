@@ -1,7 +1,8 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
 import { match, P } from 'ts-pattern'
+
+import { usePathname } from '~/i18n/navigation'
 
 import { Image } from './assets'
 

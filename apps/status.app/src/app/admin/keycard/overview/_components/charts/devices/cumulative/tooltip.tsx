@@ -1,6 +1,7 @@
 import { animated } from '@react-spring/web'
 import { DoneIcon, OpenIcon } from '@status-im/icons/16'
 import { defaultStyles, TooltipWithBounds } from '@visx/tooltip'
+import { useTranslations } from 'next-intl'
 
 import { formatNumber } from '~admin/_utils'
 
@@ -34,6 +35,7 @@ const tooltipStyles: React.CSSProperties = {
 
 const ChartTooltip = (props: Props) => {
   const { tooltipData, opacityAnimation, tooltipAnimation } = props
+  const t = useTranslations('admin')
   const totalDevices = formatNumber(
     tooltipData.verifiedDevices + (tooltipData?.unverifiedDevices || 0)
   )
@@ -47,7 +49,7 @@ const ChartTooltip = (props: Props) => {
       <div>
         <div className="flex items-center gap-1 text-neutral-100">
           <p className="text-19 font-semibold">{totalDevices}</p>
-          <p className="pt-1 text-15 font-semibold">devices</p>
+          <p className="pt-1 text-15 font-semibold">{t('devicesLowercase')}</p>
         </div>
       </div>
       <div className="pb-2">

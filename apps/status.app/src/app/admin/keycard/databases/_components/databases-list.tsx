@@ -3,6 +3,7 @@
 import { useState } from 'react'
 
 import { usePathname, useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import { AddNewButton } from '~admin/_components/add-new-button'
 import { DatabaseList } from '~admin/_components/database-list'
@@ -89,11 +90,8 @@ const fakeDatabases = [
   },
 ]
 
-const orderByData = {
-  date: 'Added date',
-}
-
 const DatabasesList = () => {
+  const t = useTranslations('admin')
   const { showRightView } = useLayoutContext()
 
   const router = useRouter()
@@ -119,19 +117,23 @@ const DatabasesList = () => {
     setSearchFilter('')
   }
 
+  const orderByData = {
+    date: t('addedDate'),
+  }
+
   return (
     <AdminLayoutList segment="databases">
       <div className="flex flex-col gap-6">
         {user.canEditKeycard && (
           <AddNewButton href="/admin/keycard/databases/new">
-            New database
+            {t('newDatabase')}
           </AddNewButton>
         )}
         <AdminLayoutList.Filters>
           <SearchInput
             value={searchFilter}
             onChange={setSearchFilter}
-            placeholder="Find devices"
+            placeholder={t('findDatabases')}
           />
           <AdminDropdownSort
             data={orderByData}
@@ -164,18 +166,22 @@ const DatabasesList = () => {
                 }}
               >
                 <DatabaseList.ItemRow
-                  label="ERC-20 URL"
+                  label={t('erc20Url')}
                   value={erc20url}
                   type="link"
                 />
                 <DatabaseList.ItemRow
-                  label="Chain URL"
+                  label={t('chainUrl')}
                   value={chainUrl}
                   type="link"
                 />
-                <DatabaseList.ItemRow label="Date" value={date} type="text" />
                 <DatabaseList.ItemRow
-                  label="Added By"
+                  label={t('date')}
+                  value={date}
+                  type="text"
+                />
+                <DatabaseList.ItemRow
+                  label={t('addedBy')}
                   value={addedBy}
                   type="user"
                 />

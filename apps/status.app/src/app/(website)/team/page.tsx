@@ -1,5 +1,6 @@
 import { Button, Tag, Text } from '@status-im/components'
 import { ArrowRightIcon, ExternalIcon } from '@status-im/icons/20'
+import { getTranslations } from 'next-intl/server'
 
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
 import { Metadata } from '~app/_metadata'
@@ -11,22 +12,88 @@ import { ParallaxCircle } from '~website/_components/parallax-circle'
 import { CircleWord } from '../_components/circle-word'
 import { OrgChart } from './_components/org-chart'
 
-import type { ImageType } from '~components/assets'
+import type { ImageAlt, ImageType } from '~components/assets'
+import type { Metadata as NextMetadata } from 'next'
 
-export const metadata = Metadata({
-  title: 'Team',
-  description:
-    'Founded in 2017, Status has grown to over 90 core contributors. Meet the team behind the open-source, decentralised wallet and messenger.',
-  alternates: {
-    canonical: '/team',
-  },
-})
+export async function generateMetadata(): Promise<NextMetadata> {
+  const t = await getTranslations('team')
 
-export default function TeamPage() {
-  const organizationSchema = jsonLD.organization({
-    description:
-      'Founded in 2017, Status has grown to over 90 core contributors building the open-source, decentralised wallet and messenger.',
+  return Metadata({
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+    alternates: {
+      canonical: '/team',
+    },
   })
+}
+
+export default async function TeamPage() {
+  const t = await getTranslations('team')
+  const tn = await getTranslations('nav')
+
+  const organizationSchema = jsonLD.organization({
+    description: t('schemaDescription'),
+  })
+
+  const ABOUT_LIST = [
+    {
+      title: t('whoAreWe'),
+      description: t('whoAreWeText'),
+      cta: {
+        label: t('buildFreeWorld'),
+        href: '/jobs',
+      },
+    },
+    {
+      title: t('whyStatus'),
+      description: t('whyStatusText'),
+      cta: {
+        label: t('viewManifesto'),
+        href: '/manifesto',
+      },
+    },
+    {
+      title: t('whereAreWe'),
+      description: t('whereAreWeText'),
+      cta: {
+        label: t('privacyRevolution'),
+        href: '/jobs',
+      },
+    },
+  ] satisfies Array<{
+    title: string
+    description: string
+    cta: {
+      label: string
+      href: string
+    }
+  }>
+
+  const NETWORK_LIST = [
+    {
+      image: {
+        id: 'Team/Network Section/Logos:96:96',
+        alt: t('logosAlt') as ImageAlt['Team/Network Section/Logos:96:96'],
+      },
+      title: t('logos'),
+      description: t('logosDescription'),
+      url: 'https://logos.co',
+    },
+    {
+      image: {
+        id: 'Team/Network Section/Vac:96:96',
+        alt: t('vacAlt') as ImageAlt['Team/Network Section/Vac:96:96'],
+      },
+      title: t('vac'),
+      description: t('vacDescription'),
+      url: 'https://vac.dev',
+    },
+  ] satisfies Array<{
+    image: ImageType
+    title: string
+    description: string
+    url: string
+  }>
 
   return (
     <>
@@ -34,20 +101,19 @@ export default function TeamPage() {
       <Body>
         <div className="container mb-11 max-w-[742px] pt-24 xl:mb-20 xl:pt-40">
           <div className="mb-4 flex">
-            <Tag size="32" label="Team" />
+            <Tag size="32" label={tn('team')} />
           </div>
           <h1 className="text-27 font-regular xl:text-40">
-            Founded in 2017, Status has grown to{' '}
+            {t('heroDescription')}{' '}
             <CircleWord
               imageId="Team/Scribbles and Notes/Scribble_01:478:169"
               className="!top-[-4%]"
             >
-              <span className="whitespace-nowrap">over 90</span>
+              <span className="whitespace-nowrap">{t('heroOver90')}</span>
             </CircleWord>{' '}
-            core contributors. The last 18 months has been a period of growth,
-            attracting a large community who ardently seek to defend{' '}
+            {t('heroCoreContributors')}{' '}
             <CircleWord imageId="Team/Scribbles and Notes/Scribble_02:772:196">
-              human rights.
+              {t('heroHumanRights')}
             </CircleWord>
           </h1>
         </div>
@@ -99,9 +165,7 @@ export default function TeamPage() {
           />
           <div className="border-dashed-default relative z-20 border-t pt-24 xl:pt-40">
             <h2 className="text-center text-40 font-bold xl:text-64">
-              +90 core
-              <br />
-              contributors
+              {t('contributorCount')}
             </h2>
           </div>
           <div className="relative z-20 flex justify-center pb-24 pt-14 2md:pb-40 2md:pt-20">
@@ -111,7 +175,7 @@ export default function TeamPage() {
 
         <div className="container py-24 lg:py-40">
           <div className="mb-16 lg:mb-20">
-            <h2 className="text-40 font-bold xl:text-64">Our Network</h2>
+            <h2 className="text-40 font-bold xl:text-64">{t('ourNetwork')}</h2>
           </div>
 
           <div className="grid gap-3 md:gap-4 2md:grid-cols-2 lg:grid-cols-3 xl:gap-5">
@@ -145,83 +209,3 @@ export default function TeamPage() {
     </>
   )
 }
-
-const ABOUT_LIST = [
-  {
-    title: 'Who are we?',
-    description:
-      'Jarrad Hope and Carl Bennetts envisioned the organisation while thinking about how online forums and games incubated communities with a multitude of unique cultures, and how the freedom that birthed these communities was at risk from the growing digital panopticon.',
-    cta: {
-      label: 'Help build a free digital world',
-      href: '/jobs',
-    },
-  },
-  {
-    title: 'Why Status?',
-    description:
-      "Big tech platforms and other centralised actors have the power to siphon people's data, sell it to the highest bidder or use it as a tool to commodify and control behaviour. Jarrad and Carl saw this as an unconscionable affront to human decency, solidifying the goals and focus of the organisation.",
-    cta: {
-      label: 'View our manifesto',
-      href: '/manifesto',
-    },
-  },
-  {
-    title: 'Where are we?',
-    description:
-      'Status has grown from two in 2017 to over 90 core contributors in 2023. It has developed most rapidly in the last 18 months, attracting a large community who ardently seek to build software that defends human rights. The org is positioned to generate waves in the crypto ecosystem.',
-    cta: {
-      label: 'Be part of the privacy revolution',
-      href: '/jobs',
-    },
-  },
-] satisfies Array<{
-  title: string
-  description: string
-  cta: {
-    label: string
-    href: string
-  }
-}>
-
-const NETWORK_LIST = [
-  {
-    image: { id: 'Team/Network Section/Logos:96:96', alt: 'Logos logo' },
-    title: 'Logos',
-    description:
-      'Building the tools & nurturing the culture of the network state movement.',
-    url: 'https://logos.co',
-  },
-  {
-    image: { id: 'Team/Network Section/Nomos:96:96', alt: 'Nomos logo' },
-    title: 'Nomos',
-    description:
-      "Nomos is a novel blockchain project that will address a network state's fundamental need for adaptable privacy and sovereignty.",
-    url: 'https://nomos.tech',
-  },
-  {
-    image: { id: 'Team/Network Section/Waku:96:96', alt: 'Waku logo' },
-    title: 'Waku',
-    description:
-      'A family of robust, censorship-resistant communication protocols designed to enable privacy-focused messaging for web3 apps.',
-    url: 'https://waku.org',
-  },
-  {
-    image: { id: 'Team/Network Section/Codex:96:96', alt: '' },
-    title: 'Codex',
-    description:
-      'Codex is a durable, decentralised data storage protocol, created so the world community can preserve its most important knowledge.',
-    url: 'https://codex.storage',
-  },
-  {
-    image: { id: 'Team/Network Section/Vac:96:96', alt: 'Vac logo' },
-    title: 'Vac',
-    description:
-      'Vac builds public good protocols for the decentralised web, with a focus on privacy and communication.',
-    url: 'https://vac.dev',
-  },
-] satisfies Array<{
-  image: ImageType
-  title: string
-  description: string
-  url: string
-}>

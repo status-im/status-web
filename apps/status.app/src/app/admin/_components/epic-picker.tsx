@@ -2,6 +2,7 @@
 
 import { Tag } from '@status-im/components'
 import { AddIcon } from '@status-im/icons/12'
+import { useTranslations } from 'next-intl'
 import { useController } from 'react-hook-form'
 
 import { EpicTag } from '~admin/_components/epic-tag'
@@ -16,6 +17,7 @@ type Props = {
 
 const EpicPicker = (props: Props) => {
   const { name, epics } = props
+  const t = useTranslations('admin')
 
   const { field, fieldState } = useController<Record<string, number[]>>({
     name,
@@ -25,7 +27,7 @@ const EpicPicker = (props: Props) => {
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-13 font-medium text-neutral-50">Epics</p>
+      <p className="text-13 font-medium text-neutral-50">{t('epics')}</p>
       <div className="flex items-center">
         <div className="flex flex-wrap gap-1 pr-1">
           {field.value.map(epicId => {
@@ -51,7 +53,7 @@ const EpicPicker = (props: Props) => {
               <button type="button" className="group inline-flex">
                 {field.value.length === 0 ? (
                   <div className="[&>div]:cursor-pointer">
-                    <Tag size="24" label="Add epic" icon={<AddIcon />} />
+                    <Tag size="24" label={t('addEpic')} icon={<AddIcon />} />
                   </div>
                 ) : (
                   <div className="w-6 [&>div]:cursor-pointer">

@@ -7,6 +7,7 @@ import { animated, to, useTransition } from '@react-spring/web'
 import { ChevronRightIcon } from '@status-im/icons/20'
 import { Group } from '@visx/group'
 import Pie from '@visx/shape/lib/shapes/Pie'
+import { useTranslations } from 'next-intl'
 
 import { Link } from '~components/link'
 
@@ -38,6 +39,7 @@ type PieProps = {
 }
 
 const PieChart = (props: PieProps) => {
+  const t = useTranslations('admin')
   const {
     size = 166,
     margin = defaultMargin,
@@ -130,7 +132,9 @@ const PieChart = (props: PieProps) => {
           </svg>
         </div>
         <div className="flex flex-col p-4 pt-6 text-13 2xl:px-4 2xl:pb-8">
-          <span className="pb-2 font-medium text-neutral-50">Distribution</span>
+          <span className="pb-2 font-medium text-neutral-50">
+            {t('distribution')}
+          </span>
           <div className="flex flex-wrap 2xl:flex-col 2xl:gap-0">
             {data.map(item => {
               const hasChildren = item.children && item.children.length > 0

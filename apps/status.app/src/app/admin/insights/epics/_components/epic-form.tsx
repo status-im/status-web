@@ -5,6 +5,7 @@ import { useTransition } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useToast } from '@status-im/components'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 
 import { ColorPicker } from '~admin/_components/color-picker'
@@ -15,9 +16,8 @@ import { TextArea } from '~components/forms/text-area'
 import { TextInput } from '~components/forms/text-input'
 import { epicSchema } from '~server/api/validation/epics'
 
-import { InsightsStatusIcon } from '../../_components/insights-status-icon'
+import { getEpicStatusSelectOptions } from '../../_utils/i18n'
 
-import type { SelectProps } from '~components/forms/select'
 import type { SubmitHandler } from 'react-hook-form'
 import type { z } from 'zod'
 
@@ -29,29 +29,13 @@ type Props = {
 
 type FormValues = z.infer<typeof epicSchema>
 
-const epicStatusOptions: SelectProps['options'] = [
-  {
-    label: 'Not started',
-    value: 'not-started',
-    icon: <InsightsStatusIcon status="not-started" />,
-  },
-  {
-    label: 'In progress',
-    value: 'in-progress',
-    icon: <InsightsStatusIcon status="in-progress" />,
-  },
-  {
-    label: 'Done',
-    value: 'done',
-    icon: <InsightsStatusIcon status="done" />,
-  },
-]
-
 const EpicForm = (props: Props) => {
   const { defaultValues, onSubmit, variant } = props
 
   const router = useRouter()
   const toast = useToast()
+  const t = useTranslations('admin')
+  const epicStatusOptions = getEpicStatusSelectOptions(t)
 
   const [isPending, startTransition] = useTransition()
 
@@ -66,11 +50,11 @@ const EpicForm = (props: Props) => {
       startTransition(async () => {
         await onSubmit(data)
         router.push('/admin/insights/epics')
-        toast.positive('Epic updated successfully')
+        toast.positive(t('epicUpdated'))
       })
     } catch (error) {
       console.error(error)
-      toast.negative('Something went wrong. Please try again later.')
+      toast.negative(t('genericError'))
     }
   }
 
@@ -78,21 +62,21 @@ const EpicForm = (props: Props) => {
     <Form {...form} onSubmit={handleSubmit}>
       <div className="grid gap-4">
         <TextInput
-          label="Name"
+          label={t('name')}
           name="name"
-          placeholder="Epic name"
+          placeholder={t('epicName')}
           maxLength={30}
         />
         <TextArea
-          label="Description"
+          label={t('description')}
           name="description"
-          placeholder="Set an epic description"
+          placeholder={t('epicDescriptionPlaceholder')}
           rows={6}
         />
         <ColorPicker name="color" />
         <Select
           name="status"
-          label="Status"
+          label={t('status')}
           options={epicStatusOptions}
           required
         />

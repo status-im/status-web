@@ -1,9 +1,12 @@
+'use client'
+
 import { cloneElement, forwardRef } from 'react'
 
 import * as Dialog from '@radix-ui/react-dialog'
 import { Button } from '@status-im/components'
 import { CloseIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
+import { useTranslations } from 'next-intl'
 
 type Props = {
   children: [React.ReactElement, JSX.Element]
@@ -55,6 +58,7 @@ type ContentProps = {
 
 const Content = (props: ContentProps) => {
   const { children, title, onClose } = props
+  const t = useTranslations('common')
 
   return (
     <div
@@ -71,7 +75,7 @@ const Content = (props: ContentProps) => {
             size="32"
             icon={<CloseIcon />}
             onPress={onClose}
-            aria-label="Close"
+            aria-label={t('close')}
           />
         </div>
       )}
