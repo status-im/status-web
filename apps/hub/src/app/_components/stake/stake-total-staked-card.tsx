@@ -1,6 +1,6 @@
 import { Skeleton } from '@status-im/components'
 import { useTranslations } from 'next-intl'
-import { useAccount, useReadContract } from 'wagmi'
+import { useReadContract } from 'wagmi'
 import { statusSepolia } from 'wagmi/chains'
 
 import { SNTIcon } from '~components/icons'
@@ -30,7 +30,6 @@ const TotalStakedCardSkeleton = () => {
 
 const TotalStakedCard = () => {
   const t = useTranslations()
-  const { isConnecting } = useAccount()
   const { data: totalStaked, isLoading } = useReadContract({
     address: STAKING_MANAGER.address,
     abi: STAKING_MANAGER.abi,
@@ -43,7 +42,7 @@ const TotalStakedCard = () => {
     return null
   }
 
-  if (isLoading || isConnecting) {
+  if (isLoading) {
     return <TotalStakedCardSkeleton />
   }
 
