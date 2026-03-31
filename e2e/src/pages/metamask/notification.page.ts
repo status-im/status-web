@@ -166,16 +166,11 @@ export class NotificationPage {
 
     if (!hasContent) {
       await page.reload({ waitUntil: 'load' })
-      const hasContentAfterReload = await page
+      await page
         .locator('button')
         .first()
         .isVisible({ timeout: contentTimeout })
         .catch(() => false)
-      if (!hasContentAfterReload) {
-        console.warn(
-          '[notification] No content after reload — returning page as-is',
-        )
-      }
       return page
     }
 
@@ -211,15 +206,34 @@ export class NotificationPage {
   }
 
   async approveConnection(): Promise<void> {
-    const page = await this.waitForNotificationPage()
+    const t0 = Date.now()
+    const log = (msg: string) =>
+      console.log(`[approveConnection +${Date.now() - t0}ms] ${msg}`)
+
+    let page = this.context
+      .pages()
+      .find(p => this.isMetaMaskPopup(p) && !p.isClosed())
+
+    if (page) {
+      log('reusing existing popup')
+    } else {
+      page = await this.context.newPage()
+      await page.goto(
+        `chrome-extension://${this.extensionId}/notification.html`,
+        { waitUntil: 'load' },
+      )
+      log('opened notification.html')
+    }
 
     const connectButton = page
       .getByRole('button', { name: /^connect$/i })
       .or(page.getByTestId('page-container-footer-next'))
 
+    log('waiting for Connect button...')
     await connectButton.click({
-      timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM,
+      timeout: NOTIFICATION_TIMEOUTS.NOTIFICATION_CONTENT,
     })
+    log('Connect clicked')
   }
 
   /** Approve a transaction (Confirm button) */

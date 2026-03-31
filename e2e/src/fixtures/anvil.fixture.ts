@@ -120,6 +120,10 @@ export const test = walletTest.extend<AnvilFixtures>({
       }
     }
 
+    const homePage = await metamask.getExtensionPage()
+    await homePage.waitForLoadState('load')
+    console.log('[anvil-fixture] MetaMask home loaded (SW warm-up)')
+
     await use(metamask)
   },
 
@@ -395,6 +399,7 @@ export const test = walletTest.extend<AnvilFixtures>({
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             eth.request = async (args: any) => {
               if (args.method === 'wallet_addEthereumChain') {
+                console.log('[eth-patch] blocked wallet_addEthereumChain')
                 return null
               }
               return orig(args)
@@ -409,8 +414,21 @@ export const test = walletTest.extend<AnvilFixtures>({
           }
         })
 
+        page.on('console', msg => {
+          const text = msg.text()
+          if (text.includes('[eth-patch]') || msg.type() === 'error')
+            console.log(`[hub-page][${msg.type()}] ${text}`)
+        })
+        page.on('pageerror', err => {
+          console.log(`[hub-page][pageerror] ${err.message}`)
+        })
+
+        const connectStart = Date.now()
         await page.goto(env.BASE_URL)
         await page.waitForLoadState('domcontentloaded')
+        console.log(
+          `[anvil-fixture] Hub loaded in ${Date.now() - connectStart}ms`,
+        )
 
         await metamask.connectToDApp(page)
         connectedPage = page
