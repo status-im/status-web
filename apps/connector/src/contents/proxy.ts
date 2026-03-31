@@ -1,11 +1,14 @@
+import {
+  ProviderMessage,
+  type ProxyMessage,
+} from '@status-im/ethereum-provider'
+
 import { getFaviconUrl } from '~lib/get-favicon-url'
 import { logger } from '~lib/logger'
 import { MainMessage } from '~messages/main-message'
-import { ProviderMessage } from '~messages/provider-message'
 
 import { DesktopClient } from '../lib/desktop-client'
 
-import type { ProxyMessage } from '~messages/proxy-message'
 import type { EthersError } from 'ethers'
 import type { PlasmoCSConfig } from 'plasmo'
 

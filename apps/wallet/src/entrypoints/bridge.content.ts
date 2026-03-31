@@ -1,6 +1,8 @@
+import {
+  ProviderMessage,
+  type ProxyMessage,
+} from '@status-im/ethereum-provider'
 import { defineContentScript } from 'wxt/sandbox'
-
-import { ProviderMessage, type ProxyMessage } from '../lib/messages'
 
 export default defineContentScript({
   matches: ['*://*/*'],

@@ -1,0 +1,39 @@
+{
+  "name": "@status-im/ethereum-provider",
+  "version": "0.1.0",
+  "license": "MPL-2.0",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/src/index.d.ts",
+  "source": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "dev": "vite build --watch --mode development",
+    "build:types": "tsc --noEmit false --emitDeclarationOnly",
+    "build": "vite build && pnpm build:types",
+    "typecheck": "tsc",
+    "clean": "rimraf dist node_modules .turbo"
+  },
+  "peerDependencies": {
+    "zod": ">=3.22"
+  },
+  "devDependencies": {
+    "vite": "6.2.5",
+    "zod": "^3.25.0"
+  }
+}
