@@ -765,17 +765,17 @@
       "translation": "예치금",
       "notes": "vault::your_deposit"
     },
-    "liquid_apy": {
-      "translation": "유동 APY",
-      "notes": "vault::liquid_apy"
+    "liquid_apr": {
+      "translation": "유동 APR",
+      "notes": "vault::liquid_apr"
     },
-    "liquid_apy_tbd": {
-      "translation": "유동 APY 추후 공지",
-      "notes": "vault::liquid_apy_tbd"
+    "liquid_apr_tbd": {
+      "translation": "유동 APR 추후 공지",
+      "notes": "vault::liquid_apr_tbd"
     },
-    "apy_tooltip": {
-      "translation": "TVL을 기반으로 한 추정 APY 및 모든 금고의 총 유동 토큰 보상: 15M SNT + 20M LINEA",
-      "notes": "vault::apy_tooltip"
+    "apr_tooltip": {
+      "translation": "TVL을 기반으로 한 추정 APR 및 모든 금고의 총 유동 토큰 보상: 15M SNT + 20M LINEA",
+      "notes": "vault::apr_tooltip"
     },
     "tvl": {
       "translation": "TVL",
@@ -1293,9 +1293,25 @@
       "translation": "{token}의 가격 값이 유효하지 않습니다: {price}",
       "notes": "errors::invalid_price_value"
     },
-    "failed_fetch_vaults_apy": {
-      "translation": "금고 APY를 불러오지 못했습니다: {error}",
-      "notes": "errors::failed_fetch_vaults_apy"
+    "failed_fetch_vaults_apr": {
+      "translation": "금고 APR을 불러오지 못했습니다: {error}",
+      "notes": "errors::failed_fetch_vaults_apr"
+    },
+    "mp_overflow": {
+      "translation": "잠금을 연장할 수 없습니다: 멀티플라이어 포인트가 최대 한도를 초과합니다. 더 짧은 연장 기간을 시도해 주세요.",
+      "notes": "errors::mp_overflow"
+    },
+    "invalid_lock_period": {
+      "translation": "잘못된 잠금 기간입니다. 잠금 기간은 90일에서 4년 사이여야 합니다.",
+      "notes": "errors::invalid_lock_period"
+    },
+    "insufficient_balance": {
+      "translation": "이 잠금 작업을 수행하기에 스테이킹된 잔액이 부족합니다.",
+      "notes": "errors::insufficient_balance"
+    },
+    "lock_simulation_failed": {
+      "translation": "잠금 트랜잭션이 실패할 수 있습니다. 더 짧은 잠금 기간을 시도해 주세요.",
+      "notes": "errors::lock_simulation_failed"
     }
   },
   "not_found": {

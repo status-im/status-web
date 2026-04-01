@@ -21,20 +21,22 @@ export default defineBackground({
   // note: The background's main() function return a promise, but it must be synchronous
   // main: async function main() {
   main: function main() {
+    const g = globalThis as typeof globalThis & Record<string, unknown>
+
     // Polyfill
-    globalThis.Buffer = Buffer
+    g.Buffer = Buffer
 
     // Encoder
-    globalThis.encoder = encoder
+    g.encoder = encoder
 
     // Wallet
     getWalletCore().then(walletCore => {
-      globalThis.wallet = walletCore
+      g.wallet = walletCore
     })
 
     // API
     createAPI().then(api => {
-      globalThis.api = api
+      g.api = api
     })
 
     chrome.alarms.onAlarm.addListener(alarm => {

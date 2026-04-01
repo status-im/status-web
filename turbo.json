@@ -9,6 +9,7 @@
         "dist/**",
         ".output/**",
         "build/**",
+        "out/**",
         ".next/**",
         ".contentlayer/**"
       ]
@@ -30,6 +31,32 @@
     "comment_dev": {
       "dependsOn": ["^build:content"],
       "persistent": true
+    },
+    "@status-im/community-dapp#build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"],
+      "passThroughEnv": [
+        "ENV",
+        "VOTING_CONTRACT",
+        "DIRECTORY_CONTRACT",
+        "MULTICALL_CONTRACT",
+        "TOKEN_CONTRACT",
+        "FEATURED_VOTING_CONTRACT",
+        "INFURA_API_KEY"
+      ]
+    },
+    "@status-im/community-dapp#dev": {
+      "cache": false,
+      "persistent": true,
+      "passThroughEnv": [
+        "ENV",
+        "VOTING_CONTRACT",
+        "DIRECTORY_CONTRACT",
+        "MULTICALL_CONTRACT",
+        "TOKEN_CONTRACT",
+        "FEATURED_VOTING_CONTRACT",
+        "INFURA_API_KEY"
+      ]
     },
     "status.network#build": {
       "dependsOn": ["^build"],

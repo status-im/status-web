@@ -10,6 +10,8 @@
       "packages/components",
       "packages/wallet",
       "packages/status-network",
+      "packages/community-contracts",
+      "apps/community-dapp",
       "apps/hub",
       "apps/status.app",
       "apps/status.network",
@@ -39,7 +41,7 @@
     "vite": "6.3.5",
     "vitest": "3.1.4",
     "vite-node": "3.1.4",
-    "protons-runtime": "^5.4.0",
+    "protons-runtime": "^5.6.0",
     "it-length-prefixed": "9.0.3",
     "remark-lint": "10.0.1",
     "@scure/base": "^1.2.6",
@@ -81,7 +83,38 @@
       "react": "19.1.2",
       "react-dom": "19.1.2",
       "@types/react": "19.1.2",
-      "@types/react-dom": "19.1.2"
+      "@types/react-dom": "19.1.2",
+      "@status-im/community-dapp>react": "^17.0.2",
+      "@status-im/community-dapp>react-dom": "^17.0.2",
+      "@status-im/community-dapp>@types/react": "^17.0.8",
+      "@status-im/community-dapp>@types/react-dom": "^17.0.6",
+      "@types/styled-components>@types/react": "^17.0.8",
+      "@types/hoist-non-react-statics>@types/react": "^17.0.8",
+      "@types/react-router>@types/react": "^17.0.8",
+      "@types/react-router-dom>@types/react": "^17.0.8",
+      "react-countup>react": "^17.0.2"
+    },
+    "packageExtensions": {
+      "@waku/sdk": {
+        "dependencies": {
+          "@libp2p/interface": "^2.10.4"
+        }
+      },
+      "@waku/core": {
+        "dependencies": {
+          "@libp2p/interface": "^2.10.4"
+        }
+      },
+      "@waku/discovery": {
+        "dependencies": {
+          "@libp2p/interface": "^2.10.4"
+        }
+      },
+      "@waku/utils": {
+        "dependencies": {
+          "@libp2p/interface": "^2.10.4"
+        }
+      }
     },
     "patchedDependencies": {
       "it-length-prefixed@9.0.3": "patches/it-length-prefixed@9.0.3.patch",

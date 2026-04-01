@@ -60,7 +60,7 @@ const WeightedBoostCardSkeleton = () => {
 
 const WeightedBoostCard = () => {
   const t = useTranslations()
-  const { isConnecting, isConnected } = useAccount()
+  const { isConnected } = useAccount()
   const { data: vaults, isLoading } = useStakingVaults()
   const { isSignedIn, isLoading: isLoadingSIWE } = useSIWE()
   const weightedBoost = useWeightedBoost(vaults)
@@ -95,7 +95,7 @@ const WeightedBoostCard = () => {
     }
   }, [multiplierPointsData, isConnected, isSignedIn, t])
 
-  if (isLoading || isConnecting || isLoadingSIWE) {
+  if (isLoading || isLoadingSIWE) {
     return <WeightedBoostCardSkeleton />
   }
 

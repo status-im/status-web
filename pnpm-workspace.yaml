@@ -8,6 +8,8 @@ packages:
   - 'packages/status-network'
   - 'packages/wallet'
   - 'packages/ethereum-provider'
+  - 'packages/community-contracts'
+  - 'apps/community-dapp'
   - 'apps/hub'
   - 'apps/status.app'
   - 'apps/status.network'

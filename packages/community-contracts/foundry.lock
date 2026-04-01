@@ -1,0 +1,17 @@
+{
+  "../../apps/status.app/content/specs": {
+    "rev": "c861a646f30610da282d65654691243064c43378"
+  },
+  "../../apps/status.network/content/legal-external": {
+    "rev": "af837fd897a94bf814302622a5b5fee6c83026f3"
+  },
+  "lib/forge-std": {
+    "rev": "73d44ec7d124e3831bc5f832267889ffb6f9bc3f"
+  },
+  "lib/minime": {
+    "rev": "8b541109ec33f8df763c71e74d9a14088aa88d06"
+  },
+  "lib/openzeppelin-contracts": {
+    "rev": "e50c24f5839db17f46991478384bfda14acfb830"
+  }
+}

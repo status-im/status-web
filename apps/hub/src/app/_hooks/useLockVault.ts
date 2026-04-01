@@ -1,12 +1,21 @@
 import { useToast } from '@status-im/components'
-import { useMutation, type UseMutationResult } from '@tanstack/react-query'
+import {
+  useMutation,
+  type UseMutationResult,
+  useQueryClient,
+} from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
-import { type Address, type Hash } from 'viem'
+import {
+  type Address,
+  BaseError,
+  ContractFunctionRevertedError,
+  type Hash,
+} from 'viem'
 import { useAccount, useConfig, useReadContract, useWriteContract } from 'wagmi'
-import { waitForTransactionReceipt } from 'wagmi/actions'
+import { simulateContract, waitForTransactionReceipt } from 'wagmi/actions'
 import { statusSepolia } from 'wagmi/chains'
 
-import { vaultAbi } from '~constants/contracts'
+import { stakingManagerAbi, vaultAbi } from '~constants/contracts'
 import { CONFIRMATION_BLOCKS, MIN_LOCK_PERIOD } from '~constants/index'
 import { useStakingVaults } from '~hooks/useStakingVaults'
 import { useVaultStateContext } from '~hooks/useVaultStateContext'
@@ -49,6 +58,37 @@ const MUTATION_KEY = 'lock-vault' as const
 // ============================================================================
 // Helper Functions
 // ============================================================================
+
+/**
+ * Known contract revert error names and their user-friendly message keys
+ */
+const REVERT_ERROR_KEYS: Record<string, string> = {
+  StakeMath__AbsoluteMaxMPOverflow: 'errors.mp_overflow',
+  StakeMath__InvalidLockingPeriod: 'errors.invalid_lock_period',
+  StakeMath__InsufficientBalance: 'errors.insufficient_balance',
+  StakeManager__DurationCannotBeZero: 'errors.lock_period_greater_than_zero',
+}
+
+/**
+ * Extracts a user-friendly error message from a contract revert error
+ */
+function getLockRevertMessage(
+  error: unknown,
+  t: ReturnType<typeof useTranslations>
+): string {
+  if (error instanceof BaseError) {
+    const revertError = error.walk(
+      e => e instanceof ContractFunctionRevertedError
+    )
+    if (revertError instanceof ContractFunctionRevertedError) {
+      const errorName = revertError.data?.errorName
+      if (errorName && errorName in REVERT_ERROR_KEYS) {
+        return t(REVERT_ERROR_KEYS[errorName])
+      }
+    }
+  }
+  return t('errors.lock_simulation_failed')
+}
 
 /**
  * Generates a success toast message based on the lock operation performed
@@ -129,6 +169,7 @@ export function useLockVault(vaultAddress: Address): UseLockVaultReturn {
   const config = useConfig()
   const { send: sendVaultEvent, reset: resetVault } = useVaultStateContext()
   const { refetch: refetchStakingVaults } = useStakingVaults()
+  const queryClient = useQueryClient()
   const toast = useToast()
   const t = useTranslations()
 
@@ -159,6 +200,27 @@ export function useLockVault(vaultAddress: Address): UseLockVaultReturn {
       sendVaultEvent({ type: 'START_LOCK' })
 
       try {
+        // Simulate the contract call first to catch reverts before MetaMask
+        // This prevents the confusing "Network fee: Unavailable" error
+        // Include stakeManager error ABIs so viem can decode errors that bubble up
+        const stakeManagerErrors = (
+          stakingManagerAbi as readonly Record<string, unknown>[]
+        ).filter(item => item['type'] === 'error')
+        try {
+          await simulateContract(config, {
+            account: address,
+            address: vaultAddress,
+            abi: [...vaultAbi, ...stakeManagerErrors],
+            functionName: 'lock',
+            args: [lockPeriodInSeconds],
+            chainId: statusSepolia.id,
+          })
+        } catch (simulationError) {
+          const message = getLockRevertMessage(simulationError, t)
+          toast.negative(message)
+          throw new Error(message)
+        }
+
         // Call Vault.lock with the increased lock duration in seconds
         // The smart contract's _calculateLock handles all the math
         const hash = await writeContractAsync({
@@ -192,6 +254,9 @@ export function useLockVault(vaultAddress: Address): UseLockVaultReturn {
         toast.positive(
           formatLockSuccessMessage(vaultAddress, !!wasAlreadyLocked, t)
         )
+
+        // Invalidate all queries to ensure fresh data after lock transaction
+        await queryClient.invalidateQueries()
 
         // Reset state machine and refetch vaults
         resetVault()

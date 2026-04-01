@@ -26,7 +26,6 @@ export default defineConfig({
         : `ws: http://localhost:3030/ https://localhost:3030/ https://li.quest/ https://registry.npmjs.org/ ${rpcEndpoints}`
 
     return {
-      version: '0.1.0',
       name: '!Status Portfolio Wallet (Beta)',
       description:
         'Easily view and manage your crypto portfolio in real time — Beta crypto wallet and Web3 portfolio tracker in one.',
