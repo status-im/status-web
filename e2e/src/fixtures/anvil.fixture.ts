@@ -424,8 +424,10 @@ export const test = walletTest.extend<AnvilFixtures>({
         })
 
         const connectStart = Date.now()
-        await page.goto(env.BASE_URL)
-        await page.waitForLoadState('domcontentloaded')
+        await page.goto(env.BASE_URL, {
+          waitUntil: 'domcontentloaded',
+          timeout: 60_000,
+        })
         console.log(
           `[anvil-fixture] Hub loaded in ${Date.now() - connectStart}ms`,
         )

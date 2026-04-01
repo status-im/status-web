@@ -116,6 +116,19 @@ export class NotificationPage {
       .catch(() => false)
   }
 
+  private async dismissToastOverlays(page: Page): Promise<void> {
+    const toast = page.getByTestId('storage-error-toast-banner-base')
+    if (
+      await toast
+        .isVisible({ timeout: NOTIFICATION_TIMEOUTS.DOM_SETTLE })
+        .catch(() => false)
+    ) {
+      const closeBtn = toast.locator('button').first()
+      await closeBtn.click().catch(() => {})
+      await page.waitForTimeout(NOTIFICATION_TIMEOUTS.DOM_SETTLE)
+    }
+  }
+
   private async closeStaleNotificationPages(): Promise<void> {
     let closed = false
     for (const p of this.context.pages()) {
@@ -277,8 +290,9 @@ export class NotificationPage {
         continue
       }
 
-      // force:true — MetaMask may re-render during gas estimation, detaching
-      // the DOM element between visibility check and click
+      // Dismiss toast overlays that block clicks, then force-click — MetaMask
+      // may re-render during gas estimation, detaching the DOM element
+      await this.dismissToastOverlays(page)
       try {
         await confirm.click({
           timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM,
@@ -523,8 +537,10 @@ export class NotificationPage {
       await useDefaultButton.click()
     }
 
+    await this.dismissToastOverlays(page)
     await this.confirmButton(page).click({
-      timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM,
+      timeout: NOTIFICATION_TIMEOUTS.NOTIFICATION_CONTENT,
+      force: true,
     })
 
     // MetaMask v13 may use 2-step approval: Next → Approve.
@@ -539,8 +555,10 @@ export class NotificationPage {
         .catch(() => false)
     ) {
       if (await this.isSpendingCapConfirmation(page)) {
+        await this.dismissToastOverlays(page)
         await secondConfirm.click({
-          timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM,
+          timeout: NOTIFICATION_TIMEOUTS.NOTIFICATION_CONTENT,
+          force: true,
         })
       }
     }
