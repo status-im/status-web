@@ -48,8 +48,9 @@ const createPuzzleAuthHooks = () => {
   }
 }
 
-const isPuzzleAuthEnabled =
+const isPuzzleAuthEnabled = Boolean(
   clientEnv.NEXT_PUBLIC_USE_PUZZLE_AUTH && clientEnv.NEXT_PUBLIC_RPC_PROXY_URL
+)
 
 const puzzleAuthHooks = isPuzzleAuthEnabled ? createPuzzleAuthHooks() : {}
 

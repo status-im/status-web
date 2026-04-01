@@ -99,7 +99,7 @@ class PuzzleAuthService {
 
   private isValid(tokenData: TokenData | null): boolean {
     if (!tokenData?.token) return false
-    if (!tokenData.expiresAt) return true
+    if (!tokenData.expiresAt) return false
     const buffer = this.config.expiryBuffer ?? DEFAULTS.expiryBuffer
     return Date.now() < tokenData.expiresAt - buffer
   }
@@ -110,7 +110,6 @@ class PuzzleAuthService {
     try {
       const response = await fetch(puzzlePath, {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
       })
 
       if (!response.ok) {

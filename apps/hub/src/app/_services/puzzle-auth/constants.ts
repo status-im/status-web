@@ -1,5 +1,5 @@
 /**
- * HTTP status codes that should trigger token invalidation and retry.
+ * HTTP status codes that should trigger token invalidation.
  * - 401: Unauthorized - token is invalid or expired
  * - 403: Forbidden - token doesn't have required permissions
  * - 429: Too Many Requests - rate limited
