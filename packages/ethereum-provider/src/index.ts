@@ -37,19 +37,12 @@ export function listenForProviderRequests(
   })
 }
 
-export function injectProvider(
-  provider: unknown,
-  options?: { configurable?: boolean },
-): void {
-  const { configurable = true } = options ?? {}
+export function injectProvider(provider: unknown): void {
   try {
-    Object.defineProperties(window, {
-      ethereum: {
-        get() {
-          return provider
-        },
-        configurable,
-      },
+    Object.defineProperty(window, 'ethereum', {
+      value: provider,
+      writable: true,
+      configurable: true,
     })
   } catch {
     console.debug(
