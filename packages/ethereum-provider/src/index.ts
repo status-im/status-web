@@ -1,4 +1,4 @@
-export { Provider, ProviderRpcError } from './provider'
+export { Provider, ProviderRpcError, logger } from './provider'
 export type { ProviderEvent } from './provider'
 export { default as statusIcon } from './status-icon'
 export {

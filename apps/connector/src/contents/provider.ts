@@ -7,7 +7,6 @@ import {
 } from '@status-im/ethereum-provider'
 
 import asMetamaskIcon from '~_encoded/icon-as-metamask'
-import { logger } from '~lib/logger'
 
 import type { PlasmoCSConfig } from 'plasmo'
 
@@ -61,11 +60,7 @@ listenForProviderRequests(provider, statusInfo)
 announceProvider(provider, statusInfo)
 
 if (window.localStorage.getItem('status:default-wallet') !== 'false') {
-  try {
-    injectProvider(provider)
-  } catch (error) {
-    logger.error(error)
-  }
+  injectProvider(provider)
 
   window.addEventListener('eip6963:requestProvider', () => {
     announceAsDefaultProvider()

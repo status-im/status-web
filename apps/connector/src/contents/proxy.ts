@@ -1,10 +1,10 @@
 import {
+  logger,
   ProviderMessage,
   type ProxyMessage,
 } from '@status-im/ethereum-provider'
 
 import { getFaviconUrl } from '~lib/get-favicon-url'
-import { logger } from '~lib/logger'
 import { MainMessage } from '~messages/main-message'
 
 import { DesktopClient } from '../lib/desktop-client'

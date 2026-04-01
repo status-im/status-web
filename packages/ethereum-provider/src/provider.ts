@@ -40,16 +40,24 @@ function waitUntilComplete(doc: Document): Promise<void> {
   })
 }
 
-function log(
-  level: 'info' | 'warn' | 'error',
-  message: unknown,
-  ...args: unknown[]
-) {
+function log(level: 'info' | 'warn' | 'error', ...args: unknown[]) {
   if (!(window?.localStorage.getItem('status:logging') === 'true')) {
     return
   }
 
-  console[level]('status:provider:', message, ...args)
+  console[level]('status:', ...args)
+}
+
+export const logger = {
+  info(...args: unknown[]) {
+    logger.info( ...args)
+  },
+  warn(...args: unknown[]) {
+    log('warn', ...args)
+  },
+  error(...args: unknown[]) {
+    logger.error( ...args)
+  },
 }
 
 const DEFAULT_CHAIN_ID = '0x1'
@@ -136,7 +144,7 @@ export class Provider {
               this.#emit('connected', { chainId: DEFAULT_CHAIN_ID })
               this.#emit('accountsChanged', message.data)
 
-              log('info', 'connected::')
+              logger.info( 'connected::')
             }
 
             if (method === 'wallet_switchEthereumChain') {
@@ -148,14 +156,14 @@ export class Provider {
                 this.#emit('networkChanged', switchedChainId)
               }, 0)
 
-              log('info', 'chainChanged::')
+              logger.info( 'chainChanged::')
             }
 
             resolve(message.data)
             return
           }
           case 'status:proxy:error': {
-            log('error', message.error)
+            logger.error( message.error)
 
             if (
               message.error.message === 'dApp is not permitted by user' &&
@@ -197,7 +205,7 @@ export class Provider {
     event: ProviderEvent,
     handler: (...args: unknown[]) => void,
   ): this => {
-    log('info', 'on::', event)
+    logger.info( 'on::', event)
 
     let handlers = this.#listeners.get(event)
     if (!handlers) {
@@ -210,7 +218,7 @@ export class Provider {
 
   /** @deprecated */
   public close = async (): Promise<void> => {
-    log('info', 'close::')
+    logger.info( 'close::')
 
     this.disconnect()
   }
@@ -219,7 +227,7 @@ export class Provider {
     event: ProviderEvent,
     handler?: (...args: unknown[]) => void,
   ): void => {
-    log('info', 'removeListener::', event)
+    logger.info( 'removeListener::', event)
 
     if (handler) {
       this.#listeners.get(event)?.delete(handler)
@@ -236,7 +244,7 @@ export class Provider {
   }
 
   public enable = async (): Promise<boolean> => {
-    log('info', 'enable::')
+    logger.info( 'enable::')
 
     return true
   }
@@ -248,7 +256,7 @@ export class Provider {
 
     this.connected = false
 
-    log('info', 'disconnect::')
+    logger.info( 'disconnect::')
 
     await this.request({
       method: 'wallet_revokePermissions',

@@ -1,10 +1,8 @@
+import { logger, type RequestArguments } from '@status-im/ethereum-provider'
 import { WebSocketProvider } from 'ethers'
 
 import { config } from '~config'
 
-import { logger } from './logger'
-
-import type { RequestArguments } from '@status-im/ethereum-provider'
 import type { WebSocketLike } from 'ethers'
 
 type DesktopRequestArguments = RequestArguments & {
