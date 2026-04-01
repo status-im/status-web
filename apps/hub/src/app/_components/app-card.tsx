@@ -1,10 +1,15 @@
 'use client'
 
+import { useState } from 'react'
+
 import { ExternalIcon } from '@status-im/icons/20'
 import { TwitterIcon } from '@status-im/icons/social'
 import { ButtonLink } from '@status-im/status-network/components'
+import { cx } from 'cva'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
+
+import { MigrationIcon } from './icons'
 
 type Props = {
   name: string
@@ -15,6 +20,7 @@ type Props = {
   twitter?: string
   cover: string
   icon: string
+  status?: string
 }
 
 function AppCard(props: Props) {
@@ -27,35 +33,52 @@ function AppCard(props: Props) {
     twitter,
     cover,
     icon,
+    status,
   } = props
   const t = useTranslations()
   const displayName = nameKey ? t(nameKey) : name
   const displayDescription = descriptionKey ? t(descriptionKey) : description
+  const isUnmigrated = status === 'soon'
+  const [isHovered, setIsHovered] = useState(false)
 
   return (
-    <div className="flex h-full flex-col rounded-28 border border-neutral-20 bg-white-100 p-2 shadow-2 transition-colors hover:border-neutral-30">
-      <div className="relative mb-4">
-        <div className="flex aspect-[2/1] w-full items-center justify-center overflow-hidden rounded-24 bg-neutral-20 md:aspect-[12/5]">
-          <Image
-            src={cover}
-            alt={displayName}
-            fill
-            className="overflow-hidden rounded-24 object-cover"
-          />
-        </div>
-        <div className="absolute bottom-[-15px] left-2 hidden size-20 items-center justify-center overflow-hidden rounded-24 bg-neutral-40 text-11 text-neutral-60 lg:flex">
-          <Image src={icon} alt={displayName} fill className="object-cover" />
-        </div>
-      </div>
+    <div
+      className="relative h-full"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="flex h-full flex-col rounded-28 border border-neutral-20 bg-white-100 p-2 shadow-2 transition-colors hover:border-neutral-30">
+        <div className={cx(isUnmigrated && 'opacity-[0.3]')}>
+          <div className="relative mb-4">
+            <div className="flex aspect-[2/1] w-full items-center justify-center overflow-hidden rounded-24 bg-neutral-20 md:aspect-[12/5]">
+              <Image
+                src={cover}
+                alt={displayName}
+                fill
+                className="overflow-hidden rounded-24 object-cover"
+              />
+            </div>
+            <div className="absolute bottom-[-15px] left-2 hidden size-20 items-center justify-center overflow-hidden rounded-24 bg-neutral-40 text-11 text-neutral-60 lg:flex">
+              <Image
+                src={icon}
+                alt={displayName}
+                fill
+                className="object-cover"
+              />
+            </div>
+          </div>
 
-      <div className="flex flex-1 flex-col gap-0 px-2 pb-2 pt-0 md:gap-1 md:pt-[10px]">
-        <h3 className="mb-1 text-19 font-semibold text-neutral-90 lg:text-27">
-          {displayName}
-        </h3>
-        <p className="mb-4 text-13 font-400 text-neutral-100 lg:mb-auto lg:text-15">
-          {displayDescription}
-        </p>
-        <div className="mt-1 flex items-start gap-2">
+          <div className="flex flex-1 flex-col gap-0 px-2 pt-0 md:gap-1 md:pt-[10px]">
+            <h3 className="mb-1 text-19 font-semibold text-neutral-90 lg:text-27">
+              {displayName}
+            </h3>
+            <p className="mb-4 text-13 font-400 text-neutral-100 lg:mb-auto lg:text-15">
+              {displayDescription}
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-1 flex items-start gap-2 px-2 pb-2">
           <ButtonLink
             href={website}
             target="_blank"
@@ -79,6 +102,28 @@ function AppCard(props: Props) {
           )}
         </div>
       </div>
+      {isUnmigrated && (
+        <>
+          <div className="absolute right-4 top-4 flex items-center gap-1">
+            <span
+              className="rounded-20 border bg-white-90"
+              style={{
+                opacity: isHovered ? 1 : 0,
+                transition: 'opacity 200ms ease',
+              }}
+            >
+              <span className="flex overflow-hidden px-2 py-1 text-center text-13 font-500 text-purple">
+                Migration in progress
+              </span>
+            </span>
+            <span className="rounded-20 border bg-white-90">
+              <span className="flex overflow-hidden px-2 py-1 text-center text-13 font-500 text-purple">
+                <MigrationIcon />
+              </span>
+            </span>
+          </div>
+        </>
+      )}
     </div>
   )
 }
