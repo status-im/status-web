@@ -165,13 +165,22 @@ export class NotificationPage {
       .catch(() => false)
 
     if (!hasContent) {
-      await page.reload({ waitUntil: 'load' })
-      await page
+      if (!page.isClosed()) await page.close()
+      await new Promise(resolve =>
+        setTimeout(resolve, NOTIFICATION_TIMEOUTS.PAGE_REOPEN),
+      )
+
+      const freshPage = await this.context.newPage()
+      await freshPage.goto(
+        `chrome-extension://${this.extensionId}/notification.html`,
+        { waitUntil: 'load' },
+      )
+      await freshPage
         .locator('button')
         .first()
         .isVisible({ timeout: contentTimeout })
         .catch(() => false)
-      return page
+      return freshPage
     }
 
     return page
@@ -366,7 +375,9 @@ export class NotificationPage {
    * are queued (only safe before any transaction is pending).
    */
   async dismissPendingAddNetwork(): Promise<void> {
-    const page = await this.waitForNotificationPage()
+    const page = await this.waitForNotificationPage(
+      NOTIFICATION_TIMEOUTS.ELEMENT_VISIBLE,
+    )
 
     const rejectAll = page
       .getByTestId('confirm_nav__reject_all')
@@ -473,14 +484,21 @@ export class NotificationPage {
       .catch(() => false)
 
     if (!contentVisible) {
-      if (!page.isClosed()) {
-        await page.reload({ waitUntil: 'load' })
-        await page
-          .locator('button')
-          .first()
-          .isVisible({ timeout: NOTIFICATION_TIMEOUTS.NOTIFICATION_CONTENT })
-          .catch(() => false)
-      }
+      if (!page.isClosed()) await page.close()
+      await new Promise(resolve =>
+        setTimeout(resolve, NOTIFICATION_TIMEOUTS.PAGE_REOPEN),
+      )
+
+      page = await this.context.newPage()
+      await page.goto(
+        `chrome-extension://${this.extensionId}/notification.html`,
+        { waitUntil: 'load' },
+      )
+      await page
+        .locator('button')
+        .first()
+        .isVisible({ timeout: NOTIFICATION_TIMEOUTS.NOTIFICATION_CONTENT })
+        .catch(() => false)
       page = await this.clearAddNetworkQueue(page)
 
       const freshSpendingCapText = page.getByText(
