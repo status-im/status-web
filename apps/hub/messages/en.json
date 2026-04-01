@@ -1296,6 +1296,22 @@
     "failed_fetch_vaults_apr": {
       "translation": "Failed to fetch vaults APR: {error}",
       "notes": "errors::failed_fetch_vaults_apr"
+    },
+    "mp_overflow": {
+      "translation": "Cannot extend lock: multiplier points would exceed the maximum limit. Try a shorter extension period.",
+      "notes": "errors::mp_overflow"
+    },
+    "invalid_lock_period": {
+      "translation": "Invalid lock period. The lock duration must be between 90 days and 4 years.",
+      "notes": "errors::invalid_lock_period"
+    },
+    "insufficient_balance": {
+      "translation": "Insufficient staked balance to perform this lock operation.",
+      "notes": "errors::insufficient_balance"
+    },
+    "lock_simulation_failed": {
+      "translation": "Lock transaction would fail. Please try a shorter lock period.",
+      "notes": "errors::lock_simulation_failed"
     }
   },
   "not_found": {

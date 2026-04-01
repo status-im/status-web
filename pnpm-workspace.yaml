@@ -7,6 +7,8 @@ packages:
   - 'packages/components'
   - 'packages/status-network'
   - 'packages/wallet'
+  - 'packages/community-contracts'
+  - 'apps/community-dapp'
   - 'apps/hub'
   - 'apps/status.app'
   - 'apps/status.network'
