@@ -40,7 +40,10 @@ function waitUntilComplete(doc: Document): Promise<void> {
   })
 }
 
-function log(level: 'info' | 'warn' | 'error', ...args: unknown[]) {
+function statusLog(
+  level: 'info' | 'warn' | 'error',
+  ...args: unknown[]
+) {
   if (!(window?.localStorage.getItem('status:logging') === 'true')) {
     return
   }
@@ -50,13 +53,13 @@ function log(level: 'info' | 'warn' | 'error', ...args: unknown[]) {
 
 export const logger = {
   info(...args: unknown[]) {
-    logger.info( ...args)
+    statusLog('info', ...args)
   },
   warn(...args: unknown[]) {
-    log('warn', ...args)
+    statusLog('warn', ...args)
   },
   error(...args: unknown[]) {
-    logger.error( ...args)
+    statusLog('error', ...args)
   },
 }
 
