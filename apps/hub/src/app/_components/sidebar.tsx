@@ -3,11 +3,11 @@
 import { useLocale, useTranslations } from 'next-intl'
 
 import {
-  BridgeIcon,
   DepositIcon,
   DiscoverIcon,
   DocsIcon,
   ExplorerIcon,
+  FundingPoolIcon,
   HandIcon,
   // HeartIcon,
   // GovernanceIcon,
@@ -58,10 +58,10 @@ const Sidebar = (props: Props) => {
       href: '/karma',
     },
     {
-      id: 'bridge',
-      label: t('navigation.bridge'),
-      icon: BridgeIcon,
-      href: 'https://bridge.status.network/',
+      id: 'funding-pool',
+      label: t('navigation.funding_pool'),
+      icon: FundingPoolIcon,
+      href: '/funding-pool',
     },
   ]
 

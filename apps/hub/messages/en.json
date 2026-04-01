@@ -97,6 +97,10 @@
       "translation": "Testnet",
       "notes": "navigation::testnet"
     },
+    "funding_pool": {
+      "translation": "Funding pool",
+      "notes": "navigation::funding_pool"
+    },
     "tokens": {
       "translation": "Tokens",
       "notes": "navigation::tokens"
@@ -682,6 +686,84 @@
     "stake_card_badge_description": {
       "translation": "Stake STT to level up",
       "notes": "karma::stake_card_badge_description"
+    }
+  },
+  "funding_pool": {
+    "title": {
+      "translation": "Public funding pool",
+      "notes": "funding_pool::title"
+    },
+    "description": {
+      "translation": "A transparent pool that powers ongoing development and ecosystem initiatives. It accumulates funds through protocol defined sources and distributes them using rules you can verify onchain.",
+      "notes": "funding_pool::description"
+    },
+    "total_amount": {
+      "translation": "Total amount",
+      "notes": "funding_pool::total_amount"
+    },
+    "vote_for_allocation": {
+      "translation": "Vote for allocation",
+      "notes": "funding_pool::vote_for_allocation"
+    },
+    "breakdown": {
+      "translation": "Breakdown",
+      "notes": "funding_pool::breakdown"
+    },
+    "native_apps": {
+      "translation": "Native apps",
+      "notes": "funding_pool::native_apps"
+    },
+    "native_apps_description": {
+      "translation": "Yield from apps built within the Status Network ecosystem.",
+      "notes": "funding_pool::native_apps_description"
+    },
+    "native_apps_link": {
+      "translation": "Launch your app on the free network",
+      "notes": "funding_pool::native_apps_link"
+    },
+    "donations": {
+      "translation": "Donations",
+      "notes": "funding_pool::donations"
+    },
+    "donations_description": {
+      "translation": "Voluntary contributions from the community.",
+      "notes": "funding_pool::donations_description"
+    },
+    "donations_link": {
+      "translation": "Support ecosystem and earn KARMA.",
+      "notes": "funding_pool::donations_link"
+    },
+    "transaction_fees": {
+      "translation": "Transaction fees",
+      "notes": "funding_pool::transaction_fees"
+    },
+    "transaction_fees_description": {
+      "translation": "Sequencing tips, gas fees and premium gas.",
+      "notes": "funding_pool::transaction_fees_description"
+    },
+    "transaction_fees_link": {
+      "translation": "Learn about gasless network",
+      "notes": "funding_pool::transaction_fees_link"
+    },
+    "yield_bearing_bridge": {
+      "translation": "Yield bearing bridge",
+      "notes": "funding_pool::yield_bearing_bridge"
+    },
+    "yield_bearing_bridge_description": {
+      "translation": "Yield from bridging assets to Status Network.",
+      "notes": "funding_pool::yield_bearing_bridge_description"
+    },
+    "yield_bearing_bridge_link": {
+      "translation": "Bridge tokens to Status Network",
+      "notes": "funding_pool::yield_bearing_bridge_link"
+    },
+    "smart_contract": {
+      "translation": "Smart contract",
+      "notes": "funding_pool::smart_contract"
+    },
+    "view_on_explorer": {
+      "translation": "View on blockchain explorer",
+      "notes": "funding_pool::view_on_explorer"
     }
   },
   "rewards": {
