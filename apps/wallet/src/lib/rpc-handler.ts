@@ -17,7 +17,7 @@ const publicClient = createPublicClient({
 })
 
 const DEFAULT_CHAIN_ID = '0x1'
-const SUPPORTED_CHAIN_IDS = new Set(['0x1'])
+const SUPPORTED_CHAIN_IDS = new Set(['0x1', '0x6300b5ea'])
 
 // 5 minutes in ms
 const APPROVAL_TIMEOUT_MS = 5 * 60 * 1000
