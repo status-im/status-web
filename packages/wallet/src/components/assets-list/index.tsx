@@ -1,8 +1,8 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
-import { Button } from '@status-im/components'
+import { Button, Checkbox } from '@status-im/components'
 import { match, P } from 'ts-pattern'
 
 import { CurrencyAmount } from '../currency-amount'
@@ -23,6 +23,7 @@ type Props = {
 
 const AssetsList = (props: Props) => {
   const { assets, pathname, onSelect, searchParams, clearSearch } = props
+  const [hideBelowOneEur, setHideBelowOneEur] = useState(false)
 
   const searchParamValue = searchParams.get('search') ?? ''
   const sortParamValue = searchParams.get('sort') ?? ''
@@ -46,9 +47,13 @@ const AssetsList = (props: Props) => {
       }
     })
 
-    if (!orderByColumn) return filtered
+    const valueFiltered = hideBelowOneEur
+      ? filtered.filter(asset => Number(asset.total_eur ?? 0) >= 1)
+      : filtered
 
-    return [...filtered].sort((a, b) => {
+    if (!orderByColumn) return valueFiltered
+
+    return [...valueFiltered].sort((a, b) => {
       const comparison = match(orderByColumn)
         .with('name', () => (a.name || '').localeCompare(b.name || ''))
         .with(
@@ -71,10 +76,25 @@ const AssetsList = (props: Props) => {
 
       return ascending ? comparison : -comparison
     })
-  }, [assets, searchParamValue, orderByColumn, ascending])
+  }, [assets, searchParamValue, orderByColumn, ascending, hideBelowOneEur])
+
+  const isSearchActive = searchParamValue.trim().length > 0
 
   return (
     <div className="pb-10">
+      <div className="mb-3 flex items-center justify-end">
+        <label
+          htmlFor="hide-assets-below-one-eur"
+          className="flex cursor-pointer select-none items-center gap-2 text-13 text-neutral-100"
+        >
+          <Checkbox
+            id="hide-assets-below-one-eur"
+            checked={hideBelowOneEur}
+            onCheckedChange={checked => setHideBelowOneEur(checked === true)}
+          />
+          Hide assets below $1
+        </label>
+      </div>
       <div className="hidden min-h-[calc(100svh-362px)] w-full overflow-auto 2xl:block">
         {filteredAssets.length !== 0 && (
           <Table.Root>
@@ -146,17 +166,35 @@ const AssetsList = (props: Props) => {
               No tokens found
             </h2>
             <p className="mb-5 text-13 font-regular text-neutral-100">
-              We didn&apos;t find any tokens that match your search
+              {isSearchActive
+                ? "We didn't find any tokens that match your search"
+                : hideBelowOneEur
+                  ? 'All tokens are below $1'
+                  : "We didn't find any tokens"}
             </p>
-            <Button
-              variant="outline"
-              target="_blank"
-              size="32"
-              rel="noopener noreferrer"
-              onClick={() => clearSearch()}
-            >
-              Clear search
-            </Button>
+            {isSearchActive ? (
+              <Button
+                variant="outline"
+                target="_blank"
+                size="32"
+                rel="noopener noreferrer"
+                onClick={() => clearSearch()}
+              >
+                Clear search
+              </Button>
+            ) : (
+              hideBelowOneEur && (
+                <Button
+                  variant="outline"
+                  target="_blank"
+                  size="32"
+                  rel="noopener noreferrer"
+                  onClick={() => setHideBelowOneEur(false)}
+                >
+                  Show all assets
+                </Button>
+              )
+            )}
           </div>
         )}
       </div>
