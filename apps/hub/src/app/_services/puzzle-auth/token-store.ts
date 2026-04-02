@@ -25,26 +25,26 @@ class TokenStore {
   }
 
   private loadFromStorage(): void {
+    if (typeof localStorage === 'undefined') return
+
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (!stored) return
+
     try {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      if (stored) {
-        const parsed = JSON.parse(stored) as Record<string, TokenData>
-        for (const [key, value] of Object.entries(parsed)) {
-          this.tokens.set(key, value)
-        }
+      const parsed = JSON.parse(stored) as Record<string, TokenData>
+      for (const [key, value] of Object.entries(parsed)) {
+        this.tokens.set(key, value)
       }
-    } catch {
-      // localStorage may not be available (SSR) or data may be corrupted
+    } catch (error) {
+      console.warn('Failed to parse stored puzzle-auth data:', error)
     }
   }
 
   private saveToStorage(): void {
-    try {
-      const obj = Object.fromEntries(this.tokens)
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(obj))
-    } catch {
-      // localStorage may not be available (SSR)
-    }
+    if (typeof localStorage === 'undefined') return
+
+    const obj = Object.fromEntries(this.tokens)
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(obj))
   }
 }
 
