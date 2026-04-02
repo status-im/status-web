@@ -123,7 +123,10 @@ export class NotificationPage {
         .isVisible({ timeout: NOTIFICATION_TIMEOUTS.DOM_SETTLE })
         .catch(() => false)
     ) {
-      const closeBtn = toast.locator('button').first()
+      const closeBtn = toast
+        .locator('[aria-label="Close"]')
+        .or(toast.getByRole('button', { name: /close|dismiss/i }))
+        .or(toast.locator('button').first())
       await closeBtn.click().catch(() => {})
       await page.waitForTimeout(NOTIFICATION_TIMEOUTS.DOM_SETTLE)
     }
@@ -213,9 +216,13 @@ export class NotificationPage {
       }
 
       if (!openedFallbackPage) {
-        // MetaMask won't auto-open popups in automation — keep a notification
-        // page connected so it can push queued confirmations to it
-        await this.waitForNotificationPage(timeout).catch(() => {})
+        // Open notification.html so MetaMask can push queued confirmations.
+        const fallback = await this.context.newPage()
+        await fallback
+          .goto(`chrome-extension://${this.extensionId}/notification.html`, {
+            waitUntil: 'load',
+          })
+          .catch(() => {})
         openedFallbackPage = true
       }
 
@@ -262,6 +269,11 @@ export class NotificationPage {
   async approveTransaction(
     contentTimeout: number = NOTIFICATION_TIMEOUTS.NOTIFICATION_CONTENT,
   ): Promise<void> {
+    const t0 = Date.now()
+    const log = (msg: string) =>
+      console.log(`[approveTransaction +${Date.now() - t0}ms] ${msg}`)
+
+    log('start')
     const deadline = Date.now() + contentTimeout
     let page: Page | null = null
 
@@ -271,7 +283,8 @@ export class NotificationPage {
         deadline - Date.now(),
       )
       page = await this.waitForConfirmablePopupPage(remaining)
-      page = await this.clearAddNetworkQueue(page)
+      log('found confirmable page')
+      page = await this.clearAddNetworkQueue(page, 10, deadline)
 
       // Skip stale spending-cap confirmation from approveTokenSpend() —
       // otherwise we "confirm" the wrong request and the deposit stays pending
@@ -293,13 +306,16 @@ export class NotificationPage {
       // Dismiss toast overlays that block clicks, then force-click — MetaMask
       // may re-render during gas estimation, detaching the DOM element
       await this.dismissToastOverlays(page)
+      log('clicking Confirm...')
       try {
         await confirm.click({
           timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM,
           force: true,
         })
+        log('Confirm clicked')
       } catch (err) {
         const msg = err instanceof Error ? err.message : ''
+        log(`Confirm click error: ${msg}`)
         if (!msg.includes('Timeout') && !msg.includes('detach')) throw err
 
         // Click may have succeeded despite error — check if button disappeared
@@ -357,9 +373,11 @@ export class NotificationPage {
       }
 
       if (!page.isClosed()) await page.close()
+      log('done')
       return
     }
 
+    log('TIMEOUT — confirm button never appeared')
     if (page && !page.isClosed()) await page.close().catch(() => {})
     throw new Error('MetaMask transaction confirmation button did not appear')
   }
@@ -389,9 +407,15 @@ export class NotificationPage {
    * are queued (only safe before any transaction is pending).
    */
   async dismissPendingAddNetwork(): Promise<void> {
+    const t0 = Date.now()
+    const log = (msg: string) =>
+      console.log(`[dismissAddNetwork +${Date.now() - t0}ms] ${msg}`)
+
+    log('start')
     const page = await this.waitForNotificationPage(
       NOTIFICATION_TIMEOUTS.ELEMENT_VISIBLE,
     )
+    log('notification page ready')
 
     const rejectAll = page
       .getByTestId('confirm_nav__reject_all')
@@ -401,25 +425,28 @@ export class NotificationPage {
         .isVisible({ timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION })
         .catch(() => false)
     ) {
+      log('found rejectAll — clicking')
       await rejectAll.click()
       await page.waitForLoadState('load').catch(() => {})
       if (!page.isClosed()) await page.close()
+      log('done (rejectAll)')
       return
     }
+    log('no rejectAll')
 
     const cancel = this.cancelButton(page)
-    // // MetaMask notification.html is a React SPA — buttons render after JS hydration.
-    // // Wait for the hub's wallet_addEthereumChain request to arrive and render.
-    // const confirmButton = page.getByRole('button', { name: /^confirm$/i })
     const hasPending = await cancel
       .isVisible({ timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION })
       .catch(() => false)
 
     if (!hasPending) {
+      log('no pending — closing')
       if (!page.isClosed()) await page.close()
+      log('done (no pending)')
       return
     }
 
+    log('found cancel — clicking')
     await cancel.click()
     // await confirmButton.click()
 
@@ -436,9 +463,10 @@ export class NotificationPage {
   private async clearAddNetworkQueue(
     page: Page,
     maxAttempts = 10,
+    deadline = Date.now() + 60_000,
   ): Promise<Page> {
     const currentPage = page
-    for (let i = 0; i < maxAttempts; i++) {
+    for (let i = 0; i < maxAttempts && Date.now() < deadline; i++) {
       const anyButton = currentPage.locator('button')
       const rendered = await anyButton
         .first()
@@ -482,10 +510,21 @@ export class NotificationPage {
     return currentPage
   }
 
+  /**
+   * Approve a token spending allowance.
+   * Uses waitForNotificationPage (which has close+reopen fallback) —
+   * this is safe here because no transaction is pending yet at this point.
+   */
   async approveTokenSpend(): Promise<void> {
+    const t0 = Date.now()
+    const log = (msg: string) =>
+      console.log(`[approveTokenSpend +${Date.now() - t0}ms] ${msg}`)
+
+    log('start')
     await this.closeStaleNotificationPages()
 
     let page = await this.waitForNotificationPage()
+    log('notification page ready')
     page = await this.clearAddNetworkQueue(page)
 
     // Wait for spending-cap text before clicking Confirm — the button appears
@@ -538,10 +577,12 @@ export class NotificationPage {
     }
 
     await this.dismissToastOverlays(page)
+    log('clicking Confirm...')
     await this.confirmButton(page).click({
       timeout: NOTIFICATION_TIMEOUTS.NOTIFICATION_CONTENT,
       force: true,
     })
+    log('Confirm clicked')
 
     // MetaMask v13 may use 2-step approval: Next → Approve.
     // On Anvil the approval confirms instantly and the Hub immediately fires
