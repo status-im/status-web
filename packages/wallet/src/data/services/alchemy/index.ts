@@ -26,21 +26,19 @@ import type { NetworkType } from '../../api/types'
 import type {
   AssetTransfer,
   BlockNumberResponseBody,
-  BlockResponseBody,
+  // BlockResponseBody, // TESTNET: unused while using direct Alchemy RPC
   deprecated_NFTSaleResponseBody,
   ERC20TokenBalanceResponseBody,
-  FeeHistoryResponseBody,
-  GasEstimateResponseBody,
-  MaxPriorityFeeResponseBody,
+  // FeeHistoryResponseBody, // TESTNET: unused while using direct Alchemy RPC
+  // GasEstimateResponseBody, // TESTNET: unused while using direct Alchemy RPC
+  // MaxPriorityFeeResponseBody, // TESTNET: unused while using direct Alchemy RPC
   NativeTokenBalanceResponseBody,
   NFTFloorPriceResponseBody,
   NFTMetadataResponseBody,
   NFTsResponseBody,
   ResponseBody,
-  SendRawTransactionResponseBody,
   TokenBalanceHistoryResponseBody,
   TokensBalanceResponseBody,
-  TransactionCountResponseBody,
   TransactionStatusResponseBody,
 } from './types'
 
@@ -48,8 +46,15 @@ const API_KEY_COUNT = serverEnv.ALCHEMY_API_KEYS.split(',')
   .map(k => k.trim())
   .filter(Boolean).length
 
+// ============================================================
+// TESTNET CONFIG - Change ALCHEMY_ETHEREUM_NETWORK to switch
+// For mainnet: 'eth-mainnet'
+// For Sepolia: 'eth-sepolia'
+// ============================================================
+const ALCHEMY_ETHEREUM_NETWORK = 'eth-sepolia' // Sepolia testnet
+
 const alchemyNetworks = {
-  ethereum: 'eth-mainnet',
+  ethereum: ALCHEMY_ETHEREUM_NETWORK,
   optimism: 'opt-mainnet',
   arbitrum: 'arb-mainnet',
   base: 'base-mainnet',
@@ -985,69 +990,25 @@ export async function getFeeRate(
 
   let gasEstimate, maxPriorityFee, latestBlock, feeHistory, ethPriceData
 
+  // TESTNET: Using Alchemy RPC directly (Status RPC proxy doesn't support Sepolia)
+  // For mainnet: revert to Status RPC proxy with _fetch + STATUS_RPC_AUTH
+  const alchemyRpc = `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`
+  const rpcCall = async (method: string, params: unknown[], id: number) => {
+    const res = await fetch(alchemyRpc, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ jsonrpc: '2.0', id, method, params }),
+    })
+    return res.json()
+  }
+
   try {
     ;[gasEstimate, maxPriorityFee, latestBlock, feeHistory, ethPriceData] =
       await Promise.all([
-        _retry(async () => {
-          const url = new URL(getStatusRpcUrl(network))
-          return _fetch<GasEstimateResponseBody>(
-            url,
-            'POST',
-            0,
-            {
-              jsonrpc: '2.0',
-              id: 1,
-              method: 'eth_estimateGas',
-              params: [gasParams],
-            },
-            STATUS_RPC_AUTH,
-          )
-        }),
-        _retry(async () => {
-          const url = new URL(getStatusRpcUrl(network))
-          return _fetch<MaxPriorityFeeResponseBody>(
-            url,
-            'POST',
-            0,
-            {
-              jsonrpc: '2.0',
-              id: 2,
-              method: 'eth_maxPriorityFeePerGas',
-              params: [],
-            },
-            STATUS_RPC_AUTH,
-          )
-        }),
-        _retry(async () => {
-          const url = new URL(getStatusRpcUrl(network))
-          return _fetch<BlockResponseBody>(
-            url,
-            'POST',
-            0,
-            {
-              jsonrpc: '2.0',
-              id: 3,
-              method: 'eth_getBlockByNumber',
-              params: ['latest', false],
-            },
-            STATUS_RPC_AUTH,
-          )
-        }),
-        _retry(async () => {
-          const url = new URL(getStatusRpcUrl(network))
-          return _fetch<FeeHistoryResponseBody>(
-            url,
-            'POST',
-            0,
-            {
-              jsonrpc: '2.0',
-              id: 4,
-              method: 'eth_feeHistory',
-              params: ['0x4', 'latest', [10, 50, 90]],
-            },
-            STATUS_RPC_AUTH,
-          )
-        }),
+        rpcCall('eth_estimateGas', [gasParams], 1),
+        rpcCall('eth_maxPriorityFeePerGas', [], 2),
+        rpcCall('eth_getBlockByNumber', ['latest', false], 3),
+        rpcCall('eth_feeHistory', ['0x4', 'latest', [10, 50, 90]], 4),
         fetchTokensPrice(['ETH'], COINGECKO_REVALIDATION_TIMES.TRADING_PRICE),
       ])
   } catch (error) {
@@ -1106,22 +1067,24 @@ export async function broadcastTransaction(
   txHex: string,
   network: NetworkType = 'ethereum',
 ) {
-  const body = await _retry(async () => {
-    const url = new URL(getStatusRpcUrl(network))
-    return _fetch<SendRawTransactionResponseBody>(
-      url,
-      'POST',
-      0,
-      {
-        jsonrpc: '2.0',
-        id: 1,
-        method: 'eth_sendRawTransaction',
-        params: [txHex],
-      },
-      STATUS_RPC_AUTH,
-    )
+  // TESTNET: Using Alchemy RPC directly (Status RPC proxy doesn't support Sepolia)
+  // For mainnet: revert to Status RPC proxy with _fetch + STATUS_RPC_AUTH
+  const alchemyRpcUrl = `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`
+  const response = await fetch(alchemyRpcUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'eth_sendRawTransaction',
+      params: [txHex],
+    }),
   })
-
+  const body = await response.json()
+  console.log('[broadcastTransaction] response:', JSON.stringify(body))
+  if (body.error) {
+    throw new Error(body.error.message || JSON.stringify(body.error))
+  }
   return body.result
 }
 
@@ -1132,25 +1095,21 @@ export async function getTransactionCount(
   address: string,
   network: NetworkType,
 ) {
-  const body = await _retry(async () => {
-    const url = new URL(getStatusRpcUrl(network))
-    return _fetch<TransactionCountResponseBody>(
-      url,
-      'POST',
-      0,
-      {
-        jsonrpc: '2.0',
-        id: 1,
-        method: 'eth_getTransactionCount',
-        params: [address, 'pending'],
-      },
-      STATUS_RPC_AUTH,
-    )
+  // TESTNET: Using Alchemy RPC directly (Status RPC proxy doesn't support Sepolia)
+  // For mainnet: revert to Status RPC proxy with _fetch + STATUS_RPC_AUTH
+  const alchemyRpcUrl = `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`
+  const response = await fetch(alchemyRpcUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'eth_getTransactionCount',
+      params: [address, 'pending'],
+    }),
   })
-
-  const nonce = body.result
-
-  return nonce
+  const body = await response.json()
+  return body.result
 }
 
 function extractAlchemyApiKey(url: URL): string | undefined {

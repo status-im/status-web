@@ -163,19 +163,17 @@ const Collectible = (props: Props) => {
               /> */}
             </div>
 
-            {(collectible.standard === 'ERC721' ||
-              collectible.standard === 'ERC1155') &&
-              address && (
-                <SendNftSection
-                  standard={collectible.standard}
-                  displayName={collectible.displayName}
-                  address={address}
-                  walletId={currentWallet?.id || ''}
-                  network={network}
-                  contract={contract}
-                  tokenId={id}
-                />
-              )}
+            {collectible.standard !== 'NOT_A_CONTRACT' && address && (
+              <SendNftSection
+                standard={collectible.standard}
+                displayName={collectible.displayName}
+                address={address}
+                walletId={currentWallet?.id || ''}
+                network={network}
+                contract={contract}
+                tokenId={id}
+              />
+            )}
           </div>
         </div>
 
@@ -322,7 +320,11 @@ const SendNftSection = (props: SendNftSectionProps) => {
 
     try {
       if (!hasActiveSession) {
-        await requestPassword()
+        const unlocked = await requestPassword()
+        if (!unlocked) {
+          setIsSending(false)
+          return
+        }
       }
 
       const gasFees = await fetchNftGasFees({
@@ -352,6 +354,14 @@ const SendNftSection = (props: SendNftSectionProps) => {
           data,
           value: '0',
         })
+
+      console.log('[SendNFT] result:', JSON.stringify(result, null, 2)) // DEBUG: remove after testing
+
+      if (!result.id || result.id.txid?.error) {
+        console.error('[SendNFT] tx error:', result.id?.txid?.error) // DEBUG: remove after testing
+        toast.negative(result.id?.txid?.error || ERROR_MESSAGES.TX_FAILED)
+        throw new Error(result.id?.txid?.error || 'Transaction failed')
+      }
 
       const txHash = typeof result.id === 'string' ? result.id : result.id.txid
 
@@ -384,9 +394,14 @@ const SendNftSection = (props: SendNftSectionProps) => {
       })
 
       toast.positive('NFT transfer submitted')
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : 'Failed to send NFT'
+    } catch (error: unknown) {
+      console.error('[SendNFT] error:', error) // DEBUG: remove after testing
+      let message = 'Failed to send NFT'
+      if (error instanceof Error) {
+        message = error.message
+      } else if (typeof error === 'object' && error !== null) {
+        message = JSON.stringify(error)
+      }
       setSendError(message)
       toast.negative(message)
     } finally {

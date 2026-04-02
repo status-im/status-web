@@ -20,14 +20,6 @@ export function encodeNftTransfer(params: {
   tokenId: string
   amount?: string
 }): string {
-  if (params.standard === 'ERC721') {
-    return erc721.encodeFunctionData('safeTransferFrom', [
-      params.from,
-      params.to,
-      BigInt(params.tokenId),
-    ])
-  }
-
   if (params.standard === 'ERC1155') {
     return erc1155.encodeFunctionData('safeTransferFrom', [
       params.from,
@@ -38,7 +30,12 @@ export function encodeNftTransfer(params: {
     ])
   }
 
-  throw new Error(`Unsupported NFT standard: ${params.standard}`)
+  // Default to ERC721 (covers 'ERC721', 'UNKNOWN', etc.)
+  return erc721.encodeFunctionData('safeTransferFrom', [
+    params.from,
+    params.to,
+    BigInt(params.tokenId),
+  ])
 }
 
 export function buildNftGasFeeParams(params: {

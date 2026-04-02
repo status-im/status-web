@@ -25,6 +25,13 @@ import * as walletMetadata from './wallet-metadata'
 
 import type { WalletAccount, WalletMeta } from './wallet-metadata'
 
+// ============================================================
+// TESTNET CONFIG - Change these values to switch between networks
+// For mainnet: ETHEREUM_CHAIN_ID = '01'
+// For Sepolia: ETHEREUM_CHAIN_ID = '11155111'
+// ============================================================
+const ETHEREUM_CHAIN_ID = '11155111' // Sepolia testnet
+
 const createContext = async () => {
   const walletCore = await getWalletCore()
   return { walletCore, session: sessionManager }
@@ -242,7 +249,7 @@ const apiRouter = router({
               const id = await ethereum.send({
                 walletCore,
                 walletPrivateKey: privateKey,
-                chainID: '01',
+                chainID: ETHEREUM_CHAIN_ID,
                 toAddress: input.toAddress,
                 amount: input.amount,
                 fromAddress: input.fromAddress,
@@ -287,7 +294,7 @@ const apiRouter = router({
               const id = await ethereum.sendErc20({
                 walletCore,
                 walletPrivateKey: privateKey,
-                chainID: '01',
+                chainID: ETHEREUM_CHAIN_ID,
                 toAddress: input.toAddress,
                 fromAddress: input.fromAddress,
                 gasLimit: input.gasLimit,
@@ -315,36 +322,47 @@ const apiRouter = router({
             }),
           )
           .mutation(async ({ input, ctx }) => {
-            const { walletCore } = ctx
-            const wallet = await walletMetadata.get(input.walletId)
-            if (!wallet) throw new Error('Wallet not found')
-            const account = wallet.activeAccounts.find(
-              a => a.address === input.fromAddress,
-            )
-            if (!account) throw new Error('From address not found')
-            const privateKey = await getSigningKey(
-              ctx,
-              input.walletId,
-              wallet,
-              account,
-              ctx.walletCore.CoinType.ethereum,
+            // DEBUG: remove after testing
+            console.log(
+              '[sendContractCall] input:',
+              JSON.stringify(input, null, 2),
             )
             try {
-              const id = await ethereum.sendContractCall({
-                walletCore,
-                walletPrivateKey: privateKey,
-                chainID: '01',
-                toAddress: input.toAddress,
-                fromAddress: input.fromAddress,
-                gasLimit: input.gasLimit,
-                maxFeePerGas: input.maxFeePerGas,
-                maxInclusionFeePerGas: input.maxInclusionFeePerGas,
-                data: input.data,
-                value: input.value,
-              })
-              return { id }
-            } finally {
-              privateKey.delete()
+              const { walletCore } = ctx
+              const wallet = await walletMetadata.get(input.walletId)
+              if (!wallet) throw new Error('Wallet not found')
+              const account = wallet.activeAccounts.find(
+                a => a.address === input.fromAddress,
+              )
+              if (!account) throw new Error('From address not found')
+              const privateKey = await getSigningKey(
+                ctx,
+                input.walletId,
+                wallet,
+                account,
+                ctx.walletCore.CoinType.ethereum,
+              )
+              try {
+                const id = await ethereum.sendContractCall({
+                  walletCore,
+                  walletPrivateKey: privateKey,
+                  chainID: ETHEREUM_CHAIN_ID,
+                  toAddress: input.toAddress,
+                  fromAddress: input.fromAddress,
+                  gasLimit: input.gasLimit,
+                  maxFeePerGas: input.maxFeePerGas,
+                  maxInclusionFeePerGas: input.maxInclusionFeePerGas,
+                  data: input.data,
+                  value: input.value,
+                })
+                console.log('[sendContractCall] success, id:', id) // DEBUG: remove after testing
+                return { id }
+              } finally {
+                privateKey.delete()
+              }
+            } catch (err) {
+              console.error('[sendContractCall] error:', err) // DEBUG: remove after testing
+              throw err
             }
           }),
 
