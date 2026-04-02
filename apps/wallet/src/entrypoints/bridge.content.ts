@@ -1,4 +1,5 @@
 import {
+  logger,
   ProviderMessage,
   type ProxyMessage,
 } from '@status-im/ethereum-provider'
@@ -30,6 +31,10 @@ export default defineContentScript({
       }
 
       if (message.type === 'status:provider:disconnect') {
+        chrome.runtime.sendMessage({
+          type: 'status:disconnect',
+          data: { origin: window.location.origin },
+        })
         return
       }
 
@@ -55,7 +60,7 @@ export default defineContentScript({
 
         event.ports[0].postMessage(response satisfies ProxyMessage)
       } catch (error) {
-        console.error('[Status Bridge] error:', message.data.method, error)
+        logger.error('[Status Bridge] error:', message.data.method, error)
         event.ports[0].postMessage({
           type: 'status:proxy:error',
           error: {

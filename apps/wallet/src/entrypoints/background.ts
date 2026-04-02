@@ -71,6 +71,21 @@ export default defineBackground({
       }
     })
 
+    // dApp disconnect handler
+    chrome.runtime.onMessage.addListener(message => {
+      if (message?.type !== 'status:disconnect') {
+        return
+      }
+      const origin = message.data?.origin
+      if (typeof origin === 'string') {
+        handleRpcRequest(
+          'wallet_revokePermissions',
+          [{ eth_accounts: {} }],
+          origin,
+        )
+      }
+    })
+
     // dApp RPC message handler
     chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       if (message?.type !== 'status:rpc') {

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { Button } from '@status-im/components'
 import { CloseIcon } from '@status-im/icons/20'
+import { PasswordModal } from '@status-im/wallet/components'
 
 import ethereumIcon from '../../assets/networks/ethereum.png'
 import statusNetworkIcon from '../../assets/networks/status-network.png'
@@ -9,7 +10,7 @@ import {
   getPendingApproval,
   type PendingApproval,
   setApprovalResult,
-} from '../../lib/approval'
+} from '../../data/approval'
 import { apiClient } from '../../providers/api-client'
 
 const CHAIN_NAMES: Record<string, string> = {
@@ -40,10 +41,9 @@ function hexToReadableMessage(hex: string): string {
 export function ApprovalPage() {
   const [approval, setApproval] = useState<PendingApproval | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [password, setPassword] = useState('')
   const [isSessionActive, setIsSessionActive] = useState(false)
-  const [unlockError, setUnlockError] = useState<string | null>(null)
   const [isCheckingSession, setIsCheckingSession] = useState(true)
+  const [isUnlocking, setIsUnlocking] = useState(false)
 
   useEffect(() => {
     getPendingApproval().then(setApproval)
@@ -59,63 +59,23 @@ export function ApprovalPage() {
 
   const needsPassword = !isSessionActive
 
-  const handleUnlock = async () => {
-    setIsSubmitting(true)
-    setUnlockError(null)
+  const handlePasswordConfirm = async (password: string) => {
+    setIsUnlocking(true)
     try {
       await apiClient.session.unlock.mutate({ password })
       setIsSessionActive(true)
     } catch {
-      setUnlockError('Incorrect password')
+      throw new Error('Invalid password')
     } finally {
-      setIsSubmitting(false)
+      setIsUnlocking(false)
     }
   }
 
-  // Password gate — shown before any approval content when wallet is locked
-  if (needsPassword) {
-    return (
-      <div
-        data-customisation="blue"
-        className="flex h-screen flex-col items-center justify-center bg-white-100 p-4"
-      >
-        <h1 className="mb-4 text-19 font-semibold text-neutral-100">
-          Unlock wallet
-        </h1>
-        <input
-          type="password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          onKeyDown={e => {
-            if (e.key === 'Enter' && password) handleUnlock()
-          }}
-          placeholder="Enter password"
-          className="mb-2 h-10 w-full max-w-[280px] rounded-12 border border-neutral-20 bg-white-100 px-3 text-15 text-neutral-100 outline-none placeholder:text-neutral-40 focus:border-customisation-50"
-        />
-        {unlockError && (
-          <p className="mb-2 text-13 text-danger-50">{unlockError}</p>
-        )}
-        <div className="mt-2 grid w-full max-w-[280px] grid-cols-2 gap-3">
-          <Button
-            variant="grey"
-            onPress={() => {
-              setApprovalResult({ id: approval.id, approved: false })
-              window.close()
-            }}
-            disabled={isSubmitting}
-          >
-            Cancel
-          </Button>
-          <Button
-            variant="primary"
-            onPress={handleUnlock}
-            disabled={isSubmitting || !password}
-          >
-            Unlock
-          </Button>
-        </div>
-      </div>
-    )
+  const handlePasswordCancel = (open: boolean) => {
+    if (!open) {
+      setApprovalResult({ id: approval.id, approved: false })
+      window.close()
+    }
   }
 
   const isSign = approval.type === 'personal_sign'
@@ -136,6 +96,16 @@ export function ApprovalPage() {
       data-customisation="blue"
       className="flex h-screen flex-col bg-white-100 p-4"
     >
+      <PasswordModal
+        open={needsPassword}
+        onOpenChange={handlePasswordCancel}
+        onConfirm={handlePasswordConfirm}
+        isLoading={isUnlocking}
+        title="Unlock wallet"
+        description="Enter your password to continue"
+        buttonLabel="Unlock"
+      />
+
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-27 font-semibold text-neutral-100">
           {isSign ? 'Sign message' : 'Connect dApp'}

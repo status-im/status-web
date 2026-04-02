@@ -147,7 +147,7 @@ export class Provider {
               this.#emit('connected', { chainId: DEFAULT_CHAIN_ID })
               this.#emit('accountsChanged', message.data)
 
-              logger.info( 'connected::')
+              logger.info('connected::')
             }
 
             if (method === 'wallet_switchEthereumChain') {
@@ -159,14 +159,14 @@ export class Provider {
                 this.#emit('networkChanged', switchedChainId)
               }, 0)
 
-              logger.info( 'chainChanged::')
+              logger.info('chainChanged::')
             }
 
             resolve(message.data)
             return
           }
           case 'status:proxy:error': {
-            logger.error( message.error)
+            logger.error(message.error)
 
             if (
               message.error.message === 'dApp is not permitted by user' &&

@@ -19,7 +19,7 @@
     "./package.json": "./package.json"
   },
   "engines": {
-    "node": ">=18.18.0"
+    "node": "22.x"
   },
   "scripts": {
     "preinstall": "npx only-allow pnpm",

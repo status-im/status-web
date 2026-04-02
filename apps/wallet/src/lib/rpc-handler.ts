@@ -9,7 +9,7 @@ import {
   getPendingApproval,
   type PendingApproval,
   setPendingApproval,
-} from './approval'
+} from '../data/approval'
 
 const publicClient = createPublicClient({
   chain: mainnet,
@@ -18,6 +18,11 @@ const publicClient = createPublicClient({
 
 const DEFAULT_CHAIN_ID = '0x1'
 const SUPPORTED_CHAIN_IDS = new Set(['0x1'])
+
+// 5 minutes in ms
+const APPROVAL_TIMEOUT_MS = 5 * 60 * 1000
+const APPROVAL_POPUP_WIDTH = 390
+const APPROVAL_POPUP_HEIGHT = 628
 
 async function getChainIdForOrigin(origin: string): Promise<string> {
   const result = await chrome.storage.session.get('originChainIds')
@@ -85,13 +90,10 @@ function requestApproval(
     const id = crypto.randomUUID()
     let popupWindowId: number | undefined
     let settled = false
-    const timeout: ReturnType<typeof setTimeout> = setTimeout(
-      () => {
-        cleanup()
-        resolve(null)
-      },
-      5 * 60 * 1000,
-    )
+    const timeout: ReturnType<typeof setTimeout> = setTimeout(() => {
+      cleanup()
+      resolve(null)
+    }, APPROVAL_TIMEOUT_MS)
 
     const cleanup = () => {
       if (settled) return
@@ -129,17 +131,18 @@ function requestApproval(
         await setPendingApproval({ id, ...approval } as PendingApproval)
         const popupUrl = chrome.runtime.getURL('approval.html')
         const currentWindow = await chrome.windows.getCurrent()
-        const width = 390
-        const height = 628
         const left =
-          (currentWindow.left ?? 0) + (currentWindow.width ?? 0) - width - 16
+          (currentWindow.left ?? 0) +
+          (currentWindow.width ?? 0) -
+          APPROVAL_POPUP_WIDTH -
+          16
         const top = (currentWindow.top ?? 0) + 16
 
         const popup = await chrome.windows.create({
           url: popupUrl,
           type: 'popup',
-          width,
-          height,
+          width: APPROVAL_POPUP_WIDTH,
+          height: APPROVAL_POPUP_HEIGHT,
           left,
           top,
           focused: true,
