@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Button, useToast } from '@status-im/components'
 import {
@@ -17,7 +17,13 @@ import { ERROR_MESSAGES } from '@status-im/wallet/constants'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 
+import { apiClient } from '@/providers/api-client'
+import { usePassword } from '@/providers/password-context'
+import { usePendingTransactions } from '@/providers/pending-transactions-context'
+import { useWallet } from '@/providers/wallet-context'
+
 import { CardDetail } from './card-detail'
+import { encodeNftTransfer, fetchNftGasFees } from './nft-helpers'
 
 import type { NetworkType } from '@status-im/wallet/data'
 
@@ -27,10 +33,15 @@ type Props = {
   id: string
 }
 
+const isValidAddress = (addr: string) => /^0x[0-9a-fA-F]{40}$/.test(addr)
+
 const Collectible = (props: Props) => {
   const { network, contract, id } = props
 
   const toast = useToast()
+  const { currentWallet } = useWallet()
+
+  const address = currentWallet?.activeAccounts[0]?.address
 
   const {
     data: collectible,
@@ -151,6 +162,20 @@ const Collectible = (props: Props) => {
                 aria-label="More options"
               /> */}
             </div>
+
+            {(collectible.standard === 'ERC721' ||
+              collectible.standard === 'ERC1155') &&
+              address && (
+                <SendNftSection
+                  standard={collectible.standard}
+                  displayName={collectible.displayName}
+                  address={address}
+                  walletId={currentWallet?.id || ''}
+                  network={network}
+                  contract={contract}
+                  tokenId={id}
+                />
+              )}
           </div>
         </div>
 
@@ -254,6 +279,148 @@ const Collectible = (props: Props) => {
 }
 
 export { Collectible }
+
+type SendNftSectionProps = {
+  standard: string
+  displayName: string
+  address: string
+  walletId: string
+  network: NetworkType
+  contract: string
+  tokenId: string
+}
+
+const SendNftSection = (props: SendNftSectionProps) => {
+  const {
+    standard,
+    displayName,
+    address,
+    walletId,
+    network,
+    contract,
+    tokenId,
+  } = props
+
+  const toast = useToast()
+  const { hasActiveSession, requestPassword } = usePassword()
+  const { addPendingTransaction } = usePendingTransactions()
+
+  const [recipientAddress, setRecipientAddress] = useState('')
+  const [isSending, setIsSending] = useState(false)
+  const [txResult, setTxResult] = useState<string | null>(null)
+  const [sendError, setSendError] = useState<string | null>(null)
+
+  const handleSendNft = async () => {
+    if (!isValidAddress(recipientAddress)) {
+      setSendError('Invalid Ethereum address')
+      return
+    }
+
+    setIsSending(true)
+    setSendError(null)
+    setTxResult(null)
+
+    try {
+      if (!hasActiveSession) {
+        await requestPassword()
+      }
+
+      const gasFees = await fetchNftGasFees({
+        from: address,
+        to: recipientAddress,
+        contractAddress: contract,
+        tokenId,
+        standard,
+        network,
+      })
+
+      const data = encodeNftTransfer({
+        standard,
+        from: address,
+        to: recipientAddress,
+        tokenId,
+      })
+
+      const result =
+        await apiClient.wallet.account.ethereum.sendContractCall.mutate({
+          walletId,
+          fromAddress: address,
+          toAddress: contract,
+          gasLimit: gasFees.txParams.gasLimit,
+          maxFeePerGas: gasFees.txParams.maxFeePerGas,
+          maxInclusionFeePerGas: gasFees.txParams.maxPriorityFeePerGas,
+          data,
+          value: '0',
+        })
+
+      const txHash = typeof result.id === 'string' ? result.id : result.id.txid
+
+      if (!txHash) {
+        toast.negative(ERROR_MESSAGES.TX_FAILED)
+        throw new Error('Transaction hash not found')
+      }
+
+      setTxResult(txHash)
+
+      addPendingTransaction({
+        hash: txHash,
+        from: address,
+        to: recipientAddress,
+        value: 0,
+        asset: displayName,
+        network,
+        status: 'pending',
+        category: 'external',
+        blockNum: '0',
+        metadata: {
+          blockTimestamp: new Date().toISOString(),
+        },
+        rawContract: {
+          value: '0',
+          address: contract,
+          decimal: '0',
+        },
+        eurRate: 0,
+      })
+
+      toast.positive('NFT transfer submitted')
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Failed to send NFT'
+      setSendError(message)
+      toast.negative(message)
+    } finally {
+      setIsSending(false)
+    }
+  }
+
+  return (
+    <div className="mt-4 flex flex-col gap-2">
+      <div className="text-13 font-semibold text-neutral-50">
+        Send {standard}
+      </div>
+      <input
+        type="text"
+        placeholder="Recipient address (0x...)"
+        value={recipientAddress}
+        onChange={e => setRecipientAddress(e.target.value)}
+        className="rounded-8 border border-neutral-20 bg-white-100 px-3 py-2 text-13 text-neutral-100 outline-none focus:border-customisation-blue-50"
+      />
+      <Button
+        size="32"
+        variant="outline"
+        onPress={handleSendNft}
+        disabled={isSending || !recipientAddress}
+      >
+        {isSending ? 'Sending...' : `Send ${standard} NFT`}
+      </Button>
+      {txResult && (
+        <div className="break-all text-13 text-success-50">Tx: {txResult}</div>
+      )}
+      {sendError && <div className="text-13 text-danger-50">{sendError}</div>}
+    </div>
+  )
+}
 
 const truncateAddress = (address: string, chars = 5) =>
   `${address.slice(0, chars)}...${address.slice(-chars)}`
