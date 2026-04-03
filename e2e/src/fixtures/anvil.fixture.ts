@@ -102,10 +102,14 @@ export const test = walletTest.extend<AnvilFixtures>({
     const password = requireWalletPassword()
 
     const MAX_ATTEMPTS = 2
+    const onboardStart = Date.now()
 
     for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
       try {
         await metamask.onboarding.importWallet(seedPhrase, password)
+        console.log(
+          `[anvil-fixture] Onboarding done in ${Date.now() - onboardStart}ms`,
+        )
         break
       } catch (err) {
         console.warn(
@@ -158,6 +162,8 @@ export const test = walletTest.extend<AnvilFixtures>({
       walletAddress,
     )
 
+    const anvilStart = Date.now()
+
     if (!baseSnapshots) {
       await helper.requireHealthy()
 
@@ -168,6 +174,9 @@ export const test = walletTest.extend<AnvilFixtures>({
       await helper.enableAllVaults()
 
       baseSnapshots = await helper.snapshotBoth()
+      console.log(
+        `[anvil-fixture] Initial setup done in ${Date.now() - anvilStart}ms`,
+      )
     } else {
       try {
         await helper.revertBoth(baseSnapshots)
@@ -190,6 +199,9 @@ export const test = walletTest.extend<AnvilFixtures>({
         await helper.enableAllVaults()
       }
       baseSnapshots = await helper.snapshotBoth()
+      console.log(
+        `[anvil-fixture] Revert/snapshot done in ${Date.now() - anvilStart}ms`,
+      )
     }
 
     // Force auto-mining — interval mining can leave the second tx in
