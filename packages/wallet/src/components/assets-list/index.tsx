@@ -173,22 +173,14 @@ const AssetsList = (props: Props) => {
                   : "We didn't find any tokens"}
             </p>
             {isSearchActive ? (
-              <Button
-                variant="outline"
-                target="_blank"
-                size="32"
-                rel="noopener noreferrer"
-                onClick={() => clearSearch()}
-              >
+              <Button variant="outline" size="32" onClick={() => clearSearch()}>
                 Clear search
               </Button>
             ) : (
               hideBelowOneEur && (
                 <Button
                   variant="outline"
-                  target="_blank"
                   size="32"
-                  rel="noopener noreferrer"
                   onClick={() => setHideBelowOneEur(false)}
                 >
                   Show all assets
