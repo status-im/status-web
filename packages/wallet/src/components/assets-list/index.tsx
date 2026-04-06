@@ -1,8 +1,8 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
-import { Button, Checkbox } from '@status-im/components'
+import { Button } from '@status-im/components'
 import { match, P } from 'ts-pattern'
 
 import { CurrencyAmount } from '../currency-amount'
@@ -16,14 +16,23 @@ import type { ApiOutput } from '../../data'
 type Props = {
   assets: ApiOutput['assets']['all']['assets']
   pathname?: string
+  hideBelowOneEur?: boolean
+  onHideBelowOneEurChange?: (value: boolean) => void
   onSelect: (url: string, options?: { scroll?: boolean }) => void
   searchParams: URLSearchParams
   clearSearch: () => void
 }
 
 const AssetsList = (props: Props) => {
-  const { assets, pathname, onSelect, searchParams, clearSearch } = props
-  const [hideBelowOneEur, setHideBelowOneEur] = useState(false)
+  const {
+    assets,
+    pathname,
+    hideBelowOneEur = false,
+    onHideBelowOneEurChange = () => {},
+    onSelect,
+    searchParams,
+    clearSearch,
+  } = props
 
   const searchParamValue = searchParams.get('search') ?? ''
   const sortParamValue = searchParams.get('sort') ?? ''
@@ -82,19 +91,6 @@ const AssetsList = (props: Props) => {
 
   return (
     <div className="pb-10">
-      <div className="mb-3 flex items-center justify-end">
-        <label
-          htmlFor="hide-assets-below-one-eur"
-          className="flex cursor-pointer select-none items-center gap-2 text-13 text-neutral-100"
-        >
-          <Checkbox
-            id="hide-assets-below-one-eur"
-            checked={hideBelowOneEur}
-            onCheckedChange={checked => setHideBelowOneEur(checked === true)}
-          />
-          Hide assets below $1
-        </label>
-      </div>
       <div className="hidden min-h-[calc(100svh-362px)] w-full overflow-auto 2xl:block">
         {filteredAssets.length !== 0 && (
           <Table.Root>
@@ -181,7 +177,7 @@ const AssetsList = (props: Props) => {
                 <Button
                   variant="outline"
                   size="32"
-                  onClick={() => setHideBelowOneEur(false)}
+                  onClick={() => onHideBelowOneEurChange(false)}
                 >
                   Show all assets
                 </Button>

@@ -6,6 +6,7 @@ import { useState } from 'react'
 
 import { Button } from '@status-im/components'
 import { RefreshIcon } from '@status-im/icons/20'
+import { ToggleButton } from '@status-im/wallet/components'
 // import { DropdownSort } from '@status-im/wallet/components'
 import { useIsFetching, useQueryClient } from '@tanstack/react-query'
 
@@ -27,8 +28,14 @@ import { TabLink } from './tab-link'
 //   collectibles: 'Search collection or collectible name',
 // } as const
 
+export type HideAssetsBelowOneToggle = {
+  checked: boolean
+  onCheckedChange: (checked: boolean) => void
+}
+
 type Props = {
   address: string
+  hideAssetsBelowOneToggle?: HideAssetsBelowOneToggle
   searchAndSortValues: {
     inputValue: string
     updateSearchParam: (value: string) => void
@@ -42,6 +49,7 @@ type Props = {
 const ActionButtons = (props: Props) => {
   const {
     address,
+    hideAssetsBelowOneToggle,
     // searchAndSortValues
   } = props
   const queryClient = useQueryClient()
@@ -132,6 +140,13 @@ const ActionButtons = (props: Props) => {
           clearable={!!searchAndSortValues.inputValue}
           aria-label="Search"
         /> */}
+        {hideAssetsBelowOneToggle && (
+          <ToggleButton
+            label="Hide below $1"
+            checked={hideAssetsBelowOneToggle.checked}
+            onCheckedChange={hideAssetsBelowOneToggle.onCheckedChange}
+          />
+        )}
         <Button
           size="32"
           variant="outline"
