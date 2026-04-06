@@ -241,7 +241,7 @@ function Confirm({
       <Text size={27} weight="semibold">
         Confirm import
       </Text>
-      <div className="gap-1 rounded-12 border border-neutral-10 bg-neutral-2.5 p-3">
+      <div className="flex flex-col gap-1 rounded-12 border border-neutral-10 bg-neutral-2.5 p-3">
         <Text size={13} color="$neutral-50">
           Address
         </Text>
