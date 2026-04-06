@@ -9,11 +9,18 @@ export type WalletAccount = {
   derivation: number
 }
 
+export type HardwareWalletInfo = {
+  vendor: string
+  publicKey: string
+  sourceFingerprint?: number
+}
+
 export type WalletMeta = {
   id: string
   name: string
-  type: 'mnemonic' | 'privateKey'
+  type: 'mnemonic' | 'privateKey' | 'hardware-qr'
   activeAccounts: WalletAccount[]
+  hardware?: HardwareWalletInfo
 }
 
 type MetadataStore = Record<string, WalletMeta>

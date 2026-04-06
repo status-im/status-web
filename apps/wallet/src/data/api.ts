@@ -40,6 +40,11 @@ async function getSigningKey(
   coin: InstanceType<Context['walletCore']['CoinType']>,
 ): Promise<ReturnType<typeof derivePrivateKey>> {
   const { walletCore, session } = ctx
+  if (wallet.type === 'hardware-qr') {
+    throw new Error(
+      'WALLET_IS_WATCH_ONLY: hardware-wallet signing requires the air-gapped QR sign flow which is not yet implemented',
+    )
+  }
   if (wallet.type === 'mnemonic') {
     const mnemonic = await session.getMnemonic(walletId)
     return derivePrivateKey(walletCore, mnemonic, coin, account.derivationPath)
@@ -171,6 +176,46 @@ const apiRouter = router({
           activeAccounts: [account],
         })
         return { id, mnemonic: input.mnemonic }
+      }),
+
+    importHardware: procedure
+      .input(
+        z.object({
+          name: z.string(),
+          vendor: z.string(),
+          address: z.string(),
+          publicKey: z.string(),
+          sourceFingerprint: z.number().optional(),
+        }),
+      )
+      .mutation(async ({ input, ctx }) => {
+        const { walletCore } = ctx
+        const id = crypto.randomUUID()
+        const account: WalletAccount = {
+          address: input.address,
+          coin: walletCore.CoinType.ethereum.value,
+          // note: hardware-wallet accounts come from a scanned xpub; the
+          // device's actual derivation path is not exposed by parseConnection.
+          // We persist the conventional EVM base path so the UI can display
+          // something sensible. Signing must be re-routed via the air-gapped
+          // QR flow regardless of this value.
+          derivationPath: "m/44'/60'/0'/0/0",
+          derivation: walletCore.Derivation.default.value,
+        }
+        await walletMetadata.save({
+          id,
+          name: input.name,
+          type: 'hardware-qr',
+          activeAccounts: [account],
+          hardware: {
+            vendor: input.vendor,
+            publicKey: input.publicKey,
+            sourceFingerprint: input.sourceFingerprint,
+          },
+        })
+        // note: no vault interaction — hardware wallets are watch-only here.
+        // The session stays in whatever state it was in.
+        return { id, address: input.address }
       }),
 
     account: router({

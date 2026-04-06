@@ -13,6 +13,7 @@ import { Route as OnboardingLayoutRouteImport } from './routes/onboarding/_layou
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as OnboardingIndexRouteImport } from './routes/onboarding/index'
 import { Route as OnboardingNewRouteImport } from './routes/onboarding/new'
+import { Route as OnboardingImportHardwareRouteImport } from './routes/onboarding/import-hardware'
 import { Route as OnboardingImportRouteImport } from './routes/onboarding/import'
 import { Route as PortfolioCollectiblesIndexRouteImport } from './routes/portfolio/collectibles/index'
 import { Route as PortfolioAssetsIndexRouteImport } from './routes/portfolio/assets/index'
@@ -40,6 +41,12 @@ const OnboardingNewRoute = OnboardingNewRouteImport.update({
   path: '/new',
   getParentRoute: () => OnboardingLayoutRoute,
 } as any)
+const OnboardingImportHardwareRoute =
+  OnboardingImportHardwareRouteImport.update({
+    id: '/import-hardware',
+    path: '/import-hardware',
+    getParentRoute: () => OnboardingLayoutRoute,
+  } as any)
 const OnboardingImportRoute = OnboardingImportRouteImport.update({
   id: '/import',
   path: '/import',
@@ -77,6 +84,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/onboarding': typeof OnboardingLayoutRouteWithChildren
   '/onboarding/import': typeof OnboardingImportRoute
+  '/onboarding/import-hardware': typeof OnboardingImportHardwareRoute
   '/onboarding/new': typeof OnboardingNewRoute
   '/onboarding/': typeof OnboardingIndexRoute
   '/portfolio/assets/$ticker': typeof PortfolioAssetsTickerRoute
@@ -88,6 +96,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/onboarding/import': typeof OnboardingImportRoute
+  '/onboarding/import-hardware': typeof OnboardingImportHardwareRoute
   '/onboarding/new': typeof OnboardingNewRoute
   '/onboarding': typeof OnboardingIndexRoute
   '/portfolio/assets/$ticker': typeof PortfolioAssetsTickerRoute
@@ -101,6 +110,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/onboarding': typeof OnboardingLayoutRouteWithChildren
   '/onboarding/import': typeof OnboardingImportRoute
+  '/onboarding/import-hardware': typeof OnboardingImportHardwareRoute
   '/onboarding/new': typeof OnboardingNewRoute
   '/onboarding/': typeof OnboardingIndexRoute
   '/portfolio/assets/$ticker': typeof PortfolioAssetsTickerRoute
@@ -115,6 +125,7 @@ export interface FileRouteTypes {
     | '/'
     | '/onboarding'
     | '/onboarding/import'
+    | '/onboarding/import-hardware'
     | '/onboarding/new'
     | '/onboarding/'
     | '/portfolio/assets/$ticker'
@@ -126,6 +137,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/onboarding/import'
+    | '/onboarding/import-hardware'
     | '/onboarding/new'
     | '/onboarding'
     | '/portfolio/assets/$ticker'
@@ -138,6 +150,7 @@ export interface FileRouteTypes {
     | '/'
     | '/onboarding'
     | '/onboarding/import'
+    | '/onboarding/import-hardware'
     | '/onboarding/new'
     | '/onboarding/'
     | '/portfolio/assets/$ticker'
@@ -187,6 +200,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingNewRouteImport
       parentRoute: typeof OnboardingLayoutRoute
     }
+    '/onboarding/import-hardware': {
+      id: '/onboarding/import-hardware'
+      path: '/import-hardware'
+      fullPath: '/onboarding/import-hardware'
+      preLoaderRoute: typeof OnboardingImportHardwareRouteImport
+      parentRoute: typeof OnboardingLayoutRoute
+    }
     '/onboarding/import': {
       id: '/onboarding/import'
       path: '/import'
@@ -234,12 +254,14 @@ declare module '@tanstack/react-router' {
 
 interface OnboardingLayoutRouteChildren {
   OnboardingImportRoute: typeof OnboardingImportRoute
+  OnboardingImportHardwareRoute: typeof OnboardingImportHardwareRoute
   OnboardingNewRoute: typeof OnboardingNewRoute
   OnboardingIndexRoute: typeof OnboardingIndexRoute
 }
 
 const OnboardingLayoutRouteChildren: OnboardingLayoutRouteChildren = {
   OnboardingImportRoute: OnboardingImportRoute,
+  OnboardingImportHardwareRoute: OnboardingImportHardwareRoute,
   OnboardingNewRoute: OnboardingNewRoute,
   OnboardingIndexRoute: OnboardingIndexRoute,
 }

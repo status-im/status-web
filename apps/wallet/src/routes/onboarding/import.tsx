@@ -104,6 +104,15 @@ function ImportWallet({
         loading={isPending}
         defaultValues={{ mnemonic }}
       />
+
+      <div className="mt-3 text-center">
+        <a
+          href="/onboarding/import-hardware"
+          className="text-13 text-customisation-blue-50 hover:underline"
+        >
+          Use a hardware wallet instead
+        </a>
+      </div>
     </div>
   )
 }
