@@ -7,11 +7,13 @@ import {
   TwitterIcon,
 } from '@status-im/icons/social'
 import { notFound } from 'next/navigation'
+import { getTranslations } from 'next-intl/server'
 import production from 'react/jsx-runtime'
 import rehypeParse from 'rehype-parse'
 import rehypeReact, { type Options } from 'rehype-react'
 import { unified } from 'unified'
 
+import { jsonLD, JSONLDScript } from '~/utils/json-ld'
 import { Metadata } from '~app/_metadata'
 import { formatDate } from '~app/_utils/format-time'
 import { Body } from '~components/body'
@@ -27,6 +29,7 @@ import {
 import { PostAuthor } from '~website/blog/_components/post-author'
 import { PostCard } from '~website/blog/_components/post-card'
 import { PostTag } from '~website/blog/_components/post-tag'
+import { getPostFAQItems } from '~website/blog/_utils/faq'
 
 import type { PostOrPage } from '@tryghost/content-api'
 
@@ -41,12 +44,13 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props) {
+  const t = await getTranslations('blog')
   const slug = (await params).slug
   const post = await getPostBySlug(slug)
 
   if (!post) {
     return Metadata({
-      title: 'Post not found',
+      title: t('postNotFound'),
     })
   }
 
@@ -71,6 +75,7 @@ type Props = {
 
 export default async function BlogDetailPage(props: Props) {
   const { params } = props
+  const t = await getTranslations('blog')
 
   const post = await getPostBySlug((await params).slug)
 
@@ -109,7 +114,7 @@ export default async function BlogDetailPage(props: Props) {
   // root
   const breadcrumbs = [
     {
-      label: 'Blog',
+      label: t('breadcrumb'),
       href: '/blog',
     },
     {
@@ -127,15 +132,46 @@ export default async function BlogDetailPage(props: Props) {
 
   const author = post.primary_author!
   const tag = post.primary_tag
+  const faqItems = getPostFAQItems(
+    post.codeinjection_head,
+    post.codeinjection_foot
+  )
 
   // const { asPath } = useRouter()
   const asPath = `/blog/${post.slug}`
 
   const url = `${baseUrl()}${asPath}`
   const shareUrl = encodeURIComponent(url)
+  const articleSchema = jsonLD.article({
+    headline: post.title!,
+    description: post.excerpt ?? undefined,
+    image: post.feature_image ?? undefined,
+    datePublished: post.published_at ?? undefined,
+    dateModified: post.updated_at ?? post.published_at ?? undefined,
+    author: {
+      name: author.name ?? author.slug,
+      type: 'Person',
+    },
+    publisher: {
+      name: 'Status',
+      logo: `${baseUrl()}/logo.svg`,
+    },
+  })
+  const faqSchema =
+    faqItems.length > 0
+      ? jsonLD.faqPage({
+          questions: faqItems.map(item => ({
+            question: item.question,
+            answer: item.answer,
+          })),
+        })
+      : null
 
   return (
     <>
+      <JSONLDScript
+        schema={faqSchema ? [articleSchema, faqSchema] : articleSchema}
+      />
       <Body>
         <Breadcrumbs items={breadcrumbs} />
 
@@ -147,22 +183,47 @@ export default async function BlogDetailPage(props: Props) {
           <div className="mt-auto flex h-5 items-center gap-1">
             <PostAuthor author={author} />
             <Text size={15} color="$neutral-50">
-              on {formatDate(new Date(post.published_at!))}
+              {t('publishedOn', {
+                date: formatDate(new Date(post.published_at!)),
+              })}
             </Text>
           </div>
         </div>
 
-        <div className="mx-auto w-full max-w-[1504px] px-1 py-6 xl:px-6 xl:py-10">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={post.feature_image!}
-            className="aspect-[374/182] size-full rounded-20 object-cover xl:aspect-[1456/470]"
-            alt={post.feature_image_alt!}
-          />
-        </div>
+        {post.feature_image && (
+          <div className="mx-auto w-full max-w-[1504px] px-1 py-6 xl:px-6 xl:py-10">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={post.feature_image}
+              className="aspect-[374/182] size-full rounded-20 object-cover xl:aspect-[1456/470]"
+              alt={post.feature_image_alt ?? ''}
+            />
+          </div>
+        )}
 
         {/* Content */}
         <div className="root-content container-blog py-6">{content}</div>
+
+        {faqItems.length > 0 && (
+          <div className="container-blog py-6">
+            <div className="rounded-20 border border-neutral-20 bg-neutral-5 p-5 xl:p-6">
+              <h2 className="text-27 font-semibold">{t('faq')}</h2>
+              <div className="mt-5 grid gap-4">
+                {faqItems.map((item, index) => (
+                  <div
+                    key={`${item.question}-${index}`}
+                    className="rounded-16 border border-neutral-20 bg-white-100 p-4"
+                  >
+                    <h3 className="text-19 font-semibold">{item.question}</h3>
+                    <p className="mt-2 whitespace-pre-line text-15 text-neutral-50">
+                      {item.answer}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="container-blog py-6">
           <div className="mb-4 flex flex-row items-center gap-2">
@@ -184,13 +245,13 @@ export default async function BlogDetailPage(props: Props) {
 
           <div className="flex gap-3">
             <span className="text-13 font-medium text-neutral-50">
-              Share article on:
+              {t('shareArticle')}
             </span>
             <a
               href={`https://twitter.com/intent/tweet?text=${post.title}&url=${shareUrl}`}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Share on Twitter"
+              aria-label={t('shareOnTwitter')}
             >
               <TwitterIcon className="text-neutral-50" />
             </a>
@@ -198,7 +259,7 @@ export default async function BlogDetailPage(props: Props) {
               href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Share on Facebook"
+              aria-label={t('shareOnFacebook')}
             >
               <FacebookIcon className="text-neutral-50" />
             </a>
@@ -206,7 +267,7 @@ export default async function BlogDetailPage(props: Props) {
               href={`https://linkedin.com/sharing/share-offsite/?url=${shareUrl}`}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Share on LinkedIn"
+              aria-label={t('shareOnLinkedIn')}
             >
               <LinkedinIcon className="text-neutral-50" />
             </a>
@@ -218,7 +279,7 @@ export default async function BlogDetailPage(props: Props) {
             <div className="container-lg">
               <div className="mb-6">
                 <Text size={27} weight="semibold">
-                  Related articles
+                  {t('relatedArticles')}
                 </Text>
               </div>
 

@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 
 import { animated, useScroll } from '@react-spring/web'
 import { cx } from 'class-variance-authority'
-import { usePathname } from 'next/navigation'
 
+import { usePathname } from '~/i18n/navigation'
 import { useOutsideClick } from '~hooks/use-outside-click'
 
 import { FloatingDesktop } from './floating-desktop'

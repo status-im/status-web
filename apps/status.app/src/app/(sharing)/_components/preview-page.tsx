@@ -21,6 +21,7 @@ import {
 } from '@status-im/js'
 import { useQuery } from '@tanstack/react-query'
 import { cx } from 'class-variance-authority'
+import { useTranslations } from 'next-intl'
 
 import { Image } from '~components/assets'
 import { ERROR_CODES } from '~sharing/_error-codes'
@@ -88,20 +89,16 @@ type ProfileData = {
 
 export type Data = CommunityData | ChannelData | ProfileData
 
-const INSTRUCTIONS_HEADING: Record<Type, string> = {
-  community: 'How to join this community:',
-  channel: 'How to join this channel:',
-  profile: 'How to connect with this profile:',
-}
-
-const JOIN_BUTTON_LABEL: Record<Type, string> = {
-  community: 'Join community in Status',
-  channel: 'View channel in Status',
-  profile: 'Open profile in Status',
-}
+const actionLabelKeyByType = {
+  community: 'joinCommunityButton',
+  channel: 'viewChannelButton',
+  profile: 'openProfileButton',
+} satisfies Record<Type, string>
 
 export function PreviewPage(props: PreviewPageProps) {
   const { type, decodedData, encodedData } = props
+  const t = useTranslations('sharing')
+  const actionLabel = t(actionLabelKeyByType[type])
 
   const toast = useToast()
 
@@ -211,13 +208,13 @@ export function PreviewPage(props: PreviewPageProps) {
 
     if (!wakuData || error) {
       // todo?: rephrase to "fetch latest"
-      toast.negative("Couldn't fetch information")
+      toast.negative(t('couldntFetchInformation'))
 
       return
     }
 
     if (urlData) {
-      toast.custom('Information just updated', <InfoIcon />)
+      toast.custom(t('informationUpdated'), <InfoIcon />)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading])
@@ -428,7 +425,7 @@ export function PreviewPage(props: PreviewPageProps) {
                 )}
                 {data.type === 'channel' && (
                   <div className="flex items-center gap-1">
-                    <p className="text-13 text-neutral-40">Channel in</p>
+                    <p className="text-13 text-neutral-40">{t('channelIn')}</p>
                     <ContextTag
                       size="32"
                       type="community"
@@ -452,14 +449,20 @@ export function PreviewPage(props: PreviewPageProps) {
               </div>
 
               <p className="mb-4 text-15 font-regular text-neutral-100 xl:text-19">
-                {INSTRUCTIONS_HEADING[type]}
+                {t(
+                  type === 'community'
+                    ? 'joinCommunity'
+                    : type === 'channel'
+                      ? 'joinChannel'
+                      : 'connectProfile'
+                )}
               </p>
 
               {/* INSTRUCTIONS */}
               <div className="mb-6 grid gap-3">
                 <div className="rounded-16 border border-neutral-10 bg-white-100 px-4 py-3">
                   <h3 className="mb-2 text-15 font-semibold">
-                    Don&apos;t have Status yet?
+                    {t('dontHaveStatus')}
                   </h3>
                   <ul>
                     <ListItem order={1} alignment="top">
@@ -481,12 +484,10 @@ export function PreviewPage(props: PreviewPageProps) {
                       </div>
                     </ListItem>
                     <ListItem order={2}>
-                      <p className="text-13">Install Status</p>
+                      <p className="text-13">{t('installStatus')}</p>
                     </ListItem>
                     <ListItem order={3}>
-                      <p className="text-13">
-                        Complete the onboarding and keep Status open
-                      </p>
+                      <p className="text-13">{t('completeOnboarding')}</p>
                     </ListItem>
                     <ListItem order={4} alignment="top">
                       <div className="mt-[-4px] inline-flex flex-col justify-end gap-2">
@@ -496,14 +497,12 @@ export function PreviewPage(props: PreviewPageProps) {
                             variant="grey"
                             onPress={joinHandler}
                           >
-                            {JOIN_BUTTON_LABEL[type]}
+                            {actionLabel}
                           </Button>
                         </div>
                         {url && (
                           <>
-                            <p className="text-13">
-                              or scan the QR code with your device
-                            </p>
+                            <p className="text-13">{t('scanQrDevice')}</p>
                             <div className="inline-flex">
                               <QrDialog value={url}>
                                 <Button
@@ -511,7 +510,7 @@ export function PreviewPage(props: PreviewPageProps) {
                                   size="24"
                                   iconBefore={<QrCodeIcon />}
                                 >
-                                  Show QR code
+                                  {t('showQrCode')}
                                 </Button>
                               </QrDialog>
                             </div>
@@ -525,29 +524,25 @@ export function PreviewPage(props: PreviewPageProps) {
                 {url && (
                   <div className="flex flex-col items-start gap-4 rounded-16 border border-neutral-10 bg-white-100 p-4 pt-3">
                     <div className="flex flex-col gap-1">
-                      <p className="text-15 font-semibold">
-                        Have Status already?
-                      </p>
+                      <p className="text-15 font-semibold">{t('haveStatus')}</p>
                       <ListItem order={1}>
-                        <p className="text-13">Open status</p>
+                        <p className="text-13">{t('openStatus')}</p>
                       </ListItem>
                       <ListItem order={2} alignment="top">
                         <div className="flex flex-col gap-2">
                           <div className="inline-flex gap-2">
-                            <p className="text-13">Click on </p>{' '}
+                            <p className="text-13">{t('clickOn')}</p>{' '}
                             <div className="mt-[-3px]">
                               <Button
                                 size="24"
                                 variant="grey"
                                 onClick={joinHandler}
                               >
-                                {JOIN_BUTTON_LABEL[type]}
+                                {actionLabel}
                               </Button>
                             </div>
                           </div>
-                          <p className="text-13">
-                            or scan the QR code with your device
-                          </p>
+                          <p className="text-13">{t('scanQrDevice')}</p>
                           <div className="inline-flex">
                             <QrDialog value={url}>
                               <Button
@@ -555,7 +550,7 @@ export function PreviewPage(props: PreviewPageProps) {
                                 size="24"
                                 iconBefore={<QrCodeIcon />}
                               >
-                                Show QR code
+                                {t('showQrCode')}
                               </Button>
                             </QrDialog>
                           </div>

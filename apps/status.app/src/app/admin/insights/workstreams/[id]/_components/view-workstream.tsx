@@ -1,6 +1,7 @@
 'use client'
 
 import { Avatar } from '@status-im/components'
+import { useTranslations } from 'next-intl'
 
 import { DataItem } from '~admin/_components/data-item'
 import { AdminLayoutDetailView } from '~admin/_layouts/admin-layout-detail-view'
@@ -18,6 +19,7 @@ type Props = {
 
 const ViewWorkstream = (props: Props) => {
   const { workstream, breadcrumbs } = props
+  const t = useTranslations('admin')
 
   return (
     <AdminLayoutDetailView
@@ -34,7 +36,7 @@ const ViewWorkstream = (props: Props) => {
       breadcrumbs={breadcrumbs}
     >
       <div className="grid grid-cols-3 gap-3">
-        <DataItem label="Date" className="col-span-1">
+        <DataItem label={t('date')} className="col-span-1">
           {shortDate(new Date(workstream.createdAt))}
         </DataItem>
         {/* <DataItem label="Added by" className="col-span-2">

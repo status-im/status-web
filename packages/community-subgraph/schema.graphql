@@ -1,0 +1,13 @@
+type ExampleEntity @entity {
+  id: ID!
+  roomId: BigInt! # uint256
+  voter: Bytes! # address
+}
+
+type VotingRoom @entity {
+  id: ID!
+  community: Bytes!
+  type: Int
+  timestamp: BigInt
+  result: Boolean
+}

@@ -1,6 +1,7 @@
 import { type ButtonHTMLAttributes, forwardRef } from 'react'
 
 import { EditIcon } from '@status-im/icons/12'
+import { useTranslations } from 'next-intl'
 
 import { type Emoji, EmojiTwitter } from './emoji-twitter'
 
@@ -10,6 +11,7 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 const EmojiTrigger = forwardRef<HTMLButtonElement, Props>((props, ref) => {
   const { selectedEmoji, ...rest } = props
+  const t = useTranslations('admin')
 
   return (
     <button {...rest} ref={ref}>
@@ -22,7 +24,7 @@ const EmojiTrigger = forwardRef<HTMLButtonElement, Props>((props, ref) => {
           <EditIcon className="text-neutral-100" />
         </div>
       </div>
-      <span className="sr-only">Open emoji picker</span>
+      <span className="sr-only">{t('openEmojiPicker')}</span>
     </button>
   )
 })

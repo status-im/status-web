@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 
 import { Button } from '@status-im/components'
 import { DeleteIcon } from '@status-im/icons/12'
+import { useTranslations } from 'next-intl'
 
 import { AddNewButton } from '~admin/_components/add-new-button'
 import { AlertDialog } from '~admin/_components/alert-dialog'
@@ -11,6 +12,7 @@ import { DataItem } from '~admin/_components/data-item'
 import { shortDate } from '~admin/_utils'
 import { MilestonesStatusGroupList } from '~admin/insights/_components/milestones-status-group-list'
 import { StatusGroupHeader } from '~admin/insights/_components/status-group-header'
+import { getAdminPlatformLabel } from '~admin/insights/_utils/i18n'
 
 import {
   removeReleaseMilestone,
@@ -28,6 +30,7 @@ type Props = {
 
 export const ReleaseDetail = (props: Props) => {
   const { release, projects, user } = props
+  const t = useTranslations('admin')
 
   const [milestoneIds, setMilestoneIds] = useState<number[]>(() =>
     release.milestones.map(p => p.id)
@@ -40,14 +43,14 @@ export const ReleaseDetail = (props: Props) => {
   return (
     <>
       <div className="grid grid-cols-3 gap-3">
-        <DataItem label="Platform" className="col-span-2">
+        <DataItem label={t('platform')} className="col-span-2">
           <div className="flex flex-row items-center gap-2">
             {/* <span className="text-15">{release.platform.emoji}</span> */}
-            <span className="capitalize">{release.platform}</span>
+            <span>{getAdminPlatformLabel(t, release.platform)}</span>
           </div>
         </DataItem>
         {release.dueOn && (
-          <DataItem label="Due date" className="col-span-1">
+          <DataItem label={t('dueDate')} className="col-span-1">
             {shortDate(new Date(release.dueOn))}
           </DataItem>
         )}
@@ -55,8 +58,8 @@ export const ReleaseDetail = (props: Props) => {
 
       {user.canEditInsights && (
         <StatusGroupHeader
-          title="Milestones"
-          description="Add, view, and manage milestones."
+          title={t('milestones')}
+          description={t('manageMilestones')}
         >
           <AddMilestonesDrawer
             projects={projects}
@@ -69,7 +72,7 @@ export const ReleaseDetail = (props: Props) => {
               })
             }
           >
-            <AddNewButton>Add project milestones</AddNewButton>
+            <AddNewButton>{t('addProjectMilestones')}</AddNewButton>
           </AddMilestonesDrawer>
         </StatusGroupHeader>
       )}
@@ -79,7 +82,7 @@ export const ReleaseDetail = (props: Props) => {
         cardFooterType="project"
         cardAction={milestone => (
           <AlertDialog
-            title="Remove milestone"
+            title={t('removeMilestone')}
             onConfirm={async () => {
               await removeReleaseMilestone({
                 releaseId: release.id,
@@ -91,7 +94,7 @@ export const ReleaseDetail = (props: Props) => {
               size="24"
               variant="outline"
               icon={<DeleteIcon />}
-              aria-label="Remove milestone"
+              aria-label={t('removeMilestone')}
             />
           </AlertDialog>
         )}

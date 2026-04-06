@@ -1,0 +1,19 @@
+{
+  "name": "@status-im/community-subgraph",
+  "description": "The Graph subgraph for Status Community Curation DApp",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ HistorySubgraph",
+    "create-local": "graph create --node http://localhost:8020/ HistorySubgraph",
+    "remove-local": "graph remove --node http://localhost:8020/ HistorySubgraph",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 HistorySubgraph"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.21.1",
+    "@graphprotocol/graph-ts": "0.20.0"
+  }
+}

@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 
 import { DropdownButton, DropdownMenu, Text } from '@status-im/components'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 
 import { useMediaQuery } from '~hooks/use-media-query'
 
@@ -45,6 +46,7 @@ type Props = {
 const DropdownFilter = (props: Props) => {
   const { data, label, placeholder, selectedValues, onSelectedValuesChange } =
     props
+  const t = useTranslations('insights')
 
   const [filterText, setFilterText] = useState('')
 
@@ -71,7 +73,7 @@ const DropdownFilter = (props: Props) => {
         align={matches2XL ? 'end' : 'start'}
       >
         <DropdownMenu.Search
-          placeholder={placeholder || 'Search'}
+          placeholder={placeholder || t('search')}
           value={filterText}
           onChange={setFilterText}
         />
@@ -109,13 +111,11 @@ const DropdownFilter = (props: Props) => {
             />
             <div className="pb-[2px]">
               <Text size={15} weight="semibold">
-                No options found
+                {t('noOptionsFound')}
               </Text>
             </div>
             <div className="text-center">
-              <Text size={13}>
-                We didn’t find results that match your search
-              </Text>
+              <Text size={13}>{t('noOptionsFoundDescription')}</Text>
             </div>
           </div>
         )}

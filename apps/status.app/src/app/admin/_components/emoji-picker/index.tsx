@@ -18,6 +18,7 @@ import {
   TravelIcon,
 } from '@status-im/icons/20'
 import { cva } from 'class-variance-authority'
+import { useTranslations } from 'next-intl'
 
 import { EmojiButton } from './emoji-button'
 import { EmojiTrigger } from './emoji-trigger'
@@ -109,6 +110,7 @@ const CATEGORY_ICONS: CategoryIcons = {
 // Emoji Picker Component
 const EmojiPicker = (props: Props) => {
   const { children, onSelect, emoji } = props
+  const t = useTranslations('admin')
 
   const {
     isOpen,
@@ -149,7 +151,7 @@ const EmojiPicker = (props: Props) => {
           <div className="flex items-center justify-between border-b border-neutral-10 bg-white-100">
             <div className="flex w-full flex-col p-3">
               <Input
-                placeholder="Find emojis"
+                placeholder={t('findEmojis')}
                 icon={<SearchIcon />}
                 size="32"
                 value={search}

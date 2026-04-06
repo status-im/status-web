@@ -14,25 +14,46 @@ const inter = Inter({
   preload: true,
 })
 
-const organizationSchema = jsonLD.organization({
-  '@id': 'https://status.network/#organization',
-  name: 'Status Network',
-  url: 'https://status.network',
-  logo: 'https://status.network/logo.svg',
-  description:
-    'Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack.',
-})
-
-const websiteSchema = jsonLD.website({
-  '@id': 'https://status.network/#website',
-  name: 'Status Network',
-  url: 'https://status.network',
-  description:
-    'Status Network is a privacy-first, fully gasless Ethereum Layer 2 designed for scalable onchain activity, coordinated through reputation and native yield.',
-  publisher: {
+const organizationSchema = {
+  ...jsonLD.organization({
     '@id': 'https://status.network/#organization',
-  },
-})
+    name: 'Status Network',
+    url: 'https://status.network/',
+    logo: 'https://status.network/logo.svg',
+    description:
+      'Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack, with network-level spam protection enforced through reputation (Karma) and execution funded by native yield rather than user-paid gas fees.',
+  }),
+  knowsAbout: [
+    { '@type': 'Thing' as const, name: 'Ethereum Layer 2' },
+    { '@type': 'Thing' as const, name: 'Gasless transactions' },
+    { '@type': 'Thing' as const, name: 'Composable privacy' },
+    { '@type': 'Thing' as const, name: 'Spam protection' },
+    { '@type': 'Thing' as const, name: 'Reputation system' },
+    { '@type': 'Thing' as const, name: 'Native yield funding' },
+    { '@type': 'Thing' as const, name: 'Bots' },
+  ],
+}
+
+const websiteSchema = {
+  ...jsonLD.website({
+    '@id': 'https://status.network/#website',
+    name: 'Status Network',
+    url: 'https://status.network/',
+    description:
+      'Status Network is a privacy-first, fully gasless Ethereum Layer 2 designed for scalable onchain activity, coordinated through reputation and native yield.',
+    publisher: {
+      '@id': 'https://status.network/#organization',
+    },
+  }),
+  about: [
+    { '@type': 'Thing' as const, name: 'Ethereum Layer 2' },
+    { '@type': 'Thing' as const, name: 'Gasless transactions' },
+    { '@type': 'Thing' as const, name: 'Composable privacy' },
+    { '@type': 'Thing' as const, name: 'Spam protection' },
+    { '@type': 'Thing' as const, name: 'Reputation system' },
+    { '@type': 'Thing' as const, name: 'Native yield funding' },
+  ],
+}
 
 const softwareApplicationSchema = jsonLD.softwareApplication({
   name: 'Status Network',

@@ -1,7 +1,8 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
 import { match, P } from 'ts-pattern'
+
+import { usePathname } from '~/i18n/navigation'
 
 import { Image } from './assets'
 
@@ -24,7 +25,7 @@ export const Logo = (props: Props) => {
           () => (
             <Image
               id="Brand/Logo Section/Variants/Mark/Mark_02:480:480"
-              alt="Status logo mark variant 2"
+              alt=""
               width={32}
               height={32}
             />
@@ -35,7 +36,7 @@ export const Logo = (props: Props) => {
           () => (
             <Image
               id="Brand/Logo Section/Variants/Mark/Mark_02:480:480"
-              alt="Status logo mark variant 2"
+              alt=""
               width={32}
               height={32}
             />
@@ -46,7 +47,7 @@ export const Logo = (props: Props) => {
           () => (
             <Image
               id="Brand/Logo Section/Variants/Mark/Mark_01:480:480"
-              alt="Status logo mark variant 1"
+              alt=""
               width={32}
               height={32}
             />
@@ -57,7 +58,7 @@ export const Logo = (props: Props) => {
           () => (
             <Image
               id="Brand/Logo Section/Variants/Mark/Mark_03:480:480"
-              alt="Status logo mark variant 3"
+              alt=""
               width={32}
               height={32}
             />
@@ -66,7 +67,7 @@ export const Logo = (props: Props) => {
         .otherwise(() => (
           <Image
             id="Brand/Logo Section/Mark/Mark_01:480:480"
-            alt="Status logo mark"
+            alt=""
             width={32}
             height={32}
           />

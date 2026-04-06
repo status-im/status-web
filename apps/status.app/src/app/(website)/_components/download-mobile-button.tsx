@@ -3,6 +3,7 @@
 import { Button } from '@status-im/components'
 import { CloseIcon, DownloadIcon, MobileIcon } from '@status-im/icons/20'
 import NextImage from 'next/image'
+import { useTranslations } from 'next-intl'
 import { QRCodeSVG } from 'qrcode.react'
 import { match } from 'ts-pattern'
 
@@ -30,18 +31,19 @@ type Props = Pick<React.ComponentProps<typeof Button>, 'variant' | 'size'> & {
 export const DownloadMobileButton = (props: Props) => {
   const mobileOS = useMobileOperatingSystem()
   const latestReleaseTags = useLatestReleaseTags()
+  const t = useTranslations('download')
 
   const { children } = props
 
   const renderLabel = () => {
     return (
       <>
-        Download for{' '}
+        {t('prefix')}{' '}
         <span className="hidden macos:contents windows:contents linux:contents unknown:contents">
-          mobile
+          {t('mobile')}
         </span>
-        <span className="hidden ios:contents">iOS</span>
-        <span className="hidden android:contents">Android</span>
+        <span className="hidden ios:contents">{t('ios')}</span>
+        <span className="hidden android:contents">{t('android')}</span>
       </>
     )
   }
@@ -71,7 +73,7 @@ export const DownloadMobileButton = (props: Props) => {
               variant="outline"
               size="32"
               icon={<CloseIcon />}
-              aria-label="Close"
+              aria-label={t('close')}
             />
           </Dialog.Close>
         </div>
@@ -82,10 +84,10 @@ export const DownloadMobileButton = (props: Props) => {
               <LatestVersionTag platform="mobile" />
             </div>
             <Dialog.Title className="mb-2 max-w-[381px] text-40 font-bold">
-              Download Status mobile app
+              {t('mobileTitle')}
             </Dialog.Title>
             <Dialog.Description className="mb-6 max-w-[468px] pr-12 text-19 font-regular">
-              Available for iOS or Android.
+              {t('mobileDescription')}
             </Dialog.Description>
 
             <div className="flex h-10 gap-3">
@@ -106,7 +108,7 @@ export const DownloadMobileButton = (props: Props) => {
                     src={appStoreSrc}
                     quality={100}
                     height={40}
-                    alt="App Store logo"
+                    alt={t('appStoreLogo')}
                   />
                 </a>
               )}
@@ -128,7 +130,7 @@ export const DownloadMobileButton = (props: Props) => {
                       src={googlePlaySrc}
                       quality={100}
                       height={40}
-                      alt="Google Play logo"
+                      alt={t('googlePlayLogo')}
                     />
                   </a>
                   {/* <a
@@ -157,7 +159,7 @@ export const DownloadMobileButton = (props: Props) => {
             {mobileOS !== 'ios' && (
               <div className="mt-8 flex flex-col items-start">
                 <span className="mb-2 text-13 font-medium text-neutral-50">
-                  Other options
+                  {t('otherOptions')}
                 </span>
                 <Button
                   variant="outline"
@@ -171,7 +173,7 @@ export const DownloadMobileButton = (props: Props) => {
                     })
                   }}
                 >
-                  Download APK file
+                  {t('downloadApk')}
                 </Button>
               </div>
             )}
@@ -180,10 +182,10 @@ export const DownloadMobileButton = (props: Props) => {
               <div className="mt-10 flex items-center justify-between gap-4 rounded-20 border border-neutral-30 p-3 pl-6 xl:mr-20 xl:flex-col xl:items-start xl:p-4 xl:pt-3">
                 <div>
                   <div className="text-19 font-semibold text-neutral-100">
-                    Scan QR to download
+                    {t('scanQrTitle')}
                   </div>
                   <div className="text-15 font-regular text-neutral-100">
-                    Download our app directly to your phone.
+                    {t('scanQrDescription')}
                   </div>
                 </div>
                 <div className="aspect-square shrink-0 rounded-16 border border-neutral-30 p-2 xl:p-3">
@@ -199,13 +201,13 @@ export const DownloadMobileButton = (props: Props) => {
           <div className="relative overflow-hidden max-xl:h-[30dvh]">
             <div className="absolute left-5 w-3/5 md:left-12 md:w-[calc(50%-60px)] xl:left-0 xl:top-20 xl:w-[316px]">
               <ScreenImage
-                id="Non Beta Release/Download/Screen_01:1500:3248"
+                id="Non Beta Release/Download/Screen_01:750:1624"
                 alt=""
               />
             </div>
             <div className="absolute left-[calc(60%+40px)] w-1/2 md:left-auto md:right-12 md:w-[calc(50%-60px)] xl:left-[336px] xl:top-20 xl:w-[316px]">
               <ScreenImage
-                id="Non Beta Release/Download/Screen_02:1500:3248"
+                id="Non Beta Release/Download/Screen_02:750:1624"
                 alt=""
               />
             </div>

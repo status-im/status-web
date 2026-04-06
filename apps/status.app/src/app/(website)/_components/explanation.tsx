@@ -1,7 +1,10 @@
+'use client'
+
 import * as Dialog from '@radix-ui/react-dialog'
 import * as Popover from '@radix-ui/react-popover'
 import { Button, Text } from '@status-im/components'
 import { CloseIcon, PopupIcon } from '@status-im/icons/20'
+import { useTranslations } from 'next-intl'
 
 import { useMediaQuery } from '~hooks/use-media-query'
 
@@ -22,6 +25,7 @@ const defaultTrigger = (
 
 const ExplanationDesktop = (props: Props) => {
   const { title, description, children = defaultTrigger } = props
+  const t = useTranslations('common')
 
   return (
     <Popover.Root modal>
@@ -44,7 +48,7 @@ const ExplanationDesktop = (props: Props) => {
                   variant="grey"
                   size="32"
                   icon={<CloseIcon />}
-                  aria-label="Close"
+                  aria-label={t('close')}
                 />
               </Popover.Close>
             </div>
@@ -65,6 +69,7 @@ const ExplanationDesktop = (props: Props) => {
 
 const ExplanationMobile = (props: Props) => {
   const { title, description, children = defaultTrigger } = props
+  const t = useTranslations('common')
 
   return (
     <Dialog.Root>
@@ -78,7 +83,7 @@ const ExplanationMobile = (props: Props) => {
                 variant="grey"
                 size="32"
                 icon={<CloseIcon />}
-                aria-label="Close"
+                aria-label={t('close')}
               />
             </Dialog.Close>
           </div>

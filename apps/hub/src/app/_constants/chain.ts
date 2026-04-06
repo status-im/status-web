@@ -5,6 +5,8 @@ import { estimateGas } from 'viem/linea'
 import { createConfig, http } from 'wagmi'
 import { type Chain, linea, mainnet } from 'wagmi/chains'
 
+import { PuzzleAuthService, RETRY_STATUS_CODES } from '~services/puzzle-auth'
+
 import { clientEnv } from './env.client.mjs'
 
 import type {
@@ -65,17 +67,60 @@ export const statusHoodi = defineChain({
   },
 })
 
+const tRpcProxyUrl = (chainId: number) =>
+  `${clientEnv.NEXT_PUBLIC_STATUS_API_URL}/api/trpc/rpc.proxy?chainId=${chainId}`
+
+const rpcProxyPaths: Record<number, string> = {
+  [mainnet.id]: '/ethereum/mainnet',
+  [linea.id]: '/linea/mainnet',
+  [statusHoodi.id]: '/status/hoodi',
+}
+
+const rpcProxyUrl = (chainId: number) =>
+  `${clientEnv.NEXT_PUBLIC_RPC_PROXY_URL}${rpcProxyPaths[chainId]}`
+
+const createPuzzleAuthHooks = () => {
+  const origin = new URL(clientEnv.NEXT_PUBLIC_RPC_PROXY_URL!).origin
+  const service = PuzzleAuthService.forOrigin(origin)
+
+  return {
+    onFetchRequest: async (
+      _request: Request,
+      init: RequestInit
+    ): Promise<RequestInit | undefined> => {
+      const token = service.getToken() ?? (await service.ensureToken())
+      if (!token) return undefined
+
+      const headers = new Headers(init.headers)
+      headers.set('Authorization', `Bearer ${token}`)
+      return { ...init, headers }
+    },
+    onFetchResponse: async (response: Response): Promise<void> => {
+      if (RETRY_STATUS_CODES.has(response.status)) {
+        service.invalidateToken()
+      }
+    },
+  }
+}
+
+const isPuzzleAuthEnabled = Boolean(
+  clientEnv.NEXT_PUBLIC_USE_PUZZLE_AUTH && clientEnv.NEXT_PUBLIC_RPC_PROXY_URL
+)
+
+const puzzleAuthHooks = isPuzzleAuthEnabled ? createPuzzleAuthHooks() : {}
+
+const createTransport = (chainId: number) =>
+  http(isPuzzleAuthEnabled ? rpcProxyUrl(chainId) : tRpcProxyUrl(chainId), {
+    ...puzzleAuthHooks,
+  })
+
 export const getDefaultWagmiConfig = () =>
   getDefaultConfig({
     chains: [statusHoodi, mainnet, linea],
     transports: {
-      // TODO: switch back to proxy once Andrey adds status/hoodi route
-      [statusHoodi.id]: http(
-        'https://rpc.status-network-testnet-hoodi.gateway.fm'
-      ),
-      // TODO: switch back to proxy once rpc proxy is available in dev
-      [mainnet.id]: http(),
-      [linea.id]: http(),
+      [statusHoodi.id]: createTransport(statusHoodi.id),
+      [mainnet.id]: createTransport(mainnet.id),
+      [linea.id]: createTransport(linea.id),
     },
     walletConnectProjectId:
       clientEnv.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID as string,

@@ -314,7 +314,7 @@ export const createVaultTableColumns = ({
           : false
 
         return (
-          <div className="flex items-end justify-end gap-2 lg:gap-4">
+          <div className="flex items-center justify-end gap-2 lg:gap-4">
             {emergencyModeEnabled ? (
               <WithdrawVaultModal
                 open={isWithdrawModalOpen}
