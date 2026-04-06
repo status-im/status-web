@@ -179,7 +179,14 @@ export const test = walletTest.extend<AnvilFixtures>({
       )
     } else {
       try {
-        await helper.revertBoth(baseSnapshots)
+        const rt0 = Date.now()
+        await helper.revert(baseSnapshots.mainnet, helper.mainnetRpc)
+        const rt1 = Date.now()
+        await helper.revert(baseSnapshots.linea, helper.lineaRpc)
+        const rt2 = Date.now()
+        console.log(
+          `[anvil-fixture] revert mainnet: ${rt1 - rt0}ms, linea: ${rt2 - rt1}ms`,
+        )
       } catch (err) {
         console.log(
           `[anvil-fixture] revertBoth failed: ${err instanceof Error ? err.message : err}. ` +
@@ -198,7 +205,15 @@ export const test = walletTest.extend<AnvilFixtures>({
         ])
         await helper.enableAllVaults()
       }
-      baseSnapshots = await helper.snapshotBoth()
+      const st0 = Date.now()
+      const mainnetSnap = await helper.snapshot(helper.mainnetRpc)
+      const st1 = Date.now()
+      const lineaSnap = await helper.snapshot(helper.lineaRpc)
+      const st2 = Date.now()
+      baseSnapshots = { mainnet: mainnetSnap, linea: lineaSnap }
+      console.log(
+        `[anvil-fixture] snapshot mainnet: ${st1 - st0}ms, linea: ${st2 - st1}ms`,
+      )
       console.log(
         `[anvil-fixture] Revert/snapshot done in ${Date.now() - anvilStart}ms`,
       )
