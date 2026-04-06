@@ -1,8 +1,8 @@
 'use client'
 
 import { useBlock, useReadContract } from 'wagmi'
-import { statusSepolia } from 'wagmi/chains'
 
+import { statusHoodi } from '~constants/chain'
 import { stakingManagerAbi, vaultAbi } from '~constants/contracts'
 import { STAKING_MANAGER } from '~constants/index'
 import { useLockVault } from '~hooks/useLockVault'
@@ -63,7 +63,7 @@ export function LockVaultModal(props: LockVaultModalProps) {
     abi: vaultAbi,
     address: vaultAddress,
     functionName: 'lockUntil',
-    chainId: statusSepolia.id,
+    chainId: statusHoodi.id,
     query: {
       staleTime: 0,
       refetchOnMount: 'always',
@@ -71,7 +71,7 @@ export function LockVaultModal(props: LockVaultModalProps) {
   }) as { data: bigint; isLoading: boolean; isFetching: boolean }
 
   const { data: latestBlock } = useBlock({
-    chainId: statusSepolia.id,
+    chainId: statusHoodi.id,
   })
 
   const { data: vaultData } = useReadContract({
@@ -79,7 +79,7 @@ export function LockVaultModal(props: LockVaultModalProps) {
     address: STAKING_MANAGER.address,
     functionName: 'getVault',
     args: [vaultAddress],
-    chainId: statusSepolia.id,
+    chainId: statusHoodi.id,
   }) as {
     data:
       | {
@@ -93,7 +93,7 @@ export function LockVaultModal(props: LockVaultModalProps) {
     address: STAKING_MANAGER.address,
     functionName: 'mpBalanceOf',
     args: [vaultAddress],
-    chainId: statusSepolia.id,
+    chainId: statusHoodi.id,
   }) as { data: bigint | undefined }
 
   // Calculate initial values based on current lockUntil for extensions

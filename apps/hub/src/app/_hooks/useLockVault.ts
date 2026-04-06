@@ -13,8 +13,8 @@ import {
 } from 'viem'
 import { useAccount, useConfig, useReadContract, useWriteContract } from 'wagmi'
 import { simulateContract, waitForTransactionReceipt } from 'wagmi/actions'
-import { statusSepolia } from 'wagmi/chains'
 
+import { statusHoodi } from '~constants/chain'
 import { stakingManagerAbi, vaultAbi } from '~constants/contracts'
 import { CONFIRMATION_BLOCKS, MIN_LOCK_PERIOD } from '~constants/index'
 import { useStakingVaults } from '~hooks/useStakingVaults'
@@ -178,7 +178,7 @@ export function useLockVault(vaultAddress: Address): UseLockVaultReturn {
     abi: vaultAbi,
     address: vaultAddress,
     functionName: 'lockUntil',
-    chainId: statusSepolia.id,
+    chainId: statusHoodi.id,
   }) as { data: bigint | undefined }
 
   return useMutation({
@@ -213,7 +213,7 @@ export function useLockVault(vaultAddress: Address): UseLockVaultReturn {
             abi: [...vaultAbi, ...stakeManagerErrors],
             functionName: 'lock',
             args: [lockPeriodInSeconds],
-            chainId: statusSepolia.id,
+            chainId: statusHoodi.id,
           })
         } catch (simulationError) {
           const message = getLockRevertMessage(simulationError, t)

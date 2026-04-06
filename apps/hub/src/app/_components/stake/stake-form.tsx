@@ -11,13 +11,13 @@ import { match } from 'ts-pattern'
 import { formatUnits, parseUnits } from 'viem'
 import { useAccount, useBalance, useConfig, useReadContract } from 'wagmi'
 import { readContract } from 'wagmi/actions'
-import { statusSepolia } from 'wagmi/chains'
 import { z } from 'zod'
 
 import { SNTIcon } from '~components/icons'
 import { PromoModal } from '~components/stake/promo-modal'
 import { VaultSelect } from '~components/vault-select'
 import { LockVaultModal } from '~components/vaults/modals/lock-vault-modal'
+import { statusHoodi } from '~constants/chain'
 import {
   STAKE_PAGE_CONSTANTS,
   STAKING_MANAGER,
@@ -214,7 +214,7 @@ const StakeForm = () => {
     try {
       // Check current allowance
       const currentAllowance = (await readContract(config, {
-        chainId: statusSepolia.id,
+        chainId: statusHoodi.id,
         address: STT_TOKEN.address,
         abi: STT_TOKEN.abi,
         functionName: 'allowance',
