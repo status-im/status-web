@@ -999,7 +999,13 @@ export async function getFeeRate(
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ jsonrpc: '2.0', id, method, params }),
     })
-    return res.json()
+    const body = await res.json()
+    if (body.error) {
+      throw new Error(
+        `${method} failed: ${body.error.message || JSON.stringify(body.error)}`,
+      )
+    }
+    return body
   }
 
   try {

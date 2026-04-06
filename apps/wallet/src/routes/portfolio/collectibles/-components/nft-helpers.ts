@@ -5,37 +5,53 @@ import {
   type GasFees,
 } from '../../assets/-components/token-helpers'
 
-export const erc721 = new Interface([
+export type NftStandard = 'ERC721' | 'ERC1155' | 'UNKNOWN'
+
+const erc721 = new Interface([
   'function safeTransferFrom(address from, address to, uint256 tokenId)',
 ])
 
-export const erc1155 = new Interface([
+const erc1155 = new Interface([
   'function safeTransferFrom(address from, address to, uint256 id, uint256 amount, bytes data)',
 ])
 
+const parseTokenId = (tokenId: string): bigint => {
+  try {
+    return BigInt(tokenId)
+  } catch {
+    throw new Error(`Invalid token id: ${tokenId}`)
+  }
+}
+
 export function encodeNftTransfer(params: {
-  standard: string
+  standard: NftStandard | string
   from: string
   to: string
   tokenId: string
   amount?: string
 }): string {
+  const id = parseTokenId(params.tokenId)
+
   if (params.standard === 'ERC1155') {
     return erc1155.encodeFunctionData('safeTransferFrom', [
       params.from,
       params.to,
-      BigInt(params.tokenId),
+      id,
       BigInt(params.amount ?? '1'),
       '0x',
     ])
   }
 
-  // Default to ERC721 (covers 'ERC721', 'UNKNOWN', etc.)
-  return erc721.encodeFunctionData('safeTransferFrom', [
-    params.from,
-    params.to,
-    BigInt(params.tokenId),
-  ])
+  // Alchemy returns 'UNKNOWN' for some custom contracts; treat as ERC721.
+  if (params.standard === 'ERC721' || params.standard === 'UNKNOWN') {
+    return erc721.encodeFunctionData('safeTransferFrom', [
+      params.from,
+      params.to,
+      id,
+    ])
+  }
+
+  throw new Error(`Unsupported NFT standard: ${params.standard}`)
 }
 
 export function buildNftGasFeeParams(params: {

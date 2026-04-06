@@ -14,7 +14,7 @@ import {
   NetworkLogo,
 } from '@status-im/wallet/components'
 import { ERROR_MESSAGES } from '@status-im/wallet/constants'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 
 import { apiClient } from '@/providers/api-client'
@@ -300,6 +300,7 @@ const SendNftSection = (props: SendNftSectionProps) => {
   } = props
 
   const toast = useToast()
+  const queryClient = useQueryClient()
   const { hasActiveSession, requestPassword } = usePassword()
   const { addPendingTransaction } = usePendingTransactions()
 
@@ -307,6 +308,8 @@ const SendNftSection = (props: SendNftSectionProps) => {
   const [isSending, setIsSending] = useState(false)
   const [txResult, setTxResult] = useState<string | null>(null)
   const [sendError, setSendError] = useState<string | null>(null)
+
+  const sendLabel = standard === 'UNKNOWN' ? 'NFT' : `${standard} NFT`
 
   const handleSendNft = async () => {
     if (!isValidAddress(recipientAddress)) {
@@ -355,15 +358,7 @@ const SendNftSection = (props: SendNftSectionProps) => {
           value: '0',
         })
 
-      console.log('[SendNFT] result:', JSON.stringify(result, null, 2)) // DEBUG: remove after testing
-
-      if (!result.id || result.id.txid?.error) {
-        console.error('[SendNFT] tx error:', result.id?.txid?.error) // DEBUG: remove after testing
-        toast.negative(result.id?.txid?.error || ERROR_MESSAGES.TX_FAILED)
-        throw new Error(result.id?.txid?.error || 'Transaction failed')
-      }
-
-      const txHash = typeof result.id === 'string' ? result.id : result.id.txid
+      const txHash = result.id?.txid
 
       if (!txHash) {
         toast.negative(ERROR_MESSAGES.TX_FAILED)
@@ -371,6 +366,7 @@ const SendNftSection = (props: SendNftSectionProps) => {
       }
 
       setTxResult(txHash)
+      setRecipientAddress('')
 
       addPendingTransaction({
         hash: txHash,
@@ -393,9 +389,13 @@ const SendNftSection = (props: SendNftSectionProps) => {
         eurRate: 0,
       })
 
+      queryClient.invalidateQueries({ queryKey: ['collectibles'] })
+      queryClient.invalidateQueries({
+        queryKey: ['collectible', network, contract, tokenId],
+      })
+
       toast.positive('NFT transfer submitted')
     } catch (error: unknown) {
-      console.error('[SendNFT] error:', error) // DEBUG: remove after testing
       let message = 'Failed to send NFT'
       if (error instanceof Error) {
         message = error.message
@@ -412,7 +412,7 @@ const SendNftSection = (props: SendNftSectionProps) => {
   return (
     <div className="mt-4 flex flex-col gap-2">
       <div className="text-13 font-semibold text-neutral-50">
-        Send {standard}
+        Send {sendLabel}
       </div>
       <input
         type="text"
@@ -427,7 +427,7 @@ const SendNftSection = (props: SendNftSectionProps) => {
         onPress={handleSendNft}
         disabled={isSending || !recipientAddress}
       >
-        {isSending ? 'Sending...' : `Send ${standard} NFT`}
+        {isSending ? 'Sending...' : `Send ${sendLabel}`}
       </Button>
       {txResult && (
         <div className="break-all text-13 text-success-50">Tx: {txResult}</div>
