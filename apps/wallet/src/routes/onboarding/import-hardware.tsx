@@ -2,6 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { UrFountainDecoder } from '@qrkit/bc-ur'
 import { parseConnection } from '@qrkit/core'
+import { Button, Input, Text } from '@status-im/components'
+import { ArrowLeftIcon } from '@status-im/icons/20'
 import { useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import jsQR from 'jsqr'
@@ -17,294 +19,180 @@ export const Route = createFileRoute('/onboarding/import-hardware')({
 /**
  * Hardware-wallet onboarding flow.
  *
- * Custom inline scanner (no qrkit modal) so we can see exactly what is
- * happening at every frame. The qrkit hooks have zero logging which made the
- * previous "안됨" reports impossible to diagnose. This component logs:
- *   - getUserMedia state
- *   - video readyState transitions
- *   - every jsQR call result
- *   - every UR fragment received and progress %
- *   - parseConnection result
- *
- * Open the page DevTools console while scanning. The logs will tell us
- * exactly which step is failing.
+ * Reads an animated BC-UR QR via jsQR, assembles the fragments through
+ * @qrkit/bc-ur's UrFountainDecoder, parses the resulting CBOR via
+ * @qrkit/core's `parseConnection`, and stores the resulting account as a
+ * watch-only wallet. Compatible with any ERC-4527 air-gapped device
+ * (Keystone, AirGap Vault, NGRAVE, GapSign, etc.). The signing flow is not
+ * implemented yet — `getSigningKey` throws `WALLET_IS_WATCH_ONLY` for these
+ * wallets.
  */
 function RouteComponent() {
-  const scanner = useScanner()
-  const [showConfirm, setShowConfirm] = useState(false)
-
-  useEffect(() => {
-    if (scanner.account) setShowConfirm(true)
-  }, [scanner.account])
-
-  if (scanner.account && showConfirm) {
-    return (
-      <Confirm
-        account={scanner.account}
-        onBack={() => {
-          setShowConfirm(false)
-          scanner.reset()
-        }}
-      />
-    )
-  }
-
-  return <ScannerScreen scanner={scanner} />
-}
-
-interface UseScannerResult {
-  account: Account | null
-  reset: () => void
-  videoRef: React.RefObject<HTMLVideoElement | null>
-  progress: number | null
-  error: string | null
-  frameCount: number
-  qrHits: number
-}
-
-function useScanner(): UseScannerResult {
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const decoderRef = useRef<UrFountainDecoder>(new UrFountainDecoder())
-  const rafRef = useRef<number | null>(null)
-  const doneRef = useRef(false)
-  const frameCountRef = useRef(0)
-  const qrHitsRef = useRef(0)
-
   const [account, setAccount] = useState<Account | null>(null)
-  const [progress, setProgress] = useState<number | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [frameCount, setFrameCount] = useState(0)
-  const [qrHits, setQrHits] = useState(0)
 
-  const reset = useCallback(() => {
-    console.log('[scanner] reset')
-    decoderRef.current = new UrFountainDecoder()
-    setAccount(null)
-    setProgress(null)
-    setError(null)
-    setFrameCount(0)
-    setQrHits(0)
-    frameCountRef.current = 0
-    qrHitsRef.current = 0
-    doneRef.current = false
-  }, [])
-
-  const handleQrString = useCallback((data: string) => {
-    console.log('[scanner] jsQR decoded string:', data.slice(0, 80))
-    if (!data.toLowerCase().startsWith('ur:')) {
-      console.warn('[scanner] not a UR string, ignoring')
-      return
-    }
-    try {
-      decoderRef.current.receivePartUr(data.toLowerCase())
-    } catch (e) {
-      console.error('[scanner] receivePartUr threw', e)
-      return
-    }
-    const pct = Math.round(decoderRef.current.estimatedPercentComplete() * 100)
-    console.log('[scanner] UR progress', pct, '%')
-    setProgress(pct)
-    if (!decoderRef.current.isComplete()) return
-    try {
-      const ur = decoderRef.current.resultUr
-      const scanned: ScannedUR = { type: ur.type, cbor: ur.getPayloadCbor() }
-      console.log('[scanner] UR complete, type=', ur.type)
-      const accounts = parseConnection(scanned, { chains: ['evm'] })
-      console.log('[scanner] parseConnection accounts=', accounts)
-      const acc = accounts[0]
-      if (!acc) {
-        setError('No EVM account found in scanned QR.')
-        return
-      }
-      doneRef.current = true
-      setAccount(acc)
-    } catch (e) {
-      console.error('[scanner] parseConnection threw', e)
-      setError(`Parse error: ${(e as Error).message}`)
-    }
-  }, [])
-
-  const processFrame = useCallback((): void => {
-    const video = videoRef.current
-    const canvas = canvasRef.current
-    if (!video || !canvas || doneRef.current) return
-
-    frameCountRef.current += 1
-    if (frameCountRef.current % 30 === 0) {
-      setFrameCount(frameCountRef.current)
-      console.log(
-        '[scanner] frame',
-        frameCountRef.current,
-        'readyState=',
-        video.readyState,
-        'dims=',
-        video.videoWidth,
-        'x',
-        video.videoHeight,
-      )
-    }
-
-    const ctx = canvas.getContext('2d', { willReadFrequently: true })
-    if (!ctx) {
-      setError('Could not get 2D canvas context')
-      return
-    }
-
-    if (video.readyState === video.HAVE_ENOUGH_DATA) {
-      canvas.width = video.videoWidth
-      canvas.height = video.videoHeight
-      ctx.drawImage(video, 0, 0)
-      let imageData: ImageData
-      try {
-        imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-      } catch (e) {
-        console.error('[scanner] getImageData threw', e)
-        setError('Canvas access blocked. Disable fingerprinting protection.')
-        return
-      }
-      const code = jsQR(imageData.data, imageData.width, imageData.height)
-      if (code) {
-        qrHitsRef.current += 1
-        setQrHits(qrHitsRef.current)
-        handleQrString(code.data)
-      }
-    }
-
-    rafRef.current = requestAnimationFrame(processFrame)
-  }, [handleQrString])
-
-  useEffect(() => {
-    console.log('[scanner] mount, starting camera')
-    let stream: MediaStream | null = null
-    canvasRef.current = document.createElement('canvas')
-    doneRef.current = false
-
-    navigator.mediaDevices
-      .getUserMedia({ video: { facingMode: 'environment' } })
-      .then(s => {
-        console.log(
-          '[scanner] getUserMedia OK, tracks=',
-          s.getVideoTracks().map(t => ({
-            label: t.label,
-            settings: t.getSettings(),
-          })),
-        )
-        stream = s
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream
-          videoRef.current
-            .play()
-            .then(() => console.log('[scanner] video.play() resolved'))
-            .catch(e => console.error('[scanner] video.play() rejected', e))
-          rafRef.current = requestAnimationFrame(processFrame)
-        }
-      })
-      .catch(e => {
-        console.error('[scanner] getUserMedia rejected', e)
-        setError(`Camera error: ${e.name}: ${e.message}`)
-      })
-
-    return () => {
-      console.log('[scanner] cleanup')
-      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current)
-      stream?.getTracks().forEach(t => t.stop())
-      canvasRef.current = null
-    }
-  }, [processFrame])
-
-  return {
-    account,
-    reset,
-    videoRef,
-    progress,
-    error,
-    frameCount,
-    qrHits,
+  if (account) {
+    return <Confirm account={account} onBack={() => setAccount(null)} />
   }
+
+  return <ScannerScreen onAccount={setAccount} />
 }
 
-function ScannerScreen({ scanner }: { scanner: UseScannerResult }) {
-  const { videoRef, progress, error, frameCount, qrHits } = scanner
+function ScannerScreen({ onAccount }: { onAccount: (acc: Account) => void }) {
+  const { videoRef, progress, error } = useUrScanner(onAccount)
+
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '1rem',
-        padding: '1rem',
-      }}
-    >
-      <a
-        href="/onboarding"
-        style={{ fontSize: 13, opacity: 0.7, textDecoration: 'none' }}
-      >
-        ← Back
-      </a>
-      <h2 style={{ margin: 0, fontSize: 22, fontWeight: 600 }}>
+    <div className="flex flex-1 flex-col gap-1">
+      <div className="pb-4">
+        <Button
+          href="/onboarding"
+          variant="grey"
+          icon={<ArrowLeftIcon color="$neutral-100" />}
+          aria-label="Back"
+          size="32"
+        />
+      </div>
+      <Text size={27} weight="semibold">
         Connect a hardware wallet
-      </h2>
-      <p style={{ opacity: 0.7, fontSize: 14, margin: 0 }}>
-        On your hardware wallet, choose <strong>Connect software wallet</strong>{' '}
-        and point its screen at this camera.
-      </p>
-      <div
-        style={{
-          position: 'relative',
-          width: '100%',
-          aspectRatio: 1,
-          background: '#000',
-          borderRadius: 12,
-          overflow: 'hidden',
-        }}
-      >
+      </Text>
+      <Text size={15} color="$neutral-50" className="mb-4">
+        Use any air-gapped wallet that supports the ERC-4527 QR standard:
+        Keystone, AirGap Vault, NGRAVE, GapSign, and others. On your device,
+        choose Connect Software Wallet and pick the generic QR / MetaMask
+        option, then point the screen at this camera.
+      </Text>
+      <div className="relative aspect-square w-full overflow-hidden rounded-12 bg-neutral-100">
         <video
           ref={videoRef}
           autoPlay
           playsInline
           muted
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            display: 'block',
-          }}
+          className="block size-full object-cover"
         />
-        {progress !== null && (
+        {progress !== null && progress < 100 && (
           <div
-            style={{
-              position: 'absolute',
-              bottom: 10,
-              left: '50%',
-              transform: 'translateX(-50%)',
-              background: 'rgba(0,0,0,0.7)',
-              color: '#fff',
-              padding: '4px 12px',
-              borderRadius: 20,
-              fontSize: 12,
-            }}
+            className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-[12px] text-white-100"
+            style={{ background: 'rgba(9, 16, 28, 0.7)' }}
           >
             {progress}%
           </div>
         )}
       </div>
-      <div style={{ fontSize: 11, opacity: 0.5, fontFamily: 'monospace' }}>
-        frames: {frameCount} · jsQR hits: {qrHits} · progress: {progress ?? '—'}
-      </div>
-      {error && (
-        <p
-          style={{
-            margin: 0,
-            padding: '0.5rem',
-            color: '#c00',
-            fontSize: 13,
-          }}
-        >
-          {error}
-        </p>
-      )}
+      {error && <p className="mt-2 text-13 text-danger-50">{error}</p>}
     </div>
   )
+}
+
+interface UseUrScannerResult {
+  videoRef: React.RefObject<HTMLVideoElement | null>
+  progress: number | null
+  error: string | null
+}
+
+/**
+ * Owns the camera stream, the per-frame jsQR loop, and the UR fountain
+ * decoder. Mounts/unmounts cleanly with the host component — there is no
+ * external reset API; if the caller wants a fresh scanner it should remount
+ * the component.
+ */
+function useUrScanner(
+  onAccount: (account: Account) => void,
+): UseUrScannerResult {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const onAccountRef = useRef(onAccount)
+  onAccountRef.current = onAccount
+
+  const [progress, setProgress] = useState<number | null>(null)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleQrString = useCallback(
+    (decoder: UrFountainDecoder, data: string): boolean => {
+      if (!data.toLowerCase().startsWith('ur:')) return false
+      try {
+        decoder.receivePartUr(data.toLowerCase())
+      } catch {
+        return false
+      }
+      setProgress(Math.round(decoder.estimatedPercentComplete() * 100))
+      if (!decoder.isComplete()) return false
+      try {
+        const ur = decoder.resultUr
+        const scanned: ScannedUR = { type: ur.type, cbor: ur.getPayloadCbor() }
+        const accounts = parseConnection(scanned, { chains: ['evm'] })
+        const acc = accounts[0]
+        if (!acc) {
+          setError('No EVM account found in scanned QR.')
+          return false
+        }
+        onAccountRef.current(acc)
+        return true
+      } catch (e) {
+        setError(`Parse error: ${(e as Error).message}`)
+        return false
+      }
+    },
+    [],
+  )
+
+  useEffect(() => {
+    let stream: MediaStream | null = null
+    let raf: number | null = null
+    let done = false
+    const decoder = new UrFountainDecoder()
+    const canvas = document.createElement('canvas')
+
+    const processFrame = (): void => {
+      const video = videoRef.current
+      if (!video || done) return
+
+      if (video.readyState === video.HAVE_ENOUGH_DATA) {
+        const ctx = canvas.getContext('2d', { willReadFrequently: true })
+        if (!ctx) {
+          setError('Could not get 2D canvas context')
+          return
+        }
+        canvas.width = video.videoWidth
+        canvas.height = video.videoHeight
+        ctx.drawImage(video, 0, 0)
+        let imageData: ImageData
+        try {
+          imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+        } catch {
+          setError(
+            'Canvas access blocked. Disable fingerprinting protection for this site to scan QR codes.',
+          )
+          return
+        }
+        const code = jsQR(imageData.data, imageData.width, imageData.height)
+        if (code && handleQrString(decoder, code.data)) {
+          done = true
+          return
+        }
+      }
+
+      raf = requestAnimationFrame(processFrame)
+    }
+
+    navigator.mediaDevices
+      .getUserMedia({ video: { facingMode: 'environment' } })
+      .then(s => {
+        stream = s
+        if (!videoRef.current) return
+        videoRef.current.srcObject = stream
+        videoRef.current.play().catch(() => {})
+        raf = requestAnimationFrame(processFrame)
+      })
+      .catch((e: Error) => {
+        setError(`Camera error: ${e.name}: ${e.message}`)
+      })
+
+    return () => {
+      done = true
+      if (raf !== null) cancelAnimationFrame(raf)
+      stream?.getTracks().forEach(t => t.stop())
+    }
+  }, [handleQrString])
+
+  return { videoRef, progress, error }
 }
 
 function Confirm({
@@ -323,6 +211,9 @@ function Confirm({
     try {
       await importHardwareWalletAsync({
         name,
+        // note: parseConnection does not currently expose the device vendor
+        // string. A generic label keeps the import working with any ERC-4527
+        // wallet; vendor detection can be added when @qrkit/core surfaces it.
         vendor: 'air-gapped',
         address: account.address,
         publicKey: account.publicKey,
@@ -330,77 +221,45 @@ function Confirm({
           account.chain === 'evm' ? account.sourceFingerprint : undefined,
       })
       await queryClient.invalidateQueries({ queryKey: ['session', 'status'] })
-      await queryClient.invalidateQueries({ queryKey: ['wallets'] })
       navigate({ to: '/portfolio/assets' })
     } catch (error) {
-      console.error('[import-hardware] import failed', error)
+      console.error('hardware-wallet import failed', error)
     }
   }
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '1rem',
-        padding: '1rem',
-      }}
-    >
-      <button
-        onClick={onBack}
-        style={{
-          alignSelf: 'flex-start',
-          background: 'transparent',
-          border: 'none',
-          cursor: 'pointer',
-          fontSize: 13,
-          opacity: 0.7,
-        }}
-      >
-        ← Back
-      </button>
-      <h2 style={{ margin: 0, fontSize: 22, fontWeight: 600 }}>
-        Confirm import
-      </h2>
-      <div
-        style={{
-          padding: '0.75rem',
-          borderRadius: 8,
-          background: 'rgba(0,0,0,0.04)',
-          fontSize: 13,
-          wordBreak: 'break-all',
-        }}
-      >
-        <div style={{ opacity: 0.6, marginBottom: 4 }}>Address</div>
-        <code>{account.address}</code>
+    <div className="flex flex-1 flex-col gap-4">
+      <div>
+        <Button
+          onClick={onBack}
+          variant="grey"
+          icon={<ArrowLeftIcon color="$neutral-100" />}
+          aria-label="Back"
+          size="32"
+        />
       </div>
-      <input
+      <Text size={27} weight="semibold">
+        Confirm import
+      </Text>
+      <div className="gap-1 rounded-12 border border-neutral-10 bg-neutral-2.5 p-3">
+        <Text size={13} color="$neutral-50">
+          Address
+        </Text>
+        <Text size={13} weight="medium" className="break-all">
+          {account.address}
+        </Text>
+      </div>
+
+      <Input
+        label="Wallet name"
         value={name}
-        onChange={e => setName(e.target.value)}
-        placeholder="Wallet name"
-        style={{
-          padding: '0.6rem 0.8rem',
-          borderRadius: 8,
-          border: '1px solid rgba(0,0,0,0.15)',
-          fontSize: 14,
-        }}
+        onChange={setName}
+        placeholder="Hardware Wallet"
       />
-      <button
-        onClick={handleImport}
-        disabled={isPending || !name.trim()}
-        style={{
-          padding: '0.75rem 2rem',
-          fontSize: '1rem',
-          borderRadius: '8px',
-          border: 'none',
-          cursor: 'pointer',
-          background: '#6750a4',
-          color: '#fff',
-          opacity: isPending || !name.trim() ? 0.5 : 1,
-        }}
-      >
+
+      <Button onClick={handleImport} disabled={isPending || !name.trim()}>
         {isPending ? 'Importing…' : 'Import wallet'}
-      </button>
+      </Button>
     </div>
   )
 }

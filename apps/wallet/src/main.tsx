@@ -1,9 +1,7 @@
 import './styles/global.css'
-import '@qrkit/react/styles.css'
 
 import { StrictMode } from 'react'
 
-import { QRKitProvider } from '@qrkit/react'
 import ReactDOM from 'react-dom/client'
 
 import { APIClientProvider } from './providers/api-client'
@@ -27,9 +25,7 @@ if (!rootElement.innerHTML) {
       <QueryClientProvider>
         <StatusProvider>
           <APIClientProvider>
-            <QRKitProvider appName="Status Wallet">
-              <RouterProvider />
-            </QRKitProvider>
+            <RouterProvider />
           </APIClientProvider>
         </StatusProvider>
       </QueryClientProvider>

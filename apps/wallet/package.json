@@ -35,7 +35,6 @@
     "@metamask/browser-passworder": "^6.0.0",
     "@qrkit/bc-ur": "2.0.0-beta.9-qrkit.1",
     "@qrkit/core": "^0.2.0",
-    "@qrkit/react": "^0.2.0",
     "@radix-ui/react-dialog": "^1.1.1",
     "@status-im/colors": "workspace:*",
     "@status-im/components": "workspace:*",

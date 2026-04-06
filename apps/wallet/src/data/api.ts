@@ -194,11 +194,10 @@ const apiRouter = router({
         const account: WalletAccount = {
           address: input.address,
           coin: walletCore.CoinType.ethereum.value,
-          // note: hardware-wallet accounts come from a scanned xpub; the
-          // device's actual derivation path is not exposed by parseConnection.
-          // We persist the conventional EVM base path so the UI can display
-          // something sensible. Signing must be re-routed via the air-gapped
-          // QR flow regardless of this value.
+          // qrkit's parseConnection derives the first child of the scanned
+          // account-level xpub, which corresponds to m/44'/60'/0'/0/0 by
+          // BIP-44 convention. Signing for hardware wallets does not use this
+          // field — it is re-routed through the air-gapped QR sign flow.
           derivationPath: "m/44'/60'/0'/0/0",
           derivation: walletCore.Derivation.default.value,
         }
