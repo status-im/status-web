@@ -23,7 +23,7 @@ import {
 // eslint-disable-next-line import/first
 import { checkPendingTransactions } from './tx-monitor'
 
-const storageMock = storage as {
+const storageMock = storage as unknown as {
   getItem: ReturnType<typeof vi.fn>
   setItem: ReturnType<typeof vi.fn>
 }

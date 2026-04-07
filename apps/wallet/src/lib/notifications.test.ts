@@ -20,7 +20,7 @@ import {
 } from './notifications'
 /* eslint-enable import/first */
 
-const storageMock = storage as { getItem: ReturnType<typeof vi.fn> }
+const storageMock = storage as unknown as { getItem: ReturnType<typeof vi.fn> }
 
 beforeEach(() => {
   vi.stubGlobal('chrome', {
