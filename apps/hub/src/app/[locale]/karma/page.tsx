@@ -13,6 +13,8 @@ import {
   KarmaStakeCard,
   KarmaVisualCard,
   KarmaVisualCardSkeleton,
+  LeaderboardSection,
+  LeaderboardSectionSkeleton,
   OverviewCard,
 } from '~components/karma'
 import { NetworkSwitchErrorDialog } from '~components/network-switch-error-dialog'
@@ -39,6 +41,7 @@ function KarmaCardsSkeleton() {
           <KarmaSourceCardSkeleton />
         </div>
       </div>
+      <LeaderboardSectionSkeleton />
     </>
   )
 }
@@ -102,6 +105,7 @@ function KarmaCards() {
           <KarmaStakeCard />
         </div>
       </div>
+      <LeaderboardSection />
     </>
   )
 }

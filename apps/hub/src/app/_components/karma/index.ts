@@ -1,4 +1,6 @@
 export * from './achievement-badges'
+export * from './leaderboard-card'
+export * from './leaderboard-section'
 export * from './overview-card'
 export * from './source-card'
 export * from './stake-card'

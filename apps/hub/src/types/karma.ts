@@ -40,3 +40,24 @@ export interface KarmaSourceData {
   isClaimed?: boolean
   capApiEndpoint?: string
 }
+
+export type LeaderboardEntry = {
+  rank: number
+  address: string
+  displayName: string | null
+  karma: number
+  isCurrentUser?: boolean
+}
+
+export type LeaderboardResponse = {
+  entries: LeaderboardEntry[]
+  updatedAt: string
+}
+
+export type KarmaLeaderboardData = {
+  overall: LeaderboardResponse
+  gainers: LeaderboardResponse
+  surrounding: LeaderboardResponse
+}
+
+export type LeaderboardType = keyof KarmaLeaderboardData

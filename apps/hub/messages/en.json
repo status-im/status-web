@@ -682,6 +682,22 @@
     "stake_card_badge_description": {
       "translation": "Stake STT to level up",
       "notes": "karma::stake_card_badge_description"
+    },
+    "leaderboard": {
+      "translation": "Leaderboard",
+      "notes": "karma::leaderboard"
+    },
+    "leaderboard_overall": {
+      "translation": "Best overall",
+      "notes": "karma::leaderboard_overall"
+    },
+    "leaderboard_gainers": {
+      "translation": "Top gainers for week",
+      "notes": "karma::leaderboard_gainers"
+    },
+    "leaderboard_your_place": {
+      "translation": "Your place",
+      "notes": "karma::leaderboard_your_place"
     }
   },
   "rewards": {
