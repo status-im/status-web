@@ -1,17 +1,24 @@
-import { storage } from '@wxt-dev/storage'
 import { afterEach, beforeEach, expect, test, vi } from 'vitest'
 
-import {
-  notifyTransactionConfirmed,
-  notifyTransactionFailed,
-  notifyTransactionSent,
-} from './notifications'
+// vi.mock is hoisted by Vitest at compile time; placing it here makes the
+// hoisting intent explicit. ESLint rules are suppressed for the lines that
+// follow because the import ordering is intentional.
 
 vi.mock('@wxt-dev/storage', () => ({
   storage: {
     getItem: vi.fn(),
   },
 }))
+
+/* eslint-disable import/first */
+import { storage } from '@wxt-dev/storage'
+
+import {
+  notifyTransactionConfirmed,
+  notifyTransactionFailed,
+  notifyTransactionSent,
+} from './notifications'
+/* eslint-enable import/first */
 
 const storageMock = storage as { getItem: ReturnType<typeof vi.fn> }
 

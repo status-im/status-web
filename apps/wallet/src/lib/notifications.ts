@@ -11,7 +11,7 @@ export async function notifyTransactionSent(
   asset: string,
 ): Promise<void> {
   if (!(await isEnabled())) return
-  chrome.notifications.create({
+  await chrome.notifications.create({
     type: 'basic',
     iconUrl: chrome.runtime.getURL('icons/128.png'),
     title: 'Transaction Sent',
@@ -24,7 +24,7 @@ export async function notifyTransactionConfirmed(
   asset: string,
 ): Promise<void> {
   if (!(await isEnabled())) return
-  chrome.notifications.create({
+  await chrome.notifications.create({
     type: 'basic',
     iconUrl: chrome.runtime.getURL('icons/128.png'),
     title: 'Transaction Confirmed',
@@ -37,7 +37,7 @@ export async function notifyTransactionFailed(
   asset: string,
 ): Promise<void> {
   if (!(await isEnabled())) return
-  chrome.notifications.create({
+  await chrome.notifications.create({
     type: 'basic',
     iconUrl: chrome.runtime.getURL('icons/128.png'),
     title: 'Transaction Failed',
