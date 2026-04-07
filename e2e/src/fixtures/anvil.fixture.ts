@@ -174,6 +174,20 @@ export const test = walletTest.extend<AnvilFixtures>({
       await helper.enableAllVaults()
 
       baseSnapshots = await helper.snapshotBoth()
+
+      const warmupStart = Date.now()
+      await helper.revertBoth(baseSnapshots)
+      console.log(
+        `[anvil-fixture] Warm-up revert: ${Date.now() - warmupStart}ms`,
+      )
+
+      await Promise.all([
+        helper.setEthBalance(10n * 10n ** 18n),
+        helper.setEthBalance(10n * 10n ** 18n, helper.lineaRpc),
+      ])
+      await helper.enableAllVaults()
+      baseSnapshots = await helper.snapshotBoth()
+
       console.log(
         `[anvil-fixture] Initial setup done in ${Date.now() - anvilStart}ms`,
       )

@@ -87,10 +87,15 @@ export interface FundingPreset {
   usds?: bigint
 }
 
+// Module-level slot cache — survives across AnvilRpcHelper instances.
+// Safe with workers: 1. Eliminates 240 RPC calls on fallback revert paths.
+const globalSlotCache = new Map<string, bigint>()
+let globalLineaSlot: bigint | null = null
+
 export class AnvilRpcHelper {
   private rpcIdCounter = 0
-  private lineaTokenBalanceSlot: bigint | null = null
-  private erc20BalanceSlotCache = new Map<string, bigint>()
+  private lineaTokenBalanceSlot: bigint | null = globalLineaSlot
+  private erc20BalanceSlotCache = globalSlotCache
 
   constructor(
     readonly mainnetRpc: string,
@@ -112,7 +117,13 @@ export class AnvilRpcHelper {
    * Returns true if successful.
    */
   async revert(snapshotId: string, rpc?: string): Promise<boolean> {
-    return this.call(rpc ?? this.mainnetRpc, 'evm_revert', [snapshotId])
+    return this.callWithRetry(
+      rpc ?? this.mainnetRpc,
+      'evm_revert',
+      [snapshotId],
+      3,
+      1_000,
+    )
   }
 
   /**
@@ -376,6 +387,7 @@ export class AnvilRpcHelper {
         CONTRACTS.LINEA,
         this.lineaRpc,
       )
+      globalLineaSlot = this.lineaTokenBalanceSlot
     }
 
     await this.setErc20BalanceViaStorage(
