@@ -48,6 +48,10 @@ export const Route = createRootRouteWithContext<{
         throw redirect({ to: '/onboarding' })
       }
 
+      if (location.pathname.startsWith('/settings') && !hasWallets) {
+        throw redirect({ to: '/onboarding' })
+      }
+
       if (location.pathname.startsWith('/onboarding') && hasWallets) {
         throw redirect({ to: '/portfolio/assets' })
       }
@@ -138,7 +142,11 @@ function RootComponent() {
               <WagmiConfigProvider>
                 <PendingTransactionsProvider>
                   <div className="flex min-h-[56px] items-center px-2">
-                    <Navbar hasFeedback linkComponent={Link} />
+                    <Navbar
+                      hasFeedback
+                      linkComponent={Link}
+                      settingsHref="/settings"
+                    />
                   </div>
                   <div className="px-1">
                     <div className="flex-1 flex-col 2md:flex xl:pb-1">
