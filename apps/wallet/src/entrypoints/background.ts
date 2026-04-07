@@ -14,6 +14,9 @@ import { INACTIVITY_ALARM_NAME, lock } from '../data/session'
 import { getWalletCore } from '../data/wallet'
 import { RpcMessage } from '../lib/messages'
 import { handleRpcRequest } from '../lib/rpc-handler'
+import { checkPendingTransactions } from '../lib/tx-monitor'
+
+const TX_MONITOR_ALARM = 'tx-monitor'
 
 export default defineBackground({
   type: 'module',
@@ -41,7 +44,11 @@ export default defineBackground({
 
     chrome.alarms.onAlarm.addListener(alarm => {
       if (alarm.name === INACTIVITY_ALARM_NAME) lock()
+      if (alarm.name === TX_MONITOR_ALARM) void checkPendingTransactions()
     })
+
+    // Create tx monitor alarm (fires every 30 seconds, minimum allowed by Chrome MV3)
+    chrome.alarms.create(TX_MONITOR_ALARM, { periodInMinutes: 0.5 })
 
     chrome.runtime.onInstalled.addListener(() => {
       const extensionUrl = chrome.runtime.getURL('page.html#/onboarding')
