@@ -40,37 +40,51 @@ afterEach(() => {
 })
 
 test('notifyTransactionSent creates notification with correct content', async () => {
-  await notifyTransactionSent('0.1', 'ETH')
+  const result = await notifyTransactionSent('0.1', 'ETH')
   expect(chrome.notifications.create).toHaveBeenCalledWith({
     type: 'basic',
     iconUrl: 'chrome-extension://test/icons/128.png',
     title: 'Transaction Sent',
     message: 'Sending 0.1 ETH…',
   })
+  expect(result).toBe(true)
 })
 
 test('notifyTransactionConfirmed creates notification with correct content', async () => {
-  await notifyTransactionConfirmed('0.5', 'USDC')
+  const result = await notifyTransactionConfirmed('0.5', 'USDC')
   expect(chrome.notifications.create).toHaveBeenCalledWith({
     type: 'basic',
     iconUrl: 'chrome-extension://test/icons/128.png',
     title: 'Transaction Confirmed',
     message: '0.5 USDC sent successfully',
   })
+  expect(result).toBe(true)
 })
 
 test('notifyTransactionFailed creates notification with correct content', async () => {
-  await notifyTransactionFailed('0.1', 'ETH')
+  const result = await notifyTransactionFailed('0.1', 'ETH')
   expect(chrome.notifications.create).toHaveBeenCalledWith({
     type: 'basic',
     iconUrl: 'chrome-extension://test/icons/128.png',
     title: 'Transaction Failed',
     message: '0.1 ETH transaction failed',
   })
+  expect(result).toBe(true)
 })
 
 test('does not create notification when notifications are disabled', async () => {
   storageMock.getItem.mockResolvedValue(false)
-  await notifyTransactionSent('0.1', 'ETH')
+  const result = await notifyTransactionSent('0.1', 'ETH')
   expect(chrome.notifications.create).not.toHaveBeenCalled()
+  expect(result).toBe(false)
+})
+
+test('returns false when chrome.notifications.create throws', async () => {
+  vi.mocked(chrome.notifications.create).mockRejectedValueOnce(
+    new Error('boom'),
+  )
+  const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+  const result = await notifyTransactionSent('0.1', 'ETH')
+  expect(result).toBe(false)
+  warnSpy.mockRestore()
 })

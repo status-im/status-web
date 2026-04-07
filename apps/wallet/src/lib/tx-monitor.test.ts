@@ -12,16 +12,20 @@ vi.mock('./notifications', () => ({
   notifyTransactionFailed: vi.fn(),
 }))
 
-// eslint-disable-next-line import/first
+/* eslint-disable import/first */
 import { storage } from '@wxt-dev/storage'
 
-// eslint-disable-next-line import/first
 import {
   notifyTransactionConfirmed,
   notifyTransactionFailed,
 } from './notifications'
-// eslint-disable-next-line import/first
+import {
+  NOTIFICATIONS_ENABLED_KEY,
+  PENDING_TXS_KEY,
+  TX_NOTIFIED_KEY,
+} from './storage-keys'
 import { checkPendingTransactions } from './tx-monitor'
+/* eslint-enable import/first */
 
 const storageMock = storage as unknown as {
   getItem: ReturnType<typeof vi.fn>
@@ -43,6 +47,8 @@ beforeEach(() => {
   vi.stubGlobal('fetch', vi.fn())
   storageMock.getItem.mockResolvedValue(null)
   storageMock.setItem.mockResolvedValue(undefined)
+  notifyConfirmedMock.mockResolvedValue(true)
+  notifyFailedMock.mockResolvedValue(true)
 })
 
 afterEach(() => {
@@ -59,19 +65,16 @@ test('does nothing when there are no pending transactions', async () => {
 
 test('clears notified list when pending transactions are empty', async () => {
   storageMock.getItem.mockImplementation(async (key: string) => {
-    if (key === 'local:pending-transactions:transactions') return []
+    if (key === PENDING_TXS_KEY) return []
     return null
   })
   await checkPendingTransactions()
-  expect(storageMock.setItem).toHaveBeenCalledWith(
-    'local:tx-monitor:notified',
-    [],
-  )
+  expect(storageMock.setItem).toHaveBeenCalledWith(TX_NOTIFIED_KEY, [])
 })
 
 test('sends confirmed notification when receipt status is 0x1', async () => {
   storageMock.getItem.mockImplementation(async (key: string) => {
-    if (key === 'local:pending-transactions:transactions') return [A_PENDING_TX]
+    if (key === PENDING_TXS_KEY) return [A_PENDING_TX]
     return null
   })
   vi.mocked(fetch).mockResolvedValue({
@@ -81,15 +84,14 @@ test('sends confirmed notification when receipt status is 0x1', async () => {
   await checkPendingTransactions()
 
   expect(notifyConfirmedMock).toHaveBeenCalledWith('0.1', 'ETH')
-  expect(storageMock.setItem).toHaveBeenCalledWith(
-    'local:tx-monitor:notified',
-    ['0xabc123'],
-  )
+  expect(storageMock.setItem).toHaveBeenCalledWith(TX_NOTIFIED_KEY, [
+    '0xabc123',
+  ])
 })
 
 test('sends failed notification when receipt status is 0x0', async () => {
   storageMock.getItem.mockImplementation(async (key: string) => {
-    if (key === 'local:pending-transactions:transactions') return [A_PENDING_TX]
+    if (key === PENDING_TXS_KEY) return [A_PENDING_TX]
     return null
   })
   vi.mocked(fetch).mockResolvedValue({
@@ -103,8 +105,8 @@ test('sends failed notification when receipt status is 0x0', async () => {
 
 test('skips already-notified transactions', async () => {
   storageMock.getItem.mockImplementation(async (key: string) => {
-    if (key === 'local:pending-transactions:transactions') return [A_PENDING_TX]
-    if (key === 'local:tx-monitor:notified') return ['0xabc123']
+    if (key === PENDING_TXS_KEY) return [A_PENDING_TX]
+    if (key === TX_NOTIFIED_KEY) return ['0xabc123']
     return null
   })
 
@@ -116,7 +118,7 @@ test('skips already-notified transactions', async () => {
 
 test('skips tx if receipt is not yet available (null result)', async () => {
   storageMock.getItem.mockImplementation(async (key: string) => {
-    if (key === 'local:pending-transactions:transactions') return [A_PENDING_TX]
+    if (key === PENDING_TXS_KEY) return [A_PENDING_TX]
     return null
   })
   vi.mocked(fetch).mockResolvedValue({
@@ -127,4 +129,17 @@ test('skips tx if receipt is not yet available (null result)', async () => {
 
   expect(notifyConfirmedMock).not.toHaveBeenCalled()
   expect(notifyFailedMock).not.toHaveBeenCalled()
+})
+
+test('does not poll or notify when notifications are disabled', async () => {
+  storageMock.getItem.mockImplementation(async (key: string) => {
+    if (key === NOTIFICATIONS_ENABLED_KEY) return false
+    if (key === PENDING_TXS_KEY) return [A_PENDING_TX]
+    return null
+  })
+
+  await checkPendingTransactions()
+
+  expect(fetch).not.toHaveBeenCalled()
+  expect(notifyConfirmedMock).not.toHaveBeenCalled()
 })

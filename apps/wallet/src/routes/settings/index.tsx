@@ -4,7 +4,7 @@ import { Switch } from '@status-im/components'
 import { createFileRoute } from '@tanstack/react-router'
 import { storage } from '@wxt-dev/storage'
 
-const ENABLED_KEY = 'local:notifications:enabled' as const
+import { NOTIFICATIONS_ENABLED_KEY } from '@/lib/storage-keys'
 
 export const Route = createFileRoute('/settings/')({
   component: SettingsPage,
@@ -15,7 +15,7 @@ function SettingsPage() {
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
-    storage.getItem<boolean>(ENABLED_KEY).then(value => {
+    storage.getItem<boolean>(NOTIFICATIONS_ENABLED_KEY).then(value => {
       setNotificationsEnabled(value ?? true)
       setIsLoaded(true)
     })
@@ -23,7 +23,7 @@ function SettingsPage() {
 
   const handleToggle = async (checked: boolean) => {
     setNotificationsEnabled(checked)
-    await storage.setItem(ENABLED_KEY, checked)
+    await storage.setItem(NOTIFICATIONS_ENABLED_KEY, checked)
   }
 
   if (!isLoaded) return null

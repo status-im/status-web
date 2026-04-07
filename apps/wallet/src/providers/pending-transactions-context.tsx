@@ -11,6 +11,7 @@ type Activity = ApiOutput['activities']['activities']['activities'][0]
 type PendingTransaction = Activity & {
   status: 'pending'
   uniqueId: string
+  displayAmount?: string
 }
 
 type PendingTransactionsContext = {

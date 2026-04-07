@@ -4,23 +4,23 @@ import { getTransactionHash } from '@status-im/wallet/utils'
 import { storage } from '@wxt-dev/storage'
 
 import { notifyTransactionConfirmed } from '../lib/notifications'
+import { TX_NOTIFIED_KEY } from '../lib/storage-keys'
 import { usePendingTransactions } from '../providers/pending-transactions-context'
 
 import type { ApiOutput } from '@status-im/wallet/data'
 
 type Activity = ApiOutput['activities']['activities']['activities'][0]
 
-const NOTIFIED_KEY = 'local:tx-monitor:notified' as const
-
 async function markConfirmed(
   hash: string,
-  amount: number,
+  amount: string,
   asset: string,
 ): Promise<void> {
-  const notified = (await storage.getItem<string[]>(NOTIFIED_KEY)) ?? []
+  const notified = (await storage.getItem<string[]>(TX_NOTIFIED_KEY)) ?? []
   if (notified.includes(hash)) return
-  await storage.setItem(NOTIFIED_KEY, [...notified, hash])
-  await notifyTransactionConfirmed(String(amount), asset)
+  const fired = await notifyTransactionConfirmed(amount, asset)
+  if (!fired) return
+  await storage.setItem(TX_NOTIFIED_KEY, [...notified, hash])
 }
 
 export const usePendingTransactionsCleanup = (activities: Activity[]) => {
@@ -43,7 +43,11 @@ export const usePendingTransactionsCleanup = (activities: Activity[]) => {
       const pendingHash = getTransactionHash(pendingTx.hash)
 
       if (confirmedHashes.has(pendingHash)) {
-        void markConfirmed(pendingHash, pendingTx.value, pendingTx.asset)
+        void markConfirmed(
+          pendingHash,
+          pendingTx.displayAmount ?? String(pendingTx.value),
+          pendingTx.asset,
+        )
         removePendingTransaction(pendingHash)
         return
       }

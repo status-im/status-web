@@ -4,15 +4,19 @@ import {
   notifyTransactionConfirmed,
   notifyTransactionFailed,
 } from './notifications'
+import {
+  NOTIFICATIONS_ENABLED_KEY,
+  PENDING_TXS_KEY,
+  TX_NOTIFIED_KEY,
+} from './storage-keys'
 
-const PENDING_KEY = 'local:pending-transactions:transactions' as const
-const NOTIFIED_KEY = 'local:tx-monitor:notified' as const
 const ETH_RPC_URL = 'https://eth.merkle.io/'
 
 type PendingTx = {
   hash: unknown
   value: number
   asset: string
+  displayAmount?: string
 }
 
 function extractTxHash(hash: unknown): string | null {
@@ -48,14 +52,18 @@ async function fetchReceipt(
 }
 
 export async function checkPendingTransactions(): Promise<void> {
-  const pendingTxs = (await storage.getItem<PendingTx[]>(PENDING_KEY)) ?? []
+  const enabled =
+    (await storage.getItem<boolean>(NOTIFICATIONS_ENABLED_KEY)) ?? true
+  if (!enabled) return
+
+  const pendingTxs = (await storage.getItem<PendingTx[]>(PENDING_TXS_KEY)) ?? []
 
   if (pendingTxs.length === 0) {
-    await storage.setItem(NOTIFIED_KEY, [])
+    await storage.setItem(TX_NOTIFIED_KEY, [])
     return
   }
 
-  const notified = (await storage.getItem<string[]>(NOTIFIED_KEY)) ?? []
+  const notified = (await storage.getItem<string[]>(TX_NOTIFIED_KEY)) ?? []
   const notifiedSet = new Set(notified)
   const newlyNotified: string[] = []
 
@@ -66,19 +74,19 @@ export async function checkPendingTransactions(): Promise<void> {
     const receipt = await fetchReceipt(txHash)
     if (!receipt) continue
 
-    const amount = String(tx.value)
+    const amount = tx.displayAmount ?? String(tx.value)
     const asset = tx.asset ?? 'ETH'
 
     if (receipt.status === '0x1') {
-      await notifyTransactionConfirmed(amount, asset)
-      newlyNotified.push(txHash)
+      const fired = await notifyTransactionConfirmed(amount, asset)
+      if (fired) newlyNotified.push(txHash)
     } else if (receipt.status === '0x0') {
-      await notifyTransactionFailed(amount, asset)
-      newlyNotified.push(txHash)
+      const fired = await notifyTransactionFailed(amount, asset)
+      if (fired) newlyNotified.push(txHash)
     }
   }
 
   if (newlyNotified.length > 0) {
-    await storage.setItem(NOTIFIED_KEY, [...notified, ...newlyNotified])
+    await storage.setItem(TX_NOTIFIED_KEY, [...notified, ...newlyNotified])
   }
 }
