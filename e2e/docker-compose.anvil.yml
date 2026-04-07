@@ -1,22 +1,38 @@
 name: status-web-anvil
 
 services:
+  erpc:
+    image: ghcr.io/erpc/erpc:latest
+    platform: ${DOCKER_PLATFORM:-linux/amd64}
+    volumes:
+      - ./erpc.yaml:/erpc.yaml:ro
+    environment:
+      MAINNET_FORK_URL: ${MAINNET_FORK_URL:-https://ethereum-rpc.publicnode.com}
+      LINEA_FORK_URL: ${LINEA_FORK_URL:-https://rpc.linea.build}
+
   anvil-mainnet:
     image: ghcr.io/foundry-rs/foundry:v1.4.0
     platform: ${DOCKER_PLATFORM:-linux/amd64}
     entrypoint: anvil
+    depends_on:
+      erpc:
+        condition: service_started
+    restart: on-failure
     command:
       - --host=0.0.0.0
       - --port=8545
-      - --fork-url=${MAINNET_FORK_URL:-https://ethereum-rpc.publicnode.com}
+      - --fork-url=http://erpc:4000/main/evm/1
       - --chain-id=1
       - --silent
+      - --timeout=15000
+      - --retries=2
+      - --no-rate-limit
     ports:
       - '${MAINNET_FORK_PORT:-8547}:8545'
     healthcheck:
       test:
         ['CMD', 'cast', 'block-number', '--rpc-url', 'http://localhost:8545']
-      start_period: 5s
+      start_period: 30s
       interval: 2s
       timeout: 5s
       retries: 15
@@ -25,18 +41,25 @@ services:
     image: ghcr.io/foundry-rs/foundry:v1.4.0
     platform: ${DOCKER_PLATFORM:-linux/amd64}
     entrypoint: anvil
+    depends_on:
+      erpc:
+        condition: service_started
+    restart: on-failure
     command:
       - --host=0.0.0.0
       - --port=8545
-      - --fork-url=${LINEA_FORK_URL:-https://rpc.linea.build}
+      - --fork-url=http://erpc:4000/main/evm/59144
       - --chain-id=59144
       - --silent
+      - --timeout=15000
+      - --retries=2
+      - --no-rate-limit
     ports:
       - '${LINEA_FORK_PORT:-8546}:8545'
     healthcheck:
       test:
         ['CMD', 'cast', 'block-number', '--rpc-url', 'http://localhost:8545']
-      start_period: 5s
+      start_period: 30s
       interval: 2s
       timeout: 5s
       retries: 15

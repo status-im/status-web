@@ -117,13 +117,7 @@ export class AnvilRpcHelper {
    * Returns true if successful.
    */
   async revert(snapshotId: string, rpc?: string): Promise<boolean> {
-    return this.callWithRetry(
-      rpc ?? this.mainnetRpc,
-      'evm_revert',
-      [snapshotId],
-      3,
-      1_000,
-    )
+    return this.call(rpc ?? this.mainnetRpc, 'evm_revert', [snapshotId])
   }
 
   /**
