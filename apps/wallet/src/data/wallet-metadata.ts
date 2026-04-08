@@ -13,10 +13,37 @@ export type WalletMeta = {
   id: string
   name: string
   type: 'mnemonic' | 'privateKey'
-  activeAccounts: WalletAccount[]
+  accounts: WalletAccount[]
+  selectedAccountAddress?: string
 }
 
-type MetadataStore = Record<string, WalletMeta>
+type LegacyWalletMeta = {
+  id: string
+  name: string
+  type: 'mnemonic' | 'privateKey'
+  activeAccounts?: WalletAccount[]
+  accounts?: WalletAccount[]
+  selectedAccountAddress?: string
+}
+
+type MetadataStore = Record<string, LegacyWalletMeta>
+
+function normalizeWallet(wallet: LegacyWalletMeta): WalletMeta {
+  const accounts = wallet.accounts ?? wallet.activeAccounts ?? []
+  const selectedAccountAddress = accounts.some(
+    account => account.address === wallet.selectedAccountAddress,
+  )
+    ? wallet.selectedAccountAddress
+    : accounts[0]?.address
+
+  return {
+    id: wallet.id,
+    name: wallet.name,
+    type: wallet.type,
+    accounts,
+    selectedAccountAddress,
+  }
+}
 
 async function getStore(): Promise<MetadataStore> {
   const data = await storage.getItem<string>(VAULT_METADATA_KEY)
@@ -30,17 +57,19 @@ async function setStore(store: MetadataStore): Promise<void> {
 
 export async function getAll(): Promise<WalletMeta[]> {
   const store = await getStore()
-  return Object.values(store)
+  return Object.values(store).map(normalizeWallet)
 }
 
 export async function get(walletId: string): Promise<WalletMeta | null> {
   const store = await getStore()
-  return store[walletId] ?? null
+  const wallet = store[walletId]
+  if (!wallet) return null
+  return normalizeWallet(wallet)
 }
 
 export async function save(wallet: WalletMeta): Promise<void> {
   const store = await getStore()
-  store[wallet.id] = wallet
+  store[wallet.id] = normalizeWallet(wallet)
   await setStore(store)
 }
 
@@ -50,8 +79,11 @@ export async function addAccount(
 ): Promise<void> {
   const wallet = await get(walletId)
   if (!wallet) throw new Error(`Wallet ${walletId} not found`)
-  if (wallet.activeAccounts.some(a => a.address === account.address)) return
-  wallet.activeAccounts.push(account)
+  if (wallet.accounts.some(a => a.address === account.address)) return
+  wallet.accounts.push(account)
+  if (!wallet.selectedAccountAddress) {
+    wallet.selectedAccountAddress = account.address
+  }
   await save(wallet)
 }
 
