@@ -1,5 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { patchAssetsAllWithAnvilBalance } from '@/lib/anvil-balance'
+
 import { useConfigEnv } from './use-config-env'
 
 import type { ApiOutput } from '@status-im/wallet/data'
@@ -51,7 +53,10 @@ const useAssets = (
 
       const body = await response.json()
 
-      return body.result.data.json
+      return await patchAssetsAllWithAnvilBalance(
+        body.result.data.json,
+        address,
+      )
     },
     enabled: !!address && !isWalletLoading,
     staleTime: configEnv.staleTimeMs,

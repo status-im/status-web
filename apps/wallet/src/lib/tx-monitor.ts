@@ -18,23 +18,18 @@ async function fetchReceipt(
   txHash: string,
 ): Promise<{ status: string } | null> {
   try {
-    const url = `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/rpc.proxy`
-    const res = await fetch(url, {
+    const res = await fetch('http://127.0.0.1:8545', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        json: {
-          method: 'eth_getTransactionReceipt',
-          params: [txHash],
-          id: 1,
-          chainId: 1,
-        },
+        jsonrpc: '2.0',
+        method: 'eth_getTransactionReceipt',
+        params: [txHash],
+        id: 1,
       }),
     })
-    const body = (await res.json()) as {
-      result: { data: { json: { result: { status: string } | null } } }
-    }
-    return body.result.data.json.result
+    const json = (await res.json()) as { result: { status: string } | null }
+    return json.result
   } catch {
     return null
   }

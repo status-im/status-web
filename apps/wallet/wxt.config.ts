@@ -23,7 +23,7 @@ export default defineConfig({
     const connectSrc =
       mode === 'production'
         ? `https://status-api-status-im-web.vercel.app/ https://status-api-status-im-web.vercel.app/api/ https://li.quest/ https://registry.npmjs.org/ ${rpcEndpoints}`
-        : `ws: http://localhost:3030/ https://localhost:3030/ https://li.quest/ https://registry.npmjs.org/ ${rpcEndpoints}`
+        : `ws: http://localhost:3030/ https://localhost:3030/ http://127.0.0.1:8545 http://localhost:8545 https://li.quest/ https://registry.npmjs.org/ ${rpcEndpoints}`
 
     return {
       name: '!Status Portfolio Wallet (Beta)',

@@ -242,7 +242,7 @@ const apiRouter = router({
               const id = await ethereum.send({
                 walletCore,
                 walletPrivateKey: privateKey,
-                chainID: '01',
+                chainID: '31337',
                 toAddress: input.toAddress,
                 amount: input.amount,
                 fromAddress: input.fromAddress,
@@ -287,7 +287,7 @@ const apiRouter = router({
               const id = await ethereum.sendErc20({
                 walletCore,
                 walletPrivateKey: privateKey,
-                chainID: '01',
+                chainID: '31337',
                 toAddress: input.toAddress,
                 fromAddress: input.fromAddress,
                 gasLimit: input.gasLimit,
@@ -333,7 +333,7 @@ const apiRouter = router({
               const id = await ethereum.sendContractCall({
                 walletCore,
                 walletPrivateKey: privateKey,
-                chainID: '01',
+                chainID: '31337',
                 toAddress: input.toAddress,
                 fromAddress: input.fromAddress,
                 gasLimit: input.gasLimit,

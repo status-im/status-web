@@ -1,4 +1,9 @@
-import { Interface } from 'ethers'
+import { formatEther, Interface } from 'ethers'
+
+import {
+  patchAssetsAllWithAnvilBalance,
+  patchNativeTokenWithAnvilBalance,
+} from '@/lib/anvil-balance'
 
 import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 
@@ -25,6 +30,7 @@ export type GasFees = {
 }
 
 export const NETWORKS = ['ethereum'] as const
+const ANVIL_RPC_URL = 'http://127.0.0.1:8545'
 
 export const erc20 = new Interface([
   'function transfer(address to, uint256 amount)',
@@ -66,7 +72,23 @@ export async function fetchTrpcData<T>(
   }
 
   const body = await response.json()
-  return body.result.data.json
+  const data = body.result.data.json as T
+
+  if (endpoint === 'assets.all' && typeof params.address === 'string') {
+    return (await patchAssetsAllWithAnvilBalance(
+      data as AssetsResponse,
+      params.address,
+    )) as T
+  }
+
+  if (endpoint === 'assets.nativeToken' && typeof params.address === 'string') {
+    return (await patchNativeTokenWithAnvilBalance(
+      data as ApiOutput['assets']['nativeToken'],
+      params.address,
+    )) as T
+  }
+
+  return data
 }
 
 // Helper function to get token endpoint based on ticker
@@ -143,14 +165,89 @@ export async function fetchGasFees(
 ): Promise<GasFees> {
   const params = buildGasFeeParams(isNative, from, to, value, contractAddress)
 
-  return fetchTrpcData<GasFees>(
-    'nodes.getFeeRate',
-    {
-      network: 'ethereum',
-      params,
+  const [estimateGasResponse, priorityFeeResponse, latestBlockResponse] =
+    await Promise.all([
+      fetch(ANVIL_RPC_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          id: 1,
+          method: 'eth_estimateGas',
+          params: [params],
+        }),
+        cache: 'no-store',
+      }),
+      fetch(ANVIL_RPC_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          id: 2,
+          method: 'eth_maxPriorityFeePerGas',
+          params: [],
+        }),
+        cache: 'no-store',
+      }),
+      fetch(ANVIL_RPC_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          id: 3,
+          method: 'eth_getBlockByNumber',
+          params: ['latest', false],
+        }),
+        cache: 'no-store',
+      }),
+    ])
+
+  if (
+    !estimateGasResponse.ok ||
+    !priorityFeeResponse.ok ||
+    !latestBlockResponse.ok
+  ) {
+    throw new Error('Failed to fetch gas fees')
+  }
+
+  const estimateGasBody = (await estimateGasResponse.json()) as {
+    result?: string
+  }
+  const priorityFeeBody = (await priorityFeeResponse.json()) as {
+    result?: string
+  }
+  const latestBlockBody = (await latestBlockResponse.json()) as {
+    result?: { baseFeePerGas?: string }
+  }
+
+  const gasLimit = BigInt(estimateGasBody.result ?? '0x5208')
+  const maxPriorityFeePerGas = BigInt(priorityFeeBody.result ?? '0x0')
+  const baseFeePerGas = BigInt(latestBlockBody.result?.baseFeePerGas ?? '0x0')
+  const maxFeePerGas =
+    baseFeePerGas > 0n
+      ? baseFeePerGas * 2n + maxPriorityFeePerGas
+      : maxPriorityFeePerGas || 1_500_000_000n
+
+  const maxFeeEth = Number(formatEther(gasLimit * maxFeePerGas))
+
+  return {
+    feeEth: maxFeeEth,
+    feeEur: 0,
+    maxFeeEth,
+    maxFeeEur: 0,
+    confirmationTime: '~1s',
+    txParams: {
+      gasLimit: `0x${gasLimit.toString(16)}`,
+      maxFeePerGas: `0x${maxFeePerGas.toString(16)}`,
+      maxPriorityFeePerGas: `0x${maxPriorityFeePerGas.toString(16)}`,
     },
-    'Failed to fetch gas fees',
-  )
+  }
 }
 
 export function matchesAsset(asset: AssetData, ticker: string): boolean {

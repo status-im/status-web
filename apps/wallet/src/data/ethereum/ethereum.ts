@@ -4,9 +4,7 @@ import { encoder } from '../encoder'
 
 import type { WalletCore } from '@trustwallet/wallet-core'
 
-const BROADCAST_TRANSACTION_URL = new URL(
-  `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/nodes.broadcastTransaction`,
-)
+const ANVIL_RPC_URL = new URL('http://127.0.0.1:8545')
 
 export async function send({
   walletCore,
@@ -66,16 +64,16 @@ export async function send({
   const rawTx = walletCore.HexCoding.encode(output.encoded)
 
   // broadcast
-  const response = await fetch(BROADCAST_TRANSACTION_URL.toString(), {
+  const response = await fetch(ANVIL_RPC_URL.toString(), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      json: {
-        txHex: rawTx,
-        network,
-      },
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'eth_sendRawTransaction',
+      params: [rawTx],
     }),
     cache: 'no-store',
   })
@@ -85,7 +83,7 @@ export async function send({
   }
 
   const body = await response.json()
-  const txid = body.result.data.json
+  const txid = body.result
 
   return {
     txid,
@@ -150,10 +148,15 @@ export async function sendContractCall({
   const output = encoder.Ethereum.Proto.SigningOutput.decode(outputData)
   const rawTx = walletCore.HexCoding.encode(output.encoded)
 
-  const response = await fetch(BROADCAST_TRANSACTION_URL.toString(), {
+  const response = await fetch(ANVIL_RPC_URL.toString(), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ json: { txHex: rawTx, network } }),
+    body: JSON.stringify({
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'eth_sendRawTransaction',
+      params: [rawTx],
+    }),
     cache: 'no-store',
   })
 
@@ -162,7 +165,7 @@ export async function sendContractCall({
   }
 
   const body = await response.json()
-  const txid = body.result.data.json
+  const txid = body.result
 
   return { txid }
 }
@@ -231,16 +234,16 @@ export async function sendErc20({
   const rawTx = walletCore.HexCoding.encode(output.encoded)
 
   // broadcast
-  const response = await fetch(BROADCAST_TRANSACTION_URL.toString(), {
+  const response = await fetch(ANVIL_RPC_URL.toString(), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      json: {
-        txHex: rawTx,
-        network,
-      },
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'eth_sendRawTransaction',
+      params: [rawTx],
     }),
     cache: 'no-store',
   })
@@ -250,7 +253,7 @@ export async function sendErc20({
   }
 
   const body = await response.json()
-  const txid = body.result.data.json
+  const txid = body.result
 
   return {
     txid,
@@ -268,23 +271,18 @@ const padHex = (hexStr: string) => {
 }
 
 // Fetch the nonce for the given address and network
-const fetchNetworkNonce = async (
-  fromAddress: string,
-  network: string,
-): Promise<number> => {
-  const nonceUrl = new URL(
-    `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/nodes.getNonce`,
-  )
-  nonceUrl.searchParams.set(
-    'input',
-    JSON.stringify({ json: { address: fromAddress, network } }),
-  )
-
-  const nonceResponse = await fetch(nonceUrl.toString(), {
-    method: 'GET',
+const fetchNetworkNonce = async (fromAddress: string): Promise<number> => {
+  const nonceResponse = await fetch(ANVIL_RPC_URL.toString(), {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'eth_getTransactionCount',
+      params: [fromAddress, 'pending'],
+    }),
     cache: 'no-store',
   })
 
@@ -293,7 +291,7 @@ const fetchNetworkNonce = async (
   }
 
   const nonceBody = await nonceResponse.json()
-  const hex: string = nonceBody.result.data.json
+  const hex: string = nonceBody.result
   return Number(hex)
 }
 
@@ -307,7 +305,7 @@ const getNonceHex = async (
   network: string,
 ): Promise<string> => {
   const key = `${fromAddress}:${network}`
-  const networkNonce = await fetchNetworkNonce(fromAddress, network)
+  const networkNonce = await fetchNetworkNonce(fromAddress)
   const localNonce = localNonceTracker.get(key) ?? 0
   const nonce = Math.max(networkNonce, localNonce)
 
