@@ -8,19 +8,22 @@ import {
 } from 'react'
 
 import { useQuery } from '@tanstack/react-query'
+import { storage } from '@wxt-dev/storage'
 
 import { useSynchronizedRefetch } from '../hooks/use-synchronized-refetch'
 import { apiClient } from './api-client'
 
-import type { WalletMeta } from '../data/wallet-metadata'
+import type { WalletAccount, WalletMeta } from '../data/wallet-metadata'
 
 const WALLET_LIST_STALE_TIME_MS = 5 * 60 * 1000 // 5 minutes
 const WALLET_LIST_GC_TIME_MS = 60 * 60 * 1000 // 1 hour
+const SELECTED_WALLET_ID_KEY = 'local:wallet:selected-id'
 
 type Wallet = WalletMeta
 
 type WalletContext = {
   currentWallet: Wallet | null
+  currentAccount: WalletAccount | null
   wallets: Wallet[]
   isLoading: boolean
   hasWallets: boolean
@@ -39,6 +42,8 @@ export function useWallet() {
 
 export function WalletProvider({ children }: { children: React.ReactNode }) {
   const [selectedWalletId, setSelectedWalletId] = useState<string | null>(null)
+  const [hasHydratedSelectedWallet, setHasHydratedSelectedWallet] =
+    useState(false)
 
   const { data: wallets = [], isLoading } = useQuery({
     queryKey: ['wallets'],
@@ -62,29 +67,72 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     return wallets[0] || null
   }, [hasWallets, selectedWalletId, wallets])
 
+  const currentAccount = useMemo(() => {
+    if (!currentWallet) return null
+    return currentWallet.accounts[0] ?? null
+  }, [currentWallet])
+
   useEffect(() => {
-    if (hasWallets && !selectedWalletId && wallets[0]) {
+    if (
+      hasWallets &&
+      !selectedWalletId &&
+      wallets[0] &&
+      hasHydratedSelectedWallet
+    ) {
       setSelectedWalletId(wallets[0].id)
     }
-  }, [hasWallets, selectedWalletId, wallets])
+  }, [hasHydratedSelectedWallet, hasWallets, selectedWalletId, wallets])
 
-  const setCurrentWallet = useCallback(
-    (id: string) => {
-      const walletExists = wallets.some(w => w.id === id)
-      if (walletExists) {
-        setSelectedWalletId(id)
-      } else {
-        console.error(`Wallet with id ${id} not found`)
+  useEffect(() => {
+    let isCancelled = false
+
+    async function hydrateSelectedWallet() {
+      const persistedSelectedWalletId = await storage.getItem<string>(
+        SELECTED_WALLET_ID_KEY,
+      )
+      if (isCancelled) return
+      if (persistedSelectedWalletId) {
+        setSelectedWalletId(persistedSelectedWalletId)
       }
-    },
-    [wallets],
-  )
+      setHasHydratedSelectedWallet(true)
+    }
+
+    hydrateSelectedWallet().catch(error => {
+      console.error('Failed to hydrate selected wallet id:', error)
+      setHasHydratedSelectedWallet(true)
+    })
+
+    return () => {
+      isCancelled = true
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!hasHydratedSelectedWallet) return
+
+    const persistSelectedWallet = async () => {
+      if (selectedWalletId) {
+        await storage.setItem(SELECTED_WALLET_ID_KEY, selectedWalletId)
+        return
+      }
+      await storage.removeItem(SELECTED_WALLET_ID_KEY)
+    }
+
+    persistSelectedWallet().catch(error =>
+      console.error('Failed to persist selected wallet id:', error),
+    )
+  }, [hasHydratedSelectedWallet, selectedWalletId])
+
+  const setCurrentWallet = useCallback((id: string) => {
+    setSelectedWalletId(id)
+  }, [])
 
   // Auto-refresh
-  useSynchronizedRefetch(currentWallet?.activeAccounts[0]?.address ?? '')
+  useSynchronizedRefetch(currentAccount?.address ?? '')
 
   const contextValue: WalletContext = {
     currentWallet,
+    currentAccount,
     wallets,
     isLoading,
     hasWallets,
