@@ -203,16 +203,31 @@ export class NotificationPage {
   }
 
   private async waitForConfirmablePopupPage(timeout: number): Promise<Page> {
-    const deadline = Date.now() + timeout
+    const t0 = Date.now()
+    const deadline = t0 + timeout
     let openedFallbackPage = false
+    let iterCount = 0
+    let lastLog = t0
 
     while (Date.now() < deadline) {
-      for (const p of this.context.pages()) {
-        if (!this.isMetaMaskPopup(p) || p.isClosed()) continue
+      iterCount++
+      const popups = this.context
+        .pages()
+        .filter(p => this.isMetaMaskPopup(p) && !p.isClosed())
+
+      for (const p of popups) {
         const hasConfirm = await this.confirmButton(p)
           .isVisible({ timeout: NOTIFICATION_TIMEOUTS.DOM_SETTLE })
           .catch(() => false)
         if (hasConfirm) return p
+      }
+
+      // Log every 5s with current state
+      if (Date.now() - lastLog > 5000) {
+        console.log(
+          `[waitConfirmable +${Date.now() - t0}ms] iters=${iterCount} popups=${popups.length} fallbackOpened=${openedFallbackPage}`,
+        )
+        lastLog = Date.now()
       }
 
       if (!openedFallbackPage) {
@@ -224,6 +239,9 @@ export class NotificationPage {
           })
           .catch(() => {})
         openedFallbackPage = true
+        console.log(
+          `[waitConfirmable +${Date.now() - t0}ms] opened fallback page`,
+        )
       }
 
       await new Promise(resolve =>

@@ -45,6 +45,7 @@ export async function launchMetaMaskContext(
 
   const profileDir = fs.mkdtempSync(path.join(os.tmpdir(), 'pw-metamask-'))
 
+  const launchStart = Date.now()
   const context = await chromium.launchPersistentContext(profileDir, {
     headless: false,
     args: [
@@ -56,6 +57,9 @@ export async function launchMetaMaskContext(
     ],
     viewport: { width: VIEWPORT.WIDTH, height: VIEWPORT.HEIGHT },
   })
+  console.log(
+    `[metamask-fixture] Browser launched in ${Date.now() - launchStart}ms`,
+  )
 
   await use(context)
 
