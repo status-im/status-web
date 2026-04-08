@@ -29,18 +29,18 @@ export async function writeStatusNetworkContract(
       Account
     >
 
-    const { priorityFeePerGas } = await estimateGas(
+    const { baseFeePerGas, priorityFeePerGas } = await estimateGas(
       client,
       simulation.request as Parameters<typeof estimateGas>[1]
     )
 
-    simulation.request = {
-      ...simulation.request,
+    Object.assign(simulation.request, {
+      baseFeePerGas,
       maxFeePerGas: priorityFeePerGas,
       maxPriorityFeePerGas: priorityFeePerGas,
-    } as typeof simulation.request
-  } catch {
-    // If linea_estimateGas fails, proceed without overriding gas fields
+    })
+  } catch (error) {
+    console.error('Failed filling tx using linea_estimateGas', error)
   }
 
   return writeContract(
