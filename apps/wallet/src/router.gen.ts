@@ -9,9 +9,12 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WalletFlowLayoutRouteImport } from './routes/wallet-flow/_layout'
 import { Route as OnboardingLayoutRouteImport } from './routes/onboarding/_layout'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as OnboardingIndexRouteImport } from './routes/onboarding/index'
+import { Route as WalletFlowNewRouteImport } from './routes/wallet-flow/new'
+import { Route as WalletFlowImportRouteImport } from './routes/wallet-flow/import'
 import { Route as OnboardingNewRouteImport } from './routes/onboarding/new'
 import { Route as OnboardingImportRouteImport } from './routes/onboarding/import'
 import { Route as PortfolioCollectiblesIndexRouteImport } from './routes/portfolio/collectibles/index'
@@ -20,6 +23,11 @@ import { Route as PortfolioActivityIndexRouteImport } from './routes/portfolio/a
 import { Route as PortfolioAssetsTickerRouteImport } from './routes/portfolio/assets/$ticker'
 import { Route as PortfolioCollectiblesNetworkContractIdRouteImport } from './routes/portfolio/collectibles/$network/$contract/$id'
 
+const WalletFlowLayoutRoute = WalletFlowLayoutRouteImport.update({
+  id: '/wallet-flow',
+  path: '/wallet-flow',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OnboardingLayoutRoute = OnboardingLayoutRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
@@ -34,6 +42,16 @@ const OnboardingIndexRoute = OnboardingIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => OnboardingLayoutRoute,
+} as any)
+const WalletFlowNewRoute = WalletFlowNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => WalletFlowLayoutRoute,
+} as any)
+const WalletFlowImportRoute = WalletFlowImportRouteImport.update({
+  id: '/import',
+  path: '/import',
+  getParentRoute: () => WalletFlowLayoutRoute,
 } as any)
 const OnboardingNewRoute = OnboardingNewRouteImport.update({
   id: '/new',
@@ -76,8 +94,11 @@ const PortfolioCollectiblesNetworkContractIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/onboarding': typeof OnboardingLayoutRouteWithChildren
+  '/wallet-flow': typeof WalletFlowLayoutRouteWithChildren
   '/onboarding/import': typeof OnboardingImportRoute
   '/onboarding/new': typeof OnboardingNewRoute
+  '/wallet-flow/import': typeof WalletFlowImportRoute
+  '/wallet-flow/new': typeof WalletFlowNewRoute
   '/onboarding/': typeof OnboardingIndexRoute
   '/portfolio/assets/$ticker': typeof PortfolioAssetsTickerRoute
   '/portfolio/activity': typeof PortfolioActivityIndexRoute
@@ -87,8 +108,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/wallet-flow': typeof WalletFlowLayoutRouteWithChildren
   '/onboarding/import': typeof OnboardingImportRoute
   '/onboarding/new': typeof OnboardingNewRoute
+  '/wallet-flow/import': typeof WalletFlowImportRoute
+  '/wallet-flow/new': typeof WalletFlowNewRoute
   '/onboarding': typeof OnboardingIndexRoute
   '/portfolio/assets/$ticker': typeof PortfolioAssetsTickerRoute
   '/portfolio/activity': typeof PortfolioActivityIndexRoute
@@ -100,8 +124,11 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/onboarding': typeof OnboardingLayoutRouteWithChildren
+  '/wallet-flow': typeof WalletFlowLayoutRouteWithChildren
   '/onboarding/import': typeof OnboardingImportRoute
   '/onboarding/new': typeof OnboardingNewRoute
+  '/wallet-flow/import': typeof WalletFlowImportRoute
+  '/wallet-flow/new': typeof WalletFlowNewRoute
   '/onboarding/': typeof OnboardingIndexRoute
   '/portfolio/assets/$ticker': typeof PortfolioAssetsTickerRoute
   '/portfolio/activity/': typeof PortfolioActivityIndexRoute
@@ -114,8 +141,11 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/onboarding'
+    | '/wallet-flow'
     | '/onboarding/import'
     | '/onboarding/new'
+    | '/wallet-flow/import'
+    | '/wallet-flow/new'
     | '/onboarding/'
     | '/portfolio/assets/$ticker'
     | '/portfolio/activity'
@@ -125,8 +155,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/wallet-flow'
     | '/onboarding/import'
     | '/onboarding/new'
+    | '/wallet-flow/import'
+    | '/wallet-flow/new'
     | '/onboarding'
     | '/portfolio/assets/$ticker'
     | '/portfolio/activity'
@@ -137,8 +170,11 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/onboarding'
+    | '/wallet-flow'
     | '/onboarding/import'
     | '/onboarding/new'
+    | '/wallet-flow/import'
+    | '/wallet-flow/new'
     | '/onboarding/'
     | '/portfolio/assets/$ticker'
     | '/portfolio/activity/'
@@ -150,6 +186,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   OnboardingLayoutRoute: typeof OnboardingLayoutRouteWithChildren
+  WalletFlowLayoutRoute: typeof WalletFlowLayoutRouteWithChildren
   PortfolioAssetsTickerRoute: typeof PortfolioAssetsTickerRoute
   PortfolioActivityIndexRoute: typeof PortfolioActivityIndexRoute
   PortfolioAssetsIndexRoute: typeof PortfolioAssetsIndexRoute
@@ -159,6 +196,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wallet-flow': {
+      id: '/wallet-flow'
+      path: '/wallet-flow'
+      fullPath: '/wallet-flow'
+      preLoaderRoute: typeof WalletFlowLayoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/onboarding': {
       id: '/onboarding'
       path: '/onboarding'
@@ -179,6 +223,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/onboarding/'
       preLoaderRoute: typeof OnboardingIndexRouteImport
       parentRoute: typeof OnboardingLayoutRoute
+    }
+    '/wallet-flow/new': {
+      id: '/wallet-flow/new'
+      path: '/new'
+      fullPath: '/wallet-flow/new'
+      preLoaderRoute: typeof WalletFlowNewRouteImport
+      parentRoute: typeof WalletFlowLayoutRoute
+    }
+    '/wallet-flow/import': {
+      id: '/wallet-flow/import'
+      path: '/import'
+      fullPath: '/wallet-flow/import'
+      preLoaderRoute: typeof WalletFlowImportRouteImport
+      parentRoute: typeof WalletFlowLayoutRoute
     }
     '/onboarding/new': {
       id: '/onboarding/new'
@@ -247,9 +305,23 @@ const OnboardingLayoutRouteChildren: OnboardingLayoutRouteChildren = {
 const OnboardingLayoutRouteWithChildren =
   OnboardingLayoutRoute._addFileChildren(OnboardingLayoutRouteChildren)
 
+interface WalletFlowLayoutRouteChildren {
+  WalletFlowImportRoute: typeof WalletFlowImportRoute
+  WalletFlowNewRoute: typeof WalletFlowNewRoute
+}
+
+const WalletFlowLayoutRouteChildren: WalletFlowLayoutRouteChildren = {
+  WalletFlowImportRoute: WalletFlowImportRoute,
+  WalletFlowNewRoute: WalletFlowNewRoute,
+}
+
+const WalletFlowLayoutRouteWithChildren =
+  WalletFlowLayoutRoute._addFileChildren(WalletFlowLayoutRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   OnboardingLayoutRoute: OnboardingLayoutRouteWithChildren,
+  WalletFlowLayoutRoute: WalletFlowLayoutRouteWithChildren,
   PortfolioAssetsTickerRoute: PortfolioAssetsTickerRoute,
   PortfolioActivityIndexRoute: PortfolioActivityIndexRoute,
   PortfolioAssetsIndexRoute: PortfolioAssetsIndexRoute,
