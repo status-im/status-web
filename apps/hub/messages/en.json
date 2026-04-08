@@ -316,6 +316,10 @@
         "translation": "All",
         "notes": "discover::tabs::all"
       }
+    },
+    "migration_in_progress": {
+      "translation": "Migration in progress",
+      "notes": "discover::migration_in_progress"
     }
   },
   "stake": {

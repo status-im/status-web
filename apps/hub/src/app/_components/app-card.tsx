@@ -113,7 +113,7 @@ function AppCard(props: Props) {
               }}
             >
               <span className="flex overflow-hidden px-2 py-1 text-center text-13 font-500 text-purple">
-                Migration in progress
+                {t('discover.migration_in_progress')}
               </span>
             </span>
             <span className="rounded-20 border bg-white-90">
