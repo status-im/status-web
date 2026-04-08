@@ -1,5 +1,5 @@
 ---
-"hub": patch
+'hub': patch
 ---
 
 rename APY to APR

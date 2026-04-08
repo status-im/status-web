@@ -7,6 +7,7 @@ packages:
   - 'packages/components'
   - 'packages/status-network'
   - 'packages/wallet'
+  - 'packages/ethereum-provider'
   - 'packages/community-contracts'
   - 'apps/community-dapp'
   - 'apps/hub'

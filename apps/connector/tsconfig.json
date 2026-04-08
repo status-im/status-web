@@ -16,5 +16,8 @@
     {
       "path": "../../packages/colors",
     },
+    {
+      "path": "../../packages/ethereum-provider",
+    },
   ],
 }
