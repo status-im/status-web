@@ -174,9 +174,9 @@ const HeaderRightSlot = () => {
 
 const MainContentBody = () => {
   const { account, isLoading } = usePortfolio()
-  const { currentWallet, isLoading: isWalletLoading } = useWallet()
+  const { currentAccount, isLoading: isWalletLoading } = useWallet()
 
-  const address = currentWallet?.activeAccounts[0].address
+  const address = currentAccount?.address
 
   if (isLoading || isWalletLoading) {
     return (

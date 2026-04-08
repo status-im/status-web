@@ -9,22 +9,25 @@ const DEFAULT_SUMMARY = {
 }
 
 const MOCK_ACCOUNT = {
-  name: 'Account 1',
   emoji: '🍑',
   color: 'magenta',
 }
 
 const usePortfolio = () => {
-  const { currentWallet, isLoading: isWalletLoading } = useWallet()
+  const {
+    currentWallet,
+    currentAccount,
+    isLoading: isWalletLoading,
+  } = useWallet()
 
   const { data: assetsData, isLoading: isAssetsLoading } = useAssets({
-    address: currentWallet?.activeAccounts[0]?.address,
+    address: currentAccount?.address,
     isWalletLoading,
   })
 
   const account = {
     ...MOCK_ACCOUNT,
-    name: currentWallet?.name || MOCK_ACCOUNT.name,
+    name: 'Account 1',
   }
 
   const summary = assetsData?.summary || DEFAULT_SUMMARY

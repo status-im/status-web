@@ -37,12 +37,12 @@ export function useWalletSigner() {
 }
 
 export function SignerProvider({ children }: { children: React.ReactNode }) {
-  const { currentWallet } = useWallet()
+  const { currentWallet, currentAccount } = useWallet()
   const { hasActiveSession, requestPassword, clearSession } = usePassword()
 
   const address = useMemo(() => {
-    return currentWallet?.activeAccounts[0]?.address as Address | undefined
-  }, [currentWallet])
+    return currentAccount?.address as Address | undefined
+  }, [currentAccount])
 
   const unlock = useCallback(async (): Promise<boolean> => {
     if (!currentWallet?.id) return false

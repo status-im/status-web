@@ -22,12 +22,16 @@ export const Route = createFileRoute('/portfolio/assets/')({
 })
 
 function Component() {
-  const { currentWallet, isLoading: isWalletLoading } = useWallet()
+  const {
+    currentWallet,
+    currentAccount,
+    isLoading: isWalletLoading,
+  } = useWallet()
   const { isPinExtension, handleClose } = usePinExtension()
 
   const toast = useToast()
 
-  const address = currentWallet?.activeAccounts?.[0]?.address
+  const address = currentAccount?.address
 
   const router = useRouter()
   const { data, isLoading, isError } = useAssets({
