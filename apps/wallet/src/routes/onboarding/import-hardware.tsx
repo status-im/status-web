@@ -1,11 +1,12 @@
-import { useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { parseConnection } from '@qrkit/core'
-import { useQRScanner } from '@qrkit/react'
+import { useURDecoder } from '@qrkit/react'
 import { Button, Input, Text } from '@status-im/components'
 import { ArrowLeftIcon } from '@status-im/icons/20'
 import { useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import jsQR from 'jsqr'
 
 import { useImportHardwareWallet } from '../../hooks/use-import-hardware-wallet'
 
@@ -18,24 +19,26 @@ export const Route = createFileRoute('/onboarding/import-hardware')({
 /**
  * Hardware-wallet onboarding flow.
  *
- * Reads an animated BC-UR QR via @qrkit/react's useQRScanner, assembles the
- * fragments internally, parses the resulting CBOR via @qrkit/core's
- * `parseConnection`, and stores the resulting account(s) as a watch-only
- * wallet. Compatible with any ERC-4527 air-gapped device (Keystone, AirGap
- * Vault, NGRAVE, GapSign, etc.). The signing flow is not implemented yet —
- * `getSigningKey` throws `WALLET_IS_WATCH_ONLY` for these wallets.
+ * Reads an animated BC-UR QR via jsQR + @qrkit/react's useURDecoder, parses
+ * the resulting CBOR via @qrkit/core's `parseConnection`, and stores the
+ * resulting account(s) as a watch-only wallet. Compatible with any ERC-4527
+ * air-gapped device (Keystone, AirGap Vault, NGRAVE, GapSign, etc.). The
+ * signing flow is not implemented yet — `getSigningKey` throws
+ * `WALLET_IS_WATCH_ONLY` for these wallets.
  */
 function RouteComponent() {
   const [accounts, setAccounts] = useState<Account[]>([])
   const [selected, setSelected] = useState<Account | null>(null)
+  const accountToConfirm =
+    selected ?? (accounts.length === 1 ? accounts[0] : null)
 
-  if (selected) {
+  if (accountToConfirm) {
     return (
       <Confirm
-        account={selected}
+        account={accountToConfirm}
         onBack={() => {
           setSelected(null)
-          if (accounts.length > 1) return // go back to account select
+          if (accounts.length > 1) return
           setAccounts([])
         }}
       />
@@ -60,16 +63,22 @@ function ScannerScreen({
 }: {
   onAccounts: (accounts: Account[]) => void
 }) {
+  const videoRef = useRef<HTMLVideoElement>(null)
   const onAccountsRef = useRef(onAccounts)
   onAccountsRef.current = onAccounts
 
   const [error, setError] = useState<string | null>(null)
 
-  const { videoRef, progress } = useQRScanner({
-    onScan: (result: ScannedUR | string): boolean => {
-      if (typeof result === 'string') return false
+  const { receivePart, progress } = useURDecoder({
+    onScan: useCallback((result: ScannedUR | string) => {
+      if (typeof result === 'string') {
+        console.log('[QR] onScan: plain string (not UR), ignoring')
+        return false
+      }
+      console.log('[QR] onScan: ScannedUR assembled, type=', result.type)
       try {
         const found = parseConnection(result, { chains: ['evm'] })
+        console.log('[QR] parseConnection returned', found.length, 'accounts')
         if (found.length === 0) {
           setError('No EVM account found in scanned QR.')
           return false
@@ -77,11 +86,97 @@ function ScannerScreen({
         onAccountsRef.current(found)
         return true
       } catch (e) {
+        console.error('[QR] parseConnection threw:', e)
         setError(`Parse error: ${(e as Error).message}`)
         return false
       }
-    },
+    }, []),
   })
+  const receivePartRef = useRef(receivePart)
+  receivePartRef.current = receivePart
+
+  useEffect(() => {
+    let stream: MediaStream | null = null
+    let raf: number | null = null
+    let done = false
+    const canvas = document.createElement('canvas')
+    const video = videoRef.current
+
+    console.log('[QR] effect mounted')
+
+    const processFrame = (): void => {
+      if (!video || done) return
+
+      if (video.readyState === video.HAVE_ENOUGH_DATA) {
+        const ctx = canvas.getContext('2d', { willReadFrequently: true })
+        if (!ctx) {
+          console.error('[QR] could not get 2D canvas context')
+          setError('Could not get 2D canvas context')
+          return
+        }
+        canvas.width = video.videoWidth
+        canvas.height = video.videoHeight
+        ctx.drawImage(video, 0, 0)
+
+        let imageData: ImageData
+        try {
+          imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+        } catch (e) {
+          console.error('[QR] getImageData blocked:', e)
+          setError(
+            'Canvas access blocked. Disable fingerprinting protection for this site to scan QR codes.',
+          )
+          return
+        }
+
+        const code = jsQR(imageData.data, imageData.width, imageData.height)
+        if (code) {
+          console.log('[QR] jsQR decoded:', code.data.slice(0, 80))
+          let finished = false
+          try {
+            finished = receivePartRef.current(code.data)
+            console.log('[QR] receivePart result:', finished)
+          } catch (e) {
+            console.error('[QR] receivePart threw:', e)
+          }
+          if (finished) {
+            done = true
+            return
+          }
+        }
+      }
+
+      raf = requestAnimationFrame(processFrame)
+    }
+
+    navigator.mediaDevices
+      .getUserMedia({ video: { facingMode: 'environment' } })
+      .then(s => {
+        console.log('[QR] camera stream acquired')
+        stream = s
+        if (!video) {
+          console.warn('[QR] videoRef is null after stream acquired')
+          return
+        }
+        video.srcObject = stream
+        video.play().catch(e => console.error('[QR] play() failed:', e))
+        raf = requestAnimationFrame(processFrame)
+      })
+      .catch((e: Error) => {
+        console.error('[QR] getUserMedia failed:', e)
+        setError(`Camera error: ${e.name}: ${e.message}`)
+      })
+
+    return () => {
+      console.log('[QR] effect cleanup')
+      done = true
+      if (raf !== null) cancelAnimationFrame(raf)
+      stream?.getTracks().forEach(t => t.stop())
+      if (video) {
+        video.srcObject = null
+      }
+    }
+  }, [])
 
   return (
     <div className="flex flex-1 flex-col gap-1">
@@ -187,10 +282,7 @@ function Confirm({
     try {
       await importHardwareWalletAsync({
         name,
-        vendor:
-          account.chain === 'evm'
-            ? account.device ?? 'air-gapped'
-            : 'air-gapped',
+        vendor: 'air-gapped',
         address: account.address,
         publicKey: account.publicKey,
         sourceFingerprint:
