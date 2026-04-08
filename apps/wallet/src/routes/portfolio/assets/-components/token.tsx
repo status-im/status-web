@@ -357,12 +357,12 @@ const Token = (props: Props) => {
         throw new Error('Transaction hash not found')
       }
 
-      void notifyTransactionSent(
+      await notifyTransactionSent(
         formData.amount,
         finalTokenDetail.summary.symbol,
       )
 
-      addPendingTransaction({
+      await addPendingTransaction({
         hash: txHash,
         from: address,
         to: formData.to,
@@ -422,12 +422,12 @@ const Token = (props: Props) => {
         throw new Error('Transaction hash not found')
       }
 
-      void notifyTransactionSent(
+      await notifyTransactionSent(
         formData.amount,
         finalTokenDetail.summary.symbol,
       )
 
-      addPendingTransaction({
+      await addPendingTransaction({
         hash: txHash,
         from: address,
         to: formData.to,

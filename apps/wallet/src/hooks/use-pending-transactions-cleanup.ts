@@ -48,7 +48,7 @@ export const usePendingTransactionsCleanup = (activities: Activity[]) => {
           pendingTx.displayAmount ?? String(pendingTx.value),
           pendingTx.asset,
         )
-        removePendingTransaction(pendingHash)
+        void removePendingTransaction(pendingHash)
         return
       }
 
@@ -56,7 +56,7 @@ export const usePendingTransactionsCleanup = (activities: Activity[]) => {
       if (timestamp) {
         const txTime = new Date(timestamp).getTime()
         if (!isNaN(txTime) && now - txTime > TEN_MINUTES_MS) {
-          removePendingTransaction(pendingHash)
+          void removePendingTransaction(pendingHash)
         }
       }
     })

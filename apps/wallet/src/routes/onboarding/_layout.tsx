@@ -1,7 +1,7 @@
 import { BlurredCircle } from '@status-im/wallet/components'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/onboarding/_layout')({
+export const Route = createFileRoute('/onboarding')({
   component: RouteComponent,
 })
 
