@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 
-import { Avatar, Skeleton } from '@status-im/components'
+import { Skeleton } from '@status-im/components'
 import {
   Balance,
   StickyHeaderContainer,
@@ -12,6 +12,7 @@ import { useWallet } from '@/providers/wallet-context'
 
 import { ActionButtons } from '../components/action-buttons'
 import { RecoveryPhraseBackup } from '../components/recovery-phrase-backup'
+import { WalletAccountSelector } from '../components/wallet-account-selector'
 import {
   AccountSkeleton,
   ActionButtonsSkeleton,
@@ -97,20 +98,8 @@ const AccountInfo = () => {
   }
 
   return (
-    <div
-      className="hidden items-center gap-1.5 xl:flex"
-      data-customisation={account.color}
-    >
-      <Avatar
-        type="account"
-        name={account.name}
-        emoji={account.emoji}
-        size="24"
-        bgOpacity="20"
-      />
-      <div className="text-15 font-semibold text-neutral-100">
-        {account.name}
-      </div>
+    <div data-customisation={account.color}>
+      <WalletAccountSelector />
     </div>
   )
 }
