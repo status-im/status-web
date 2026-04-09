@@ -51,7 +51,10 @@ export async function checkPendingTransactions(): Promise<void> {
   const pendingTxs = (await storage.getItem<PendingTx[]>(PENDING_TXS_KEY)) ?? []
 
   if (pendingTxs.length === 0) {
-    await storage.setItem(TX_NOTIFIED_KEY, [])
+    const notified = await storage.getItem<string[]>(TX_NOTIFIED_KEY)
+    if (Array.isArray(notified) && notified.length > 0) {
+      await storage.setItem(TX_NOTIFIED_KEY, [])
+    }
     return
   }
 

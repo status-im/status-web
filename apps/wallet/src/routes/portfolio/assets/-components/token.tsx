@@ -362,7 +362,7 @@ const Token = (props: Props) => {
         finalTokenDetail.summary.symbol,
       )
 
-      await addPendingTransaction({
+      addPendingTransaction({
         hash: txHash,
         from: address,
         to: formData.to,
@@ -427,7 +427,7 @@ const Token = (props: Props) => {
         finalTokenDetail.summary.symbol,
       )
 
-      await addPendingTransaction({
+      addPendingTransaction({
         hash: txHash,
         from: address,
         to: formData.to,

@@ -17,10 +17,18 @@ function SettingsPage() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    storage.getItem<boolean>(NOTIFICATIONS_ENABLED_KEY).then(value => {
-      setNotificationsEnabled(value ?? true)
-      setIsLoaded(true)
-    })
+    storage
+      .getItem<boolean>(NOTIFICATIONS_ENABLED_KEY)
+      .then(value => {
+        setNotificationsEnabled(value ?? true)
+      })
+      .catch(error => {
+        console.error('Failed to load notification setting', error)
+        setNotificationsEnabled(true)
+      })
+      .finally(() => {
+        setIsLoaded(true)
+      })
   }, [])
 
   const handleToggle = async (checked: boolean) => {

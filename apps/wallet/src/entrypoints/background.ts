@@ -44,7 +44,11 @@ export default defineBackground({
 
     chrome.alarms.onAlarm.addListener(alarm => {
       if (alarm.name === INACTIVITY_ALARM_NAME) lock()
-      if (alarm.name === TX_MONITOR_ALARM) void checkPendingTransactions()
+      if (alarm.name === TX_MONITOR_ALARM) {
+        void checkPendingTransactions().catch(error => {
+          console.error('Failed to check pending transactions', error)
+        })
+      }
     })
 
     // Create tx monitor alarm (fires every 30 seconds, minimum allowed by Chrome MV3)

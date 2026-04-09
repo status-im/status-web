@@ -5,12 +5,11 @@ import { SettingsIcon } from '@status-im/icons/20'
 import { FeedbackPopover } from '../feedback'
 import { Logo } from '../logo'
 
-import type { ReactNode } from 'react'
+import type { AnchorHTMLAttributes, ReactNode } from 'react'
 
-type LinkComponentProps = {
+type LinkComponentProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   href: string
   children: ReactNode
-  className?: string
 }
 
 type Props = {
@@ -42,6 +41,8 @@ const Navbar = (props: Props) => {
         {props.settingsHref && (
           <LinkComponent
             href={props.settingsHref}
+            aria-label="Settings"
+            title="Settings"
             className="opacity-40 hover:opacity-100 flex h-8 w-8 items-center justify-center rounded-10 text-white-100 transition-opacity"
           >
             <SettingsIcon />

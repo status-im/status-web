@@ -3,15 +3,20 @@ import { storage } from '@wxt-dev/storage'
 import { NOTIFICATIONS_ENABLED_KEY } from './storage-keys'
 
 async function isEnabled(): Promise<boolean> {
-  return (await storage.getItem<boolean>(NOTIFICATIONS_ENABLED_KEY)) ?? true
+  try {
+    return (await storage.getItem<boolean>(NOTIFICATIONS_ENABLED_KEY)) ?? true
+  } catch (error) {
+    console.warn('Failed to read notification setting', error)
+    return true
+  }
 }
 
 export async function notifyTransactionSent(
   amount: string,
   asset: string,
 ): Promise<boolean> {
-  if (!(await isEnabled())) return false
   try {
+    if (!(await isEnabled())) return false
     await chrome.notifications.create({
       type: 'basic',
       iconUrl: chrome.runtime.getURL('icons/128.png'),
@@ -29,8 +34,8 @@ export async function notifyTransactionConfirmed(
   amount: string,
   asset: string,
 ): Promise<boolean> {
-  if (!(await isEnabled())) return false
   try {
+    if (!(await isEnabled())) return false
     await chrome.notifications.create({
       type: 'basic',
       iconUrl: chrome.runtime.getURL('icons/128.png'),
@@ -48,8 +53,8 @@ export async function notifyTransactionFailed(
   amount: string,
   asset: string,
 ): Promise<boolean> {
-  if (!(await isEnabled())) return false
   try {
+    if (!(await isEnabled())) return false
     await chrome.notifications.create({
       type: 'basic',
       iconUrl: chrome.runtime.getURL('icons/128.png'),

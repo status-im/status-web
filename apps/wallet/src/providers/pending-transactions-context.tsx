@@ -18,9 +18,9 @@ type PendingTransactionsContext = {
   pendingTransactions: PendingTransaction[]
   addPendingTransaction: (
     transaction: Omit<PendingTransaction, 'uniqueId'>,
-  ) => Promise<void>
-  removePendingTransaction: (hash: string) => Promise<void>
-  clearPendingTransactions: () => Promise<void>
+  ) => void
+  removePendingTransaction: (hash: string) => void
+  clearPendingTransactions: () => void
   isLoading: boolean
 }
 
@@ -76,7 +76,7 @@ export function PendingTransactionsProvider({
     })
   }, [pendingTransactions, storage, isLoading])
 
-  const addPendingTransaction = async (
+  const addPendingTransaction = (
     transaction: Omit<PendingTransaction, 'uniqueId'>,
   ) => {
     const newTransaction: PendingTransaction = {
@@ -87,13 +87,13 @@ export function PendingTransactionsProvider({
     setPendingTransactions(prev => [...prev, newTransaction])
   }
 
-  const removePendingTransaction = async (hash: string) => {
+  const removePendingTransaction = (hash: string) => {
     setPendingTransactions(prev =>
       prev.filter(tx => getTransactionHash(tx.hash) !== hash),
     )
   }
 
-  const clearPendingTransactions = async () => {
+  const clearPendingTransactions = () => {
     setPendingTransactions([])
   }
 
