@@ -22,8 +22,12 @@ const LeaderboardSectionSkeleton = () => {
 
 const LeaderboardSection = () => {
   const t = useTranslations()
-  const { address } = useAccount()
+  const { address, isConnected } = useAccount()
   const { data, isLoading } = useKarmaLeaderboard()
+
+  if (!isConnected) {
+    return null
+  }
 
   if (isLoading || !data) {
     return <LeaderboardSectionSkeleton />
