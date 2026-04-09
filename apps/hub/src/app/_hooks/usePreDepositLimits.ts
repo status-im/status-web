@@ -12,6 +12,8 @@ import type { Vault } from '~constants/index'
 export interface MinPreDepositValueParams {
   /** Vault to query Min deposit for */
   vault: Vault
+  /** Whether to enable the query (default: true) */
+  enabled?: boolean
 }
 
 // ============================================================================
@@ -83,14 +85,17 @@ export interface MinPreDepositValueParams {
  * ```
  *
  */
-export function usePreDepositLimits({ vault }: MinPreDepositValueParams) {
+export function usePreDepositLimits({
+  vault,
+  enabled = true,
+}: MinPreDepositValueParams) {
   return useReadContract({
     abi: vault.abi,
     address: vault.address,
     functionName: 'getDepositLimits',
     chainId: vault.chainId,
     query: {
-      enabled: vault !== null,
+      enabled: enabled && vault !== null,
       select: data => {
         return {
           minDeposit: data[0],

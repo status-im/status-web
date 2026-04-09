@@ -104,7 +104,7 @@ export function useGUSDPreDeposit(): UseGUSDPreDepositReturn {
       const remoteRecipient = addressToBytes32(address)
 
       sendPreDepositEvent({
-        type: 'START_APPROVE_TOKEN',
+        type: 'START_PRE_DEPOSIT',
         amount,
       })
 
@@ -116,27 +116,12 @@ export function useGUSDPreDeposit(): UseGUSDPreDepositReturn {
       ] as const
 
       try {
-        const estimatedGas = await publicClient?.estimateContractGas({
-          address: GENERIC_DEPOSITOR.address,
-          abi: GENERIC_DEPOSITOR.abi,
-          functionName: 'depositAndPredeposit',
-          args: contractArgs,
-          account: address,
-        })
-
-        const GAS_LIMIT_MULTIPLIER_PERCENT = 120n
-
-        const gasLimit = estimatedGas
-          ? (estimatedGas * GAS_LIMIT_MULTIPLIER_PERCENT) / 100n
-          : undefined
-
         const hash = await writeContractAsync({
           address: GENERIC_DEPOSITOR.address,
           abi: GENERIC_DEPOSITOR.abi,
           functionName: 'depositAndPredeposit',
           args: contractArgs,
           chainId: mainnet.id,
-          gas: gasLimit,
         })
 
         sendPreDepositEvent({ type: 'EXECUTE' })
