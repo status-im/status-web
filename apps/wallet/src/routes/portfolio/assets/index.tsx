@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useToast } from '@status-im/components'
 import {
@@ -16,6 +16,8 @@ import { useMediaQuery } from '@/hooks/use-media-query'
 import { usePinExtension } from '@/hooks/use-pin-extension'
 
 import { useWallet } from '../../../providers/wallet-context'
+
+import type { HideAssetsBelowOneToggle } from '@/components/action-buttons'
 
 export const Route = createFileRoute('/portfolio/assets/')({
   component: Component,
@@ -35,6 +37,11 @@ function Component() {
     isWalletLoading,
   })
   const isDesktop = useMediaQuery('xl')
+  const [hideBelowOneEur, setHideBelowOneEur] = useState(false)
+  const hideAssetsBelowOneToggle: HideAssetsBelowOneToggle = {
+    checked: hideBelowOneEur,
+    onCheckedChange: setHideBelowOneEur,
+  }
 
   // Show error toast if there is an error fetching assets
   useEffect(() => {
@@ -48,9 +55,12 @@ function Component() {
   return (
     <>
       <SplittedLayout
+        hideAssetsBelowOneToggle={hideAssetsBelowOneToggle}
         list={
           <AssetsList
             assets={data?.assets ?? []}
+            hideBelowOneEur={hideBelowOneEur}
+            onHideBelowOneEurChange={setHideBelowOneEur}
             onSelect={url => {
               try {
                 const ticker = url.split('/').pop()
