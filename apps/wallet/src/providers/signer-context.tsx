@@ -50,9 +50,7 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
     return currentAccount?.address as Address | undefined
   }, [currentAccount])
 
-  const accountName = useMemo(() => {
-    return currentWallet?.name ?? 'Account 1'
-  }, [currentWallet])
+  const accountName = 'Account 1'
 
   useEffect(() => {
     if (address) {
