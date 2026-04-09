@@ -1,4 +1,4 @@
-import { z } from 'zod-3-23-8'
+import { z } from 'zod'
 
 export const ServiceWorkerMessage = z.discriminatedUnion('type', [
   z.object({
