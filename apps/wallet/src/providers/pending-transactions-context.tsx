@@ -3,7 +3,6 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { getTransactionHash } from '@status-im/wallet/utils'
 
 import { Storage } from '../data/storage'
-import { checkPendingTransactions } from '../lib/tx-monitor'
 
 import type { ApiOutput } from '@status-im/wallet/data'
 
@@ -70,20 +69,12 @@ export function PendingTransactionsProvider({
   }, [storage])
 
   useEffect(() => {
-    if (isLoading || pendingTransactions.length === 0) {
-      return
-    }
+    if (isLoading) return
 
-    void checkPendingTransactions()
-
-    const intervalId = window.setInterval(() => {
-      void checkPendingTransactions()
-    }, 3_000)
-
-    return () => {
-      window.clearInterval(intervalId)
-    }
-  }, [isLoading, pendingTransactions.length])
+    storage.set({ transactions: pendingTransactions }).catch(error => {
+      console.error('Failed to save pending transactions:', error)
+    })
+  }, [pendingTransactions, storage, isLoading])
 
   const addPendingTransaction = async (
     transaction: Omit<PendingTransaction, 'uniqueId'>,
@@ -93,41 +84,17 @@ export function PendingTransactionsProvider({
       uniqueId: `pending-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
     }
 
-    let nextTransactions: PendingTransaction[] = []
-    setPendingTransactions(prev => {
-      nextTransactions = [...prev, newTransaction]
-      return nextTransactions
-    })
-
-    try {
-      await storage.set({ transactions: nextTransactions })
-    } catch (error) {
-      console.error('Failed to save pending transactions:', error)
-    }
+    setPendingTransactions(prev => [...prev, newTransaction])
   }
 
   const removePendingTransaction = async (hash: string) => {
-    let nextTransactions: PendingTransaction[] = []
-    setPendingTransactions(prev => {
-      nextTransactions = prev.filter(tx => getTransactionHash(tx.hash) !== hash)
-      return nextTransactions
-    })
-
-    try {
-      await storage.set({ transactions: nextTransactions })
-    } catch (error) {
-      console.error('Failed to save pending transactions:', error)
-    }
+    setPendingTransactions(prev =>
+      prev.filter(tx => getTransactionHash(tx.hash) !== hash),
+    )
   }
 
   const clearPendingTransactions = async () => {
     setPendingTransactions([])
-
-    try {
-      await storage.set({ transactions: [] })
-    } catch (error) {
-      console.error('Failed to save pending transactions:', error)
-    }
   }
 
   const contextValue: PendingTransactionsContext = {

@@ -4,11 +4,7 @@ import {
   notifyTransactionConfirmed,
   notifyTransactionFailed,
 } from './notifications'
-import {
-  NOTIFICATIONS_ENABLED_KEY,
-  PENDING_TXS_KEY,
-  TX_NOTIFIED_KEY,
-} from './storage-keys'
+import { PENDING_TXS_KEY, TX_NOTIFIED_KEY } from './storage-keys'
 
 const ETH_RPC_URL = 'https://eth.merkle.io/'
 
@@ -52,10 +48,6 @@ async function fetchReceipt(
 }
 
 export async function checkPendingTransactions(): Promise<void> {
-  const enabled =
-    (await storage.getItem<boolean>(NOTIFICATIONS_ENABLED_KEY)) ?? true
-  if (!enabled) return
-
   const pendingTxs = (await storage.getItem<PendingTx[]>(PENDING_TXS_KEY)) ?? []
 
   if (pendingTxs.length === 0) {
@@ -66,10 +58,13 @@ export async function checkPendingTransactions(): Promise<void> {
   const notified = (await storage.getItem<string[]>(TX_NOTIFIED_KEY)) ?? []
   const notifiedSet = new Set(notified)
   const newlyNotified: string[] = []
+  const settledHashes = new Set<string>()
 
   for (const tx of pendingTxs) {
     const txHash = extractTxHash(tx.hash)
-    if (!txHash || notifiedSet.has(txHash)) continue
+    if (!txHash) continue
+
+    const alreadyNotified = notifiedSet.has(txHash)
 
     const receipt = await fetchReceipt(txHash)
     if (!receipt) continue
@@ -78,12 +73,34 @@ export async function checkPendingTransactions(): Promise<void> {
     const asset = tx.asset ?? 'ETH'
 
     if (receipt.status === '0x1') {
-      const fired = await notifyTransactionConfirmed(amount, asset)
-      if (fired) newlyNotified.push(txHash)
+      if (!alreadyNotified) {
+        const fired = await notifyTransactionConfirmed(amount, asset)
+        if (fired) {
+          newlyNotified.push(txHash)
+          notifiedSet.add(txHash)
+        }
+      }
+      settledHashes.add(txHash)
     } else if (receipt.status === '0x0') {
-      const fired = await notifyTransactionFailed(amount, asset)
-      if (fired) newlyNotified.push(txHash)
+      if (!alreadyNotified) {
+        const fired = await notifyTransactionFailed(amount, asset)
+        if (fired) {
+          newlyNotified.push(txHash)
+          notifiedSet.add(txHash)
+        }
+      }
+      settledHashes.add(txHash)
     }
+  }
+
+  if (settledHashes.size > 0) {
+    await storage.setItem(
+      PENDING_TXS_KEY,
+      pendingTxs.filter(tx => {
+        const txHash = extractTxHash(tx.hash)
+        return !txHash || !settledHashes.has(txHash)
+      }),
+    )
   }
 
   if (newlyNotified.length > 0) {
