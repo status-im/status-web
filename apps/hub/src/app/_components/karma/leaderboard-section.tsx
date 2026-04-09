@@ -1,14 +1,11 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { useAccount } from 'wagmi'
 
-import { LEADERBOARD_MOCK } from '~constants/leaderboard-mock'
+import { useKarmaLeaderboard } from '~hooks/useKarmaLeaderboard'
 
 import { LeaderboardCard, LeaderboardCardSkeleton } from './leaderboard-card'
-
-type LeaderboardSectionProps = {
-  isLoading?: boolean
-}
 
 const LeaderboardSectionSkeleton = () => {
   return (
@@ -23,13 +20,12 @@ const LeaderboardSectionSkeleton = () => {
   )
 }
 
-const LeaderboardSection = (props: LeaderboardSectionProps) => {
-  const { isLoading = false } = props
+const LeaderboardSection = () => {
   const t = useTranslations()
+  const { address } = useAccount()
+  const { data, isLoading } = useKarmaLeaderboard()
 
-  const data = LEADERBOARD_MOCK
-
-  if (isLoading) {
+  if (isLoading || !data) {
     return <LeaderboardSectionSkeleton />
   }
 
@@ -41,18 +37,21 @@ const LeaderboardSection = (props: LeaderboardSectionProps) => {
       <div className="flex flex-col gap-8 xl:flex-row xl:gap-8">
         <LeaderboardCard
           title={t('karma.leaderboard_overall')}
-          entries={data.overall.entries}
-          type="overall"
+          type="best"
+          data={data}
+          currentUserAddress={address}
         />
         <LeaderboardCard
           title={t('karma.leaderboard_gainers')}
-          entries={data.gainers.entries}
           type="gainers"
+          data={data}
+          currentUserAddress={address}
         />
         <LeaderboardCard
           title={t('karma.leaderboard_your_place')}
-          entries={data.surrounding.entries}
-          type="surrounding"
+          type="ranked"
+          data={data}
+          currentUserAddress={address}
         />
       </div>
     </div>
@@ -60,4 +59,3 @@ const LeaderboardSection = (props: LeaderboardSectionProps) => {
 }
 
 export { LeaderboardSection, LeaderboardSectionSkeleton }
-export type { LeaderboardSectionProps }

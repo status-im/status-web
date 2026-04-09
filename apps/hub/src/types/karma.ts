@@ -41,23 +41,26 @@ export interface KarmaSourceData {
   capApiEndpoint?: string
 }
 
-export type LeaderboardEntry = {
-  rank: number
+export type LeaderboardBestEntry = {
   address: string
-  displayName: string | null
   karma: number
-  isCurrentUser?: boolean
 }
 
-export type LeaderboardResponse = {
-  entries: LeaderboardEntry[]
-  updatedAt: string
+export type LeaderboardGainerEntry = {
+  address: string
+  diff: number
+}
+
+export type LeaderboardRankedEntry = {
+  address: string
+  karma: number
+  globalPosition: number
 }
 
 export type KarmaLeaderboardData = {
-  overall: LeaderboardResponse
-  gainers: LeaderboardResponse
-  surrounding: LeaderboardResponse
+  best: LeaderboardBestEntry[]
+  gainers: LeaderboardGainerEntry[]
+  ranked: LeaderboardRankedEntry[]
 }
 
 export type LeaderboardType = keyof KarmaLeaderboardData

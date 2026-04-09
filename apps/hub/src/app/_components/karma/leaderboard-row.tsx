@@ -3,7 +3,7 @@ import { CrownIcon } from '@status-im/icons/20'
 import { shortenAddress } from '~utils/address'
 import { formatKarma } from '~utils/currency'
 
-import type { LeaderboardEntry, LeaderboardType } from '~types/karma'
+import type { LeaderboardType } from '~types/karma'
 
 const CROWN_COLORS: Record<number, string> = {
   1: 'text-yellow',
@@ -13,7 +13,7 @@ const CROWN_COLORS: Record<number, string> = {
 
 type RankBadgeProps = {
   rank: number
-  isCurrentUser?: boolean
+  isCurrentUser: boolean
   type: LeaderboardType
 }
 
@@ -21,7 +21,7 @@ const RankBadge = (props: RankBadgeProps) => {
   const { rank, isCurrentUser, type } = props
   const crownColor = CROWN_COLORS[rank]
 
-  if (type === 'overall' && crownColor && rank <= 3) {
+  if (type === 'best' && crownColor && rank <= 3) {
     return <CrownIcon className={`size-5 shrink-0 ${crownColor}`} />
   }
 
@@ -38,15 +38,17 @@ const RankBadge = (props: RankBadgeProps) => {
   )
 }
 
-type LeaderboardRowProps = {
-  entry: LeaderboardEntry
+export type LeaderboardRowProps = {
+  rank: number
+  address: string
+  value: number
   type: LeaderboardType
+  isCurrentUser: boolean
 }
 
 const LeaderboardRow = (props: LeaderboardRowProps) => {
-  const { entry, type } = props
-  const { rank, address, displayName, karma, isCurrentUser } = entry
-  const name = displayName ?? shortenAddress(address)
+  const { rank, address, value, type, isCurrentUser } = props
+  const name = shortenAddress(address)
   const isGainer = type === 'gainers'
 
   const textColor = isCurrentUser
@@ -70,7 +72,7 @@ const LeaderboardRow = (props: LeaderboardRowProps) => {
       <p className="shrink-0 whitespace-nowrap text-right text-15 font-medium">
         <span className={textColor}>
           {prefix}
-          {formatKarma(karma)}
+          {formatKarma(value)}
         </span>
         <span className={suffixColor}> TKARMA</span>
       </p>
@@ -79,4 +81,3 @@ const LeaderboardRow = (props: LeaderboardRowProps) => {
 }
 
 export { LeaderboardRow }
-export type { LeaderboardRowProps }
