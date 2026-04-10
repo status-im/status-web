@@ -8,7 +8,7 @@ import { jsonLD, JSONLDScript } from '~app/_utils/json-ld'
 import { Link } from '~components/link'
 import { cx } from 'cva'
 import { compileMDX } from 'next-mdx-remote/rsc'
-import type { ComponentProps } from 'react'
+import { Children, isValidElement, type ComponentProps } from 'react'
 import rehypeSlug from 'rehype-slug'
 import remarkGfm from 'remark-gfm'
 import { z } from 'zod'
@@ -97,8 +97,8 @@ export default async function KarmaTokenomicsPage() {
           <div className="absolute -right-2 top-0 z-50 h-full w-2 bg-gradient-to-l from-white-100 to-[transparent] 2xl:-right-12 2xl:w-12" />
           <BlogHeader />
           <main className="px-5 pb-16 pt-10 xl:pb-24 xl:pt-16">
-            <div className="mx-auto w-full max-w-[860px]">
-              <div className="mb-10">
+            <div className="mx-auto w-full max-w-[1184px]">
+              <div className="mx-auto mb-10 max-w-[860px]">
                 <div className="mb-6 text-13 text-neutral-50">
                   <Link href="/" className="hover:text-neutral-100">
                     Home
@@ -114,15 +114,9 @@ export default async function KarmaTokenomicsPage() {
               <article
                 className={[
                   'text-19 text-neutral-100',
-                  '[&_h2]:mb-3 [&_h2]:mt-12 [&_h2]:scroll-m-[100px] [&_h2]:text-27 [&_h2]:font-600',
-                  '[&_p]:mt-5 [&_p]:leading-[1.7]',
                   '[&_strong]:font-600',
                   '[&_em]:italic',
                   '[&_a]:text-purple hover:[&_a]:underline',
-                  '[&_ol]:mt-5 [&_ol]:list-decimal [&_ol]:pl-6',
-                  '[&_ul]:mt-5 [&_ul]:list-disc [&_ul]:pl-6',
-                  '[&_li]:mt-2 [&_li]:leading-[1.7]',
-                  '[&_img]:my-10 [&_img]:w-full [&_img]:rounded-20 [&_img]:border [&_img]:border-neutral-20 [&_img]:bg-neutral-10',
                 ].join(' ')}
               >
                 {content}
@@ -149,8 +143,55 @@ const components = {
       </Link>
     )
   },
+  p: ({ children, className, ...props }: ComponentProps<'p'>) => {
+    const childItems = Children.toArray(children).filter(
+      child => child !== '\n',
+    )
+    const onlyChild = childItems[0]
+    const isImageOnly =
+      childItems.length === 1 &&
+      isValidElement<{ src?: unknown }>(onlyChild) &&
+      typeof onlyChild.props.src === 'string'
+
+    if (isImageOnly) {
+      return <div className="my-10">{children}</div>
+    }
+
+    return (
+      <p
+        {...props}
+        className={cx('mx-auto mt-5 max-w-[860px] leading-[1.7]', className)}
+      >
+        {children}
+      </p>
+    )
+  },
+  h2: ({ className, ...props }: ComponentProps<'h2'>) => (
+    <h2
+      {...props}
+      className={cx(
+        'mx-auto mb-3 mt-12 max-w-[860px] scroll-m-[100px] text-27 font-600',
+        className,
+      )}
+    />
+  ),
+  ol: ({ className, ...props }: ComponentProps<'ol'>) => (
+    <ol
+      {...props}
+      className={cx('mx-auto mt-5 max-w-[860px] list-decimal pl-6', className)}
+    />
+  ),
+  ul: ({ className, ...props }: ComponentProps<'ul'>) => (
+    <ul
+      {...props}
+      className={cx('mx-auto mt-5 max-w-[860px] list-disc pl-6', className)}
+    />
+  ),
+  li: ({ className, ...props }: ComponentProps<'li'>) => (
+    <li {...props} className={cx('mt-2 leading-[1.7]', className)} />
+  ),
   table: ({ className, ...props }: ComponentProps<'table'>) => (
-    <div className="my-6 overflow-x-auto rounded-16 border border-neutral-20">
+    <div className="mx-auto my-6 max-w-[860px] overflow-x-auto rounded-16 border border-neutral-20">
       <table
         {...props}
         className={cx(
@@ -178,8 +219,31 @@ const components = {
       )}
     />
   ),
-  img: ({ alt = '', className, ...props }: ComponentProps<'img'>) => (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img {...props} alt={alt} className={className} />
-  ),
+  img: ({ alt = '', className, src, ...props }: ComponentProps<'img'>) => {
+    const image = (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        {...props}
+        src={src}
+        alt={alt}
+        className={cx('w-full min-w-[760px] max-w-none', className)}
+      />
+    )
+
+    if (typeof src !== 'string') {
+      return image
+    }
+
+    return (
+      <a
+        href={src}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`${alt || 'Image'} (opens full-size image)`}
+        className="relative left-1/2 block w-[calc(100vw-40px)] max-w-[1184px] -translate-x-1/2 overflow-x-auto rounded-20 border border-neutral-20 bg-neutral-10"
+      >
+        {image}
+      </a>
+    )
+  },
 }
