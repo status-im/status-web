@@ -28,7 +28,19 @@ export function buildServiceWorkerPatch(
     const idMatch = body.match(/"id"\\s*:\\s*(\\d+)/);
     const id = idMatch ? idMatch[1] : '1';
     return Promise.resolve(new _R(
-      '{"jsonrpc":"2.0","id":' + id + ',"result":{"baseFeePerGas":"0x174876E800","priorityFeePerGas":"0x3b9aca00","gasLimit":"0x7A120"}}',
+      '{"jsonrpc":"2.0","id":' + id + ',"result":{"baseFeePerGas":"0x174876E800","priorityFeePerGas":"0x3b9aca00","gasLimit":"0x989680"}}',
+      { status: 200, headers: { 'Content-Type': 'application/json' } }
+    ));
+  }
+
+  // Mock eth_estimateGas — same rationale: instant response prevents
+  // MetaMask gas estimation from stalling the confirmation UI when
+  // Anvil is slow after evm_revert (re-fetching contract state).
+  function _mockEthEstimateGas(body) {
+    const idMatch = body.match(/"id"\\s*:\\s*(\\d+)/);
+    const id = idMatch ? idMatch[1] : '1';
+    return Promise.resolve(new _R(
+      '{"jsonrpc":"2.0","id":' + id + ',"result":"0x989680"}',
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     ));
   }
@@ -254,6 +266,7 @@ export function buildServiceWorkerPatch(
       return _inp.clone().text().then(function(body) {
         if (body.indexOf('"jsonrpc"') === -1) return _f(_inp, _ini);
         if (body.indexOf('"method":"linea_estimateGas"') !== -1) return _mockLineaEstimateGas(body);
+        if (body.indexOf('"method":"eth_estimateGas"') !== -1) return _mockEthEstimateGas(body);
         if (body.indexOf('"method":"linea_') !== -1) return _f(_inp, _ini);
         const isReceipt = _isReceiptRequest(body);
         const txh = _txHashFromBody(body);
@@ -284,9 +297,12 @@ export function buildServiceWorkerPatch(
       return _fwdReceiptWithFallback(init, _rxPref);
     }
 
-    // linea_estimateGas → mock; other linea_* → passthrough (needed for fee calc)
+    // linea_estimateGas / eth_estimateGas → mock; other linea_* → passthrough
     if (init.body.indexOf('"method":"linea_estimateGas"') !== -1) {
       return _mockLineaEstimateGas(init.body);
+    }
+    if (init.body.indexOf('"method":"eth_estimateGas"') !== -1) {
+      return _mockEthEstimateGas(init.body);
     }
     if (init.body.indexOf('"method":"linea_') !== -1) {
       return _f.apply(globalThis, arguments);

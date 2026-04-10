@@ -295,6 +295,16 @@ export const test = walletTest.extend<AnvilFixtures>({
       if (!postData?.includes('"jsonrpc"')) return route.continue()
       if (postData.includes('"method":"linea_')) return route.continue()
 
+      if (postData.includes('"method":"eth_estimateGas"')) {
+        const idMatch = postData.match(/"id"\s*:\s*(\d+)/)
+        const id = idMatch ? idMatch[1] : '1'
+        return route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: `{"jsonrpc":"2.0","id":${id},"result":"0x989680"}`,
+        })
+      }
+
       const url = request.url()
       if (url.startsWith('chrome-extension:') || url.includes('localhost')) {
         return route.continue()
