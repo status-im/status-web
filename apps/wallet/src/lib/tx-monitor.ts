@@ -69,15 +69,20 @@ export async function checkPendingTransactions(): Promise<void> {
   const newlyNotified: string[] = []
   const settledHashes = new Set<string>()
 
-  for (const tx of pendingTxs) {
-    const txHash = extractTxHash(tx.hash)
-    if (!txHash) continue
+  const receipts = await Promise.all(
+    pendingTxs.map(tx => {
+      const txHash = extractTxHash(tx.hash)
+      return txHash
+        ? fetchReceipt(txHash).then(r => ({ tx, txHash, receipt: r }))
+        : null
+    }),
+  )
 
+  for (const entry of receipts) {
+    if (!entry || !entry.receipt) continue
+
+    const { tx, txHash, receipt } = entry
     const alreadyNotified = notifiedSet.has(txHash)
-
-    const receipt = await fetchReceipt(txHash)
-    if (!receipt) continue
-
     const amount = tx.displayAmount ?? String(tx.value)
     const asset = tx.asset ?? 'ETH'
 
