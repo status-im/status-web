@@ -6,8 +6,6 @@ import {
 } from './notifications'
 import { PENDING_TXS_KEY, TX_NOTIFIED_KEY } from './storage-keys'
 
-const ETH_RPC_URL = 'https://eth.merkle.io/'
-
 type PendingTx = {
   hash: unknown
   value: number
@@ -28,23 +26,31 @@ async function fetchReceipt(
   txHash: string,
 ): Promise<{ status: string } | null> {
   try {
-    const res = await fetch(ETH_RPC_URL, {
+    const url = `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/rpc.proxy`
+    const res = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        jsonrpc: '2.0',
-        method: 'eth_getTransactionReceipt',
-        params: [txHash],
-        id: 1,
+        json: {
+          method: 'eth_getTransactionReceipt',
+          params: [txHash],
+          id: 1,
+          chainId: 1,
+        },
       }),
     })
-    const json = (await res.json()) as {
-      result: { status: string } | null
+    const body = (await res.json()) as {
+      result: { data: { json: { result: { status: string } | null } } }
     }
-    return json.result
+    return body.result.data.json.result
   } catch {
     return null
   }
+}
+
+export async function hasPendingTransactions(): Promise<boolean> {
+  const pendingTxs = (await storage.getItem<PendingTx[]>(PENDING_TXS_KEY)) ?? []
+  return pendingTxs.length > 0
 }
 
 export async function checkPendingTransactions(): Promise<void> {
