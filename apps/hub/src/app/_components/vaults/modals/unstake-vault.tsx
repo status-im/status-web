@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 import { formatUnits, parseUnits } from 'viem'
 import { useAccount, useReadContract } from 'wagmi'
+import { statusSepolia } from 'wagmi/chains'
 import { z } from 'zod'
 
 import { SNTIcon } from '~components/icons'
@@ -73,6 +74,7 @@ export function UnstakeVaultModal(props: UnstakeVaultModalProps) {
     address: vaultAddress,
     abi: vaultAbi,
     functionName: 'amountStaked',
+    chainId: statusSepolia.id,
     query: {
       enabled: open && !!vaultAddress,
       refetchOnMount: true,
@@ -81,9 +83,21 @@ export function UnstakeVaultModal(props: UnstakeVaultModalProps) {
     },
   })
 
-  const maxBalance = stakedBalance
-    ? Number(formatUnits(stakedBalance as bigint, STT_TOKEN.decimals))
-    : 0
+  const maxBalanceFormatted = stakedBalance
+    ? formatUnits(stakedBalance as bigint, STT_TOKEN.decimals)
+    : '0'
+
+  // Truncate to 6 decimal places to avoid floating-point precision issues
+  // that cause MAX amount to exceed actual balance after parseUnits roundtrip
+  const maxBalanceTruncated = (() => {
+    const parts = maxBalanceFormatted.split('.')
+    if (parts[1] && parts[1].length > 6) {
+      return `${parts[0]}.${parts[1].slice(0, 6)}`
+    }
+    return maxBalanceFormatted
+  })()
+
+  const maxBalance = Number(maxBalanceTruncated)
 
   const form = useForm<FormValues>({
     resolver: zodResolver(createUnstakeFormSchema(maxBalance, t)),
@@ -105,14 +119,26 @@ export function UnstakeVaultModal(props: UnstakeVaultModalProps) {
   }, [maxBalance, amountValue, form])
 
   const handleMaxClick = () => {
-    form.setValue('amount', maxBalance.toString(), { shouldValidate: true })
+    form.setValue('amount', maxBalanceTruncated, { shouldValidate: true })
   }
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
+    // Allow clearing the input
+    if (value === '') {
+      form.setValue('amount', '', { shouldValidate: true })
+      return
+    }
     // Allow only numbers and decimal point
     if (validateVaultAmount(value)) {
-      form.setValue('amount', value, { shouldValidate: true })
+      // Truncate to 6 decimal places to avoid precision issues
+      const parts = value.split('.')
+      const truncated =
+        parts[1] && parts[1].length > 6
+          ? `${parts[0]}.${parts[1].slice(0, 6)}`
+          : value
+
+      form.setValue('amount', truncated, { shouldValidate: true })
     }
   }
 

@@ -5,7 +5,14 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".output/**", "build/**", ".next/**"]
+      "outputs": [
+        "dist/**",
+        ".output/**",
+        "build/**",
+        "out/**",
+        ".next/**",
+        ".contentlayer/**"
+      ]
     },
     "dev": {
       "cache": false
@@ -24,6 +31,37 @@
     "comment_dev": {
       "dependsOn": ["^build:content"],
       "persistent": true
+    },
+    "@status-im/community-dapp#build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"],
+      "passThroughEnv": [
+        "ENV",
+        "VOTING_CONTRACT",
+        "DIRECTORY_CONTRACT",
+        "MULTICALL_CONTRACT",
+        "TOKEN_CONTRACT",
+        "FEATURED_VOTING_CONTRACT",
+        "INFURA_API_KEY"
+      ]
+    },
+    "@status-im/community-dapp#dev": {
+      "cache": false,
+      "persistent": true,
+      "passThroughEnv": [
+        "ENV",
+        "VOTING_CONTRACT",
+        "DIRECTORY_CONTRACT",
+        "MULTICALL_CONTRACT",
+        "TOKEN_CONTRACT",
+        "FEATURED_VOTING_CONTRACT",
+        "INFURA_API_KEY"
+      ]
+    },
+    "status.network#build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**"],
+      "passThroughEnv": ["GHOST_API_URL", "GHOST_API_KEY"]
     },
     "comment_build:content": {
       "cache": true,

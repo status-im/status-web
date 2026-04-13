@@ -1,0 +1,33 @@
+# directories
+cache
+node_modules
+out/*
+!out/VotingContract.sol/
+!out/Directory.sol/
+!out/FeaturedVotingContract.sol/
+out/VotingContract.sol/*
+out/Directory.sol/*
+out/FeaturedVotingContract.sol/*
+!out/VotingContract.sol/VotingContract.json
+!out/Directory.sol/Directory.json
+!out/FeaturedVotingContract.sol/FeaturedVotingContract.json
+
+# files
+*.env
+*.log
+.DS_Store
+.pnp.*
+lcov.info
+yarn.lock
+
+# broadcasts
+!broadcast
+broadcast/*
+broadcast/*/31337/
+
+# Hardhat files
+artifacts
+coverage
+coverage.json
+typechain
+typechain-types

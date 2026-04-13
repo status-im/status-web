@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react'
 
 import { cx } from 'class-variance-authority'
 import { matchSorter } from 'match-sorter'
+import { useTranslations } from 'next-intl'
 
 import * as Drawer from '~admin/_components/drawer'
 import { EmptySearchResults } from '~admin/_components/empty-search-results'
@@ -11,9 +12,9 @@ import { MultiselectFilter } from '~admin/_components/multiselect-filter'
 import { SearchInput } from '~admin/_components/search-input'
 import { matchesSearchFilter } from '~admin/_utils'
 import {
-  projectAppOptions,
-  projectStatusOptions,
-} from '~admin/insights/projects/_components/projects-list'
+  getProjectAppOptions,
+  getProjectStatusOptions,
+} from '~admin/insights/_utils/i18n'
 
 import { ProjectItem } from './project-item'
 
@@ -61,6 +62,7 @@ type ReportsDrawerListProps = {
 
 const ReportsDrawerList = (props: ReportsDrawerListProps) => {
   const { projects, initialSelection, onSave } = props
+  const t = useTranslations('admin')
 
   const [milestoneIds, setMilestoneIds] = useState<number[]>(initialSelection)
 
@@ -119,24 +121,27 @@ const ReportsDrawerList = (props: ReportsDrawerListProps) => {
     0
   )
 
+  const projectAppOptions = getProjectAppOptions(t)
+  const projectStatusOptions = getProjectStatusOptions(t)
+
   return (
     <>
       <Drawer.Header>
-        <Drawer.Title>Add project milestones</Drawer.Title>
+        <Drawer.Title>{t('addProjectMilestones')}</Drawer.Title>
         <Drawer.Filters>
           <SearchInput
             value={searchFilter}
             onChange={setSearchFilter}
-            placeholder="Find milestones"
+            placeholder={t('findMilestones')}
           />
           <MultiselectFilter
-            label="App"
+            label={t('app')}
             options={projectAppOptions}
             selection={appsFilter}
             onSelectionChange={setAppsFilter}
           />
           <MultiselectFilter
-            label="Status"
+            label={t('status')}
             options={projectStatusOptions}
             selection={statusFilter}
             onSelectionChange={setStatusFilter}
@@ -180,7 +185,7 @@ const ReportsDrawerList = (props: ReportsDrawerListProps) => {
               'active:bg-customisation-blue-60 hover:bg-customisation-blue-60 disabled:bg-customisation-blue-50/20'
             )}
           >
-            Save Changes
+            {t('saveChanges')}
           </button>
         </div>
       </Drawer.Footer>

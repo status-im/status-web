@@ -1,12 +1,14 @@
 import { Button, Text } from '@status-im/components'
+import { ExternalIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
+import { getTranslations } from 'next-intl/server'
 
 import { ROUTES } from '~/config/routes'
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
 import { Image, Video } from '~components/assets'
 import { Body } from '~components/body'
 import { ColorTheme } from '~website/_components/color-theme'
-import { getPosts } from '~website/_lib/ghost'
+import { findLatestReleasePost, getPosts } from '~website/_lib/ghost'
 import { PostGrid } from '~website/blog/_components/post-grid'
 
 import { CopyrightSymbol } from './_components/copyright-symbol'
@@ -17,6 +19,7 @@ import { DownloadMobileButton } from './_components/download-mobile-button'
 import { FeatureList } from './_components/feature-list'
 import { FeatureTag } from './_components/feature-tag'
 import { HandsSection } from './_components/hands-section'
+import { NewsTag } from './_components/news-tag'
 import { ParallaxCircle } from './_components/parallax-circle'
 
 import type { FeatureListProps } from './_components/feature-list'
@@ -24,133 +27,180 @@ import type { FeatureListProps } from './_components/feature-list'
 export const revalidate = 3600 // 1 hour
 
 export default async function HomePage() {
-  const { posts } = await getPosts({ limit: 3 })
+  const t = await getTranslations('home')
+  const td = await getTranslations('download')
+
+  const { posts: allPosts } = await getPosts({ limit: 10 })
+  const releaseResult = findLatestReleasePost(allPosts)
+  const posts = allPosts.slice(0, 3)
+
+  const featureList: FeatureListProps['list'] = [
+    {
+      title: t('openSource'),
+      description: t('openSourceDescription'),
+      icon: 'Non Beta Release/Icons/10:144:144',
+    },
+    {
+      title: t('decentralised'),
+      description: t('decentralisedDescription'),
+      icon: 'Non Beta Release/Icons/11:144:144',
+    },
+    {
+      title: t('secure'),
+      description: t('secureDescription'),
+      icon: 'Non Beta Release/Icons/12:145:144',
+    },
+    {
+      title: t('communityDriven'),
+      description: t('communityDrivenDescription'),
+      icon: 'Non Beta Release/Icons/13:145:144',
+    },
+    {
+      title: t('permissionless'),
+      description: t('permissionlessDescription'),
+      icon: 'Non Beta Release/Icons/14:144:144',
+    },
+    {
+      title: t('freeAndAdFree'),
+      description: t('freeAndAdFreeDescription'),
+      icon: 'Non Beta Release/Icons/15:145:144',
+    },
+  ]
+
+  const prefooterList = [
+    {
+      title: t('prefooterManifestoTitle'),
+      description: t('prefooterManifestoDescription'),
+      link: {
+        label: t('prefooterManifestoLink'),
+        href: ROUTES.organization[0].href,
+      },
+    },
+    {
+      title: t('prefooterSntTitle'),
+      description: t('prefooterSntDescription'),
+      link: {
+        label: t('prefooterSntLink'),
+        href: ROUTES.snt[0].href,
+      },
+    },
+    {
+      title: t('prefooterNetworkTitle'),
+      description: t('prefooterNetworkDescription'),
+      link: {
+        label: t('prefooterNetworkLink'),
+        href: ROUTES.ecosystem[1].href,
+      },
+    },
+  ]
 
   const organizationSchema = jsonLD.organization({
     description:
-      'The open-source, decentralised wallet and messenger. Make the jump to web3.',
+      'Private, secure by design. Transact, Message, Browse on your Terms.',
   })
 
   const websiteSchema = jsonLD.website({
     description:
-      'The open-source, decentralised wallet and messenger. Make the jump to web3.',
+      'Private, secure by design. Transact, Message, Browse on your Terms.',
   })
 
   return (
     <>
       <JSONLDScript schema={[organizationSchema, websiteSchema]} />
-      <div className="relative flex w-full justify-center">
-        <Image
-          id="Non Beta Release/Illustrations/hero-1:930:1424"
-          alt=""
-          aria-hidden
-          width={465}
-          height={712}
-          className="absolute top-0 z-10 hidden xl:left-[-150px] xl:block 2xl:left-[-75px] 3xl:left-0"
-          priority
-        />
-        <Image
-          id="Non Beta Release/Illustrations/hero-2:950:1424"
-          alt=""
-          aria-hidden
-          width={475}
-          height={712}
-          className="absolute top-0 z-10 hidden xl:right-[-150px] xl:block 2xl:right-[-75px] 3xl:right-0"
-          priority
-        />
-        {/* HERO */}
-        <div
-          data-theme="dark"
-          className="flex flex-col items-center bg-neutral-100 px-5 pb-[386px] pt-16 lg:pt-44 xl:pb-24"
-        >
-          <div className="relative z-20 mb-6 grid max-w-[582px] place-items-center text-center lg:mb-8">
-            {/* {latestPost && (
-              <Link
-                href={`/blog/${latestPost.slug}`}
-                className="mb-4 inline-flex h-8 select-none items-center rounded-[56px] border border-white-10 bg-white-5 pl-2 pr-[6px]"
-              >
-                <p className="line-clamp-1 text-left text-15 font-medium text-white-100">
-                  {latestPost.title}
-                </p>
-                <ChevronRightIcon className="ml-[2px] text-white-40" />
-              </Link>
-            )} */}
-
-            <h1 className="mb-4 text-48 font-bold text-white-100 lg:mb-6 lg:text-88">
-              Make the
-              <br />
-              jump to web3
+      {/* HERO */}
+      <div
+        data-theme="dark"
+        className="relative w-full overflow-x-clip bg-neutral-100 pb-8 pt-16 lg:pb-16 lg:pt-24"
+      >
+        <div className="container mx-auto grid grid-cols-1 gap-8 px-5 xl:grid-cols-2 xl:gap-0">
+          <div className="relative z-10 mx-auto flex max-w-[636px] flex-col items-center text-center xl:mx-0 xl:min-w-[640px] xl:items-start xl:text-left">
+            <h1 className="mb-4 text-48 font-bold text-white-100 lg:mb-10 lg:text-88">
+              {t('heroTitle')
+                .split('\n')
+                .map((line, i) => (
+                  <span key={i}>
+                    {i > 0 && <br />}
+                    {line}
+                  </span>
+                ))}
             </h1>
 
-            <p className="text-27 text-white-100">
-              Use the open-source, decentralised wallet and messenger.
+            <p className="mb-6 max-w-[320px] text-19 font-medium text-white-100 lg:mb-8 lg:max-w-[600px] lg:text-27 lg:font-regular">
+              {t('heroDescription')}
             </p>
-          </div>
 
-          <div className="relative z-20 inline-flex w-[237px] flex-col items-center gap-6 text-center md:w-full">
-            <div
-              data-theme="dark"
-              className={cx(
-                'hidden w-fit flex-row items-stretch gap-2 rounded-20 border border-dashed border-neutral-80 p-2',
-                'md:w-fit md:flex-row md:items-center',
-                'ios:flex android:flex unknown:flex xl:unknown:hidden'
-              )}
-            >
-              <DownloadDesktopButton variant="primary" show="all" />
-              <DownloadMobileButton variant="outline" />
+            <div className="mb-6 flex max-w-full flex-col items-center gap-4 lg:mb-8 xl:items-start">
+              <div
+                data-theme="dark"
+                className={cx(
+                  'hidden max-w-full flex-row flex-wrap items-stretch justify-center gap-2 rounded-20 border border-dashed border-neutral-80 p-2',
+                  'sm:w-fit sm:flex-nowrap sm:justify-start',
+                  'ios:flex android:flex unknown:flex xl:unknown:hidden'
+                )}
+              >
+                <DownloadDesktopButton variant="outline" show="all" />
+                <DownloadMobileButton variant="primary" />
+              </div>
+              <div
+                data-theme="dark"
+                className={cx(
+                  'hidden max-w-full flex-row flex-wrap items-stretch justify-center gap-2 rounded-20 border border-dashed border-neutral-80 p-2',
+                  'sm:w-fit sm:flex-nowrap sm:justify-start',
+                  'macos:flex windows:flex linux:flex xl:unknown:flex'
+                )}
+              >
+                <DownloadDesktopButton variant="primary" show="all" />
+                <DownloadMobileButton variant="outline" />
+              </div>
             </div>
-          </div>
-          <div
-            data-theme="dark"
-            className={cx(
-              'hidden w-fit flex-row items-stretch gap-2 rounded-20 border border-dashed border-neutral-80 p-2',
-              'md:w-fit md:flex-row md:items-center',
-              'macos:flex windows:flex linux:flex xl:unknown:flex'
-            )}
-          >
-            <DownloadDesktopButton variant="primary" show="all" />
-            <DownloadMobileButton variant="outline" />
-          </div>
-          <div
-            data-theme="dark"
-            className="mt-6 flex max-w-[572px] flex-col items-start gap-4 rounded-16 border border-solid border-white-10 bg-white-5 p-[6px] pl-[12px] text-left lg:flex-row lg:items-center lg:gap-10"
-          >
-            <div className="flex flex-col text-left">
-              <p className="text-15 font-400 text-white-100">
-                Still on the Status Legacy mobile app? Migrate now.
+
+            <div className="mb-9 flex max-w-full flex-row items-center gap-3 text-left sm:max-w-[572px] lg:mb-20">
+              <p className="text-13 font-medium text-white-100">
+                {t('migrateBanner')}
               </p>
-            </div>
-            <div className="flex items-center">
               <Button
                 size="32"
-                variant="outline"
+                variant="darkGrey"
                 href="https://status.app/blog/migrate-from-status-legacy-to-unified-status-mobile-app"
                 target="_blank"
                 rel="noopener noreferrer"
+                iconAfter={<ExternalIcon className="text-white-100" />}
               >
-                Learn more
+                {t('learnMore')}
               </Button>
             </div>
+
+            {releaseResult && <NewsTag post={releaseResult} />}
           </div>
-          <Image
-            id="Non Beta Release/Illustrations/Hero_Non_Beta_Release_Mobile_Long-optimized:1470:813"
-            alt=""
-            aria-hidden
-            width={735}
-            height={406}
-            className="absolute bottom-[-200px] left-[-70px] block max-w-[735px] -translate-y-40 md:left-1/2 md:-translate-x-1/2 xl:hidden"
-            priority
-          />
+
+          <div className="relative hidden xl:block">
+            <Image
+              id="Homepage/Hero/device-mockups:2128:1292"
+              alt="Status app showing wallet and messenger on devices"
+              width={2128}
+              height={1292}
+              className="absolute left-0 top-1/2 z-20 ml-[18%] w-[170%] max-w-none translate-y-[-36%]"
+            />
+          </div>
+          <div className="relative mb-[-80px] xl:hidden">
+            <Image
+              id="Homepage/Hero/device-mockups-mobile:1267:770"
+              alt="Status app showing wallet and messenger on devices"
+              width={1267}
+              height={770}
+              className="relative z-20 w-[130%] max-w-none"
+            />
+          </div>
         </div>
       </div>
 
       <Body>
         <div className="container relative mx-auto pb-20 lg:pb-40">
           <h2 className="pb-12 pt-40 text-40 font-bold lg:pb-20 lg:text-64">
-            Built different
+            {t('builtDifferent')}
           </h2>
           <div className="-ml-5">
-            <FeatureList list={FEATURE_LIST} />
+            <FeatureList list={featureList} />
           </div>
         </div>
         <div className="relative z-20 w-full">
@@ -166,23 +216,26 @@ export default async function HomePage() {
               type="wallet"
               title={
                 <>
-                  Send, swap
-                  <br />
-                  and bridge
-                  <br />
-                  crypto
+                  {t('walletTitle')
+                    .split('\n')
+                    .map((line, i) => (
+                      <span key={i}>
+                        {i > 0 && <br />}
+                        {line}
+                      </span>
+                    ))}
                 </>
               }
-              description="All the features you have come to expect from your favorite crypto wallet."
+              description={t('walletDescription')}
               secondary={
                 <div className="flex flex-col">
                   <div className="p-4">
                     <p className="text-19 font-semibold">
-                      Ways to buy crypto with a credit card or Apple Pay!
+                      {t('walletBuyTitle')}
                     </p>
                     <div className="flex pt-1">
                       <p className="text-19 font-regular text-neutral-100">
-                        You can buy crypto via our on-ramp partners!
+                        {t('walletBuyDescription')}
                       </p>
                     </div>
                   </div>
@@ -212,23 +265,26 @@ export default async function HomePage() {
                 type="messenger"
                 title={
                   <>
-                    Chat privately
-                    <br />
-                    with friends
+                    {t('messengerTitle')
+                      .split('\n')
+                      .map((line, i) => (
+                        <span key={i}>
+                          {i > 0 && <br />}
+                          {line}
+                        </span>
+                      ))}
                   </>
                 }
-                description="Protect your right to free speech with decentralised messaging, metadata privacy and end-to-end encryption."
+                description={t('messengerDescription')}
                 secondary={
                   <div className="flex flex-col">
                     <div className="p-4">
                       <p className="text-19 font-semibold">
-                        Communicate pseudonymously
+                        {t('messengerPseudonymTitle')}
                       </p>
                       <div className="flex pt-1">
                         <p className="text-19 font-regular text-neutral-100">
-                          No identifying information like phone number, email,
-                          bank card or other social media required to use
-                          Status.
+                          {t('messengerPseudonymDescription')}
                         </p>
                       </div>
                     </div>
@@ -263,11 +319,9 @@ export default async function HomePage() {
 
           <div className="relative z-10 max-w-[700px] px-5 pb-10 text-center md:px-16 md:pb-0 2md:-mb-20">
             <h2 className="mb-1 text-27 font-bold text-white-100">
-              Keep private who your friends are
+              {t('metadataTitle')}
             </h2>
-            <p className="text-19 text-white-100">
-              With our metadata privacy, no one can see who you're talking to.
-            </p>
+            <p className="text-19 text-white-100">{t('metadataDescription')}</p>
           </div>
         </div>
       </ColorTheme>
@@ -283,14 +337,17 @@ export default async function HomePage() {
               type="communities"
               title={
                 <>
-                  Join
-                  <br />
-                  token-gated
-                  <br />
-                  communities
+                  {t('communitiesTitle')
+                    .split('\n')
+                    .map((line, i) => (
+                      <span key={i}>
+                        {i > 0 && <br />}
+                        {line}
+                      </span>
+                    ))}
                 </>
               }
-              description="Imagine a community group chat platform designed to work with crypto from the ground up."
+              description={t('communitiesDescription')}
               imageId="Platforms/Screens/Desktop Screens/Communities/Communities:2880:1800"
               imageAlt="Desktop screenshot showing the community feature included in the Status app"
             />
@@ -309,14 +366,17 @@ export default async function HomePage() {
                   <FeatureTag type="extension" />
                 </div>
                 <h3 className="mb-2 text-40 font-bold xl:text-64">
-                  Status Portfolio
-                  <br />
-                  Wallet (Beta)
+                  {t('extensionTitle')
+                    .split('\n')
+                    .map((line, i) => (
+                      <span key={i}>
+                        {i > 0 && <br />}
+                        {line}
+                      </span>
+                    ))}
                 </h3>
                 <p className="mb-20 max-w-[462px] text-19 font-regular xl:mb-44 xl:text-27">
-                  Need an easy way to view and manage your crypto portfolio in
-                  real time? Try Status Portfolio Wallet (Beta) now - a crypto
-                  wallet and portfolio tracker in one.
+                  {t('extensionDescription')}
                 </p>
 
                 <div className="flex flex-col items-start rounded-20 bg-white-20">
@@ -325,7 +385,7 @@ export default async function HomePage() {
                     variant="primary"
                     size="40"
                   >
-                    Download for Chrome
+                    {td('downloadForChrome')}
                   </DownloadExtensionButton>
                 </div>
               </div>
@@ -367,20 +427,20 @@ export default async function HomePage() {
               <div className="flex max-w-none flex-1 flex-col gap-4 lg:gap-5 2xl:max-w-[462px]">
                 <div className="flex flex-col">
                   <h2 className="relative inline-block whitespace-nowrap text-40 font-bold lg:text-64">
-                    Use Status
+                    {t('keycardTitle').split('\n')[0]}
                   </h2>
                   <h2 className="relative inline-block whitespace-nowrap text-40 font-bold lg:text-64">
-                    with Keycard
+                    {t('keycardTitle').split('\n').slice(1).join(' ')}
                     <span className="inline-block w-3 pt-1 align-top lg:w-4 lg:pt-[9px]">
                       <CopyrightSymbol />
                     </span>
                   </h2>
                 </div>
 
-                <Text size={19}>A secure contactless hardware wallet.</Text>
+                <Text size={19}>{t('keycardDescription')}</Text>
               </div>
               <Button variant="outline" href="/keycard">
-                Learn More
+                {t('keycardLink')}
               </Button>
             </div>
 
@@ -395,13 +455,13 @@ export default async function HomePage() {
         <div className="relative z-30 flex-1 bg-white-100 py-40">
           <div className="container">
             <div className="mb-6 flex items-center justify-between">
-              <h3 className="text-27 font-semibold">Stay up to date</h3>
+              <h3 className="text-27 font-semibold">{t('blogTitle')}</h3>
               <Button
                 variant="outline"
-                href={ROUTES.Collaborate[2].href}
+                href={ROUTES.collaborate[2].href}
                 size="32"
               >
-                View Blog
+                {t('blogLink')}
               </Button>
             </div>
             {posts.length > 0 && (
@@ -415,7 +475,7 @@ export default async function HomePage() {
           <div className="absolute inset-x-1/2 top-0 z-10 h-px w-screen -translate-x-1/2 border-t border-dashed border-neutral-30" />
           <div className="relative mx-auto max-w-[1264px] overflow-hidden">
             <div className="justify-center divide-y divide-dashed divide-neutral-30 py-12 lg:grid lg:grid-cols-3 lg:divide-x lg:divide-y-0 lg:py-0">
-              {PREFOOTER_LIST.map(({ title, description, link }) => (
+              {prefooterList.map(({ title, description, link }) => (
                 <div
                   key={title}
                   className="relative px-5 pb-4 pt-12 2md:px-10 2md:py-16 lg:py-40"
@@ -458,70 +518,3 @@ export default async function HomePage() {
     </>
   )
 }
-
-const FEATURE_LIST: FeatureListProps['list'] = [
-  {
-    title: 'Open source',
-    description:
-      'Status is a community project. Anyone can build, contribute to and fork its source code.',
-    icon: 'Non Beta Release/Icons/10:144:144',
-  },
-  {
-    title: 'Decentralised',
-    description:
-      'Communities are exclusively powered by their members running the Status desktop app.',
-    icon: 'Non Beta Release/Icons/11:144:144',
-  },
-  {
-    title: 'Secure',
-    description:
-      'Self-custodial keys safeguard your wallets and messages via elliptic curve cryptography.',
-    icon: 'Non Beta Release/Icons/12:145:144',
-  },
-  {
-    title: 'Community driven',
-    description:
-      'SNT holders can influence future developments and governance decisions.',
-    icon: 'Non Beta Release/Icons/13:145:144',
-  },
-  {
-    title: 'Permissionless',
-    description:
-      'Nobody can stop you chatting with your friends because nobody controls Status’ p2p network.',
-    icon: 'Non Beta Release/Icons/14:144:144',
-  },
-  {
-    title: 'Free and ad-free',
-    description: 'No ads. No paid tier. No imposed limits. It’s just free.',
-    icon: 'Non Beta Release/Icons/15:145:144',
-  },
-]
-
-const PREFOOTER_LIST = [
-  {
-    title: 'Decentralising the future',
-    description:
-      'Building apps to uphold human rights, free speech and privacy.',
-    link: {
-      label: 'Our manifesto',
-      href: ROUTES.Organization.find(link => link.name === 'Manifesto')!.href,
-    },
-  },
-  {
-    title: 'A token by and for Status',
-    description:
-      'Participate in Status’ governance and help guide development with SNT.',
-    link: {
-      label: 'About SNT',
-      href: ROUTES.SNT.find(link => link.name === 'Token')!.href,
-    },
-  },
-  {
-    title: 'Building our own L2',
-    description: 'A thin, fast and secure execution layer for communities.',
-    link: {
-      label: 'About Status Network',
-      href: ROUTES.Ecosystem.find(link => link.name === 'Status Network')!.href,
-    },
-  },
-]

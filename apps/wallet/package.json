@@ -1,6 +1,6 @@
 {
   "name": "wallet",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MPL-2.0",
   "private": true,
   "type": "module",
@@ -27,6 +27,7 @@
     "clean": "rimraf .wxt .output node_modules .turbo"
   },
   "dependencies": {
+    "@metamask/browser-passworder": "^6.0.0",
     "@cardano-sdk/core": "^0.45.4",
     "@cardano-sdk/crypto": "^0.2.3",
     "@cardano-sdk/key-management": "^0.27.5",
@@ -34,6 +35,7 @@
     "@lifi/widget": "^3.40.1",
     "@radix-ui/react-dialog": "^1.1.1",
     "@status-im/colors": "workspace:*",
+    "@status-im/ethereum-provider": "workspace:*",
     "@status-im/components": "workspace:*",
     "@status-im/icons": "workspace:*",
     "@status-im/wallet": "workspace:*",
@@ -67,7 +69,7 @@
     "viem": "^2.44.1",
     "vite-plugin-node-polyfills": "^0.23.0",
     "wagmi": "^3.3.2",
-    "zod": "^3.23.8"
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "4.1.1",

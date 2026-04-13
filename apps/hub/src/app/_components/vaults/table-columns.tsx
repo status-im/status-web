@@ -253,7 +253,7 @@ export const createVaultTableColumns = ({
           <div className="flex items-center gap-1">
             <span className="text-13 font-medium text-neutral-100">
               {formatSNT(karma)}
-              <span className="ml-0.5 text-neutral-50">KARMA</span>
+              <span className="ml-0.5 text-neutral-50">TKARMA</span>
             </span>
           </div>
         )
@@ -262,7 +262,7 @@ export const createVaultTableColumns = ({
         return (
           <span className="text-13 font-medium text-neutral-100">
             {formatSNT(totalKarma)}
-            <span className="ml-0.5 text-neutral-50">KARMA</span>
+            <span className="ml-0.5 text-neutral-50">TKARMA</span>
           </span>
         )
       },
@@ -314,7 +314,7 @@ export const createVaultTableColumns = ({
           : false
 
         return (
-          <div className="flex items-end justify-end gap-2 lg:gap-4">
+          <div className="flex items-center justify-end gap-2 lg:gap-4">
             {emergencyModeEnabled ? (
               <WithdrawVaultModal
                 open={isWithdrawModalOpen}

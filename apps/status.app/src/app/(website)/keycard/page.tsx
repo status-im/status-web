@@ -1,6 +1,7 @@
 import { Button, Tag, Text } from '@status-im/components'
 import { ExternalIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
+import { getTranslations } from 'next-intl/server'
 
 import { KEYCARD_STORE_URL } from '~/config/routes'
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
@@ -17,22 +18,102 @@ import { VideoSection } from '~website/_components/video-section'
 
 import { HeroSection } from '../_components/hero-section'
 
+import type { ImageAlt } from '~components/assets'
 import type { FeatureListProps } from '~website/_components/feature-list'
+import type { Metadata as NextMetadata } from 'next'
 
-export const metadata = Metadata({
-  title: {
-    absolute: 'Keycard by Status',
-  },
-  description: 'A secure contactless hardware wallet.',
-  alternates: {
-    canonical: '/keycard',
-  },
-})
+export async function generateMetadata(): Promise<NextMetadata> {
+  const t = await getTranslations('keycard')
 
-export default function KeycardPage() {
-  const organizationSchema = jsonLD.organization({
-    description: 'A secure contactless hardware wallet for Status.',
+  return Metadata({
+    title: t('getKeycard'),
+    description: t('description'),
+    alternates: {
+      canonical: '/keycard',
+    },
   })
+}
+
+export default async function KeycardPage() {
+  const t = await getTranslations('keycard')
+
+  const organizationSchema = jsonLD.organization({
+    description: t('description'),
+  })
+
+  const featureList: FeatureListProps['list'] = [
+    {
+      title: t('keysSecuredTitle'),
+      description: t('keysSecuredDescription'),
+      icon: 'Keycard/Icons/Icon Section/01_Keys_Secured:144:144',
+    },
+    {
+      title: t('mobileFriendlyTitle'),
+      description: t('mobileFriendlyDescription'),
+      icon: 'Keycard/Icons/Icon Section/02_Mobile_Friendly:145:144',
+    },
+    {
+      title: t('portableTitle'),
+      description: t('portableDescription'),
+      icon: 'Keycard/Icons/Icon Section/06_Portable_Discrete:145:144',
+    },
+    {
+      title: t('noChargingTitle'),
+      description: t('noChargingDescription'),
+      icon: 'Keycard/Icons/Icon Section/04_No_Charging:144:144',
+    },
+    {
+      title: t('openSourceTitle'),
+      description: t('openSourceDescription'),
+      icon: 'Keycard/Icons/Icon Section/05_Open_Source:145:144',
+    },
+    {
+      title: t('unparalleledSecurityTitle'),
+      description: t('unparalleledSecurityDescription'),
+      icon: 'Keycard/Icons/Icon Section/03_Unparalleled_Security:145:144',
+    },
+  ]
+
+  const prefooterList = [
+    {
+      title: t('openStandardsTitle'),
+      description: t('openStandardsDescription'),
+      links: [
+        {
+          label: 'bip-32',
+          href: 'https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki',
+        },
+        {
+          label: 'bip-39',
+          href: 'https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki',
+        },
+        {
+          label: 'bip-44',
+          href: 'https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki',
+        },
+      ],
+    },
+    {
+      title: t('easyIntegrationTitle'),
+      description: t('easyIntegrationDescription'),
+      links: [
+        {
+          label: t('documentation'),
+          href: 'https://keycard.tech/docs/overview',
+        },
+      ],
+    },
+    {
+      title: t('fullCustomizationTitle'),
+      description: t('fullCustomizationDescription'),
+      links: [
+        {
+          label: 'get@keycard.tech',
+          href: 'mailto:get@keycard.tech',
+        },
+      ],
+    },
+  ] as const
 
   return (
     <>
@@ -41,8 +122,8 @@ export default function KeycardPage() {
         <Body data-customisation="army">
           <div className="relative">
             <HeroSection
-              title="Use Status with Keycard"
-              description="A secure contactless hardware wallet."
+              title={t('title')}
+              description={t('description')}
               reverse
               tag={<FeatureTag type="keycard" />}
               video={{
@@ -53,7 +134,7 @@ export default function KeycardPage() {
               action={
                 <div className="inline-flex gap-2 rounded-20 border border-dashed border-neutral-80/20 p-2">
                   <Button iconAfter={<ExternalIcon />} href={KEYCARD_STORE_URL}>
-                    Get a Keycard
+                    {t('getKeycard')}
                   </Button>
                 </div>
               }
@@ -68,15 +149,9 @@ export default function KeycardPage() {
 
           <div className="relative z-30 bg-white-100">
             <div className="container relative z-20 pb-7 pt-12 xl:py-20">
-              <h2 className="text-40 font-bold xl:text-64">
-                Secure.
-                <br />
-                Simple to use.
-                <br />
-                100% open source.
-              </h2>
+              <h2 className="text-40 font-bold xl:text-64">{t('tagline')}</h2>
             </div>
-            <FeatureList list={FEATURE_LIST} />
+            <FeatureList list={featureList} />
             <ParallaxCircle className="top-[416px] xl:right-[80px] xl:top-[36px]" />
           </div>
 
@@ -89,18 +164,19 @@ export default function KeycardPage() {
               />
             </div>
           </div>
+
           <div className="relative">
             <VideoSection
-              title="Seamless integration with Status"
+              title={t('integrationTitle')}
               circle={
                 <div className="absolute top-[-438px] z-10 xl:left-[-80px]">
                   <ParallaxCircle />
                 </div>
               }
-              description="Get offline private key management, transaction authorization, and two factor authentication.*"
+              description={t('integrationDescription')}
               secondarySlot={
                 <p className="-mt-8 text-15 text-neutral-50">
-                  *some features are only available with Status Desktop
+                  {t('integrationNote')}
                 </p>
               }
               video={
@@ -118,49 +194,48 @@ export default function KeycardPage() {
 
             <Section
               icon="Keycard/Icons/Screen Section/01_Protect_Your_Assets:144:144"
-              title="Protect your assets"
-              description="Use Status Wallet, knowing that keys never actually leave your Keycard."
+              title={t('protectAssetsTitle')}
+              description={t('protectAssetsDescription')}
               secondary={[
                 {
-                  title: 'Intrinsically secure',
-                  description:
-                    'Fully and irrevocably own your own crypto. Feel secure in the knowledge that keys never leave a Keycard, so that even if your phone or desktop computer is compromised, keys remain safe.',
+                  title: t('intrinsicallySecureTitle'),
+                  description: t('intrinsicallySecureDescription'),
                 },
               ]}
               image={{
                 id: 'Keycard/Screens/Keycard_01:750:1624',
-                alt: 'Mobile app screenshot showing how the keycard feature works: the user can protect their assets using the Status wallet, knowing that keys never actually leave their Keycard',
+                alt: t(
+                  'protectAssetsAlt'
+                ) as ImageAlt['Keycard/Screens/Keycard_01:750:1624'],
               }}
             />
 
             <Section
               reverse
               icon="Keycard/Icons/Screen Section/02_Protect_Your_Identity:144:144"
-              title="Protect your identity"
-              description="Sign in to Status Desktop and Mobile securely using your Keycard."
+              title={t('protectIdentityTitle')}
+              description={t('protectIdentityDescription')}
               secondary={[
                 {
-                  title: 'Keycard encrypted',
-                  description:
-                    'By signing into Status with a Keycard, you can rest assured knowing that all data stored in your Status app is encrypted with your Keycard.',
+                  title: t('encryptedTitle'),
+                  description: t('encryptedDescription'),
                 },
                 {
-                  title: 'Migrate devices',
-                  description:
-                    'Use Status on any new device with your existing profile, with just your Keycard and pin in hand.',
+                  title: t('migrateTitle'),
+                  description: t('migrateDescription'),
                 },
                 {
-                  title: 'Profile secured',
-                  description:
-                    'Secure your messages and identity in the same way you secure your tokens, by keeping your Status profile chat key on a Keycard.',
+                  title: t('profileSecuredTitle'),
+                  description: t('profileSecuredDescription'),
                 },
               ]}
               image={{
                 id: 'Keycard/Screens/Keycard_02:750:1624',
-                alt: 'Mobile app screenshot showing how the keycard feature works: the user can protect their identity signing in to Status Desktop and Mobile securely using their Keycard',
+                alt: t(
+                  'protectIdentityAlt'
+                ) as ImageAlt['Keycard/Screens/Keycard_02:750:1624'],
               }}
             />
-            {/* Gradient effect with texture */}
             <div className="mask-image absolute left-1/2 top-0 h-[calc(100%+80px)] w-screen -translate-x-1/2 bg-[url('/texture-gradient.png')] bg-[length:420px]" />
             <div className="absolute left-1/2 top-0 z-[2] h-[calc(100%+80px)] w-screen -translate-x-1/2 bg-gradient-to-t from-customisation-army-50/10 to-transparent" />
           </div>
@@ -168,7 +243,7 @@ export default function KeycardPage() {
           <div className="relative mt-20 border-t border-dashed border-neutral-30 bg-white-100">
             <div className="relative mx-auto max-w-[1264px]">
               <div className="grid grid-cols-1 justify-center divide-y divide-dashed divide-neutral-30 xl:grid-cols-3 xl:divide-x xl:divide-y-0 xl:py-0">
-                {PREFOOTER_LIST.map(({ title, description, links }) => (
+                {prefooterList.map(({ title, description, links }) => (
                   <div
                     key={title}
                     className="relative px-5 py-12 xl:px-10 xl:py-40"
@@ -196,7 +271,6 @@ export default function KeycardPage() {
                 ))}
               </div>
 
-              {/* STICKERS */}
               <Image
                 id="Keycard/Stickers/01:410:409"
                 alt=""
@@ -211,7 +285,6 @@ export default function KeycardPage() {
                 height={136}
                 className="absolute -bottom-10 right-24 xl:-right-6 xl:top-8"
               />
-
               <Image
                 id="Keycard/Stickers/03:441:442"
                 alt=""
@@ -223,12 +296,14 @@ export default function KeycardPage() {
           </div>
 
           <div className="container flex flex-col items-center border-t border-dashed border-neutral-30 py-24 text-center xl:border-none xl:pb-40 xl:pt-0">
-            <h4 className="mb-4 text-40 font-bold xl:text-64">Get a Keycard</h4>
+            <h4 className="mb-4 text-40 font-bold xl:text-64">
+              {t('getKeycard')}
+            </h4>
             <p className="mb-8 max-w-[572px] text-27 font-regular">
-              The safest, simplest and most secure hardware wallet available.
+              {t('safestWallet')}
             </p>
             <Button iconAfter={<ExternalIcon />} href={KEYCARD_STORE_URL}>
-              Get a Keycard
+              {t('getKeycard')}
             </Button>
           </div>
         </Body>
@@ -236,90 +311,3 @@ export default function KeycardPage() {
     </>
   )
 }
-
-const FEATURE_LIST: FeatureListProps['list'] = [
-  {
-    title: 'Keys secured',
-    description:
-      'Your keys are stored in the keycard and nobody can extract them. Not Status. Not hackers. Not government.',
-
-    icon: 'Keycard/Icons/Icon Section/01_Keys_Secured:144:144',
-  },
-  {
-    title: 'Mobile friendly',
-    description:
-      'It just works. Sign transactions by tapping on a phone with Status. No pairing, no compatibility issues.',
-    icon: 'Keycard/Icons/Icon Section/02_Mobile_Friendly:145:144',
-  },
-  {
-    title: 'Portable, discreet',
-    description:
-      'Keycard is the same size as a credit card. Easily carry it everywhere and anywhere, with your other cards.',
-    icon: 'Keycard/Icons/Icon Section/06_Portable_Discrete:145:144',
-  },
-
-  {
-    title: 'No charging',
-    description:
-      'Keycard doesn’t have and doesn’t need a battery. No need to plug in!',
-
-    icon: 'Keycard/Icons/Icon Section/04_No_Charging:144:144',
-  },
-  {
-    title: 'Open source',
-    description: 'Keycard’s applet and all support libs are 100% open source.',
-
-    icon: 'Keycard/Icons/Icon Section/05_Open_Source:145:144',
-  },
-  {
-    title: 'Unparalleled security',
-    description:
-      'Keycard’s secure element has passed Common Criteria EAL6+ certification.',
-
-    icon: 'Keycard/Icons/Icon Section/03_Unparalleled_Security:145:144',
-  },
-]
-
-const PREFOOTER_LIST = [
-  {
-    title: 'Open standards',
-    description:
-      'Status key management follows open and commonly used standards.',
-    links: [
-      {
-        label: 'bip-32',
-        href: 'https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki',
-      },
-      {
-        label: 'bip-39',
-        href: 'https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki',
-      },
-      {
-        label: 'bip-44',
-        href: 'https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki',
-      },
-    ],
-  },
-  {
-    title: 'Easy integration',
-    description:
-      'Add Keycard support to your mobile or desktop wallet app using our SDK.',
-    links: [
-      {
-        label: 'Documentation',
-        href: 'https://keycard.tech/docs/overview',
-      },
-    ],
-  },
-  {
-    title: 'Full customization',
-    description:
-      'Contact us about creating Keycards with custom design and branding.',
-    links: [
-      {
-        label: 'get@keycard.tech',
-        href: 'mailto:get@keycard.tech',
-      },
-    ],
-  },
-] as const

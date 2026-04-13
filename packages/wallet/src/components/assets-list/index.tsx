@@ -9,19 +9,30 @@ import { CurrencyAmount } from '../currency-amount'
 import { PercentageChange } from '../percentage-change'
 import * as Table from '../table'
 import { TokenAmount } from '../token-amount'
+import { TokenIcon } from '../token-icon'
 
 import type { ApiOutput } from '../../data'
 
 type Props = {
   assets: ApiOutput['assets']['all']['assets']
   pathname?: string
+  hideBelowOneEur?: boolean
+  onHideBelowOneEurChange?: (value: boolean) => void
   onSelect: (url: string, options?: { scroll?: boolean }) => void
   searchParams: URLSearchParams
   clearSearch: () => void
 }
 
 const AssetsList = (props: Props) => {
-  const { assets, pathname, onSelect, searchParams, clearSearch } = props
+  const {
+    assets,
+    pathname,
+    hideBelowOneEur = false,
+    onHideBelowOneEurChange = () => {},
+    onSelect,
+    searchParams,
+    clearSearch,
+  } = props
 
   const searchParamValue = searchParams.get('search') ?? ''
   const sortParamValue = searchParams.get('sort') ?? ''
@@ -45,9 +56,13 @@ const AssetsList = (props: Props) => {
       }
     })
 
-    if (!orderByColumn) return filtered
+    const valueFiltered = hideBelowOneEur
+      ? filtered.filter(asset => Number(asset.total_eur ?? 0) >= 1)
+      : filtered
 
-    return [...filtered].sort((a, b) => {
+    if (!orderByColumn) return valueFiltered
+
+    return [...valueFiltered].sort((a, b) => {
       const comparison = match(orderByColumn)
         .with('name', () => (a.name || '').localeCompare(b.name || ''))
         .with(
@@ -70,7 +85,9 @@ const AssetsList = (props: Props) => {
 
       return ascending ? comparison : -comparison
     })
-  }, [assets, searchParamValue, orderByColumn, ascending])
+  }, [assets, searchParamValue, orderByColumn, ascending, hideBelowOneEur])
+
+  const isSearchActive = searchParamValue.trim().length > 0
 
   return (
     <div className="pb-10">
@@ -104,10 +121,11 @@ const AssetsList = (props: Props) => {
                   >
                     <Table.Cell size={36}>
                       <div className="flex flex-row items-center gap-2">
-                        <img
-                          className="size-6 rounded-full bg-neutral-10"
-                          alt={asset.name}
-                          src={asset.icon}
+                        <TokenIcon
+                          icon={asset.icon}
+                          name={asset.name}
+                          symbol={asset.symbol}
+                          size="24"
                         />
                         <span className="truncate">{asset.name}</span>
                       </div>
@@ -144,17 +162,27 @@ const AssetsList = (props: Props) => {
               No tokens found
             </h2>
             <p className="mb-5 text-13 font-regular text-neutral-100">
-              We didn&apos;t find any tokens that match your search
+              {isSearchActive
+                ? "We didn't find any tokens that match your search"
+                : hideBelowOneEur
+                  ? 'All tokens are below $1'
+                  : "We didn't find any tokens"}
             </p>
-            <Button
-              variant="outline"
-              target="_blank"
-              size="32"
-              rel="noopener noreferrer"
-              onClick={() => clearSearch()}
-            >
-              Clear search
-            </Button>
+            {isSearchActive ? (
+              <Button variant="outline" size="32" onClick={() => clearSearch()}>
+                Clear search
+              </Button>
+            ) : (
+              hideBelowOneEur && (
+                <Button
+                  variant="outline"
+                  size="32"
+                  onClick={() => onHideBelowOneEurChange(false)}
+                >
+                  Show all assets
+                </Button>
+              )
+            )}
           </div>
         )}
       </div>
@@ -177,10 +205,11 @@ const AssetsList = (props: Props) => {
                 }}
               >
                 <div className="flex items-center gap-2">
-                  <img
-                    className="size-8 rounded-full"
-                    alt={asset.name}
-                    src={asset.icon}
+                  <TokenIcon
+                    icon={asset.icon}
+                    name={asset.name}
+                    symbol={asset.symbol}
+                    size="32"
                   />
                   <div className="flex min-w-0 flex-col items-start text-left">
                     <span className="w-full max-w-40 truncate text-15 font-600 sm:max-w-full">

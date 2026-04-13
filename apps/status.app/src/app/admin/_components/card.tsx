@@ -10,10 +10,11 @@ type Props = {
   description: string
   href: string
   hrefLabel?: string
+  actionLabel?: string
 }
 
 export const Card = (props: Props) => {
-  const { href, hrefLabel, title, description, icon: Icon } = props
+  const { href, hrefLabel, title, description, icon: Icon, actionLabel } = props
 
   const external = href.startsWith('https')
 
@@ -45,7 +46,7 @@ export const Card = (props: Props) => {
           <Button
             variant="outline"
             icon={<ArrowRightIcon />}
-            aria-label="Go to page"
+            aria-label={actionLabel ?? title}
           />
         )}
       </div>

@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { Avatar } from '@status-im/components'
 import { AttachIcon } from '@status-im/icons/16'
 import { usePathname, useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import { AddNewButton } from '~admin/_components/add-new-button'
 import { AdminDropdownSort } from '~admin/_components/dropdown-sort'
@@ -109,12 +110,8 @@ const fakeFirmwares: Firmware[] = [
   },
 ]
 
-const orderByData = {
-  version: 'Numerical (version)',
-  date: 'Added date',
-}
-
 const FirmwaresList = () => {
+  const t = useTranslations('admin')
   const { showRightView } = useLayoutContext()
 
   const router = useRouter()
@@ -140,17 +137,22 @@ const FirmwaresList = () => {
     setSearchFilter('')
   }
 
+  const orderByData = {
+    version: t('numericalVersion'),
+    date: t('addedDate'),
+  }
+
   return (
     <AdminLayoutList segment="firmwares">
       <div className="flex flex-col gap-6">
         {user.canEditKeycard && (
           <AddNewButton href="/admin/keycard/firmwares/new">
-            New firmware
+            {t('newFirmwareLowercase')}
           </AddNewButton>
         )}
         <AdminLayoutList.Filters>
           <SearchInput
-            placeholder="Find firmwares"
+            placeholder={t('findFirmwares')}
             value={searchFilter}
             onChange={setSearchFilter}
           />
@@ -170,10 +172,10 @@ const FirmwaresList = () => {
       >
         <Table.Root>
           <Table.Header>
-            <Table.HeaderCell>Version</Table.HeaderCell>
-            <Table.HeaderCell>File</Table.HeaderCell>
-            <Table.HeaderCell>Date</Table.HeaderCell>
-            <Table.HeaderCell>Added by</Table.HeaderCell>
+            <Table.HeaderCell>{t('version')}</Table.HeaderCell>
+            <Table.HeaderCell>{t('file')}</Table.HeaderCell>
+            <Table.HeaderCell>{t('date')}</Table.HeaderCell>
+            <Table.HeaderCell>{t('addedBy')}</Table.HeaderCell>
           </Table.Header>
           <Table.Body>
             {filteredFirmwares.map(firmware => {

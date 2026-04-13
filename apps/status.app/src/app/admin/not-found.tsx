@@ -1,4 +1,5 @@
 import { Button } from '@status-im/components'
+import { getTranslations } from 'next-intl/server'
 
 import { Video } from '~components/assets'
 
@@ -8,26 +9,25 @@ import { Video } from '~components/assets'
 //   title: 'Page not found',
 // }
 
-export default function NotFound() {
+export default async function NotFound() {
+  const t = await getTranslations('admin')
   return (
     <>
       {/* note: https://github.com/vercel/next.js/issues/45620#issuecomment-1827734000 to overwrite `metadata.title` of the page from which `notFound()` was thrown */}
       <div>
-        <title>Page not found</title>
+        <title>{t('notFoundTitle')}</title>
       </div>
       <div className="relative flex min-h-[calc(100vh-56px)] w-full flex-col items-center justify-center gap-8 bg-white-100 text-center">
         <div className="z-10 flex flex-col items-center">
           <div className="mb-3 flex flex-col gap-2 py-3">
             <h2 className="text-19 font-semibold 2md:text-27">
-              Oh no! It looks like you’re lost
+              {t('notFoundTitle')}
             </h2>
-            <p className="text-15 2md:text-19">
-              The page you were looking for doesn’t exist
-            </p>
+            <p className="text-15 2md:text-19">{t('notFoundDescription')}</p>
           </div>
 
           <Button variant="outline" href="/admin">
-            Go to homepage
+            {t('goHome')}
           </Button>
         </div>
         <Video

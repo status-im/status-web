@@ -2,21 +2,24 @@
 
 import { Button, Tag } from '@status-im/components'
 import { ChromeIcon } from '@status-im/icons/20'
+import { useTranslations } from 'next-intl'
 
 import { STATUS_CONNECTOR_CHROME_URL } from '~/config/routes'
 import { trackEvent } from '~app/_utils/track'
 import { DownloadConnectorSection } from '~website/_components/download-connector'
 
 const ConnectorSection = () => {
+  const t = useTranslations('apps')
+  const td = useTranslations('download')
+
   return (
     <DownloadConnectorSection>
-      <Tag size="32" label="Status Wallet Connector" />
+      <Tag size="32" label={t('connectorTag')} />
       <h2 className="mb-3 mt-4 text-27 font-700 xl:text-40">
-        Connect Status to your favourite dapps
+        {t('connectorTitle')}
       </h2>
       <p className="mb-8 text-19 font-400 xl:text-27">
-        Safely explore dapps with our browser extension while keeping your keys
-        secure inside Status.
+        {t('connectorDescription')}
       </p>
 
       <Button
@@ -31,7 +34,7 @@ const ConnectorSection = () => {
           window.open(STATUS_CONNECTOR_CHROME_URL, '_blank')
         }}
       >
-        Download for Chrome
+        {td('downloadForChrome')}
       </Button>
     </DownloadConnectorSection>
   )

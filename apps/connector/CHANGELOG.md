@@ -1,5 +1,15 @@
 # connector
 
+## 0.0.7
+
+### Patch Changes
+
+- 5975aae: fix(connector): two different zod instances being used leading to errors in extension
+- 5a9bc8e: fix: remove connection_error flag that incorrectly forced not-connected state on RPC errors
+- edc1953: chore: remove supported networks
+- ccc91d5: JSON-LD schema type updates, status.network/hub layout and copy, connector assets, blog and karma UI tweaks
+- 5975aae: fix: zod version resolution
+
 ## 0.0.6
 
 ### Patch Changes

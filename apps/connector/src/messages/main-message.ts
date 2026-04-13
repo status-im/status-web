@@ -1,6 +1,5 @@
+import { RequestArguments } from '@status-im/ethereum-provider'
 import { z } from 'zod'
-
-import { RequestArguments } from '~lib/request-arguments'
 
 export const MainMessage = z.discriminatedUnion('type', [
   z.object({

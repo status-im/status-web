@@ -11,6 +11,7 @@ import { match } from 'ts-pattern'
 import { formatUnits, parseUnits } from 'viem'
 import { useAccount, useBalance, useConfig } from 'wagmi'
 import { readContract } from 'wagmi/actions'
+import { statusSepolia } from 'wagmi/chains'
 import { z } from 'zod'
 
 import { SNTIcon } from '~components/icons'
@@ -107,7 +108,7 @@ type FormValues = z.infer<ReturnType<typeof createStakeFormSchema>>
 const StakeForm = () => {
   const t = useTranslations()
   const { mutate: createVault } = useCreateVault()
-  const { address, isConnected, isConnecting } = useAccount()
+  const { address, isConnected } = useAccount()
   const { mutateAsync: approveToken } = useApproveToken()
   const { mutateAsync: stakeVault } = useVaultTokenStake()
   const { isSignedIn, isLoading: isLoadingSIWE, signIn } = useSIWE()
@@ -200,6 +201,7 @@ const StakeForm = () => {
     try {
       // Check current allowance
       const currentAllowance = (await readContract(config, {
+        chainId: statusSepolia.id,
         address: STT_TOKEN.address,
         abi: STT_TOKEN.abi,
         functionName: 'allowance',
@@ -230,8 +232,7 @@ const StakeForm = () => {
     }
   }
 
-  const showLoadingSkeleton =
-    isConnecting || (isConnected && (isLoading || isLoadingSIWE))
+  const showLoadingSkeleton = isConnected && (isLoading || isLoadingSIWE)
 
   if (showLoadingSkeleton) {
     return <StakeFormSkeleton />

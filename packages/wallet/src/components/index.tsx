@@ -67,10 +67,10 @@ export {
   shortenAddress,
   type ShortenAddressProps,
 } from './shorten-address'
-export { SignTransactionDialog } from './sign-transaction'
 export { Slider, type SliderProps } from './slider'
 export { StickyHeaderContainer } from './sticky-header-container'
 export { getTabLinkClassName, TabLink } from './tab-link'
+export { ToggleButton, type ToggleButtonProps } from './toggle-button'
 export { TokenAmount } from './token-amount'
 export { TokenLogo } from './token-logo'
 export { TokenSkeleton } from './token-skeleton'

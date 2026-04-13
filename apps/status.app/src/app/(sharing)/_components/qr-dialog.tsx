@@ -1,6 +1,9 @@
+'use client'
+
 import * as Dialog from '@radix-ui/react-dialog'
 import { Button } from '@status-im/components'
 import { CloseIcon } from '@status-im/icons/20'
+import { useTranslations } from 'next-intl'
 import { QRCodeSVG } from 'qrcode.react'
 
 type Props = {
@@ -10,6 +13,8 @@ type Props = {
 
 export const QrDialog = (props: Props) => {
   const { value, children } = props
+  const tc = useTranslations('common')
+  const t = useTranslations('sharing')
 
   return (
     <Dialog.Root>
@@ -26,7 +31,7 @@ export const QrDialog = (props: Props) => {
                 </div>
               </div>
               <Dialog.Description className="text-13 text-blur-white/70">
-                Scan with Status Desktop or Status Mobile
+                {t('scanWithStatus')}
               </Dialog.Description>
             </div>
 
@@ -40,7 +45,7 @@ export const QrDialog = (props: Props) => {
                   icon={<CloseIcon />}
                   size="32"
                   variant="outline"
-                  aria-label="Close"
+                  aria-label={tc('close')}
                 />
               </Dialog.Close>
             </div>

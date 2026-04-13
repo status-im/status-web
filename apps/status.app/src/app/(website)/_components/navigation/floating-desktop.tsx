@@ -2,6 +2,7 @@ import * as NavigationMenu from '@radix-ui/react-navigation-menu'
 import { Text } from '@status-im/components'
 import { ExternalIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
+import { useTranslations } from 'next-intl'
 
 import { ROUTES } from '~/config/routes'
 import { Link } from '~components/link'
@@ -9,6 +10,7 @@ import { Logo } from '~components/logo'
 
 import { DownloadDesktopButton } from '../download-desktop-button'
 import { DownloadMobileButton } from '../download-mobile-button'
+import { LanguageSelector } from './language-selector'
 import { useDesktopMenu } from './use-desktop-menu'
 
 type Props = {
@@ -17,6 +19,7 @@ type Props = {
 
 const FloatingDesktop = (props: Props) => {
   const { visible } = props
+  const t = useTranslations('nav')
 
   const {
     value,
@@ -25,6 +28,7 @@ const FloatingDesktop = (props: Props) => {
     handleTriggerMouseEnter,
     handleTriggerMouseLeave,
     handleContentLeave,
+    handleTriggerKeyDown,
   } = useDesktopMenu()
 
   return (
@@ -45,16 +49,17 @@ const FloatingDesktop = (props: Props) => {
           <Logo label={false} />
         </Link>
         <NavigationMenu.List className="flex items-center pl-5 pr-4">
-          {Object.entries(ROUTES).map(([name, links]) => (
-            <NavigationMenu.Item key={name} value={name}>
+          {Object.entries(ROUTES).map(([nameKey, links]) => (
+            <NavigationMenu.Item key={nameKey} value={nameKey}>
               <NavigationMenu.Trigger
-                aria-expanded={value === name}
+                aria-expanded={value === nameKey}
                 className="pr-5 transition-opacity aria-expanded:opacity-[50%]"
-                onMouseEnter={handleTriggerMouseEnter}
+                onMouseEnter={() => handleTriggerMouseEnter(nameKey)}
                 onMouseLeave={handleTriggerMouseLeave}
+                onKeyDown={event => handleTriggerKeyDown(event, nameKey)}
               >
                 <Text size={15} weight="medium" color="$white-100">
-                  {name}
+                  {t(nameKey)}
                 </Text>
               </NavigationMenu.Trigger>
 
@@ -69,14 +74,14 @@ const FloatingDesktop = (props: Props) => {
                 {links.map(link => {
                   const external = link.href.startsWith('http')
                   return (
-                    <NavigationMenu.Link key={link.name} asChild>
+                    <NavigationMenu.Link key={link.nameKey} asChild>
                       <Link
                         onClick={handleContentLeave}
                         href={link.href}
                         className="flex items-center gap-1 pt-3 text-white-100 transition-opacity hover:opacity-[50%]"
                       >
                         <Text size={27} weight="semibold">
-                          {link.name}
+                          {t(link.nameKey)}
                         </Text>
                         {external && <ExternalIcon />}
                       </Link>
@@ -88,18 +93,25 @@ const FloatingDesktop = (props: Props) => {
           ))}
         </NavigationMenu.List>
 
-        <div className={cx('hidden flex-row gap-2', 'ios:flex android:flex')}>
+        <div
+          className={cx(
+            'hidden flex-row items-center gap-2',
+            'ios:flex android:flex'
+          )}
+        >
           <DownloadDesktopButton size="32" variant="primary" />
           <DownloadMobileButton size="32" variant="outline" />
+          <LanguageSelector />
         </div>
         <div
           className={cx(
-            'hidden flex-row gap-2',
+            'hidden flex-row items-center gap-2',
             'macos:flex windows:flex linux:flex unknown:flex'
           )}
         >
           <DownloadDesktopButton size="32" variant="primary" show="all" />
           <DownloadMobileButton size="32" variant="outline" />
+          <LanguageSelector />
         </div>
       </div>
       <NavigationMenu.Viewport

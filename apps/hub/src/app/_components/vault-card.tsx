@@ -18,7 +18,7 @@ import { useGUSDUserBalance } from '~hooks/useGUSDUserBalance'
 import { usePreDepositTVL } from '~hooks/usePreDepositTVL'
 import { usePreDepositTVLInUSD } from '~hooks/usePreDepositTVLInUSD'
 import { useUserVaultDeposit } from '~hooks/useUserVaultDeposit'
-import { useVaultsAPY } from '~hooks/useVaultsAPY'
+import { useVaultsAPR } from '~hooks/useVaultsAPR'
 
 import {
   DollarIcon,
@@ -129,7 +129,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
   const { data: gusdTvl, isLoading: isGUSDTvlLoading } = useGUSDTVL()
   const { data: gusdBreakdown, isLoading: isGUSDBreakdownLoading } =
     useGUSDStablecoinBreakdown({ enabled: isGUSD })
-  const { data: apyMap, isLoading: isApyLoading } = useVaultsAPY()
+  const { data: aprMap, isLoading: isAprLoading } = useVaultsAPR()
   const { data: depositedBalance, isLoading: isDepositedBalanceLoading } =
     useUserVaultDeposit({ vault, registerRefetch })
   const { data: gusdBalance, isLoading: isGUSDBalanceLoading } =
@@ -145,10 +145,11 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
   const t = useTranslations()
 
   const vaultAddressLower = vault.address.toLowerCase()
-  const isVaultInApi = apyMap !== undefined && vaultAddressLower in apyMap
+  const isVaultInApi = aprMap !== undefined && vaultAddressLower in aprMap
+  // If the query inside useVaultsAPR fails, all vaults are disabled even though they might technically work
   const isDisabled = !isVaultInApi
-  const dynamicApy = apyMap?.[vaultAddressLower]
-  const apyValue = dynamicApy !== undefined ? String(dynamicApy) : null
+  const dynamicApr = aprMap?.[vaultAddressLower]
+  const aprValue = dynamicApr !== undefined ? String(dynamicApr) : null
   const rewardsLine = rewards
     .map(reward =>
       reward.startsWith('vault.')
@@ -212,7 +213,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
         <div className="flex items-center gap-4">
           <VaultImage vault={icon} network={vault.network} size="56" />
         </div>
-        <InfoTooltip content={t('vault.apy_tooltip')} />
+        <InfoTooltip content={t('vault.apr_tooltip')} />
       </div>
 
       <h3 className="mb-2 text-19 font-600 lg:text-27">{vault.name}</h3>
@@ -253,13 +254,13 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
           <span className="text-neutral-50">
             <PercentIcon />
           </span>
-          {isApyLoading ? (
+          {isAprLoading ? (
             <Skeleton width={120} height={20} className="rounded-6" />
           ) : (
             <span>
-              {apyValue
-                ? `${apyValue}% ${t('vault.liquid_apy')}`
-                : t('vault.liquid_apy_tbd')}
+              {aprValue
+                ? `${aprValue}% ${t('vault.liquid_apr')}`
+                : t('vault.liquid_apr_tbd')}
             </span>
           )}
         </li>
@@ -338,7 +339,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
 const VaultCard: FC<Props> = props => {
   const pendingDepositRef = useRef(false)
   const [isMounted, setIsMounted] = useState(false)
-  const { isLoading: isApyLoading } = useVaultsAPY()
+  const { isLoading: isAprLoading } = useVaultsAPR()
   const { isConnected } = useAccount()
 
   useEffect(() => {
@@ -347,7 +348,7 @@ const VaultCard: FC<Props> = props => {
 
   const stableIsConnected = isMounted ? isConnected : false
 
-  if (!isMounted || isApyLoading) {
+  if (!isMounted || isAprLoading) {
     return <VaultCardSkeleton isConnected={stableIsConnected} />
   }
 

@@ -10,6 +10,7 @@ import {
   CloseIcon,
 } from '@status-im/icons/20'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 import { match } from 'ts-pattern'
 
 import config from '~/config/help/config.json'
@@ -34,25 +35,27 @@ type Props = {
 export const FullscreenSearchDialog = (props: Props) => {
   const { type, open, onOpenChange } = props
 
-  const search = useSearchEngine(type)
+  const tc = useTranslations('common')
+  const t = useTranslations('help')
+  const { query, results } = useSearchEngine(type)
   const [value, setValue] = useState('')
 
   useEffect(() => {
-    search.query(value)
-  }, [value])
+    query(value)
+  }, [query, value])
 
   const { title, inputPlaceholder } = useMemo(() => {
     return match(type)
       .with('help', () => ({
-        title: 'I need help with',
-        inputPlaceholder: 'crypto',
+        title: t('searchHelpTitle'),
+        inputPlaceholder: t('searchHelpPlaceholder'),
       }))
       .with('specs', () => ({
-        title: 'I am looking for',
-        inputPlaceholder: 'scaling',
+        title: t('searchSpecsTitle'),
+        inputPlaceholder: t('searchSpecsPlaceholder'),
       }))
       .exhaustive()
-  }, [type])
+  }, [t, type])
 
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
@@ -69,7 +72,7 @@ export const FullscreenSearchDialog = (props: Props) => {
                 icon={<CloseIcon />}
                 size="32"
                 variant="grey"
-                aria-label="Close"
+                aria-label={tc('close')}
               />
             </Dialog.Close>
           </div>
@@ -98,26 +101,26 @@ export const FullscreenSearchDialog = (props: Props) => {
             </div>
 
             <div className="flex flex-col divide-y divide-dashed divide-neutral-80/20 pb-6 pt-[80px]">
-              {value !== '' && search.results.length === 0 && (
+              {value !== '' && results.length === 0 && (
                 <div className="relative z-10 flex flex-col items-center justify-center">
                   <Image
-                    alt="No results found"
+                    alt={t('noResultsTitle')}
                     src="/assets/chart/empty.png"
                     width={80}
                     height={80}
                   />
                   <div className="pb-3" />
                   <span className="text-15 font-semibold">
-                    No results for &apos;{value}&apos;.
+                    {t('noResultsFor', { value })}
                   </span>
                   <div className="pb-1" />
                   <span className="text-13 text-neutral-100">
-                    Please try another search.
+                    {t('tryAnotherSearch')}
                   </span>
                 </div>
               )}
 
-              {search.results.map((result, idx) => {
+              {results.map((result, idx) => {
                 // const isIndex =
                 //   result.path.replace('/help/', '').split('/').length === 1
                 const category = getCategory(config, result.path)

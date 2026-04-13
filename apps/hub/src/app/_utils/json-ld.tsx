@@ -1,7 +1,4 @@
-import {
-  createAppJSONLD,
-  JSONLDScript as BaseJSONLDScript,
-} from '@status-im/components'
+import { createAppJSONLD, JSONLDScript } from '@status-im/components'
 
 import type {
   ArticleSchema,
@@ -32,6 +29,11 @@ export const jsonLD = {
     description?: string
     logo?: string
     sameAs?: string[]
+    knowsAbout?: Array<{
+      '@type': string
+      name: string
+      url?: string
+    }>
   }) => {
     const { sameAs, ...restConfig } = config ?? {}
     return baseJsonLD.organization({
@@ -58,4 +60,4 @@ export type {
 /**
  * Re-export JSONLDScript component
  */
-export { BaseJSONLDScript as JSONLDScript }
+export { JSONLDScript }

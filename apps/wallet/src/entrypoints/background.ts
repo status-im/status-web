@@ -1,4 +1,5 @@
 // todo!: keep-alive
+//^ 2026-02-13 - Jules: I don't think this is a good idea, or even necessary anymore
 
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="../../.wxt/wxt.d.ts" />
@@ -9,8 +10,10 @@ import { defineBackground } from 'wxt/sandbox'
 // import { browser as wxtBrowser } from 'wxt/browser'
 import { createAPI } from '../data/api'
 import { encoder } from '../data/encoder'
-import { getKeystore } from '../data/keystore'
+import { INACTIVITY_ALARM_NAME, lock } from '../data/session'
 import { getWalletCore } from '../data/wallet'
+import { RpcMessage } from '../lib/messages'
+import { handleRpcRequest } from '../lib/rpc-handler'
 
 export default defineBackground({
   type: 'module',
@@ -18,25 +21,26 @@ export default defineBackground({
   // note: The background's main() function return a promise, but it must be synchronous
   // main: async function main() {
   main: function main() {
+    const g = globalThis as typeof globalThis & Record<string, unknown>
+
     // Polyfill
-    globalThis.Buffer = Buffer
+    g.Buffer = Buffer
 
     // Encoder
-    globalThis.encoder = encoder
-
-    // Storage
-    getKeystore().then(keystore => {
-      globalThis.storage = keystore
-    })
+    g.encoder = encoder
 
     // Wallet
     getWalletCore().then(walletCore => {
-      globalThis.wallet = walletCore
+      g.wallet = walletCore
     })
 
     // API
     createAPI().then(api => {
-      globalThis.api = api
+      g.api = api
+    })
+
+    chrome.alarms.onAlarm.addListener(alarm => {
+      if (alarm.name === INACTIVITY_ALARM_NAME) lock()
     })
 
     chrome.runtime.onInstalled.addListener(() => {
@@ -67,6 +71,58 @@ export default defineBackground({
       }
     })
 
-    // debugger
+    // dApp message handler (single listener to avoid Chrome port conflicts)
+    chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+      if (message?.type === 'status:disconnect') {
+        const origin = message.data?.origin
+        if (typeof origin === 'string') {
+          handleRpcRequest(
+            'wallet_revokePermissions',
+            [{ eth_accounts: {} }],
+            origin,
+          )
+        }
+        return false
+      }
+
+      if (message?.type !== 'status:rpc') {
+        return false
+      }
+
+      const parsed = RpcMessage.safeParse(message)
+      if (!parsed.success) {
+        sendResponse({
+          type: 'status:proxy:error',
+          error: { code: -32600, message: 'Invalid Request' },
+        })
+        return true
+      }
+
+      const { method, params, origin, title, favicon } = parsed.data.data
+
+      handleRpcRequest(method, params, origin, { title, favicon })
+        .then(result => {
+          sendResponse({ type: 'status:proxy:success', data: result })
+        })
+        .catch(error => {
+          sendResponse({
+            type: 'status:proxy:error',
+            error: {
+              code:
+                error && typeof error === 'object' && 'code' in error
+                  ? error.code
+                  : -32603,
+              message:
+                error instanceof Error
+                  ? error.message
+                  : error && typeof error === 'object' && 'message' in error
+                    ? error.message
+                    : 'Internal error',
+            },
+          })
+        })
+
+      return true
+    })
   },
 })

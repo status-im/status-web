@@ -5,15 +5,20 @@ import { useEffect, useMemo, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Avatar, Button, Input, useToast } from '@status-im/components'
-import { AlertIcon, CloseIcon, ExternalIcon } from '@status-im/icons/20'
+import {
+  AlertIcon,
+  CloseIcon,
+  ExternalIcon,
+  InfoIcon,
+} from '@status-im/icons/20'
 import { cx } from 'cva'
 import { Controller, useForm } from 'react-hook-form'
 import * as z from 'zod'
 
 import { CurrencyAmount } from '../currency-amount'
 import { NetworkLogo } from '../network-logo'
-import { PasswordModal } from '../password-modal'
 import { TokenAmount } from '../token-amount'
+import { TokenIcon } from '../token-icon'
 
 import type { NetworkType } from '../../data'
 import type { Account } from '../address'
@@ -26,7 +31,7 @@ type Props = {
   }
   asset: {
     name: string
-    icon: string
+    icon?: string
     symbol: string
     totalBalance: number
     totalBalanceEur: number
@@ -34,9 +39,14 @@ type Props = {
     network: NetworkType
     decimals: number
   }
-  signTransaction: (data: FormData & { password: string }) => Promise<string>
-  verifyPassword: (inputPassword: string) => Promise<boolean>
+  signTransaction: (data: FormData) => Promise<string>
   onEstimateGas: (to: string, value: string) => void
+  hasActiveSession: boolean
+  requestPassword: (options?: {
+    title?: string
+    description?: string
+    buttonLabel?: string
+  }) => Promise<boolean>
   gasFees?: {
     maxFeeEur: number
     feeEur: number
@@ -48,6 +58,10 @@ type Props = {
 }
 
 type TransactionState = 'idle' | 'signing' | 'pending' | 'success' | 'error'
+
+const TOAST_PROCESSING_DURATION_MS = 30_000
+const TOAST_SUCCESS_DURATION_MS = 2_000
+const ERROR_STATE_RESET_DELAY_MS = 3_000
 
 const createFormSchema = (
   balance: number,
@@ -70,18 +84,18 @@ const createFormSchema = (
       .refine(
         val => {
           const amount = Number.parseFloat(val)
-          if (!maxGasFeeEth) return amount > 0 && amount <= balance
-
-          const isETH = assetSymbol === 'ETH'
-          const totalCost = isETH ? amount + maxGasFeeEth : maxGasFeeEth
-          const availableBalance = balance
-
-          return amount > 0 && totalCost <= availableBalance
+          return amount > 0 && amount <= balance
+        },
+        { message: 'More than available balance' },
+      )
+      .refine(
+        val => {
+          if (!maxGasFeeEth || assetSymbol !== 'ETH') return true
+          const amount = Number.parseFloat(val)
+          return amount + maxGasFeeEth <= balance
         },
         {
-          message: maxGasFeeEth
-            ? `Insufficient balance. Max gas fees: ${maxGasFeeEth.toFixed(6)} ETH`
-            : 'More than available balance',
+          message: `Insufficient balance. Max gas fees: ${(maxGasFeeEth ?? 0).toFixed(6)} ETH`,
         },
       ),
     contractAddress: z
@@ -101,18 +115,15 @@ const SendAssetsModal = (props: Props) => {
     asset,
     account,
     signTransaction,
-    verifyPassword,
     onEstimateGas,
+    hasActiveSession,
+    requestPassword,
     gasFees,
-    isLoadingFees,
   } = props
   const [open, setOpen] = useState(false)
   const [hasInsufficientEth, setHasInsufficientEth] = useState(false)
   const [transactionState, setTransactionState] =
     useState<TransactionState>('idle')
-  const [showPasswordModal, setShowPasswordModal] = useState(false)
-  const [pendingTransactionData, setPendingTransactionData] =
-    useState<FormData | null>(null)
 
   const toast = useToast()
   const balance = asset.totalBalance
@@ -149,6 +160,19 @@ const SendAssetsModal = (props: Props) => {
   const watchedAmount = watch('amount')
   const watchedTo = watch('to')
   const balanceEur = asset.totalBalanceEur
+
+  // Minimum transaction value in USD
+  const MIN_TRANSACTION_AMOUNT_USD = 0.1
+
+  const amountFiatValue = useMemo(() => {
+    if (!watchedAmount || balance === 0) return 0
+    return Number.parseFloat(watchedAmount || '0') * (balanceEur / balance)
+  }, [watchedAmount, balance, balanceEur])
+
+  const hasValueBelowMinimum =
+    watchedAmount &&
+    Number.parseFloat(watchedAmount) > 0 &&
+    amountFiatValue < MIN_TRANSACTION_AMOUNT_USD
 
   useEffect(() => {
     setValue('contractAddress', asset.contractAddress || undefined)
@@ -202,54 +226,39 @@ const SendAssetsModal = (props: Props) => {
   ])
 
   const onSubmit = async (data: FormData) => {
-    setPendingTransactionData(data)
-    setShowPasswordModal(true)
-  }
+    if (!hasActiveSession) {
+      const unlocked = await requestPassword({
+        title: 'Enter password',
+        description: 'To send transaction',
+        buttonLabel: 'Send Transaction',
+      })
+      if (!unlocked) return
+    }
 
-  const handlePasswordConfirm = async (password: string) => {
     setTransactionState('signing')
 
     try {
-      const isValid = await verifyPassword(password)
+      handleOnOpenChange(false)
 
-      if (!isValid) {
-        setTransactionState('idle')
-        throw new Error('Invalid password')
-      }
+      toast.custom('Processing transaction...', <InfoIcon />, {
+        duration: TOAST_PROCESSING_DURATION_MS,
+      })
+      await signTransaction(data)
+      toast.positive('Transaction signed and sent', {
+        duration: TOAST_SUCCESS_DURATION_MS,
+      })
 
-      setShowPasswordModal(false)
-      setTransactionState('pending')
-
-      if (pendingTransactionData) {
-        toast.positive('Transaction signed and sent', {
-          duration: 2000,
-        })
-
-        handleOnOpenChange(false)
-
-        await signTransaction({
-          ...pendingTransactionData,
-          password,
-        })
-      }
+      // State should be pending but setting success
+      // so "Sign Transaction" button is not disabled after tx sent
+      // TODO?: check for tx success on chain
+      setTransactionState('success')
     } catch (error) {
       setTransactionState('error')
-      if (error instanceof Error && error.message !== 'Invalid password') {
-        setShowPasswordModal(false)
-      }
-
       setTimeout(() => {
         setTransactionState('idle')
-      }, 3000)
-
+      }, ERROR_STATE_RESET_DELAY_MS)
       throw error
     }
-  }
-
-  const handlePasswordModalClose = () => {
-    setShowPasswordModal(false)
-    setTransactionState('idle')
-    setPendingTransactionData(null)
   }
 
   const handleOnOpenChange = (open: boolean) => {
@@ -258,8 +267,6 @@ const SendAssetsModal = (props: Props) => {
       reset()
       setHasInsufficientEth(false)
       setTransactionState('idle')
-      setShowPasswordModal(false)
-      setPendingTransactionData(null)
     }
   }
 
@@ -268,7 +275,9 @@ const SendAssetsModal = (props: Props) => {
     Number.parseFloat(watchedAmount) > balance &&
     Number.parseFloat(watchedAmount) > 0
 
-  const isTransactionSigning = transactionState === 'signing'
+  const submitButtonLabel = hasActiveSession
+    ? 'Send transaction'
+    : 'Sign & Send transaction'
 
   return (
     <>
@@ -284,7 +293,7 @@ const SendAssetsModal = (props: Props) => {
             data-customisation="blue"
             className="fixed left-0 top-[38px] flex size-full justify-center"
           >
-            <div className="shadow opacity-100 fixed z-auto flex h-[calc(100vh-76px)] w-[calc(100%-23px)] max-w-[494px] flex-col gap-3 overflow-auto rounded-16 bg-white-100 transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in">
+            <div className="shadow fixed z-auto flex h-[calc(100vh-76px)] w-[calc(100%-23px)] max-w-[494px] flex-col gap-3 overflow-auto rounded-16 bg-white-100 opacity-[100] transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in">
               <div className="flex items-center justify-between p-4">
                 <Dialog.Title className="text-27 font-semibold">
                   Send assets
@@ -305,7 +314,7 @@ const SendAssetsModal = (props: Props) => {
 
               <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="flex h-full flex-col place-content-between content-between justify-between space-y-6 px-4 pb-4"
+                className="flex h-full flex-col place-content-between space-y-6 px-4 pb-4"
               >
                 <div>
                   <div className="mb-2 mt-4">
@@ -356,7 +365,7 @@ const SendAssetsModal = (props: Props) => {
                             step="any"
                             placeholder="0"
                             className={cx([
-                              'w-full px-4 py-3 text-27 font-medium',
+                              'w-full py-3 pl-4 pr-24 text-27 font-medium',
                               '[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none',
                               hasInsufficientBalance && 'text-danger-50',
                             ])}
@@ -364,12 +373,13 @@ const SendAssetsModal = (props: Props) => {
                         )}
                       />
 
-                      <div className="absolute right-4 top-3 flex items-center gap-2">
+                      <div className="absolute right-4 top-3 flex items-center gap-2 bg-white-100">
                         <div className="relative">
-                          <img
-                            className="size-8 rounded-full"
-                            alt={asset.name}
-                            src={asset.icon}
+                          <TokenIcon
+                            icon={asset.icon}
+                            name={asset.name}
+                            symbol={asset.symbol}
+                            size="32"
                           />
                           <div className="absolute bottom-[-3px] right-[-3px] rounded-full border-2 border-white-100">
                             <NetworkLogo name={asset.network} size={12} />
@@ -408,9 +418,22 @@ const SendAssetsModal = (props: Props) => {
                     </div>
 
                     {errors.amount && hasInsufficientBalance && (
-                      <div className="mt-2 flex items-center gap-1 text-13 text-danger-50">
+                      <div className="mt-2 flex items-start gap-1 text-13 text-danger-50">
                         <AlertIcon className="size-4" />
                         <p>{errors.amount.message}</p>
+                      </div>
+                    )}
+
+                    {hasValueBelowMinimum && (
+                      <div className="mt-2 flex items-start gap-1 text-13 text-danger-50">
+                        <AlertIcon className="size-4" />
+                        <p>
+                          Value of the transaction must be at least{' '}
+                          <CurrencyAmount
+                            value={MIN_TRANSACTION_AMOUNT_USD}
+                            format="standard"
+                          />
+                        </p>
                       </div>
                     )}
 
@@ -557,13 +580,15 @@ const SendAssetsModal = (props: Props) => {
                     disabled={
                       hasInsufficientBalance ||
                       hasInsufficientEth ||
+                      hasValueBelowMinimum ||
                       !watchedAmount ||
                       !watchedTo ||
                       !gasFees ||
-                      isLoadingFees
+                      transactionState === 'signing' ||
+                      transactionState === 'pending'
                     }
                   >
-                    Sign Transaction
+                    {submitButtonLabel}
                   </Button>
                 </div>
               </form>
@@ -571,15 +596,6 @@ const SendAssetsModal = (props: Props) => {
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
-
-      {/* Password Verification Modal */}
-      <PasswordModal
-        open={showPasswordModal}
-        onOpenChange={handlePasswordModalClose}
-        onConfirm={handlePasswordConfirm}
-        isLoading={isTransactionSigning}
-        buttonLabel="Send Transaction"
-      />
     </>
   )
 }
@@ -631,5 +647,5 @@ const Label = ({
 
 export type { FormData as SendAssetsFormData }
 export type SendAssetsModalProps = Omit<Props, 'signTransaction'> & {
-  signTransaction: (data: FormData & { password: string }) => Promise<string>
+  signTransaction: (data: FormData) => Promise<string>
 }

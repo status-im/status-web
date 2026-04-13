@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD ../../{patches,package.json,turbo.json} ../../packages/{status-js,community-contracts} ./",
+  "installCommand": "pnpm install --ignore-scripts",
+  "buildCommand": "pnpm --filter @status-im/js run build && pnpm --filter @status-im/community-dapp run generate:proto && cd apps/community-dapp && NODE_OPTIONS=--openssl-legacy-provider pnpm exec webpack --mode=production",
+  "outputDirectory": "apps/community-dapp/dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

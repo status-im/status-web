@@ -42,7 +42,12 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Initialize submodules
-        run: git submodule update --init
+        run: git submodule update --init --recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: v1.5.1
 
       - name: Build
         run: pnpm build

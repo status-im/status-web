@@ -13,6 +13,7 @@ type LinkComponentProps = {
 type Props = {
   hasFeedback?: boolean
   linkComponent?: React.ComponentType<LinkComponentProps>
+  rightSlot?: ReactNode
 }
 
 const Navbar = (props: Props) => {
@@ -31,7 +32,10 @@ const Navbar = (props: Props) => {
           <Logo isTopbarDesktop />
         </LinkComponent>
       </div>
-      {props.hasFeedback && <FeedbackPopover />}
+      <div className="flex items-center gap-2">
+        {props.rightSlot}
+        {props.hasFeedback && <FeedbackPopover />}
+      </div>
     </div>
   )
 }

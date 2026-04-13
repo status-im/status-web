@@ -3,12 +3,186 @@
 		"details": [
 			{
 				"appIDs": [
+					"8B5X2M6H2Y.app.status.mobile"
+				],
+				"components": [
+					{
+						"/": "/",
+						"comment": "Root",
+						"exclude": true
+					},
+					{
+						"/": "/c/*",
+						"comment": "Community"
+					},
+					{
+						"/": "/cc/*",
+						"comment": "Community channel"
+					},
+					{
+						"/": "/u/*",
+						"comment": "User"
+					},
+					{
+						"/": "/p/*",
+						"comment": "Private chat"
+					},
+					{
+						"/": "/b/*",
+						"comment": "Browser"
+					},
+					{
+						"/": "/cr/*",
+						"comment": "Community request"
+					},
+					{
+						"/": "/g/*",
+						"comment": "Group chat"
+					},
+					{
+						"/": "/wallet/*",
+						"comment": "Wallet"
+					}
+				]
+			},
+			{
+				"appIDs": [
 					"DTX7Z4U3YA.im.status.ethereum",
+					"8B5X2M6H2Y.im.status.ethereum"
+				],
+				"components": [
+					{
+						"/": "/",
+						"comment": "Root",
+						"exclude": true
+					},
+					{
+						"/": "/c/*",
+						"comment": "Community"
+					},
+					{
+						"/": "/cc/*",
+						"comment": "Community channel"
+					},
+					{
+						"/": "/u/*",
+						"comment": "User"
+					},
+					{
+						"/": "/p/*",
+						"comment": "Private chat"
+					},
+					{
+						"/": "/b/*",
+						"comment": "Browser"
+					},
+					{
+						"/": "/cr/*",
+						"comment": "Community request"
+					},
+					{
+						"/": "/g/*",
+						"comment": "Group chat"
+					},
+					{
+						"/": "/wallet/*",
+						"comment": "Wallet"
+					}
+				]
+			},
+			{
+				"appIDs": [
+					"7JLRC79H5J.im.Status.NimStatusClient",
+					"8B5X2M6H2Y.im.Status.NimStatusClient"
+				],
+				"components": [
+					{
+						"/": "/",
+						"comment": "Root",
+						"exclude": true
+					},
+					{
+						"/": "/c/*",
+						"comment": "Community"
+					},
+					{
+						"/": "/cc/*",
+						"comment": "Community channel"
+					},
+					{
+						"/": "/u/*",
+						"comment": "User"
+					},
+					{
+						"/": "/p/*",
+						"comment": "Private chat"
+					},
+					{
+						"/": "/b/*",
+						"comment": "Browser"
+					},
+					{
+						"/": "/cr/*",
+						"comment": "Community request"
+					},
+					{
+						"/": "/g/*",
+						"comment": "Group chat"
+					},
+					{
+						"/": "/wallet/*",
+						"comment": "Wallet"
+					}
+				]
+			},
+			{
+				"appIDs": [
+					"8B5X2M6H2Y.app.status.mobile.pr"
+				],
+				"components": [
+					{
+						"/": "/",
+						"comment": "Root",
+						"exclude": true
+					},
+					{
+						"/": "/c/*",
+						"comment": "Community"
+					},
+					{
+						"/": "/cc/*",
+						"comment": "Community channel"
+					},
+					{
+						"/": "/u/*",
+						"comment": "User"
+					},
+					{
+						"/": "/p/*",
+						"comment": "Private chat"
+					},
+					{
+						"/": "/b/*",
+						"comment": "Browser"
+					},
+					{
+						"/": "/cr/*",
+						"comment": "Community request"
+					},
+					{
+						"/": "/g/*",
+						"comment": "Group chat"
+					},
+					{
+						"/": "/wallet/*",
+						"comment": "Wallet"
+					}
+				]
+			},
+			{
+				"appIDs": [
 					"DTX7Z4U3YA.im.status.ethereum.test",
 					"46H86FR76G.im.status.ethereum.test",
-					"7JLRC79H5J.im.Status.NimStatusClient",
-					"8B5X2M6H2Y.im.status.ethereum",
-					"8B5X2M6H2Y.im.Status.NimStatusClient",
 					"8B5X2M6H2Y.im.status.ethereum.pr",
 					"8B5X2M6H2Y.im.status.ethereum.debug"
 				],

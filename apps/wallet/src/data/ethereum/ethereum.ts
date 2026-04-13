@@ -35,12 +35,12 @@ export async function send({
   const nonceHex = await getNonceHex(fromAddress, network)
   const chainIdHex = getChainIdHex(chainID)
 
-  const cleanAmount = amount.replace(/^0x/, '').padStart(16, '0')
+  const cleanAmount = padHex(amount)
 
   const txInput = encoder.Ethereum.Proto.SigningInput.create({
     chainId: Uint8Array.from(Buffer.from(chainIdHex, 'hex')),
     nonce: Uint8Array.from(Buffer.from(nonceHex, 'hex')),
-    gasLimit: Uint8Array.from(Buffer.from(gasLimit.replace(/^0x/, ''), 'hex')),
+    gasLimit: Uint8Array.from(Buffer.from(padHex(gasLimit), 'hex')),
     maxFeePerGas: Uint8Array.from(Buffer.from(padHex(maxFeePerGas), 'hex')),
     maxInclusionFeePerGas: Uint8Array.from(
       Buffer.from(padHex(maxInclusionFeePerGas), 'hex'),
@@ -268,10 +268,10 @@ const padHex = (hexStr: string) => {
 }
 
 // Fetch the nonce for the given address and network
-const getNonceHex = async (
+const fetchNetworkNonce = async (
   fromAddress: string,
   network: string,
-): Promise<string> => {
+): Promise<number> => {
   const nonceUrl = new URL(
     `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/nodes.getNonce`,
   )
@@ -293,7 +293,27 @@ const getNonceHex = async (
   }
 
   const nonceBody = await nonceResponse.json()
-  return nonceBody.result.data.json.replace(/^0x/, '').padStart(2, '0')
+  const hex: string = nonceBody.result.data.json
+  return Number(hex)
+}
+
+/**
+ * Track the nonce for the given address and network locally,
+ * this avoids nonce collisions when sending two tx in a very short period of time.
+ */
+const localNonceTracker = new Map<string, number>()
+const getNonceHex = async (
+  fromAddress: string,
+  network: string,
+): Promise<string> => {
+  const key = `${fromAddress}:${network}`
+  const networkNonce = await fetchNetworkNonce(fromAddress, network)
+  const localNonce = localNonceTracker.get(key) ?? 0
+  const nonce = Math.max(networkNonce, localNonce)
+
+  localNonceTracker.set(key, nonce + 1)
+
+  return padHex(nonce.toString(16))
 }
 
 // Get the chain ID in hex format

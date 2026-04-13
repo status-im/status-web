@@ -17,7 +17,7 @@ import {
   fetchTokenPriceHistory,
   fetchTokensPrice,
 } from '../../services/coingecko/index'
-import { publicProcedure, router } from '../lib/trpc'
+import { ethRPCProcedure, router } from '../lib/trpc'
 
 import type {
   CoinGeckoCoinDetailResponse,
@@ -41,7 +41,7 @@ const tokenMetadataSchema = z.object({
 
 type Asset = {
   networks: NetworkType[]
-  icon: string
+  icon?: string
   name: string
   symbol: string
   price_eur: number
@@ -105,7 +105,7 @@ export const DEFAULT_TOKEN_IDS: Record<string, string> = {
 
 function buildTokenSummary(
   assets: Asset[],
-  defaultIcon: string,
+  defaultIcon: string | undefined,
   defaultName: string,
   defaultSymbol: string,
 ) {
@@ -114,7 +114,7 @@ function buildTokenSummary(
 
   return {
     ...summary,
-    icon: defaultIcon,
+    icon: defaultIcon ?? '',
     name: defaultName,
     symbol: defaultSymbol,
     about: firstAsset?.metadata.about ?? '',
@@ -195,7 +195,7 @@ async function fetchTokenData(
 }
 
 export const assetsRouter = router({
-  all: publicProcedure
+  all: ethRPCProcedure
     .input(
       z.object({
         address: z.string(),
@@ -216,7 +216,7 @@ export const assetsRouter = router({
 
       return await cachedAll(inputHash)
     }),
-  nativeToken: publicProcedure
+  nativeToken: ethRPCProcedure
     .input(
       z.object({
         address: z.string(),
@@ -240,7 +240,7 @@ export const assetsRouter = router({
 
       return await cachedNativeToken(inputHash)
     }),
-  token: publicProcedure
+  token: ethRPCProcedure
     .input(
       z.object({
         address: z.string(),
@@ -264,7 +264,7 @@ export const assetsRouter = router({
 
       return await cachedToken(inputHash)
     }),
-  nativeTokenPriceChart: publicProcedure
+  nativeTokenPriceChart: ethRPCProcedure
     .input(
       z.object({
         symbol: z.string(),
@@ -276,7 +276,7 @@ export const assetsRouter = router({
 
       return await cachedNativeTokenPriceChart(inputHash)
     }),
-  tokenPriceChart: publicProcedure
+  tokenPriceChart: ethRPCProcedure
     .input(
       z.object({
         symbol: z.string(),
@@ -288,7 +288,7 @@ export const assetsRouter = router({
 
       return await cachedTokenPriceChart(inputHash)
     }),
-  nativeTokenBalanceChart: publicProcedure
+  nativeTokenBalanceChart: ethRPCProcedure
     .input(
       z.object({
         address: z.string(),
@@ -301,7 +301,7 @@ export const assetsRouter = router({
 
       return await cachedNativeTokenBalanceChart(inputHash)
     }),
-  tokenBalanceChart: publicProcedure
+  tokenBalanceChart: ethRPCProcedure
     .input(
       z.object({
         address: z.string(),
@@ -674,7 +674,7 @@ async function token({
 
       if (
         !Number(result.tokenBalances[0].tokenBalance) &&
-        !DEFAULT_TOKEN_SYMBOLS.includes(token.symbol)
+        !(DEFAULT_TOKEN_SYMBOLS as readonly string[]).includes(token.symbol)
       ) {
         throw new Error(`Balance not found for token ${token.symbol}`)
       }

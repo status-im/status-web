@@ -39,7 +39,7 @@ import { useExchangeRate } from '~hooks/useExchangeRate'
 import { useGUSDPreDeposit } from '~hooks/useGUSDPreDeposit'
 import { useGUSDPreview } from '~hooks/useGUSDPreview'
 import { usePreDepositVault } from '~hooks/usePreDepositVault'
-import { useVaultsAPY } from '~hooks/useVaultsAPY'
+import { useVaultsAPR } from '~hooks/useVaultsAPR'
 import { useWrapETH } from '~hooks/useWrapETH'
 import { formatCurrency, formatTokenAmount } from '~utils/currency'
 
@@ -193,9 +193,9 @@ const PreDepositModal = ({
     token: currentToken.priceKey || currentToken.symbol,
   })
 
-  const { data: apyMap } = useVaultsAPY()
-  const dynamicApy = apyMap?.[vault.address.toLowerCase()]
-  const apyValue = dynamicApy !== undefined ? String(dynamicApy) : null
+  const { data: aprMap } = useVaultsAPR()
+  const dynamicApr = aprMap?.[vault.address.toLowerCase()]
+  const aprValue = dynamicApr !== undefined ? String(dynamicApr) : null
 
   const amountInUSD = useMemo(() => {
     const amountInputNumber = parseFloat(amountValue || '0')
@@ -344,6 +344,8 @@ const PreDepositModal = ({
       return t('vault.insufficient_balance', {
         max: formatTokenAmount(totalBalance, currentToken.symbol, {
           tokenDecimals: currentToken.decimals,
+          dynamicFractionDigits: true,
+          roundDown: true,
         }),
       })
     })
@@ -351,6 +353,8 @@ const PreDepositModal = ({
       t('vault.exceeds_vault_limit', {
         max: formatTokenAmount(maxDeposit ?? 0n, currentToken.symbol, {
           tokenDecimals: currentToken.decimals,
+          dynamicFractionDigits: true,
+          roundDown: true,
         }),
       })
     )
@@ -358,6 +362,7 @@ const PreDepositModal = ({
       t('vault.below_minimum_deposit', {
         min: formatTokenAmount(minDeposit ?? 0n, currentToken.symbol, {
           tokenDecimals: currentToken.decimals,
+          dynamicFractionDigits: true,
         }),
       })
     )
@@ -496,6 +501,7 @@ const PreDepositModal = ({
                     {formatTokenAmount(balance, currentToken.symbol, {
                       includeSymbol: true,
                       tokenDecimals: currentToken.decimals,
+                      dynamicFractionDigits: true,
                       roundDown: true,
                     })}
                   </button>
@@ -505,6 +511,7 @@ const PreDepositModal = ({
                     <span>
                       {t('vault.available_eth_to_wrap')}{' '}
                       {formatTokenAmount(ethBalance, 'ETH', {
+                        dynamicFractionDigits: true,
                         roundDown: true,
                       })}
                     </span>
@@ -554,9 +561,9 @@ const PreDepositModal = ({
                   <PercentIcon />
                 </span>
                 <span className="text-neutral-100">
-                  {apyValue
-                    ? `${apyValue}% ${t('vault.liquid_apy')}`
-                    : t('vault.liquid_apy_tbd')}
+                  {aprValue
+                    ? `${aprValue}% ${t('vault.liquid_apr')}`
+                    : t('vault.liquid_apr_tbd')}
                 </span>
               </div>
               <div className="flex items-center gap-2 text-15">

@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useToast } from '@status-im/components'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 
 import { FloatingActions } from '~admin/_components/floating-actions'
@@ -19,6 +20,7 @@ type Inputs = z.infer<typeof FormDataSchema>
 
 const NewDeviceForm = () => {
   const toast = useToast()
+  const t = useTranslations('admin')
   const form = useForm<Inputs>({
     resolver: zodResolver(FormDataSchema),
     mode: 'onTouched',
@@ -36,7 +38,7 @@ const NewDeviceForm = () => {
     const result = await addDevice(data)
 
     if (!result) {
-      toast.negative('Something went wrong. Please try again later.')
+      toast.negative(t('genericError'))
       return
     }
 
@@ -48,7 +50,7 @@ const NewDeviceForm = () => {
     }
 
     form.reset()
-    toast.positive('Device added successfully')
+    toast.positive(t('deviceAdded'))
     router.push('/admin/keycard/devices')
   }
 
@@ -60,9 +62,13 @@ const NewDeviceForm = () => {
         className="relative h-full overflow-hidden"
       >
         <div className="flex max-w-[462px] flex-col gap-4">
-          <TextInput label="UID" name="uid" placeholder="n3rc9tmzwaya4ive" />
           <TextInput
-            label="Public key"
+            label={t('uid')}
+            name="uid"
+            placeholder={t('uidPlaceholder')}
+          />
+          <TextInput
+            label={t('publicKey')}
             name="publicKey"
             placeholder="0x183912Ddd631317315C7bEa3bFE8919Da5f301F5"
           />

@@ -104,3 +104,9 @@ web-build/
 
 # Contentlayer
 .contentlayer
+
+# IDE
+.idea
+
+# Foundry dependencies
+packages/community-contracts/lib/

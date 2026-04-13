@@ -1,27 +1,44 @@
 [
-	{
-		"relation": [
-			"delegate_permission/common.handle_all_urls"
-		],
-		"target": {
-			"namespace": "android_app",
-			"package_name": "im.status.ethereum",
-			"sha256_cert_fingerprints": [
-				"29:58:6A:6B:A0:CA:FA:A5:38:AA:CE:EA:DF:60:55:1C:EC:22:E9:65:68:40:35:D4:75:B7:9A:0A:8B:13:E2:9F",
-				"FA:C6:17:45:DC:09:03:78:6F:B9:ED:E6:2A:96:2B:39:9F:73:48:F0:BB:6F:89:9B:83:32:66:75:91:03:3B:9C"
-			]
-		}
-	},
-	{
-		"relation": [
-			"delegate_permission/common.handle_all_urls"
-		],
-		"target": {
-			"namespace": "android_app",
-			"package_name": "im.status.ethereum.pr",
-			"sha256_cert_fingerprints": [
-				"29:58:6A:6B:A0:CA:FA:A5:38:AA:CE:EA:DF:60:55:1C:EC:22:E9:65:68:40:35:D4:75:B7:9A:0A:8B:13:E2:9F"
-			]
-		}
-	}
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "im.status.ethereum",
+      "sha256_cert_fingerprints": [
+        "29:58:6A:6B:A0:CA:FA:A5:38:AA:CE:EA:DF:60:55:1C:EC:22:E9:65:68:40:35:D4:75:B7:9A:0A:8B:13:E2:9F",
+        "FA:C6:17:45:DC:09:03:78:6F:B9:ED:E6:2A:96:2B:39:9F:73:48:F0:BB:6F:89:9B:83:32:66:75:91:03:3B:9C"
+      ]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "im.status.ethereum.pr",
+      "sha256_cert_fingerprints": [
+        "29:58:6A:6B:A0:CA:FA:A5:38:AA:CE:EA:DF:60:55:1C:EC:22:E9:65:68:40:35:D4:75:B7:9A:0A:8B:13:E2:9F"
+      ]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.status.mobile",
+      "sha256_cert_fingerprints": [
+        "64:FD:80:52:7F:62:2E:E0:EA:0B:9E:62:96:18:EF:63:20:0C:11:4C:96:7D:79:BC:4A:C1:0B:AF:F8:85:A5:A4",
+        "9D:7C:65:ED:4A:14:AD:D9:29:6B:C8:C6:23:33:62:F2:8A:A5:9A:B7:95:D2:C4:E0:4F:12:3A:88:3F:5C:B1:68"
+      ]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.status.mobile.pr",
+      "sha256_cert_fingerprints": [
+        "7A:E1:C6:18:98:A9:42:A6:AE:E1:19:EF:80:8E:A9:27:34:4C:2E:69:17:83:F2:5E:38:C6:93:69:CF:9A:14:AD"
+      ]
+    }
+  }
 ]
