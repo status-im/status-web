@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 
-import { Button, useToast } from '@status-im/components'
+import { Button, Input, useToast } from '@status-im/components'
 import {
+  AlertIcon,
   ArrowLeftIcon,
   ExternalIcon,
   // OptionsIcon,
@@ -34,6 +35,24 @@ type Props = {
 }
 
 const isValidAddress = (addr: string) => /^0x[0-9a-fA-F]{40}$/.test(addr)
+const isSupportedNftStandard = (standard: string) =>
+  ['ERC721', 'ERC1155', 'UNKNOWN'].includes(standard)
+
+const extractTxHash = (id: unknown): string | undefined => {
+  if (typeof id === 'string') {
+    return id
+  }
+  if (id && typeof id === 'object') {
+    const obj = id as Record<string, unknown>
+    if ('result' in obj && typeof obj.result === 'string') {
+      return obj.result
+    }
+    if ('txid' in obj && typeof obj.txid === 'string') {
+      return obj.txid
+    }
+  }
+  return undefined
+}
 
 const Collectible = (props: Props) => {
   const { network, contract, id } = props
@@ -163,17 +182,19 @@ const Collectible = (props: Props) => {
               /> */}
             </div>
 
-            {collectible.standard !== 'NOT_A_CONTRACT' && address && (
-              <SendNftSection
-                standard={collectible.standard}
-                displayName={collectible.displayName}
-                address={address}
-                walletId={currentWallet?.id || ''}
-                network={network}
-                contract={contract}
-                tokenId={id}
-              />
-            )}
+            {collectible.standard !== 'NOT_A_CONTRACT' &&
+              isSupportedNftStandard(collectible.standard) &&
+              address && (
+                <SendNftSection
+                  standard={collectible.standard}
+                  displayName={collectible.displayName}
+                  address={address}
+                  walletId={currentWallet?.id || ''}
+                  network={network}
+                  contract={contract}
+                  tokenId={id}
+                />
+              )}
           </div>
         </div>
 
@@ -312,7 +333,9 @@ const SendNftSection = (props: SendNftSectionProps) => {
   const sendLabel = standard === 'UNKNOWN' ? 'NFT' : `${standard} NFT`
 
   const handleSendNft = async () => {
-    if (!isValidAddress(recipientAddress)) {
+    const normalizedRecipientAddress = recipientAddress.trim()
+
+    if (!isValidAddress(normalizedRecipientAddress)) {
       setSendError('Invalid Ethereum address')
       return
     }
@@ -332,7 +355,7 @@ const SendNftSection = (props: SendNftSectionProps) => {
 
       const gasFees = await fetchNftGasFees({
         from: address,
-        to: recipientAddress,
+        to: normalizedRecipientAddress,
         contractAddress: contract,
         tokenId,
         standard,
@@ -342,7 +365,7 @@ const SendNftSection = (props: SendNftSectionProps) => {
       const data = encodeNftTransfer({
         standard,
         from: address,
-        to: recipientAddress,
+        to: normalizedRecipientAddress,
         tokenId,
       })
 
@@ -358,7 +381,7 @@ const SendNftSection = (props: SendNftSectionProps) => {
           value: '0',
         })
 
-      const txHash = result.id?.txid
+      const txHash = extractTxHash(result.id)
 
       if (!txHash) {
         toast.negative(ERROR_MESSAGES.TX_FAILED)
@@ -371,7 +394,7 @@ const SendNftSection = (props: SendNftSectionProps) => {
       addPendingTransaction({
         hash: txHash,
         from: address,
-        to: recipientAddress,
+        to: normalizedRecipientAddress,
         value: 0,
         asset: displayName,
         network,
@@ -414,12 +437,13 @@ const SendNftSection = (props: SendNftSectionProps) => {
       <div className="text-13 font-semibold text-neutral-50">
         Send {sendLabel}
       </div>
-      <input
-        type="text"
+      <Input
+        label="Recipient"
         placeholder="Recipient address (0x...)"
         value={recipientAddress}
-        onChange={e => setRecipientAddress(e.target.value)}
-        className="rounded-8 border border-neutral-20 bg-white-100 px-3 py-2 text-13 text-neutral-100 outline-none focus:border-customisation-blue-50"
+        onChange={setRecipientAddress}
+        autoComplete="off"
+        clearable={!!recipientAddress}
       />
       <Button
         size="32"
@@ -432,7 +456,12 @@ const SendNftSection = (props: SendNftSectionProps) => {
       {txResult && (
         <div className="break-all text-13 text-success-50">Tx: {txResult}</div>
       )}
-      {sendError && <div className="text-13 text-danger-50">{sendError}</div>}
+      {sendError && (
+        <div className="flex items-center gap-1 text-13 text-danger-50">
+          <AlertIcon className="size-4" />
+          <span>{sendError}</span>
+        </div>
+      )}
     </div>
   )
 }
