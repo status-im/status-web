@@ -6,7 +6,7 @@ import {
   type GasFees,
 } from '../../assets/-components/token-helpers'
 
-export type NftStandard = 'ERC721' | 'ERC1155' | 'UNKNOWN'
+import type { NetworkType } from '@status-im/wallet/data'
 
 const erc721 = new Interface([
   'function safeTransferFrom(address from, address to, uint256 tokenId)',
@@ -50,7 +50,7 @@ export const extractTxHash = (id: unknown): string | undefined => {
   return undefined
 }
 
-export const getErrorMessage = (error: unknown): string | null => {
+const getErrorMessage = (error: unknown): string | null => {
   if (error instanceof Error) {
     return error.message
   }
@@ -119,7 +119,7 @@ export const getNftSendErrorMessage = (error: unknown): string => {
 }
 
 export function encodeNftTransfer(params: {
-  standard: NftStandard | string
+  standard: string
   from: string
   to: string
   tokenId: string
@@ -149,7 +149,7 @@ export function encodeNftTransfer(params: {
   throw new Error(`Unsupported NFT standard: ${params.standard}`)
 }
 
-export function buildNftGasFeeParams(params: {
+function buildNftGasFeeParams(params: {
   from: string
   to: string
   contractAddress: string
@@ -179,7 +179,7 @@ export async function fetchNftGasFees(params: {
   contractAddress: string
   tokenId: string
   standard: string
-  network: string
+  network: NetworkType
   amount?: string
 }): Promise<GasFees> {
   const gasFeeParams = buildNftGasFeeParams(params)

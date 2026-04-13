@@ -169,19 +169,17 @@ const Collectible = (props: Props) => {
               /> */}
             </div>
 
-            {collectible.standard !== 'NOT_A_CONTRACT' &&
-              isSupportedNftStandard(collectible.standard) &&
-              address && (
-                <SendNftSection
-                  standard={collectible.standard}
-                  displayName={collectible.displayName}
-                  address={address}
-                  walletId={currentWallet?.id || ''}
-                  network={network}
-                  contract={contract}
-                  tokenId={id}
-                />
-              )}
+            {isSupportedNftStandard(collectible.standard) && address && (
+              <SendNftSection
+                standard={collectible.standard}
+                displayName={collectible.displayName}
+                address={address}
+                walletId={currentWallet?.id || ''}
+                network={network}
+                contract={contract}
+                tokenId={id}
+              />
+            )}
           </div>
         </div>
 
@@ -335,7 +333,6 @@ const SendNftSection = (props: SendNftSectionProps) => {
       if (!hasActiveSession) {
         const unlocked = await requestPassword()
         if (!unlocked) {
-          setIsSending(false)
           return
         }
       }
@@ -377,7 +374,6 @@ const SendNftSection = (props: SendNftSectionProps) => {
       const txHash = extractTxHash(result.id.txid)
 
       if (!txHash) {
-        toast.negative(ERROR_MESSAGES.TX_FAILED)
         throw new Error('Transaction hash not found')
       }
 
