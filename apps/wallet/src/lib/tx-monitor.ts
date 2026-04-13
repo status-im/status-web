@@ -5,21 +5,13 @@ import {
   notifyTransactionFailed,
 } from './notifications'
 import { PENDING_TXS_KEY, TX_NOTIFIED_KEY } from './storage-keys'
+import { extractTxHash } from './tx-helpers'
 
 type PendingTx = {
   hash: unknown
   value: number
   asset: string
   displayAmount?: string
-}
-
-function extractTxHash(hash: unknown): string | null {
-  if (typeof hash === 'string') return hash
-  if (hash && typeof hash === 'object' && 'txid' in hash) {
-    const { txid } = hash as { txid: unknown }
-    return typeof txid === 'string' ? txid : null
-  }
-  return null
 }
 
 async function fetchReceipt(

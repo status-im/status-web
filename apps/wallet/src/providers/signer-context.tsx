@@ -10,6 +10,8 @@ import { type Address, createPublicClient, type Hex, http } from 'viem'
 import { mainnet } from 'viem/chains'
 import { formatEther } from 'viem/utils'
 
+import { extractTxHash } from '@/lib/tx-helpers'
+
 import { apiClient } from './api-client'
 import { usePassword } from './password-context'
 import { useWallet } from './wallet-context'
@@ -188,22 +190,6 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
           })
           gasLimit = (estimatedGas + estimatedGas / 10n).toString(16)
         }
-      }
-
-      const extractTxHash = (id: unknown): string | undefined => {
-        if (typeof id === 'string') {
-          return id
-        }
-        if (id && typeof id === 'object') {
-          const obj = id as Record<string, unknown>
-          if ('result' in obj && typeof obj.result === 'string') {
-            return obj.result
-          }
-          if ('txid' in obj) {
-            return obj.txid as string
-          }
-        }
-        return undefined
       }
 
       if (tx.data) {
