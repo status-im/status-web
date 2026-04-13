@@ -24,7 +24,14 @@ import { usePendingTransactions } from '@/providers/pending-transactions-context
 import { useWallet } from '@/providers/wallet-context'
 
 import { CardDetail } from './card-detail'
-import { encodeNftTransfer, fetchNftGasFees } from './nft-helpers'
+import {
+  encodeNftTransfer,
+  extractTxHash,
+  fetchNftGasFees,
+  getNftSendErrorMessage,
+  isSupportedNftStandard,
+  isValidAddress,
+} from './nft-helpers'
 
 import type { NetworkType } from '@status-im/wallet/data'
 
@@ -32,26 +39,6 @@ type Props = {
   network: NetworkType
   contract: string
   id: string
-}
-
-const isValidAddress = (addr: string) => /^0x[0-9a-fA-F]{40}$/.test(addr)
-const isSupportedNftStandard = (standard: string) =>
-  ['ERC721', 'ERC1155', 'UNKNOWN'].includes(standard)
-
-const extractTxHash = (id: unknown): string | undefined => {
-  if (typeof id === 'string') {
-    return id
-  }
-  if (id && typeof id === 'object') {
-    const obj = id as Record<string, unknown>
-    if ('result' in obj && typeof obj.result === 'string') {
-      return obj.result
-    }
-    if ('txid' in obj && typeof obj.txid === 'string') {
-      return obj.txid
-    }
-  }
-  return undefined
 }
 
 const Collectible = (props: Props) => {
@@ -381,7 +368,13 @@ const SendNftSection = (props: SendNftSectionProps) => {
           value: '0',
         })
 
-      const txHash = extractTxHash(result.id)
+      if (!result.id || result.id.txid?.error) {
+        throw new Error(
+          result.id?.txid?.error || 'Failed to send NFT transaction',
+        )
+      }
+
+      const txHash = extractTxHash(result.id.txid)
 
       if (!txHash) {
         toast.negative(ERROR_MESSAGES.TX_FAILED)
@@ -419,12 +412,7 @@ const SendNftSection = (props: SendNftSectionProps) => {
 
       toast.positive('NFT transfer submitted')
     } catch (error: unknown) {
-      let message = 'Failed to send NFT'
-      if (error instanceof Error) {
-        message = error.message
-      } else if (typeof error === 'object' && error !== null) {
-        message = JSON.stringify(error)
-      }
+      const message = getNftSendErrorMessage(error)
       setSendError(message)
       toast.negative(message)
     } finally {

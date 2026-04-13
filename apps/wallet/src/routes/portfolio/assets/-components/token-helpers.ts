@@ -47,6 +47,27 @@ export function buildTrpcUrl(
   return url
 }
 
+function extractTrpcErrorMessage(body: unknown): string | null {
+  if (typeof body !== 'object' || body === null) {
+    return null
+  }
+
+  const bodyObj = body as {
+    error?: {
+      message?: string
+      json?: { message?: string }
+      data?: { message?: string }
+    }
+  }
+
+  return (
+    bodyObj.error?.json?.message ||
+    bodyObj.error?.data?.message ||
+    bodyObj.error?.message ||
+    null
+  )
+}
+
 // Helper function to fetch data from tRPC API
 export async function fetchTrpcData<T>(
   endpoint: string,
@@ -61,11 +82,18 @@ export async function fetchTrpcData<T>(
     },
   })
 
+  const body = await response.json().catch(() => null)
+
   if (!response.ok) {
-    throw new Error(errorMessage)
+    const message = extractTrpcErrorMessage(body)
+    throw new Error(message || errorMessage)
   }
 
-  const body = await response.json()
+  const trpcErrorMessage = extractTrpcErrorMessage(body)
+  if (trpcErrorMessage) {
+    throw new Error(trpcErrorMessage)
+  }
+
   return body.result.data.json
 }
 
