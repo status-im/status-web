@@ -40,15 +40,21 @@ async function fetchReceipt(
   }
 }
 
-export async function hasPendingTransactions(): Promise<boolean> {
-  const pendingTxs = (await storage.getItem<PendingTx[]>(PENDING_TXS_KEY)) ?? []
-  return pendingTxs.length > 0
+export const TX_MONITOR_ALARM = 'tx-monitor'
+
+export async function startTxMonitor(): Promise<void> {
+  const existing = await chrome.alarms.get(TX_MONITOR_ALARM)
+  if (!existing) {
+    // Fires every 30 seconds, minimum allowed by Chrome MV3
+    chrome.alarms.create(TX_MONITOR_ALARM, { periodInMinutes: 0.5 })
+  }
 }
 
 export async function checkPendingTransactions(): Promise<void> {
   const pendingTxs = (await storage.getItem<PendingTx[]>(PENDING_TXS_KEY)) ?? []
 
   if (pendingTxs.length === 0) {
+    await chrome.alarms.clear(TX_MONITOR_ALARM)
     const notified = await storage.getItem<string[]>(TX_NOTIFIED_KEY)
     if (Array.isArray(notified) && notified.length > 0) {
       await storage.setItem(TX_NOTIFIED_KEY, [])
@@ -100,13 +106,15 @@ export async function checkPendingTransactions(): Promise<void> {
   }
 
   if (settledHashes.size > 0) {
-    await storage.setItem(
-      PENDING_TXS_KEY,
-      pendingTxs.filter(tx => {
-        const txHash = extractTxHash(tx.hash)
-        return !txHash || !settledHashes.has(txHash)
-      }),
-    )
+    const remaining = pendingTxs.filter(tx => {
+      const txHash = extractTxHash(tx.hash)
+      return !txHash || !settledHashes.has(txHash)
+    })
+    await storage.setItem(PENDING_TXS_KEY, remaining)
+
+    if (remaining.length === 0) {
+      await chrome.alarms.clear(TX_MONITOR_ALARM)
+    }
   }
 
   if (newlyNotified.length > 0) {
