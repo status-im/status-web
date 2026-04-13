@@ -12,6 +12,8 @@ import { createAPI } from '../data/api'
 import { encoder } from '../data/encoder'
 import { INACTIVITY_ALARM_NAME, lock } from '../data/session'
 import { getWalletCore } from '../data/wallet'
+import { RpcMessage } from '../lib/messages'
+import { handleRpcRequest } from '../lib/rpc-handler'
 
 export default defineBackground({
   type: 'module',
@@ -69,6 +71,58 @@ export default defineBackground({
       }
     })
 
-    // debugger
+    // dApp message handler (single listener to avoid Chrome port conflicts)
+    chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+      if (message?.type === 'status:disconnect') {
+        const origin = message.data?.origin
+        if (typeof origin === 'string') {
+          handleRpcRequest(
+            'wallet_revokePermissions',
+            [{ eth_accounts: {} }],
+            origin,
+          )
+        }
+        return false
+      }
+
+      if (message?.type !== 'status:rpc') {
+        return false
+      }
+
+      const parsed = RpcMessage.safeParse(message)
+      if (!parsed.success) {
+        sendResponse({
+          type: 'status:proxy:error',
+          error: { code: -32600, message: 'Invalid Request' },
+        })
+        return true
+      }
+
+      const { method, params, origin, title, favicon } = parsed.data.data
+
+      handleRpcRequest(method, params, origin, { title, favicon })
+        .then(result => {
+          sendResponse({ type: 'status:proxy:success', data: result })
+        })
+        .catch(error => {
+          sendResponse({
+            type: 'status:proxy:error',
+            error: {
+              code:
+                error && typeof error === 'object' && 'code' in error
+                  ? error.code
+                  : -32603,
+              message:
+                error instanceof Error
+                  ? error.message
+                  : error && typeof error === 'object' && 'message' in error
+                    ? error.message
+                    : 'Internal error',
+            },
+          })
+        })
+
+      return true
+    })
   },
 })

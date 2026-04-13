@@ -1,6 +1,8 @@
-import { ProxyMessage } from '~messages/proxy-message'
+import {
+  ProxyMessage,
+  type RequestArguments,
+} from '@status-im/ethereum-provider'
 
-import type { RequestArguments } from '~lib/request-arguments'
 import type { PlasmoCSConfig } from 'plasmo'
 
 export const config: PlasmoCSConfig = {

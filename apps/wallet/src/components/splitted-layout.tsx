@@ -20,16 +20,23 @@ import {
 } from './skeletons'
 import { TabLink } from './tab-link'
 
+import type { HideAssetsBelowOneToggle } from './action-buttons'
+
 type Props = {
   list: React.ReactNode
   detail?: React.ReactNode
   isLoading?: boolean
   loadingState?: React.ReactNode
+  hideAssetsBelowOneToggle?: HideAssetsBelowOneToggle
 }
 
-const getActionsButtonsData = (address: string | undefined) => ({
+const getActionsButtonsData = (
+  address: string | undefined,
+  hideAssetsBelowOneToggle?: HideAssetsBelowOneToggle,
+) => ({
   address: address ?? '',
   pathname: '/portfolio/assets',
+  hideAssetsBelowOneToggle,
   searchAndSortValues: {
     inputValue: '',
     updateSearchParam: () => {},
@@ -47,7 +54,8 @@ const getActionsButtonsData = (address: string | undefined) => ({
 })
 
 const SplittedLayout = (props: Props) => {
-  const { list, detail, isLoading, loadingState } = props
+  const { list, detail, isLoading, loadingState, hideAssetsBelowOneToggle } =
+    props
 
   return (
     <div className="grid flex-1 divide-x divide-neutral-10 overflow-hidden">
@@ -61,7 +69,9 @@ const SplittedLayout = (props: Props) => {
               rightSlot={<HeaderRightSlot />}
             >
               <div className="relative -mt-8 flex flex-1 flex-col px-3 xl:mt-0 xl:px-12">
-                <MainContentBody />
+                <MainContentBody
+                  hideAssetsBelowOneToggle={hideAssetsBelowOneToggle}
+                />
                 {isLoading ? loadingState : list}
               </div>
             </StickyHeaderContainer>
@@ -172,7 +182,11 @@ const HeaderRightSlot = () => {
   )
 }
 
-const MainContentBody = () => {
+const MainContentBody = ({
+  hideAssetsBelowOneToggle,
+}: {
+  hideAssetsBelowOneToggle?: HideAssetsBelowOneToggle
+}) => {
   const { account, isLoading } = usePortfolio()
   const { currentWallet, isLoading: isWalletLoading } = useWallet()
 
@@ -221,7 +235,9 @@ const MainContentBody = () => {
         <PortfolioBalance variant="secondary" />
       </div>
 
-      <ActionButtons {...getActionsButtonsData(address)} />
+      <ActionButtons
+        {...getActionsButtonsData(address, hideAssetsBelowOneToggle)}
+      />
     </div>
   )
 }
