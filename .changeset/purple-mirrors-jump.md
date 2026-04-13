@@ -2,4 +2,4 @@
 'wallet': patch
 ---
 
-Implement NFT send transfer
+Implement NFT transfers

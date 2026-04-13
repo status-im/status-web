@@ -94,6 +94,10 @@ export async function fetchTrpcData<T>(
     throw new Error(trpcErrorMessage)
   }
 
+  if (!body?.result?.data?.json) {
+    throw new Error(errorMessage)
+  }
+
   return body.result.data.json
 }
 
