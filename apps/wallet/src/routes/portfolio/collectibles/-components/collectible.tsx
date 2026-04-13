@@ -17,6 +17,8 @@ import { ERROR_MESSAGES } from '@status-im/wallet/constants'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 
+import { truncateAddress } from '@/lib/tx-helpers'
+
 import { CardDetail } from './card-detail'
 
 import type { NetworkType } from '@status-im/wallet/data'
@@ -254,6 +256,3 @@ const Collectible = (props: Props) => {
 }
 
 export { Collectible }
-
-const truncateAddress = (address: string, chars = 5) =>
-  `${address.slice(0, chars)}...${address.slice(-chars)}`

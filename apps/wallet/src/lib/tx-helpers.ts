@@ -7,3 +7,7 @@ export function extractTxHash(hash: unknown): string | null {
   }
   return null
 }
+
+export function truncateAddress(address: string, chars = 5): string {
+  return `${address.slice(0, chars)}...${address.slice(-chars)}`
+}

@@ -11,59 +11,48 @@ async function isEnabled(): Promise<boolean> {
   }
 }
 
-export async function notifyTransactionSent(
-  amount: string,
-  asset: string,
+async function createNotification(
+  title: string,
+  message: string,
 ): Promise<boolean> {
   try {
     if (!(await isEnabled())) return false
     await chrome.notifications.create({
       type: 'basic',
       iconUrl: chrome.runtime.getURL('icons/128.png'),
-      title: 'Transaction Sent',
-      message: `Sending ${amount} ${asset}…`,
+      title,
+      message,
     })
     return true
   } catch (error) {
     console.warn('Failed to create notification', error)
     return false
   }
+}
+
+export async function notifyTransactionSent(
+  amount: string,
+  asset: string,
+): Promise<boolean> {
+  return createNotification('Transaction Sent', `Sending ${amount} ${asset}…`)
 }
 
 export async function notifyTransactionConfirmed(
   amount: string,
   asset: string,
 ): Promise<boolean> {
-  try {
-    if (!(await isEnabled())) return false
-    await chrome.notifications.create({
-      type: 'basic',
-      iconUrl: chrome.runtime.getURL('icons/128.png'),
-      title: 'Transaction Confirmed',
-      message: `${amount} ${asset} sent successfully`,
-    })
-    return true
-  } catch (error) {
-    console.warn('Failed to create notification', error)
-    return false
-  }
+  return createNotification(
+    'Transaction Confirmed',
+    `${amount} ${asset} sent successfully`,
+  )
 }
 
 export async function notifyTransactionFailed(
   amount: string,
   asset: string,
 ): Promise<boolean> {
-  try {
-    if (!(await isEnabled())) return false
-    await chrome.notifications.create({
-      type: 'basic',
-      iconUrl: chrome.runtime.getURL('icons/128.png'),
-      title: 'Transaction Failed',
-      message: `${amount} ${asset} transaction failed`,
-    })
-    return true
-  } catch (error) {
-    console.warn('Failed to create notification', error)
-    return false
-  }
+  return createNotification(
+    'Transaction Failed',
+    `${amount} ${asset} transaction failed`,
+  )
 }
