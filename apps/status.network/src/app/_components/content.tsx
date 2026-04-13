@@ -286,6 +286,23 @@ export const baseComponents = {
   img: (props: any) => {
     return <img {...props} alt={props.alt || ''} className="rounded-28" />
   },
+  table: (props: ComponentProps<'table'>) => (
+    <div className="my-6 overflow-x-auto rounded-16 border border-neutral-20">
+      <table
+        {...props}
+        className="min-w-full border-collapse text-left text-15"
+      />
+    </div>
+  ),
+  th: (props: ComponentProps<'th'>) => (
+    <th
+      {...props}
+      className="border-b border-neutral-20 bg-neutral-10 px-4 py-3 font-600"
+    />
+  ),
+  td: (props: ComponentProps<'td'>) => (
+    <td {...props} className="border-t border-neutral-20 px-4 py-3 align-top" />
+  ),
   pre: (props: ComponentProps<'pre'>) => (
     <pre
       {...props}
