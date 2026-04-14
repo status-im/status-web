@@ -149,6 +149,7 @@ export const test = walletTest.extend<AnvilFixtures>({
   },
 
   anvilRpc: async ({}, use, testInfo) => {
+    // Hard limit: module-level snapshot state races across workers.
     if (testInfo.config.workers > 1) {
       throw new Error(
         'anvil.fixture requires workers: 1 (module-level snapshot state is not worker-safe)',
