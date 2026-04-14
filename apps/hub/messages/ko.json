@@ -316,6 +316,10 @@
         "translation": "전체",
         "notes": "discover::tabs::all"
       }
+    },
+    "migration_in_progress": {
+      "translation": "마이그레이션 진행 중",
+      "notes": "discover::migration_in_progress"
     }
   },
   "stake": {
@@ -382,6 +386,10 @@
     "create_new_vault": {
       "translation": "새 금고 만들기",
       "notes": "stake::create_new_vault"
+    },
+    "max_vaults_reached": {
+      "translation": "최대 금고 수에 도달했습니다 ({max})",
+      "notes": "stake::max_vaults_reached"
     },
     "dont_lock": {
       "translation": "잠그지 않기",

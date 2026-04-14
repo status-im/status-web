@@ -4,9 +4,8 @@ import { ToastContainer } from '@status-im/components'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ConnectKitProvider, SIWEProvider } from 'connectkit'
 import { WagmiProvider } from 'wagmi'
-import { statusSepolia } from 'wagmi/chains'
 
-import { wagmiConfig } from '~constants/chain'
+import { statusHoodi, wagmiConfig } from '~constants/chain'
 import { siweConfig } from '~constants/siwe'
 import { PreDepositStateProvider } from '~hooks/usePreDepositStateContext'
 import { VaultStateProvider } from '~hooks/useVaultStateContext'
@@ -48,7 +47,7 @@ export function Providers({ children }: ProvidersProps) {
         <SIWEProvider {...siweConfig}>
           <ConnectKitProvider
             options={{
-              initialChainId: statusSepolia.id,
+              initialChainId: statusHoodi.id,
             }}
           >
             <PreDepositStateProvider>

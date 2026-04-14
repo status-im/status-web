@@ -11,7 +11,6 @@ import { useTranslations } from 'next-intl'
 import { categories } from '~/constants/categories'
 import { tabs } from '~/constants/tabs'
 import { apps } from '~/data/apps'
-import { featuredApps } from '~/data/featured-apps'
 import { AppCard } from '~components/app-card'
 import { HubLayout } from '~components/hub-layout'
 
@@ -42,6 +41,8 @@ export default function DiscoverPage() {
   const [activeTab, setActiveTab] = useState('all')
   const [selectedTag, setSelectedTag] = useState('all-apps')
   const [openCategories, setOpenCategories] = useState(false)
+
+  const featuredApps = apps.filter(app => app.isFeatured)
 
   const currentApps = useMemo(() => {
     return apps.filter(app => {
