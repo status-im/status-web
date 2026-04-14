@@ -38,6 +38,24 @@ import type { Page } from '@playwright/test'
  * Worker.evaluate() is blocked by LavaMoat. Hence the file-level patch.
  */
 
+// --- Retry / timing knobs ---
+/** How many times to retry MetaMask onboarding before giving up */
+const MAX_ONBOARDING_ATTEMPTS = 2
+/** How many times to retry connecting the Hub page + MetaMask before giving up */
+const MAX_CONNECT_ATTEMPTS = 2
+/** How many times to probe an unknown RPC with eth_chainId before caching null */
+const MAX_CHAIN_ID_PROBE_ATTEMPTS = 2
+/** Delay between onboarding / connect retry attempts (ms) */
+const RETRY_DELAY_MS = 2_000
+/** Time to wait for Hub page to reach DOMContentLoaded (ms) */
+const HUB_PAGE_LOAD_TIMEOUT_MS = 60_000
+
+// --- Anvil funding / RPC constants ---
+/** ETH balance funded to the wallet on each Anvil fork before tests (10 ETH) */
+const ANVIL_FUND_ETH_WEI = 10n * 10n ** 18n
+/** Mocked eth_estimateGas response for gas-sensitive flows (10M gas) */
+const MOCK_GAS_ESTIMATE_HEX = '0x989680'
+
 // Module-level state — safe with workers: 1
 let baseSnapshots: { mainnet: string; linea: string } | null = null
 let originalSwContent: string | null = null
@@ -101,10 +119,9 @@ export const test = walletTest.extend<AnvilFixtures>({
     const seedPhrase = requireWalletSeedPhrase()
     const password = requireWalletPassword()
 
-    const MAX_ATTEMPTS = 2
     const onboardStart = Date.now()
 
-    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    for (let attempt = 1; attempt <= MAX_ONBOARDING_ATTEMPTS; attempt++) {
       try {
         await metamask.onboarding.importWallet(seedPhrase, password)
         console.log(
@@ -113,14 +130,14 @@ export const test = walletTest.extend<AnvilFixtures>({
         break
       } catch (err) {
         console.warn(
-          `[anvil-fixture] Onboarding attempt ${attempt}/${MAX_ATTEMPTS} failed: ${err}`,
+          `[anvil-fixture] Onboarding attempt ${attempt}/${MAX_ONBOARDING_ATTEMPTS} failed: ${err}`,
         )
-        if (attempt === MAX_ATTEMPTS) throw err
+        if (attempt === MAX_ONBOARDING_ATTEMPTS) throw err
         for (const page of extensionContext.pages()) {
           if (page.url().includes('chrome-extension:'))
             await page.close().catch(() => {})
         }
-        await new Promise(r => setTimeout(r, 2_000))
+        await new Promise(r => setTimeout(r, RETRY_DELAY_MS))
       }
     }
 
@@ -168,8 +185,8 @@ export const test = walletTest.extend<AnvilFixtures>({
       await helper.requireHealthy()
 
       await Promise.all([
-        helper.setEthBalance(10n * 10n ** 18n),
-        helper.setEthBalance(10n * 10n ** 18n, helper.lineaRpc),
+        helper.setEthBalance(ANVIL_FUND_ETH_WEI),
+        helper.setEthBalance(ANVIL_FUND_ETH_WEI, helper.lineaRpc),
       ])
       await helper.enableAllVaults()
 
@@ -195,8 +212,8 @@ export const test = walletTest.extend<AnvilFixtures>({
         // Zero out stale token balances from previous test.
         // SNT excluded: MiniMeToken uses checkpoint storage, can't be zeroed via slots.
         await Promise.all([
-          helper.setEthBalance(10n * 10n ** 18n),
-          helper.setEthBalance(10n * 10n ** 18n, helper.lineaRpc),
+          helper.setEthBalance(ANVIL_FUND_ETH_WEI),
+          helper.setEthBalance(ANVIL_FUND_ETH_WEI, helper.lineaRpc),
           helper.fundWeth(0n),
           helper.fundLinea(0n),
           helper.fundUsdt(0n),
@@ -301,7 +318,7 @@ export const test = walletTest.extend<AnvilFixtures>({
         return route.fulfill({
           status: 200,
           contentType: 'application/json',
-          body: `{"jsonrpc":"2.0","id":${id},"result":"0x989680"}`,
+          body: `{"jsonrpc":"2.0","id":${id},"result":"${MOCK_GAS_ESTIMATE_HEX}"}`,
         })
       }
 
@@ -329,7 +346,11 @@ export const test = walletTest.extend<AnvilFixtures>({
             else rpcRedirectCache.set(url, null)
           } else {
             let probeResult: string | null = null
-            for (let attempt = 0; attempt < 2; attempt++) {
+            for (
+              let attempt = 0;
+              attempt < MAX_CHAIN_ID_PROBE_ATTEMPTS;
+              attempt++
+            ) {
               try {
                 const probe = await fetch(url, {
                   method: 'POST',
@@ -415,7 +436,6 @@ export const test = walletTest.extend<AnvilFixtures>({
       }
     })
 
-    const MAX_CONNECT_ATTEMPTS = 2
     let connectedPage: Page | null = null
 
     for (let attempt = 1; attempt <= MAX_CONNECT_ATTEMPTS; attempt++) {
@@ -463,7 +483,7 @@ export const test = walletTest.extend<AnvilFixtures>({
         const connectStart = Date.now()
         await page.goto(env.BASE_URL, {
           waitUntil: 'domcontentloaded',
-          timeout: 60_000,
+          timeout: HUB_PAGE_LOAD_TIMEOUT_MS,
         })
         console.log(
           `[anvil-fixture] Hub loaded in ${Date.now() - connectStart}ms`,
@@ -478,7 +498,7 @@ export const test = walletTest.extend<AnvilFixtures>({
         )
         if (page) await page.close().catch(() => {})
         if (attempt === MAX_CONNECT_ATTEMPTS) throw err
-        await new Promise(r => setTimeout(r, 2_000))
+        await new Promise(r => setTimeout(r, RETRY_DELAY_MS))
       }
     }
 

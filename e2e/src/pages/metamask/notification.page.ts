@@ -2,6 +2,13 @@ import { NOTIFICATION_TIMEOUTS } from '@constants/timeouts.js'
 
 import type { BrowserContext, Locator, Page } from '@playwright/test'
 
+/** Interval for progress logging inside waitConfirmable (ms) */
+const WAIT_CONFIRMABLE_LOG_INTERVAL_MS = 5_000
+/** Max iterations to walk past queued "Add network" popups in MetaMask */
+const MAX_ADD_NETWORK_CLEAR_ATTEMPTS = 10
+/** Default wall-clock budget for clearAddNetworkQueue (ms) */
+const CLEAR_ADD_NETWORK_DEADLINE_MS = 60_000
+
 export class NotificationPage {
   private cachedHomePage: Page | null = null
 
@@ -223,7 +230,7 @@ export class NotificationPage {
       }
 
       // Log every 5s with current state
-      if (Date.now() - lastLog > 5000) {
+      if (Date.now() - lastLog > WAIT_CONFIRMABLE_LOG_INTERVAL_MS) {
         console.log(
           `[waitConfirmable +${Date.now() - t0}ms] iters=${iterCount} popups=${popups.length} fallbackOpened=${openedFallbackPage}`,
         )
@@ -302,7 +309,11 @@ export class NotificationPage {
       )
       page = await this.waitForConfirmablePopupPage(remaining)
       log('found confirmable page')
-      page = await this.clearAddNetworkQueue(page, 10, deadline)
+      page = await this.clearAddNetworkQueue(
+        page,
+        MAX_ADD_NETWORK_CLEAR_ATTEMPTS,
+        deadline,
+      )
 
       // Skip stale spending-cap confirmation from approveTokenSpend() —
       // otherwise we "confirm" the wrong request and the deposit stays pending
@@ -480,8 +491,8 @@ export class NotificationPage {
    */
   private async clearAddNetworkQueue(
     page: Page,
-    maxAttempts = 10,
-    deadline = Date.now() + 60_000,
+    maxAttempts = MAX_ADD_NETWORK_CLEAR_ATTEMPTS,
+    deadline = Date.now() + CLEAR_ADD_NETWORK_DEADLINE_MS,
   ): Promise<Page> {
     const currentPage = page
     for (let i = 0; i < maxAttempts && Date.now() < deadline; i++) {
