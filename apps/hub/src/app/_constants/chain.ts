@@ -26,13 +26,13 @@ export const statusHoodi = defineChain({
   nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
   rpcUrls: {
     default: {
-      http: ['https://rpc.status-network-testnet-hoodi.gateway.fm'],
+      http: ['https://public.hoodi.rpc.status.network/'],
     },
   },
   blockExplorers: {
     default: {
       name: 'Blockscout',
-      url: 'https://explorer.status-network-testnet-hoodi.gateway.fm',
+      url: 'https://hoodiscan.status.network',
     },
   },
   contracts: {},
