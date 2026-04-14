@@ -76,8 +76,10 @@ const rpcProxyPaths: Record<number, string> = {
   [statusHoodi.id]: '/status/hoodi',
 }
 
-const rpcProxyUrl = (chainId: number) =>
-  `${clientEnv.NEXT_PUBLIC_RPC_PROXY_URL}${rpcProxyPaths[chainId]}`
+const rpcProxyUrl = (chainId: number) => {
+  const base = clientEnv.NEXT_PUBLIC_RPC_PROXY_URL?.replace(/\/+$/, '') ?? ''
+  return `${base}${rpcProxyPaths[chainId]}`
+}
 
 const createPuzzleAuthHooks = () => {
   const origin = new URL(clientEnv.NEXT_PUBLIC_RPC_PROXY_URL!).origin
