@@ -73,7 +73,7 @@ const resolveChainExplorerHref = (
 ): string => {
   switch (chainId) {
     case 374:
-      return `https://explorer.status-network-testnet-hoodi.gateway.fm/address/${address}`
+      return `https://hoodiscan.status.network/address/${address}`
     default:
       return `https://etherscan.io/address/${address}`
   }
