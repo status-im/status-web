@@ -76,7 +76,7 @@ const Sidebar = (props: Props) => {
       id: 'explorer',
       label: t('navigation.explorer'),
       icon: ExplorerIcon,
-      href: 'https://sepoliascan.status.network/',
+      href: 'https://explorer.status-network-testnet-hoodi.gateway.fm/',
     },
     // {
     //   id: 'governance',

@@ -66,17 +66,17 @@ export function isGUSDVault(vault: Vault): vault is GUSDVault {
 }
 
 export const STAKING_MANAGER = {
-  address: '0x5cDf1646E4c1D21eE94DED1DA8da3Ca450dc96D1' as Address,
+  address: '0x2Bc5b2a5F580064aaB6fbC1ee30113CD808582aC' as Address,
   abi: stakingManagerAbi as Abi,
 } as const
 
 export const VAULT_FACTORY = {
-  address: '0xddDcd43a0B0dA865decf3e4Ae71FbBE3e2DfFF14' as Address,
+  address: '0x20620462A0415D922130C1c36bee3C5fcA866fd3' as Address,
   abi: vaultFactoryAbi as Abi,
 } as const
 
 export const FAUCET = {
-  address: '0x4Fb609F4a457f47B41D35Dd060447271F000120A' as Address,
+  address: '0x2673840A768893dbD8F6398B0E985dDC8cfC9C6C' as Address,
   abi: faucetAbi as Abi,
 } as const
 
@@ -105,9 +105,9 @@ export const SNT_TOKEN: Token = {
   abi: tokenAbi,
 } as const
 
-// Testnet token for staking on Status Sepolia
+// Testnet token for staking on Status Hoodi
 export const STT_TOKEN: Token = {
-  address: '0x1C3Ac2a186c6149Ae7Cb4D716eBbD0766E4f898a',
+  address: '0x14c847ce7ab6c8002616176478b32C237fdF0cBb',
   name: 'Status Test Token',
   symbol: 'STT',
   decimals: 18,
@@ -253,16 +253,16 @@ export const GUSD_VAULT: GUSDVault = {
 export const VAULTS: Vault[] = [WETH_VAULT, GUSD_VAULT, SNT_VAULT, LINEA_VAULT]
 
 export const KARMA = {
-  address: '0x7ec5Dc75D09fAbcD55e76077AFa5d4b77D112fde' as Address,
+  address: '0x0700bE6f329cC48C38144f71c898b72795dB6C1b' as Address,
   abi: karmaAbi as Abi,
 } as const
 
 export const REWARDS = {
-  address: '0xAEF19bbbe490Ad9C083EcE40c835A2f21B720de8' as Address,
+  address: '0xDfcF9ec4A92c2Af67fE3D7E5d12d132b3FdD825e' as Address,
   abi: rewardsAbi as Abi,
 } as const
 
 export const KARMA_TIER = {
-  address: '0xc7fCD786a161f42bDaF66E18a67C767C23cFd30C' as Address,
+  address: '0xb8039632E089DCEFA6bBB1590948926B2463b691' as Address,
   abi: karmaTierAbi as Abi,
 } as const
