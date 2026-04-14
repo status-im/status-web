@@ -32,13 +32,13 @@ export const metadata = Metadata({
 
   appLinks: {
     ios: {
-      app_store_id: '1178893006',
-      app_name: 'Status — Ethereum. Anywhere',
+      app_store_id: '6754166924',
+      app_name: 'Status - privacy super app',
       url: 'https://status.app',
     },
     android: {
-      package: 'im.status.ethereum',
-      app_name: 'Status — Ethereum. Anywhere',
+      package: 'app.status.mobile',
+      app_name: 'Status - privacy super app',
       url: 'https://status.app',
     },
   },
