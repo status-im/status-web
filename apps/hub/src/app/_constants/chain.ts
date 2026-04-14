@@ -1,6 +1,9 @@
 import { getDefaultConfig } from 'connectkit'
+import { defineChain, parseGwei } from 'viem'
+import { linea as lineaChainConfig } from 'viem/chains'
+import { estimateGas } from 'viem/linea'
 import { createConfig, http } from 'wagmi'
-import { type Chain, linea, mainnet, statusSepolia } from 'wagmi/chains'
+import { type Chain, linea, mainnet } from 'wagmi/chains'
 
 import { PuzzleAuthService, RETRY_STATUS_CODES } from '~services/puzzle-auth'
 
@@ -12,13 +15,65 @@ import type {
   Transport,
 } from 'wagmi'
 
+const FALLBACK_MAX_FEE_PER_GAS = parseGwei('100')
+const FALLBACK_MAX_PRIORITY_FEE_PER_GAS = parseGwei('100')
+
+export const statusHoodi = defineChain({
+  // https://github.com/wevm/viem/blob/main/src/chains/definitions/statusNetworkSepolia.ts
+  ...lineaChainConfig,
+  id: 374,
+  name: 'Status Network Hoodi',
+  nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ['https://rpc.status-network-testnet-hoodi.gateway.fm'],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: 'Blockscout',
+      url: 'https://explorer.status-network-testnet-hoodi.gateway.fm',
+    },
+  },
+  contracts: {},
+  testnet: true,
+  fees: {
+    async estimateFeesPerGas({ client, request }) {
+      const account = request?.account
+      if (!account) {
+        return {
+          maxFeePerGas: FALLBACK_MAX_FEE_PER_GAS,
+          maxPriorityFeePerGas: FALLBACK_MAX_PRIORITY_FEE_PER_GAS,
+        }
+      }
+      try {
+        const response = await estimateGas(client, {
+          ...request,
+          account,
+        })
+        const maxPriorityFeePerGas = response.priorityFeePerGas
+        const baseFeePerGas = response.baseFeePerGas
+        return {
+          maxFeePerGas: baseFeePerGas + maxPriorityFeePerGas,
+          maxPriorityFeePerGas,
+        }
+      } catch {
+        return {
+          maxFeePerGas: FALLBACK_MAX_FEE_PER_GAS,
+          maxPriorityFeePerGas: FALLBACK_MAX_PRIORITY_FEE_PER_GAS,
+        }
+      }
+    },
+  },
+})
+
 const tRpcProxyUrl = (chainId: number) =>
   `${clientEnv.NEXT_PUBLIC_STATUS_API_URL}/api/trpc/rpc.proxy?chainId=${chainId}`
 
 const rpcProxyPaths: Record<number, string> = {
   [mainnet.id]: '/ethereum/mainnet',
   [linea.id]: '/linea/mainnet',
-  [statusSepolia.id]: '/status/sepolia',
+  [statusHoodi.id]: '/status/hoodi',
 }
 
 const rpcProxyUrl = (chainId: number) =>
@@ -61,9 +116,9 @@ const createTransport = (chainId: number) =>
 
 export const getDefaultWagmiConfig = () =>
   getDefaultConfig({
-    chains: [statusSepolia, mainnet, linea],
+    chains: [statusHoodi, mainnet, linea],
     transports: {
-      [statusSepolia.id]: createTransport(statusSepolia.id),
+      [statusHoodi.id]: createTransport(statusHoodi.id),
       [mainnet.id]: createTransport(mainnet.id),
       [linea.id]: createTransport(linea.id),
     },

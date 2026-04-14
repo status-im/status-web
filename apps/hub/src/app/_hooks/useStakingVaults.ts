@@ -4,8 +4,8 @@ import { useTranslations } from 'next-intl'
 import { type Address } from 'viem'
 import { useAccount, useChainId, useConfig } from 'wagmi'
 import { readContract, readContracts } from 'wagmi/actions'
-import { statusSepolia } from 'wagmi/chains'
 
+import { statusHoodi } from '~constants/chain'
 import { vaultAbi } from '~constants/contracts'
 import { CACHE_CONFIG, STAKING_MANAGER, STT_TOKEN } from '~constants/index'
 
@@ -249,7 +249,7 @@ export function useStakingVaults(
   const chainId = useChainId()
   const toast = useToast()
   const t = useTranslations()
-  const isStatusNetworkSepolia = chainId === statusSepolia.id
+  const isStatusNetworkHoodi = chainId === statusHoodi.id
 
   return useQuery<StakingVault[], Error>({
     queryKey: [QUERY_KEY, address, chainId],
@@ -284,7 +284,7 @@ export function useStakingVaults(
         throw error
       }
     },
-    enabled: (options?.enabled ?? !!address) && isStatusNetworkSepolia,
+    enabled: (options?.enabled ?? !!address) && isStatusNetworkHoodi,
     staleTime: options?.staleTime ?? CACHE_CONFIG.DEFAULT_STALE_TIME,
     refetchInterval: options?.refetchInterval,
   })

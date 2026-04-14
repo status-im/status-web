@@ -1,7 +1,7 @@
 import { useMutation, type UseMutationResult } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
 import { formatUnits, zeroAddress } from 'viem'
-import { useAccount, useConfig, useWriteContract } from 'wagmi'
+import { useAccount, useConfig } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 
 import {
@@ -11,6 +11,7 @@ import {
   STT_TOKEN,
 } from '~constants/index'
 import { useMultiplierPointsBalance } from '~hooks/useMultiplierPoints'
+import { writeStatusNetworkContract } from '~utils/status-network-transaction'
 
 import { useVaultStateContext } from './useVaultStateContext'
 
@@ -99,7 +100,6 @@ const MUTATION_KEY = 'compound-multiplier-points' as const
  */
 export function useCompoundMultiplierPoints(): UseCompoundMultiplierPointsReturn {
   const { address } = useAccount()
-  const { writeContractAsync } = useWriteContract()
   const config = useConfig()
   const { data: mpBalance, refetch: refetchMultiplierPoints } =
     useMultiplierPointsBalance()
@@ -131,7 +131,7 @@ export function useCompoundMultiplierPoints(): UseCompoundMultiplierPointsReturn
       })
 
       // Execute compound transaction via updateAccount
-      const hash = await writeContractAsync({
+      const hash = await writeStatusNetworkContract(config, {
         account: address,
         address: STAKING_MANAGER.address,
         abi: STAKING_MANAGER.abi,

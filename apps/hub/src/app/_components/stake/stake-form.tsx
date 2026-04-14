@@ -9,16 +9,20 @@ import { useTranslations } from 'next-intl'
 import { useForm, useWatch } from 'react-hook-form'
 import { match } from 'ts-pattern'
 import { formatUnits, parseUnits } from 'viem'
-import { useAccount, useBalance, useConfig } from 'wagmi'
+import { useAccount, useBalance, useConfig, useReadContract } from 'wagmi'
 import { readContract } from 'wagmi/actions'
-import { statusSepolia } from 'wagmi/chains'
 import { z } from 'zod'
 
 import { SNTIcon } from '~components/icons'
 import { PromoModal } from '~components/stake/promo-modal'
 import { VaultSelect } from '~components/vault-select'
 import { LockVaultModal } from '~components/vaults/modals/lock-vault-modal'
-import { STAKE_PAGE_CONSTANTS, STT_TOKEN } from '~constants/index'
+import { statusHoodi } from '~constants/chain'
+import {
+  STAKE_PAGE_CONSTANTS,
+  STAKING_MANAGER,
+  STT_TOKEN,
+} from '~constants/index'
 import { useApproveToken } from '~hooks/useApproveToken'
 import { useCreateVault } from '~hooks/useCreateVault'
 import { useExchangeRate } from '~hooks/useExchangeRate'
@@ -118,6 +122,15 @@ const StakeForm = () => {
   const { data: exchangeRate } = useExchangeRate()
   const { isInstalled: isStatusWalletInstalled } = useStatusWallet()
   const { data: emergencyModeEnabled } = useEmergencyModeEnabled()
+  const { data: maxVaultsPerUser } = useReadContract({
+    address: STAKING_MANAGER.address,
+    abi: STAKING_MANAGER.abi,
+    functionName: 'maxVaultsPerUser',
+  })
+  const hasReachedVaultLimit =
+    maxVaultsPerUser != null &&
+    vaults != null &&
+    BigInt(vaults.length) >= (maxVaultsPerUser as bigint)
   const [isPromoModalOpen, setIsPromoModalOpen] = useState(false)
   const [lockModalVaultAddress, setLockModalVaultAddress] =
     useState<Address | null>(null)
@@ -201,7 +214,7 @@ const StakeForm = () => {
     try {
       // Check current allowance
       const currentAllowance = (await readContract(config, {
-        chainId: statusSepolia.id,
+        chainId: statusHoodi.id,
         address: STT_TOKEN.address,
         abi: STT_TOKEN.abi,
         functionName: 'allowance',
@@ -343,13 +356,24 @@ const StakeForm = () => {
                 {t('stake.stake_stt')}
               </Button>
             ) : (
-              <Button
-                className="w-full justify-center"
-                onClick={() => createVault()}
-                disabled={Boolean(emergencyModeEnabled)}
-              >
-                {t('stake.create_new_vault')}
-              </Button>
+              <>
+                {hasReachedVaultLimit && (
+                  <p className="text-13 font-500 text-danger-50">
+                    {t('stake.max_vaults_reached', {
+                      max: maxVaultsPerUser?.toString() ?? '0',
+                    })}
+                  </p>
+                )}
+                <Button
+                  className="w-full justify-center"
+                  onClick={() => createVault()}
+                  disabled={
+                    Boolean(emergencyModeEnabled) || hasReachedVaultLimit
+                  }
+                >
+                  {t('stake.create_new_vault')}
+                </Button>
+              </>
             )
           })
           .exhaustive()}
