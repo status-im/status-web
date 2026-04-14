@@ -307,7 +307,7 @@ const getNonceHex = async (
   network: string,
 ): Promise<string> => {
   const key = `${fromAddress}:${network}`
-  const networkNonce = await fetchNetworkNonce(fromAddress, network)
+  const networkNonce = await fetchNetworkNonce(fromAddress)
   const localNonce = localNonceTracker.get(key) ?? 0
   const nonce = Math.max(networkNonce, localNonce)
 

@@ -41,12 +41,15 @@ async function fetchReceipt(
 }
 
 export const TX_MONITOR_ALARM = 'tx-monitor'
+// 0.5 minutes = 30 seconds, minimum allowed by Chrome MV3
+const TX_MONITOR_INTERVAL_MINUTES = 0.5
 
 export async function startTxMonitor(): Promise<void> {
   const existing = await chrome.alarms.get(TX_MONITOR_ALARM)
   if (!existing) {
-    // Fires every 30 seconds, minimum allowed by Chrome MV3
-    chrome.alarms.create(TX_MONITOR_ALARM, { periodInMinutes: 0.5 })
+    chrome.alarms.create(TX_MONITOR_ALARM, {
+      periodInMinutes: TX_MONITOR_INTERVAL_MINUTES,
+    })
   }
 }
 
