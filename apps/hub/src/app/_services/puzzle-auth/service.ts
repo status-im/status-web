@@ -1,6 +1,5 @@
 import { solvePuzzle } from './solver'
 import { tokenStore } from './token-store'
-import { parseJwtExp } from './utils'
 
 import type {
   ProgressCallback,
@@ -72,7 +71,7 @@ class PuzzleAuthService {
       if (result.success && result.token) {
         const tokenData: TokenData = {
           token: result.token,
-          expiresAt: parseJwtExp(result.token) ?? 0,
+          expiresAt: (result.puzzle?.expires_at ?? 0) * 1000,
           solveTime: result.solveTime,
           attempts: result.attempts,
         }
