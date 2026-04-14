@@ -142,7 +142,7 @@ const ActionButtons = (props: Props) => {
         /> */}
         {hideAssetsBelowOneToggle && (
           <ToggleButton
-            label="Hide below $1"
+            label="Hide <$1"
             checked={hideAssetsBelowOneToggle.checked}
             onCheckedChange={hideAssetsBelowOneToggle.onCheckedChange}
           />
