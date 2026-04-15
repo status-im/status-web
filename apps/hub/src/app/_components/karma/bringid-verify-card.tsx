@@ -35,7 +35,11 @@ export function BringIDVerifyCard({
     setIsVerifying(true)
 
     try {
-      await bringid.verifyHumanity()
+      const { proofs, points } = await bringid.verifyHumanity()
+      console.log({ proofs, points })
+      // you can check the proofs validity via server before any action
+      // example is shown here https://github.com/BringID/status-demo-serivce
+
       setIsVerified(true)
       toast.positive(t('karma.bringid_verify_success'))
       await onComplete?.()
