@@ -1,6 +1,4 @@
-import { useEffect } from 'react'
-
-import { Button, useToast } from '@status-im/components'
+import { Button } from '@status-im/components'
 import {
   ArrowLeftIcon,
   ExternalIcon,
@@ -13,16 +11,17 @@ import {
   CollectibleSkeleton,
   // CurrencyAmount,
   NetworkLogo,
+  shortenAddress,
 } from '@status-im/wallet/components'
-import { ERROR_MESSAGES } from '@status-im/wallet/constants'
-import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 
 import { useWallet } from '@/providers/wallet-context'
 
 import { CardDetail } from './card-detail'
+import { CollectibleTraits } from './collectible-traits'
 import { isSupportedNftStandard } from './nft-helpers'
 import { SendCollectibleModal } from './send-collectible-modal'
+import { useCollectible } from './use-collectible'
 
 import type { NetworkType } from '@status-im/wallet/data'
 
@@ -35,56 +34,10 @@ type Props = {
 const Collectible = (props: Props) => {
   const { network, contract, id } = props
 
-  const toast = useToast()
   const { currentWallet } = useWallet()
-
   const address = currentWallet?.activeAccounts[0]?.address
 
-  const {
-    data: collectible,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['collectible', network, contract, id],
-    queryFn: async () => {
-      const url = new URL(
-        `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/collectibles.collectible`,
-      )
-      url.searchParams.set(
-        'input',
-        JSON.stringify({
-          json: {
-            contract,
-            tokenId: id,
-            network,
-          },
-        }),
-      )
-
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-
-      if (!response.ok) {
-        throw new Error(response.statusText, { cause: response.status })
-      }
-
-      const body = await response.json()
-      return body.result.data.json
-    },
-    staleTime: 15 * 1000, // 15 seconds
-    gcTime: 60 * 60 * 1000, // 1 hour
-  })
-
-  // Show error toast if fetching fails
-  useEffect(() => {
-    if (isError) {
-      toast.negative(ERROR_MESSAGES.COLLECTIBLE_INFO)
-    }
-  }, [isError, toast])
+  const { data: collectible, isLoading } = useCollectible(network, contract, id)
 
   if (isLoading || !collectible) {
     return <CollectibleSkeleton />
@@ -119,26 +72,6 @@ const Collectible = (props: Props) => {
                 {collectible.displayName}
               </div>
             </div>
-
-            {/* {collectible.floor_price && collectible.price_eur && (
-              <div className="mb-6 flex items-center gap-1.5">
-                <div className="flex items-center gap-1">
-                  <div className="text-13 font-medium text-neutral-50">
-                    {collectible.floor_price} {collectible.currency}
-                  </div>
-                  <div
-                    className="size-0.5 rounded-full bg-neutral-40"
-                    aria-hidden
-                  />
-                  <div className="text-13 font-medium text-neutral-50">
-                    <CurrencyAmount
-                      value={collectible.price_eur}
-                      format="standard"
-                    />
-                  </div>
-                </div>
-              </div>
-            )} */}
 
             <div className="flex gap-2">
               {collectible?.links?.opensea && (
@@ -177,12 +110,6 @@ const Collectible = (props: Props) => {
                     </Button>
                   </SendCollectibleModal>
                 )}
-              {/* <Button
-                size="32"
-                variant="outline"
-                icon={<OptionsIcon />}
-                aria-label="More options"
-              /> */}
             </div>
           </div>
         </div>
@@ -224,7 +151,7 @@ const Collectible = (props: Props) => {
                   href={`https://etherscan.io/address/${collectible.contract}`}
                 >
                   <div className="font-mono">
-                    {truncateAddress(collectible.contract)}
+                    {shortenAddress(collectible.contract)}
                   </div>
                 </CardDetail>
                 <CardDetail title="Token Standard">
@@ -246,47 +173,13 @@ const Collectible = (props: Props) => {
         aria-hidden="true"
       />
 
-      {collectible.traits && Object.keys(collectible.traits).length > 0 && (
-        <div>
-          <div className="mb-3 text-15 font-semibold text-neutral-100">
-            Traits
-          </div>
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(155px,1fr))] gap-3">
-            {Object.entries(collectible.traits as Record<string, unknown>)
-              .filter(([, value]) => {
-                if (typeof value === 'object' && value !== null) {
-                  const valueObj = value as Record<string, unknown>
-                  if ('parent' in valueObj && 'child' in valueObj) {
-                    return false
-                  }
-                }
-                return true
-              })
-              .map(([trait, value], index) => {
-                let displayValue: string
-
-                if (typeof value === 'object' && value !== null) {
-                  displayValue = JSON.stringify(value)
-                } else {
-                  displayValue = String(value)
-                }
-
-                return (
-                  <CardDetail key={index} title={trait}>
-                    <div className="text-13 font-medium text-neutral-100">
-                      {displayValue}
-                    </div>
-                  </CardDetail>
-                )
-              })}
-          </div>
-        </div>
+      {collectible.traits && (
+        <CollectibleTraits
+          traits={collectible.traits as Record<string, unknown>}
+        />
       )}
     </div>
   )
 }
 
 export { Collectible }
-
-const truncateAddress = (address: string, chars = 5) =>
-  `${address.slice(0, chars)}...${address.slice(-chars)}`

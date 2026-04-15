@@ -29,13 +29,17 @@ const AmountField = ({
 }: Props) => {
   const symbol = deriveSymbol(displayName)
   const isIntegerAmount = /^\d+$/.test(amount)
+
   const amountBig = isIntegerAmount ? BigInt(amount) : null
+
   const isOverBalance =
     isErc1155 &&
     balance !== undefined &&
     amountBig !== null &&
     amountBig > balance
+
   const showBalanceRow = isErc1155 && balance !== undefined
+
   const remaining =
     isErc1155 && balance !== undefined && !isOverBalance
       ? balance - (amountBig ?? 0n)
