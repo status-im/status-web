@@ -1,11 +1,11 @@
-import { Avatar, Button, DropdownMenu, Tooltip } from '@status-im/components'
+import { Avatar, Button, DropdownMenu /*Tooltip*/ } from '@status-im/components'
 import {
   AddIcon,
   ChevronDownIcon,
   ImportIcon,
   WalletIcon,
 } from '@status-im/icons/20'
-import { shortenAddress } from '@status-im/wallet/components'
+// import { shortenAddress } from '@status-im/wallet/components'
 import { useNavigate } from '@tanstack/react-router'
 
 import { useWallet } from '@/providers/wallet-context'
@@ -20,7 +20,7 @@ const DEFAULT_ACCOUNT_NAME = 'Account 1'
 export function WalletAccountSelector(props: Props) {
   const { className } = props
   const navigate = useNavigate()
-  const { wallets, currentWallet, currentAccount, setCurrentWallet } =
+  const { wallets, currentWallet /*, currentAccount*/, setCurrentWallet } =
     useWallet()
 
   if (!currentWallet) {
@@ -45,13 +45,15 @@ export function WalletAccountSelector(props: Props) {
           <div className="text-15 font-semibold text-neutral-100">
             {currentWallet.name}
           </div>
-          {currentAccount?.address ? (
+          {/* TODO: Uncomment to display current account's name
+          when multi-account support is implemented */}
+          {/* {currentAccount?.address ? (
             <Tooltip content={DEFAULT_ACCOUNT_NAME} side="top">
               <div className="text-13 font-medium text-neutral-50">
                 {shortenAddress(currentAccount.address)}
               </div>
             </Tooltip>
-          ) : null}
+          ) : null} */}
         </div>
       </div>
 
