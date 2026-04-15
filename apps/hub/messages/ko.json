@@ -1111,6 +1111,10 @@
       "translation": "🎮 게임",
       "notes": "categories::gaming"
     },
+    "governance": {
+      "translation": "🏛️ 거버넌스",
+      "notes": "categories::governance"
+    },
     "infra": {
       "translation": "💻 인프라",
       "notes": "categories::infra"

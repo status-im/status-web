@@ -95,7 +95,7 @@ export const apps: App[] = [
     cover: '/apps/status-network-bridge-cover.png',
     isPopular: false,
     isNew: false,
-    isFeatured: false,
+    isFeatured: true,
   },
   {
     id: 7,
