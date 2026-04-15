@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
-import { Button, Input, useToast } from '@status-im/components'
+import { Button, useToast } from '@status-im/components'
 import {
-  AlertIcon,
   ArrowLeftIcon,
   ExternalIcon,
   // OptionsIcon,
   SadIcon,
+  SendBlurIcon,
 } from '@status-im/icons/20'
 import { OpenseaIcon } from '@status-im/icons/social'
 import {
@@ -15,23 +15,14 @@ import {
   NetworkLogo,
 } from '@status-im/wallet/components'
 import { ERROR_MESSAGES } from '@status-im/wallet/constants'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 
-import { apiClient } from '@/providers/api-client'
-import { usePassword } from '@/providers/password-context'
-import { usePendingTransactions } from '@/providers/pending-transactions-context'
 import { useWallet } from '@/providers/wallet-context'
 
 import { CardDetail } from './card-detail'
-import {
-  encodeNftTransfer,
-  extractTxHash,
-  fetchNftGasFees,
-  getNftSendErrorMessage,
-  isSupportedNftStandard,
-  isValidAddress,
-} from './nft-helpers'
+import { isSupportedNftStandard } from './nft-helpers'
+import { SendCollectibleModal } from './send-collectible-modal'
 
 import type { NetworkType } from '@status-im/wallet/data'
 
@@ -161,6 +152,29 @@ const Collectible = (props: Props) => {
                   View on OpenSea
                 </Button>
               )}
+              {isSupportedNftStandard(collectible.standard) && address && (
+                <SendCollectibleModal
+                  standard={collectible.standard}
+                  displayName={collectible.displayName}
+                  collectibleImage={
+                    collectible.thumbnail || collectible.image || undefined
+                  }
+                  fromAddress={address}
+                  walletId={currentWallet?.id || ''}
+                  accountName={currentWallet?.name || 'Account 1'}
+                  network={network}
+                  contract={contract}
+                  tokenId={id}
+                >
+                  <Button
+                    size="32"
+                    variant="outline"
+                    iconBefore={<SendBlurIcon />}
+                  >
+                    Send
+                  </Button>
+                </SendCollectibleModal>
+              )}
               {/* <Button
                 size="32"
                 variant="outline"
@@ -168,18 +182,6 @@ const Collectible = (props: Props) => {
                 aria-label="More options"
               /> */}
             </div>
-
-            {isSupportedNftStandard(collectible.standard) && address && (
-              <SendNftSection
-                standard={collectible.standard}
-                displayName={collectible.displayName}
-                address={address}
-                walletId={currentWallet?.id || ''}
-                network={network}
-                contract={contract}
-                tokenId={id}
-              />
-            )}
           </div>
         </div>
 
@@ -283,172 +285,6 @@ const Collectible = (props: Props) => {
 }
 
 export { Collectible }
-
-type SendNftSectionProps = {
-  standard: string
-  displayName: string
-  address: string
-  walletId: string
-  network: NetworkType
-  contract: string
-  tokenId: string
-}
-
-const SendNftSection = (props: SendNftSectionProps) => {
-  const {
-    standard,
-    displayName,
-    address,
-    walletId,
-    network,
-    contract,
-    tokenId,
-  } = props
-
-  const toast = useToast()
-  const queryClient = useQueryClient()
-  const { hasActiveSession, requestPassword } = usePassword()
-  const { addPendingTransaction } = usePendingTransactions()
-
-  const [recipientAddress, setRecipientAddress] = useState('')
-  const [isSending, setIsSending] = useState(false)
-  const [txResult, setTxResult] = useState<string | null>(null)
-  const [sendError, setSendError] = useState<string | null>(null)
-
-  const sendLabel = standard === 'UNKNOWN' ? 'NFT' : `${standard} NFT`
-
-  const handleSendNft = async () => {
-    const normalizedRecipientAddress = recipientAddress.trim()
-
-    if (!isValidAddress(normalizedRecipientAddress)) {
-      setSendError('Invalid Ethereum address')
-      return
-    }
-
-    setIsSending(true)
-    setSendError(null)
-    setTxResult(null)
-
-    try {
-      if (!hasActiveSession) {
-        const unlocked = await requestPassword()
-        if (!unlocked) {
-          return
-        }
-      }
-
-      const gasFees = await fetchNftGasFees({
-        from: address,
-        to: normalizedRecipientAddress,
-        contractAddress: contract,
-        tokenId,
-        standard,
-        network,
-      })
-
-      const data = encodeNftTransfer({
-        standard,
-        from: address,
-        to: normalizedRecipientAddress,
-        tokenId,
-      })
-
-      const result =
-        await apiClient.wallet.account.ethereum.sendContractCall.mutate({
-          walletId,
-          fromAddress: address,
-          toAddress: contract,
-          gasLimit: gasFees.txParams.gasLimit,
-          maxFeePerGas: gasFees.txParams.maxFeePerGas,
-          maxInclusionFeePerGas: gasFees.txParams.maxPriorityFeePerGas,
-          data,
-          value: '0',
-        })
-
-      if (!result.id || result.id.txid?.error) {
-        throw new Error(
-          result.id?.txid?.error || 'Failed to send NFT transaction',
-        )
-      }
-
-      const txHash = extractTxHash(result.id.txid)
-
-      if (!txHash) {
-        throw new Error('Transaction hash not found')
-      }
-
-      setTxResult(txHash)
-      setRecipientAddress('')
-
-      addPendingTransaction({
-        hash: txHash,
-        from: address,
-        to: normalizedRecipientAddress,
-        value: 0,
-        asset: displayName,
-        network,
-        status: 'pending',
-        category: 'external',
-        blockNum: '0',
-        metadata: {
-          blockTimestamp: new Date().toISOString(),
-        },
-        rawContract: {
-          value: '0',
-          address: contract,
-          decimal: '0',
-        },
-        eurRate: 0,
-      })
-
-      queryClient.invalidateQueries({ queryKey: ['collectibles'] })
-      queryClient.invalidateQueries({
-        queryKey: ['collectible', network, contract, tokenId],
-      })
-
-      toast.positive('NFT transfer submitted')
-    } catch (error: unknown) {
-      const message = getNftSendErrorMessage(error)
-      setSendError(message)
-      toast.negative(message)
-    } finally {
-      setIsSending(false)
-    }
-  }
-
-  return (
-    <div className="mt-4 flex flex-col gap-2">
-      <div className="text-13 font-semibold text-neutral-50">
-        Send {sendLabel}
-      </div>
-      <Input
-        label="Recipient"
-        placeholder="Recipient address (0x...)"
-        value={recipientAddress}
-        onChange={setRecipientAddress}
-        autoComplete="off"
-        clearable={!!recipientAddress}
-      />
-      <Button
-        size="32"
-        variant="outline"
-        onPress={handleSendNft}
-        disabled={isSending || !recipientAddress}
-      >
-        {isSending ? 'Sending...' : `Send ${sendLabel}`}
-      </Button>
-      {txResult && (
-        <div className="break-all text-13 text-success-50">Tx: {txResult}</div>
-      )}
-      {sendError && (
-        <div className="flex items-center gap-1 text-13 text-danger-50">
-          <AlertIcon className="size-4" />
-          <span>{sendError}</span>
-        </div>
-      )}
-    </div>
-  )
-}
 
 const truncateAddress = (address: string, chars = 5) =>
   `${address.slice(0, chars)}...${address.slice(-chars)}`

@@ -14,7 +14,12 @@ const erc721 = new Interface([
 
 const erc1155 = new Interface([
   'function safeTransferFrom(address from, address to, uint256 id, uint256 amount, bytes data)',
+  'function balanceOf(address account, uint256 id) view returns (uint256)',
 ])
+
+const NETWORK_TO_CHAIN_ID: Record<string, number> = {
+  ethereum: 1,
+}
 
 const parseTokenId = (tokenId: string): bigint => {
   try {
@@ -26,6 +31,26 @@ const parseTokenId = (tokenId: string): bigint => {
 
 export const isValidAddress = (address: string) =>
   /^0x[0-9a-fA-F]{40}$/.test(address)
+
+const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
+
+export type AddressValidation =
+  | { kind: 'empty' }
+  | { kind: 'invalid' }
+  | { kind: 'zero' }
+  | { kind: 'self' }
+  | { kind: 'ok' }
+
+export const validateRecipient = (
+  recipient: string,
+  sender: string,
+): AddressValidation => {
+  if (!recipient) return { kind: 'empty' }
+  if (!isValidAddress(recipient)) return { kind: 'invalid' }
+  if (recipient.toLowerCase() === ZERO_ADDRESS) return { kind: 'zero' }
+  if (recipient.toLowerCase() === sender.toLowerCase()) return { kind: 'self' }
+  return { kind: 'ok' }
+}
 
 export const isSupportedNftStandard = (standard: string) =>
   ['ERC721', 'ERC1155', 'UNKNOWN'].includes(standard)
@@ -171,6 +196,55 @@ function buildNftGasFeeParams(params: {
     value: '0x0',
     data,
   }
+}
+
+export async function fetchErc1155Balance(params: {
+  owner: string
+  contract: string
+  tokenId: string
+  network: NetworkType
+}): Promise<number> {
+  const chainId = NETWORK_TO_CHAIN_ID[params.network]
+  if (!chainId) {
+    throw new Error(`Unsupported network: ${params.network}`)
+  }
+
+  const data = erc1155.encodeFunctionData('balanceOf', [
+    params.owner,
+    parseTokenId(params.tokenId),
+  ])
+
+  const url = `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/rpc.proxy?chainId=${chainId}`
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'eth_call',
+      params: [{ to: params.contract, data }, 'latest'],
+    }),
+  })
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch ERC-1155 balance')
+  }
+
+  const body = (await response.json()) as {
+    result?: string
+    error?: { message: string }
+  }
+
+  if (body.error) {
+    throw new Error(body.error.message)
+  }
+  if (!body.result) {
+    throw new Error('Empty ERC-1155 balance response')
+  }
+
+  const decoded = erc1155.decodeFunctionResult('balanceOf', body.result)
+  return Number(decoded[0] as bigint)
 }
 
 export async function fetchNftGasFees(params: {
