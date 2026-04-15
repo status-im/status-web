@@ -5,12 +5,13 @@ import {
 } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
 import { type Address, formatUnits } from 'viem'
-import { useAccount, useConfig, useWriteContract } from 'wagmi'
+import { useAccount, useConfig } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 
 import { vaultAbi } from '~constants/contracts'
 import { STT_TOKEN } from '~constants/index'
 import { useVaultStateContext } from '~hooks/useVaultStateContext'
+import { writeStatusNetworkContract } from '~utils/status-network-transaction'
 
 // ============================================================================
 // Types
@@ -96,7 +97,6 @@ const CONFIRMATION_BLOCKS = 1
  */
 export function useVaultEmergencyExit(): UseVaultEmergencyExitReturn {
   const { address } = useAccount()
-  const { writeContractAsync } = useWriteContract()
   const config = useConfig()
   const queryClient = useQueryClient()
   const { send: sendVaultEvent, reset: resetVault } = useVaultStateContext()
@@ -126,7 +126,7 @@ export function useVaultEmergencyExit(): UseVaultEmergencyExitReturn {
       try {
         // Execute emergency exit transaction
         // emergencyExit withdraws ALL funds to the specified destination address
-        const hash = await writeContractAsync({
+        const hash = await writeStatusNetworkContract(config, {
           account: address,
           address: vaultAddress,
           abi: vaultAbi,

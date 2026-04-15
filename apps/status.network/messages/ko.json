@@ -48,7 +48,7 @@
       "notes": "common::new"
     },
     "testnet_live": {
-      "translation": "테스트넷이 활성화되었습니다!",
+      "translation": "테스트넷 v2가 활성화되었습니다!",
       "notes": "common::testnet_live"
     },
     "promo_message": {

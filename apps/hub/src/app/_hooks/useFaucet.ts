@@ -6,10 +6,11 @@ import {
   type UseQueryResult,
 } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
-import { useAccount, useChainId, useConfig, useWriteContract } from 'wagmi'
+import { useAccount, useChainId, useConfig } from 'wagmi'
 import { readContracts, waitForTransactionReceipt } from 'wagmi/actions'
 
 import { FAUCET } from '~constants/index'
+import { writeStatusNetworkContract } from '~utils/status-network-transaction'
 
 // ============================================================================
 // Types
@@ -95,7 +96,6 @@ export function useFaucetMutation(): UseMutationResult<
   unknown
 > {
   const { address } = useAccount()
-  const { writeContractAsync } = useWriteContract()
   const chainId = useChainId()
   const config = useConfig()
   const queryClient = useQueryClient()
@@ -109,7 +109,7 @@ export function useFaucetMutation(): UseMutationResult<
         throw new Error(t('errors.wallet_not_connected'))
       }
 
-      const hash = await writeContractAsync({
+      const hash = await writeStatusNetworkContract(config, {
         account: address,
         address: FAUCET.address,
         abi: FAUCET.abi,

@@ -2,8 +2,8 @@ import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { type Address } from 'viem'
 import { useAccount, useChainId, useConfig } from 'wagmi'
 import { readContract } from 'wagmi/actions'
-import { statusSepolia } from 'wagmi/chains'
 
+import { statusHoodi } from '~constants/chain'
 import {
   CACHE_CONFIG,
   DEFAULT_MP_VALUE,
@@ -59,7 +59,7 @@ async function fetchVaultMpBalance(
   vaultAddress: Address
 ): Promise<bigint> {
   const result = (await readContract(config, {
-    chainId: statusSepolia.id,
+    chainId: statusHoodi.id,
     address: STAKING_MANAGER.address,
     abi: STAKING_MANAGER.abi,
     functionName: 'mpBalanceOf',

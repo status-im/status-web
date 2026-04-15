@@ -58,7 +58,6 @@ function Component() {
             <AssetsList
               assets={assets?.assets ?? []}
               hideBelowOneEur={hideBelowOneEur}
-              onHideBelowOneEurChange={setHideBelowOneEur}
               onSelect={url => {
                 const ticker = url.split('/').pop()
                 if (!ticker) return
