@@ -69,6 +69,7 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
 
   const currentAccount = useMemo(() => {
     if (!currentWallet) return null
+    // TODO: Use currently selected account when multi-account support is implemented. See ^^^
     return currentWallet.accounts[0] ?? null
   }, [currentWallet])
 
