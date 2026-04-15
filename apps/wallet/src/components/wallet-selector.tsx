@@ -17,7 +17,7 @@ type Props = {
 const DEFAULT_ACCOUNT_EMOJI = '🍑'
 const DEFAULT_ACCOUNT_NAME = 'Account 1'
 
-export function WalletAccountSelector(props: Props) {
+export function WalletSelector(props: Props) {
   const { className } = props
   const navigate = useNavigate()
   const { wallets, currentWallet /*, currentAccount*/, setCurrentWallet } =

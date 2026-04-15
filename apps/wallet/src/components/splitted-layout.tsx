@@ -12,7 +12,7 @@ import { useWallet } from '@/providers/wallet-context'
 
 import { ActionButtons } from '../components/action-buttons'
 import { RecoveryPhraseBackup } from '../components/recovery-phrase-backup'
-import { WalletAccountSelector } from '../components/wallet-account-selector'
+import { WalletSelector } from '../components/wallet-selector'
 import {
   AccountSkeleton,
   ActionButtonsSkeleton,
@@ -109,7 +109,7 @@ const AccountInfo = () => {
 
   return (
     <div data-customisation={account.color}>
-      <WalletAccountSelector />
+      <WalletSelector />
     </div>
   )
 }
