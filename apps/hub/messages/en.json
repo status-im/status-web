@@ -690,6 +690,70 @@
     "stake_card_badge_description": {
       "translation": "Stake STT to level up",
       "notes": "karma::stake_card_badge_description"
+    },
+    "bringid_verify_title": {
+      "translation": "Verify with BringID",
+      "notes": "karma::bringid_verify_title"
+    },
+    "bringid_verify_button": {
+      "translation": "Verify",
+      "notes": "karma::bringid_verify_button"
+    },
+    "bringid_verifying": {
+      "translation": "Verifying...",
+      "notes": "karma::bringid_verifying"
+    },
+    "bringid_verify_done": {
+      "translation": "Verified",
+      "notes": "karma::bringid_verify_done"
+    },
+    "bringid_verify_success": {
+      "translation": "Identity verified successfully",
+      "notes": "karma::bringid_verify_success"
+    },
+    "bringid_badge_title": {
+      "translation": "Proof-of-human",
+      "notes": "karma::bringid_badge_title"
+    },
+    "bringid_badge_description": {
+      "translation": "Prove you're human to level up",
+      "notes": "karma::bringid_badge_description"
+    },
+    "bringid_score_title": {
+      "translation": "BringID Reputation Score",
+      "notes": "karma::bringid_score_title"
+    },
+    "bringid_score_description": {
+      "translation": "Your on-chain reputation score from BringID",
+      "notes": "karma::bringid_score_description"
+    },
+    "bringid_score_button": {
+      "translation": "Check My Score",
+      "notes": "karma::bringid_score_button"
+    },
+    "bringid_score_loading": {
+      "translation": "Fetching score...",
+      "notes": "karma::bringid_score_loading"
+    },
+    "bringid_score_refresh": {
+      "translation": "Refresh Score",
+      "notes": "karma::bringid_score_refresh"
+    },
+    "bringid_score_connect_wallet": {
+      "translation": "Connect wallet to view your score",
+      "notes": "karma::bringid_score_connect_wallet"
+    },
+    "bringid_score_error": {
+      "translation": "Could not fetch your BringID score",
+      "notes": "karma::bringid_score_error"
+    },
+    "bringid_score_badge_title": {
+      "translation": "Reputation",
+      "notes": "karma::bringid_score_badge_title"
+    },
+    "bringid_score_badge_description": {
+      "translation": "Your BringID on-chain reputation",
+      "notes": "karma::bringid_score_badge_description"
     }
   },
   "rewards": {
