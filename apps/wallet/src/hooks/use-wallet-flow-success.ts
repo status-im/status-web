@@ -12,7 +12,6 @@ export function useWalletFlowSuccess(successHref: string) {
 
   return async (wallet: { id: string; name: string }, message: string) => {
     await queryClient.invalidateQueries({ queryKey: ['wallets'] })
-    await queryClient.refetchQueries({ queryKey: ['wallets'] })
     setCurrentWallet(wallet.id)
     toast.positive(message)
     await queryClient.invalidateQueries({ queryKey: ['session', 'status'] })
