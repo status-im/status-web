@@ -47,6 +47,12 @@ function BringIDModalWrapper() {
           ? (msg: string) => walletClient.signMessage({ message: msg })
           : undefined
       }
+      highlightColor="#6B43F4"
+      customTitles={{
+        scoreTitle: 'Karma',
+        pointsTitle: 'karma',
+        pointsShortTitle: 'karma',
+      }}
     />
   )
 }
