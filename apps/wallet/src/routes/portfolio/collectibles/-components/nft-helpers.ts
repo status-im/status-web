@@ -1,6 +1,7 @@
 import { Interface } from 'ethers'
 import { isAddress } from 'viem'
 import { formatEther } from 'viem/utils'
+import * as z from 'zod'
 
 import {
   fetchTrpcData,
@@ -30,28 +31,63 @@ const parseTokenId = (tokenId: string): bigint => {
   }
 }
 
-export const isValidAddress = (address: string) =>
-  isAddress(address, { strict: true })
-
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
-export type AddressValidation =
-  | { kind: 'empty' }
-  | { kind: 'invalid' }
-  | { kind: 'zero' }
-  | { kind: 'self' }
-  | { kind: 'ok' }
-
-export const validateRecipient = (
-  recipient: string,
-  sender: string,
-): AddressValidation => {
-  if (!recipient) return { kind: 'empty' }
-  if (!isValidAddress(recipient)) return { kind: 'invalid' }
-  if (recipient.toLowerCase() === ZERO_ADDRESS) return { kind: 'zero' }
-  if (recipient.toLowerCase() === sender.toLowerCase()) return { kind: 'self' }
-  return { kind: 'ok' }
+const tryBigInt = (val: string): bigint | null => {
+  try {
+    return BigInt(val)
+  } catch {
+    return null
+  }
 }
+
+export const createNftSendSchema = (params: {
+  fromAddress: string
+  isErc1155: boolean
+  balance?: bigint
+}) => {
+  const { fromAddress, isErc1155, balance } = params
+
+  return z.object({
+    to: z
+      .string()
+      .min(1, 'Recipient address is required')
+      .refine(
+        val => isAddress(val, { strict: true }),
+        'The address is not valid',
+      )
+      .refine(
+        val => val.toLowerCase() !== ZERO_ADDRESS,
+        "Can't send to the zero address",
+      )
+      .refine(
+        val => val.toLowerCase() !== fromAddress.toLowerCase(),
+        "Can't send to the sender address",
+      ),
+    amount: z
+      .string()
+      .refine(
+        val => !isErc1155 || !val.includes('.'),
+        "Can't send fraction of collectible",
+      )
+      .refine(
+        val => !isErc1155 || /^\d+$/.test(val),
+        'Amount must be a positive integer',
+      )
+      .refine(val => {
+        if (!isErc1155) return true
+        const big = tryBigInt(val)
+        return big !== null && big > 0n
+      }, 'Amount must be greater than 0')
+      .refine(val => {
+        if (!isErc1155 || balance === undefined) return true
+        const big = tryBigInt(val)
+        return big !== null && big <= balance
+      }, 'More than available balance'),
+  })
+}
+
+export type NftSendFormData = z.infer<ReturnType<typeof createNftSendSchema>>
 
 export const isSupportedNftStandard = (standard: string) =>
   ['ERC721', 'ERC1155'].includes(standard)

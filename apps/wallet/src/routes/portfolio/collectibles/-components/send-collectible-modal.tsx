@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import * as Dialog from '@radix-ui/react-dialog'
 import { Avatar, Button, useToast } from '@status-im/components'
@@ -11,12 +11,12 @@ import { usePassword } from '@/providers/password-context'
 import { usePendingTransactions } from '@/providers/pending-transactions-context'
 
 import {
+  createNftSendSchema,
   encodeNftTransfer,
   extractTxHash,
   fetchErc1155Balance,
   fetchNftGasFees,
   getNftSendErrorMessage,
-  validateRecipient,
 } from './nft-helpers'
 import { AddressField } from './send-collectible-modal/address-field'
 import { AmountField } from './send-collectible-modal/amount-field'
@@ -101,26 +101,25 @@ const SendCollectibleModal = (props: Props) => {
   const balance = balanceProp ?? balanceQuery.data
 
   const effectiveAmount = isErc1155 ? amount : '1'
-  const isFractionalAmount = isErc1155 && amount.includes('.')
-  const isIntegerAmount = /^\d+$/.test(effectiveAmount)
-  const amountBig = isIntegerAmount ? BigInt(effectiveAmount) : null
-  const isValidAmount = isErc1155 ? amountBig !== null && amountBig > 0n : true
-  const isOverBalance =
-    isErc1155 &&
-    balance !== undefined &&
-    amountBig !== null &&
-    amountBig > balance
 
-  const addressValidation = validateRecipient(recipientAddress, fromAddress)
-  const isAddressValid = addressValidation.kind === 'ok'
-  const addressErrorMessage =
-    addressValidation.kind === 'invalid'
-      ? 'The address is not valid'
-      : addressValidation.kind === 'zero'
-        ? "Can't send to the zero address"
-        : addressValidation.kind === 'self'
-          ? "Can't send to the sender address"
-          : null
+  const formSchema = useMemo(
+    () => createNftSendSchema({ fromAddress, isErc1155, balance }),
+    [fromAddress, isErc1155, balance],
+  )
+  const parseResult = formSchema.safeParse({
+    to: recipientAddress,
+    amount: effectiveAmount,
+  })
+  const fieldErrors = parseResult.success
+    ? {}
+    : parseResult.error.flatten().fieldErrors
+  const addressErrorMessage = fieldErrors.to?.[0] ?? null
+  const amountErrorMessage = fieldErrors.amount?.[0] ?? null
+  const isAddressValid = !addressErrorMessage && recipientAddress.length > 0
+  const isValidAmount = !amountErrorMessage
+  const isOverBalance = amountErrorMessage === 'More than available balance'
+  const isFractionalAmount =
+    amountErrorMessage === "Can't send fraction of collectible"
   const showAddressError =
     addressTouched &&
     recipientAddress.length > 0 &&
