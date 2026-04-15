@@ -7,6 +7,7 @@ export const categories: Category[] = [
   { id: 'community', label: '🐕 Community' },
   { id: 'defi', label: '📈 DeFi' },
   { id: 'gaming', label: '🎮 Gaming' },
+  { id: 'governance', label: '🏛️ Governance' },
   { id: 'infra', label: '💻 Infra' },
   { id: 'nft', label: '🖼️ NFT' },
   { id: 'payment', label: '💰 Payment' },

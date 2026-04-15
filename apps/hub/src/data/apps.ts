@@ -15,7 +15,7 @@ export const apps: App[] = [
     cover: '/apps/status-mines-cover.png',
     isPopular: true,
     isNew: true,
-    isFeatured: true,
+    isFeatured: false,
   },
   {
     id: 2,
@@ -31,7 +31,7 @@ export const apps: App[] = [
     cover: '/apps/karma-climber-cover.png',
     isPopular: true,
     isNew: true,
-    isFeatured: true,
+    isFeatured: false,
   },
   {
     id: 3,
@@ -47,7 +47,7 @@ export const apps: App[] = [
     cover: '/apps/canary-cover.jpeg',
     isPopular: true,
     isNew: true,
-    isFeatured: true,
+    isFeatured: false,
   },
   {
     id: 4,
@@ -63,7 +63,7 @@ export const apps: App[] = [
     cover: '/apps/ponzi-hero-cover.png',
     isPopular: true,
     isNew: true,
-    isFeatured: true,
+    isFeatured: false,
   },
   {
     id: 5,
@@ -109,6 +109,7 @@ export const apps: App[] = [
     cover: '/apps/orvex-cover.png',
     isPopular: false,
     isNew: true,
+    isFeatured: true,
   },
   {
     id: 8,
@@ -122,6 +123,7 @@ export const apps: App[] = [
     cover: '/apps/dia-oracles-cover.png',
     isPopular: false,
     isNew: true,
+    isFeatured: true,
   },
   {
     id: 9,
@@ -135,6 +137,7 @@ export const apps: App[] = [
     cover: '/apps/firm-cover.jpeg',
     isPopular: false,
     isNew: true,
+    isFeatured: true,
   },
   {
     id: 10,
@@ -148,6 +151,7 @@ export const apps: App[] = [
     cover: '/apps/envio-cover.png',
     isPopular: false,
     isNew: true,
+    isFeatured: true,
   },
   {
     id: 11,
@@ -161,6 +165,7 @@ export const apps: App[] = [
     cover: '/apps/ankr-cover.jpeg',
     isPopular: false,
     isNew: true,
+    isFeatured: true,
   },
   {
     id: 12,
@@ -174,5 +179,6 @@ export const apps: App[] = [
     cover: '/apps/punk-fun-cover.jpg',
     isPopular: false,
     isNew: true,
+    isFeatured: true,
   },
 ]
