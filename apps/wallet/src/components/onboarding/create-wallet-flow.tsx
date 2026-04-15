@@ -2,16 +2,14 @@ import { useState } from 'react'
 
 import { Button, Text } from '@status-im/components'
 import { LoadingIcon } from '@status-im/icons/20'
-import {
-  CreatePasswordForm,
-  type CreatePasswordFormValues,
-} from '@status-im/wallet/components'
+import { type CreatePasswordFormValues } from '@status-im/wallet/components'
 
 import { useCreateWallet } from '@/hooks/use-create-wallet'
 import { useWalletFlowSuccess } from '@/hooks/use-wallet-flow-success'
 import { usePassword } from '@/providers/password-context'
 
 import { BackButton } from './back-button'
+import { CreatePasswordStep } from './create-password-step'
 
 import type { SubmitHandler } from 'react-hook-form'
 
@@ -69,20 +67,13 @@ export function CreateWalletFlow({
   if (requiresPasswordCreation) {
     return (
       <div className="flex h-full flex-1">
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center pb-4">
-            <BackButton href={backHref} />
-          </div>
-          <h1 className="text-27 font-600">Create password</h1>
-          <div className="text-15 text-neutral-50">
-            To unlock the extension and sign transactions, the password is
-            stored only on your device. Status can&apos;t recover it.
-          </div>
-          <CreatePasswordForm
-            onSubmit={handlePasswordSubmit}
-            loading={isLoading}
-          />
-        </div>
+        <CreatePasswordStep
+          backHref={backHref}
+          onSubmit={handlePasswordSubmit}
+          isLoading={isLoading}
+          backButtonClassName="pb-4"
+          confirmButtonLabel="Create wallet"
+        />
       </div>
     )
   }
