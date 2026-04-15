@@ -40,7 +40,7 @@ type Props = {
   contract: string
   tokenId: string
   /** ERC-1155 token balance held by the sender. When provided, enables balance display and validation. */
-  balance?: number
+  balance?: bigint
 }
 
 const SendCollectibleModal = (props: Props) => {
@@ -103,10 +103,13 @@ const SendCollectibleModal = (props: Props) => {
   const effectiveAmount = isErc1155 ? amount : '1'
   const isFractionalAmount = isErc1155 && amount.includes('.')
   const isIntegerAmount = /^\d+$/.test(effectiveAmount)
-  const amountNum = isIntegerAmount ? Number.parseInt(effectiveAmount, 10) : NaN
-  const isValidAmount = isErc1155 ? isIntegerAmount && amountNum > 0 : true
+  const amountBig = isIntegerAmount ? BigInt(effectiveAmount) : null
+  const isValidAmount = isErc1155 ? amountBig !== null && amountBig > 0n : true
   const isOverBalance =
-    isErc1155 && balance !== undefined && isValidAmount && amountNum > balance
+    isErc1155 &&
+    balance !== undefined &&
+    amountBig !== null &&
+    amountBig > balance
 
   const addressValidation = validateRecipient(recipientAddress, fromAddress)
   const isAddressValid = addressValidation.kind === 'ok'
@@ -152,20 +155,20 @@ const SendCollectibleModal = (props: Props) => {
   const hasInsufficientEth =
     isAddressValid &&
     !!gasFeeQuery.data &&
-    ethBalance <= gasFeeQuery.data.maxFeeEth
+    ethBalance < gasFeeQuery.data.maxFeeEth
 
-  // Pre-fetch gas on open (using sender as dummy recipient), then re-fetch
-  // with the real address once valid. This keeps fees visible at all times.
+  // Debounce gas fetching on recipient/amount changes. Uses sender as a
+  // dummy recipient while the real address is still invalid so fees stay
+  // visible at all times.
   useEffect(() => {
     if (!open || !isValidAmount) return
 
     const effectiveTo = isAddressValid ? recipientAddress : fromAddress
-    const delay = isAddressValid ? 500 : 0
 
     if (gasTimerRef.current) clearTimeout(gasTimerRef.current)
     gasTimerRef.current = setTimeout(() => {
       setGasInput({ to: effectiveTo, amount: effectiveAmount })
-    }, delay)
+    }, 500)
 
     return () => {
       if (gasTimerRef.current) clearTimeout(gasTimerRef.current)
@@ -186,6 +189,8 @@ const SendCollectibleModal = (props: Props) => {
     setIsSending(false)
     setGasInput(null)
     if (gasTimerRef.current) clearTimeout(gasTimerRef.current)
+    queryClient.cancelQueries({ queryKey: ['nft-gas-fees'] })
+    queryClient.cancelQueries({ queryKey: ['erc1155-balance'] })
   }
 
   const handleOpenChange = (nextOpen: boolean) => {

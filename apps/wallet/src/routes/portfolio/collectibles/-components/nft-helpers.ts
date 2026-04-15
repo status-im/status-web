@@ -250,7 +250,7 @@ export async function fetchErc1155Balance(params: {
   contract: string
   tokenId: string
   network: NetworkType
-}): Promise<number> {
+}): Promise<bigint> {
   const chainId = NETWORK_TO_CHAIN_ID[params.network]
   if (!chainId) {
     throw new Error(`Unsupported network: ${params.network}`)
@@ -291,7 +291,7 @@ export async function fetchErc1155Balance(params: {
   }
 
   const decoded = erc1155.decodeFunctionResult('balanceOf', body.result)
-  return Number(decoded[0] as bigint)
+  return decoded[0] as bigint
 }
 
 export async function fetchNftGasFees(params: {

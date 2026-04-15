@@ -12,7 +12,7 @@ type Props = {
   collectibleImage?: string
   network: NetworkType
   isFractionalAmount: boolean
-  balance?: number
+  balance?: bigint
 }
 
 const deriveSymbol = (displayName: string) => displayName.split(/\s+/)[0] ?? ''
@@ -29,17 +29,16 @@ const AmountField = ({
 }: Props) => {
   const symbol = deriveSymbol(displayName)
   const isIntegerAmount = /^\d+$/.test(amount)
-  const amountNum = isIntegerAmount ? Number.parseInt(amount, 10) : NaN
-  const isValidAmount = isIntegerAmount && amountNum > 0
+  const amountBig = isIntegerAmount ? BigInt(amount) : null
   const isOverBalance =
-    isErc1155 && balance !== undefined && isValidAmount && amountNum > balance
+    isErc1155 &&
+    balance !== undefined &&
+    amountBig !== null &&
+    amountBig > balance
   const showBalanceRow = isErc1155 && balance !== undefined
   const remaining =
     isErc1155 && balance !== undefined && !isOverBalance
-      ? balance -
-        (isFractionalAmount
-          ? Math.floor(parseFloat(amount) || 0)
-          : amountNum || 0)
+      ? balance - (amountBig ?? 0n)
       : undefined
 
   return (
@@ -93,7 +92,7 @@ const AmountField = ({
           <>
             <div className="mx-4 mt-3 h-px w-[calc(100%-32px)] bg-neutral-10" />
             <div className="mt-3 flex h-4 items-center justify-end px-4 text-13 font-medium text-neutral-100">
-              {balance} {symbol}
+              {balance.toString()} {symbol}
             </div>
           </>
         )}
@@ -116,7 +115,7 @@ const AmountField = ({
       {/* Remaining — matches Figma separate section */}
       {isErc1155 && remaining !== undefined && !isOverBalance && (
         <p className="text-13 font-medium text-neutral-50">
-          Remaining: {remaining} {symbol}
+          Remaining: {remaining.toString()} {symbol}
         </p>
       )}
     </div>
