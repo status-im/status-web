@@ -17,7 +17,7 @@ async function createNotification(
 ): Promise<boolean> {
   try {
     if (!(await isEnabled())) return false
-    await chrome.notifications.create({
+    chrome.notifications.create({
       type: 'basic',
       iconUrl: chrome.runtime.getURL('icons/128.png'),
       title,

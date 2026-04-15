@@ -9,6 +9,7 @@ import {
 } from '@tanstack/react-router'
 
 import { Link } from '../components/link'
+import { useNotificationPermissionCheck } from '../hooks/use-notification-permission-check'
 import { apiClient } from '../providers/api-client'
 import { PasswordProvider } from '../providers/password-context'
 import { PendingTransactionsProvider } from '../providers/pending-transactions-context'
@@ -131,6 +132,8 @@ export const Route = createRootRouteWithContext<{
 })
 
 function RootComponent() {
+  useNotificationPermissionCheck()
+
   return (
     <>
       <HeadContent />
