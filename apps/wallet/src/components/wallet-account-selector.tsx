@@ -37,7 +37,8 @@ export function WalletAccountSelector(props: Props) {
         <Avatar
           type="account"
           size="24"
-          name={DEFAULT_ACCOUNT_NAME}
+          // TODO: Use currently selected account name instead when multi-account support is implemented.
+          name={currentWallet.name ?? DEFAULT_ACCOUNT_NAME}
           emoji={DEFAULT_ACCOUNT_EMOJI}
           bgOpacity="20"
         />

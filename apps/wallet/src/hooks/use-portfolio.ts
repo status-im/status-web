@@ -11,6 +11,7 @@ const DEFAULT_SUMMARY = {
 const MOCK_ACCOUNT = {
   emoji: '🍑',
   color: 'magenta',
+  name: 'Account 1',
 }
 
 const usePortfolio = () => {
@@ -27,7 +28,8 @@ const usePortfolio = () => {
 
   const account = {
     ...MOCK_ACCOUNT,
-    name: 'Account 1',
+    // TODO: Use currently selected account name instead when multi-account support is implemented.
+    name: currentWallet?.name ?? MOCK_ACCOUNT.name,
   }
 
   const summary = assetsData?.summary || DEFAULT_SUMMARY

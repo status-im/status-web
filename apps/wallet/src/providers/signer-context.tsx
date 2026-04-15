@@ -32,6 +32,8 @@ type SignerContextValue = {
   requestUnlock: () => Promise<boolean>
 }
 
+const DEFAULT_ACCOUNT_NAME = 'Account 1'
+
 const SignerContext = createContext<SignerContextValue | undefined>(undefined)
 
 export function useWalletSigner() {
@@ -50,7 +52,10 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
     return currentAccount?.address as Address | undefined
   }, [currentAccount])
 
-  const accountName = 'Account 1'
+  const accountName = useMemo(() => {
+    // TODO: Use currently selected account name instead when multi-account support is implemented.
+    return currentWallet?.name ?? DEFAULT_ACCOUNT_NAME
+  }, [currentWallet])
 
   useEffect(() => {
     if (address) {
