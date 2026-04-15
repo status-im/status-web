@@ -76,8 +76,18 @@ const SendCollectibleModal = (props: Props) => {
 
   const isErc1155 = standard === 'ERC1155'
 
+  const contractKey = contract.toLowerCase()
+  const fromAddressKey = fromAddress.toLowerCase()
+  const gasToKey = gasInput?.to.toLowerCase()
+
   const balanceQuery = useQuery({
-    queryKey: ['erc1155-balance', network, contract, tokenId, fromAddress],
+    queryKey: [
+      'erc1155-balance',
+      network,
+      contractKey,
+      tokenId,
+      fromAddressKey,
+    ],
     queryFn: () =>
       fetchErc1155Balance({
         owner: fromAddress,
@@ -92,10 +102,9 @@ const SendCollectibleModal = (props: Props) => {
 
   const effectiveAmount = isErc1155 ? amount : '1'
   const isFractionalAmount = isErc1155 && amount.includes('.')
-  const amountNum = Number.parseInt(effectiveAmount, 10)
-  const isValidAmount = isErc1155
-    ? !isFractionalAmount && !Number.isNaN(amountNum) && amountNum > 0
-    : true
+  const isIntegerAmount = /^\d+$/.test(effectiveAmount)
+  const amountNum = isIntegerAmount ? Number.parseInt(effectiveAmount, 10) : NaN
+  const isValidAmount = isErc1155 ? isIntegerAmount && amountNum > 0 : true
   const isOverBalance =
     isErc1155 && balance !== undefined && isValidAmount && amountNum > balance
 
@@ -117,10 +126,10 @@ const SendCollectibleModal = (props: Props) => {
   const gasFeeQuery = useQuery<GasFees>({
     queryKey: [
       'nft-gas-fees',
-      fromAddress,
-      gasInput?.to,
+      fromAddressKey,
+      gasToKey,
       gasInput?.amount,
-      contract,
+      contractKey,
       tokenId,
       standard,
     ],
@@ -221,11 +230,18 @@ const SendCollectibleModal = (props: Props) => {
           value: '0',
         })
 
-      if (!result.id || result.id.txid?.error) {
-        throw new Error(result.id?.txid?.error || 'Failed to send NFT')
+      const txid = result.id?.txid
+      if (!txid) throw new Error('Failed to send NFT')
+
+      if (
+        typeof txid === 'object' &&
+        'error' in txid &&
+        typeof txid.error === 'string'
+      ) {
+        throw new Error(txid.error)
       }
 
-      const txHash = extractTxHash(result.id.txid)
+      const txHash = extractTxHash(txid)
       if (!txHash) throw new Error('Transaction hash not found')
 
       addPendingTransaction({
@@ -252,9 +268,9 @@ const SendCollectibleModal = (props: Props) => {
           queryKey: [
             'erc1155-balance',
             network,
-            contract,
+            contractKey,
             tokenId,
-            fromAddress,
+            fromAddressKey,
           ],
         })
       }

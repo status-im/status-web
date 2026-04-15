@@ -152,29 +152,31 @@ const Collectible = (props: Props) => {
                   View on OpenSea
                 </Button>
               )}
-              {isSupportedNftStandard(collectible.standard) && address && (
-                <SendCollectibleModal
-                  standard={collectible.standard}
-                  displayName={collectible.displayName}
-                  collectibleImage={
-                    collectible.thumbnail || collectible.image || undefined
-                  }
-                  fromAddress={address}
-                  walletId={currentWallet?.id || ''}
-                  accountName={currentWallet?.name || 'Account 1'}
-                  network={network}
-                  contract={contract}
-                  tokenId={id}
-                >
-                  <Button
-                    size="32"
-                    variant="outline"
-                    iconBefore={<SendBlurIcon />}
+              {isSupportedNftStandard(collectible.standard) &&
+                address &&
+                currentWallet?.id && (
+                  <SendCollectibleModal
+                    standard={collectible.standard}
+                    displayName={collectible.displayName}
+                    collectibleImage={
+                      collectible.thumbnail || collectible.image || undefined
+                    }
+                    fromAddress={address}
+                    walletId={currentWallet.id}
+                    accountName={currentWallet.name || 'Account 1'}
+                    network={network}
+                    contract={contract}
+                    tokenId={id}
                   >
-                    Send
-                  </Button>
-                </SendCollectibleModal>
-              )}
+                    <Button
+                      size="32"
+                      variant="outline"
+                      iconBefore={<SendBlurIcon />}
+                    >
+                      Send
+                    </Button>
+                  </SendCollectibleModal>
+                )}
               {/* <Button
                 size="32"
                 variant="outline"

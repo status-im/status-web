@@ -28,9 +28,9 @@ const AmountField = ({
   balance,
 }: Props) => {
   const symbol = deriveSymbol(displayName)
-  const amountNum = Number.parseInt(amount, 10)
-  const isValidAmount =
-    !isFractionalAmount && !Number.isNaN(amountNum) && amountNum > 0
+  const isIntegerAmount = /^\d+$/.test(amount)
+  const amountNum = isIntegerAmount ? Number.parseInt(amount, 10) : NaN
+  const isValidAmount = isIntegerAmount && amountNum > 0
   const isOverBalance =
     isErc1155 && balance !== undefined && isValidAmount && amountNum > balance
   const showBalanceRow = isErc1155 && balance !== undefined

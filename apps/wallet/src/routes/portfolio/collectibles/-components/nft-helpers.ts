@@ -1,4 +1,5 @@
 import { Interface } from 'ethers'
+import { isAddress } from 'viem'
 import { formatEther } from 'viem/utils'
 
 import {
@@ -30,7 +31,7 @@ const parseTokenId = (tokenId: string): bigint => {
 }
 
 export const isValidAddress = (address: string) =>
-  /^0x[0-9a-fA-F]{40}$/.test(address)
+  isAddress(address, { strict: true })
 
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
@@ -53,7 +54,7 @@ export const validateRecipient = (
 }
 
 export const isSupportedNftStandard = (standard: string) =>
-  ['ERC721', 'ERC1155', 'UNKNOWN'].includes(standard)
+  ['ERC721', 'ERC1155'].includes(standard)
 
 export const extractTxHash = (id: unknown): string | undefined => {
   if (typeof id === 'string') {
@@ -97,51 +98,98 @@ const getErrorMessage = (error: unknown): string | null => {
   return null
 }
 
-export const getNftSendErrorMessage = (error: unknown): string => {
+export type NftSendErrorCode =
+  | 'insufficient_funds'
+  | 'user_rejected'
+  | 'not_approved'
+  | 'erc1155_insufficient_balance'
+  | 'execution_reverted'
+  | 'tx_hash_missing'
+  | 'wallet_locked'
+  | 'unknown'
+
+export type NftSendError = {
+  code: NftSendErrorCode
+  message: string
+  data?: { haveWei: bigint; wantWei: bigint }
+}
+
+const insufficientFundsPatterns = [
+  /insufficient funds for gas \* price \+ value: have (\d+) want (\d+)/i,
+  /insufficient funds.*have[:\s]+(\d+).*want[:\s]+(\d+)/i,
+]
+
+export const classifyNftSendError = (error: unknown): NftSendError => {
   const message = getErrorMessage(error)
 
   if (!message) {
-    return 'Failed to send NFT'
+    return { code: 'unknown', message: 'Failed to send NFT' }
   }
 
-  const insufficientFundsMatch = message.match(
-    /insufficient funds for gas \* price \+ value: have (\d+) want (\d+)/,
-  )
+  for (const pattern of insufficientFundsPatterns) {
+    const match = message.match(pattern)
+    if (match) {
+      const haveWei = BigInt(match[1])
+      const wantWei = BigInt(match[2])
+      return {
+        code: 'insufficient_funds',
+        message: `Not enough ETH for gas. Have ${formatEther(haveWei)} ETH, need up to ${formatEther(wantWei)} ETH. Short ${formatEther(wantWei - haveWei)} ETH.`,
+        data: { haveWei, wantWei },
+      }
+    }
+  }
 
-  if (insufficientFundsMatch) {
-    const haveWei = BigInt(insufficientFundsMatch[1])
-    const wantWei = BigInt(insufficientFundsMatch[2])
-    const shortfallWei = wantWei - haveWei
-
-    return `Not enough ETH for gas. Have ${formatEther(haveWei)} ETH, need up to ${formatEther(wantWei)} ETH. Short ${formatEther(shortfallWei)} ETH.`
+  if (/insufficient funds/i.test(message)) {
+    return {
+      code: 'insufficient_funds',
+      message: 'Not enough ETH to pay for gas.',
+    }
   }
 
   if (/user rejected|user denied|rejected request|cancelled/i.test(message)) {
-    return 'Transaction was cancelled.'
+    return { code: 'user_rejected', message: 'Transaction was cancelled.' }
   }
 
   if (/not owner nor approved|caller is not token owner/i.test(message)) {
-    return 'This wallet is not allowed to transfer this NFT.'
+    return {
+      code: 'not_approved',
+      message: 'This wallet is not allowed to transfer this NFT.',
+    }
   }
 
   if (/insufficient balance for transfer/i.test(message)) {
-    return 'Not enough balance to transfer this ERC1155 NFT.'
+    return {
+      code: 'erc1155_insufficient_balance',
+      message: 'Not enough balance to transfer this ERC1155 NFT.',
+    }
   }
 
   if (/execution reverted/i.test(message)) {
-    return 'The NFT contract rejected this transfer.'
+    return {
+      code: 'execution_reverted',
+      message: 'The NFT contract rejected this transfer.',
+    }
   }
 
   if (/transaction hash not found/i.test(message)) {
-    return 'The node did not return a transaction hash.'
+    return {
+      code: 'tx_hash_missing',
+      message: 'The node did not return a transaction hash.',
+    }
   }
 
   if (/wallet not unlocked/i.test(message)) {
-    return 'Wallet is locked. Unlock it and try again.'
+    return {
+      code: 'wallet_locked',
+      message: 'Wallet is locked. Unlock it and try again.',
+    }
   }
 
-  return message
+  return { code: 'unknown', message: 'Failed to send NFT' }
 }
+
+export const getNftSendErrorMessage = (error: unknown): string =>
+  classifyNftSendError(error).message
 
 export function encodeNftTransfer(params: {
   standard: string
@@ -162,8 +210,7 @@ export function encodeNftTransfer(params: {
     ])
   }
 
-  // Alchemy returns 'UNKNOWN' for some custom contracts; treat as ERC721.
-  if (params.standard === 'ERC721' || params.standard === 'UNKNOWN') {
+  if (params.standard === 'ERC721') {
     return erc721.encodeFunctionData('safeTransferFrom', [
       params.from,
       params.to,
