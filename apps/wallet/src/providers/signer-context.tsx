@@ -10,6 +10,7 @@ import { type Address, createPublicClient, type Hex, http } from 'viem'
 import { mainnet } from 'viem/chains'
 import { formatEther } from 'viem/utils'
 
+import { getRpcProxyUrl } from '../lib/rpc-proxy'
 import { apiClient } from './api-client'
 import { usePassword } from './password-context'
 import { useWallet } from './wallet-context'
@@ -33,6 +34,11 @@ type SignerContextValue = {
 }
 
 const SignerContext = createContext<SignerContextValue | undefined>(undefined)
+
+const publicClient = createPublicClient({
+  chain: mainnet,
+  transport: http(getRpcProxyUrl(mainnet.id)),
+})
 
 export function useWalletSigner() {
   const context = useContext(SignerContext)
@@ -159,11 +165,6 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
       let gasLimit = tx.gas?.toString(16)
 
       if (!maxFeePerGas || !maxPriorityFeePerGas || !gasLimit) {
-        const publicClient = createPublicClient({
-          chain: mainnet,
-          transport: http(),
-        })
-
         if (!maxFeePerGas || !maxPriorityFeePerGas) {
           const [block, priorityFee] = await Promise.all([
             publicClient.getBlock({ blockTag: 'latest' }),

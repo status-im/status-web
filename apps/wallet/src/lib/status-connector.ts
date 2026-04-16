@@ -8,6 +8,8 @@ import {
 import { createConnector } from 'wagmi'
 import { mainnet } from 'wagmi/chains'
 
+import { getRpcProxyUrl } from './rpc-proxy'
+
 export type StatusConnectorOptions = {
   getAddress: () => Address | undefined
   signAndSendTransaction: (tx: {
@@ -21,6 +23,11 @@ export type StatusConnectorOptions = {
   signMessage: (message: Hex) => Promise<Hex>
   signTypedData: (typedData: string) => Promise<Hex>
 }
+
+const publicClient = createPublicClient({
+  chain: mainnet,
+  transport: http(getRpcProxyUrl(mainnet.id)),
+})
 
 function handleProviderRequest(
   method: string,
@@ -111,12 +118,7 @@ function handleProviderRequest(
     }
 
     default: {
-      const client = createPublicClient({
-        chain: mainnet,
-        transport: http(),
-      })
-
-      return client.request({
+      return publicClient.request({
         method: method as never,
         params: params as never,
       })

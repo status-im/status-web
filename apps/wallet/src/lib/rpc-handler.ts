@@ -10,10 +10,11 @@ import {
   type PendingApproval,
   setPendingApproval,
 } from '../data/approval'
+import { getRpcProxyUrl } from './rpc-proxy'
 
 const publicClient = createPublicClient({
   chain: mainnet,
-  transport: http(),
+  transport: http(getRpcProxyUrl(mainnet.id)),
 })
 
 const DEFAULT_CHAIN_ID = '0x1'
