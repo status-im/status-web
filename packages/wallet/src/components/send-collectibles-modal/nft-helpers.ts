@@ -156,10 +156,8 @@ export type NftSendError = {
   data?: { haveWei: bigint; wantWei: bigint }
 }
 
-const insufficientFundsPatterns = [
-  /insufficient funds for gas \* price \+ value: have (\d+) want (\d+)/i,
-  /insufficient funds.*have[:\s]+(\d+).*want[:\s]+(\d+)/i,
-]
+const insufficientFundsPattern =
+  /insufficient funds[^:]*:\s*have\s+(\d+)\s+want\s+(\d+)/i
 
 export const classifyNftSendError = (error: unknown): NftSendError => {
   const message = getErrorMessage(error)
@@ -168,16 +166,14 @@ export const classifyNftSendError = (error: unknown): NftSendError => {
     return { code: 'unknown', message: 'Failed to send NFT' }
   }
 
-  for (const pattern of insufficientFundsPatterns) {
-    const match = message.match(pattern)
-    if (match) {
-      const haveWei = BigInt(match[1])
-      const wantWei = BigInt(match[2])
-      return {
-        code: 'insufficient_funds',
-        message: `Not enough ETH for gas. Have ${formatEther(haveWei)} ETH, need up to ${formatEther(wantWei)} ETH. Short ${formatEther(wantWei - haveWei)} ETH.`,
-        data: { haveWei, wantWei },
-      }
+  const match = message.match(insufficientFundsPattern)
+  if (match) {
+    const haveWei = BigInt(match[1])
+    const wantWei = BigInt(match[2])
+    return {
+      code: 'insufficient_funds',
+      message: `Not enough ETH for gas. Have ${formatEther(haveWei)} ETH, need up to ${formatEther(wantWei)} ETH. Short ${formatEther(wantWei - haveWei)} ETH.`,
+      data: { haveWei, wantWei },
     }
   }
 
