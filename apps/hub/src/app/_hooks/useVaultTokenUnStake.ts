@@ -1,7 +1,7 @@
 import { useMutation, type UseMutationResult } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
 import { type Address, formatUnits } from 'viem'
-import { useAccount, useConfig, useWriteContract } from 'wagmi'
+import { useAccount, useConfig } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 
 import { vaultAbi } from '~constants/contracts'
@@ -12,6 +12,7 @@ import {
 } from '~constants/index'
 import { useStakingVaults } from '~hooks/useStakingVaults'
 import { useVaultStateContext } from '~hooks/useVaultStateContext'
+import { writeStatusNetworkContract } from '~utils/status-network-transaction'
 
 import { useMultiplierPointsBalance } from './useMultiplierPoints'
 
@@ -103,7 +104,6 @@ const MUTATION_KEY_PREFIX = 'vault-unstake' as const
  */
 export function useVaultTokenUnStake(): UseVaultUnstakeReturn {
   const { address } = useAccount()
-  const { writeContractAsync } = useWriteContract()
   const config = useConfig()
   const { send: sendVaultEvent, reset: resetVault } = useVaultStateContext()
   const { refetch: refetchStakingVaults } = useStakingVaults()
@@ -134,7 +134,7 @@ export function useVaultTokenUnStake(): UseVaultUnstakeReturn {
 
       try {
         // Execute unstaking transaction
-        const hash = await writeContractAsync({
+        const hash = await writeStatusNetworkContract(config, {
           account: address,
           address: vaultAddress,
           abi: vaultAbi,

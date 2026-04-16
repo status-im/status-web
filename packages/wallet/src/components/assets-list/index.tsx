@@ -6,23 +6,33 @@ import { Button } from '@status-im/components'
 import { match, P } from 'ts-pattern'
 
 import { CurrencyAmount } from '../currency-amount'
+import { Image } from '../image'
 import { PercentageChange } from '../percentage-change'
 import * as Table from '../table'
 import { TokenAmount } from '../token-amount'
 import { TokenIcon } from '../token-icon'
 
 import type { ApiOutput } from '../../data'
+import type { ImageId } from '../image'
 
 type Props = {
   assets: ApiOutput['assets']['all']['assets']
   pathname?: string
+  hideBelowOneEur?: boolean
   onSelect: (url: string, options?: { scroll?: boolean }) => void
   searchParams: URLSearchParams
   clearSearch: () => void
 }
 
 const AssetsList = (props: Props) => {
-  const { assets, pathname, onSelect, searchParams, clearSearch } = props
+  const {
+    assets,
+    pathname,
+    hideBelowOneEur = false,
+    onSelect,
+    searchParams,
+    clearSearch,
+  } = props
 
   const searchParamValue = searchParams.get('search') ?? ''
   const sortParamValue = searchParams.get('sort') ?? ''
@@ -46,9 +56,13 @@ const AssetsList = (props: Props) => {
       }
     })
 
-    if (!orderByColumn) return filtered
+    const valueFiltered = hideBelowOneEur
+      ? filtered.filter(asset => Number(asset.total_eur ?? 0) >= 1)
+      : filtered
 
-    return [...filtered].sort((a, b) => {
+    if (!orderByColumn) return valueFiltered
+
+    return [...valueFiltered].sort((a, b) => {
       const comparison = match(orderByColumn)
         .with('name', () => (a.name || '').localeCompare(b.name || ''))
         .with(
@@ -71,11 +85,15 @@ const AssetsList = (props: Props) => {
 
       return ascending ? comparison : -comparison
     })
-  }, [assets, searchParamValue, orderByColumn, ascending])
+  }, [assets, searchParamValue, orderByColumn, ascending, hideBelowOneEur])
+
+  const isSearchActive = searchParamValue.trim().length > 0
 
   return (
-    <div className="pb-10">
-      <div className="hidden min-h-[calc(100svh-362px)] w-full overflow-auto 2xl:block">
+    <div className={filteredAssets.length > 0 ? 'pb-10' : 'h-full'}>
+      <div
+        className={`hidden min-h-[calc(100svh-362px)] w-full flex-col overflow-auto 2xl:flex ${filteredAssets.length === 0 ? 'h-full' : ''}`}
+      >
         {filteredAssets.length !== 0 && (
           <Table.Root>
             <Table.Header>
@@ -141,22 +159,33 @@ const AssetsList = (props: Props) => {
           </Table.Root>
         )}
         {filteredAssets.length === 0 && (
-          <div className="flex flex-1 flex-col items-center py-8">
-            <h2 className="pt-[68px] text-15 font-semibold text-neutral-100 first-line:mb-0.5">
-              No tokens found
+          <div className="m-auto flex flex-1 flex-col items-center justify-center py-8 text-center">
+            {hideBelowOneEur && !isSearchActive && (
+              <Image
+                id={'admin/empty/devices:241:240' as ImageId}
+                alt="No tokens"
+                className="size-20"
+              />
+            )}
+            <h2 className="mb-0.5 text-15 font-600">
+              {hideBelowOneEur && !isSearchActive
+                ? 'No tokens >$1'
+                : 'No tokens found'}
             </h2>
-            <p className="mb-5 text-13 font-regular text-neutral-100">
-              We didn&apos;t find any tokens that match your search
-            </p>
-            <Button
-              variant="outline"
-              target="_blank"
-              size="32"
-              rel="noopener noreferrer"
-              onClick={() => clearSearch()}
+            <p
+              className={`${isSearchActive ? 'mb-5' : ''} text-13 text-neutral-100`}
             >
-              Clear search
-            </Button>
+              {isSearchActive
+                ? "We didn't find any tokens that match your search"
+                : hideBelowOneEur
+                  ? `Turn off "Hide <$1" to see all tokens`
+                  : "We didn't find any tokens"}
+            </p>
+            {isSearchActive && (
+              <Button variant="outline" size="32" onClick={() => clearSearch()}>
+                Clear search
+              </Button>
+            )}
           </div>
         )}
       </div>

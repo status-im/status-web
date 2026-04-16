@@ -8,18 +8,23 @@ export const vaultAbi: Abi = [
     stateMutability: 'nonpayable',
     type: 'constructor',
   },
+  { inputs: [], name: 'StakeVault__FailedToExit', type: 'error' },
+  { inputs: [], name: 'StakeVault__FailedToLeave', type: 'error' },
   { inputs: [], name: 'StakeVault__FundsLocked', type: 'error' },
   { inputs: [], name: 'StakeVault__InvalidDestinationAddress', type: 'error' },
+  { inputs: [], name: 'StakeVault__InvalidLockEnd', type: 'error' },
+  { inputs: [], name: 'StakeVault__InvalidMigrationTarget', type: 'error' },
+  { inputs: [], name: 'StakeVault__MarkedAsLeft', type: 'error' },
   { inputs: [], name: 'StakeVault__MigrationFailed', type: 'error' },
+  { inputs: [], name: 'StakeVault__MustLeaveFirst', type: 'error' },
   { inputs: [], name: 'StakeVault__NotAllowedToExit', type: 'error' },
-  { inputs: [], name: 'StakeVault__NotAllowedToLeave', type: 'error' },
-  { inputs: [], name: 'StakeVault__NotAuthorized', type: 'error' },
-  { inputs: [], name: 'StakeVault__NotEnoughAvailableBalance', type: 'error' },
   {
     inputs: [],
-    name: 'StakeVault__StakeManagerImplementationNotTrusted',
+    name: 'StakeVault__NotAllowedToTransferOwnership',
     type: 'error',
   },
+  { inputs: [], name: 'StakeVault__NotAuthorized', type: 'error' },
+  { inputs: [], name: 'StakeVault__NotEnoughAvailableBalance', type: 'error' },
   { inputs: [], name: 'StakeVault__StakingFailed', type: 'error' },
   { inputs: [], name: 'StakeVault__UnstakingFailed', type: 'error' },
   { inputs: [], name: 'StakeVault__WithdrawFromVaultFailed', type: 'error' },
@@ -74,12 +79,26 @@ export const vaultAbi: Abi = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'depositedBalance',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       { internalType: 'address', name: '_destination', type: 'address' },
     ],
     name: 'emergencyExit',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'hasLeft',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -116,6 +135,27 @@ export const vaultAbi: Abi = [
     type: 'function',
   },
   {
+    inputs: [
+      {
+        components: [
+          { internalType: 'uint256', name: 'lockUntil', type: 'uint256' },
+          {
+            internalType: 'uint256',
+            name: 'depositedBalance',
+            type: 'uint256',
+          },
+        ],
+        internalType: 'struct IStakeVault.MigrationData',
+        name: 'data',
+        type: 'tuple',
+      },
+    ],
+    name: 'migrateFromVault',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [{ internalType: 'address', name: 'migrateTo', type: 'address' }],
     name: 'migrateToVault',
     outputs: [],
@@ -131,15 +171,15 @@ export const vaultAbi: Abi = [
   },
   {
     inputs: [],
-    name: 'register',
+    name: 'renounceOwnership',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
   },
   {
     inputs: [],
-    name: 'renounceOwnership',
-    outputs: [],
+    name: 'replaceVault',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
     stateMutability: 'nonpayable',
     type: 'function',
   },
@@ -169,7 +209,7 @@ export const vaultAbi: Abi = [
     name: 'stakeManager',
     outputs: [
       {
-        internalType: 'contract IStakeManagerProxy',
+        internalType: 'contract IStakeManager',
         name: '',
         type: 'address',
       },
@@ -178,24 +218,8 @@ export const vaultAbi: Abi = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'stakeManagerImplementationAddress',
-    outputs: [{ internalType: 'address', name: '', type: 'address' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [{ internalType: 'address', name: 'newOwner', type: 'address' }],
     name: 'transferOwnership',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'address', name: 'stakeManagerAddress', type: 'address' },
-    ],
-    name: 'trustStakeManager',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -218,13 +242,6 @@ export const vaultAbi: Abi = [
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'uint256', name: '_lockUntil', type: 'uint256' }],
-    name: 'updateLockUntil',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
     inputs: [
       { internalType: 'contract IERC20', name: '_token', type: 'address' },
       { internalType: 'uint256', name: '_amount', type: 'uint256' },
@@ -241,16 +258,6 @@ export const vaultAbi: Abi = [
       { internalType: 'uint256', name: '_amount', type: 'uint256' },
     ],
     name: 'withdraw',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'uint256', name: '_amount', type: 'uint256' },
-      { internalType: 'address', name: '_destination', type: 'address' },
-    ],
-    name: 'withdrawFromVault',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

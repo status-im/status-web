@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import { AssetsList, AssetsListLoading } from '@status-im/wallet/components'
 import {
   createFileRoute,
@@ -11,6 +13,8 @@ import { useMediaQuery } from '@/hooks/use-media-query'
 
 import { useWallet } from '../../../providers/wallet-context'
 import { Token } from './-components/token'
+
+import type { HideAssetsBelowOneToggle } from '@/components/action-buttons'
 
 export const Route = createFileRoute('/portfolio/assets/$ticker')({
   component: Component,
@@ -31,6 +35,11 @@ function Component() {
     address,
     isWalletLoading,
   })
+  const [hideBelowOneEur, setHideBelowOneEur] = useState(false)
+  const hideAssetsBelowOneToggle: HideAssetsBelowOneToggle = {
+    checked: hideBelowOneEur,
+    onCheckedChange: setHideBelowOneEur,
+  }
 
   if (!currentWallet || !address) {
     return null
@@ -40,9 +49,11 @@ function Component() {
     <>
       <div className="hidden 2xl:block">
         <SplittedLayout
+          hideAssetsBelowOneToggle={hideAssetsBelowOneToggle}
           list={
             <AssetsList
               assets={assets?.assets ?? []}
+              hideBelowOneEur={hideBelowOneEur}
               onSelect={url => {
                 const ticker = url.split('/').pop()
                 if (!ticker) return

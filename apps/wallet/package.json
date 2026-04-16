@@ -37,6 +37,7 @@
     "@qrkit/react": "^0.3.2",
     "@radix-ui/react-dialog": "^1.1.1",
     "@status-im/colors": "workspace:*",
+    "@status-im/ethereum-provider": "workspace:*",
     "@status-im/components": "workspace:*",
     "@status-im/icons": "workspace:*",
     "@status-im/wallet": "workspace:*",

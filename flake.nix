@@ -2,7 +2,7 @@
   description = "Flake file for Status Web repo ";
 
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-24.11";
+    nixpkgs.url = "nixpkgs/nixos-25.11";
   };
 
   outputs =
@@ -24,10 +24,11 @@
         default = pkgsFor.${system}.mkShellNoCC {
           packages = with pkgsFor.${system}.buildPackages; [
             ghp-import # 2.1.0
-            git # 2.47.2
-            nodejs_22 # v22.20.0
-            openssh
-            pnpm # 9.15.9
+            git        # 2.51.2
+            nodejs_22  # 22.22.2
+            openssh    # 10.2p1
+            pnpm       # 10.28.0
+            foundry    # 1.4.4
           ];
         };
       });

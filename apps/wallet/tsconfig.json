@@ -25,5 +25,8 @@
     {
       "path": "../../packages/icons",
     },
+    {
+      "path": "../../packages/ethereum-provider",
+    },
   ],
 }

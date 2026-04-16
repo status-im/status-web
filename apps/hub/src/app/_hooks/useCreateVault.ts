@@ -2,7 +2,7 @@ import { useToast } from '@status-im/components'
 import { useMutation, type UseMutationResult } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
 import { type Address, type Hash } from 'viem'
-import { useAccount, useConfig, useWriteContract } from 'wagmi'
+import { useAccount, useConfig } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 
 import {
@@ -14,6 +14,7 @@ import {
 import { useStakingVaults } from '~hooks/useStakingVaults'
 import { useVaultStateContext } from '~hooks/useVaultStateContext'
 import { shortenAddress } from '~utils/address'
+import { writeStatusNetworkContract } from '~utils/status-network-transaction'
 
 // ============================================================================
 // Types
@@ -115,7 +116,6 @@ function extractVaultAddressFromLogs(
  */
 export function useCreateVault(): UseCreateVaultReturn {
   const { address } = useAccount()
-  const { writeContractAsync } = useWriteContract()
   const { refetch: refetchStakingVaults } = useStakingVaults()
   const { send: sendVaultEvent, reset: resetVault } = useVaultStateContext()
   const config = useConfig()
@@ -135,7 +135,7 @@ export function useCreateVault(): UseCreateVaultReturn {
 
       try {
         // Execute vault creation transaction
-        const hash = await writeContractAsync({
+        const hash = await writeStatusNetworkContract(config, {
           address: VAULT_FACTORY.address,
           abi: VAULT_FACTORY.abi,
           functionName: 'createVault',

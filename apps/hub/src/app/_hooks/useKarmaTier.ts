@@ -1,8 +1,8 @@
 import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { useConfig } from 'wagmi'
 import { readContract } from 'wagmi/actions'
-import { statusSepolia } from 'wagmi/chains'
 
+import { statusHoodi } from '~constants/chain'
 import { KARMA_TIER } from '~constants/index'
 
 // ============================================================================
@@ -168,7 +168,7 @@ export function useKarmaTier(
   options: UseKarmaTierOptions = {}
 ): UseKarmaTierReturn {
   const config = useConfig()
-  const chainId = statusSepolia.id
+  const chainId = statusHoodi.id
 
   const { enabled = true, staleTime = DEFAULT_STALE_TIME } = options
 
