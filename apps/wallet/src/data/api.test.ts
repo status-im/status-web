@@ -123,3 +123,42 @@ test('should get wallet', async () => {
 
   expect(returnedWallet.mnemonic).toBe(mnemonic)
 }, 7000)
+
+test('should import hardware wallet metadata', async () => {
+  await createAPI()
+  const apiClient = createAPIClient()
+
+  const importedWallet = await apiClient.wallet.importHardware.mutate({
+    name: 'Keystone Wallet',
+    vendor: 'Keystone',
+    address: '0x1234567890abcdef1234567890abcdef12345678',
+    publicKey: 'xpub661MyMwAqRbcF7FakePublicKey',
+    sourceFingerprint: 1234,
+  })
+
+  const wallets = await apiClient.wallet.all.query()
+
+  expect(importedWallet.address).toBe(
+    '0x1234567890abcdef1234567890abcdef12345678',
+  )
+  expect(wallets).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({
+        id: importedWallet.id,
+        name: 'Keystone Wallet',
+        type: 'hardware-qr',
+        activeAccounts: expect.arrayContaining([
+          expect.objectContaining({
+            address: '0x1234567890abcdef1234567890abcdef12345678',
+            derivationPath: "m/44'/60'/0'/0/0",
+          }),
+        ]),
+        hardware: expect.objectContaining({
+          vendor: 'Keystone',
+          publicKey: 'xpub661MyMwAqRbcF7FakePublicKey',
+          sourceFingerprint: 1234,
+        }),
+      }),
+    ]),
+  )
+}, 7000)

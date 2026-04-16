@@ -181,10 +181,10 @@ const apiRouter = router({
     importHardware: procedure
       .input(
         z.object({
-          name: z.string(),
-          vendor: z.string(),
-          address: z.string(),
-          publicKey: z.string(),
+          name: z.string().trim().min(1),
+          vendor: z.string().trim().min(1),
+          address: z.string().trim().min(1),
+          publicKey: z.string().trim().min(1),
           sourceFingerprint: z.number().optional(),
         }),
       )
