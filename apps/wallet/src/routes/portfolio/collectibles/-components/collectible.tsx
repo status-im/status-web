@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import { Button } from '@status-im/components'
 import {
   ArrowLeftIcon,
@@ -11,18 +13,29 @@ import {
   CollectibleSkeleton,
   // CurrencyAmount,
   NetworkLogo,
+  SendCollectiblesModal,
   shortenAddress,
 } from '@status-im/wallet/components'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 
+import { useEthBalance } from '@/hooks/use-eth-balance'
+import { apiClient } from '@/providers/api-client'
+import { usePassword } from '@/providers/password-context'
+import { usePendingTransactions } from '@/providers/pending-transactions-context'
 import { useWallet } from '@/providers/wallet-context'
 
 import { CardDetail } from './card-detail'
 import { CollectibleTraits } from './collectible-traits'
-import { isSupportedNftStandard } from './nft-helpers'
-import { SendCollectibleModal } from './send-collectible-modal'
+import {
+  extractTxHash,
+  fetchErc1155Balance,
+  fetchNftGasFees,
+  isSupportedNftStandard,
+} from './nft-helpers'
 import { useCollectible } from './use-collectible'
 
+import type { SendCollectibleParams } from '@status-im/wallet/components'
 import type { NetworkType } from '@status-im/wallet/data'
 
 type Props = {
@@ -37,7 +50,116 @@ const Collectible = (props: Props) => {
   const { currentWallet } = useWallet()
   const address = currentWallet?.activeAccounts[0]?.address
 
+  const { hasActiveSession, requestPassword } = usePassword()
+  const { addPendingTransaction } = usePendingTransactions()
+  const queryClient = useQueryClient()
+
+  const [gasInput, setGasInput] = useState<{
+    to: string
+    amount?: string
+  } | null>(null)
+
   const { data: collectible, isLoading } = useCollectible(network, contract, id)
+
+  const isErc1155 = collectible?.standard === 'ERC1155'
+
+  const gasFeeQuery = useQuery({
+    queryKey: [
+      'nft-gas-fees',
+      address,
+      gasInput?.to,
+      gasInput?.amount,
+      contract,
+      id,
+      collectible?.standard,
+      network,
+    ],
+    queryFn: () =>
+      fetchNftGasFees({
+        from: address!,
+        to: gasInput!.to,
+        contractAddress: contract,
+        tokenId: id,
+        standard: collectible!.standard,
+        network,
+        amount: gasInput?.amount,
+      }),
+    enabled: !!gasInput && !!address && !!collectible,
+  })
+
+  const erc1155BalanceQuery = useQuery({
+    queryKey: ['erc1155-balance', network, contract, id, address],
+    queryFn: () =>
+      fetchErc1155Balance({
+        owner: address!,
+        contract,
+        tokenId: id,
+        network,
+      }),
+    enabled: isErc1155 && !!address,
+  })
+
+  const ethBalanceQuery = useEthBalance(address ?? '', !!address)
+  const ethBalance = ethBalanceQuery.data?.summary.total_balance ?? 0
+
+  const handleEstimateGas = (to: string, amount?: string) => {
+    setGasInput({ to, amount })
+  }
+
+  const handleSend = async (params: SendCollectibleParams) => {
+    const result =
+      await apiClient.wallet.account.ethereum.sendContractCall.mutate({
+        walletId: currentWallet!.id,
+        fromAddress: address!,
+        toAddress: params.contractAddress,
+        gasLimit: params.gasLimit,
+        maxFeePerGas: params.maxFeePerGas,
+        maxInclusionFeePerGas: params.maxInclusionFeePerGas,
+        data: params.encodedData,
+        value: '0',
+      })
+
+    const txid = result.id?.txid
+    if (!txid) throw new Error('Failed to send NFT')
+
+    if (
+      typeof txid === 'object' &&
+      'error' in txid &&
+      typeof txid.error === 'string'
+    ) {
+      throw new Error(txid.error)
+    }
+
+    const txHash = extractTxHash(txid)
+    if (!txHash) throw new Error('Transaction hash not found')
+
+    addPendingTransaction({
+      hash: txHash,
+      from: address!,
+      to: params.to,
+      value: 0,
+      asset: collectible?.displayName ?? '',
+      network,
+      status: 'pending',
+      category: 'external',
+      blockNum: '0',
+      metadata: { blockTimestamp: new Date().toISOString() },
+      rawContract: { value: '0', address: contract, decimal: '0' },
+      eurRate: 0,
+    })
+  }
+
+  const handleSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ['collectibles'] })
+    queryClient.invalidateQueries({
+      queryKey: ['collectible', network, contract, id],
+    })
+    if (isErc1155) {
+      queryClient.invalidateQueries({
+        queryKey: ['erc1155-balance', network, contract, id, address],
+      })
+    }
+  }
 
   if (isLoading || !collectible) {
     return <CollectibleSkeleton />
@@ -88,18 +210,26 @@ const Collectible = (props: Props) => {
               {isSupportedNftStandard(collectible.standard) &&
                 address &&
                 currentWallet?.id && (
-                  <SendCollectibleModal
+                  <SendCollectiblesModal
                     standard={collectible.standard}
                     displayName={collectible.displayName}
                     collectibleImage={
                       collectible.thumbnail || collectible.image || undefined
                     }
                     fromAddress={address}
-                    walletId={currentWallet.id}
                     accountName={currentWallet.name || 'Account 1'}
                     network={network}
                     contract={contract}
                     tokenId={id}
+                    balance={erc1155BalanceQuery.data}
+                    gasFees={gasFeeQuery.data}
+                    isFetchingFees={gasFeeQuery.isFetching}
+                    onEstimateGas={handleEstimateGas}
+                    ethBalance={ethBalance}
+                    onSend={handleSend}
+                    onSuccess={handleSuccess}
+                    hasActiveSession={hasActiveSession}
+                    requestPassword={requestPassword}
                   >
                     <Button
                       size="32"
@@ -108,7 +238,7 @@ const Collectible = (props: Props) => {
                     >
                       Send
                     </Button>
-                  </SendCollectibleModal>
+                  </SendCollectiblesModal>
                 )}
             </div>
           </div>
