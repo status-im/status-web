@@ -1,14 +1,8 @@
-import {
-  type Address,
-  createPublicClient,
-  type Hex,
-  http,
-  numberToHex,
-} from 'viem'
+import { type Address, type Hex, numberToHex } from 'viem'
 import { createConnector } from 'wagmi'
 import { mainnet } from 'wagmi/chains'
 
-import { getRpcProxyUrl } from './rpc-proxy'
+import { publicClient } from './public-client'
 
 export type StatusConnectorOptions = {
   getAddress: () => Address | undefined
@@ -23,11 +17,6 @@ export type StatusConnectorOptions = {
   signMessage: (message: Hex) => Promise<Hex>
   signTypedData: (typedData: string) => Promise<Hex>
 }
-
-const publicClient = createPublicClient({
-  chain: mainnet,
-  transport: http(getRpcProxyUrl(mainnet.id)),
-})
 
 function handleProviderRequest(
   method: string,

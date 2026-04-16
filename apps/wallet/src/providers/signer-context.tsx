@@ -6,11 +6,10 @@ import {
   useMemo,
 } from 'react'
 
-import { type Address, createPublicClient, type Hex, http } from 'viem'
-import { mainnet } from 'viem/chains'
+import { type Address, type Hex } from 'viem'
 import { formatEther } from 'viem/utils'
 
-import { getRpcProxyUrl } from '../lib/rpc-proxy'
+import { publicClient } from '../lib/public-client'
 import { apiClient } from './api-client'
 import { usePassword } from './password-context'
 import { useWallet } from './wallet-context'
@@ -34,11 +33,6 @@ type SignerContextValue = {
 }
 
 const SignerContext = createContext<SignerContextValue | undefined>(undefined)
-
-const publicClient = createPublicClient({
-  chain: mainnet,
-  transport: http(getRpcProxyUrl(mainnet.id)),
-})
 
 export function useWalletSigner() {
   const context = useContext(SignerContext)
