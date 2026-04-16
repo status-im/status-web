@@ -59,7 +59,7 @@ function SettingsPage() {
         />
         <h1 className="text-17 font-semibold text-neutral-100">Settings</h1>
       </div>
-      <div className="rounded-2xl flex items-center justify-between bg-neutral-5 px-4 py-3">
+      <div className="rounded-2xl flex items-center justify-between gap-4 bg-neutral-5 px-4 py-3">
         <div className="flex flex-col gap-0.5">
           <span className="text-15 font-medium text-neutral-100">
             Transaction notifications
