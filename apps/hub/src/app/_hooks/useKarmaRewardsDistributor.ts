@@ -4,8 +4,8 @@ import { useTranslations } from 'next-intl'
 import { type Address } from 'viem'
 import { useAccount, useChainId, useConfig } from 'wagmi'
 import { readContract } from 'wagmi/actions'
-import { statusSepolia } from 'wagmi/chains'
 
+import { statusHoodi } from '~constants/chain'
 import { CACHE_CONFIG, REWARDS } from '~constants/index'
 
 // ============================================================================
@@ -182,10 +182,10 @@ export function useKarmaRewardsDistributor(
   } = options
 
   const targetAddress = queryAddress ?? connectedAddress
-  const isStatusNetworkSepolia = chainId === statusSepolia.id
+  const isStatusNetworkHoodi = chainId === statusHoodi.id
 
   return useQuery<KarmaRewardsBalanceData>({
-    queryKey: [QUERY_KEY_PREFIX, targetAddress, statusSepolia.id] as const,
+    queryKey: [QUERY_KEY_PREFIX, targetAddress, statusHoodi.id] as const,
     queryFn: async (): Promise<KarmaRewardsBalanceData> => {
       if (!targetAddress) {
         return {
@@ -197,7 +197,7 @@ export function useKarmaRewardsDistributor(
       try {
         const balance = await fetchKarmaRewardsBalance(
           config,
-          statusSepolia.id,
+          statusHoodi.id,
           targetAddress
         )
 
@@ -214,7 +214,7 @@ export function useKarmaRewardsDistributor(
         throw error
       }
     },
-    enabled: enabled && !!targetAddress && isStatusNetworkSepolia,
+    enabled: enabled && !!targetAddress && isStatusNetworkHoodi,
     staleTime,
     refetchInterval,
     retry: 3,

@@ -6,8 +6,8 @@ import { ToastContainer } from '@status-im/components'
 import { Divider, Footer } from '@status-im/status-network/components'
 import { useTranslations } from 'next-intl'
 import { useReadContract } from 'wagmi'
-import { statusSepolia } from 'wagmi/chains'
 
+import { statusHoodi } from '~constants/chain'
 import { STAKING_MANAGER } from '~constants/index'
 import { CACHE_CONFIG } from '~constants/staking'
 
@@ -27,7 +27,7 @@ export function HubLayout({ children }: HubLayoutProps) {
     address: STAKING_MANAGER.address,
     abi: STAKING_MANAGER.abi,
     functionName: 'emergencyModeEnabled',
-    chainId: statusSepolia.id,
+    chainId: statusHoodi.id,
     query: {
       refetchInterval: CACHE_CONFIG.EMERGENCY_MODE_REFETCH_INTERVAL,
     },

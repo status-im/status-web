@@ -208,7 +208,7 @@ Ten million Entry registrations consume 10M Karma, under 1% of year-one emission
 
 **Is year-one emission enough to incentivize growth?**
 
-1B Karma minted across 52 weekly epochs gives ~19.2M per week. With the 60% liquidity pool, roughly 11.5M weekly Karma flows to LPs and users. If the network reaches $50M TVL with 1,000 active LPs, each LP earns an average of ~11,500 Karma per week, reaching the Regular tier (5K Karma, 480 tx/day) within the first week and the Power tier (20K Karma, 960 tx/day) within two weeks. Active users earning from the same pool reach Basic tier within their first week of regular usage. The ramp is steep enough to reward early participation without gatekeeping newcomers.
+1B Karma minted across 26 bi-weekly epochs gives ~38.5M Karma per epoch. With the 60% liquidity pool, roughly 23M Karma flows to LPs and users each distribution. If the network reaches $50M TVL with 1,000 active LPs, each LP earns an average of ~11,500 Karma per week, reaching the Regular tier (5K Karma, 480 tx/day) within the first week and the Power tier (20K Karma, 960 tx/day) within two weeks. Active users earning from the same pool reach Basic tier within their first week of regular usage. The ramp is steep enough to reward early participation without gatekeeping newcomers.
 
 **What does governance concentration look like?**
 
@@ -246,6 +246,6 @@ _Reputation: earned._
 _Gasless transactions: unlocked._  
 _Yield: governed._
 
-Pre-deposits are live at **hub.status.network/pre-deposits**. Earn Karma ahead of mainnet.
+Pre-deposits are live at [**hub.status.network/pre-deposits**](https://hub.status.network/pre-deposits). Earn Karma ahead of mainnet.
 
-Learn more at **status.network**. Follow updates at **@StatusL2**. Join the builders at **t.me/StatusL2**.
+Learn more at [**status.network**](https://status.network/). Follow updates at [**@StatusL2**](https://x.com/StatusL2). Join the builders at [**t.me/StatusL2**](https://t.me/StatusL2).

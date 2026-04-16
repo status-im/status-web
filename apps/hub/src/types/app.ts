@@ -12,6 +12,7 @@ export type App = {
   icon: string
   isPopular?: boolean
   isNew?: boolean
+  isFeatured?: boolean
 }
 
 export type Category = {

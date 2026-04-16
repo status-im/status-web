@@ -6,18 +6,19 @@ import { Button } from '@status-im/components'
 import { match, P } from 'ts-pattern'
 
 import { CurrencyAmount } from '../currency-amount'
+import { Image } from '../image'
 import { PercentageChange } from '../percentage-change'
 import * as Table from '../table'
 import { TokenAmount } from '../token-amount'
 import { TokenIcon } from '../token-icon'
 
 import type { ApiOutput } from '../../data'
+import type { ImageId } from '../image'
 
 type Props = {
   assets: ApiOutput['assets']['all']['assets']
   pathname?: string
   hideBelowOneEur?: boolean
-  onHideBelowOneEurChange?: (value: boolean) => void
   onSelect: (url: string, options?: { scroll?: boolean }) => void
   searchParams: URLSearchParams
   clearSearch: () => void
@@ -28,7 +29,6 @@ const AssetsList = (props: Props) => {
     assets,
     pathname,
     hideBelowOneEur = false,
-    onHideBelowOneEurChange = () => {},
     onSelect,
     searchParams,
     clearSearch,
@@ -90,8 +90,10 @@ const AssetsList = (props: Props) => {
   const isSearchActive = searchParamValue.trim().length > 0
 
   return (
-    <div className="pb-10">
-      <div className="hidden min-h-[calc(100svh-362px)] w-full overflow-auto 2xl:block">
+    <div className={filteredAssets.length > 0 ? 'pb-10' : 'h-full'}>
+      <div
+        className={`hidden min-h-[calc(100svh-362px)] w-full flex-col overflow-auto 2xl:flex ${filteredAssets.length === 0 ? 'h-full' : ''}`}
+      >
         {filteredAssets.length !== 0 && (
           <Table.Root>
             <Table.Header>
@@ -157,31 +159,32 @@ const AssetsList = (props: Props) => {
           </Table.Root>
         )}
         {filteredAssets.length === 0 && (
-          <div className="flex flex-1 flex-col items-center py-8">
-            <h2 className="pt-[68px] text-15 font-semibold text-neutral-100 first-line:mb-0.5">
-              No tokens found
+          <div className="m-auto flex flex-1 flex-col items-center justify-center py-8 text-center">
+            {hideBelowOneEur && !isSearchActive && (
+              <Image
+                id={'admin/empty/devices:241:240' as ImageId}
+                alt="No tokens"
+                className="size-20"
+              />
+            )}
+            <h2 className="mb-0.5 text-15 font-600">
+              {hideBelowOneEur && !isSearchActive
+                ? 'No tokens >$1'
+                : 'No tokens found'}
             </h2>
-            <p className="mb-5 text-13 font-regular text-neutral-100">
+            <p
+              className={`${isSearchActive ? 'mb-5' : ''} text-13 text-neutral-100`}
+            >
               {isSearchActive
                 ? "We didn't find any tokens that match your search"
                 : hideBelowOneEur
-                  ? 'All tokens are below $1'
+                  ? `Turn off "Hide <$1" to see all tokens`
                   : "We didn't find any tokens"}
             </p>
-            {isSearchActive ? (
+            {isSearchActive && (
               <Button variant="outline" size="32" onClick={() => clearSearch()}>
                 Clear search
               </Button>
-            ) : (
-              hideBelowOneEur && (
-                <Button
-                  variant="outline"
-                  size="32"
-                  onClick={() => onHideBelowOneEurChange(false)}
-                >
-                  Show all assets
-                </Button>
-              )
             )}
           </div>
         )}

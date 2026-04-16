@@ -11,15 +11,16 @@ import {
   ContractFunctionRevertedError,
   type Hash,
 } from 'viem'
-import { useAccount, useConfig, useReadContract, useWriteContract } from 'wagmi'
+import { useAccount, useConfig, useReadContract } from 'wagmi'
 import { simulateContract, waitForTransactionReceipt } from 'wagmi/actions'
-import { statusSepolia } from 'wagmi/chains'
 
+import { statusHoodi } from '~constants/chain'
 import { stakingManagerAbi, vaultAbi } from '~constants/contracts'
 import { CONFIRMATION_BLOCKS, MIN_LOCK_PERIOD } from '~constants/index'
 import { useStakingVaults } from '~hooks/useStakingVaults'
 import { useVaultStateContext } from '~hooks/useVaultStateContext'
 import { shortenAddress } from '~utils/address'
+import { writeStatusNetworkContract } from '~utils/status-network-transaction'
 
 // ============================================================================
 // Types
@@ -165,7 +166,6 @@ const formatLockSuccessMessage = (
  */
 export function useLockVault(vaultAddress: Address): UseLockVaultReturn {
   const { address } = useAccount()
-  const { writeContractAsync } = useWriteContract()
   const config = useConfig()
   const { send: sendVaultEvent, reset: resetVault } = useVaultStateContext()
   const { refetch: refetchStakingVaults } = useStakingVaults()
@@ -178,7 +178,7 @@ export function useLockVault(vaultAddress: Address): UseLockVaultReturn {
     abi: vaultAbi,
     address: vaultAddress,
     functionName: 'lockUntil',
-    chainId: statusSepolia.id,
+    chainId: statusHoodi.id,
   }) as { data: bigint | undefined }
 
   return useMutation({
@@ -213,7 +213,7 @@ export function useLockVault(vaultAddress: Address): UseLockVaultReturn {
             abi: [...vaultAbi, ...stakeManagerErrors],
             functionName: 'lock',
             args: [lockPeriodInSeconds],
-            chainId: statusSepolia.id,
+            chainId: statusHoodi.id,
           })
         } catch (simulationError) {
           const message = getLockRevertMessage(simulationError, t)
@@ -223,7 +223,7 @@ export function useLockVault(vaultAddress: Address): UseLockVaultReturn {
 
         // Call Vault.lock with the increased lock duration in seconds
         // The smart contract's _calculateLock handles all the math
-        const hash = await writeContractAsync({
+        const hash = await writeStatusNetworkContract(config, {
           account: address,
           address: vaultAddress,
           abi: vaultAbi,

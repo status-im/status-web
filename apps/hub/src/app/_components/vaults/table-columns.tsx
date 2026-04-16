@@ -72,8 +72,8 @@ const resolveChainExplorerHref = (
   address: Address
 ): string => {
   switch (chainId) {
-    case 1660990954:
-      return `https://sepoliascan.status.network/address/${address}`
+    case 374:
+      return `https://hoodiscan.status.network/address/${address}`
     default:
       return `https://etherscan.io/address/${address}`
   }
