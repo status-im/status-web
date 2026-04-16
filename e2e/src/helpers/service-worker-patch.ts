@@ -1,5 +1,10 @@
 import { CHAIN_ID_LINEA, CHAIN_ID_MAINNET } from '@constants/chain-ids.js'
-import { KNOWN_LINEA_HOSTS, KNOWN_MAINNET_HOSTS } from '@constants/rpc-hosts.js'
+import {
+  KNOWN_LINEA_HOSTS,
+  KNOWN_LINEA_PATHS,
+  KNOWN_MAINNET_HOSTS,
+  KNOWN_MAINNET_PATHS,
+} from '@constants/rpc-hosts.js'
 
 export const PATCH_MARKER = '/* __ANVIL_RPC_PATCH__ */'
 
@@ -45,11 +50,17 @@ export function buildServiceWorkerPatch(
     ));
   }
 
-  // Hostname-based chain detection (from constants/rpc-hosts.ts).
+  // Hostname/path-based chain detection (from constants/rpc-hosts.ts).
+  // Paths are checked first — one puzzle-auth host (snt.eth-rpc.status.im) serves
+  // multiple chains, so the URL path is the only reliable discriminator there.
   const _mainnetHosts = [${KNOWN_MAINNET_HOSTS.map(h => `'${h}'`).join(',')}];
   const _lineaHosts = [${KNOWN_LINEA_HOSTS.map(h => `'${h}'`).join(',')}];
+  const _mainnetPaths = [${KNOWN_MAINNET_PATHS.map(p => `'${p}'`).join(',')}];
+  const _lineaPaths = [${KNOWN_LINEA_PATHS.map(p => `'${p}'`).join(',')}];
   function _chainByHost(u) {
     // Linea first: 'linea-mainnet.infura.io' contains 'mainnet.infura.io'
+    for (let lp = 0; lp < _lineaPaths.length; lp++) { if (u.indexOf(_lineaPaths[lp]) !== -1) return '${CHAIN_ID_LINEA}'; }
+    for (let mp = 0; mp < _mainnetPaths.length; mp++) { if (u.indexOf(_mainnetPaths[mp]) !== -1) return '${CHAIN_ID_MAINNET}'; }
     for (let j = 0; j < _lineaHosts.length; j++) { if (u.indexOf(_lineaHosts[j]) !== -1) return '${CHAIN_ID_LINEA}'; }
     for (let i = 0; i < _mainnetHosts.length; i++) { if (u.indexOf(_mainnetHosts[i]) !== -1) return '${CHAIN_ID_MAINNET}'; }
     return null;

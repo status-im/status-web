@@ -4,7 +4,12 @@ import {
   requireWalletSeedPhrase,
 } from '@config/env.js'
 import { CHAIN_ID_LINEA, CHAIN_ID_MAINNET } from '@constants/chain-ids.js'
-import { KNOWN_LINEA_HOSTS, KNOWN_MAINNET_HOSTS } from '@constants/rpc-hosts.js'
+import {
+  KNOWN_LINEA_HOSTS,
+  KNOWN_LINEA_PATHS,
+  KNOWN_MAINNET_HOSTS,
+  KNOWN_MAINNET_PATHS,
+} from '@constants/rpc-hosts.js'
 import { AnvilRpcHelper } from '@helpers/anvil-rpc.js'
 import {
   buildServiceWorkerPatch,
@@ -259,11 +264,18 @@ export const test = walletTest.extend<AnvilFixtures>({
     // Context-level route: intercept Hub's own RPC calls (wagmi http transports).
     // MetaMask SW requests are handled by Layer 1 (file-level fetch patch).
     //
-    // Chain discovery: 1) ?chainId= query param, 2) hostname lookup, 3) eth_chainId probe.
+    // Chain discovery: 1) ?chainId= query param, 2) path/hostname lookup,
+    // 3) eth_chainId probe. Path is checked before hostname because the puzzle-auth
+    // proxy (snt.eth-rpc.status.im) serves multiple chains under one host.
     // Check Linea FIRST — 'linea-mainnet.infura.io' contains 'mainnet.infura.io'.
-    const getChainIdByHostname = (url: string): number | null => {
+    const getChainIdFromUrl = (url: string): number | null => {
       try {
-        const hostname = new URL(url).hostname
+        const parsed = new URL(url)
+        const { hostname, pathname } = parsed
+        if (KNOWN_LINEA_PATHS.some(p => pathname.includes(p)))
+          return CHAIN_ID_LINEA
+        if (KNOWN_MAINNET_PATHS.some(p => pathname.includes(p)))
+          return CHAIN_ID_MAINNET
         if (KNOWN_LINEA_HOSTS.some(h => hostname.includes(h)))
           return CHAIN_ID_LINEA
         if (KNOWN_MAINNET_HOSTS.some(h => hostname.includes(h)))
@@ -338,7 +350,7 @@ export const test = walletTest.extend<AnvilFixtures>({
             rpcRedirectCache.set(url, env.ANVIL_LINEA_RPC)
           else rpcRedirectCache.set(url, null)
         } else {
-          const knownChainId = getChainIdByHostname(url)
+          const knownChainId = getChainIdFromUrl(url)
           if (knownChainId !== null) {
             if (knownChainId === CHAIN_ID_MAINNET)
               rpcRedirectCache.set(url, env.ANVIL_MAINNET_RPC)
