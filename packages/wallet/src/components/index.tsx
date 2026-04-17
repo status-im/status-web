@@ -63,6 +63,9 @@ export {
 } from './send-assets-modal'
 export {
   type CollectibleGasFees,
+  encodeNftTransfer,
+  extractTxHash,
+  isSupportedNftStandard,
   type SendCollectibleParams,
   SendCollectiblesModal,
 } from './send-collectibles-modal'

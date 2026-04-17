@@ -6,6 +6,9 @@ import { useQuery } from '@tanstack/react-query'
 
 import type { NetworkType } from '@status-im/wallet/data'
 
+const STALE_TIME_MS = 15_000
+const GC_TIME_MS = 60 * 60 * 1000
+
 export const useCollectible = (
   network: NetworkType,
   contract: string,
@@ -38,8 +41,8 @@ export const useCollectible = (
       const body = await response.json()
       return body.result.data.json
     },
-    staleTime: 15 * 1000,
-    gcTime: 60 * 60 * 1000,
+    staleTime: STALE_TIME_MS,
+    gcTime: GC_TIME_MS,
   })
 
   useEffect(() => {

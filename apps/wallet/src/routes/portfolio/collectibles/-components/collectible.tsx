@@ -25,6 +25,7 @@ import { usePassword } from '@/providers/password-context'
 import { usePendingTransactions } from '@/providers/pending-transactions-context'
 import { useWallet } from '@/providers/wallet-context'
 
+import { useCollectible } from '../-hooks/use-collectible'
 import { CardDetail } from './card-detail'
 import { CollectibleTraits } from './collectible-traits'
 import {
@@ -33,7 +34,6 @@ import {
   fetchNftGasFees,
   isSupportedNftStandard,
 } from './nft-helpers'
-import { useCollectible } from './use-collectible'
 
 import type { SendCollectibleParams } from '@status-im/wallet/components'
 import type { NetworkType } from '@status-im/wallet/data'
