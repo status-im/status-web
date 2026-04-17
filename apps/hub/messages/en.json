@@ -712,6 +712,10 @@
     "disclaimer": {
       "translation": "disclaimer",
       "notes": "rewards::disclaimer"
+    },
+    "predeposit_end": {
+      "translation": "Pre-deposit period has now ended. Fund unlock and reward claiming will be available soon",
+      "notes": "rewards::predeposit_end"
     }
   },
   "pre_deposits": {
@@ -800,6 +804,10 @@
     "coming_soon": {
       "translation": "Coming soon",
       "notes": "vault::coming_soon"
+    },
+    "campaign_deposit_stopped": {
+      "translation": "Deposits Paused",
+      "notes": "vault::campaign_deposit_stopped"
     },
     "deposit_funds": {
       "translation": "Deposit funds",
