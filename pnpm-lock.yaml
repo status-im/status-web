@@ -25,7 +25,6 @@ overrides:
   '@status-im/community-dapp>react-dom': ^17.0.2
   '@status-im/community-dapp>@types/react': ^17.0.8
   '@status-im/community-dapp>@types/react-dom': ^17.0.6
-  '@qrkit/core>@noble/secp256k1': ^3.0.0
   '@types/styled-components>@types/react': ^17.0.8
   '@types/hoist-non-react-statics>@types/react': ^17.0.8
   '@types/react-router>@types/react': ^17.0.8
@@ -2011,11 +2010,11 @@ importers:
         specifier: ^6.0.0
         version: 6.0.0
       '@qrkit/core':
-        specifier: ^0.3.2
-        version: 0.3.2
+        specifier: ^0.4.1
+        version: 0.4.1
       '@qrkit/react':
-        specifier: ^0.3.2
-        version: 0.3.2(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
+        specifier: ^0.4.1
+        version: 0.4.1(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
       '@radix-ui/react-dialog':
         specifier: ^1.1.1
         version: 1.1.15(@types/react-dom@19.1.2(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
@@ -6436,9 +6435,6 @@ packages:
   '@noble/secp256k1@1.7.2':
     resolution: {integrity: sha512-/qzwYl5eFLH8OWIecQWM31qld2g1NfjgylK+TNhqtaUKP37Nm+Y+z30Fjhw0Ct8p9yCQEm2N3W/AckdIb3SMcQ==}
 
-  '@noble/secp256k1@3.0.0':
-    resolution: {integrity: sha512-NJBaR352KyIvj3t6sgT/+7xrNyF9Xk9QlLSIqUGVUYlsnDTAUqY8LOmwpcgEx4AMJXRITQ5XEVHD+mMaPfr3mg==}
-
   '@node-rs/argon2-android-arm-eabi@1.7.0':
     resolution: {integrity: sha512-udDqkr5P9E+wYX1SZwAVPdyfYvaF4ry9Tm+R9LkfSHbzWH0uhU6zjIwNRp7m+n4gx691rk+lqqDAIP8RLKwbhg==}
     engines: {node: '>= 10'}
@@ -8017,11 +8013,11 @@ packages:
   '@qrkit/bc-ur-web@2.0.1':
     resolution: {integrity: sha512-sng5nX2K6S99mn4USxVPwG3i960gfu2Ucgsyfmdo0LoK/6dk/ks2LKjEFx0unlQY4J+M2xn+Aa/q+SUQJetFdA==}
 
-  '@qrkit/core@0.3.2':
-    resolution: {integrity: sha512-dP0N2bpxsTzs2l5wR5IkfLq05RM8Xzsh/x11/5Bf2niv5Ttj3pQ2jGsF4XDnQnWBE6ZvqaOG22wHFywMKQS/rw==}
+  '@qrkit/core@0.4.1':
+    resolution: {integrity: sha512-mc7tnPXQ9RRIv9D4dsoW42lf/F9SZ4OkrcfzyTLAvX4XAWeCfevPHou59u3uJ6ucby5JvqAJhFTdvKcMJTTGDQ==}
 
-  '@qrkit/react@0.3.2':
-    resolution: {integrity: sha512-hfUJpzANlVUsipoYAOJK1CvSD5Jq3az0w4GZl4H518ZaL8CoXPYIoCe6aN1q0D/O9Lwce2y9keQV4/1h/b0HSA==}
+  '@qrkit/react@0.4.1':
+    resolution: {integrity: sha512-DvFhISvfi04LuKkswdOpKCiNDLESlQv05s5965dvcvjCgEkA0D5cyQwZ8qJ7QEoVz25ax20Fu5ofmCItptVHPg==}
     peerDependencies:
       react: 19.1.2
       react-dom: 19.1.2
@@ -29079,8 +29075,6 @@ snapshots:
 
   '@noble/secp256k1@1.7.2(patch_hash=i72ifz5lfv7aay2tf35fcyibhu)': {}
 
-  '@noble/secp256k1@3.0.0': {}
-
   '@node-rs/argon2-android-arm-eabi@1.7.0':
     optional: true
 
@@ -31069,18 +31063,19 @@ snapshots:
     dependencies:
       cbor2: 1.12.0
 
-  '@qrkit/core@0.3.2':
+  '@qrkit/core@0.4.1':
     dependencies:
+      '@noble/curves': 2.0.1
       '@noble/hashes': 2.0.1
-      '@noble/secp256k1': 3.0.0
       '@qrkit/bc-ur-web': 2.0.1
+      '@scure/base': 1.2.6
       '@scure/bip32': 2.0.1
       cborg: 4.5.8
 
-  '@qrkit/react@0.3.2(react-dom@19.1.2(react@19.1.2))(react@19.1.2)':
+  '@qrkit/react@0.4.1(react-dom@19.1.2(react@19.1.2))(react@19.1.2)':
     dependencies:
       '@qrkit/bc-ur-web': 2.0.1
-      '@qrkit/core': 0.3.2
+      '@qrkit/core': 0.4.1
       focus-trap: 8.0.1
       jsqr: 1.4.0
       qrcode: 1.5.4
@@ -32392,7 +32387,7 @@ snapshots:
       debug: 4.4.3(supports-color@8.1.1)
       invariant: 2.2.4
       metro: 0.83.3(bufferutil@4.0.8)(utf-8-validate@6.0.3)
-      metro-config: 0.83.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      metro-config: 0.83.3(bufferutil@4.0.8)(utf-8-validate@6.0.3)
       metro-core: 0.83.3
       semver: 7.7.3
     transitivePeerDependencies:
@@ -32421,7 +32416,7 @@ snapshots:
       debug: 4.4.3(supports-color@8.1.1)
       invariant: 2.2.4
       metro: 0.83.3(bufferutil@4.0.9)(utf-8-validate@6.0.3)
-      metro-config: 0.83.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      metro-config: 0.83.3(bufferutil@4.0.9)(utf-8-validate@6.0.3)
       metro-core: 0.83.3
       semver: 7.7.3
     transitivePeerDependencies:
@@ -46924,6 +46919,22 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  metro-config@0.83.3(bufferutil@4.0.8)(utf-8-validate@6.0.3):
+    dependencies:
+      connect: 3.7.0
+      flow-enums-runtime: 0.0.6
+      jest-validate: 29.7.0
+      metro: 0.83.3(bufferutil@4.0.8)(utf-8-validate@6.0.3)
+      metro-cache: 0.83.3
+      metro-core: 0.83.3
+      metro-runtime: 0.83.3
+      yaml: 2.8.1
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    optional: true
+
   metro-config@0.83.3(bufferutil@4.0.9)(utf-8-validate@5.0.10):
     dependencies:
       connect: 3.7.0
@@ -46938,6 +46949,22 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
+
+  metro-config@0.83.3(bufferutil@4.0.9)(utf-8-validate@6.0.3):
+    dependencies:
+      connect: 3.7.0
+      flow-enums-runtime: 0.0.6
+      jest-validate: 29.7.0
+      metro: 0.83.3(bufferutil@4.0.9)(utf-8-validate@6.0.3)
+      metro-cache: 0.83.3
+      metro-core: 0.83.3
+      metro-runtime: 0.83.3
+      yaml: 2.8.1
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    optional: true
 
   metro-core@0.83.3:
     dependencies:
@@ -47098,7 +47125,7 @@ snapshots:
       metro-babel-transformer: 0.83.3
       metro-cache: 0.83.3
       metro-cache-key: 0.83.3
-      metro-config: 0.83.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      metro-config: 0.83.3(bufferutil@4.0.8)(utf-8-validate@6.0.3)
       metro-core: 0.83.3
       metro-file-map: 0.83.3
       metro-resolver: 0.83.3
@@ -47193,7 +47220,7 @@ snapshots:
       metro-babel-transformer: 0.83.3
       metro-cache: 0.83.3
       metro-cache-key: 0.83.3
-      metro-config: 0.83.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      metro-config: 0.83.3(bufferutil@4.0.9)(utf-8-validate@6.0.3)
       metro-core: 0.83.3
       metro-file-map: 0.83.3
       metro-resolver: 0.83.3
