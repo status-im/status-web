@@ -40,6 +40,7 @@ import { parseUnits } from 'ethers'
 
 import { useEthBalance } from '@/hooks/use-eth-balance'
 import { renderMarkdown } from '@/lib/markdown'
+import { extractTxHash } from '@/lib/tx-helpers'
 import { apiClient } from '@/providers/api-client'
 import { usePassword } from '@/providers/password-context'
 import { usePendingTransactions } from '@/providers/pending-transactions-context'
@@ -199,13 +200,12 @@ const Token = (props: Props) => {
   const isLoading =
     !data?.assets || (isTokenLoading && !tokenDetail) || !finalTokenDetail
 
-  const needsEthBalance = finalTokenDetail?.summary.symbol !== 'ETH'
+  const ethBalanceQuery = useEthBalance(address, !!finalTokenDetail)
 
-  const ethBalanceQuery = useEthBalance(address, needsEthBalance)
-
-  const ethBalance = needsEthBalance
-    ? ethBalanceQuery.data?.summary.total_balance || 0
-    : finalTokenDetail?.summary.total_balance || 0
+  const ethBalance =
+    ethBalanceQuery.data?.summary.total_balance ??
+    finalTokenDetail?.summary.total_balance ??
+    0
 
   // Get gas fees for the current network
   const gasFeeQuery = useQuery<GasFees>({
@@ -296,11 +296,18 @@ const Token = (props: Props) => {
   const icon = asset.icon || ''
   const name = asset.name || ticker
 
+  const isNativeETH = finalTokenDetail.summary.symbol === 'ETH'
+
   const sendAsset = {
     name: finalTokenDetail.summary.name,
     icon,
-    totalBalance: finalTokenDetail.summary.total_balance,
-    totalBalanceEur: finalTokenDetail.summary.total_eur,
+    totalBalance: isNativeETH
+      ? ethBalance
+      : finalTokenDetail.summary.total_balance,
+    totalBalanceEur: isNativeETH
+      ? ethBalanceQuery.data?.summary.total_eur ??
+        finalTokenDetail.summary.total_eur
+      : finalTokenDetail.summary.total_eur,
     contractAddress: ticker.startsWith('0x') ? ticker : undefined,
     symbol: finalTokenDetail.summary.symbol,
     ethBalance,
@@ -309,7 +316,6 @@ const Token = (props: Props) => {
     decimals: asset.decimals ?? 18,
   }
 
-  const isNativeETH = finalTokenDetail.summary.symbol === 'ETH'
   const fromTokenAddress = isNativeETH
     ? '0x0000000000000000000000000000000000000000'
     : finalTokenDetail.summary.contracts?.ethereum ||
@@ -343,13 +349,7 @@ const Token = (props: Props) => {
       }
 
       const result = await apiClient.wallet.account.ethereum.send.mutate(params)
-      if (!result.id || result.id.txid?.error) {
-        console.error(result.id.txid?.error)
-        toast.negative(ERROR_MESSAGES.TX_FAILED)
-        throw new Error('Transaction failed')
-      }
-
-      const txHash = typeof result.id === 'string' ? result.id : result.id.txid
+      const txHash = extractTxHash(result.id)
 
       if (!txHash) {
         toast.negative(ERROR_MESSAGES.TX_FAILED)
@@ -376,6 +376,8 @@ const Token = (props: Props) => {
         },
         eurRate: 0,
       })
+
+      return txHash
     } else {
       const tokenDecimals = asset.decimals ?? 18
       const amount = parseUnits(formData.amount, tokenDecimals)
@@ -401,14 +403,7 @@ const Token = (props: Props) => {
 
       const result =
         await apiClient.wallet.account.ethereum.sendErc20.mutate(params)
-
-      if (!result.id || result.id.txid?.error) {
-        console.error(result.id.txid?.error)
-        toast.negative(ERROR_MESSAGES.TX_FAILED)
-        throw new Error('Transaction failed')
-      }
-
-      const txHash = typeof result.id === 'string' ? result.id : result.id.txid
+      const txHash = extractTxHash(result.id)
 
       if (!txHash) {
         toast.negative(ERROR_MESSAGES.TX_FAILED)
@@ -435,7 +430,8 @@ const Token = (props: Props) => {
         },
         eurRate: 0,
       })
-      return result.id.txid
+
+      return txHash
     }
   }
 

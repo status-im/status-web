@@ -1,5 +1,7 @@
 import { Interface } from 'ethers'
 
+import { estimateAnvilGasFees } from '@/lib/anvil-rpc'
+
 import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 
 export type TokenData =
@@ -175,14 +177,7 @@ export async function fetchGasFees(
 ): Promise<GasFees> {
   const params = buildGasFeeParams(isNative, from, to, value, contractAddress)
 
-  return fetchTrpcData<GasFees>(
-    'nodes.getFeeRate',
-    {
-      network: 'ethereum',
-      params,
-    },
-    'Failed to fetch gas fees',
-  )
+  return estimateAnvilGasFees(params)
 }
 
 export function matchesAsset(asset: AssetData, ticker: string): boolean {

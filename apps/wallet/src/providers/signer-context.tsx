@@ -224,11 +224,7 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
               data: tx.data,
             })
 
-          if (result.id.txid?.error) {
-            handleTransactionError(result.id.txid.error, 'ERC20 transfer')
-          }
-
-          const txHash = extractTxHash(result.id.txid)
+          const txHash = extractTxHash(result.id)
           if (!txHash) throw new Error('Transaction failed')
           return txHash as Hex
         }
@@ -246,11 +242,7 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
             value: valueHex,
           })
 
-        if (result.id.txid?.error) {
-          handleTransactionError(result.id.txid.error, 'Contract call')
-        }
-
-        const txHash = extractTxHash(result.id.txid)
+        const txHash = extractTxHash(result.id)
         if (!txHash) throw new Error('Transaction failed')
         return txHash as Hex
       }
@@ -266,11 +258,7 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
         maxInclusionFeePerGas: maxPriorityFeePerGas,
       })
 
-      if (result.id.txid?.error) {
-        handleTransactionError(result.id.txid.error, 'Send transaction')
-      }
-
-      const txHash = extractTxHash(result.id.txid)
+      const txHash = extractTxHash(result.id)
       if (!txHash) throw new Error('Transaction failed')
       return txHash as Hex
     },

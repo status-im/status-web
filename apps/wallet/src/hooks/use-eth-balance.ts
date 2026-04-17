@@ -1,5 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { patchNativeTokenWithAnvilBalance } from '@/lib/anvil-balance'
+
 import type { ApiOutput } from '@status-im/wallet/data'
 
 const NETWORKS = ['ethereum'] as const
@@ -34,7 +36,10 @@ export const useEthBalance = (address: string, enabled: boolean = true) => {
       }
 
       const body = await response.json()
-      return body.result.data.json
+      return await patchNativeTokenWithAnvilBalance(
+        body.result.data.json,
+        address,
+      )
     },
     enabled,
     staleTime: 30 * 1000,

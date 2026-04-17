@@ -1,10 +1,8 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 
+import { getAnvilCollectiblesPage } from '@/lib/anvil-collectibles'
+
 import { useConfigEnv } from './use-config-env'
-
-import type { NetworkType } from '@status-im/wallet/data'
-
-const PAGE_LIMIT = 20
 
 const DEFAULT_SORT = {
   assets: { column: 'name', direction: 'asc' as const },
@@ -28,51 +26,6 @@ export const SORT_OPTIONS = {
 type Props = {
   isWalletLoading: boolean
   address?: string
-}
-
-const getCollectibles = async (
-  address: string,
-  networks: NetworkType[],
-  search?: string,
-  sort?: {
-    column: 'name' | 'collection'
-    direction: 'asc' | 'desc'
-  },
-  offset = 0,
-  pages?: Record<NetworkType, string>,
-) => {
-  const url = new URL(
-    `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/collectibles.page`,
-  )
-
-  url.searchParams.set(
-    'input',
-    JSON.stringify({
-      json: {
-        address,
-        networks,
-        limit: PAGE_LIMIT,
-        offset,
-        search,
-        sort,
-        pages,
-      },
-    }),
-  )
-
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-
-  if (!response.ok) {
-    throw new Error(response.statusText, { cause: response.status })
-  }
-
-  const body = await response.json()
-  return body.result.data.json
 }
 
 const useCollectibles = (props: Props) => {
@@ -110,42 +63,18 @@ const useCollectibles = (props: Props) => {
         throw new Error('No wallet address available')
       }
 
-      if (usePageKeys) {
-        // Fast path: continue from server-provided page keys
-        const pages =
-          typeof pageParam === 'object' && pageParam
-            ? (pageParam as { pages?: Record<NetworkType, string> }).pages
-            : undefined
-
-        const response = await getCollectibles(
-          address,
-          networks as NetworkType[],
-          search,
-          sort,
-          0,
-          pages,
-        )
-        return {
-          collectibles: response.collectibles,
-          hasMore: response.hasMore,
-          nextPage: { pages: response.pages },
-        }
-      }
-
-      const offset = (pageParam as number) * PAGE_LIMIT
-
-      const response = await getCollectibles(
+      const response = await getAnvilCollectiblesPage({
         address,
-        networks as NetworkType[],
         search,
         sort,
-        offset,
-      )
+      })
 
       return {
         collectibles: response.collectibles,
         hasMore: response.hasMore,
-        nextPage: (pageParam as number) + 1,
+        nextPage: usePageKeys
+          ? { pages: response.pages }
+          : (pageParam as number) + 1,
       }
     },
     getNextPageParam: lastPage =>

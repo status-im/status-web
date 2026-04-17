@@ -3,20 +3,14 @@ import {
   extractTxHash,
   isSupportedNftStandard,
 } from '@status-im/wallet/components'
-import { NETWORK_TO_CHAIN_ID } from '@status-im/wallet/data'
 import { Interface } from 'ethers'
 
-import {
-  fetchTrpcData,
-  type GasFees,
-} from '../../assets/-components/token-helpers'
+import { callAnvilRpc, estimateAnvilGasFees } from '@/lib/anvil-rpc'
 
+import type { GasFees } from '../../assets/-components/token-helpers'
 import type { NetworkType } from '@status-im/wallet/data'
 
 export { extractTxHash, isSupportedNftStandard }
-
-const JSONRPC_REQUEST_ID = 1
-const JSONRPC_VERSION = '2.0'
 
 const erc1155 = new Interface([
   'function balanceOf(address account, uint256 id) view returns (uint256)',
@@ -60,46 +54,21 @@ export async function fetchErc1155Balance(params: {
   tokenId: string
   network: NetworkType
 }): Promise<bigint> {
-  const chainId = NETWORK_TO_CHAIN_ID[params.network]
-  if (!chainId) {
-    throw new Error(`Unsupported network: ${params.network}`)
-  }
-
   const data = erc1155.encodeFunctionData('balanceOf', [
     params.owner,
     parseTokenId(params.tokenId),
   ])
 
-  const url = `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/rpc.proxy?chainId=${chainId}`
+  const result = await callAnvilRpc<string>('eth_call', [
+    { to: params.contract, data },
+    'latest',
+  ])
 
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      jsonrpc: JSONRPC_VERSION,
-      id: JSONRPC_REQUEST_ID,
-      method: 'eth_call',
-      params: [{ to: params.contract, data }, 'latest'],
-    }),
-  })
-
-  if (!response.ok) {
-    throw new Error('Failed to fetch ERC-1155 balance')
-  }
-
-  const body = (await response.json()) as {
-    result?: string
-    error?: { message: string }
-  }
-
-  if (body.error) {
-    throw new Error(body.error.message)
-  }
-  if (!body.result) {
+  if (!result) {
     throw new Error('Empty ERC-1155 balance response')
   }
 
-  const decoded = erc1155.decodeFunctionResult('balanceOf', body.result)
+  const decoded = erc1155.decodeFunctionResult('balanceOf', result)
   return decoded[0] as bigint
 }
 
@@ -114,9 +83,5 @@ export async function fetchNftGasFees(params: {
 }): Promise<GasFees> {
   const gasFeeParams = buildNftGasFeeParams(params)
 
-  return fetchTrpcData<GasFees>(
-    'nodes.getFeeRate',
-    { network: params.network, params: gasFeeParams },
-    'Failed to fetch NFT transfer gas fees',
-  )
+  return estimateAnvilGasFees(gasFeeParams)
 }

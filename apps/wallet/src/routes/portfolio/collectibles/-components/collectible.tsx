@@ -20,6 +20,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 
 import { useEthBalance } from '@/hooks/use-eth-balance'
+import { getCollectibleContractHref } from '@/lib/anvil-collectibles'
+import { extractTxHash } from '@/lib/tx-helpers'
 import { apiClient } from '@/providers/api-client'
 import { usePassword } from '@/providers/password-context'
 import { usePendingTransactions } from '@/providers/pending-transactions-context'
@@ -29,7 +31,6 @@ import { useCollectible } from '../-hooks/use-collectible'
 import { CardDetail } from './card-detail'
 import { CollectibleTraits } from './collectible-traits'
 import {
-  extractTxHash,
   fetchErc1155Balance,
   fetchNftGasFees,
   isSupportedNftStandard,
@@ -119,18 +120,7 @@ const Collectible = (props: Props) => {
         value: '0',
       })
 
-    const txid = result.id?.txid
-    if (!txid) throw new Error('Failed to send NFT')
-
-    if (
-      typeof txid === 'object' &&
-      'error' in txid &&
-      typeof txid.error === 'string'
-    ) {
-      throw new Error(txid.error)
-    }
-
-    const txHash = extractTxHash(txid)
+    const txHash = extractTxHash(result.id)
     if (!txHash) throw new Error('Transaction hash not found')
 
     addPendingTransaction({
@@ -278,7 +268,7 @@ const Collectible = (props: Props) => {
               <>
                 <CardDetail
                   title="Contract"
-                  href={`https://etherscan.io/address/${collectible.contract}`}
+                  href={getCollectibleContractHref(collectible.contract)}
                 >
                   <div className="font-mono">
                     {shortenAddress(collectible.contract)}

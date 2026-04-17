@@ -1,0 +1,5 @@
+[profile.default]
+src = "src"
+out = "out"
+script = "script"
+solc = "0.8.20"
