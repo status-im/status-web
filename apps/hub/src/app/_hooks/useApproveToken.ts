@@ -2,11 +2,12 @@ import { useToast } from '@status-im/components'
 import { useMutation, type UseMutationResult } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
 import { type Address, parseUnits, zeroAddress } from 'viem'
-import { useAccount, useConfig, useWriteContract } from 'wagmi'
+import { useAccount, useConfig } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 
 import { STT_TOKEN } from '~constants/index'
 import { useVaultStateContext } from '~hooks/useVaultStateContext'
+import { writeStatusNetworkContract } from '~utils/status-network-transaction'
 
 // ============================================================================
 // Types
@@ -102,7 +103,6 @@ const TRANSACTION_CONFIG = {
  */
 export function useApproveToken(): UseApproveTokenReturn {
   const { address } = useAccount()
-  const { writeContractAsync } = useWriteContract()
   const config = useConfig()
   const { send: sendVaultEvent } = useVaultStateContext()
   const toast = useToast()
@@ -140,7 +140,7 @@ export function useApproveToken(): UseApproveTokenReturn {
 
       try {
         // Execute approval transaction
-        const hash = await writeContractAsync({
+        const hash = await writeStatusNetworkContract(config, {
           address: STT_TOKEN.address,
           abi: STT_TOKEN.abi,
           functionName: 'approve',

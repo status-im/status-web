@@ -53,6 +53,7 @@ pipeline {
     stage('Check Connector Changes') {
       when {
         anyOf {
+          changeset "flake.*"
           changeset "Jenkinsfile"
           changeset "apps/${params.APP_NAME}/**"
           changeset "packages/colors/**"
@@ -69,6 +70,7 @@ pipeline {
     stage('Check Wallet Changes') {
       when {
         anyOf {
+          changeset "flake.*"
           changeset "Jenkinsfile"
           changeset "apps/${params.APP_NAME}/**"
           changeset "packages/colors/**"

@@ -42,6 +42,16 @@ pipeline {
       description: 'Status API URL',
       defaultValue: params.NEXT_PUBLIC_STATUS_API_URL ?: 'https://api-dev.status.network'
     )
+    string(
+      name: 'NEXT_PUBLIC_RPC_PROXY_URL',
+      description: '',
+      defaultValue: params.NEXT_PUBLIC_RPC_PROXY_URL ?: 'https://snt.eth-rpc.status.im/'
+    )
+    string(
+      name: 'NEXT_PUBLIC_USE_PUZZLE_AUTH',
+      description: '',
+      defaultValue: params.NEXT_PUBLIC_USE_PUZZLE_AUTH ?: 'true'
+    )
   }
 
   environment {
