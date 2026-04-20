@@ -6,6 +6,10 @@ import {
   useMemo,
 } from 'react'
 
+import {
+  getTransactionHash,
+  isEthereumTransactionHash,
+} from '@status-im/wallet/utils'
 import { type Address, type Hex } from 'viem'
 import { formatEther } from 'viem/utils'
 
@@ -185,22 +189,6 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
         }
       }
 
-      const extractTxHash = (id: unknown): string | undefined => {
-        if (typeof id === 'string') {
-          return id
-        }
-        if (id && typeof id === 'object') {
-          const obj = id as Record<string, unknown>
-          if ('result' in obj && typeof obj.result === 'string') {
-            return obj.result
-          }
-          if ('txid' in obj) {
-            return obj.txid as string
-          }
-        }
-        return undefined
-      }
-
       if (tx.data) {
         const ERC20_TRANSFER_SIGNATURE = '0xa9059cbb'
         const isErc20Transfer = tx.data
@@ -223,8 +211,10 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
             handleTransactionError(result.id.txid.error, 'ERC20 transfer')
           }
 
-          const txHash = extractTxHash(result.id.txid)
-          if (!txHash) throw new Error('Transaction failed')
+          const txHash = getTransactionHash(result.id.txid)
+          if (!isEthereumTransactionHash(txHash)) {
+            throw new Error('Transaction failed')
+          }
           return txHash as Hex
         }
 
@@ -245,8 +235,10 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
           handleTransactionError(result.id.txid.error, 'Contract call')
         }
 
-        const txHash = extractTxHash(result.id.txid)
-        if (!txHash) throw new Error('Transaction failed')
+        const txHash = getTransactionHash(result.id.txid)
+        if (!isEthereumTransactionHash(txHash)) {
+          throw new Error('Transaction failed')
+        }
         return txHash as Hex
       }
 
@@ -265,8 +257,10 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
         handleTransactionError(result.id.txid.error, 'Send transaction')
       }
 
-      const txHash = extractTxHash(result.id.txid)
-      if (!txHash) throw new Error('Transaction failed')
+      const txHash = getTransactionHash(result.id.txid)
+      if (!isEthereumTransactionHash(txHash)) {
+        throw new Error('Transaction failed')
+      }
       return txHash as Hex
     },
     [currentWallet?.id, address, ensureUnlocked, handleTransactionError],
