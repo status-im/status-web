@@ -401,7 +401,15 @@ export const test = walletTest.extend<AnvilFixtures>({
       }
 
       const anvilUrl = rpcRedirectCache.get(url)
-      if (!anvilUrl) return route.continue()
+      if (!anvilUrl) {
+        // Diagnostic: unmocked JSON-RPC is forwarded to the real network.
+        // Useful to identify which call MetaMask/Hub is stuck on when a
+        // confirmation popup never becomes confirmable (WETH debug).
+        const methodMatch = postData.match(/"method"\s*:\s*"([^"]+)"/)
+        const method = methodMatch ? methodMatch[1] : '?'
+        console.log(`[anvil-intercept] passthrough method=${method} url=${url}`)
+        return route.continue()
+      }
 
       // Receipt requests may hit the wrong fork after network switches —
       // try both forks before returning null

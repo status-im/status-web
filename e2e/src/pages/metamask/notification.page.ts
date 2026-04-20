@@ -1,4 +1,5 @@
 import { NOTIFICATION_TIMEOUTS } from '@constants/timeouts.js'
+import { test } from '@playwright/test'
 
 import type { BrowserContext, Locator, Page } from '@playwright/test'
 
@@ -209,6 +210,51 @@ export class NotificationPage {
     return page
   }
 
+  /**
+   * Collect a fingerprint of a popup's current state: URL + presence of a few
+   * well-known UI markers. Used in waitForConfirmablePopupPage to diagnose
+   * stalls where the Confirm button never appears (e.g. MetaMask gas
+   * estimation hangs, "Unable to fetch" error screen, spending-cap popup
+   * still open after approve). All probes are fail-fast so fingerprinting
+   * never extends the polling loop.
+   */
+  private async fingerprintPopup(page: Page): Promise<Record<string, unknown>> {
+    const quick = { timeout: 100 } as const
+    const is = (loc: Locator) => loc.isVisible(quick).catch(() => false)
+    const [
+      confirmVisible,
+      spendingCap,
+      gasError,
+      unableError,
+      insufficient,
+      h1Text,
+    ] = await Promise.all([
+      is(this.confirmButton(page)),
+      is(
+        page.getByText(
+          /spending cap|permission to withdraw|allow this site to spend/i,
+        ),
+      ),
+      is(page.getByText(/gas estimation|estimating gas/i)),
+      is(page.getByText(/unable to fetch|we could not|something went wrong/i)),
+      is(page.getByText(/insufficient (funds|balance)/i)),
+      page
+        .locator('h1, h2, [role="heading"]')
+        .first()
+        .innerText({ timeout: 100 })
+        .catch(() => ''),
+    ])
+    return {
+      url: page.url(),
+      confirmVisible,
+      spendingCap,
+      gasError,
+      unableError,
+      insufficient,
+      h1: (h1Text || '').slice(0, 80),
+    }
+  }
+
   private async waitForConfirmablePopupPage(timeout: number): Promise<Page> {
     const t0 = Date.now()
     const deadline = t0 + timeout
@@ -229,10 +275,13 @@ export class NotificationPage {
         if (hasConfirm) return p
       }
 
-      // Log every 5s with current state
+      // Log every 5s with current state + per-popup fingerprints
       if (Date.now() - lastLog > WAIT_CONFIRMABLE_LOG_INTERVAL_MS) {
+        const prints = await Promise.all(
+          popups.map(p => this.fingerprintPopup(p)),
+        )
         console.log(
-          `[waitConfirmable +${Date.now() - t0}ms] iters=${iterCount} popups=${popups.length} fallbackOpened=${openedFallbackPage}`,
+          `[waitConfirmable +${Date.now() - t0}ms] iters=${iterCount} popups=${popups.length} fallbackOpened=${openedFallbackPage} prints=${JSON.stringify(prints)}`,
         )
         lastLog = Date.now()
       }
@@ -256,7 +305,61 @@ export class NotificationPage {
       )
     }
 
+    // Diagnostic: capture screenshots + HTML of every popup so the failing
+    // confirmation can be analysed post-hoc (MetaMask gas-estimation stalls,
+    // unexpected error screens, etc.).
+    await this.dumpPopupsToArtifacts(
+      'waitConfirmable-timeout',
+      `timeout after ${timeout}ms, iters=${iterCount}`,
+    )
+
     throw new Error('MetaMask transaction confirmation button did not appear')
+  }
+
+  private async dumpPopupsToArtifacts(
+    label: string,
+    note: string,
+  ): Promise<void> {
+    let info: ReturnType<typeof test.info>
+    try {
+      info = test.info()
+    } catch {
+      // Not inside a test — nothing to attach to.
+      return
+    }
+    const popups = this.context
+      .pages()
+      .filter(p => this.isMetaMaskPopup(p) && !p.isClosed())
+    await info.attach(`${label}-note.txt`, {
+      body: `${note}\nPopups: ${popups.length}`,
+      contentType: 'text/plain',
+    })
+    await Promise.all(
+      popups.map(async (p, idx) => {
+        const safeUrl = p
+          .url()
+          .replace(/[^a-z0-9]+/gi, '_')
+          .slice(0, 60)
+        try {
+          const png = await p.screenshot({ fullPage: false })
+          await info.attach(`${label}-${idx}-${safeUrl}.png`, {
+            body: png,
+            contentType: 'image/png',
+          })
+        } catch {
+          // ignore — popup may have closed
+        }
+        try {
+          const html = await p.content()
+          await info.attach(`${label}-${idx}-${safeUrl}.html`, {
+            body: html,
+            contentType: 'text/html',
+          })
+        } catch {
+          // ignore
+        }
+      }),
+    )
   }
 
   async approveConnection(): Promise<void> {

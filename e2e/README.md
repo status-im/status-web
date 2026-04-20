@@ -159,13 +159,17 @@ pnpm anvil:down
 
 ### Custom Fork URLs
 
-By default, Anvil forks from public RPCs. For faster/more reliable forks, set private RPC endpoints:
+By default, Anvil forks from public RPCs (`ethereum-rpc.publicnode.com`, `rpc.linea.build`). These are **pruning nodes** — they drop historical state after ~128 blocks. Storage-based funding (WETH, USDT, USDC, LINEA) is unaffected, but **SNT funding will flake** with `-32014 historical state not available` / `ErrUpstreamsExhausted` because `anvil_setBalance` on the MiniMeToken controller reads the account nonce at the fork block.
+
+For reliable anvil-deposits runs point `MAINNET_FORK_URL` at an **archive provider**:
 
 ```bash
 # In .env or .env.local
 MAINNET_FORK_URL=https://eth-mainnet.g.alchemy.com/v2/YOUR_KEY
 LINEA_FORK_URL=https://linea-mainnet.g.alchemy.com/v2/YOUR_KEY
 ```
+
+As a defense against transient upstream outages, `AnvilRpcHelper.call` retries `-32014` / `ErrUpstreamsExhausted` errors automatically when called via `callWithRetry`.
 
 ### Hub RPC Configuration
 

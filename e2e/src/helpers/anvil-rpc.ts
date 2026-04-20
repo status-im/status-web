@@ -241,7 +241,10 @@ export class AnvilRpcHelper {
    * Whale transfer won't work (Binance no longer holds SNT).
    */
   async fundSnt(amount: bigint): Promise<void> {
-    await this.call(this.mainnetRpc, 'anvil_setBalance', [
+    // Retry: the controller's account state can fall outside the upstream fork
+    // provider's retention window (-32014 / ErrUpstreamsExhausted). Retries
+    // often succeed once eRPC re-caches or the upstream re-serves the block.
+    await this.callWithRetry(this.mainnetRpc, 'anvil_setBalance', [
       SNT_CONTROLLER,
       toHex(10n ** 18n),
     ])
@@ -251,10 +254,10 @@ export class AnvilRpcHelper {
       encodeAddress(this.walletAddress) +
       encodeUint256(amount)
 
-    await this.call(this.mainnetRpc, 'anvil_impersonateAccount', [
+    await this.callWithRetry(this.mainnetRpc, 'anvil_impersonateAccount', [
       SNT_CONTROLLER,
     ])
-    await this.call(this.mainnetRpc, 'eth_sendTransaction', [
+    await this.callWithRetry(this.mainnetRpc, 'eth_sendTransaction', [
       {
         from: SNT_CONTROLLER,
         to: CONTRACTS.SNT,
@@ -614,10 +617,21 @@ export class AnvilRpcHelper {
     }
 
     if (json.error) {
+      const message = json.error.message ?? JSON.stringify(json.error)
+      // Upstream pruning (pruning-node forks): transient — the upstream's
+      // retention window may shift, or eRPC may cache the data next call.
+      const code = (json.error as { code?: number }).code
+      const isUpstreamMissingData =
+        code === -32014 ||
+        /historical state .* is not available/i.test(message) ||
+        /ErrUpstreamsExhausted|ErrEndpointMissingData/.test(message)
+      if (isUpstreamMissingData) {
+        throw new TransientRpcError(
+          `Anvil RPC upstream-missing-data (${method}): ${message}`,
+        )
+      }
       // JSON-RPC semantic error — deterministic, do not retry
-      throw new RpcError(
-        `Anvil RPC error (${method}): ${json.error.message ?? JSON.stringify(json.error)}`,
-      )
+      throw new RpcError(`Anvil RPC error (${method}): ${message}`)
     }
 
     return json.result as T

@@ -111,6 +111,13 @@ export function buildServiceWorkerPatch(
     return p;
   }
 
+  // Extract "method" from a JSON-RPC body for diagnostic logging.
+  function _rpcMethod(body) {
+    if (!body || typeof body !== 'string') return '?';
+    const m = body.match(/"method"\\s*:\\s*"([^"]+)"/);
+    return m ? m[1] : '?';
+  }
+
   function _hasNonNullRpcResult(response) {
     try {
       const c = response.clone();
@@ -330,9 +337,16 @@ export function buildServiceWorkerPatch(
       if (typeof cached === 'string') {
         return _fwd(cached, init);
       }
-      if (cached === null) return _f.apply(globalThis, arguments);
+      if (cached === null) {
+        // Diagnostic: unmocked JSON-RPC leaks to network — useful when
+        // MetaMask confirmation UI stalls on a specific call (WETH debug).
+        console.log('[sw-patch] passthrough method=' + _rpcMethod(init.body) + ' url=' + url);
+        return _f.apply(globalThis, arguments);
+      }
       return cached.then(function(u) {
-        return u ? _fwd(u, init) : _f(url, init);
+        if (u) return _fwd(u, init);
+        console.log('[sw-patch] passthrough(probe-null) method=' + _rpcMethod(init.body) + ' url=' + url);
+        return _f(url, init);
       });
     }
 
