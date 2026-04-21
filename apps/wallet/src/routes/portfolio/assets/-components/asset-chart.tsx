@@ -94,7 +94,7 @@ function AssetChart({
       return body.result.data.json
     },
     enabled: activeDataType === 'price' || activeDataType === 'value',
-    staleTime: 60 * 60 * 1000, // 1 hour
+    staleTime: 60_000, // 1 minute
     gcTime: 60 * 60 * 1000, // 1 hour
   })
 
@@ -135,7 +135,7 @@ function AssetChart({
       return body.result.data.json
     },
     enabled: activeDataType === 'balance' || activeDataType === 'value',
-    staleTime: 60 * 60 * 1000, // 1 hour
+    staleTime: 60_000, // 1 minute
     gcTime: 60 * 60 * 1000, // 1 hour
   })
 

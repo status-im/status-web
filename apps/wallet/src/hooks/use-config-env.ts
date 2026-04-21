@@ -7,8 +7,8 @@ type ConfigEnv = ApiOutput['config']['env']
 
 const DEFAULT_ENV: ConfigEnv = {
   refreshIntervalMs: 0,
-  staleTimeMs: Infinity,
-  gcTimeMs: Infinity,
+  staleTimeMs: 60_000, // 1 minute
+  gcTimeMs: 60 * 60 * 1000, // 1 hour
 }
 
 type UseConfigEnvResult = Omit<UseQueryResult<ConfigEnv, never>, 'data'> & {
