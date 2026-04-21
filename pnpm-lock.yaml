@@ -2010,11 +2010,11 @@ importers:
         specifier: ^6.0.0
         version: 6.0.0
       '@qrkit/core':
-        specifier: ^0.4.1
-        version: 0.4.1
+        specifier: ^0.5.0
+        version: 0.5.0
       '@qrkit/react':
-        specifier: ^0.4.1
-        version: 0.4.1(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
+        specifier: ^0.4.2
+        version: 0.4.2(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
       '@radix-ui/react-dialog':
         specifier: ^1.1.1
         version: 1.1.15(@types/react-dom@19.1.2(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
@@ -8013,11 +8013,11 @@ packages:
   '@qrkit/bc-ur-web@2.0.1':
     resolution: {integrity: sha512-sng5nX2K6S99mn4USxVPwG3i960gfu2Ucgsyfmdo0LoK/6dk/ks2LKjEFx0unlQY4J+M2xn+Aa/q+SUQJetFdA==}
 
-  '@qrkit/core@0.4.1':
-    resolution: {integrity: sha512-mc7tnPXQ9RRIv9D4dsoW42lf/F9SZ4OkrcfzyTLAvX4XAWeCfevPHou59u3uJ6ucby5JvqAJhFTdvKcMJTTGDQ==}
+  '@qrkit/core@0.5.0':
+    resolution: {integrity: sha512-/ZtgBnZAk76cpvKvo+iz6z4RKgBmvoCI+v5cFoGROirVr2BtAbSst366qMpVOBQue/z+d6ofdbPsEkyCLBKiFQ==}
 
-  '@qrkit/react@0.4.1':
-    resolution: {integrity: sha512-DvFhISvfi04LuKkswdOpKCiNDLESlQv05s5965dvcvjCgEkA0D5cyQwZ8qJ7QEoVz25ax20Fu5ofmCItptVHPg==}
+  '@qrkit/react@0.4.2':
+    resolution: {integrity: sha512-5CdgWBwcitrr6oao+IcXnfPKKKpuq101NNUjM8IZ4r6ei4MQs6+dstYEOPTRtXcZ5mBhJoUeZKh2y3I9hTMiVw==}
     peerDependencies:
       react: 19.1.2
       react-dom: 19.1.2
@@ -31063,7 +31063,7 @@ snapshots:
     dependencies:
       cbor2: 1.12.0
 
-  '@qrkit/core@0.4.1':
+  '@qrkit/core@0.5.0':
     dependencies:
       '@noble/curves': 2.0.1
       '@noble/hashes': 2.0.1
@@ -31072,10 +31072,10 @@ snapshots:
       '@scure/bip32': 2.0.1
       cborg: 4.5.8
 
-  '@qrkit/react@0.4.1(react-dom@19.1.2(react@19.1.2))(react@19.1.2)':
+  '@qrkit/react@0.4.2(react-dom@19.1.2(react@19.1.2))(react@19.1.2)':
     dependencies:
       '@qrkit/bc-ur-web': 2.0.1
-      '@qrkit/core': 0.4.1
+      '@qrkit/core': 0.5.0
       focus-trap: 8.0.1
       jsqr: 1.4.0
       qrcode: 1.5.4

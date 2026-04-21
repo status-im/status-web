@@ -220,6 +220,7 @@ function Confirm({
         name: trimmedName,
         vendor: account.device ?? DEFAULT_HARDWARE_WALLET_VENDOR,
         address: account.address,
+        derivationPath: account.derivationPath,
         publicKey: account.publicKey,
         sourceFingerprint:
           account.chain === 'evm' ? account.sourceFingerprint : undefined,

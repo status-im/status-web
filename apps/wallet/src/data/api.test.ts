@@ -132,6 +132,7 @@ test('should import hardware wallet metadata', async () => {
     name: 'Keystone Wallet',
     vendor: 'Keystone',
     address: '0x1234567890abcdef1234567890abcdef12345678',
+    derivationPath: "m/44'/60'/0'/0/7",
     publicKey: 'xpub661MyMwAqRbcF7FakePublicKey',
     sourceFingerprint: 1234,
   })
@@ -150,7 +151,7 @@ test('should import hardware wallet metadata', async () => {
         activeAccounts: expect.arrayContaining([
           expect.objectContaining({
             address: '0x1234567890abcdef1234567890abcdef12345678',
-            derivationPath: "m/44'/60'/0'/0/0",
+            derivationPath: "m/44'/60'/0'/0/7",
           }),
         ]),
         hardware: expect.objectContaining({

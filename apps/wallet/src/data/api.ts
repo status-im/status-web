@@ -184,6 +184,7 @@ const apiRouter = router({
           name: z.string().trim().min(1),
           vendor: z.string().trim().min(1),
           address: z.string().trim().min(1),
+          derivationPath: z.string().trim().min(1),
           publicKey: z.string().trim().min(1),
           sourceFingerprint: z.number().optional(),
         }),
@@ -194,7 +195,7 @@ const apiRouter = router({
         const account: WalletAccount = {
           address: input.address,
           coin: walletCore.CoinType.ethereum.value,
-          derivationPath: "m/44'/60'/0'/0/0",
+          derivationPath: input.derivationPath,
           derivation: walletCore.Derivation.default.value,
         }
         await walletMetadata.save({
