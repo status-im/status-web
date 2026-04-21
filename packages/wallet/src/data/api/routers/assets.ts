@@ -714,6 +714,11 @@ const cachedTokenPriceChart = cache(async (key: string) => {
   return await tokenPriceChart({ symbol, days })
 })
 
+// Keep appended balance slightly earlier than appended price so
+// `useValueChartData.findBalance` (`apps/wallet/src/hooks/use-value-chart-data.ts`)
+// pairs with the latest balance point when `tokenPriceChart` appends a current price.
+const LATEST_BALANCE_POINT_OFFSET_MS = 60_000 // 1 minute
+
 async function tokenPriceChart({
   symbol,
   days,
@@ -721,12 +726,27 @@ async function tokenPriceChart({
   symbol: string
   days?: '1' | '7' | '30' | '90' | '365' | 'all'
 }) {
-  const data = await fetchTokenPriceHistory(symbol, days)
+  const [data, prices] = await Promise.all([
+    fetchTokenPriceHistory(symbol, days),
+    fetchTokensPrice([symbol], COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE),
+  ])
 
-  return data.prices.map(([timestamp, price]: [number, number]) => ({
+  const chartData = data.prices.map(([timestamp, price]: [number, number]) => ({
     date: new Date(timestamp).toISOString(),
     price: price,
   }))
+
+  const spotPrice = prices[symbol]?.usd
+  if (!Number.isFinite(spotPrice)) {
+    return chartData
+  }
+
+  chartData.push({
+    date: new Date().toISOString(),
+    price: spotPrice,
+  })
+
+  return chartData
 }
 
 const cachedNativeTokenPriceChart = cache(async (key: string) => {
@@ -774,6 +794,28 @@ async function nativeTokenBalanceChart({
   const result = aggregateTokenBalanceHistory(responses)
 
   result.reverse()
+
+  const latestNetworkBalances = await Promise.all(
+    networks.map(async network => {
+      try {
+        const rawBalance = await getNativeTokenBalance(address, network)
+        return Number(rawBalance) / 10 ** decimals
+      } catch {
+        return 0
+      }
+    }),
+  )
+
+  const latestBalance = latestNetworkBalances.reduce(
+    (total: number, balance: number) => total + balance,
+    0,
+  )
+  if (latestBalance > 0) {
+    result.push({
+      date: new Date(Date.now() - LATEST_BALANCE_POINT_OFFSET_MS).toISOString(),
+      price: latestBalance,
+    })
+  }
 
   return result
 }
@@ -834,6 +876,34 @@ async function tokenBalanceChart({
   const result = aggregateTokenBalanceHistory(responses)
 
   result.reverse()
+
+  const latestNetworkBalances = await Promise.all(
+    filteredERC20Tokens.map(async token => {
+      try {
+        const balanceResult = await getERC20TokensBalance(
+          address,
+          STATUS_NETWORKS[token.chainId],
+          [token.address],
+        )
+        const rawBalance = Number(
+          balanceResult.tokenBalances[0]?.tokenBalance ?? 0,
+        )
+        return rawBalance / 10 ** token.decimals
+      } catch {
+        return 0
+      }
+    }),
+  )
+  const latestBalance = latestNetworkBalances.reduce(
+    (total, balance) => total + balance,
+    0,
+  )
+  if (latestBalance > 0) {
+    result.push({
+      date: new Date(Date.now() - LATEST_BALANCE_POINT_OFFSET_MS).toISOString(),
+      price: latestBalance,
+    })
+  }
 
   return result
 }
