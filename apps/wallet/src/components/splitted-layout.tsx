@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 
-import { Avatar, Skeleton } from '@status-im/components'
+import { Avatar, Skeleton, Tag } from '@status-im/components'
 import {
   Balance,
   StickyHeaderContainer,
@@ -101,6 +101,8 @@ export default SplittedLayout
 // Components
 const AccountInfo = () => {
   const { account, isWalletLoading } = usePortfolio()
+  const { currentWallet } = useWallet()
+  const isWatchOnly = currentWallet?.type === 'hardware-qr'
 
   if (isWalletLoading) {
     return <AccountSkeleton variant="secondary" />
@@ -118,8 +120,18 @@ const AccountInfo = () => {
         size="24"
         bgOpacity="20"
       />
-      <div className="text-15 font-semibold text-neutral-100">
-        {account.name}
+      <div className="flex items-center gap-2">
+        <div className="text-15 font-semibold text-neutral-100">
+          {account.name}
+        </div>
+        {isWatchOnly && (
+          <Tag
+            size="24"
+            label="Watch only"
+            aria-label="Watch-only wallet"
+            className="border-neutral-20 bg-neutral-5 text-neutral-50 hover:border-neutral-30"
+          />
+        )}
       </div>
     </div>
   )
