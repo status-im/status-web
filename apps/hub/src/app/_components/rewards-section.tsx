@@ -44,6 +44,9 @@ const RewardsSection = () => {
           {t('rewards.disclaimer')}
         </Link>
         .
+        <br />
+        <br />
+        {t('rewards.predeposit_end')}
       </p>
     </div>
   )
