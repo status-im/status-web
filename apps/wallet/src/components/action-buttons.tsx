@@ -64,6 +64,8 @@ const ActionButtons = (props: Props) => {
       ['activities', address],
       ['collectible'],
       ['token'],
+      ['priceChart'],
+      ['balanceChart', address],
     ],
     onComplete: () => {
       setIsManualRefreshing(false)
@@ -85,7 +87,11 @@ const ActionButtons = (props: Props) => {
             key[0] === 'activities' &&
             (key[1] === address || key[1] === undefined)) ||
           (Array.isArray(key) && key[0] === 'collectible') ||
-          (Array.isArray(key) && key[0] === 'token')
+          (Array.isArray(key) && key[0] === 'token') ||
+          (Array.isArray(key) && key[0] === 'priceChart') ||
+          (Array.isArray(key) &&
+            key[0] === 'balanceChart' &&
+            (key[1] === address || key[1] === undefined))
         )
       },
     }) > 0
@@ -111,7 +117,11 @@ const ActionButtons = (props: Props) => {
           key[0] === 'activities' &&
           (key[1] === address || key[1] === undefined)) ||
         (Array.isArray(key) && key[0] === 'collectible') ||
-        (Array.isArray(key) && key[0] === 'token')
+        (Array.isArray(key) && key[0] === 'token') ||
+        (Array.isArray(key) && key[0] === 'priceChart') ||
+        (Array.isArray(key) &&
+          key[0] === 'balanceChart' &&
+          (key[1] === address || key[1] === undefined))
 
       return hasObservers && isWalletQuery
     })
