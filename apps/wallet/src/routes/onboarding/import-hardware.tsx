@@ -20,13 +20,6 @@ export const Route = createFileRoute('/onboarding/import-hardware')({
 
 /**
  * Hardware-wallet onboarding flow.
- *
- * Reads an animated BC-UR QR via @qrkit/react's scanner hook, parses the
- * resulting CBOR via @qrkit/core's `parseConnection`, and stores the resulting
- * account(s) as a watch-only wallet. Compatible with any ERC-4527 air-gapped
- * device (Keystone, AirGap Vault, NGRAVE, GapSign, etc.). The signing flow is
- * not implemented yet — `getSigningKey` throws `WALLET_IS_WATCH_ONLY` for
- * these wallets.
  */
 function RouteComponent() {
   const [accounts, setAccounts] = useState<Account[]>([])
@@ -123,9 +116,9 @@ function ScannerScreen({
       </Text>
       <Text size={15} color="$neutral-50" className="mb-4">
         Use any air-gapped wallet that supports the ERC-4527 QR standard:
-        Keystone, AirGap Vault, NGRAVE, GapSign, and others. On your device,
-        choose Connect Software Wallet and pick the generic QR / MetaMask
-        option, then point the screen at this camera.
+        Keycard, Keystone, AirGap Vault, NGRAVE, GapSign, and others. On your
+        device, choose Connect Software Wallet and pick the generic QR /
+        MetaMask option, then point the screen at this camera.
       </Text>
       <div className="relative aspect-square w-full overflow-hidden rounded-12 bg-neutral-100">
         <video
