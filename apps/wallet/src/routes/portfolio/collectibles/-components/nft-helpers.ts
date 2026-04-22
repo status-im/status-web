@@ -3,7 +3,7 @@ import {
   extractTxHash,
   isSupportedNftStandard,
 } from '@status-im/wallet/components'
-import { NETWORK_TO_CHAIN_ID } from '@status-im/wallet/data'
+import { NETWORK_TO_CHAIN_ID } from '@status-im/wallet/constants'
 import { Interface } from 'ethers'
 
 import {
