@@ -186,9 +186,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   OnboardingLayoutRoute: typeof OnboardingLayoutRouteWithChildren
-  SettingsIndexRoute: typeof SettingsIndexRoute
   WalletFlowImportRoute: typeof WalletFlowImportRoute
   WalletFlowNewRoute: typeof WalletFlowNewRoute
+  SettingsIndexRoute: typeof SettingsIndexRoute
   PortfolioAssetsTickerRoute: typeof PortfolioAssetsTickerRoute
   PortfolioActivityIndexRoute: typeof PortfolioActivityIndexRoute
   PortfolioAssetsIndexRoute: typeof PortfolioAssetsIndexRoute
@@ -310,9 +310,9 @@ const OnboardingLayoutRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   OnboardingLayoutRoute: OnboardingLayoutRouteWithChildren,
-  SettingsIndexRoute: SettingsIndexRoute,
   WalletFlowImportRoute: WalletFlowImportRoute,
   WalletFlowNewRoute: WalletFlowNewRoute,
+  SettingsIndexRoute: SettingsIndexRoute,
   PortfolioAssetsTickerRoute: PortfolioAssetsTickerRoute,
   PortfolioActivityIndexRoute: PortfolioActivityIndexRoute,
   PortfolioAssetsIndexRoute: PortfolioAssetsIndexRoute,
