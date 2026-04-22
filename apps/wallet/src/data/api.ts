@@ -87,10 +87,17 @@ const apiRouter = router({
     // todo: words count option
     // todo: handle cancelation
     add: procedure
-      .input(z.object({ password: z.string(), name: z.string() }))
+      .input(
+        z.object({
+          password: z.string().optional(),
+          name: z.string().optional(),
+        }),
+      )
       .mutation(async ({ input, ctx }) => {
         const { walletCore, session } = ctx
-        const hd = walletCore.HDWallet.create(128, input.password)
+        const walletCount = (await walletMetadata.getAll()).length
+        const walletName = input.name ?? `Wallet ${walletCount + 1}`
+        const hd = walletCore.HDWallet.create(128, input.password ?? '')
         const mnemonic = hd.mnemonic()
         hd.delete()
         const id = crypto.randomUUID()
@@ -104,6 +111,9 @@ const apiRouter = router({
         if (await hasVault()) {
           await session.addWalletToVault(id, 'mnemonic', mnemonic)
         } else {
+          if (!input.password) {
+            throw new Error('Password is required to create the first wallet')
+          }
           await encryptAndStore(input.password, {
             wallets: { [id]: { type: 'mnemonic', secret: mnemonic } },
           })
@@ -111,13 +121,15 @@ const apiRouter = router({
         }
         await walletMetadata.save({
           id,
-          name: input.name,
+          name: walletName,
           type: 'mnemonic',
-          activeAccounts: [account],
+          accounts: [account],
+          selectedAccountAddress: account.address,
         })
         return {
           // note: reference and store accounts with
           id,
+          name: walletName,
           mnemonic,
         }
       }),
@@ -142,12 +154,14 @@ const apiRouter = router({
       .input(
         z.object({
           mnemonic: z.string(),
-          name: z.string(),
-          password: z.string(),
+          name: z.string().optional(),
+          password: z.string().optional(),
         }),
       )
       .mutation(async ({ input, ctx }) => {
         const { walletCore, session } = ctx
+        const walletCount = (await walletMetadata.getAll()).length
+        const walletName = input.name ?? `Wallet ${walletCount + 1}`
         const id = crypto.randomUUID()
         const account = deriveAccount(
           walletCore,
@@ -159,6 +173,9 @@ const apiRouter = router({
         if (await hasVault()) {
           await session.addWalletToVault(id, 'mnemonic', input.mnemonic)
         } else {
+          if (!input.password) {
+            throw new Error('Password is required to import the first wallet')
+          }
           await encryptAndStore(input.password, {
             wallets: { [id]: { type: 'mnemonic', secret: input.mnemonic } },
           })
@@ -166,11 +183,12 @@ const apiRouter = router({
         }
         await walletMetadata.save({
           id,
-          name: input.name,
+          name: walletName,
           type: 'mnemonic',
-          activeAccounts: [account],
+          accounts: [account],
+          selectedAccountAddress: account.address,
         })
-        return { id, mnemonic: input.mnemonic }
+        return { id, name: walletName, mnemonic: input.mnemonic }
       }),
 
     account: router({
@@ -179,7 +197,7 @@ const apiRouter = router({
         .query(async ({ input }) => {
           const wallet = await walletMetadata.get(input.walletId)
           if (!wallet) throw new Error('Wallet not found')
-          return wallet.activeAccounts
+          return wallet.accounts
         }),
 
       ethereum: router({
@@ -196,7 +214,7 @@ const apiRouter = router({
             if (!wallet) throw new Error('Wallet not found')
             const mnemonic = await ctx.session.getMnemonic(input.walletId)
             const index = deriveNextAccountIndex(
-              wallet.activeAccounts,
+              wallet.accounts,
               walletCore.CoinType.ethereum.value,
             )
             const account = deriveAccount(
@@ -227,7 +245,7 @@ const apiRouter = router({
             const { walletCore } = ctx
             const wallet = await walletMetadata.get(input.walletId)
             if (!wallet) throw new Error('Wallet not found')
-            const account = wallet.activeAccounts.find(
+            const account = wallet.accounts.find(
               a => a.address === input.fromAddress,
             )
             if (!account) throw new Error('From address not found')
@@ -272,7 +290,7 @@ const apiRouter = router({
             const { walletCore } = ctx
             const wallet = await walletMetadata.get(input.walletId)
             if (!wallet) throw new Error('Wallet not found')
-            const account = wallet.activeAccounts.find(
+            const account = wallet.accounts.find(
               a => a.address === input.fromAddress,
             )
             if (!account) throw new Error('From address not found')
@@ -318,7 +336,7 @@ const apiRouter = router({
             const { walletCore } = ctx
             const wallet = await walletMetadata.get(input.walletId)
             if (!wallet) throw new Error('Wallet not found')
-            const account = wallet.activeAccounts.find(
+            const account = wallet.accounts.find(
               a => a.address === input.fromAddress,
             )
             if (!account) throw new Error('From address not found')
@@ -360,7 +378,7 @@ const apiRouter = router({
             const { walletCore } = ctx
             const wallet = await walletMetadata.get(input.walletId)
             if (!wallet) throw new Error('Wallet not found')
-            const account = wallet.activeAccounts.find(
+            const account = wallet.accounts.find(
               a => a.address === input.fromAddress,
             )
             if (!account) throw new Error('From address not found')
@@ -405,7 +423,7 @@ const apiRouter = router({
             const { walletCore } = ctx
             const wallet = await walletMetadata.get(input.walletId)
             if (!wallet) throw new Error('Wallet not found')
-            const account = wallet.activeAccounts.find(
+            const account = wallet.accounts.find(
               a => a.address === input.fromAddress,
             )
             if (!account) throw new Error('From address not found')
@@ -493,7 +511,7 @@ const apiRouter = router({
             const { walletCore } = ctx
             const wallet = await walletMetadata.get(input.walletId)
             if (!wallet) throw new Error('Wallet not found')
-            const account = wallet.activeAccounts.find(
+            const account = wallet.accounts.find(
               a => a.address === input.fromAddress,
             )
             if (!account) throw new Error('From address not found')
@@ -528,7 +546,7 @@ const apiRouter = router({
             if (!wallet) throw new Error('Wallet not found')
             const mnemonic = await ctx.session.getMnemonic(input.walletId)
             const index = deriveNextAccountIndex(
-              wallet.activeAccounts,
+              wallet.accounts,
               walletCore.CoinType.solana.value,
             )
             const account = deriveAccount(
@@ -556,7 +574,7 @@ const apiRouter = router({
             const { walletCore } = ctx
             const wallet = await walletMetadata.get(input.walletId)
             if (!wallet) throw new Error('Wallet not found')
-            const account = wallet.activeAccounts.find(
+            const account = wallet.accounts.find(
               a => a.address === input.fromAddress,
             )
             if (!account) throw new Error('From address not found')
@@ -592,7 +610,7 @@ const apiRouter = router({
 
             const mnemonic = await ctx.session.getMnemonic(input.walletId)
             const index = deriveNextAccountIndex(
-              wallet.activeAccounts,
+              wallet.accounts,
               walletCore.CoinType.cardano.value,
             )
             const account = deriveAccount(
@@ -614,12 +632,14 @@ const apiRouter = router({
       .input(
         z.object({
           privateKey: z.string(),
-          name: z.string(),
+          name: z.string().optional(),
           password: z.string(),
         }),
       )
       .mutation(async ({ input, ctx }) => {
         const { walletCore, session } = ctx
+        const walletCount = (await walletMetadata.getAll()).length
+        const walletName = input.name ?? `Wallet ${walletCount + 1}`
         const hex = input.privateKey.replace(/^0x/, '')
         const keyBytes = walletCore.HexCoding.decode(hex)
         const pk = walletCore.PrivateKey.createWithData(keyBytes)
@@ -645,9 +665,10 @@ const apiRouter = router({
         }
         await walletMetadata.save({
           id,
-          name: input.name,
+          name: walletName,
           type: 'privateKey',
-          activeAccounts: [account],
+          accounts: [account],
+          selectedAccountAddress: account.address,
         })
         return {
           // reference stored (single) account
