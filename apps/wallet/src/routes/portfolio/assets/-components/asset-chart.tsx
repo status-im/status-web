@@ -35,6 +35,8 @@ const getTimeFrameDays = (timeFrame: string): string => {
 }
 
 const NETWORKS = ['ethereum'] as const
+const CHART_QUERY_STALE_TIME_MS = 60_000 // 1 minute
+const CHART_QUERY_GC_TIME_MS = 60 * CHART_QUERY_STALE_TIME_MS // 1 hour
 
 function AssetChart({
   address,
@@ -94,8 +96,8 @@ function AssetChart({
       return body.result.data.json
     },
     enabled: activeDataType === 'price' || activeDataType === 'value',
-    staleTime: 60_000, // 1 minute
-    gcTime: 60 * 60 * 1000, // 1 hour
+    staleTime: CHART_QUERY_STALE_TIME_MS,
+    gcTime: CHART_QUERY_GC_TIME_MS,
   })
 
   const balanceChart = useQuery<ApiOutput['assets']['tokenBalanceChart']>({
@@ -135,8 +137,8 @@ function AssetChart({
       return body.result.data.json
     },
     enabled: activeDataType === 'balance' || activeDataType === 'value',
-    staleTime: 60_000, // 1 minute
-    gcTime: 60 * 60 * 1000, // 1 hour
+    staleTime: CHART_QUERY_STALE_TIME_MS,
+    gcTime: CHART_QUERY_GC_TIME_MS,
   })
 
   const valueChartData = useValueChartData({
