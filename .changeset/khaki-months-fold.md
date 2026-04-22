@@ -1,7 +1,6 @@
 ---
 '@status-im/wallet': patch
-'status.app': patch
 'wallet': patch
 ---
 
-feat: connect wallet to dApp
+feat(wallet): implement multi-wallets

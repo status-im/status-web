@@ -327,10 +327,11 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
       <Button
         size="40"
         onClick={handleClick}
-        disabled={isDisabled}
+        disabled={true}
         className="mt-auto w-full justify-center lg:w-fit"
       >
-        {isDisabled ? t('vault.coming_soon') : t('vault.deposit')}
+        {/*{isDisabled ? t('vault.coming_soon') : t('vault.deposit')}*/}
+        {t('vault.campaign_deposit_stopped')}
       </Button>
     </div>
   )
