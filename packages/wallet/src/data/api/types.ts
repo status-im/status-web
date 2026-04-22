@@ -10,4 +10,8 @@ export type { ApiInput, ApiOutput, ApiRouter }
 
 export type NetworkType = 'ethereum'
 
+export const NETWORK_TO_CHAIN_ID: Record<NetworkType, number> = {
+  ethereum: 1,
+}
+
 export type { Activity, Collectible }
