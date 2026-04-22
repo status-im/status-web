@@ -32,6 +32,7 @@
       "~components/*": ["./src/app/_components/*"],
       "~hooks/*": ["./src/app/_hooks/*"],
       "~constants/*": ["./src/app/_constants/*"],
+      "~providers/*": ["./src/app/_providers/*"],
       "~services/*": ["./src/app/_services/*"],
       "~utils/*": ["./src/utils/*"],
       "~types/*": ["./src/types/*"],

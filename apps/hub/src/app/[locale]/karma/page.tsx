@@ -8,6 +8,7 @@ import { formatEther } from 'viem/utils'
 
 import { HubLayout } from '~components/hub-layout'
 import {
+  BringIDVerifyCard,
   KarmaSourceCard,
   KarmaSourceCardSkeleton,
   KarmaStakeCard,
@@ -99,6 +100,12 @@ function KarmaCards() {
           {karmaSources.map(source => (
             <KarmaSourceCard key={source.title} {...source} />
           ))}
+          <BringIDVerifyCard
+            onComplete={async () => {
+              refetch()
+              rewardsRefetch()
+            }}
+          />
           <KarmaStakeCard />
         </div>
       </div>
