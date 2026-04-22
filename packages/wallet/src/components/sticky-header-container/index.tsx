@@ -30,8 +30,8 @@ const backgroundStyles = cva(
 const leftSlotStyles = cva('transition-opacity duration-100 ease-in-out', {
   variants: {
     collapsed: {
-      false: 'opacity-[0]',
-      true: 'opacity-[1]',
+      false: 'pointer-events-none opacity-[0]',
+      true: 'pointer-events-auto opacity-[1]',
     },
   },
 })
@@ -65,6 +65,14 @@ type Props = {
 
 const SMALL_THRESHOLD = 42
 const LARGE_THRESHOLD = 132
+
+const getFocusGuard =
+  (isVisible: boolean): React.FocusEventHandler<HTMLDivElement> =>
+  event => {
+    if (isVisible) return
+    if (!(event.target instanceof HTMLElement)) return
+    event.target.blur()
+  }
 
 const StickyHeaderContainer = (props: Props) => {
   const {
@@ -126,10 +134,23 @@ const StickyHeaderContainer = (props: Props) => {
         )}
       >
         <div className="flex items-center justify-between">
-          <div className={leftSlotStyles({ collapsed })}>{leftSlot}</div>
-          <div className={rightSlotStyles({ showRightSlot })}>{rightSlot}</div>
+          <div
+            className={leftSlotStyles({ collapsed })}
+            onFocusCapture={getFocusGuard(collapsed)}
+          >
+            {leftSlot}
+          </div>
+          <div
+            className={rightSlotStyles({ showRightSlot })}
+            onFocusCapture={getFocusGuard(showRightSlot)}
+          >
+            {rightSlot}
+          </div>
         </div>
-        <div className={secondaryLeftSlotStyles({ showSecondaryLeftSlot })}>
+        <div
+          className={secondaryLeftSlotStyles({ showSecondaryLeftSlot })}
+          onFocusCapture={getFocusGuard(showSecondaryLeftSlot)}
+        >
           {secondaryLeftSlot}
         </div>
       </div>
