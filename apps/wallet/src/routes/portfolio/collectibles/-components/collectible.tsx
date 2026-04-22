@@ -1,26 +1,41 @@
-import { useEffect } from 'react'
+import { useState } from 'react'
 
-import { Button, useToast } from '@status-im/components'
+import { Button } from '@status-im/components'
 import {
   ArrowLeftIcon,
   ExternalIcon,
   // OptionsIcon,
   SadIcon,
+  SendBlurIcon,
 } from '@status-im/icons/20'
 import { OpenseaIcon } from '@status-im/icons/social'
 import {
   CollectibleSkeleton,
   // CurrencyAmount,
   NetworkLogo,
+  SendCollectiblesModal,
+  shortenAddress,
 } from '@status-im/wallet/components'
-import { ERROR_MESSAGES } from '@status-im/wallet/constants'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 
-import { truncateAddress } from '@/lib/tx-helpers'
+import { useEthBalance } from '@/hooks/use-eth-balance'
+import { apiClient } from '@/providers/api-client'
+import { usePassword } from '@/providers/password-context'
+import { usePendingTransactions } from '@/providers/pending-transactions-context'
+import { useWallet } from '@/providers/wallet-context'
 
+import { useCollectible } from '../-hooks/use-collectible'
 import { CardDetail } from './card-detail'
+import { CollectibleTraits } from './collectible-traits'
+import {
+  extractTxHash,
+  fetchErc1155Balance,
+  fetchNftGasFees,
+  isSupportedNftStandard,
+} from './nft-helpers'
 
+import type { SendCollectibleParams } from '@status-im/wallet/components'
 import type { NetworkType } from '@status-im/wallet/data'
 
 type Props = {
@@ -32,53 +47,119 @@ type Props = {
 const Collectible = (props: Props) => {
   const { network, contract, id } = props
 
-  const toast = useToast()
+  const { currentWallet, currentAccount } = useWallet()
+  const address = currentAccount?.address
 
-  const {
-    data: collectible,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['collectible', network, contract, id],
-    queryFn: async () => {
-      const url = new URL(
-        `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/collectibles.collectible`,
-      )
-      url.searchParams.set(
-        'input',
-        JSON.stringify({
-          json: {
-            contract,
-            tokenId: id,
-            network,
-          },
-        }),
-      )
+  const { hasActiveSession, requestPassword } = usePassword()
+  const { addPendingTransaction } = usePendingTransactions()
+  const queryClient = useQueryClient()
 
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+  const [gasInput, setGasInput] = useState<{
+    to: string
+    amount?: string
+  } | null>(null)
 
-      if (!response.ok) {
-        throw new Error(response.statusText, { cause: response.status })
-      }
+  const { data: collectible, isLoading } = useCollectible(network, contract, id)
 
-      const body = await response.json()
-      return body.result.data.json
-    },
-    staleTime: 15 * 1000, // 15 seconds
-    gcTime: 60 * 60 * 1000, // 1 hour
+  const isErc1155 = collectible?.standard === 'ERC1155'
+
+  const gasFeeQuery = useQuery({
+    queryKey: [
+      'nft-gas-fees',
+      address,
+      gasInput?.to,
+      gasInput?.amount,
+      contract,
+      id,
+      collectible?.standard,
+      network,
+    ],
+    queryFn: () =>
+      fetchNftGasFees({
+        from: address!,
+        to: gasInput!.to,
+        contractAddress: contract,
+        tokenId: id,
+        standard: collectible!.standard,
+        network,
+        amount: gasInput?.amount,
+      }),
+    enabled: !!gasInput && !!address && !!collectible,
   })
 
-  // Show error toast if fetching fails
-  useEffect(() => {
-    if (isError) {
-      toast.negative(ERROR_MESSAGES.COLLECTIBLE_INFO)
+  const erc1155BalanceQuery = useQuery({
+    queryKey: ['erc1155-balance', network, contract, id, address],
+    queryFn: () =>
+      fetchErc1155Balance({
+        owner: address!,
+        contract,
+        tokenId: id,
+        network,
+      }),
+    enabled: isErc1155 && !!address,
+  })
+
+  const ethBalanceQuery = useEthBalance(address ?? '', !!address)
+  const ethBalance = ethBalanceQuery.data?.summary.total_balance ?? 0
+
+  const handleEstimateGas = (to: string, amount?: string) => {
+    setGasInput({ to, amount })
+  }
+
+  const handleSend = async (params: SendCollectibleParams) => {
+    const result =
+      await apiClient.wallet.account.ethereum.sendContractCall.mutate({
+        walletId: currentWallet!.id,
+        fromAddress: address!,
+        toAddress: params.contractAddress,
+        gasLimit: params.gasLimit,
+        maxFeePerGas: params.maxFeePerGas,
+        maxInclusionFeePerGas: params.maxInclusionFeePerGas,
+        data: params.encodedData,
+        value: '0',
+      })
+
+    const txid = result.id?.txid
+    if (!txid) throw new Error('Failed to send NFT')
+
+    if (
+      typeof txid === 'object' &&
+      'error' in txid &&
+      typeof txid.error === 'string'
+    ) {
+      throw new Error(txid.error)
     }
-  }, [isError, toast])
+
+    const txHash = extractTxHash(txid)
+    if (!txHash) throw new Error('Transaction hash not found')
+
+    addPendingTransaction({
+      hash: txHash,
+      from: address!,
+      to: params.to,
+      value: 0,
+      asset: collectible?.displayName ?? '',
+      network,
+      status: 'pending',
+      category: 'external',
+      blockNum: '0',
+      metadata: { blockTimestamp: new Date().toISOString() },
+      rawContract: { value: '0', address: contract, decimal: '0' },
+      eurRate: 0,
+    })
+  }
+
+  const handleSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ['collectibles'] })
+    queryClient.invalidateQueries({
+      queryKey: ['collectible', network, contract, id],
+    })
+    if (isErc1155) {
+      queryClient.invalidateQueries({
+        queryKey: ['erc1155-balance', network, contract, id, address],
+      })
+    }
+  }
 
   if (isLoading || !collectible) {
     return <CollectibleSkeleton />
@@ -114,26 +195,6 @@ const Collectible = (props: Props) => {
               </div>
             </div>
 
-            {/* {collectible.floor_price && collectible.price_eur && (
-              <div className="mb-6 flex items-center gap-1.5">
-                <div className="flex items-center gap-1">
-                  <div className="text-13 font-medium text-neutral-50">
-                    {collectible.floor_price} {collectible.currency}
-                  </div>
-                  <div
-                    className="size-0.5 rounded-full bg-neutral-40"
-                    aria-hidden
-                  />
-                  <div className="text-13 font-medium text-neutral-50">
-                    <CurrencyAmount
-                      value={collectible.price_eur}
-                      format="standard"
-                    />
-                  </div>
-                </div>
-              </div>
-            )} */}
-
             <div className="flex gap-2">
               {collectible?.links?.opensea && (
                 <Button
@@ -146,12 +207,39 @@ const Collectible = (props: Props) => {
                   View on OpenSea
                 </Button>
               )}
-              {/* <Button
-                size="32"
-                variant="outline"
-                icon={<OptionsIcon />}
-                aria-label="More options"
-              /> */}
+              {isSupportedNftStandard(collectible.standard) &&
+                address &&
+                currentWallet?.id && (
+                  <SendCollectiblesModal
+                    standard={collectible.standard}
+                    displayName={collectible.displayName}
+                    collectibleImage={
+                      collectible.thumbnail || collectible.image || undefined
+                    }
+                    fromAddress={address}
+                    accountName={currentWallet.name || 'Account 1'}
+                    network={network}
+                    contract={contract}
+                    tokenId={id}
+                    balance={erc1155BalanceQuery.data}
+                    gasFees={gasFeeQuery.data}
+                    isFetchingFees={gasFeeQuery.isFetching}
+                    onEstimateGas={handleEstimateGas}
+                    ethBalance={ethBalance}
+                    onSend={handleSend}
+                    onSuccess={handleSuccess}
+                    hasActiveSession={hasActiveSession}
+                    requestPassword={requestPassword}
+                  >
+                    <Button
+                      size="32"
+                      variant="outline"
+                      iconBefore={<SendBlurIcon />}
+                    >
+                      Send
+                    </Button>
+                  </SendCollectiblesModal>
+                )}
             </div>
           </div>
         </div>
@@ -193,7 +281,7 @@ const Collectible = (props: Props) => {
                   href={`https://etherscan.io/address/${collectible.contract}`}
                 >
                   <div className="font-mono">
-                    {truncateAddress(collectible.contract)}
+                    {shortenAddress(collectible.contract)}
                   </div>
                 </CardDetail>
                 <CardDetail title="Token Standard">
@@ -215,41 +303,10 @@ const Collectible = (props: Props) => {
         aria-hidden="true"
       />
 
-      {collectible.traits && Object.keys(collectible.traits).length > 0 && (
-        <div>
-          <div className="mb-3 text-15 font-semibold text-neutral-100">
-            Traits
-          </div>
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(155px,1fr))] gap-3">
-            {Object.entries(collectible.traits as Record<string, unknown>)
-              .filter(([, value]) => {
-                if (typeof value === 'object' && value !== null) {
-                  const valueObj = value as Record<string, unknown>
-                  if ('parent' in valueObj && 'child' in valueObj) {
-                    return false
-                  }
-                }
-                return true
-              })
-              .map(([trait, value], index) => {
-                let displayValue: string
-
-                if (typeof value === 'object' && value !== null) {
-                  displayValue = JSON.stringify(value)
-                } else {
-                  displayValue = String(value)
-                }
-
-                return (
-                  <CardDetail key={index} title={trait}>
-                    <div className="text-13 font-medium text-neutral-100">
-                      {displayValue}
-                    </div>
-                  </CardDetail>
-                )
-              })}
-          </div>
-        </div>
+      {collectible.traits && (
+        <CollectibleTraits
+          traits={collectible.traits as Record<string, unknown>}
+        />
       )}
     </div>
   )
