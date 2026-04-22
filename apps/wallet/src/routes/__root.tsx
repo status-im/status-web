@@ -9,6 +9,7 @@ import {
 } from '@tanstack/react-router'
 
 import { Link } from '../components/link'
+import { useNotificationPermissionCheck } from '../hooks/use-notification-permission-check'
 import { apiClient } from '../providers/api-client'
 import { PasswordProvider } from '../providers/password-context'
 import { PendingTransactionsProvider } from '../providers/pending-transactions-context'
@@ -45,6 +46,14 @@ export const Route = createRootRouteWithContext<{
       }
 
       if (location.pathname.startsWith('/portfolio') && !hasWallets) {
+        throw redirect({ to: '/onboarding' })
+      }
+
+      if (location.pathname.startsWith('/settings') && !hasWallets) {
+        throw redirect({ to: '/onboarding' })
+      }
+
+      if (location.pathname.startsWith('/wallet-flow') && !hasWallets) {
         throw redirect({ to: '/onboarding' })
       }
 
@@ -127,6 +136,8 @@ export const Route = createRootRouteWithContext<{
 })
 
 function RootComponent() {
+  useNotificationPermissionCheck()
+
   return (
     <>
       <HeadContent />
@@ -138,7 +149,11 @@ function RootComponent() {
               <WagmiConfigProvider>
                 <PendingTransactionsProvider>
                   <div className="flex min-h-[56px] items-center px-2">
-                    <Navbar hasFeedback linkComponent={Link} />
+                    <Navbar
+                      hasFeedback
+                      linkComponent={Link}
+                      settingsHref="/settings"
+                    />
                   </div>
                   <div className="px-1">
                     <div className="flex-1 flex-col 2md:flex xl:pb-1">

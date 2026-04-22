@@ -10,6 +10,8 @@ import { type Address, createPublicClient, type Hex, http } from 'viem'
 import { mainnet } from 'viem/chains'
 import { formatEther } from 'viem/utils'
 
+import { extractTxHash } from '@/lib/tx-helpers'
+
 import { apiClient } from './api-client'
 import { usePassword } from './password-context'
 import { useWallet } from './wallet-context'
@@ -32,6 +34,8 @@ type SignerContextValue = {
   requestUnlock: () => Promise<boolean>
 }
 
+const DEFAULT_ACCOUNT_NAME = 'Account 1'
+
 const SignerContext = createContext<SignerContextValue | undefined>(undefined)
 
 export function useWalletSigner() {
@@ -43,13 +47,17 @@ export function useWalletSigner() {
 }
 
 export function SignerProvider({ children }: { children: React.ReactNode }) {
-  const { currentWallet } = useWallet()
+  const { currentWallet, currentAccount } = useWallet()
   const { hasActiveSession, requestPassword, clearSession } = usePassword()
 
-  const address = currentWallet?.activeAccounts[0]?.address as
-    | Address
-    | undefined
-  const accountName = currentWallet?.name ?? 'Account 1'
+  const address = useMemo(() => {
+    return currentAccount?.address as Address | undefined
+  }, [currentAccount])
+
+  const accountName = useMemo(() => {
+    // TODO: Use currently selected account name instead when multi-account support is implemented.
+    return currentWallet?.name ?? DEFAULT_ACCOUNT_NAME
+  }, [currentWallet])
 
   useEffect(() => {
     if (address) {
@@ -188,22 +196,6 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
           })
           gasLimit = (estimatedGas + estimatedGas / 10n).toString(16)
         }
-      }
-
-      const extractTxHash = (id: unknown): string | undefined => {
-        if (typeof id === 'string') {
-          return id
-        }
-        if (id && typeof id === 'object') {
-          const obj = id as Record<string, unknown>
-          if ('result' in obj && typeof obj.result === 'string') {
-            return obj.result
-          }
-          if ('txid' in obj) {
-            return obj.txid as string
-          }
-        }
-        return undefined
       }
 
       if (tx.data) {

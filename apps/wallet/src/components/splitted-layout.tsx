@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 
-import { Avatar, Skeleton, Tag } from '@status-im/components'
+import { Skeleton } from '@status-im/components'
 import {
   Balance,
   StickyHeaderContainer,
@@ -12,6 +12,7 @@ import { useWallet } from '@/providers/wallet-context'
 
 import { ActionButtons } from '../components/action-buttons'
 import { RecoveryPhraseBackup } from '../components/recovery-phrase-backup'
+import { WalletSelector } from '../components/wallet-selector'
 import {
   AccountSkeleton,
   ActionButtonsSkeleton,
@@ -101,38 +102,14 @@ export default SplittedLayout
 // Components
 const AccountInfo = () => {
   const { account, isWalletLoading } = usePortfolio()
-  const { currentWallet } = useWallet()
-  const isWatchOnly = currentWallet?.type === 'hardware-qr'
 
   if (isWalletLoading) {
     return <AccountSkeleton variant="secondary" />
   }
 
   return (
-    <div
-      className="hidden items-center gap-1.5 xl:flex"
-      data-customisation={account.color}
-    >
-      <Avatar
-        type="account"
-        name={account.name}
-        emoji={account.emoji}
-        size="24"
-        bgOpacity="20"
-      />
-      <div className="flex items-center gap-2">
-        <div className="text-15 font-semibold text-neutral-100">
-          {account.name}
-        </div>
-        {isWatchOnly && (
-          <Tag
-            size="24"
-            label="Watch only"
-            aria-label="Watch-only wallet"
-            className="border-neutral-20 bg-neutral-5 text-neutral-50 hover:border-neutral-30"
-          />
-        )}
-      </div>
+    <div data-customisation={account.color}>
+      <WalletSelector />
     </div>
   )
 }
@@ -200,9 +177,9 @@ const MainContentBody = ({
   hideAssetsBelowOneToggle?: HideAssetsBelowOneToggle
 }) => {
   const { account, isLoading } = usePortfolio()
-  const { currentWallet, isLoading: isWalletLoading } = useWallet()
+  const { currentAccount, isLoading: isWalletLoading } = useWallet()
 
-  const address = currentWallet?.activeAccounts[0].address
+  const address = currentAccount?.address
 
   if (isLoading || isWalletLoading) {
     return (

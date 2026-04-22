@@ -61,6 +61,14 @@ export {
   SendAssetsModal,
   type SendAssetsModalProps,
 } from './send-assets-modal'
+export {
+  type CollectibleGasFees,
+  encodeNftTransfer,
+  extractTxHash,
+  isSupportedNftStandard,
+  type SendCollectibleParams,
+  SendCollectiblesModal,
+} from './send-collectibles-modal'
 export { SettingsPopover } from './settings-popover'
 export {
   ShortenAddress,

@@ -985,6 +985,22 @@ export async function getFeeRate(
 
   let gasEstimate, maxPriorityFee, latestBlock, feeHistory, ethPriceData
 
+  const getErrorMessage = (error: unknown) => {
+    if (error instanceof Error) {
+      return error.message
+    }
+
+    if (typeof error === 'string') {
+      return error
+    }
+
+    if (typeof error === 'object' && error !== null && 'message' in error) {
+      return String(error.message)
+    }
+
+    return null
+  }
+
   try {
     ;[gasEstimate, maxPriorityFee, latestBlock, feeHistory, ethPriceData] =
       await Promise.all([
@@ -1052,7 +1068,9 @@ export async function getFeeRate(
       ])
   } catch (error) {
     console.error('Failed to fetch fee rate:', error)
-    throw new Error('Failed to fetch fee rate.', { cause: error })
+    throw new Error(getErrorMessage(error) || 'Failed to fetch fee rate.', {
+      cause: error,
+    })
   }
 
   const baseFeeHex = latestBlock?.result?.baseFeePerGas
@@ -1228,6 +1246,10 @@ async function _fetch<T extends ResponseBody>(
         markApiKeyAsRateLimited(apiKey)
       }
     }
+
+    throw new Error(error.message || 'RPC request failed.', {
+      cause: error.code,
+    })
   } else {
     const apiKey = extractAlchemyApiKey(url)
     if (apiKey) {

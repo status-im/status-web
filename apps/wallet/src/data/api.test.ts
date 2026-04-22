@@ -148,12 +148,13 @@ test('should import hardware wallet metadata', async () => {
         id: importedWallet.id,
         name: 'Keystone Wallet',
         type: 'hardware-qr',
-        activeAccounts: expect.arrayContaining([
+        accounts: expect.arrayContaining([
           expect.objectContaining({
             address: '0x1234567890abcdef1234567890abcdef12345678',
             derivationPath: "m/44'/60'/0'/0/7",
           }),
         ]),
+        selectedAccountAddress: '0x1234567890abcdef1234567890abcdef12345678',
         hardware: expect.objectContaining({
           vendor: 'Keystone',
           publicKey: 'xpub661MyMwAqRbcF7FakePublicKey',
