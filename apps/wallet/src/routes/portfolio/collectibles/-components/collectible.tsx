@@ -47,8 +47,8 @@ type Props = {
 const Collectible = (props: Props) => {
   const { network, contract, id } = props
 
-  const { currentWallet } = useWallet()
-  const address = currentWallet?.activeAccounts[0]?.address
+  const { currentWallet, currentAccount } = useWallet()
+  const address = currentAccount?.address
 
   const { hasActiveSession, requestPassword } = usePassword()
   const { addPendingTransaction } = usePendingTransactions()
