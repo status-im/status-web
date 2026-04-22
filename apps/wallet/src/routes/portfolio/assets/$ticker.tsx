@@ -21,7 +21,11 @@ export const Route = createFileRoute('/portfolio/assets/$ticker')({
 })
 
 function Component() {
-  const { currentWallet, isLoading: isWalletLoading } = useWallet()
+  const {
+    currentWallet,
+    currentAccount,
+    isLoading: isWalletLoading,
+  } = useWallet()
   const isDesktop = useMediaQuery('xl')
 
   const params = Route.useParams()
@@ -29,7 +33,7 @@ function Component() {
   const router = useRouter()
   const routerState = useRouterState()
   const pathname = routerState.location.pathname
-  const address = currentWallet?.activeAccounts[0].address
+  const address = currentAccount?.address
 
   const { data: assets, isLoading } = useAssets({
     address,

@@ -13,12 +13,11 @@ export const useImportWallet = () => {
       password,
     }: {
       mnemonic: string
-      password: string
+      password?: string
     }) => {
-      await api.wallet.import.mutate({
+      return api.wallet.import.mutate({
         mnemonic,
         password,
-        name: 'Account 1',
       })
     },
     onSuccess: () => {

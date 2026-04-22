@@ -66,19 +66,18 @@ async function migrateFromLegacy(
     try {
       const secret = (await keyStore.export(w.id, password)) as string
       secrets.wallets[w.id] = { type: 'mnemonic', secret }
-      const activeAccounts: WalletAccount[] = (w.activeAccounts ?? []).map(
-        a => ({
-          address: a.address,
-          coin: a.coin ?? 60,
-          derivationPath: a.derivationPath ?? FALLBACK_DERIVATION_PATH,
-          derivation: a.derivation ?? 0,
-        }),
-      )
+      const accounts: WalletAccount[] = (w.activeAccounts ?? []).map(a => ({
+        address: a.address,
+        coin: a.coin ?? 60,
+        derivationPath: a.derivationPath ?? FALLBACK_DERIVATION_PATH,
+        derivation: a.derivation ?? 0,
+      }))
       await walletMetadata.save({
         id: w.id,
         name: w.name,
         type: 'mnemonic',
-        activeAccounts,
+        accounts,
+        selectedAccountAddress: accounts[0]?.address,
       })
       await keyStore.delete(w.id, password)
     } catch (err) {

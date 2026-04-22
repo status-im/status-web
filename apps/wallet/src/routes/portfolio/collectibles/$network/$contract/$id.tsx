@@ -25,7 +25,11 @@ export const Route = createFileRoute(
 })
 
 function Component() {
-  const { currentWallet, isLoading: isWalletLoading } = useWallet()
+  const {
+    currentWallet,
+    currentAccount,
+    isLoading: isWalletLoading,
+  } = useWallet()
 
   const routerState = useRouterState()
   const params = Route.useParams()
@@ -37,7 +41,7 @@ function Component() {
   const search = searchParams.get('search') ?? undefined
 
   const pathname = routerState.location.pathname
-  const address = currentWallet?.activeAccounts[0].address
+  const address = currentAccount?.address
 
   const {
     data,
