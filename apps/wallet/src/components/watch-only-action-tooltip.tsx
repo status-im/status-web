@@ -13,7 +13,15 @@ const WatchOnlyActionTooltip = ({ children, content, disabled }: Props) => {
 
   return (
     <Tooltip content={content} side="top">
-      <span className="inline-flex">{children}</span>
+      <span
+        role="button"
+        tabIndex={0}
+        aria-disabled="true"
+        aria-label={typeof content === 'string' ? content : undefined}
+        className="inline-flex"
+      >
+        {children}
+      </span>
     </Tooltip>
   )
 }

@@ -7,6 +7,7 @@ import {
   type ImportRecoveryPhraseFormValues,
 } from '@status-im/wallet/components'
 
+import { Link } from '@/components/link'
 import { useImportWallet } from '@/hooks/use-import-wallet'
 import { useWalletFlowSuccess } from '@/hooks/use-wallet-flow-success'
 import { usePassword } from '@/providers/password-context'
@@ -154,12 +155,12 @@ function ImportMnemonicStep({
 
       {hardwareWalletHref && (
         <div className="mt-3 text-center">
-          <a
+          <Link
             href={hardwareWalletHref}
             className="text-13 text-customisation-blue-50 hover:underline"
           >
             Use a hardware wallet instead
-          </a>
+          </Link>
         </div>
       )}
     </div>

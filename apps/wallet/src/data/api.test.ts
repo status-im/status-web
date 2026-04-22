@@ -1,3 +1,4 @@
+import { getAddress } from 'viem'
 import { afterEach, beforeEach, expect, test, vi } from 'vitest'
 
 import { createAPI, createAPIClient } from './api'
@@ -127,6 +128,9 @@ test('should get wallet', async () => {
 test('should import hardware wallet metadata', async () => {
   await createAPI()
   const apiClient = createAPIClient()
+  const normalizedAddress = getAddress(
+    '0x1234567890abcdef1234567890abcdef12345678',
+  )
 
   const importedWallet = await apiClient.wallet.importHardware.mutate({
     name: 'Keystone Wallet',
@@ -139,9 +143,7 @@ test('should import hardware wallet metadata', async () => {
 
   const wallets = await apiClient.wallet.all.query()
 
-  expect(importedWallet.address).toBe(
-    '0x1234567890abcdef1234567890abcdef12345678',
-  )
+  expect(importedWallet.address).toBe(normalizedAddress)
   expect(wallets).toEqual(
     expect.arrayContaining([
       expect.objectContaining({
@@ -150,11 +152,11 @@ test('should import hardware wallet metadata', async () => {
         type: 'hardware-qr',
         accounts: expect.arrayContaining([
           expect.objectContaining({
-            address: '0x1234567890abcdef1234567890abcdef12345678',
+            address: normalizedAddress,
             derivationPath: "m/44'/60'/0'/0/7",
           }),
         ]),
-        selectedAccountAddress: '0x1234567890abcdef1234567890abcdef12345678',
+        selectedAccountAddress: normalizedAddress,
         hardware: expect.objectContaining({
           vendor: 'Keystone',
           publicKey: 'xpub661MyMwAqRbcF7FakePublicKey',
@@ -163,4 +165,20 @@ test('should import hardware wallet metadata', async () => {
       }),
     ]),
   )
+}, 7000)
+
+test('should reject invalid hardware wallet metadata', async () => {
+  await createAPI()
+  const apiClient = createAPIClient()
+
+  await expect(
+    apiClient.wallet.importHardware.mutate({
+      name: 'Keystone Wallet',
+      vendor: 'Keystone',
+      address: 'not-an-address',
+      derivationPath: 'not-a-path',
+      publicKey: 'fake public key with spaces',
+      sourceFingerprint: -1,
+    }),
+  ).rejects.toThrow()
 }, 7000)

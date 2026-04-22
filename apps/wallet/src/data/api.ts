@@ -2,6 +2,7 @@ import { createTRPCProxyClient } from '@trpc/client'
 import { initTRPC } from '@trpc/server'
 import superjson from 'superjson'
 import { createChromeHandler } from 'trpc-chrome/adapter'
+import { getAddress, isAddress } from 'viem'
 import {
   signMessage as viemSignMessage,
   signTypedData as viemSignTypedData,
@@ -31,6 +32,31 @@ const createContext = async () => {
 }
 
 type Context = Awaited<ReturnType<typeof createContext>>
+
+const derivationPathSchema = z
+  .string()
+  .trim()
+  .min(1)
+  .max(128)
+  .regex(/^m(\/\d+'?)+$/, 'Invalid derivation path')
+
+const hardwareWalletImportSchema = z.object({
+  name: z.string().trim().min(1).max(80),
+  vendor: z.string().trim().min(1).max(80),
+  address: z
+    .string()
+    .trim()
+    .refine(isAddress, 'Invalid Ethereum address')
+    .transform(value => getAddress(value)),
+  derivationPath: derivationPathSchema,
+  publicKey: z
+    .string()
+    .trim()
+    .min(1)
+    .max(512)
+    .regex(/^\S+$/, 'Invalid public key'),
+  sourceFingerprint: z.number().int().nonnegative().max(0xffffffff).optional(),
+})
 
 async function getSigningKey(
   ctx: Context,
@@ -197,16 +223,7 @@ const apiRouter = router({
       }),
 
     importHardware: procedure
-      .input(
-        z.object({
-          name: z.string().trim().min(1),
-          vendor: z.string().trim().min(1),
-          address: z.string().trim().min(1),
-          derivationPath: z.string().trim().min(1),
-          publicKey: z.string().trim().min(1),
-          sourceFingerprint: z.number().optional(),
-        }),
-      )
+      .input(hardwareWalletImportSchema)
       .mutation(async ({ input, ctx }) => {
         const { walletCore } = ctx
         const id = crypto.randomUUID()
