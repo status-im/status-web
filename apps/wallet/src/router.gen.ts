@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as OnboardingLayoutRouteImport } from './routes/onboarding/_layout'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SettingsIndexRouteImport } from './routes/settings/index'
 import { Route as OnboardingIndexRouteImport } from './routes/onboarding/index'
 import { Route as WalletFlowNewRouteImport } from './routes/wallet-flow/new'
 import { Route as WalletFlowImportRouteImport } from './routes/wallet-flow/import'
@@ -30,6 +31,11 @@ const OnboardingLayoutRoute = OnboardingLayoutRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsIndexRoute = SettingsIndexRouteImport.update({
+  id: '/settings/',
+  path: '/settings/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OnboardingIndexRoute = OnboardingIndexRouteImport.update({
@@ -93,6 +99,7 @@ export interface FileRoutesByFullPath {
   '/wallet-flow/import': typeof WalletFlowImportRoute
   '/wallet-flow/new': typeof WalletFlowNewRoute
   '/onboarding/': typeof OnboardingIndexRoute
+  '/settings': typeof SettingsIndexRoute
   '/portfolio/assets/$ticker': typeof PortfolioAssetsTickerRoute
   '/portfolio/activity': typeof PortfolioActivityIndexRoute
   '/portfolio/assets': typeof PortfolioAssetsIndexRoute
@@ -106,6 +113,7 @@ export interface FileRoutesByTo {
   '/wallet-flow/import': typeof WalletFlowImportRoute
   '/wallet-flow/new': typeof WalletFlowNewRoute
   '/onboarding': typeof OnboardingIndexRoute
+  '/settings': typeof SettingsIndexRoute
   '/portfolio/assets/$ticker': typeof PortfolioAssetsTickerRoute
   '/portfolio/activity': typeof PortfolioActivityIndexRoute
   '/portfolio/assets': typeof PortfolioAssetsIndexRoute
@@ -121,6 +129,7 @@ export interface FileRoutesById {
   '/wallet-flow/import': typeof WalletFlowImportRoute
   '/wallet-flow/new': typeof WalletFlowNewRoute
   '/onboarding/': typeof OnboardingIndexRoute
+  '/settings/': typeof SettingsIndexRoute
   '/portfolio/assets/$ticker': typeof PortfolioAssetsTickerRoute
   '/portfolio/activity/': typeof PortfolioActivityIndexRoute
   '/portfolio/assets/': typeof PortfolioAssetsIndexRoute
@@ -137,6 +146,7 @@ export interface FileRouteTypes {
     | '/wallet-flow/import'
     | '/wallet-flow/new'
     | '/onboarding/'
+    | '/settings'
     | '/portfolio/assets/$ticker'
     | '/portfolio/activity'
     | '/portfolio/assets'
@@ -150,6 +160,7 @@ export interface FileRouteTypes {
     | '/wallet-flow/import'
     | '/wallet-flow/new'
     | '/onboarding'
+    | '/settings'
     | '/portfolio/assets/$ticker'
     | '/portfolio/activity'
     | '/portfolio/assets'
@@ -164,6 +175,7 @@ export interface FileRouteTypes {
     | '/wallet-flow/import'
     | '/wallet-flow/new'
     | '/onboarding/'
+    | '/settings/'
     | '/portfolio/assets/$ticker'
     | '/portfolio/activity/'
     | '/portfolio/assets/'
@@ -174,6 +186,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   OnboardingLayoutRoute: typeof OnboardingLayoutRouteWithChildren
+  SettingsIndexRoute: typeof SettingsIndexRoute
   WalletFlowImportRoute: typeof WalletFlowImportRoute
   WalletFlowNewRoute: typeof WalletFlowNewRoute
   PortfolioAssetsTickerRoute: typeof PortfolioAssetsTickerRoute
@@ -197,6 +210,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings/': {
+      id: '/settings/'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/onboarding/': {
@@ -290,6 +310,7 @@ const OnboardingLayoutRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   OnboardingLayoutRoute: OnboardingLayoutRouteWithChildren,
+  SettingsIndexRoute: SettingsIndexRoute,
   WalletFlowImportRoute: WalletFlowImportRoute,
   WalletFlowNewRoute: WalletFlowNewRoute,
   PortfolioAssetsTickerRoute: PortfolioAssetsTickerRoute,
