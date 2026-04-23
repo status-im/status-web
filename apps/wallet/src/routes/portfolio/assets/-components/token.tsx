@@ -44,6 +44,7 @@ import { parseUnits } from 'ethers'
 
 import { useEthBalance } from '@/hooks/use-eth-balance'
 import { renderMarkdown } from '@/lib/markdown'
+import { notifyTransactionSent } from '@/lib/notifications'
 import { apiClient } from '@/providers/api-client'
 import { usePassword } from '@/providers/password-context'
 import { usePendingTransactions } from '@/providers/pending-transactions-context'
@@ -360,11 +361,17 @@ const Token = (props: Props) => {
         throw new Error('Transaction hash not found')
       }
 
+      await notifyTransactionSent(
+        formData.amount,
+        finalTokenDetail.summary.symbol,
+      )
+
       addPendingTransaction({
         hash: txHash,
         from: address,
         to: formData.to,
         value: parseFloat(formData.amount),
+        displayAmount: formData.amount,
         asset: finalTokenDetail.summary.symbol,
         network: 'ethereum',
         status: 'pending',
@@ -380,7 +387,6 @@ const Token = (props: Props) => {
         },
         eurRate: 0,
       })
-
       return txHash
     } else {
       const tokenDecimals = asset.decimals ?? 18
@@ -421,11 +427,17 @@ const Token = (props: Props) => {
         throw new Error('Transaction hash not found')
       }
 
+      await notifyTransactionSent(
+        formData.amount,
+        finalTokenDetail.summary.symbol,
+      )
+
       addPendingTransaction({
         hash: txHash,
         from: address,
         to: formData.to,
         value: parseFloat(formData.amount),
+        displayAmount: formData.amount,
         asset: finalTokenDetail.summary.symbol,
         network: 'ethereum',
         status: 'pending',
