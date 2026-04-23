@@ -1,8 +1,8 @@
 import { ContextTag } from '@status-im/components'
 import { ExternalIcon } from '@status-im/icons/20'
-import { getTransactionHash } from '@status-im/wallet/utils'
 import { cx } from 'class-variance-authority'
 
+import { getTransactionHash } from '../../../utils/transaction-hash'
 import { CurrencyAmount } from '../../currency-amount'
 import { NetworkLogo } from '../../network-logo'
 import { RelativeDate } from '../../relative-date'
