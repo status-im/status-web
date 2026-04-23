@@ -712,6 +712,10 @@
     "disclaimer": {
       "translation": "면책 조항",
       "notes": "rewards::disclaimer"
+    },
+    "predeposit_end": {
+      "translation": "입금 기간이 종료되었습니다. 자산 인출 및 보상 수령은 곧 가능해집니다.",
+      "notes": "rewards::predeposit_end"
     }
   },
   "pre_deposits": {
@@ -800,6 +804,10 @@
     "coming_soon": {
       "translation": "곧 출시 예정",
       "notes": "vault::coming_soon"
+    },
+    "campaign_deposit_stopped": {
+      "translation": "입금 일시 중단",
+      "notes": "vault::campaign_deposit_stopped"
     },
     "deposit_funds": {
       "translation": "자금 예치하기",
