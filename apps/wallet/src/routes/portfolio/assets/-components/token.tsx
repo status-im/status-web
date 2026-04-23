@@ -40,6 +40,8 @@ import { parseUnits } from 'ethers'
 
 import { useEthBalance } from '@/hooks/use-eth-balance'
 import { renderMarkdown } from '@/lib/markdown'
+import { notifyTransactionSent } from '@/lib/notifications'
+import { extractTxHash } from '@/lib/tx-helpers'
 import { apiClient } from '@/providers/api-client'
 import { usePassword } from '@/providers/password-context'
 import { usePendingTransactions } from '@/providers/pending-transactions-context'
@@ -349,18 +351,24 @@ const Token = (props: Props) => {
         throw new Error('Transaction failed')
       }
 
-      const txHash = typeof result.id === 'string' ? result.id : result.id.txid
+      const txHash = extractTxHash(result.id)
 
       if (!txHash) {
         toast.negative(ERROR_MESSAGES.TX_FAILED)
         throw new Error('Transaction hash not found')
       }
 
+      await notifyTransactionSent(
+        formData.amount,
+        finalTokenDetail.summary.symbol,
+      )
+
       addPendingTransaction({
         hash: txHash,
         from: address,
         to: formData.to,
         value: parseFloat(formData.amount),
+        displayAmount: formData.amount,
         asset: finalTokenDetail.summary.symbol,
         network: 'ethereum',
         status: 'pending',
@@ -376,6 +384,7 @@ const Token = (props: Props) => {
         },
         eurRate: 0,
       })
+      return txHash
     } else {
       const tokenDecimals = asset.decimals ?? 18
       const amount = parseUnits(formData.amount, tokenDecimals)
@@ -408,18 +417,24 @@ const Token = (props: Props) => {
         throw new Error('Transaction failed')
       }
 
-      const txHash = typeof result.id === 'string' ? result.id : result.id.txid
+      const txHash = extractTxHash(result.id)
 
       if (!txHash) {
         toast.negative(ERROR_MESSAGES.TX_FAILED)
         throw new Error('Transaction hash not found')
       }
 
+      await notifyTransactionSent(
+        formData.amount,
+        finalTokenDetail.summary.symbol,
+      )
+
       addPendingTransaction({
         hash: txHash,
         from: address,
         to: formData.to,
         value: parseFloat(formData.amount),
+        displayAmount: formData.amount,
         asset: finalTokenDetail.summary.symbol,
         network: 'ethereum',
         status: 'pending',
@@ -435,7 +450,7 @@ const Token = (props: Props) => {
         },
         eurRate: 0,
       })
-      return result.id.txid
+      return txHash
     }
   }
 

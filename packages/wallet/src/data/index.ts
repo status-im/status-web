@@ -12,4 +12,5 @@ export type {
   Collectible,
   NetworkType,
 } from './api/types'
+export { NETWORK_TO_CHAIN_ID } from './api/types'
 export { createAPI } from './trpc/api'
