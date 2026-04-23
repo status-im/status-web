@@ -74,7 +74,10 @@ export function useDepositFlow({
     chainId: vault.chainId,
   })
 
-  const { data: depositLimits } = usePreDepositLimits({ vault })
+  const { data: depositLimits } = usePreDepositLimits({
+    vault,
+    enabled: !isGUSD,
+  })
   const maxDeposit = isGUSD ? undefined : depositLimits?.maxDeposit
   const minDeposit = isGUSD ? undefined : depositLimits?.minDeposit
 

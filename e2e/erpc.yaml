@@ -1,0 +1,46 @@
+logLevel: warn
+
+server:
+  httpHostV4: 0.0.0.0
+  httpPortV4: 4000
+
+database:
+  evmJsonRpcCache:
+    connectors:
+      - id: memory-cache
+        driver: memory
+        memory:
+          maxItems: 1000000
+    policies:
+      # Cache immutable data permanently
+      - network: "evm:1|evm:59144"
+        method: "eth_getCode|eth_getBlockByNumber|eth_getBlockByHash|eth_getTransactionReceipt|eth_chainId"
+        finality: finalized
+        connector: memory-cache
+        ttl: 0
+      # Cache state queries with short TTL
+      - network: "evm:1|evm:59144"
+        method: "eth_getStorageAt|eth_getBalance|eth_getTransactionCount"
+        connector: memory-cache
+        ttl: 60s
+
+projects:
+  - id: main
+    networks:
+      - architecture: evm
+        evm:
+          chainId: 1
+      - architecture: evm
+        evm:
+          chainId: 59144
+    upstreams:
+      - id: mainnet-primary
+        type: evm
+        endpoint: ${MAINNET_FORK_URL}
+        evm:
+          chainId: 1
+      - id: linea-primary
+        type: evm
+        endpoint: ${LINEA_FORK_URL}
+        evm:
+          chainId: 59144

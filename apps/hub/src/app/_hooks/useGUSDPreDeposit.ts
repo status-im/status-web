@@ -3,7 +3,8 @@ import { useMutation, type UseMutationResult } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
 import { parseUnits } from 'viem'
 import { mainnet } from 'viem/chains'
-import { BaseError, useAccount, usePublicClient, useWriteContract } from 'wagmi'
+import { BaseError, useAccount, useConfig, useWriteContract } from 'wagmi'
+import { waitForTransactionReceipt } from 'wagmi/actions'
 
 import {
   GENERIC_DEPOSITOR,
@@ -81,7 +82,7 @@ export const TRANSACTION_CONFIG = {
 export function useGUSDPreDeposit(): UseGUSDPreDepositReturn {
   const { address } = useAccount()
   const { writeContractAsync } = useWriteContract()
-  const publicClient = usePublicClient({ chainId: mainnet.id })
+  const config = useConfig()
   const { send: sendPreDepositEvent } = usePreDepositStateContext()
   const toast = useToast()
   const t = useTranslations()
@@ -104,7 +105,7 @@ export function useGUSDPreDeposit(): UseGUSDPreDepositReturn {
       const remoteRecipient = addressToBytes32(address)
 
       sendPreDepositEvent({
-        type: 'START_APPROVE_TOKEN',
+        type: 'START_PRE_DEPOSIT',
         amount,
       })
 
@@ -116,38 +117,24 @@ export function useGUSDPreDeposit(): UseGUSDPreDepositReturn {
       ] as const
 
       try {
-        const estimatedGas = await publicClient?.estimateContractGas({
-          address: GENERIC_DEPOSITOR.address,
-          abi: GENERIC_DEPOSITOR.abi,
-          functionName: 'depositAndPredeposit',
-          args: contractArgs,
-          account: address,
-        })
-
-        const GAS_LIMIT_MULTIPLIER_PERCENT = 120n
-
-        const gasLimit = estimatedGas
-          ? (estimatedGas * GAS_LIMIT_MULTIPLIER_PERCENT) / 100n
-          : undefined
-
         const hash = await writeContractAsync({
           address: GENERIC_DEPOSITOR.address,
           abi: GENERIC_DEPOSITOR.abi,
           functionName: 'depositAndPredeposit',
           args: contractArgs,
           chainId: mainnet.id,
-          gas: gasLimit,
         })
 
         sendPreDepositEvent({ type: 'EXECUTE' })
         toast.positive(t('vault.transaction_submitted'))
 
-        const receipt = await publicClient?.waitForTransactionReceipt({
+        const receipt = await waitForTransactionReceipt(config, {
           hash,
           confirmations: TRANSACTION_CONFIG.CONFIRMATION_BLOCKS,
+          pollingInterval: 2000,
         })
 
-        if (receipt?.status === 'reverted') {
+        if (receipt.status === 'reverted') {
           throw new Error(t('errors.transaction_reverted'))
         }
 

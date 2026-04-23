@@ -3,6 +3,11 @@ import { NOTIFICATION_TIMEOUTS } from '@constants/timeouts.js'
 import type { MetaMaskPage } from '@pages/metamask/metamask.page.js'
 import type { Page } from '@playwright/test'
 
+/** Minimal EIP-1193 shape for tests (injected `window.ethereum`). */
+type WindowEthereumProvider = {
+  request: (args: { method: string; params?: unknown[] }) => Promise<unknown>
+}
+
 /**
  * Force-switch MetaMask to a specific chain via the hub page.
  *
@@ -15,10 +20,26 @@ export async function switchMetaMaskToChain(
   metamask: MetaMaskPage,
   chainIdHex: string,
 ): Promise<void> {
+  const currentChainId = await hubPage
+    .evaluate(() => {
+      const eth = (window as unknown as Record<string, unknown>).ethereum as
+        | WindowEthereumProvider
+        | undefined
+      return eth?.request({ method: 'eth_chainId' })
+    })
+    .catch(() => null)
+
+  if (currentChainId === chainIdHex) {
+    return
+  }
+
   await metamask.dismissPendingAddNetwork()
 
   await hubPage.evaluate(chainId => {
-    ;(window as any).ethereum
+    const eth = (window as unknown as Record<string, unknown>).ethereum as
+      | WindowEthereumProvider
+      | undefined
+    eth
       ?.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId }],

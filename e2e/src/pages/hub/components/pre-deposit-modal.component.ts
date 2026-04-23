@@ -1,4 +1,8 @@
-import { HUB_TIMEOUTS, NOTIFICATION_TIMEOUTS } from '@constants/timeouts.js'
+import {
+  DEPOSIT_TIMEOUTS,
+  HUB_TIMEOUTS,
+  NOTIFICATION_TIMEOUTS,
+} from '@constants/timeouts.js'
 import { expect, type Locator, type Page } from '@playwright/test'
 
 export class PreDepositModalComponent {
@@ -76,6 +80,50 @@ export class PreDepositModalComponent {
   async expectSwitchNetworkButtonGone(): Promise<void> {
     await expect(this.switchNetworkButton).not.toBeVisible({
       timeout: HUB_TIMEOUTS.PAGE_READY,
+    })
+  }
+
+  /**
+   * Wait for the modal to settle after a network switch.
+   * The hub UI re-renders when wagmi detects a chain change, which can
+   * briefly unmount the action button.
+   */
+  async waitForNetworkReady(): Promise<void> {
+    await expect(this.switchNetworkButton).not.toBeVisible({
+      timeout: NOTIFICATION_TIMEOUTS.OPTIONAL_ELEMENT,
+    })
+    await expect(this.actionButton).toBeVisible({
+      timeout: HUB_TIMEOUTS.PAGE_READY,
+    })
+  }
+
+  async clickActionButton(): Promise<void> {
+    await this.actionButton.click()
+  }
+
+  /** Wait for action button to become enabled and show expected text */
+  async expectActionButtonReady(pattern: RegExp): Promise<void> {
+    await expect(this.actionButton).toBeEnabled({
+      timeout: DEPOSIT_TIMEOUTS.BUTTON_STATE_CHANGE,
+    })
+    await expect(this.actionButton).toHaveText(pattern)
+  }
+
+  /** Open token dropdown and select a token by label (e.g. "Tether USD, USDT") */
+  async selectToken(tokenLabel: string): Promise<void> {
+    const dropdownTrigger = this.dialog
+      .locator('button[type="button"]')
+      .filter({
+        has: this.dialog.page().locator('.text-15'),
+      })
+      .first()
+    await dropdownTrigger.click()
+    await this.dialog.page().getByRole('menuitem', { name: tokenLabel }).click()
+  }
+
+  async expectModalClosed(): Promise<void> {
+    await expect(this.dialog).not.toBeVisible({
+      timeout: DEPOSIT_TIMEOUTS.MODAL_CLOSE,
     })
   }
 }
