@@ -129,17 +129,6 @@ export function encodeNftTransfer(params: {
 export const isSupportedNftStandard = (standard: string) =>
   ['ERC721', 'ERC1155'].includes(standard)
 
-export function extractTxHash(id: unknown): string | undefined {
-  if (typeof id === 'string') return id
-  if (id && typeof id === 'object') {
-    const obj = id as Record<string, unknown>
-    if ('result' in obj && typeof obj['result'] === 'string')
-      return obj['result']
-    if ('txid' in obj) return obj['txid'] as string
-  }
-  return undefined
-}
-
 export type NftSendErrorCode =
   | 'insufficient_funds'
   | 'user_rejected'
