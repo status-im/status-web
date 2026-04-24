@@ -2,7 +2,6 @@ import {
   Avatar,
   Button,
   DropdownMenu,
-  Tag,
   /*Tooltip*/
 } from '@status-im/components'
 import {
@@ -15,6 +14,8 @@ import {
 import { useNavigate } from '@tanstack/react-router'
 
 import { useWallet } from '@/providers/wallet-context'
+
+import { WatchOnlyTag } from './watch-only-tag'
 
 type Props = {
   className?: string
@@ -53,14 +54,7 @@ export function WalletSelector(props: Props) {
           <div className="text-15 font-semibold text-neutral-100">
             {currentWallet.name}
           </div>
-          {isWatchOnly && (
-            <Tag
-              size="24"
-              label="Watch only"
-              aria-label="Watch-only wallet"
-              className="border-neutral-20 bg-neutral-5 text-neutral-50 hover:border-neutral-30"
-            />
-          )}
+          {isWatchOnly && <WatchOnlyTag />}
           {/* TODO: Uncomment to display current account's name
           when multi-account support is implemented */}
           {/* {currentAccount?.address ? (

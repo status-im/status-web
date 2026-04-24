@@ -16,6 +16,7 @@ export default [
         },
       ],
       'no-empty': 'warn',
+      'import/no-unresolved': ['error', { ignore: ['^@qrkit/'] }],
     },
   },
   {
