@@ -18,17 +18,14 @@ import { useGUSDUserBalance } from '~hooks/useGUSDUserBalance'
 import { usePreDepositTVL } from '~hooks/usePreDepositTVL'
 import { usePreDepositTVLInUSD } from '~hooks/usePreDepositTVLInUSD'
 import { useUserVaultDeposit } from '~hooks/useUserVaultDeposit'
-import { useVaultsAPR } from '~hooks/useVaultsAPR'
 
 import {
   DollarIcon,
   GusdIcon,
   KarmaCircleIcon,
-  PercentIcon,
   PlusIcon,
   SumIcon,
 } from './icons'
-import { InfoTooltip } from './info-tooltip'
 import { VaultImage } from './vault-image'
 
 type Props = {
@@ -129,7 +126,6 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
   const { data: gusdTvl, isLoading: isGUSDTvlLoading } = useGUSDTVL()
   const { data: gusdBreakdown, isLoading: isGUSDBreakdownLoading } =
     useGUSDStablecoinBreakdown({ enabled: isGUSD })
-  const { data: aprMap, isLoading: isAprLoading } = useVaultsAPR()
   const { data: depositedBalance, isLoading: isDepositedBalanceLoading } =
     useUserVaultDeposit({ vault, registerRefetch })
   const { data: gusdBalance, isLoading: isGUSDBalanceLoading } =
@@ -144,12 +140,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
 
   const t = useTranslations()
 
-  const vaultAddressLower = vault.address.toLowerCase()
-  const isVaultInApi = aprMap !== undefined && vaultAddressLower in aprMap
-  // If the query inside useVaultsAPR fails, all vaults are disabled even though they might technically work
-  const isDisabled = !isVaultInApi
-  const dynamicApr = aprMap?.[vaultAddressLower]
-  const aprValue = dynamicApr !== undefined ? String(dynamicApr) : null
+  const isDisabled = false
   const rewardsLine = rewards
     .map(reward =>
       reward.startsWith('vault.')
@@ -213,7 +204,6 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
         <div className="flex items-center gap-4">
           <VaultImage vault={icon} network={vault.network} size="56" />
         </div>
-        <InfoTooltip content={t('vault.apr_tooltip')} />
       </div>
 
       <h3 className="mb-2 text-19 font-600 lg:text-27">{vault.name}</h3>
@@ -249,20 +239,6 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
             <KarmaCircleIcon />
           </span>
           <span className="text-neutral-100">KARMA</span>
-        </li>
-        <li className="flex items-center gap-2 text-15">
-          <span className="text-neutral-50">
-            <PercentIcon />
-          </span>
-          {isAprLoading ? (
-            <Skeleton width={120} height={20} className="rounded-6" />
-          ) : (
-            <span>
-              {aprValue
-                ? `${aprValue}% ${t('vault.liquid_apr')}`
-                : t('vault.liquid_apr_tbd')}
-            </span>
-          )}
         </li>
         <li className="flex items-center gap-2 text-15">
           <span className="text-neutral-50">
@@ -340,7 +316,6 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
 const VaultCard: FC<Props> = props => {
   const pendingDepositRef = useRef(false)
   const [isMounted, setIsMounted] = useState(false)
-  const { isLoading: isAprLoading } = useVaultsAPR()
   const { isConnected } = useAccount()
 
   useEffect(() => {
@@ -349,7 +324,7 @@ const VaultCard: FC<Props> = props => {
 
   const stableIsConnected = isMounted ? isConnected : false
 
-  if (!isMounted || isAprLoading) {
+  if (!isMounted) {
     return <VaultCardSkeleton isConnected={stableIsConnected} />
   }
 

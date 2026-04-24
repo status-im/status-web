@@ -7,7 +7,6 @@ import { useTranslations } from 'next-intl'
 import { Link } from '~/i18n/navigation'
 
 import { ConnectButton } from './connect-button'
-import { KarmaButton } from './karma-button'
 import { LanguageSelector } from './language-selector'
 
 interface TopBarProps {
@@ -89,10 +88,6 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
               }}
             />
           </div>
-
-          {/* Karma Button */}
-          <KarmaButton size="24" className="md:hidden" />
-          <KarmaButton size="32" className="hidden md:flex" />
 
           {/* Connect Wallet Button */}
           <ConnectButton

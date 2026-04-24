@@ -20,12 +20,7 @@ import { formatUnits, parseUnits } from 'viem'
 import { useAccount, useChainId, useSwitchChain } from 'wagmi'
 import { z } from 'zod'
 
-import {
-  GusdIcon,
-  KarmaCircleIcon,
-  PercentIcon,
-  PlusIcon,
-} from '~components/icons/index'
+import { GusdIcon, KarmaCircleIcon, PlusIcon } from '~components/icons/index'
 import {
   DEFAULT_GUSD_STABLECOIN,
   GUSD_STABLECOINS,
@@ -39,7 +34,6 @@ import { useExchangeRate } from '~hooks/useExchangeRate'
 import { useGUSDPreDeposit } from '~hooks/useGUSDPreDeposit'
 import { useGUSDPreview } from '~hooks/useGUSDPreview'
 import { usePreDepositVault } from '~hooks/usePreDepositVault'
-import { useVaultsAPR } from '~hooks/useVaultsAPR'
 import { useWrapETH } from '~hooks/useWrapETH'
 import { formatCurrency, formatTokenAmount } from '~utils/currency'
 
@@ -192,10 +186,6 @@ const PreDepositModal = ({
   const { data: exchangeRate } = useExchangeRate({
     token: currentToken.priceKey || currentToken.symbol,
   })
-
-  const { data: aprMap } = useVaultsAPR()
-  const dynamicApr = aprMap?.[vault.address.toLowerCase()]
-  const aprValue = dynamicApr !== undefined ? String(dynamicApr) : null
 
   const amountInUSD = useMemo(() => {
     const amountInputNumber = parseFloat(amountValue || '0')
@@ -555,16 +545,6 @@ const PreDepositModal = ({
                   <KarmaCircleIcon />
                 </span>
                 <span className="text-neutral-100">KARMA</span>
-              </div>
-              <div className="flex items-center gap-2 text-15">
-                <span className="text-neutral-50">
-                  <PercentIcon />
-                </span>
-                <span className="text-neutral-100">
-                  {aprValue
-                    ? `${aprValue}% ${t('vault.liquid_apr')}`
-                    : t('vault.liquid_apr_tbd')}
-                </span>
               </div>
               <div className="flex items-center gap-2 text-15">
                 <span className="text-neutral-50">
