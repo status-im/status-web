@@ -8,6 +8,7 @@ import {
   AddIcon,
   ChevronDownIcon,
   ImportIcon,
+  KeycardIcon,
   WalletIcon,
 } from '@status-im/icons/20'
 // import { shortenAddress } from '@status-im/wallet/components'
@@ -99,6 +100,13 @@ export function WalletSelector(props: Props) {
             label="Import wallet"
             onClick={() => {
               navigate({ to: '/wallet-flow/import' })
+            }}
+          />
+          <DropdownMenu.Item
+            icon={<KeycardIcon />}
+            label="Connect hardware wallet"
+            onClick={() => {
+              navigate({ to: '/wallet-flow/import-hardware' })
             }}
           />
         </DropdownMenu.Content>
