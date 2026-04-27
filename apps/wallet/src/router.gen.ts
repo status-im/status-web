@@ -14,8 +14,10 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsIndexRouteImport } from './routes/settings/index'
 import { Route as OnboardingIndexRouteImport } from './routes/onboarding/index'
 import { Route as WalletFlowNewRouteImport } from './routes/wallet-flow/new'
+import { Route as WalletFlowImportHardwareRouteImport } from './routes/wallet-flow/import-hardware'
 import { Route as WalletFlowImportRouteImport } from './routes/wallet-flow/import'
 import { Route as OnboardingNewRouteImport } from './routes/onboarding/new'
+import { Route as OnboardingImportHardwareRouteImport } from './routes/onboarding/import-hardware'
 import { Route as OnboardingImportRouteImport } from './routes/onboarding/import'
 import { Route as PortfolioCollectiblesIndexRouteImport } from './routes/portfolio/collectibles/index'
 import { Route as PortfolioAssetsIndexRouteImport } from './routes/portfolio/assets/index'
@@ -48,6 +50,12 @@ const WalletFlowNewRoute = WalletFlowNewRouteImport.update({
   path: '/wallet-flow/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WalletFlowImportHardwareRoute =
+  WalletFlowImportHardwareRouteImport.update({
+    id: '/wallet-flow/import-hardware',
+    path: '/wallet-flow/import-hardware',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const WalletFlowImportRoute = WalletFlowImportRouteImport.update({
   id: '/wallet-flow/import',
   path: '/wallet-flow/import',
@@ -58,6 +66,12 @@ const OnboardingNewRoute = OnboardingNewRouteImport.update({
   path: '/new',
   getParentRoute: () => OnboardingLayoutRoute,
 } as any)
+const OnboardingImportHardwareRoute =
+  OnboardingImportHardwareRouteImport.update({
+    id: '/import-hardware',
+    path: '/import-hardware',
+    getParentRoute: () => OnboardingLayoutRoute,
+  } as any)
 const OnboardingImportRoute = OnboardingImportRouteImport.update({
   id: '/import',
   path: '/import',
@@ -95,8 +109,10 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/onboarding': typeof OnboardingLayoutRouteWithChildren
   '/onboarding/import': typeof OnboardingImportRoute
+  '/onboarding/import-hardware': typeof OnboardingImportHardwareRoute
   '/onboarding/new': typeof OnboardingNewRoute
   '/wallet-flow/import': typeof WalletFlowImportRoute
+  '/wallet-flow/import-hardware': typeof WalletFlowImportHardwareRoute
   '/wallet-flow/new': typeof WalletFlowNewRoute
   '/onboarding/': typeof OnboardingIndexRoute
   '/settings': typeof SettingsIndexRoute
@@ -109,8 +125,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/onboarding/import': typeof OnboardingImportRoute
+  '/onboarding/import-hardware': typeof OnboardingImportHardwareRoute
   '/onboarding/new': typeof OnboardingNewRoute
   '/wallet-flow/import': typeof WalletFlowImportRoute
+  '/wallet-flow/import-hardware': typeof WalletFlowImportHardwareRoute
   '/wallet-flow/new': typeof WalletFlowNewRoute
   '/onboarding': typeof OnboardingIndexRoute
   '/settings': typeof SettingsIndexRoute
@@ -125,8 +143,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/onboarding': typeof OnboardingLayoutRouteWithChildren
   '/onboarding/import': typeof OnboardingImportRoute
+  '/onboarding/import-hardware': typeof OnboardingImportHardwareRoute
   '/onboarding/new': typeof OnboardingNewRoute
   '/wallet-flow/import': typeof WalletFlowImportRoute
+  '/wallet-flow/import-hardware': typeof WalletFlowImportHardwareRoute
   '/wallet-flow/new': typeof WalletFlowNewRoute
   '/onboarding/': typeof OnboardingIndexRoute
   '/settings/': typeof SettingsIndexRoute
@@ -142,8 +162,10 @@ export interface FileRouteTypes {
     | '/'
     | '/onboarding'
     | '/onboarding/import'
+    | '/onboarding/import-hardware'
     | '/onboarding/new'
     | '/wallet-flow/import'
+    | '/wallet-flow/import-hardware'
     | '/wallet-flow/new'
     | '/onboarding/'
     | '/settings'
@@ -156,8 +178,10 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/onboarding/import'
+    | '/onboarding/import-hardware'
     | '/onboarding/new'
     | '/wallet-flow/import'
+    | '/wallet-flow/import-hardware'
     | '/wallet-flow/new'
     | '/onboarding'
     | '/settings'
@@ -171,8 +195,10 @@ export interface FileRouteTypes {
     | '/'
     | '/onboarding'
     | '/onboarding/import'
+    | '/onboarding/import-hardware'
     | '/onboarding/new'
     | '/wallet-flow/import'
+    | '/wallet-flow/import-hardware'
     | '/wallet-flow/new'
     | '/onboarding/'
     | '/settings/'
@@ -187,6 +213,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   OnboardingLayoutRoute: typeof OnboardingLayoutRouteWithChildren
   WalletFlowImportRoute: typeof WalletFlowImportRoute
+  WalletFlowImportHardwareRoute: typeof WalletFlowImportHardwareRoute
   WalletFlowNewRoute: typeof WalletFlowNewRoute
   SettingsIndexRoute: typeof SettingsIndexRoute
   PortfolioAssetsTickerRoute: typeof PortfolioAssetsTickerRoute
@@ -233,6 +260,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WalletFlowNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/wallet-flow/import-hardware': {
+      id: '/wallet-flow/import-hardware'
+      path: '/wallet-flow/import-hardware'
+      fullPath: '/wallet-flow/import-hardware'
+      preLoaderRoute: typeof WalletFlowImportHardwareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/wallet-flow/import': {
       id: '/wallet-flow/import'
       path: '/wallet-flow/import'
@@ -245,6 +279,13 @@ declare module '@tanstack/react-router' {
       path: '/new'
       fullPath: '/onboarding/new'
       preLoaderRoute: typeof OnboardingNewRouteImport
+      parentRoute: typeof OnboardingLayoutRoute
+    }
+    '/onboarding/import-hardware': {
+      id: '/onboarding/import-hardware'
+      path: '/import-hardware'
+      fullPath: '/onboarding/import-hardware'
+      preLoaderRoute: typeof OnboardingImportHardwareRouteImport
       parentRoute: typeof OnboardingLayoutRoute
     }
     '/onboarding/import': {
@@ -294,12 +335,14 @@ declare module '@tanstack/react-router' {
 
 interface OnboardingLayoutRouteChildren {
   OnboardingImportRoute: typeof OnboardingImportRoute
+  OnboardingImportHardwareRoute: typeof OnboardingImportHardwareRoute
   OnboardingNewRoute: typeof OnboardingNewRoute
   OnboardingIndexRoute: typeof OnboardingIndexRoute
 }
 
 const OnboardingLayoutRouteChildren: OnboardingLayoutRouteChildren = {
   OnboardingImportRoute: OnboardingImportRoute,
+  OnboardingImportHardwareRoute: OnboardingImportHardwareRoute,
   OnboardingNewRoute: OnboardingNewRoute,
   OnboardingIndexRoute: OnboardingIndexRoute,
 }
@@ -311,6 +354,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   OnboardingLayoutRoute: OnboardingLayoutRouteWithChildren,
   WalletFlowImportRoute: WalletFlowImportRoute,
+  WalletFlowImportHardwareRoute: WalletFlowImportHardwareRoute,
   WalletFlowNewRoute: WalletFlowNewRoute,
   SettingsIndexRoute: SettingsIndexRoute,
   PortfolioAssetsTickerRoute: PortfolioAssetsTickerRoute,

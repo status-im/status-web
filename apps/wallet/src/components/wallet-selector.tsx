@@ -1,14 +1,22 @@
-import { Avatar, Button, DropdownMenu /*Tooltip*/ } from '@status-im/components'
+import {
+  Avatar,
+  Button,
+  DropdownMenu,
+  /*Tooltip*/
+} from '@status-im/components'
 import {
   AddIcon,
   ChevronDownIcon,
   ImportIcon,
+  KeycardIcon,
   WalletIcon,
 } from '@status-im/icons/20'
 // import { shortenAddress } from '@status-im/wallet/components'
 import { useNavigate } from '@tanstack/react-router'
 
 import { useWallet } from '@/providers/wallet-context'
+
+import { WatchOnlyTag } from './watch-only-tag'
 
 type Props = {
   className?: string
@@ -22,6 +30,7 @@ export function WalletSelector(props: Props) {
   const navigate = useNavigate()
   const { wallets, currentWallet /*, currentAccount*/, setCurrentWallet } =
     useWallet()
+  const isWatchOnly = currentWallet?.type === 'hardware-qr'
 
   if (!currentWallet) {
     return null
@@ -46,6 +55,7 @@ export function WalletSelector(props: Props) {
           <div className="text-15 font-semibold text-neutral-100">
             {currentWallet.name}
           </div>
+          {isWatchOnly && <WatchOnlyTag />}
           {/* TODO: Uncomment to display current account's name
           when multi-account support is implemented */}
           {/* {currentAccount?.address ? (
@@ -90,6 +100,13 @@ export function WalletSelector(props: Props) {
             label="Import wallet"
             onClick={() => {
               navigate({ to: '/wallet-flow/import' })
+            }}
+          />
+          <DropdownMenu.Item
+            icon={<KeycardIcon />}
+            label="Connect hardware wallet"
+            onClick={() => {
+              navigate({ to: '/wallet-flow/import-hardware' })
             }}
           />
         </DropdownMenu.Content>
