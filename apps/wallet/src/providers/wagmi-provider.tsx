@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createConfig, http, WagmiProvider } from 'wagmi'
 import { mainnet } from 'wagmi/chains'
 
+import { getRpcProxyUrl } from '../lib/rpc-proxy'
 import { statusConnector } from '../lib/status-connector'
 import { useWalletSigner } from './signer-context'
 
@@ -46,7 +47,7 @@ function WagmiConfigProvider({ children }: Props) {
         }),
       ],
       transports: {
-        [mainnet.id]: http(),
+        [mainnet.id]: http(getRpcProxyUrl(mainnet.id)),
       },
       ssr: false,
     })

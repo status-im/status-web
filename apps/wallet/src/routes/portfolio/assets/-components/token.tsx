@@ -33,6 +33,10 @@ import {
 } from '@status-im/wallet/components'
 import { ERROR_MESSAGES } from '@status-im/wallet/constants'
 import { useCopyToClipboard } from '@status-im/wallet/hooks'
+import {
+  getTransactionHash,
+  isEthereumTransactionHash,
+} from '@status-im/wallet/utils'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { cx } from 'class-variance-authority'
@@ -42,7 +46,6 @@ import { WatchOnlyActionTooltip } from '@/components/watch-only-action-tooltip'
 import { useEthBalance } from '@/hooks/use-eth-balance'
 import { renderMarkdown } from '@/lib/markdown'
 import { notifyTransactionSent } from '@/lib/notifications'
-import { extractTxHash } from '@/lib/tx-helpers'
 import { apiClient } from '@/providers/api-client'
 import { usePassword } from '@/providers/password-context'
 import { usePendingTransactions } from '@/providers/pending-transactions-context'
@@ -354,9 +357,9 @@ const Token = (props: Props) => {
         throw new Error('Transaction failed')
       }
 
-      const txHash = extractTxHash(result.id)
+      const txHash = getTransactionHash(result.id.txid ?? result.id)
 
-      if (!txHash) {
+      if (!isEthereumTransactionHash(txHash)) {
         toast.negative(ERROR_MESSAGES.TX_FAILED)
         throw new Error('Transaction hash not found')
       }
@@ -420,9 +423,9 @@ const Token = (props: Props) => {
         throw new Error('Transaction failed')
       }
 
-      const txHash = extractTxHash(result.id)
+      const txHash = getTransactionHash(result.id.txid ?? result.id)
 
-      if (!txHash) {
+      if (!isEthereumTransactionHash(txHash)) {
         toast.negative(ERROR_MESSAGES.TX_FAILED)
         throw new Error('Transaction hash not found')
       }

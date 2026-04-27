@@ -31,7 +31,7 @@
     "@cardano-sdk/crypto": "^0.2.3",
     "@cardano-sdk/key-management": "^0.27.5",
     "@hookform/resolvers": "^3.1.1",
-    "@lifi/widget": "^3.40.1",
+    "@lifi/widget": "^3.40.12",
     "@metamask/browser-passworder": "^6.0.0",
     "@qrkit/core": "^0.6.0",
     "@qrkit/react": "^0.4.2",

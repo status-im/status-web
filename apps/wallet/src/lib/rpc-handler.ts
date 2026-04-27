@@ -1,6 +1,4 @@
 import { ProviderRpcError } from '@status-im/ethereum-provider'
-import { createPublicClient, http } from 'viem'
-import { mainnet } from 'viem/chains'
 
 import {
   type ApprovalResult,
@@ -10,11 +8,7 @@ import {
   type PendingApproval,
   setPendingApproval,
 } from '../data/approval'
-
-const publicClient = createPublicClient({
-  chain: mainnet,
-  transport: http(),
-})
+import { publicClient } from './public-client'
 
 const DEFAULT_CHAIN_ID = '0x1'
 const SUPPORTED_CHAIN_IDS = new Set(['0x1', '0x6300b5ea'])

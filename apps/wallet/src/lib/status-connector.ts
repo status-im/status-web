@@ -1,12 +1,8 @@
-import {
-  type Address,
-  createPublicClient,
-  type Hex,
-  http,
-  numberToHex,
-} from 'viem'
+import { type Address, type Hex, numberToHex } from 'viem'
 import { createConnector } from 'wagmi'
 import { mainnet } from 'wagmi/chains'
+
+import { publicClient } from './public-client'
 
 export type StatusConnectorOptions = {
   getAddress: () => Address | undefined
@@ -111,12 +107,7 @@ function handleProviderRequest(
     }
 
     default: {
-      const client = createPublicClient({
-        chain: mainnet,
-        transport: http(),
-      })
-
-      return client.request({
+      return publicClient.request({
         method: method as never,
         params: params as never,
       })
