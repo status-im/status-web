@@ -34,7 +34,7 @@
     "@lifi/widget": "^3.40.12",
     "@metamask/browser-passworder": "^6.0.0",
     "@qrkit/core": "^0.6.0",
-    "@qrkit/react": "^0.4.2",
+    "@qrkit/react": "^0.5.0",
     "@radix-ui/react-dialog": "^1.1.1",
     "@status-im/colors": "workspace:*",
     "@status-im/ethereum-provider": "workspace:*",
