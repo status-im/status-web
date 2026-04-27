@@ -4,7 +4,7 @@ import { z } from 'zod'
 
 import erc20TokenList from '../../../constants/erc20.json'
 import nativeTokenList from '../../../constants/native.json'
-import { toChecksumAddress } from '../../../utils'
+import { buildCanonicalTimestamps, toChecksumAddress } from '../../../utils'
 import {
   fetchTokenBalanceHistory,
   getERC20TokensBalance,
@@ -314,6 +314,35 @@ export const assetsRouter = router({
       const inputHash = JSON.stringify(input)
 
       return await cachedTokenBalanceChart(inputHash)
+    }),
+  nativeTokenValueChart: ethRPCProcedure
+    .input(
+      z.object({
+        address: z.string(),
+        networks: z.array(z.enum(['ethereum'])),
+        symbol: z.string(),
+        days: z.enum(['1', '7', '30', '90', '365', 'all']).optional(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const inputHash = JSON.stringify(input)
+
+      return await cachedNativeTokenValueChart(inputHash)
+    }),
+  tokenValueChart: ethRPCProcedure
+    .input(
+      z.object({
+        address: z.string(),
+        networks: z.array(z.enum(['ethereum'])),
+        contract: z.string(),
+        symbol: z.string(),
+        days: z.enum(['1', '7', '30', '90', '365', 'all']).optional(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const inputHash = JSON.stringify(input)
+
+      return await cachedTokenValueChart(inputHash)
     }),
 })
 
@@ -721,12 +750,27 @@ async function tokenPriceChart({
   symbol: string
   days?: '1' | '7' | '30' | '90' | '365' | 'all'
 }) {
-  const data = await fetchTokenPriceHistory(symbol, days)
+  const [data, prices] = await Promise.all([
+    fetchTokenPriceHistory(symbol, days),
+    fetchTokensPrice([symbol], COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE),
+  ])
 
-  return data.prices.map(([timestamp, price]: [number, number]) => ({
+  const chartData = data.prices.map(([timestamp, price]: [number, number]) => ({
     date: new Date(timestamp).toISOString(),
     price: price,
   }))
+
+  const spotPrice = prices[symbol]?.usd
+  if (!Number.isFinite(spotPrice)) {
+    return chartData
+  }
+
+  chartData.push({
+    date: new Date().toISOString(),
+    price: spotPrice,
+  })
+
+  return chartData
 }
 
 const cachedNativeTokenPriceChart = cache(async (key: string) => {
@@ -771,11 +815,7 @@ async function nativeTokenBalanceChart({
     }),
   )
 
-  const result = aggregateTokenBalanceHistory(responses)
-
-  result.reverse()
-
-  return result
+  return aggregateTokenBalanceHistory(responses)
 }
 
 const cachedTokenBalanceChart = cache(async (key: string) => {
@@ -831,11 +871,205 @@ async function tokenBalanceChart({
     }),
   )
 
-  const result = aggregateTokenBalanceHistory(responses)
+  return aggregateTokenBalanceHistory(responses)
+}
 
-  result.reverse()
+const cachedNativeTokenValueChart = cache(async (key: string) => {
+  const { address, networks, symbol, days } = JSON.parse(key)
 
-  return result
+  return await nativeTokenValueChart({ address, networks, symbol, days })
+})
+
+/**
+ * Computes the ETH value chart server-side on a uniform timestamp grid.
+ * All three data points (price, balance, value) share the same timestamps so
+ * the chart has homogeneous gaps. The first point always uses live spot data
+ * from the same sources as `assets.all`, keeping the chart end consistent with
+ * what AssetsList displays.
+ */
+async function nativeTokenValueChart({
+  address,
+  networks,
+  symbol,
+  days,
+}: {
+  address: string
+  networks: NetworkType[]
+  symbol: string
+  days?: '1' | '7' | '30' | '90' | '365' | 'all'
+}) {
+  const now = Math.floor(Date.now() / 1000)
+  const timestamps = buildCanonicalTimestamps(days, now)
+  const decimals = 18
+
+  const [balanceResponses, priceHistory, spotPrices] = await Promise.all([
+    Promise.all(
+      networks.map(async network => {
+        const data = await fetchTokenBalanceHistory(
+          address,
+          network,
+          days,
+          undefined,
+          now,
+          decimals,
+        )
+
+        return { [network]: data } as Record<
+          NetworkType,
+          { date: string; price: number }[]
+        >
+      }),
+    ),
+    fetchTokenPriceHistory(symbol, days),
+    fetchTokensPrice([symbol], COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE),
+  ])
+
+  return buildValuePoints(
+    timestamps,
+    buildStepBeforeLookup(
+      aggregateTokenBalanceHistory(balanceResponses).map(
+        p => [new Date(p.date).getTime() / 1000, p.price] as const,
+      ),
+    ),
+    buildStepBeforeLookup(
+      priceHistory.prices.map(
+        ([t, p]: [number, number]) => [t / 1000, p] as const,
+      ),
+    ),
+    spotPrices[symbol]?.usd,
+    now,
+  )
+}
+
+const cachedTokenValueChart = cache(async (key: string) => {
+  const { address, networks, contract, symbol, days } = JSON.parse(key)
+
+  return await tokenValueChart({ address, networks, contract, symbol, days })
+})
+
+/**
+ * Same as `nativeTokenValueChart` but for ERC20 tokens. Aggregates across all
+ * bridged versions of the token (e.g. USDC on Ethereum + USDC on Optimism) so
+ * the balance reflects the user's total cross-chain holdings.
+ */
+async function tokenValueChart({
+  address,
+  networks,
+  contract,
+  symbol,
+  days,
+}: {
+  address: string
+  networks: NetworkType[]
+  contract: string
+  symbol: string
+  days?: '1' | '7' | '30' | '90' | '365' | 'all'
+}) {
+  const erc20Token = erc20TokenList.tokens.find(
+    token =>
+      token.address === contract &&
+      networks.includes(STATUS_NETWORKS[token.chainId]),
+  )
+
+  if (!erc20Token) {
+    throw new Error('Token not found')
+  }
+
+  const bridgedERC20Tokens = getBridgedERC20Tokens(erc20Token, networks)
+  const filteredERC20Tokens = bridgedERC20Tokens.length
+    ? bridgedERC20Tokens
+    : [erc20Token]
+
+  const now = Math.floor(Date.now() / 1000)
+  const timestamps = buildCanonicalTimestamps(days, now)
+
+  const [balanceResponses, priceHistory, spotPrices] = await Promise.all([
+    Promise.all(
+      filteredERC20Tokens.map(async token => {
+        const data = await fetchTokenBalanceHistory(
+          address,
+          STATUS_NETWORKS[token.chainId],
+          days,
+          token.address,
+          now,
+          token.decimals,
+        )
+
+        return { [STATUS_NETWORKS[token.chainId]]: data } as Record<
+          NetworkType,
+          { date: string; price: number }[]
+        >
+      }),
+    ),
+    fetchTokenPriceHistory(symbol, days),
+    fetchTokensPrice([symbol], COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE),
+  ])
+
+  return buildValuePoints(
+    timestamps,
+    buildStepBeforeLookup(
+      aggregateTokenBalanceHistory(balanceResponses).map(
+        p => [new Date(p.date).getTime() / 1000, p.price] as const,
+      ),
+    ),
+    buildStepBeforeLookup(
+      priceHistory.prices.map(
+        ([t, p]: [number, number]) => [t / 1000, p] as const,
+      ),
+    ),
+    spotPrices[symbol]?.usd,
+    now,
+  )
+}
+
+/**
+ * Returns a function that, given a unix timestamp (seconds), finds the value
+ * of the latest data point whose timestamp is <= the query time. This "step
+ * before" semantics matches how price/balance data should be interpreted: the
+ * known value holds until the next observed change.
+ */
+function buildStepBeforeLookup(
+  points: readonly (readonly [number, number])[],
+): (ts: number) => number {
+  const sorted = [...points].sort((a, b) => a[0] - b[0])
+  return (ts: number): number => {
+    if (sorted.length === 0) return 0
+    let lo = 0
+    let hi = sorted.length - 1
+    let best = 0
+    while (lo <= hi) {
+      const mid = (lo + hi) >> 1
+      if (sorted[mid][0] <= ts) {
+        best = sorted[mid][1]
+        lo = mid + 1
+      } else {
+        hi = mid - 1
+      }
+    }
+    return best
+  }
+}
+
+function buildValuePoints(
+  timestamps: number[],
+  balanceAt: (ts: number) => number,
+  priceAt: (ts: number) => number,
+  spotPrice: number | undefined,
+  now: number,
+): { date: string; price: number; balance: number; value: number }[] {
+  const spotBalance = balanceAt(now)
+  return timestamps.map((ts, i) => {
+    const price =
+      i === 0 && Number.isFinite(spotPrice) ? spotPrice! : priceAt(ts)
+    // The first timestamp uses live spot data instead of historical lookups.
+    const balance = i === 0 ? spotBalance : balanceAt(ts)
+    return {
+      date: new Date(ts * 1000).toISOString(),
+      price,
+      balance,
+      value: price * balance,
+    }
+  })
 }
 
 function getBridgedERC20Tokens(

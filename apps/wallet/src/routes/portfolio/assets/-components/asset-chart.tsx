@@ -7,8 +7,6 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import { notFound } from '@tanstack/react-router'
 
-import { useValueChartData } from '../../../../hooks/use-value-chart-data'
-
 import type {
   ChartDataType,
   ChartTimeFrame,
@@ -35,6 +33,8 @@ const getTimeFrameDays = (timeFrame: string): string => {
 }
 
 const NETWORKS = ['ethereum'] as const
+const CHART_QUERY_STALE_TIME_MS = 60_000 // 1 minute
+const CHART_QUERY_GC_TIME_MS = 60 * CHART_QUERY_STALE_TIME_MS // 1 hour
 
 function AssetChart({
   address,
@@ -93,9 +93,9 @@ function AssetChart({
       const body = await response.json()
       return body.result.data.json
     },
-    enabled: activeDataType === 'price' || activeDataType === 'value',
-    staleTime: 60 * 60 * 1000, // 1 hour
-    gcTime: 60 * 60 * 1000, // 1 hour
+    enabled: activeDataType === 'price',
+    staleTime: CHART_QUERY_STALE_TIME_MS,
+    gcTime: CHART_QUERY_GC_TIME_MS,
   })
 
   const balanceChart = useQuery<ApiOutput['assets']['tokenBalanceChart']>({
@@ -134,22 +134,57 @@ function AssetChart({
       const body = await response.json()
       return body.result.data.json
     },
-    enabled: activeDataType === 'balance' || activeDataType === 'value',
-    staleTime: 60 * 60 * 1000, // 1 hour
-    gcTime: 60 * 60 * 1000, // 1 hour
+    enabled: activeDataType === 'balance',
+    staleTime: CHART_QUERY_STALE_TIME_MS,
+    gcTime: CHART_QUERY_GC_TIME_MS,
   })
 
-  const valueChartData = useValueChartData({
-    activeDataType,
-    priceData: priceChart.data,
-    balanceData: balanceChart.data,
+  const valueChart = useQuery<ApiOutput['assets']['tokenValueChart']>({
+    queryKey: ['valueChart', address, slug, symbol, timeFrame],
+    queryFn: async () => {
+      const endpoint = isContractToken
+        ? 'assets.tokenValueChart'
+        : 'assets.nativeTokenValueChart'
+
+      const url = new URL(
+        `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/${endpoint}`,
+      )
+
+      const input = {
+        json: {
+          address,
+          networks: NETWORKS,
+          symbol: isContractToken ? symbol : slug.toUpperCase(),
+          days: getTimeFrameDays(timeFrame),
+          ...(isContractToken && { contract: slug }),
+        },
+      }
+
+      url.searchParams.set('input', JSON.stringify(input))
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch value chart data.')
+      }
+
+      const body = await response.json()
+      return body.result.data.json
+    },
+    enabled: activeDataType === 'value',
+    staleTime: CHART_QUERY_STALE_TIME_MS,
+    gcTime: CHART_QUERY_GC_TIME_MS,
   })
 
   const isLoading =
     (activeDataType === 'price' && priceChart.isLoading) ||
     (activeDataType === 'balance' && balanceChart.isLoading) ||
-    (activeDataType === 'value' &&
-      (priceChart.isLoading || balanceChart.isLoading))
+    (activeDataType === 'value' && valueChart.isLoading)
 
   if (isLoading) {
     return <ChartLoading />
@@ -158,7 +193,7 @@ function AssetChart({
   const hasError =
     (activeDataType === 'price' && priceChart.error) ||
     (activeDataType === 'balance' && balanceChart.error) ||
-    (activeDataType === 'value' && (priceChart.error || balanceChart.error))
+    (activeDataType === 'value' && valueChart.error)
 
   if (hasError) {
     return (
@@ -175,7 +210,7 @@ function AssetChart({
       <Chart
         price={priceChart.data || []}
         balance={balanceChart.data || []}
-        value={valueChartData}
+        value={valueChart.data || []}
         activeTimeFrame={timeFrame as ChartTimeFrame}
         activeDataType={activeDataType}
       />
