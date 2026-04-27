@@ -1,5 +1,14 @@
 # status.network
 
+## 0.2.1
+
+### Patch Changes
+
+- 4c9771c: fix(status.network): reuse shared content renderer for karma tokenomics
+- d50bf87: fix(blog): show all published posts on /blog
+- 41096e0: chore: migrate hoodi
+- cd78f57: chore(status.network): update Karma tokenomics details and links
+
 ## 0.2.0
 
 ### Minor Changes
