@@ -1,3 +1,7 @@
+import {
+  getTransactionHash,
+  isEthereumTransactionHash,
+} from '@status-im/wallet/utils'
 import { storage } from '@wxt-dev/storage'
 
 import {
@@ -5,7 +9,6 @@ import {
   notifyTransactionFailed,
 } from './notifications'
 import { PENDING_TXS_KEY, TX_NOTIFIED_KEY } from './storage-keys'
-import { extractTxHash } from './tx-helpers'
 
 type PendingTx = {
   hash: unknown
@@ -72,10 +75,10 @@ export async function checkPendingTransactions(): Promise<void> {
 
   const receipts = await Promise.all(
     pendingTxs.map(tx => {
-      const txHash = extractTxHash(tx.hash)
-      return txHash
-        ? fetchReceipt(txHash).then(r => ({ tx, txHash, receipt: r }))
-        : null
+      const txHash = getTransactionHash(tx.hash)
+      if (!isEthereumTransactionHash(txHash)) return null
+
+      return fetchReceipt(txHash).then(r => ({ tx, txHash, receipt: r }))
     }),
   )
 
@@ -110,8 +113,9 @@ export async function checkPendingTransactions(): Promise<void> {
 
   if (settledHashes.size > 0) {
     const remaining = pendingTxs.filter(tx => {
-      const txHash = extractTxHash(tx.hash)
-      return !txHash || !settledHashes.has(txHash)
+      const txHash = getTransactionHash(tx.hash)
+      if (!isEthereumTransactionHash(txHash)) return true
+      return !settledHashes.has(txHash)
     })
     await storage.setItem(PENDING_TXS_KEY, remaining)
 
