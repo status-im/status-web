@@ -13,6 +13,7 @@ import type { Account, ScannedUR } from '@qrkit/core'
 
 const DEFAULT_HARDWARE_WALLET_NAME = 'Hardware Wallet'
 const DEFAULT_HARDWARE_WALLET_VENDOR = 'air-gapped'
+const DEFAULT_ADDRESS_INDEX = 0
 
 type Props = {
   backHref: string
@@ -172,20 +173,23 @@ function AccountSelect({
         Multiple accounts were found in the QR code. Select one to import.
       </Text>
       <div className="flex flex-col gap-2">
-        {accounts.map(account => (
-          <button
-            key={account.address}
-            onClick={() => onSelect(account)}
-            className="flex flex-col gap-1 rounded-12 border border-neutral-10 bg-neutral-2.5 p-3 text-left hover:bg-neutral-5"
-          >
-            <Text size={13} color="$neutral-50">
-              {account.chain === 'evm' ? 'Ethereum' : account.chain}
-            </Text>
-            <Text size={13} weight="medium" className="break-all">
-              {account.address}
-            </Text>
-          </button>
-        ))}
+        {accounts.map(account => {
+          const derived = account.deriveAddress(DEFAULT_ADDRESS_INDEX)
+          return (
+            <button
+              key={derived.address}
+              onClick={() => onSelect(account)}
+              className="flex flex-col gap-1 rounded-12 border border-neutral-10 bg-neutral-2.5 p-3 text-left hover:bg-neutral-5"
+            >
+              <Text size={13} color="$neutral-50">
+                {account.chain === 'evm' ? 'Ethereum' : account.chain}
+              </Text>
+              <Text size={13} weight="medium" className="break-all">
+                {derived.address}
+              </Text>
+            </button>
+          )
+        })}
       </div>
     </div>
   )
@@ -203,6 +207,7 @@ function Confirm({
   const { importHardwareWalletAsync, isPending } = useImportHardwareWallet()
   const queryClient = useQueryClient()
   const navigate = useNavigate()
+  const derivedAddress = account.deriveAddress(DEFAULT_ADDRESS_INDEX)
   const [name, setName] = useState(
     account.device ?? DEFAULT_HARDWARE_WALLET_NAME,
   )
@@ -215,9 +220,9 @@ function Confirm({
       await importHardwareWalletAsync({
         name: trimmedName,
         vendor: account.device ?? DEFAULT_HARDWARE_WALLET_VENDOR,
-        address: account.address,
-        derivationPath: account.derivationPath,
-        publicKey: account.publicKey,
+        address: derivedAddress.address,
+        derivationPath: derivedAddress.derivationPath,
+        publicKey: derivedAddress.publicKey,
         sourceFingerprint:
           account.chain === 'evm' ? account.sourceFingerprint : undefined,
       })
@@ -258,7 +263,7 @@ function Confirm({
           Address
         </Text>
         <Text size={13} weight="medium" className="break-all">
-          {account.address}
+          {derivedAddress.address}
         </Text>
       </div>
 
