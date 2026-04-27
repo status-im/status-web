@@ -1,5 +1,15 @@
 # status.app
 
+## 0.1.3
+
+### Patch Changes
+
+- a535360: feat(status.app): implement i18n coverage across website and admin UI
+- 86ed961: Update Status app metadata and universal link configuration for the new iOS and Android app details.
+- 4a48bcd: Remove legacy iOS app associations from the AASA file so Status universal links resolve to the new app.
+- b3e3155: feat: connect wallet to dApp
+- b4f9c24: fix(status.app): move platform detection script to root layout
+
 ## 0.1.2
 
 ### Patch Changes

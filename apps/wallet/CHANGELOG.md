@@ -1,5 +1,25 @@
 # wallet
 
+## 0.1.3
+
+### Patch Changes
+
+- af761a6: add browser notifications for wallet transactions
+- ca76e7d: feat(wallet): add password context
+- da1c09d: feat(wallet): implement multi-wallets
+- b3e3155: feat: connect wallet to dApp
+- 4ebe989: Implement NFT transfers
+- d361411: "chore(wallet): change layout & messaging when hide<$1"
+- 2836972: chore(wallet): remove wxt version number
+- 242931b: fix(wallet): use our custom RPC proxy instead of public RPC
+- Updated dependencies [ca76e7d]
+- Updated dependencies [da1c09d]
+- Updated dependencies [b3e3155]
+- Updated dependencies [1a74ebc]
+- Updated dependencies [d361411]
+- Updated dependencies [41096e0]
+  - @status-im/wallet@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes

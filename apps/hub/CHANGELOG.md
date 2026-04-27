@@ -1,5 +1,25 @@
 # hub
 
+## 1.1.1
+
+### Patch Changes
+
+- 24ac65d: rename APY to APR
+- 5e21cf6: fix(hub): remove isConnecting from skeleton conditions on /stake page
+- 9f86f31: fix(hub): truncate unstake MAX amount to 6 decimals to prevent precision overflow
+- 5271c7e:
+- 2d28692: chore: update hoodi URLs
+- cdc49e9: feat: pow based rpc auth
+- 41096e0: chore: migrate hoodi
+- 20f4729: fix(hub): fix bug with hub pre-deposit min/max values
+- Updated dependencies [ca76e7d]
+- Updated dependencies [da1c09d]
+- Updated dependencies [b3e3155]
+- Updated dependencies [1a74ebc]
+- Updated dependencies [d361411]
+- Updated dependencies [41096e0]
+  - @status-im/wallet@0.1.3
+
 ## 1.1.0
 
 ### Minor Changes

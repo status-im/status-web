@@ -1,5 +1,18 @@
 # api
 
+## 0.2.3
+
+### Patch Changes
+
+- 242931b: fix(wallet): use our custom RPC proxy instead of public RPC
+- Updated dependencies [ca76e7d]
+- Updated dependencies [da1c09d]
+- Updated dependencies [b3e3155]
+- Updated dependencies [1a74ebc]
+- Updated dependencies [d361411]
+- Updated dependencies [41096e0]
+  - @status-im/wallet@0.1.3
+
 ## 0.2.2
 
 ### Patch Changes

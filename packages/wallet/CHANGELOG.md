@@ -1,5 +1,16 @@
 # @status-im/wallet
 
+## 0.1.3
+
+### Patch Changes
+
+- ca76e7d: feat(wallet): add password context
+- da1c09d: feat(wallet): implement multi-wallets
+- b3e3155: feat: connect wallet to dApp
+- 1a74ebc: feat(wallet/assets-list): add hide assets < 1 USD filter
+- d361411: "chore(wallet): change layout & messaging when hide<$1"
+- 41096e0: chore: migrate hoodi
+
 ## 0.1.2
 
 ### Patch Changes
