@@ -1,5 +1,7 @@
+import { padHex } from '@status-im/wallet/utils'
 import { Buffer } from 'buffer'
 
+import { nonceTracker } from '../../lib/nonce-tracker'
 import { encoder } from '../encoder'
 
 import type { WalletCore } from '@trustwallet/wallet-core'
@@ -31,65 +33,63 @@ export async function send({
   maxFeePerGas: string
   maxInclusionFeePerGas: string
 }) {
-  // Fetch nonce
-  const nonceHex = await getNonceHex(fromAddress, network)
-  const chainIdHex = getChainIdHex(chainID)
+  return nonceTracker.withNonce(fromAddress, network, async nonceHex => {
+    const chainIdHex = getChainIdHex(chainID)
 
-  const cleanAmount = padHex(amount)
+    const cleanAmount = padHex(amount)
 
-  const txInput = encoder.Ethereum.Proto.SigningInput.create({
-    chainId: Uint8Array.from(Buffer.from(chainIdHex, 'hex')),
-    nonce: Uint8Array.from(Buffer.from(nonceHex, 'hex')),
-    gasLimit: Uint8Array.from(Buffer.from(padHex(gasLimit), 'hex')),
-    maxFeePerGas: Uint8Array.from(Buffer.from(padHex(maxFeePerGas), 'hex')),
-    maxInclusionFeePerGas: Uint8Array.from(
-      Buffer.from(padHex(maxInclusionFeePerGas), 'hex'),
-    ),
-    toAddress,
-    transaction: {
-      transfer: {
-        amount: Uint8Array.from(Buffer.from(cleanAmount, 'hex')),
+    const txInput = encoder.Ethereum.Proto.SigningInput.create({
+      chainId: Uint8Array.from(Buffer.from(chainIdHex, 'hex')),
+      nonce: Uint8Array.from(Buffer.from(nonceHex, 'hex')),
+      gasLimit: Uint8Array.from(Buffer.from(padHex(gasLimit), 'hex')),
+      maxFeePerGas: Uint8Array.from(Buffer.from(padHex(maxFeePerGas), 'hex')),
+      maxInclusionFeePerGas: Uint8Array.from(
+        Buffer.from(padHex(maxInclusionFeePerGas), 'hex'),
+      ),
+      toAddress,
+      transaction: {
+        transfer: {
+          amount: Uint8Array.from(Buffer.from(cleanAmount, 'hex')),
+        },
       },
-    },
-    privateKey: walletPrivateKey.data(),
-    txMode: encoder.Ethereum.Proto.TransactionMode.Enveloped,
-  })
+      privateKey: walletPrivateKey.data(),
+      txMode: encoder.Ethereum.Proto.TransactionMode.Enveloped,
+    })
 
-  const inputEncoded =
-    encoder.Ethereum.Proto.SigningInput.encode(txInput).finish()
-  // sign
-  const outputData = walletCore.AnySigner.sign(
-    inputEncoded,
-    walletCore.CoinType.ethereum,
-  )
-  const output = encoder.Ethereum.Proto.SigningOutput.decode(outputData)
-  const rawTx = walletCore.HexCoding.encode(output.encoded)
+    const inputEncoded =
+      encoder.Ethereum.Proto.SigningInput.encode(txInput).finish()
+    // sign
+    const outputData = walletCore.AnySigner.sign(
+      inputEncoded,
+      walletCore.CoinType.ethereum,
+    )
+    const output = encoder.Ethereum.Proto.SigningOutput.decode(outputData)
+    const rawTx = walletCore.HexCoding.encode(output.encoded)
 
-  // broadcast
-  const response = await fetch(BROADCAST_TRANSACTION_URL.toString(), {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      json: {
-        txHex: rawTx,
-        network,
+    // broadcast
+    const response = await fetch(BROADCAST_TRANSACTION_URL.toString(), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    }),
-    cache: 'no-store',
+      body: JSON.stringify({
+        json: {
+          txHex: rawTx,
+          network,
+        },
+      }),
+      cache: 'no-store',
+    })
+
+    if (!response.ok) {
+      throw new Error('Failed to broadcast transaction')
+    }
+
+    const body = await response.json()
+    const txid = body.result.data.json
+
+    return { txid }
   })
-
-  if (!response.ok) {
-    throw new Error('Failed to broadcast transaction')
-  }
-
-  const body = await response.json()
-  const txid = body.result.data.json
-
-  return {
-    txid,
-  }
 }
 
 export async function sendContractCall({
@@ -117,54 +117,55 @@ export async function sendContractCall({
   data: string
   value?: string
 }) {
-  const nonceHex = await getNonceHex(fromAddress, network)
-  const chainIdHex = getChainIdHex(chainID)
-  const cleanData = data.replace(/^0x/, '')
-  const cleanValue = padHex(value)
+  return nonceTracker.withNonce(fromAddress, network, async nonceHex => {
+    const chainIdHex = getChainIdHex(chainID)
+    const cleanData = data.replace(/^0x/, '')
+    const cleanValue = padHex(value)
 
-  const txInput = encoder.Ethereum.Proto.SigningInput.create({
-    chainId: Uint8Array.from(Buffer.from(chainIdHex, 'hex')),
-    nonce: Uint8Array.from(Buffer.from(nonceHex, 'hex')),
-    gasLimit: Uint8Array.from(Buffer.from(padHex(gasLimit), 'hex')),
-    maxFeePerGas: Uint8Array.from(Buffer.from(padHex(maxFeePerGas), 'hex')),
-    maxInclusionFeePerGas: Uint8Array.from(
-      Buffer.from(padHex(maxInclusionFeePerGas), 'hex'),
-    ),
-    toAddress,
-    transaction: {
-      contractGeneric: {
-        amount: Uint8Array.from(Buffer.from(cleanValue, 'hex')),
-        data: Uint8Array.from(Buffer.from(cleanData, 'hex')),
+    const txInput = encoder.Ethereum.Proto.SigningInput.create({
+      chainId: Uint8Array.from(Buffer.from(chainIdHex, 'hex')),
+      nonce: Uint8Array.from(Buffer.from(nonceHex, 'hex')),
+      gasLimit: Uint8Array.from(Buffer.from(padHex(gasLimit), 'hex')),
+      maxFeePerGas: Uint8Array.from(Buffer.from(padHex(maxFeePerGas), 'hex')),
+      maxInclusionFeePerGas: Uint8Array.from(
+        Buffer.from(padHex(maxInclusionFeePerGas), 'hex'),
+      ),
+      toAddress,
+      transaction: {
+        contractGeneric: {
+          amount: Uint8Array.from(Buffer.from(cleanValue, 'hex')),
+          data: Uint8Array.from(Buffer.from(cleanData, 'hex')),
+        },
       },
-    },
-    privateKey: walletPrivateKey.data(),
-    txMode: encoder.Ethereum.Proto.TransactionMode.Enveloped,
+      privateKey: walletPrivateKey.data(),
+      txMode: encoder.Ethereum.Proto.TransactionMode.Enveloped,
+    })
+
+    const inputEncoded =
+      encoder.Ethereum.Proto.SigningInput.encode(txInput).finish()
+    const outputData = walletCore.AnySigner.sign(
+      inputEncoded,
+      walletCore.CoinType.ethereum,
+    )
+    const output = encoder.Ethereum.Proto.SigningOutput.decode(outputData)
+    const rawTx = walletCore.HexCoding.encode(output.encoded)
+
+    const response = await fetch(BROADCAST_TRANSACTION_URL.toString(), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ json: { txHex: rawTx, network } }),
+      cache: 'no-store',
+    })
+
+    if (!response.ok) {
+      throw new Error('Failed to broadcast transaction')
+    }
+
+    const body = await response.json()
+    const txid = body.result.data.json
+
+    return { txid }
   })
-
-  const inputEncoded =
-    encoder.Ethereum.Proto.SigningInput.encode(txInput).finish()
-  const outputData = walletCore.AnySigner.sign(
-    inputEncoded,
-    walletCore.CoinType.ethereum,
-  )
-  const output = encoder.Ethereum.Proto.SigningOutput.decode(outputData)
-  const rawTx = walletCore.HexCoding.encode(output.encoded)
-
-  const response = await fetch(BROADCAST_TRANSACTION_URL.toString(), {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ json: { txHex: rawTx, network } }),
-    cache: 'no-store',
-  })
-
-  if (!response.ok) {
-    throw new Error('Failed to broadcast transaction')
-  }
-
-  const body = await response.json()
-  const txid = body.result.data.json
-
-  return { txid }
 }
 
 export async function sendErc20({
@@ -190,133 +191,71 @@ export async function sendErc20({
   maxInclusionFeePerGas: string
   data: string
 }) {
-  // Fetch nonce
-  const nonceHex = await getNonceHex(fromAddress, network)
-  const chainIdHex = getChainIdHex(chainID)
-  // For erc20Transfer, we need to extract the recipient address and amount from the data field
-  // data contains function signature (4 bytes) + to address (32 bytes) + amount (32 bytes)
-  const cleanData = data.replace(/^0x/, '')
-  // Extract recipientAddress from cleanData (bytes 4-36, but only last 20 bytes are used)
-  const recipientAddress = '0x' + cleanData.slice(32, 72)
-  //Extract amount (bytes 72-104) which is 32 bytes
-  const tokenAmount = cleanData.slice(72, 136)
+  return nonceTracker.withNonce(fromAddress, network, async nonceHex => {
+    const chainIdHex = getChainIdHex(chainID)
+    // For erc20Transfer, we need to extract the recipient address and amount from the data field
+    // data contains function signature (4 bytes) + to address (32 bytes) + amount (32 bytes)
+    const cleanData = data.replace(/^0x/, '')
+    // Extract recipientAddress from cleanData (bytes 4-36, but only last 20 bytes are used)
+    const recipientAddress = '0x' + cleanData.slice(32, 72)
+    //Extract amount (bytes 72-104) which is 32 bytes
+    const tokenAmount = cleanData.slice(72, 136)
 
-  const txInput = encoder.Ethereum.Proto.SigningInput.create({
-    chainId: Uint8Array.from(Buffer.from(chainIdHex, 'hex')),
-    nonce: Uint8Array.from(Buffer.from(nonceHex, 'hex')),
-    gasLimit: Uint8Array.from(Buffer.from(padHex(gasLimit), 'hex')),
-    maxFeePerGas: Uint8Array.from(Buffer.from(padHex(maxFeePerGas), 'hex')),
-    maxInclusionFeePerGas: Uint8Array.from(
-      Buffer.from(padHex(maxInclusionFeePerGas), 'hex'),
-    ),
-    toAddress,
-    transaction: {
-      erc20Transfer: {
-        to: recipientAddress,
-        amount: Uint8Array.from(Buffer.from(tokenAmount, 'hex')),
+    const txInput = encoder.Ethereum.Proto.SigningInput.create({
+      chainId: Uint8Array.from(Buffer.from(chainIdHex, 'hex')),
+      nonce: Uint8Array.from(Buffer.from(nonceHex, 'hex')),
+      gasLimit: Uint8Array.from(Buffer.from(padHex(gasLimit), 'hex')),
+      maxFeePerGas: Uint8Array.from(Buffer.from(padHex(maxFeePerGas), 'hex')),
+      maxInclusionFeePerGas: Uint8Array.from(
+        Buffer.from(padHex(maxInclusionFeePerGas), 'hex'),
+      ),
+      toAddress,
+      transaction: {
+        erc20Transfer: {
+          to: recipientAddress,
+          amount: Uint8Array.from(Buffer.from(tokenAmount, 'hex')),
+        },
       },
-    },
-    privateKey: walletPrivateKey.data(),
-    txMode: encoder.Ethereum.Proto.TransactionMode.Enveloped,
-  })
+      privateKey: walletPrivateKey.data(),
+      txMode: encoder.Ethereum.Proto.TransactionMode.Enveloped,
+    })
 
-  const inputEncoded =
-    encoder.Ethereum.Proto.SigningInput.encode(txInput).finish()
+    const inputEncoded =
+      encoder.Ethereum.Proto.SigningInput.encode(txInput).finish()
 
-  const outputData = walletCore.AnySigner.sign(
-    inputEncoded,
-    walletCore.CoinType.ethereum,
-  )
-  const output = encoder.Ethereum.Proto.SigningOutput.decode(outputData)
-  const rawTx = walletCore.HexCoding.encode(output.encoded)
+    const outputData = walletCore.AnySigner.sign(
+      inputEncoded,
+      walletCore.CoinType.ethereum,
+    )
+    const output = encoder.Ethereum.Proto.SigningOutput.decode(outputData)
+    const rawTx = walletCore.HexCoding.encode(output.encoded)
 
-  // broadcast
-  const response = await fetch(BROADCAST_TRANSACTION_URL.toString(), {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      json: {
-        txHex: rawTx,
-        network,
+    // broadcast
+    const response = await fetch(BROADCAST_TRANSACTION_URL.toString(), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    }),
-    cache: 'no-store',
+      body: JSON.stringify({
+        json: {
+          txHex: rawTx,
+          network,
+        },
+      }),
+      cache: 'no-store',
+    })
+
+    if (!response.ok) {
+      throw new Error('Failed to broadcast transaction')
+    }
+
+    const body = await response.json()
+    const txid = body.result.data.json
+
+    return { txid }
   })
-
-  if (!response.ok) {
-    throw new Error('Failed to broadcast transaction')
-  }
-
-  const body = await response.json()
-  const txid = body.result.data.json
-
-  return {
-    txid,
-  }
 }
 
-/**
- * UTILS
- */
-
-// Function to pad hex strings to even length
-const padHex = (hexStr: string) => {
-  hexStr = hexStr.replace(/^0x/, '')
-  return hexStr.length % 2 === 1 ? '0' + hexStr : hexStr
-}
-
-// Fetch the nonce for the given address and network
-const fetchNetworkNonce = async (
-  fromAddress: string,
-  network: string,
-): Promise<number> => {
-  const nonceUrl = new URL(
-    `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/nodes.getNonce`,
-  )
-  nonceUrl.searchParams.set(
-    'input',
-    JSON.stringify({ json: { address: fromAddress, network } }),
-  )
-
-  const nonceResponse = await fetch(nonceUrl.toString(), {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    cache: 'no-store',
-  })
-
-  if (!nonceResponse.ok) {
-    throw new Error('Failed to fetch nonce')
-  }
-
-  const nonceBody = await nonceResponse.json()
-  const hex: string = nonceBody.result.data.json
-  return Number(hex)
-}
-
-/**
- * Track the nonce for the given address and network locally,
- * this avoids nonce collisions when sending two tx in a very short period of time.
- */
-const localNonceTracker = new Map<string, number>()
-const getNonceHex = async (
-  fromAddress: string,
-  network: string,
-): Promise<string> => {
-  const key = `${fromAddress}:${network}`
-  const networkNonce = await fetchNetworkNonce(fromAddress, network)
-  const localNonce = localNonceTracker.get(key) ?? 0
-  const nonce = Math.max(networkNonce, localNonce)
-
-  localNonceTracker.set(key, nonce + 1)
-
-  return padHex(nonce.toString(16))
-}
-
-// Get the chain ID in hex format
 const getChainIdHex = (chainID: string): string => {
   return BigInt(chainID).toString(16).padStart(2, '0')
 }
