@@ -40,15 +40,17 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { cx } from 'class-variance-authority'
-import { parseUnits } from 'ethers'
+import { Interface, parseUnits } from 'ethers'
 
 import { useEthBalance } from '@/hooks/use-eth-balance'
+import { useGasFees } from '@/hooks/use-gas-fees'
 import { renderMarkdown } from '@/lib/markdown'
 import { notifyTransactionSent } from '@/lib/notifications'
 import { apiClient } from '@/providers/api-client'
 import { usePassword } from '@/providers/password-context'
 import { usePendingTransactions } from '@/providers/pending-transactions-context'
 import { useWallet } from '@/providers/wallet-context'
+import { fetchTrpcData } from '@/utils/trpc'
 import { ExchangeDrawer } from '~/components/exchange-drawer'
 
 import { AssetChart } from './asset-chart'
@@ -56,10 +58,6 @@ import {
   type AssetData,
   type AssetsResponse,
   buildTokenQueryParams,
-  erc20,
-  fetchGasFees,
-  fetchTrpcData,
-  type GasFees,
   getTokenEndpoint,
   getTokenMetadata,
   matchesAsset,
@@ -80,6 +78,7 @@ const TOKEN_DETAIL_STALE_TIME = 15 * 1000 // 15 seconds
 const TOKEN_DETAIL_GC_TIME = 60 * 60 * 1000 // 1 hour
 const OPTIMIZED_TOKEN_STALE_TIME = 5 * 1000 // 5 seconds
 const OPTIMIZED_TOKEN_REFETCH_INTERVAL = 30 * 1000 // 30 seconds
+const erc20 = new Interface(['function transfer(address to, uint256 amount)'])
 
 const Token = (props: Props) => {
   const { ticker, address } = props
@@ -212,18 +211,15 @@ const Token = (props: Props) => {
     ? ethBalanceQuery.data?.summary.total_balance || 0
     : finalTokenDetail?.summary.total_balance || 0
 
-  // Get gas fees for the current network
-  const gasFeeQuery = useQuery<GasFees>({
-    queryKey: ['gas-fees', address, gasInput?.to, gasInput?.value],
-    queryFn: async ({ queryKey }) => {
-      const [, from, to, value] = queryKey as [string, string, string, string]
-      const isNative = finalTokenDetail?.summary.symbol === 'ETH'
-      const contractAddress = finalTokenDetail?.summary.contracts.ethereum
+  const isNativeForGas = finalTokenDetail?.summary.symbol === 'ETH'
+  const contractAddressForGas = finalTokenDetail?.summary.contracts.ethereum
 
-      return fetchGasFees(from, to, value, isNative, contractAddress)
-    },
-    enabled:
-      !!gasInput?.to && !!gasInput?.value && !!address && !!finalTokenDetail,
+  // Get gas fees for the current network
+  const gasFeeQuery = useGasFees({
+    address,
+    gasInput: finalTokenDetail ? gasInput : null,
+    isNative: isNativeForGas,
+    contractAddress: contractAddressForGas,
   })
 
   // Show error toast if fetching gas fees fails
@@ -329,10 +325,10 @@ const Token = (props: Props) => {
   }
 
   const signTransaction = async (formData: SendAssetsFormData) => {
-    if (!gasFeeQuery.data) {
-      throw new Error('Gas fees not available')
-    }
-
+    // Throws GasShiftedError for spikes >=30% so the modal can ask for confirmation.
+    // Smaller bumps are accepted silently with fresh params.
+    const freshGasFees = await gasFeeQuery.checkAndRefreshGasFees()
+    const gasParams = freshGasFees.txParams
     const isNative = finalTokenDetail?.summary.symbol === 'ETH'
 
     if (isNative) {
@@ -342,9 +338,9 @@ const Token = (props: Props) => {
         toAddress: formData.to,
         fromAddress: address,
         walletId: currentWallet?.id || '',
-        gasLimit: gasFeeQuery.data.txParams.gasLimit,
-        maxFeePerGas: gasFeeQuery.data.txParams.maxFeePerGas,
-        maxInclusionFeePerGas: gasFeeQuery.data.txParams.maxPriorityFeePerGas,
+        gasLimit: gasParams.gasLimit,
+        maxFeePerGas: gasParams.maxFeePerGas,
+        maxInclusionFeePerGas: gasParams.maxPriorityFeePerGas,
       }
 
       const result = await apiClient.wallet.account.ethereum.send.mutate(params)
@@ -405,9 +401,9 @@ const Token = (props: Props) => {
         toAddress: contractAddress,
         fromAddress: address,
         walletId: currentWallet?.id || '',
-        gasLimit: gasFeeQuery.data.txParams.gasLimit,
-        maxFeePerGas: gasFeeQuery.data.txParams.maxFeePerGas,
-        maxInclusionFeePerGas: gasFeeQuery.data.txParams.maxPriorityFeePerGas,
+        gasLimit: gasParams.gasLimit,
+        maxFeePerGas: gasParams.maxFeePerGas,
+        maxInclusionFeePerGas: gasParams.maxPriorityFeePerGas,
         data,
       }
 
