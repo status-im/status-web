@@ -169,106 +169,98 @@ let config = {
         destination: 'https://discuss.status.app/c/features/51',
         permanent: false,
       },
-      // Legacy help-section URLs missing the /help/ prefix.
-      // Two rules per section: a bare-path rule (e.g. `/wallet` ->
-      // `/help/wallet`) and a sub-path rule (`/wallet/:slug+` ->
-      // `/help/wallet/:slug+`). Next.js's path-to-regexp engine treats
-      // `/wallet/:slug*` as requiring the literal `/wallet/` prefix, so
-      // it does NOT match the bare `/wallet`; we need the explicit
-      // entry. `/keycard` is a real product page so we omit its
-      // bare-path redirect to avoid hijacking it.
       {
         source: '/wallet',
         destination: '/help/wallet',
-        permanent: true,
+        statusCode: 301,
       },
       {
         source: '/wallet/:slug+',
         destination: '/help/wallet/:slug+',
-        permanent: true,
+        statusCode: 301,
       },
       {
         source: '/messaging',
         destination: '/help/messaging',
-        permanent: true,
+        statusCode: 301,
       },
       {
         source: '/messaging/:slug+',
         destination: '/help/messaging/:slug+',
-        permanent: true,
+        statusCode: 301,
       },
       {
         source: '/profile',
         destination: '/help/profile',
-        permanent: true,
+        statusCode: 301,
       },
       {
         source: '/profile/:slug+',
         destination: '/help/profile/:slug+',
-        permanent: true,
+        statusCode: 301,
       },
       {
         source: '/keycard/:slug+',
         destination: '/help/keycard/:slug+',
-        permanent: true,
+        statusCode: 301,
       },
       {
         source: '/communities',
         destination: '/help/communities',
-        permanent: true,
+        statusCode: 301,
       },
       {
         source: '/communities/:slug+',
         destination: '/help/communities/:slug+',
-        permanent: true,
+        statusCode: 301,
       },
       {
         source: '/getting-started',
         destination: '/help/getting-started',
-        permanent: true,
+        statusCode: 301,
       },
       {
         source: '/getting-started/:slug+',
         destination: '/help/getting-started/:slug+',
-        permanent: true,
+        statusCode: 301,
       },
       // Legacy /features/* pages.
       {
         source: '/features/wallet',
         destination: '/help/wallet',
-        permanent: true,
+        statusCode: 301,
       },
       {
         source: '/features/communities',
         destination: '/help/communities',
-        permanent: true,
+        statusCode: 301,
       },
       {
         source: '/features/create-community',
         destination: '/help/communities/create-a-status-community',
-        permanent: true,
+        statusCode: 301,
       },
       // Renamed help-doc slugs.
       {
         source: '/help/wallet/delete-your-status-wallet-or-wallet-account',
         destination: '/help/wallet/delete-your-status-wallet-accounts',
-        permanent: true,
+        statusCode: 301,
       },
       {
         source: '/help/communities/set-up-channel-permissions',
         destination: '/help/communities/set-up-your-channel-permissions',
-        permanent: true,
+        statusCode: 301,
       },
       {
         source: '/help/keycard/if-you-can-t-unlock-your-keycard',
         destination: '/help/keycard/if-you-can-t-unblock-your-keycard',
-        permanent: true,
+        statusCode: 301,
       },
       // Renamed spec slug.
       {
         source: '/specs/status-payload',
         destination: '/specs/status-payloads',
-        permanent: true,
+        statusCode: 301,
       },
     ]
   },
