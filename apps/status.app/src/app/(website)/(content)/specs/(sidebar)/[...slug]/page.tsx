@@ -25,7 +25,11 @@ export async function generateMetadata({ params }: Props) {
   const slug = (await params).slug
   const doc = allSpecsDocs.find(
     d => (d.slug as unknown as string[]).join('/') === slug.join('/')
-  )!
+  )
+
+  if (!doc) {
+    notFound()
+  }
 
   return Metadata({
     title: doc.title,

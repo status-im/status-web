@@ -46,7 +46,12 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props) {
   const slug = (await params).slug
-  const doc = allHelpDocs.find(d => d.slug.join('/') === slug.join('/'))!
+  const doc = allHelpDocs.find(d => d.slug.join('/') === slug.join('/'))
+
+  if (!doc) {
+    notFound()
+  }
+
   const t = await getTranslations('help')
 
   return Metadata({
