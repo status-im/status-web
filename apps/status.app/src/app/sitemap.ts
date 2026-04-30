@@ -3,6 +3,10 @@ import { getPostsForSitemap, getTagsForSitemap } from '~website/_lib/ghost'
 
 import type { MetadataRoute } from 'next'
 
+// Cache the sitemap for 1 hour so /sitemap.xml does not hit the Ghost
+// API on every request. Crawlers do not need second-by-second freshness.
+export const revalidate = 3600
+
 const BASE_URL = 'https://status.app'
 
 const STATIC_PATHS = [

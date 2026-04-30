@@ -170,21 +170,23 @@ let config = {
         permanent: false,
       },
       // Legacy help-section URLs missing the /help/ prefix.
-      // `:slug+` requires at least one sub-segment so the existing
-      // /keycard product page is not hijacked.
+      // Sections without a top-level product page use `:slug*` (zero or
+      // more segments) so bare `/wallet`, `/messaging`, etc. also
+      // redirect. `/keycard` is a real product page, so keep `:slug+`
+      // there to require at least one sub-segment and avoid hijacking it.
       {
-        source: '/wallet/:slug+',
-        destination: '/help/wallet/:slug+',
+        source: '/wallet/:slug*',
+        destination: '/help/wallet/:slug*',
         permanent: true,
       },
       {
-        source: '/messaging/:slug+',
-        destination: '/help/messaging/:slug+',
+        source: '/messaging/:slug*',
+        destination: '/help/messaging/:slug*',
         permanent: true,
       },
       {
-        source: '/profile/:slug+',
-        destination: '/help/profile/:slug+',
+        source: '/profile/:slug*',
+        destination: '/help/profile/:slug*',
         permanent: true,
       },
       {
@@ -193,13 +195,13 @@ let config = {
         permanent: true,
       },
       {
-        source: '/communities/:slug+',
-        destination: '/help/communities/:slug+',
+        source: '/communities/:slug*',
+        destination: '/help/communities/:slug*',
         permanent: true,
       },
       {
-        source: '/getting-started/:slug+',
-        destination: '/help/getting-started/:slug+',
+        source: '/getting-started/:slug*',
+        destination: '/help/getting-started/:slug*',
         permanent: true,
       },
       // Legacy /features/* pages.
