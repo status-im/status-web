@@ -1,0 +1,81 @@
+import { allHelpDocs, allSpecsDocs } from '~content'
+import { getPostsForSitemap, getTagsForSitemap } from '~website/_lib/ghost'
+
+import type { MetadataRoute } from 'next'
+
+const BASE_URL = 'https://status.app'
+
+const STATIC_PATHS = [
+  '/',
+  '/blog',
+  '/snt',
+  '/snt/release-schedule',
+  '/snt/exchanges',
+  '/keycard',
+  '/apps',
+  '/manifesto',
+  '/security',
+  '/team',
+  '/jobs',
+  '/brand',
+  '/translations',
+  '/insights/epics',
+  '/specs',
+  '/help',
+  '/help/getting-started',
+  '/help/wallet',
+  '/help/keycard',
+  '/help/communities',
+  '/help/messaging',
+  '/help/profile',
+  '/legal/terms-of-use',
+  '/legal/privacy-policy',
+] as const
+
+function toUrl(path: string): string {
+  return `${BASE_URL}${path}`
+}
+
+function toDate(value: string | Date | undefined): Date {
+  if (!value) {
+    return new Date()
+  }
+  const date = value instanceof Date ? value : new Date(value)
+  return Number.isNaN(date.getTime()) ? new Date() : date
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const buildDate = new Date()
+
+  const [posts, tags] = await Promise.all([
+    getPostsForSitemap(),
+    getTagsForSitemap(),
+  ])
+
+  const entries = new Map<string, Date>()
+
+  for (const path of STATIC_PATHS) {
+    entries.set(toUrl(path), buildDate)
+  }
+
+  for (const post of posts) {
+    entries.set(toUrl(`/blog/${post.slug}`), toDate(post.updatedAt))
+  }
+
+  for (const tag of tags) {
+    entries.set(toUrl(`/blog/tag/${tag.slug}`), buildDate)
+  }
+
+  for (const doc of allHelpDocs) {
+    entries.set(toUrl(doc.url), toDate(doc.lastEdited))
+  }
+
+  for (const doc of allSpecsDocs) {
+    entries.set(toUrl(doc.url), toDate(doc.lastEdited))
+  }
+
+  return Array.from(entries.entries()).map(([url, lastModified]) => ({
+    url,
+    lastModified,
+  }))
+}
