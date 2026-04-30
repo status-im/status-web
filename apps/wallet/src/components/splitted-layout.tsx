@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 
-import { Avatar, Skeleton } from '@status-im/components'
+import { Skeleton } from '@status-im/components'
 import {
   Balance,
   StickyHeaderContainer,
@@ -12,6 +12,7 @@ import { useWallet } from '@/providers/wallet-context'
 
 import { ActionButtons } from '../components/action-buttons'
 import { RecoveryPhraseBackup } from '../components/recovery-phrase-backup'
+import { WalletSelector } from '../components/wallet-selector'
 import {
   AccountSkeleton,
   ActionButtonsSkeleton,
@@ -107,20 +108,8 @@ const AccountInfo = () => {
   }
 
   return (
-    <div
-      className="hidden items-center gap-1.5 xl:flex"
-      data-customisation={account.color}
-    >
-      <Avatar
-        type="account"
-        name={account.name}
-        emoji={account.emoji}
-        size="24"
-        bgOpacity="20"
-      />
-      <div className="text-15 font-semibold text-neutral-100">
-        {account.name}
-      </div>
+    <div data-customisation={account.color}>
+      <WalletSelector />
     </div>
   )
 }
@@ -188,9 +177,9 @@ const MainContentBody = ({
   hideAssetsBelowOneToggle?: HideAssetsBelowOneToggle
 }) => {
   const { account, isLoading } = usePortfolio()
-  const { currentWallet, isLoading: isWalletLoading } = useWallet()
+  const { currentAccount, isLoading: isWalletLoading } = useWallet()
 
-  const address = currentWallet?.activeAccounts[0].address
+  const address = currentAccount?.address
 
   if (isLoading || isWalletLoading) {
     return (

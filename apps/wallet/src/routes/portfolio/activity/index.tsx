@@ -23,10 +23,14 @@ export const Route = createFileRoute('/portfolio/activity/')({
 })
 
 function RouteComponent() {
-  const { currentWallet, isLoading: isWalletLoading } = useWallet()
+  const {
+    currentWallet,
+    currentAccount,
+    isLoading: isWalletLoading,
+  } = useWallet()
   const { isPinExtension, handleClose } = usePinExtension()
   const { pendingTransactions } = usePendingTransactions()
-  const address = currentWallet?.activeAccounts[0].address
+  const address = currentAccount?.address
 
   const toast = useToast()
 

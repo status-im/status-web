@@ -4,6 +4,7 @@
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="../../.wxt/wxt.d.ts" />
 
+import { storage } from '@wxt-dev/storage'
 import { Buffer } from 'buffer'
 import { defineBackground } from 'wxt/sandbox'
 
@@ -14,6 +15,12 @@ import { INACTIVITY_ALARM_NAME, lock } from '../data/session'
 import { getWalletCore } from '../data/wallet'
 import { RpcMessage } from '../lib/messages'
 import { handleRpcRequest } from '../lib/rpc-handler'
+import { PENDING_TXS_KEY } from '../lib/storage-keys'
+import {
+  checkPendingTransactions,
+  startTxMonitor,
+  TX_MONITOR_ALARM,
+} from '../lib/tx-monitor'
 
 export default defineBackground({
   type: 'module',
@@ -41,6 +48,18 @@ export default defineBackground({
 
     chrome.alarms.onAlarm.addListener(alarm => {
       if (alarm.name === INACTIVITY_ALARM_NAME) lock()
+      if (alarm.name === TX_MONITOR_ALARM) {
+        void checkPendingTransactions().catch(error => {
+          console.error('Failed to check pending transactions', error)
+        })
+      }
+    })
+
+    // Start tx monitor alarm when pending transactions are added
+    storage.watch<unknown[]>(PENDING_TXS_KEY, pendingTxs => {
+      if (pendingTxs && pendingTxs.length > 0) {
+        void startTxMonitor()
+      }
     })
 
     chrome.runtime.onInstalled.addListener(() => {

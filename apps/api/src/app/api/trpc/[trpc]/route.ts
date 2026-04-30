@@ -95,13 +95,13 @@ async function handler(request: NextRequest) {
     const result = await response.json()
 
     return Response.json(result, { status })
-  } catch {
+  } catch (error) {
     const status = 500
     // @see https://github.com/trpc/trpc/discussions/3640#discussioncomment-5511435 for returning explicit trpc error in superjson construct as result and preventing possible timeouts due to additional parsing
     const result = {
       error: {
         json: {
-          message: 'Internal server error',
+          message: `${error instanceof Error ? error.message : 'Internal server error'}`,
           code: -32603,
           data: {
             code: 'INTERNAL_SERVER_ERROR',
@@ -163,65 +163,92 @@ function getCorsHeaders(): Record<string, string> {
 }
 
 /**
- * Handles JSON-RPC requests by transforming them to tRPC format
+ * Processes a single JSON-RPC call through the tRPC rpc.proxy mutation.
+ */
+async function processSingleJsonRpc(
+  request: NextRequest,
+  jsonRpcCall: { method: string; params?: unknown[]; id?: string | number },
+  chainId?: number
+): Promise<unknown> {
+  const trpcRequest = createTrpcRequest(request, jsonRpcCall, chainId)
+
+  const response = await fetchRequestHandler({
+    endpoint: '/api/trpc',
+    router: apiRouter,
+    req: trpcRequest,
+    createContext: async () => {
+      const headers = new Headers(await nextHeaders())
+      return { headers }
+    },
+    responseMeta: () => ({
+      headers: {
+        'cache-control': 'private, no-store',
+        ...getCorsHeaders(),
+      },
+    }),
+  })
+
+  if (!response.ok) {
+    throw new Error(
+      `tRPC handler error: ${response.status} ${response.statusText}`
+    )
+  }
+
+  const trpcResponse = await response.json()
+  return extractJsonRpcResult(trpcResponse)
+}
+
+/**
+ * Handles JSON-RPC requests (single or batch) by transforming them to tRPC format.
  */
 async function handleJsonRpcProxy(request: NextRequest): Promise<Response> {
+  const url = new URL(request.url)
+  const jsonRpcBody = await request.json()
+  const chainIdParam = url.searchParams.get('chainId')
+  const chainId = chainIdParam ? Number.parseInt(chainIdParam, 10) : undefined
+
+  const corsHeaders = {
+    ...getCorsHeaders(),
+    'cache-control': 'private, no-store',
+  }
+
+  if (Array.isArray(jsonRpcBody)) {
+    const results = await Promise.all(
+      jsonRpcBody.map(async call => {
+        try {
+          return await processSingleJsonRpc(request, call, chainId)
+        } catch (error) {
+          return {
+            jsonrpc: '2.0' as const,
+            id: call.id ?? null,
+            error: {
+              code: -32603,
+              message:
+                error instanceof Error
+                  ? error.message
+                  : 'Internal server error',
+            },
+          }
+        }
+      })
+    )
+
+    return Response.json(results, { headers: corsHeaders })
+  }
+
   try {
-    const url = new URL(request.url)
-    const jsonRpcBody = await request.json()
-    const chainIdParam = url.searchParams.get('chainId')
-    const chainId = chainIdParam ? Number.parseInt(chainIdParam, 10) : undefined
+    const result = await processSingleJsonRpc(request, jsonRpcBody, chainId)
 
-    const trpcRequest = createTrpcRequest(request, jsonRpcBody, chainId)
-
-    const response = await fetchRequestHandler({
-      endpoint: '/api/trpc',
-      router: apiRouter,
-      req: trpcRequest,
-      createContext: async () => {
-        const headers = new Headers(await nextHeaders())
-        return { headers }
-      },
-      responseMeta: () => ({
-        headers: {
-          'cache-control': 'private, no-store',
-          ...getCorsHeaders(),
-        },
-      }),
-    })
-
-    if (!response.ok) {
-      throw new Error(
-        `tRPC handler error: ${response.status} ${response.statusText}`
-      )
-    }
-
-    const trpcResponse = await response.json()
-    const jsonRpcResult = extractJsonRpcResult(trpcResponse)
-
-    if (!jsonRpcResult) {
+    if (!result) {
       throw new Error('Failed to process RPC request: no result data')
     }
 
-    return Response.json(jsonRpcResult, {
-      headers: {
-        ...getCorsHeaders(),
-        'cache-control': 'private, no-store',
-      },
-    })
+    return Response.json(result, { headers: corsHeaders })
   } catch (error) {
-    let errorId: string | number | null = null
-    try {
-      const body = await request.clone().json()
-      errorId = body.id ?? null
-    } catch {
-      // Ignore if we can't parse the body for error ID
-    }
-
     return Response.json(
       {
         jsonrpc: '2.0',
-        id: errorId,
+        id: jsonRpcBody?.id ?? null,
         error: {
           code: -32603,
           message:
@@ -230,7 +257,7 @@ async function handleJsonRpcProxy(request: NextRequest): Promise<Response> {
       },
       {
         status: 500,
-        headers: getCorsHeaders(),
+        headers: corsHeaders,
       }
     )
   }

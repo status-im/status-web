@@ -11,6 +11,7 @@ type Activity = ApiOutput['activities']['activities']['activities'][0]
 type PendingTransaction = Activity & {
   status: 'pending'
   uniqueId: string
+  displayAmount?: string
 }
 
 type PendingTransactionsContext = {
@@ -68,11 +69,11 @@ export function PendingTransactionsProvider({
   }, [storage])
 
   useEffect(() => {
-    if (!isLoading) {
-      storage.set({ transactions: pendingTransactions }).catch(error => {
-        console.error('Failed to save pending transactions:', error)
-      })
-    }
+    if (isLoading) return
+
+    storage.set({ transactions: pendingTransactions }).catch(error => {
+      console.error('Failed to save pending transactions:', error)
+    })
   }, [pendingTransactions, storage, isLoading])
 
   const addPendingTransaction = (

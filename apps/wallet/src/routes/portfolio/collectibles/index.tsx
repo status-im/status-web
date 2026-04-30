@@ -23,7 +23,11 @@ export const Route = createFileRoute('/portfolio/collectibles/')({
 })
 
 function Component() {
-  const { currentWallet, isLoading: isWalletLoading } = useWallet()
+  const {
+    currentWallet,
+    currentAccount,
+    isLoading: isWalletLoading,
+  } = useWallet()
   const { isPinExtension, handleClose } = usePinExtension()
 
   const toast = useToast()
@@ -32,7 +36,7 @@ function Component() {
   const search = searchParams.get('search') ?? undefined
 
   const pathname = window.location.pathname
-  const address = currentWallet?.activeAccounts[0].address
+  const address = currentAccount?.address
 
   const {
     data,

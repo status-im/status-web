@@ -10,12 +10,12 @@ export const useCreateWallet = () => {
 
   const { mutate, mutateAsync, ...result } = useMutation({
     mutationKey: ['create-wallet'],
-    mutationFn: async (password: string) => {
-      await api.wallet.add.mutate({
+    mutationFn: async (password?: string) => {
+      const createdWallet = await api.wallet.add.mutate({
         password,
-        name: 'Account 1',
       })
       await markAsNeedsBackup()
+      return createdWallet
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['wallets'] })

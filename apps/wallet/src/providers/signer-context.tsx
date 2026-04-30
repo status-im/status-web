@@ -6,10 +6,14 @@ import {
   useMemo,
 } from 'react'
 
-import { type Address, createPublicClient, type Hex, http } from 'viem'
-import { mainnet } from 'viem/chains'
+import {
+  getTransactionHash,
+  isEthereumTransactionHash,
+} from '@status-im/wallet/utils'
+import { type Address, type Hex } from 'viem'
 import { formatEther } from 'viem/utils'
 
+import { publicClient } from '../lib/public-client'
 import { apiClient } from './api-client'
 import { usePassword } from './password-context'
 import { useWallet } from './wallet-context'
@@ -32,6 +36,8 @@ type SignerContextValue = {
   requestUnlock: () => Promise<boolean>
 }
 
+const DEFAULT_ACCOUNT_NAME = 'Account 1'
+
 const SignerContext = createContext<SignerContextValue | undefined>(undefined)
 
 export function useWalletSigner() {
@@ -43,13 +49,17 @@ export function useWalletSigner() {
 }
 
 export function SignerProvider({ children }: { children: React.ReactNode }) {
-  const { currentWallet } = useWallet()
+  const { currentWallet, currentAccount } = useWallet()
   const { hasActiveSession, requestPassword, clearSession } = usePassword()
 
-  const address = currentWallet?.activeAccounts[0]?.address as
-    | Address
-    | undefined
-  const accountName = currentWallet?.name ?? 'Account 1'
+  const address = useMemo(() => {
+    return currentAccount?.address as Address | undefined
+  }, [currentAccount])
+
+  const accountName = useMemo(() => {
+    // TODO: Use currently selected account name instead when multi-account support is implemented.
+    return currentWallet?.name ?? DEFAULT_ACCOUNT_NAME
+  }, [currentWallet])
 
   useEffect(() => {
     if (address) {
@@ -159,11 +169,6 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
       let gasLimit = tx.gas?.toString(16)
 
       if (!maxFeePerGas || !maxPriorityFeePerGas || !gasLimit) {
-        const publicClient = createPublicClient({
-          chain: mainnet,
-          transport: http(),
-        })
-
         if (!maxFeePerGas || !maxPriorityFeePerGas) {
           const [block, priorityFee] = await Promise.all([
             publicClient.getBlock({ blockTag: 'latest' }),
@@ -190,22 +195,6 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
         }
       }
 
-      const extractTxHash = (id: unknown): string | undefined => {
-        if (typeof id === 'string') {
-          return id
-        }
-        if (id && typeof id === 'object') {
-          const obj = id as Record<string, unknown>
-          if ('result' in obj && typeof obj.result === 'string') {
-            return obj.result
-          }
-          if ('txid' in obj) {
-            return obj.txid as string
-          }
-        }
-        return undefined
-      }
-
       if (tx.data) {
         const ERC20_TRANSFER_SIGNATURE = '0xa9059cbb'
         const isErc20Transfer = tx.data
@@ -228,8 +217,10 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
             handleTransactionError(result.id.txid.error, 'ERC20 transfer')
           }
 
-          const txHash = extractTxHash(result.id.txid)
-          if (!txHash) throw new Error('Transaction failed')
+          const txHash = getTransactionHash(result.id.txid)
+          if (!isEthereumTransactionHash(txHash)) {
+            throw new Error('Transaction failed')
+          }
           return txHash as Hex
         }
 
@@ -250,8 +241,10 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
           handleTransactionError(result.id.txid.error, 'Contract call')
         }
 
-        const txHash = extractTxHash(result.id.txid)
-        if (!txHash) throw new Error('Transaction failed')
+        const txHash = getTransactionHash(result.id.txid)
+        if (!isEthereumTransactionHash(txHash)) {
+          throw new Error('Transaction failed')
+        }
         return txHash as Hex
       }
 
@@ -270,8 +263,10 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
         handleTransactionError(result.id.txid.error, 'Send transaction')
       }
 
-      const txHash = extractTxHash(result.id.txid)
-      if (!txHash) throw new Error('Transaction failed')
+      const txHash = getTransactionHash(result.id.txid)
+      if (!isEthereumTransactionHash(txHash)) {
+        throw new Error('Transaction failed')
+      }
       return txHash as Hex
     },
     [currentWallet?.id, address, ensureUnlocked, handleTransactionError],

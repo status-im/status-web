@@ -1,6 +1,4 @@
 import { ProviderRpcError } from '@status-im/ethereum-provider'
-import { createPublicClient, http } from 'viem'
-import { mainnet } from 'viem/chains'
 
 import {
   type ApprovalResult,
@@ -10,14 +8,11 @@ import {
   type PendingApproval,
   setPendingApproval,
 } from '../data/approval'
-
-const publicClient = createPublicClient({
-  chain: mainnet,
-  transport: http(),
-})
+import { publicClient } from './public-client'
 
 const DEFAULT_CHAIN_ID = '0x1'
 const SUPPORTED_CHAIN_IDS = new Set(['0x1', '0x6300b5ea'])
+const DEFAULT_ACCOUNT_NAME = 'Account 1'
 
 // 5 minutes in ms
 const APPROVAL_TIMEOUT_MS = 5 * 60 * 1000
@@ -47,7 +42,7 @@ async function getAddress(): Promise<string | null> {
 
 async function getAccountName(): Promise<string> {
   const result = await chrome.storage.session.get('dappAccountName')
-  return (result.dappAccountName as string) || 'Account 1'
+  return (result.dappAccountName as string) || DEFAULT_ACCOUNT_NAME
 }
 
 async function getWalletId(): Promise<string | null> {
