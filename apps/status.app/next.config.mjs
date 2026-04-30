@@ -169,6 +169,77 @@ let config = {
         destination: 'https://discuss.status.app/c/features/51',
         permanent: false,
       },
+      // Legacy help-section URLs missing the /help/ prefix.
+      // `:slug+` requires at least one sub-segment so the existing
+      // /keycard product page is not hijacked.
+      {
+        source: '/wallet/:slug+',
+        destination: '/help/wallet/:slug+',
+        permanent: true,
+      },
+      {
+        source: '/messaging/:slug+',
+        destination: '/help/messaging/:slug+',
+        permanent: true,
+      },
+      {
+        source: '/profile/:slug+',
+        destination: '/help/profile/:slug+',
+        permanent: true,
+      },
+      {
+        source: '/keycard/:slug+',
+        destination: '/help/keycard/:slug+',
+        permanent: true,
+      },
+      {
+        source: '/communities/:slug+',
+        destination: '/help/communities/:slug+',
+        permanent: true,
+      },
+      {
+        source: '/getting-started/:slug+',
+        destination: '/help/getting-started/:slug+',
+        permanent: true,
+      },
+      // Legacy /features/* pages.
+      {
+        source: '/features/wallet',
+        destination: '/help/wallet',
+        permanent: true,
+      },
+      {
+        source: '/features/communities',
+        destination: '/help/communities',
+        permanent: true,
+      },
+      {
+        source: '/features/create-community',
+        destination: '/help/communities/create-a-status-community',
+        permanent: true,
+      },
+      // Renamed help-doc slugs.
+      {
+        source: '/help/wallet/delete-your-status-wallet-or-wallet-account',
+        destination: '/help/wallet/delete-your-status-wallet-accounts',
+        permanent: true,
+      },
+      {
+        source: '/help/communities/set-up-channel-permissions',
+        destination: '/help/communities/set-up-your-channel-permissions',
+        permanent: true,
+      },
+      {
+        source: '/help/keycard/if-you-can-t-unlock-your-keycard',
+        destination: '/help/keycard/if-you-can-t-unblock-your-keycard',
+        permanent: true,
+      },
+      // Renamed spec slug.
+      {
+        source: '/specs/status-payload',
+        destination: '/specs/status-payloads',
+        permanent: true,
+      },
     ]
   },
 }
