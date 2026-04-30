@@ -1,3 +1,5 @@
+import { useCallback } from 'react'
+
 import { GasShiftedError } from '@status-im/wallet/constants'
 import { useQuery } from '@tanstack/react-query'
 import { Interface, isAddress } from 'ethers'
@@ -28,10 +30,23 @@ type GasInput = {
 }
 
 type UseGasFeesOptions = {
-  address: string
-  gasInput: GasInput | null
-  isNative: boolean
+  address?: string
+  gasInput?: GasInput | null
+  isNative?: boolean
   contractAddress?: string
+}
+
+export type GasFeeRequestParams = {
+  from: string
+  to: string
+  value?: string
+  data?: string
+}
+
+function toRpcHex(value: string): string {
+  if (value.startsWith('0x')) return value
+  if (value === '') return '0x0'
+  return `0x${value}`
 }
 
 function buildGasFeeParams(
@@ -40,13 +55,9 @@ function buildGasFeeParams(
   to: string,
   value: string,
   contractAddress?: string,
-): Record<string, unknown> {
+): GasFeeRequestParams {
   if (isNative) {
-    return {
-      from,
-      to,
-      value,
-    }
+    return { from, to, value }
   }
 
   if (!contractAddress) {
@@ -64,20 +75,17 @@ function buildGasFeeParams(
   }
 }
 
-async function fetchGasFees(
-  from: string,
-  to: string,
-  value: string,
-  isNative: boolean,
-  contractAddress?: string,
-): Promise<GasFees> {
-  const params = buildGasFeeParams(isNative, from, to, value, contractAddress)
+async function requestFeeRate(params: GasFeeRequestParams): Promise<GasFees> {
+  const normalizedParams: GasFeeRequestParams = {
+    ...params,
+    value: params.value ? toRpcHex(params.value) : params.value,
+  }
 
   return fetchTrpcData<GasFees>(
     'nodes.getFeeRate',
     {
       network: 'ethereum',
-      params,
+      params: normalizedParams,
     },
     'Failed to fetch gas fees',
   )
@@ -86,14 +94,21 @@ async function fetchGasFees(
 export const useGasFees = ({
   address,
   gasInput,
-  isNative,
+  isNative = true,
   contractAddress,
-}: UseGasFeesOptions) => {
+}: UseGasFeesOptions = {}) => {
   const query = useQuery<GasFees>({
     queryKey: ['gas-fees', address, gasInput?.to, gasInput?.value],
     queryFn: async ({ queryKey }) => {
       const [, from, to, value] = queryKey as [string, string, string, string]
-      return fetchGasFees(from, to, value, isNative, contractAddress)
+      const params = buildGasFeeParams(
+        isNative,
+        from,
+        to,
+        value,
+        contractAddress,
+      )
+      return requestFeeRate(params)
     },
     enabled:
       !!gasInput?.to &&
@@ -103,6 +118,13 @@ export const useGasFees = ({
     staleTime: GAS_FEES_STALE_TIME,
     refetchInterval: GAS_FEES_REFETCH_INTERVAL,
   })
+
+  // Exposed for imperative use cases (e.g. signer-context tx send path) that need fees
+  // on-demand, while most UI flows (e.g. token.tsx) can rely on the hook query lifecycle.
+  const fetchGasFees = useCallback(
+    (params: GasFeeRequestParams): Promise<GasFees> => requestFeeRate(params),
+    [],
+  )
 
   const checkAndRefreshGasFees = async (): Promise<GasFees> => {
     if (!query.data) {
@@ -128,5 +150,5 @@ export const useGasFees = ({
     return fresh.data
   }
 
-  return { ...query, checkAndRefreshGasFees }
+  return { ...query, fetchGasFees, checkAndRefreshGasFees }
 }
