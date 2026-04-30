@@ -57,9 +57,9 @@
     "messari": "Messari Transparency Verified"
   },
   "promo": {
-    "message": "Pre-deposit ETH and SNT ahead of Status Network mainnet launch!",
-    "visitHub": "Visit hub",
-    "visitHubAria": "Visit hub (opens in new tab)"
+    "message": "Status Network merges with Linea! Withdraw your deposits & rewards now",
+    "visitHub": "Withdraw",
+    "visitHubAria": "Withdraw (opens in new tab)"
   },
   "prefooter": {
     "title": "Be unstoppable",

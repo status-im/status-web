@@ -52,15 +52,15 @@
       "notes": "common::testnet_live"
     },
     "promo_message": {
-      "translation": "Pre-deposit ETH and SNT ahead of Status Network mainnet launch!",
+      "translation": "Status Network merges with Linea! Withdraw your deposits & rewards now",
       "notes": "common::promo_message"
     },
     "visit_hub": {
-      "translation": "Visit hub",
+      "translation": "Withdraw",
       "notes": "common::visit_hub"
     },
     "visit_hub_aria": {
-      "translation": "Visit hub (opens in new tab)",
+      "translation": "Withdraw (opens in new tab)",
       "notes": "common::visit_hub_aria"
     }
   },
