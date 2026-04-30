@@ -170,23 +170,41 @@ let config = {
         permanent: false,
       },
       // Legacy help-section URLs missing the /help/ prefix.
-      // Sections without a top-level product page use `:slug*` (zero or
-      // more segments) so bare `/wallet`, `/messaging`, etc. also
-      // redirect. `/keycard` is a real product page, so keep `:slug+`
-      // there to require at least one sub-segment and avoid hijacking it.
+      // Two rules per section: a bare-path rule (e.g. `/wallet` ->
+      // `/help/wallet`) and a sub-path rule (`/wallet/:slug+` ->
+      // `/help/wallet/:slug+`). Next.js's path-to-regexp engine treats
+      // `/wallet/:slug*` as requiring the literal `/wallet/` prefix, so
+      // it does NOT match the bare `/wallet`; we need the explicit
+      // entry. `/keycard` is a real product page so we omit its
+      // bare-path redirect to avoid hijacking it.
       {
-        source: '/wallet/:slug*',
-        destination: '/help/wallet/:slug*',
+        source: '/wallet',
+        destination: '/help/wallet',
         permanent: true,
       },
       {
-        source: '/messaging/:slug*',
-        destination: '/help/messaging/:slug*',
+        source: '/wallet/:slug+',
+        destination: '/help/wallet/:slug+',
         permanent: true,
       },
       {
-        source: '/profile/:slug*',
-        destination: '/help/profile/:slug*',
+        source: '/messaging',
+        destination: '/help/messaging',
+        permanent: true,
+      },
+      {
+        source: '/messaging/:slug+',
+        destination: '/help/messaging/:slug+',
+        permanent: true,
+      },
+      {
+        source: '/profile',
+        destination: '/help/profile',
+        permanent: true,
+      },
+      {
+        source: '/profile/:slug+',
+        destination: '/help/profile/:slug+',
         permanent: true,
       },
       {
@@ -195,13 +213,23 @@ let config = {
         permanent: true,
       },
       {
-        source: '/communities/:slug*',
-        destination: '/help/communities/:slug*',
+        source: '/communities',
+        destination: '/help/communities',
         permanent: true,
       },
       {
-        source: '/getting-started/:slug*',
-        destination: '/help/getting-started/:slug*',
+        source: '/communities/:slug+',
+        destination: '/help/communities/:slug+',
+        permanent: true,
+      },
+      {
+        source: '/getting-started',
+        destination: '/help/getting-started',
+        permanent: true,
+      },
+      {
+        source: '/getting-started/:slug+',
+        destination: '/help/getting-started/:slug+',
         permanent: true,
       },
       // Legacy /features/* pages.

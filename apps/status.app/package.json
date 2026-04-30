@@ -180,7 +180,6 @@
     "mdast-util-to-string": "^4.0.0",
     "mdx-bundler": "^10.0.0",
     "nanoid": "^5.0.8",
-    "next-sitemap": "^4.2.3",
     "postcss": "^8.4.21",
     "prettier": "^3.3.3",
     "react-easy-emoji": "^1.8.1",
