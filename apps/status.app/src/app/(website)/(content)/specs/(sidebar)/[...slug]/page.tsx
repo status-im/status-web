@@ -13,7 +13,12 @@ import { getLegalDocumentContent } from '~website/legal/_utils/get-legal-documen
 const GITHUB_REPO_RFC_URL =
   'https://github.com/status-im/status-specs/tree/master'
 
-export const dynamicParams = false
+// `dynamicParams = true` so unknown slugs render server-side and the
+// page's own `notFound()` call propagates a proper `NEXT_NOT_FOUND`
+// digest (HTTP 404). With `false`, Next.js throws
+// `NEXT_HTTP_ERROR_FALLBACK;404` which the root error boundary treats
+// as a 500.
+export const dynamicParams = true
 
 export function generateStaticParams() {
   return allSpecsDocs.map(doc => ({

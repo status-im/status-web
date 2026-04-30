@@ -36,7 +36,12 @@ const roleIcons: Record<Role, IconElement> = {
 
 type Params = { slug: string[] }
 
-export const dynamicParams = false
+// `dynamicParams = true` so unknown slugs render server-side and the
+// page's own `notFound()` call propagates a proper `NEXT_NOT_FOUND`
+// digest (HTTP 404). With `false`, Next.js throws
+// `NEXT_HTTP_ERROR_FALLBACK;404` which the root error boundary treats
+// as a 500.
+export const dynamicParams = true
 
 export async function generateStaticParams() {
   return allHelpDocs.map(doc => ({
