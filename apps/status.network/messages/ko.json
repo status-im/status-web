@@ -52,15 +52,15 @@
       "notes": "common::testnet_live"
     },
     "promo_message": {
-      "translation": "Status Network 메인넷 출시 전에 ETH와 SNT를 사전 예치하세요!",
+      "translation": "Status Network가 Linea와 통합됩니다! 사전 예치 출금이 곧 열립니다",
       "notes": "common::promo_message"
     },
     "visit_hub": {
-      "translation": "허브 방문",
+      "translation": "자세히 보기",
       "notes": "common::visit_hub"
     },
     "visit_hub_aria": {
-      "translation": "허브 방문 (새 탭에서 열림)",
+      "translation": "자세히 보기 (새 탭에서 열림)",
       "notes": "common::visit_hub_aria"
     }
   },
