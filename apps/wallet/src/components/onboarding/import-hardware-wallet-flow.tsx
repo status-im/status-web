@@ -4,12 +4,15 @@ import { parseConnection } from '@qrkit/core'
 import { useQRScanner } from '@qrkit/react'
 import { Button, Input, Text } from '@status-im/components'
 import { ArrowLeftIcon } from '@status-im/icons/20'
-import { useQueryClient } from '@tanstack/react-query'
-import { useNavigate } from '@tanstack/react-router'
+import { type CreatePasswordFormValues } from '@status-im/wallet/components'
 
 import { useImportHardwareWallet } from '../../hooks/use-import-hardware-wallet'
+import { useWalletFlowSuccess } from '../../hooks/use-wallet-flow-success'
+import { usePassword } from '../../providers/password-context'
+import { CreatePasswordStep } from './create-password-step'
 
 import type { Account, ScannedUR } from '@qrkit/core'
+import type { SubmitHandler } from 'react-hook-form'
 
 const DEFAULT_HARDWARE_WALLET_NAME = 'Hardware Wallet'
 const DEFAULT_HARDWARE_WALLET_VENDOR = 'air-gapped'
@@ -18,19 +21,104 @@ const DEFAULT_ADDRESS_INDEX = 0
 type Props = {
   backHref: string
   successHref: string
+  requiresPasswordCreation?: boolean
 }
 
-export function ImportHardwareWalletFlow({ backHref, successHref }: Props) {
+type PendingImport = {
+  account: Account
+  name: string
+}
+
+export function ImportHardwareWalletFlow({
+  backHref,
+  successHref,
+  requiresPasswordCreation = true,
+}: Props) {
+  const { importHardwareWalletAsync } = useImportHardwareWallet()
+  const { requestPassword } = usePassword()
+  const onSuccess = useWalletFlowSuccess(successHref)
   const [accounts, setAccounts] = useState<Account[]>([])
   const [selected, setSelected] = useState<Account | null>(null)
+  const [pendingImport, setPendingImport] = useState<PendingImport | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
   const accountToConfirm =
     selected ?? (accounts.length === 1 ? accounts[0] : null)
+
+  const completeImport = async (
+    account: Account,
+    name: string,
+    password?: string,
+  ) => {
+    const derivedAddress = account.deriveAddress(DEFAULT_ADDRESS_INDEX)
+    const wallet = await importHardwareWalletAsync({
+      name,
+      password,
+      vendor: account.device ?? DEFAULT_HARDWARE_WALLET_VENDOR,
+      address: derivedAddress.address,
+      derivationPath: derivedAddress.derivationPath,
+      publicKey: derivedAddress.publicKey,
+      sourceFingerprint:
+        account.chain === 'evm' ? account.sourceFingerprint : undefined,
+    })
+    await onSuccess(wallet, `Imported ${wallet.name}`)
+  }
+
+  const handleConfirm = async (account: Account, name: string) => {
+    if (requiresPasswordCreation) {
+      setPendingImport({ account, name })
+      return
+    }
+
+    setIsLoading(true)
+    try {
+      const isUnlocked = await requestPassword({
+        title: 'Enter password',
+        description: 'To import your hardware wallet',
+        requireFreshPassword: true,
+      })
+      if (!isUnlocked) return
+      await completeImport(account, name)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handlePasswordSubmit: SubmitHandler<
+    CreatePasswordFormValues
+  > = async data => {
+    if (!pendingImport) return
+
+    setIsLoading(true)
+    try {
+      await completeImport(
+        pendingImport.account,
+        pendingImport.name,
+        data.password,
+      )
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  if (pendingImport) {
+    return (
+      <CreatePasswordStep
+        onBack={() => setPendingImport(null)}
+        onSubmit={handlePasswordSubmit}
+        isLoading={isLoading}
+        confirmButtonLabel="Import wallet"
+      />
+    )
+  }
 
   if (accountToConfirm) {
     return (
       <Confirm
         account={accountToConfirm}
-        successHref={successHref}
+        isLoading={isLoading}
+        onConfirm={handleConfirm}
         onBack={() => {
           setSelected(null)
           if (accounts.length > 1) return
@@ -197,16 +285,15 @@ function AccountSelect({
 
 function Confirm({
   account,
-  successHref,
+  isLoading,
+  onConfirm,
   onBack,
 }: {
   account: Account
-  successHref: string
+  isLoading: boolean
+  onConfirm: (account: Account, name: string) => Promise<void>
   onBack: () => void
 }) {
-  const { importHardwareWalletAsync, isPending } = useImportHardwareWallet()
-  const queryClient = useQueryClient()
-  const navigate = useNavigate()
   const derivedAddress = account.deriveAddress(DEFAULT_ADDRESS_INDEX)
   const [name, setName] = useState(
     account.device ?? DEFAULT_HARDWARE_WALLET_NAME,
@@ -217,17 +304,7 @@ function Confirm({
   const handleImport = async () => {
     try {
       setError(null)
-      await importHardwareWalletAsync({
-        name: trimmedName,
-        vendor: account.device ?? DEFAULT_HARDWARE_WALLET_VENDOR,
-        address: derivedAddress.address,
-        derivationPath: derivedAddress.derivationPath,
-        publicKey: derivedAddress.publicKey,
-        sourceFingerprint:
-          account.chain === 'evm' ? account.sourceFingerprint : undefined,
-      })
-      await queryClient.invalidateQueries({ queryKey: ['session', 'status'] })
-      navigate({ to: successHref })
+      await onConfirm(account, trimmedName)
     } catch (error) {
       console.error('hardware-wallet import failed', error)
       setError('Unable to import the hardware wallet. Please try again.')
@@ -276,8 +353,8 @@ function Confirm({
 
       {error && <p className="text-13 text-danger-50">{error}</p>}
 
-      <Button onClick={handleImport} disabled={isPending || trimmedName === ''}>
-        {isPending ? 'Importing…' : 'Import wallet'}
+      <Button onClick={handleImport} disabled={isLoading || trimmedName === ''}>
+        {isLoading ? 'Importing…' : 'Import wallet'}
       </Button>
     </div>
   )

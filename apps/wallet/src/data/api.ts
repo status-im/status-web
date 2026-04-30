@@ -43,6 +43,7 @@ const derivationPathSchema = z
 const hardwareWalletImportSchema = z.object({
   name: z.string().trim().min(1).max(80),
   vendor: z.string().trim().min(1).max(80),
+  password: z.string().optional(),
   address: z
     .string()
     .trim()
@@ -225,13 +226,22 @@ const apiRouter = router({
     importHardware: procedure
       .input(hardwareWalletImportSchema)
       .mutation(async ({ input, ctx }) => {
-        const { walletCore } = ctx
+        const { walletCore, session } = ctx
         const id = crypto.randomUUID()
         const account: WalletAccount = {
           address: input.address,
           coin: walletCore.CoinType.ethereum.value,
           derivationPath: input.derivationPath,
           derivation: walletCore.Derivation.default.value,
+        }
+        if (!(await hasVault())) {
+          if (!input.password) {
+            throw new Error(
+              'Password is required to import the first hardware wallet',
+            )
+          }
+          await encryptAndStore(input.password, { wallets: {} })
+          await session.resetInactivityTimer()
         }
         await walletMetadata.save({
           id,
@@ -245,9 +255,7 @@ const apiRouter = router({
             sourceFingerprint: input.sourceFingerprint,
           },
         })
-        // note: no vault interaction — hardware wallets are watch-only here.
-        // The session stays in whatever state it was in.
-        return { id, address: input.address }
+        return { id, name: input.name, address: input.address }
       }),
 
     account: router({

@@ -13,6 +13,7 @@ function RouteComponent() {
       <ImportHardwareWalletFlow
         backHref="/portfolio/assets"
         successHref="/portfolio/assets"
+        requiresPasswordCreation={false}
       />
     </OnboardingFlowLayout>
   )
