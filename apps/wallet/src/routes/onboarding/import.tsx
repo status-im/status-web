@@ -8,6 +8,10 @@ export const Route = createFileRoute('/onboarding/import')({
 
 function RouteComponent() {
   return (
-    <ImportWalletFlow backHref="/onboarding" successHref="/portfolio/assets" />
+    <ImportWalletFlow
+      backHref="/onboarding"
+      successHref="/portfolio/assets"
+      hardwareWalletHref="/onboarding/import-hardware"
+    />
   )
 }

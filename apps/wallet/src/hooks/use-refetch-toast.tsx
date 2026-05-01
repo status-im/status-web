@@ -92,5 +92,12 @@ export function useRefetchToast({
         onComplete()
       }
     }
-  }, [fetchingCount, isRefreshing, toast, hasError, onComplete])
+  }, [
+    fetchingCount,
+    hasError,
+    isRefreshing,
+    onComplete,
+    showLoadingAndSuccess,
+    toast,
+  ])
 }

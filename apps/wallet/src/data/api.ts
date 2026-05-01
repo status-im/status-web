@@ -2,6 +2,7 @@ import { createTRPCProxyClient } from '@trpc/client'
 import { initTRPC } from '@trpc/server'
 import superjson from 'superjson'
 import { createChromeHandler } from 'trpc-chrome/adapter'
+import { getAddress, isAddress } from 'viem'
 import {
   signMessage as viemSignMessage,
   signTypedData as viemSignTypedData,
@@ -32,6 +33,32 @@ const createContext = async () => {
 
 type Context = Awaited<ReturnType<typeof createContext>>
 
+const derivationPathSchema = z
+  .string()
+  .trim()
+  .min(1)
+  .max(128)
+  .regex(/^m(\/\d+'?)+$/, 'Invalid derivation path')
+
+const hardwareWalletImportSchema = z.object({
+  name: z.string().trim().min(1).max(80),
+  vendor: z.string().trim().min(1).max(80),
+  password: z.string().optional(),
+  address: z
+    .string()
+    .trim()
+    .refine(isAddress, 'Invalid Ethereum address')
+    .transform(value => getAddress(value)),
+  derivationPath: derivationPathSchema,
+  publicKey: z
+    .string()
+    .trim()
+    .min(1)
+    .max(512)
+    .regex(/^\S+$/, 'Invalid public key'),
+  sourceFingerprint: z.number().int().nonnegative().max(0xffffffff).optional(),
+})
+
 async function getSigningKey(
   ctx: Context,
   walletId: string,
@@ -40,6 +67,11 @@ async function getSigningKey(
   coin: InstanceType<Context['walletCore']['CoinType']>,
 ): Promise<ReturnType<typeof derivePrivateKey>> {
   const { walletCore, session } = ctx
+  if (wallet.type === 'hardware-qr') {
+    throw new Error(
+      'WALLET_IS_WATCH_ONLY: hardware-wallet signing requires the air-gapped QR sign flow which is not yet implemented',
+    )
+  }
   if (wallet.type === 'mnemonic') {
     const mnemonic = await session.getMnemonic(walletId)
     return derivePrivateKey(walletCore, mnemonic, coin, account.derivationPath)
@@ -189,6 +221,42 @@ const apiRouter = router({
           selectedAccountAddress: account.address,
         })
         return { id, name: walletName, mnemonic: input.mnemonic }
+      }),
+
+    importHardware: procedure
+      .input(hardwareWalletImportSchema)
+      .mutation(async ({ input, ctx }) => {
+        const { walletCore, session } = ctx
+        const id = crypto.randomUUID()
+        const account: WalletAccount = {
+          address: input.address,
+          coin: walletCore.CoinType.ethereum.value,
+          derivationPath: input.derivationPath,
+          derivation: walletCore.Derivation.default.value,
+        }
+        const vaultExists = await hasVault()
+        if (!vaultExists) {
+          if (!input.password) {
+            throw new Error(
+              'Password is required to import the first hardware wallet',
+            )
+          }
+          await encryptAndStore(input.password, { wallets: {} })
+          await session.resetInactivityTimer()
+        }
+        await walletMetadata.save({
+          id,
+          name: input.name,
+          type: 'hardware-qr',
+          accounts: [account],
+          selectedAccountAddress: account.address,
+          hardware: {
+            vendor: input.vendor,
+            publicKey: input.publicKey,
+            sourceFingerprint: input.sourceFingerprint,
+          },
+        })
+        return { id, name: input.name, address: input.address }
       }),
 
     account: router({
