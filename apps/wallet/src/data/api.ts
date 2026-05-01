@@ -234,7 +234,8 @@ const apiRouter = router({
           derivationPath: input.derivationPath,
           derivation: walletCore.Derivation.default.value,
         }
-        if (!(await hasVault())) {
+        const vaultExists = await hasVault()
+        if (!vaultExists) {
           if (!input.password) {
             throw new Error(
               'Password is required to import the first hardware wallet',
