@@ -8,7 +8,9 @@ import {
   ExchangeDrawer as ExchangeDrawerUI,
 } from '@status-im/wallet/components'
 import { useAccount } from 'wagmi'
+import { mainnet } from 'wagmi/chains'
 
+import { getRpcProxyUrl } from '../lib/rpc-proxy'
 import { usePassword } from '../providers/password-context'
 
 const NATIVE_ETH_ADDRESS = '0x0000000000000000000000000000000000000000'
@@ -61,6 +63,11 @@ export const ExchangeDrawer = (props: ExchangeDrawerProps) => {
   const widgetConfig: WidgetConfig = useMemo(
     () => ({
       integrator: 'StatusWallet',
+      sdkConfig: {
+        rpcUrls: {
+          [mainnet.id]: [getRpcProxyUrl(mainnet.id)],
+        },
+      },
       variant: 'compact',
       appearance: 'light',
       fromChain,

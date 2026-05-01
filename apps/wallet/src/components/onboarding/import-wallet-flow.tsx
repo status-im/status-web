@@ -7,6 +7,7 @@ import {
   type ImportRecoveryPhraseFormValues,
 } from '@status-im/wallet/components'
 
+import { Link } from '@/components/link'
 import { useImportWallet } from '@/hooks/use-import-wallet'
 import { useWalletFlowSuccess } from '@/hooks/use-wallet-flow-success'
 import { usePassword } from '@/providers/password-context'
@@ -20,6 +21,7 @@ type Props = {
   backHref: string
   successHref: string
   requiresPasswordCreation?: boolean
+  hardwareWalletHref?: string
 }
 
 type ImportFlowStep =
@@ -30,6 +32,7 @@ export function ImportWalletFlow({
   backHref,
   successHref,
   requiresPasswordCreation = true,
+  hardwareWalletHref,
 }: Props) {
   const { importWalletAsync } = useImportWallet()
   const { requestPassword } = usePassword()
@@ -102,6 +105,7 @@ export function ImportWalletFlow({
     <ImportMnemonicStep
       backHref={backHref}
       defaultMnemonic={flowStep.mnemonic}
+      hardwareWalletHref={hardwareWalletHref}
       isLoading={isLoading}
       onSubmit={handleMnemonicSubmit}
     />
@@ -111,11 +115,13 @@ export function ImportWalletFlow({
 function ImportMnemonicStep({
   backHref,
   defaultMnemonic,
+  hardwareWalletHref,
   isLoading,
   onSubmit,
 }: {
   backHref: string
   defaultMnemonic: string
+  hardwareWalletHref?: string
   isLoading: boolean
   onSubmit: SubmitHandler<ImportRecoveryPhraseFormValues>
 }) {
@@ -146,6 +152,17 @@ function ImportMnemonicStep({
         loading={isSubmitting}
         defaultValues={{ mnemonic: defaultMnemonic }}
       />
+
+      {hardwareWalletHref && (
+        <div className="mt-3 text-center">
+          <Link
+            href={hardwareWalletHref}
+            className="text-13 text-customisation-blue-50 hover:underline"
+          >
+            Use a hardware wallet instead
+          </Link>
+        </div>
+      )}
     </div>
   )
 }

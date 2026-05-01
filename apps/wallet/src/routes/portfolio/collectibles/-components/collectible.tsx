@@ -16,6 +16,10 @@ import {
   SendCollectiblesModal,
   shortenAddress,
 } from '@status-im/wallet/components'
+import {
+  getTransactionHash,
+  isEthereumTransactionHash,
+} from '@status-im/wallet/utils'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 
@@ -29,7 +33,6 @@ import { useCollectible } from '../-hooks/use-collectible'
 import { CardDetail } from './card-detail'
 import { CollectibleTraits } from './collectible-traits'
 import {
-  extractTxHash,
   fetchErc1155Balance,
   fetchNftGasFees,
   isSupportedNftStandard,
@@ -130,8 +133,10 @@ const Collectible = (props: Props) => {
       throw new Error(txid.error)
     }
 
-    const txHash = extractTxHash(txid)
-    if (!txHash) throw new Error('Transaction hash not found')
+    const txHash = getTransactionHash(txid)
+    if (!isEthereumTransactionHash(txHash)) {
+      throw new Error('Transaction hash not found')
+    }
 
     addPendingTransaction({
       hash: txHash,

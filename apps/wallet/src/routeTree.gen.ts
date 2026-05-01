@@ -17,6 +17,7 @@ import { Route as PortfolioIndexImport } from './routes/portfolio/index'
 import { Route as OnboardingIndexImport } from './routes/onboarding/index'
 import { Route as OnboardingNewImport } from './routes/onboarding/new'
 import { Route as OnboardingImportImport } from './routes/onboarding/import'
+import { Route as OnboardingImportHardwareImport } from './routes/onboarding/import-hardware'
 
 // Create/Update Routes
 
@@ -56,6 +57,12 @@ const OnboardingImportRoute = OnboardingImportImport.update({
   getParentRoute: () => OnboardingLayoutRoute,
 } as any)
 
+const OnboardingImportHardwareRoute = OnboardingImportHardwareImport.update({
+  id: '/import-hardware',
+  path: '/import-hardware',
+  getParentRoute: () => OnboardingLayoutRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -79,6 +86,13 @@ declare module '@tanstack/react-router' {
       path: '/import'
       fullPath: '/onboarding/import'
       preLoaderRoute: typeof OnboardingImportImport
+      parentRoute: typeof OnboardingLayoutImport
+    }
+    '/onboarding/import-hardware': {
+      id: '/onboarding/import-hardware'
+      path: '/import-hardware'
+      fullPath: '/onboarding/import-hardware'
+      preLoaderRoute: typeof OnboardingImportHardwareImport
       parentRoute: typeof OnboardingLayoutImport
     }
     '/onboarding/new': {
@@ -109,12 +123,14 @@ declare module '@tanstack/react-router' {
 
 interface OnboardingLayoutRouteChildren {
   OnboardingImportRoute: typeof OnboardingImportRoute
+  OnboardingImportHardwareRoute: typeof OnboardingImportHardwareRoute
   OnboardingNewRoute: typeof OnboardingNewRoute
   OnboardingIndexRoute: typeof OnboardingIndexRoute
 }
 
 const OnboardingLayoutRouteChildren: OnboardingLayoutRouteChildren = {
   OnboardingImportRoute: OnboardingImportRoute,
+  OnboardingImportHardwareRoute: OnboardingImportHardwareRoute,
   OnboardingNewRoute: OnboardingNewRoute,
   OnboardingIndexRoute: OnboardingIndexRoute,
 }
@@ -126,6 +142,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/onboarding': typeof OnboardingLayoutRouteWithChildren
   '/onboarding/import': typeof OnboardingImportRoute
+  '/onboarding/import-hardware': typeof OnboardingImportHardwareRoute
   '/onboarding/new': typeof OnboardingNewRoute
   '/onboarding/': typeof OnboardingIndexRoute
   '/portfolio': typeof PortfolioIndexRoute
@@ -134,6 +151,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/onboarding/import': typeof OnboardingImportRoute
+  '/onboarding/import-hardware': typeof OnboardingImportHardwareRoute
   '/onboarding/new': typeof OnboardingNewRoute
   '/onboarding': typeof OnboardingIndexRoute
   '/portfolio': typeof PortfolioIndexRoute
@@ -144,6 +162,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/onboarding': typeof OnboardingLayoutRouteWithChildren
   '/onboarding/import': typeof OnboardingImportRoute
+  '/onboarding/import-hardware': typeof OnboardingImportHardwareRoute
   '/onboarding/new': typeof OnboardingNewRoute
   '/onboarding/': typeof OnboardingIndexRoute
   '/portfolio/': typeof PortfolioIndexRoute
@@ -155,6 +174,7 @@ export interface FileRouteTypes {
     | '/'
     | '/onboarding'
     | '/onboarding/import'
+    | '/onboarding/import-hardware'
     | '/onboarding/new'
     | '/onboarding/'
     | '/portfolio'
@@ -162,6 +182,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/onboarding/import'
+    | '/onboarding/import-hardware'
     | '/onboarding/new'
     | '/onboarding'
     | '/portfolio'
@@ -170,6 +191,7 @@ export interface FileRouteTypes {
     | '/'
     | '/onboarding'
     | '/onboarding/import'
+    | '/onboarding/import-hardware'
     | '/onboarding/new'
     | '/onboarding/'
     | '/portfolio/'
@@ -210,12 +232,17 @@ export const routeTree = rootRoute
       "filePath": "onboarding/_layout.tsx",
       "children": [
         "/onboarding/import",
+        "/onboarding/import-hardware",
         "/onboarding/new",
         "/onboarding/"
       ]
     },
     "/onboarding/import": {
       "filePath": "onboarding/import.tsx",
+      "parent": "/onboarding"
+    },
+    "/onboarding/import-hardware": {
+      "filePath": "onboarding/import-hardware.tsx",
       "parent": "/onboarding"
     },
     "/onboarding/new": {

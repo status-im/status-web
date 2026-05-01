@@ -1,6 +1,5 @@
 import {
   encodeNftTransfer,
-  extractTxHash,
   isSupportedNftStandard,
 } from '@status-im/wallet/components'
 import { NETWORK_TO_CHAIN_ID } from '@status-im/wallet/constants'
@@ -13,7 +12,7 @@ import {
 
 import type { NetworkType } from '@status-im/wallet/data'
 
-export { extractTxHash, isSupportedNftStandard }
+export { isSupportedNftStandard }
 
 const JSONRPC_REQUEST_ID = 1
 const JSONRPC_VERSION = '2.0'

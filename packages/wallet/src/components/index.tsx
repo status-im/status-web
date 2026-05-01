@@ -64,7 +64,6 @@ export {
 export {
   type CollectibleGasFees,
   encodeNftTransfer,
-  extractTxHash,
   isSupportedNftStandard,
   type SendCollectibleParams,
   SendCollectiblesModal,
