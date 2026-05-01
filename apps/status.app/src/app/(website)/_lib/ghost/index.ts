@@ -150,6 +150,31 @@ export const getPostSlugs = async (): Promise<string[]> => {
   }
 }
 
+export type PostSitemapEntry = {
+  slug: string
+  updatedAt: string
+}
+
+export const getPostsForSitemap = async (): Promise<PostSitemapEntry[]> => {
+  try {
+    const posts = await ghost.posts.browse({
+      limit: clientEnv.NEXT_PUBLIC_VERCEL_ENV === 'production' ? 'all' : 50,
+      fields: 'slug,updated_at,published_at',
+      filter: `visibility:public+${EXCLUDED_TAGS_FILTER}`,
+    })
+
+    return posts
+      .filter(post => !!post.slug)
+      .map(post => ({
+        slug: post.slug,
+        updatedAt: post.updated_at ?? post.published_at ?? '',
+      }))
+  } catch (error) {
+    console.error('Failed to fetch posts for sitemap from Ghost API:', error)
+    return []
+  }
+}
+
 export const getTagSlugs = async (): Promise<string[]> => {
   try {
     const tags = await ghost.tags.browse({
@@ -165,6 +190,30 @@ export const getTagSlugs = async (): Promise<string[]> => {
       )
   } catch (error) {
     console.error('Failed to fetch tag slugs from Ghost API:', error)
+    return []
+  }
+}
+
+export type TagSitemapEntry = {
+  slug: string
+}
+
+export const getTagsForSitemap = async (): Promise<TagSitemapEntry[]> => {
+  try {
+    const tags = await ghost.tags.browse({
+      limit: clientEnv.NEXT_PUBLIC_VERCEL_ENV === 'production' ? 'all' : 50,
+      fields: 'slug',
+      filter: `visibility:public`,
+    })
+
+    return tags
+      .filter(
+        (tag): tag is typeof tag & { slug: string } =>
+          !!tag.slug && !ALL_EXCLUDED_TAGS.includes(tag.slug)
+      )
+      .map(tag => ({ slug: tag.slug }))
+  } catch (error) {
+    console.error('Failed to fetch tags for sitemap from Ghost API:', error)
     return []
   }
 }
