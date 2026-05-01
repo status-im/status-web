@@ -169,6 +169,99 @@ let config = {
         destination: 'https://discuss.status.app/c/features/51',
         permanent: false,
       },
+      {
+        source: '/wallet',
+        destination: '/help/wallet',
+        statusCode: 301,
+      },
+      {
+        source: '/wallet/:slug+',
+        destination: '/help/wallet/:slug+',
+        statusCode: 301,
+      },
+      {
+        source: '/messaging',
+        destination: '/help/messaging',
+        statusCode: 301,
+      },
+      {
+        source: '/messaging/:slug+',
+        destination: '/help/messaging/:slug+',
+        statusCode: 301,
+      },
+      {
+        source: '/profile',
+        destination: '/help/profile',
+        statusCode: 301,
+      },
+      {
+        source: '/profile/:slug+',
+        destination: '/help/profile/:slug+',
+        statusCode: 301,
+      },
+      {
+        source: '/keycard/:slug+',
+        destination: '/help/keycard/:slug+',
+        statusCode: 301,
+      },
+      {
+        source: '/communities',
+        destination: '/help/communities',
+        statusCode: 301,
+      },
+      {
+        source: '/communities/:slug+',
+        destination: '/help/communities/:slug+',
+        statusCode: 301,
+      },
+      {
+        source: '/getting-started',
+        destination: '/help/getting-started',
+        statusCode: 301,
+      },
+      {
+        source: '/getting-started/:slug+',
+        destination: '/help/getting-started/:slug+',
+        statusCode: 301,
+      },
+      // Legacy /features/* pages.
+      {
+        source: '/features/wallet',
+        destination: '/help/wallet',
+        statusCode: 301,
+      },
+      {
+        source: '/features/communities',
+        destination: '/help/communities',
+        statusCode: 301,
+      },
+      {
+        source: '/features/create-community',
+        destination: '/help/communities/create-a-status-community',
+        statusCode: 301,
+      },
+      // Renamed help-doc slugs.
+      {
+        source: '/help/wallet/delete-your-status-wallet-or-wallet-account',
+        destination: '/help/wallet/delete-your-status-wallet-accounts',
+        statusCode: 301,
+      },
+      {
+        source: '/help/communities/set-up-channel-permissions',
+        destination: '/help/communities/set-up-your-channel-permissions',
+        statusCode: 301,
+      },
+      {
+        source: '/help/keycard/if-you-can-t-unlock-your-keycard',
+        destination: '/help/keycard/if-you-can-t-unblock-your-keycard',
+        statusCode: 301,
+      },
+      // Renamed spec slug.
+      {
+        source: '/specs/status-payload',
+        destination: '/specs/status-payloads',
+        statusCode: 301,
+      },
     ]
   },
 }
