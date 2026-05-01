@@ -924,10 +924,18 @@ async function nativeTokenValueChart({
     fetchTokensPrice([symbol], COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE),
   ])
 
+  const balanceHistory = aggregateTokenBalanceHistory(balanceResponses)
+
+  // Empty balance history means never held; return [] for "No value" (match Balance chart). After any
+  // hold, always return chart points per timeframe (including ranges that stay at 0).
+  if (balanceHistory.length === 0) {
+    return []
+  }
+
   return buildValuePoints(
     timestamps,
     buildStepBeforeLookup(
-      aggregateTokenBalanceHistory(balanceResponses).map(
+      balanceHistory.map(
         p => [new Date(p.date).getTime() / 1000, p.price] as const,
       ),
     ),
@@ -1005,10 +1013,18 @@ async function tokenValueChart({
     fetchTokensPrice([symbol], COINGECKO_REVALIDATION_TIMES.CURRENT_PRICE),
   ])
 
+  const balanceHistory = aggregateTokenBalanceHistory(balanceResponses)
+
+  // Same as `nativeTokenValueChart`: empty history means never held on bridged networks
+  // [] shows "No value"
+  if (balanceHistory.length === 0) {
+    return []
+  }
+
   return buildValuePoints(
     timestamps,
     buildStepBeforeLookup(
-      aggregateTokenBalanceHistory(balanceResponses).map(
+      balanceHistory.map(
         p => [new Date(p.date).getTime() / 1000, p.price] as const,
       ),
     ),
