@@ -1023,10 +1023,13 @@ async function tokenValueChart({
 }
 
 /**
- * Returns a function that, given a unix timestamp (seconds), finds the value
- * of the latest data point whose timestamp is <= the query time. This "step
- * before" semantics matches how price/balance data should be interpreted: the
- * known value holds until the next observed change.
+ * Returns a lookup function with step-before semantics: for a query timestamp,
+ * it uses the latest point at or before that time.
+ *
+ * If the query is earlier than all points, it falls back to the earliest value
+ * to avoid spurious $0 values at the chart's left edge.
+ * (This matters when the canonical timestamp grid extends slightly before the first
+ * sample returned by CoinGecko's price history)
  */
 function buildStepBeforeLookup(
   points: readonly (readonly [number, number])[],
@@ -1036,7 +1039,7 @@ function buildStepBeforeLookup(
     if (sorted.length === 0) return 0
     let lo = 0
     let hi = sorted.length - 1
-    let best = 0
+    let best: number | undefined
     while (lo <= hi) {
       const mid = (lo + hi) >> 1
       if (sorted[mid][0] <= ts) {
@@ -1046,7 +1049,9 @@ function buildStepBeforeLookup(
         hi = mid - 1
       }
     }
-    return best
+    // Forward-fill the unknown prefix with the earliest known value rather
+    // than returning 0, which would misrepresent the price/balance as zero.
+    return best ?? sorted[0][1]
   }
 }
 
