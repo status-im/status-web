@@ -1,3 +1,5 @@
+import { storage } from '@wxt-dev/storage'
+import { getAddress } from 'viem'
 import { afterEach, beforeEach, expect, test, vi } from 'vitest'
 
 import { createAPI, createAPIClient } from './api'
@@ -63,8 +65,10 @@ const createChromeMock = () => {
   }
 }
 
-beforeEach(() => {
+beforeEach(async () => {
   vi.stubGlobal('chrome', createChromeMock())
+  await storage.clear('local')
+  await storage.clear('session')
   // vi.stubGlobal('browser', createChromeMock())
   // globalThis.chrome = createChromeMock()
   // globalThis.browser = createChromeMock()
@@ -72,6 +76,8 @@ beforeEach(() => {
 })
 
 afterEach(async () => {
+  await storage.clear('local')
+  await storage.clear('session')
   vi.unstubAllGlobals()
   vi.clearAllMocks()
 })
@@ -122,4 +128,83 @@ test('should get wallet', async () => {
   })
 
   expect(returnedWallet.mnemonic).toBe(mnemonic)
+}, 7000)
+
+test('should import hardware wallet metadata', async () => {
+  await createAPI()
+  const apiClient = createAPIClient()
+  const normalizedAddress = getAddress(
+    '0x1234567890abcdef1234567890abcdef12345678',
+  )
+
+  const importedWallet = await apiClient.wallet.importHardware.mutate({
+    name: 'Keystone Wallet',
+    vendor: 'Keystone',
+    password: 'hardware-password',
+    address: '0x1234567890abcdef1234567890abcdef12345678',
+    derivationPath: "m/44'/60'/0'/0/7",
+    publicKey: 'xpub661MyMwAqRbcF7FakePublicKey',
+    sourceFingerprint: 1234,
+  })
+
+  const wallets = await apiClient.wallet.all.query()
+
+  expect(importedWallet.address).toBe(normalizedAddress)
+  expect(importedWallet.name).toBe('Keystone Wallet')
+  await apiClient.session.lock.mutate()
+  await expect(
+    apiClient.session.unlock.mutate({ password: 'hardware-password' }),
+  ).resolves.toEqual({ unlocked: true })
+  expect(wallets).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({
+        id: importedWallet.id,
+        name: 'Keystone Wallet',
+        type: 'hardware-qr',
+        accounts: expect.arrayContaining([
+          expect.objectContaining({
+            address: normalizedAddress,
+            derivationPath: "m/44'/60'/0'/0/7",
+          }),
+        ]),
+        selectedAccountAddress: normalizedAddress,
+        hardware: expect.objectContaining({
+          vendor: 'Keystone',
+          publicKey: 'xpub661MyMwAqRbcF7FakePublicKey',
+          sourceFingerprint: 1234,
+        }),
+      }),
+    ]),
+  )
+}, 7000)
+
+test('should reject invalid hardware wallet metadata', async () => {
+  await createAPI()
+  const apiClient = createAPIClient()
+
+  await expect(
+    apiClient.wallet.importHardware.mutate({
+      name: 'Keystone Wallet',
+      vendor: 'Keystone',
+      address: 'not-an-address',
+      derivationPath: 'not-a-path',
+      publicKey: 'fake public key with spaces',
+      sourceFingerprint: -1,
+    }),
+  ).rejects.toThrow()
+}, 7000)
+
+test('should require a password when importing the first hardware wallet', async () => {
+  await createAPI()
+  const apiClient = createAPIClient()
+
+  await expect(
+    apiClient.wallet.importHardware.mutate({
+      name: 'Keystone Wallet',
+      vendor: 'Keystone',
+      address: '0x1234567890abcdef1234567890abcdef12345678',
+      derivationPath: "m/44'/60'/0'/0/7",
+      publicKey: 'xpub661MyMwAqRbcF7FakePublicKey',
+    }),
+  ).rejects.toThrow()
 }, 7000)

@@ -28,6 +28,9 @@ function RouteComponent() {
         <Button href="/onboarding/import" variant="grey">
           Import wallet
         </Button>
+        <Button href="/onboarding/import-hardware" variant="grey">
+          Hardware wallet (QR)
+        </Button>
       </div>
       <Text size={13} color="$neutral-50">
         By continuing you agree with Status

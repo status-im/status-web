@@ -1,6 +1,6 @@
 'use client'
 
-import { useParams } from 'next/navigation'
+import { notFound, useParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 
 import { capitalizeFirstLetter } from '~app/_utils/capitalize-first-letter'
@@ -30,7 +30,11 @@ export default function SpecsLayout({ children }: Props) {
 
   const spec = (Object.values(specsMetadata) as SpecMetadata[]).find(
     spec => spec.href === '/specs/' + params.slug.join('/')
-  )!
+  )
+
+  if (!spec) {
+    notFound()
+  }
 
   return (
     <Body className="relative">
@@ -42,7 +46,7 @@ export default function SpecsLayout({ children }: Props) {
             href: '/specs',
           },
           {
-            label: spec.title!, // SpecsDoc#computedFields.title
+            label: spec.title, // SpecsDoc#computedFields.title
             href: spec.href,
           },
         ]}
