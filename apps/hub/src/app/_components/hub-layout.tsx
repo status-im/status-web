@@ -2,16 +2,9 @@
 
 import { useState } from 'react'
 
-import { ToastContainer } from '@status-im/components'
 import { Divider, Footer } from '@status-im/status-network/components'
 import { useTranslations } from 'next-intl'
-import { useReadContract } from 'wagmi'
 
-import { statusHoodi } from '~constants/chain'
-import { STAKING_MANAGER } from '~constants/index'
-import { CACHE_CONFIG } from '~constants/staking'
-
-import { EmergencyBar } from './emergency-bar'
 import { Sidebar } from './sidebar'
 import { TopBar } from './top-bar'
 
@@ -23,16 +16,6 @@ export function HubLayout({ children }: HubLayoutProps) {
   const t = useTranslations()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
-  const { data: emergencyModeEnabled } = useReadContract({
-    address: STAKING_MANAGER.address,
-    abi: STAKING_MANAGER.abi,
-    functionName: 'emergencyModeEnabled',
-    chainId: statusHoodi.id,
-    query: {
-      refetchInterval: CACHE_CONFIG.EMERGENCY_MODE_REFETCH_INTERVAL,
-    },
-  })
-
   return (
     <div className="relative isolate z-10 min-h-screen w-full bg-neutral-100 px-1 pb-1">
       {/* Top Navigation Bar */}
@@ -40,7 +23,6 @@ export function HubLayout({ children }: HubLayoutProps) {
 
       {/* Main Content Area */}
       <div className="relative w-full rounded-20 bg-white-100 lg:overflow-hidden lg:px-6">
-        {Boolean(emergencyModeEnabled) && <EmergencyBar />}
         <div className="mx-auto flex w-full max-w-[1504px] flex-row gap-12 lg:h-[calc(100vh-64px-50px)] lg:overflow-hidden">
           {/* Sidebar */}
           <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -69,7 +51,6 @@ export function HubLayout({ children }: HubLayoutProps) {
           </div>
         </section>
       </div>
-      <ToastContainer />
     </div>
   )
 }

@@ -44,24 +44,28 @@ const Sidebar = (props: Props) => {
       label: t('navigation.discover'),
       icon: DiscoverIcon,
       href: '/discover',
+      disabled: true,
     },
     {
       id: 'stake',
       label: t('navigation.stake'),
       icon: StakeIcon,
       href: '/stake',
+      disabled: true,
     },
     {
       id: 'karma',
       label: t('navigation.karma'),
       icon: KarmaIcon,
       href: '/karma',
+      disabled: true,
     },
     {
       id: 'bridge',
       label: t('navigation.bridge'),
       icon: BridgeIcon,
       href: 'https://bridge.status.network/',
+      disabled: true,
     },
   ]
 
@@ -71,12 +75,14 @@ const Sidebar = (props: Props) => {
       label: t('navigation.snt_vote'),
       icon: HandIcon,
       href: 'https://snapshot.org/#/s:status.eth/proposals',
+      disabled: true,
     },
     {
       id: 'explorer',
       label: t('navigation.explorer'),
       icon: ExplorerIcon,
       href: 'https://hoodiscan.status.network/',
+      disabled: true,
     },
     // {
     //   id: 'governance',
@@ -89,12 +95,14 @@ const Sidebar = (props: Props) => {
       label: t('navigation.submit_app'),
       icon: SubmitAppIcon,
       href: 'https://statusnetwork.typeform.com/builder',
+      disabled: true,
     },
     {
       id: 'docs',
       label: t('navigation.docs'),
       icon: DocsIcon,
       href: `https://docs.status.network${localePrefix}/`,
+      disabled: true,
     },
   ]
 

@@ -18,14 +18,42 @@ type LinkItemProps = {
   icon?: React.ComponentType<{ className?: string }>
   href: string
   tag?: string
+  disabled?: boolean
   onClick?: () => void
 }
 
 const LinkItem = (props: LinkItemProps) => {
-  const { id, label, icon: Icon, href, tag } = props
+  const { id, label, icon: Icon, href, tag, disabled } = props
   const pathname = usePathname() // from next-intl (locale-free)
   const nextPathname = useNextPathname() // from next/navigation (includes locale if present)
   const params = useParams()
+
+  if (disabled) {
+    const isExternalDisabled = href.startsWith('http')
+    return (
+      <li key={id}>
+        <div
+          aria-disabled="true"
+          className="flex cursor-not-allowed items-center justify-between gap-2 rounded-16 p-4 text-neutral-40"
+        >
+          <div className="flex flex-1 items-center justify-between">
+            <div className="flex items-center gap-2">
+              {Icon && <Icon className="size-5" />}
+              <span className="text-15 font-medium">{label}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              {!!tag && (
+                <div className="inline-flex items-center gap-1 rounded-full bg-neutral-20 px-1.5 py-0.5">
+                  <span className="text-11 text-neutral-50">{tag}</span>
+                </div>
+              )}
+            </div>
+          </div>
+          {isExternalDisabled && <ExternalIcon />}
+        </div>
+      </li>
+    )
+  }
 
   const isPrefixedLocale = PREFIXED_LOCALES.some(
     locale =>
