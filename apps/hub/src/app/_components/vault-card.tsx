@@ -36,14 +36,6 @@ type Props = {
 
 const vaultCardStyles = cva({
   base: 'relative flex size-full flex-col rounded-32 border border-neutral-20 bg-white-100 p-4 shadow-1 lg:p-8',
-  variants: {
-    disabled: {
-      true: 'pointer-events-none opacity-[.40]',
-    },
-  },
-  defaultVariants: {
-    disabled: false,
-  },
 })
 
 type VaultCardSkeletonProps = {
@@ -140,7 +132,6 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
 
   const t = useTranslations()
 
-  const isDisabled = false
   const rewardsLine = rewards
     .map(reward =>
       reward.startsWith('vault.')
@@ -171,22 +162,22 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
         isTvlLoading: isTvlLoading,
       }
 
-  const formattedTVL = !isDisabled
-    ? formatCurrency(vaultDisplay.tvlUSD, {
-        compact: true,
-        roundDown: true,
-      }).replace('$', '')
-    : null
+  const formattedTVL = formatCurrency(vaultDisplay.tvlUSD, {
+    compact: true,
+    roundDown: true,
+  }).replace('$', '')
 
-  const formattedTokenAmount = !isDisabled
-    ? formatTokenAmount(vaultDisplay.tvlRaw ?? 0n, vaultDisplay.symbol, {
-        tokenDecimals: vaultDisplay.tokenDecimals,
-        decimals: vaultDisplay.decimals,
-        includeSymbol: true,
-        roundDown: true,
-        compact: true,
-      })
-    : null
+  const formattedTokenAmount = formatTokenAmount(
+    vaultDisplay.tvlRaw ?? 0n,
+    vaultDisplay.symbol,
+    {
+      tokenDecimals: vaultDisplay.tokenDecimals,
+      decimals: vaultDisplay.decimals,
+      includeSymbol: true,
+      roundDown: true,
+      compact: true,
+    }
+  )
 
   const handleClick = () => {
     if (isConnected) {
@@ -198,7 +189,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
   }
 
   return (
-    <div className={vaultCardStyles({ disabled: isDisabled })}>
+    <div className={vaultCardStyles()}>
       {/* header */}
       <div className="mb-6 flex items-start justify-between">
         <div className="flex items-center gap-4">
@@ -208,7 +199,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
 
       <h3 className="mb-2 text-19 font-600 lg:text-27">{vault.name}</h3>
 
-      {!isDisabled && isConnected && (
+      {isConnected && (
         <div className="mb-4">
           <p className="text-15 font-400 text-neutral-50">
             {t('vault.your_deposit')}
@@ -268,35 +259,33 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
             </span>
           )}
         </li>
-        {!isDisabled && (
-          <li className="flex items-center gap-2 text-15">
-            <span className="text-neutral-50">
-              <SumIcon />
-            </span>
-            {isGUSD ? (
-              isGUSDBreakdownLoading ? (
-                <Skeleton width={140} height={20} className="rounded-6" />
-              ) : (
-                <span>
-                  {gusdBreakdown
-                    .filter(({ amount }) => amount > 0n)
-                    .map(({ token, amount }) =>
-                      formatTokenAmount(amount, token.symbol, {
-                        tokenDecimals: token.decimals,
-                        decimals: token.decimals === 18 ? 2 : 0,
-                        includeSymbol: true,
-                        roundDown: true,
-                        compact: true,
-                      })
-                    )
-                    .join(' + ')}
-                </span>
-              )
+        <li className="flex items-center gap-2 text-15">
+          <span className="text-neutral-50">
+            <SumIcon />
+          </span>
+          {isGUSD ? (
+            isGUSDBreakdownLoading ? (
+              <Skeleton width={140} height={20} className="rounded-6" />
             ) : (
-              <span>{formattedTokenAmount}</span>
-            )}
-          </li>
-        )}
+              <span>
+                {gusdBreakdown
+                  .filter(({ amount }) => amount > 0n)
+                  .map(({ token, amount }) =>
+                    formatTokenAmount(amount, token.symbol, {
+                      tokenDecimals: token.decimals,
+                      decimals: token.decimals === 18 ? 2 : 0,
+                      includeSymbol: true,
+                      roundDown: true,
+                      compact: true,
+                    })
+                  )
+                  .join(' + ')}
+              </span>
+            )
+          ) : (
+            <span>{formattedTokenAmount}</span>
+          )}
+        </li>
       </ul>
 
       {/* cta */}
@@ -306,7 +295,6 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
         disabled={true}
         className="mt-auto w-full justify-center lg:w-fit"
       >
-        {/*{isDisabled ? t('vault.coming_soon') : t('vault.deposit')}*/}
         {t('vault.campaign_deposit_stopped')}
       </Button>
     </div>

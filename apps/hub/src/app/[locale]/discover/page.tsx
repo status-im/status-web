@@ -1,15 +1,10 @@
-'use client'
+import { redirect } from '~/i18n/navigation'
 
-import { useEffect } from 'react'
+type Props = {
+  params: Promise<{ locale: string }>
+}
 
-import { useRouter } from '~/i18n/navigation'
-
-export default function DiscoverPage() {
-  const router = useRouter()
-
-  useEffect(() => {
-    router.replace('/')
-  }, [router])
-
-  return null
+export default async function DiscoverPage({ params }: Props) {
+  const { locale } = await params
+  redirect({ href: '/', locale })
 }
