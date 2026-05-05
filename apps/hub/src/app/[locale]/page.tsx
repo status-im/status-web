@@ -1,20 +1,25 @@
 'use client'
 
+import { useState } from 'react'
+
 import { ExternalIcon } from '@status-im/icons/20'
 import { ButtonLink } from '@status-im/status-network/components'
 import Image from 'next/image'
 import { useLocale, useTranslations } from 'next-intl'
 
 import { HubLayout } from '~components/hub-layout'
-import { PreDepositModal } from '~components/pre-deposit-modal'
+import { PreDepositClaimModal } from '~components/pre-deposit-claim-modal'
+import { PreDepositUnlockModal } from '~components/pre-deposit-unlock-modal'
 import { VaultCard } from '~components/vault-card'
-import { VAULTS } from '~constants/index'
-import { useVaultSelection } from '~hooks/useVaultSelection'
+import { type Vault, VAULTS } from '~constants/index'
+import { useVaultRefetch } from '~hooks/useVaultRefetch'
 
 import { Apps } from '../_components/apps'
 import { Hero } from '../_components/hero'
 import { RewardsSection } from '../_components/rewards-section'
 import { jsonLD, JSONLDScript } from '../_utils/json-ld'
+
+type WithdrawAction = { kind: 'unlock' | 'claim'; vault: Vault } | null
 
 const breadcrumbListSchema = jsonLD.breadcrumbList([
   {
@@ -53,15 +58,8 @@ const softwareApplicationSchema = {
 }
 
 export default function HomePage() {
-  const {
-    selectedVault,
-    setSelectedVault,
-    defaultVault,
-    activeVaults,
-    registerRefetch,
-    handleDepositSuccess,
-    isModalOpen,
-  } = useVaultSelection()
+  const { registerRefetch, refetchVault } = useVaultRefetch()
+  const [withdrawAction, setWithdrawAction] = useState<WithdrawAction>(null)
   const t = useTranslations()
   const locale = useLocale()
   const localePrefix = locale === 'en' ? '' : `/${locale}`
@@ -106,7 +104,12 @@ export default function HomePage() {
                   >
                     <VaultCard
                       vault={vault}
-                      onDeposit={() => setSelectedVault(vault)}
+                      onUnlock={vault =>
+                        setWithdrawAction({ kind: 'unlock', vault })
+                      }
+                      onClaim={vault =>
+                        setWithdrawAction({ kind: 'claim', vault })
+                      }
                       registerRefetch={registerRefetch}
                     />
                   </div>
@@ -169,14 +172,22 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      <PreDepositModal
-        open={isModalOpen}
-        onOpenChange={open => !open && setSelectedVault(null)}
-        vault={selectedVault ?? defaultVault}
-        vaults={activeVaults}
-        setActiveVault={setSelectedVault}
-        onDepositSuccess={handleDepositSuccess}
-      />
+      {withdrawAction?.kind === 'unlock' && (
+        <PreDepositUnlockModal
+          open
+          onOpenChange={open => !open && setWithdrawAction(null)}
+          vault={withdrawAction.vault}
+          onUnlockSuccess={() => refetchVault(withdrawAction.vault)}
+        />
+      )}
+      {withdrawAction?.kind === 'claim' && (
+        <PreDepositClaimModal
+          open
+          onOpenChange={open => !open && setWithdrawAction(null)}
+          vault={withdrawAction.vault}
+          onClaimSuccess={() => refetchVault(withdrawAction.vault)}
+        />
+      )}
     </HubLayout>
   )
 }

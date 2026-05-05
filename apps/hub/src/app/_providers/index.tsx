@@ -9,6 +9,8 @@ import { WagmiProvider } from 'wagmi'
 import { wagmiConfig } from '~constants/chain'
 import { PreDepositStateProvider } from '~hooks/usePreDepositStateContext'
 
+import { PreDepositProvider } from './pre-deposit-provider'
+
 interface ProvidersProps {
   children: React.ReactNode
 }
@@ -35,8 +37,10 @@ export function Providers({ children }: ProvidersProps) {
           }}
         >
           <PreDepositStateProvider>
-            {children}
-            <ToastContainer />
+            <PreDepositProvider>
+              {children}
+              <ToastContainer />
+            </PreDepositProvider>
           </PreDepositStateProvider>
         </ConnectKitProvider>
       </QueryClientProvider>

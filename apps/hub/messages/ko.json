@@ -968,6 +968,90 @@
     "gusd_deposit_successful": {
       "translation": "{amount} {symbol} 입금 성공",
       "notes": "vault::gusd_deposit_successful"
+    },
+    "amount_to_claim": {
+      "translation": "Amount to claim",
+      "notes": "TODO ko: vault::amount_to_claim"
+    },
+    "amount_to_unlock": {
+      "translation": "Amount to unlock",
+      "notes": "TODO ko: vault::amount_to_unlock"
+    },
+    "bridge_arrived": {
+      "translation": "Your {vault} funds have arrived on Linea",
+      "notes": "TODO ko: vault::bridge_arrived"
+    },
+    "bridging": {
+      "translation": "Bridging…",
+      "notes": "TODO ko: vault::bridging"
+    },
+    "claim": {
+      "translation": "Claim",
+      "notes": "TODO ko: vault::claim"
+    },
+    "claim_description": {
+      "translation": "Sign a transaction on Linea to receive your unlocked funds.",
+      "notes": "TODO ko: vault::claim_description"
+    },
+    "claim_successful": {
+      "translation": "Successfully claimed from {vault}",
+      "notes": "TODO ko: vault::claim_successful"
+    },
+    "claim_title": {
+      "translation": "Claim from vault",
+      "notes": "TODO ko: vault::claim_title"
+    },
+    "gusd_claim_link": {
+      "translation": "Claim on the GUSD app",
+      "notes": "TODO ko: vault::gusd_claim_link"
+    },
+    "invalid_address": {
+      "translation": "Enter a valid Ethereum address",
+      "notes": "TODO ko: vault::invalid_address"
+    },
+    "no_balance_to_unlock": {
+      "translation": "There is no balance to unlock",
+      "notes": "TODO ko: vault::no_balance_to_unlock"
+    },
+    "receiver_address": {
+      "translation": "Receiver address on Linea",
+      "notes": "TODO ko: vault::receiver_address"
+    },
+    "receiver_placeholder": {
+      "translation": "0x…",
+      "notes": "TODO ko: vault::receiver_placeholder"
+    },
+    "switch_network_to_claim": {
+      "translation": "Switch to Linea to claim",
+      "notes": "TODO ko: vault::switch_network_to_claim"
+    },
+    "switch_network_to_unlock": {
+      "translation": "Switch network to unlock",
+      "notes": "TODO ko: vault::switch_network_to_unlock"
+    },
+    "unlock_confirmation": {
+      "translation": "I confirm the receiver address above is one I control on Linea Mainnet.",
+      "notes": "TODO ko: vault::unlock_confirmation"
+    },
+    "unlock_description": {
+      "translation": "Withdraw your pre-deposit. Funds and rewards will be delivered to the receiver address on Linea.",
+      "notes": "TODO ko: vault::unlock_description"
+    },
+    "unlock_successful": {
+      "translation": "Unlocked {vault}",
+      "notes": "TODO ko: vault::unlock_successful"
+    },
+    "unlock_title": {
+      "translation": "Unlock vault",
+      "notes": "TODO ko: vault::unlock_title"
+    },
+    "unlock_vault": {
+      "translation": "Unlock vault",
+      "notes": "TODO ko: vault::unlock_vault"
+    },
+    "vault_to_unlock": {
+      "translation": "Vault to unlock",
+      "notes": "TODO ko: vault::vault_to_unlock"
     }
   },
   "action_status": {
@@ -1054,6 +1138,34 @@
     "wait_moment_ellipsis": {
       "translation": "잠시만 기다려주세요...",
       "notes": "action_status::wait_moment_ellipsis"
+    },
+    "claiming": {
+      "translation": "Claiming",
+      "notes": "TODO ko: action_status::claiming"
+    },
+    "ready_to_claim": {
+      "translation": "Ready to claim",
+      "notes": "TODO ko: action_status::ready_to_claim"
+    },
+    "ready_to_unlock_vault": {
+      "translation": "Ready to unlock vault",
+      "notes": "TODO ko: action_status::ready_to_unlock_vault"
+    },
+    "request_failed": {
+      "translation": "Request failed",
+      "notes": "TODO ko: action_status::request_failed"
+    },
+    "transaction_failed_retry": {
+      "translation": "Transaction failed. Please try again.",
+      "notes": "TODO ko: action_status::transaction_failed_retry"
+    },
+    "unlock_processing_description": {
+      "translation": "Bridging your funds to Linea… you can close this dialog.",
+      "notes": "TODO ko: action_status::unlock_processing_description"
+    },
+    "unlocking_vault": {
+      "translation": "Unlocking vault",
+      "notes": "TODO ko: action_status::unlocking_vault"
     }
   },
   "emergency": {
@@ -1202,6 +1314,10 @@
     "retry": {
       "translation": "다시 시도",
       "notes": "network_switch_error::retry"
+    },
+    "description_linea": {
+      "translation": "Switch to Linea Mainnet to continue.",
+      "notes": "TODO ko: network_switch_error::description_linea"
     }
   },
   "errors": {
@@ -1215,7 +1331,7 @@
     },
     "transaction_reverted": {
       "translation": "트랜잭션이 되돌려졌습니다",
-      "notes": "errors::transaction_reverted"
+      "notes": "errors::transaction_reverted_short"
     },
     "failed_fetch_vaults": {
       "translation": "스테이킹 금고 정보를 불러오지 못했습니다: {error}",
@@ -1272,10 +1388,6 @@
     "failed_fetch_reset_time": {
       "translation": "재설정 시간을 불러오지 못했습니다",
       "notes": "errors::failed_fetch_reset_time"
-    },
-    "transaction_reverted": {
-      "translation": "트랜잭션이 되돌려졌습니다",
-      "notes": "errors::transaction_reverted_short"
     },
     "token_required": {
       "translation": "토큰이 필요합니다",

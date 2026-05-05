@@ -25,6 +25,11 @@ const rpcProxyUrl = (chainId: number) => {
   return `${base}${rpcProxyPaths[chainId]}`
 }
 
+export const RPC_URLS = {
+  [mainnet.id]: tRpcProxyUrl(mainnet.id),
+  [linea.id]: tRpcProxyUrl(linea.id),
+} as const
+
 const createPuzzleAuthHooks = () => {
   const origin = new URL(clientEnv.NEXT_PUBLIC_RPC_PROXY_URL!).origin
   const service = PuzzleAuthService.forOrigin(origin)

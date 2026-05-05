@@ -52,6 +52,7 @@ export type BaseVault = {
   chainId: number
   network: (typeof mainnet | typeof linea)['name']
   abi: typeof PreDepositVaultAbi
+  l2ClaimVaultAddress?: Address
 }
 
 export type GUSDVault = BaseVault & {
@@ -185,6 +186,9 @@ export const BRIDGE_COORDINATOR_L1 = {
 
 export const STATUS_L2_CHAIN_NICKNAME = keccak256(stringToHex('Status_L2'))
 
+// TODO: replace with the actual GUSD claim app URL
+export const GUSD_CLAIM_APP_URL = 'https://hub.status.network'
+
 // ============================================================================
 // Vaults
 // ============================================================================
@@ -200,6 +204,8 @@ export const SNT_VAULT: Vault = {
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
   network: mainnet.name,
+  // TODO: replace with linea-deployed L2 ClaimVault address
+  l2ClaimVaultAddress: '0x0000000000000000000000000000000000000000',
 } as const
 
 export const LINEA_VAULT: Vault = {
@@ -213,6 +219,8 @@ export const LINEA_VAULT: Vault = {
   abi: PreDepositVaultAbi,
   chainId: linea.id,
   network: linea.name,
+  // TODO: replace with linea-deployed L2 ClaimVault address
+  l2ClaimVaultAddress: '0x0000000000000000000000000000000000000000',
 } as const
 
 export const WETH_VAULT: Vault = {
@@ -226,6 +234,8 @@ export const WETH_VAULT: Vault = {
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
   network: mainnet.name,
+  // TODO: replace with linea-deployed L2 ClaimVault address
+  l2ClaimVaultAddress: '0x0000000000000000000000000000000000000000',
 } as const
 
 export const GUSD_VAULT: GUSDVault = {

@@ -14,6 +14,8 @@ import {
 // ============================================================================
 
 export interface UseGUSDUserBalanceParams {
+  /** Optional: disable contract reads */
+  enabled?: boolean
   /** Optional: callback to register refetch function for external triggering */
   registerRefetch?: (vaultId: string, refetch: () => void) => void
 }
@@ -59,6 +61,7 @@ export function addressToBytes32(address: `0x${string}`): `0x${string}` {
  * ```
  */
 export function useGUSDUserBalance({
+  enabled = true,
   registerRefetch,
 }: UseGUSDUserBalanceParams = {}) {
   const { address: ownerAddress } = useAccount()
@@ -82,7 +85,7 @@ export function useGUSDUserBalance({
         : undefined,
     chainId: mainnet.id,
     query: {
-      enabled: !!ownerAddress,
+      enabled: enabled && !!ownerAddress,
     },
   })
 
@@ -91,8 +94,9 @@ export function useGUSDUserBalance({
   }, [refetchBalance])
 
   useEffect(() => {
+    if (!enabled) return
     registerRefetch?.('GUSD', refetch)
-  }, [registerRefetch, refetch])
+  }, [enabled, registerRefetch, refetch])
 
   return {
     data,
