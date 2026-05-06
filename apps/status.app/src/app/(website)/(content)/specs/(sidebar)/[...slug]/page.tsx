@@ -3,6 +3,7 @@ import { EditIcon } from '@status-im/icons/12'
 import { cx } from 'class-variance-authority'
 import { notFound } from 'next/navigation'
 
+import { getSeoOverride } from '~/config/seo-overrides'
 import { Metadata } from '~app/_metadata'
 import { formatDate } from '~app/_utils/format-time'
 import { allSpecsDocs } from '~content'
@@ -31,12 +32,16 @@ export async function generateMetadata({ params }: Props) {
     notFound()
   }
 
+  const canonical = `/specs/${slug.join('/')}`
+  const override = getSeoOverride(canonical)
+
   return Metadata({
-    title: doc.title,
+    title: override?.title ?? doc.title,
     description:
+      override?.description ??
       'Technical deep dives into the inner workings of the Status apps.',
     alternates: {
-      canonical: `/specs/${slug.join('/')}`,
+      canonical,
     },
   })
 }

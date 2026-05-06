@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server'
 
 import { ROUTES } from '~/config/routes'
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
+import { Metadata } from '~app/_metadata'
 import { Image, Video } from '~components/assets'
 import { Body } from '~components/body'
 import { ColorTheme } from '~website/_components/color-theme'
@@ -25,6 +26,15 @@ import { ParallaxCircle } from './_components/parallax-circle'
 import type { FeatureListProps } from './_components/feature-list'
 
 export const revalidate = 3600 // 1 hour
+
+export async function generateMetadata() {
+  return Metadata({
+    title: 'Status',
+    alternates: {
+      canonical: '/',
+    },
+  })
+}
 
 export default async function HomePage() {
   const t = await getTranslations('home')

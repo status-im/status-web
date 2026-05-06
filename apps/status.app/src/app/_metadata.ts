@@ -1,3 +1,4 @@
+import { getSeoOverride } from '~/config/seo-overrides'
 import { createCloudinaryUrl } from '~components/assets/loader'
 
 import type { Metadata } from 'next'
@@ -18,21 +19,32 @@ type Input = Metadata & {
  * Generate metadata for regular pages
  */
 export function Metadata(input: Input): Metadata {
+  const canonical =
+    typeof input.alternates?.canonical === 'string'
+      ? input.alternates.canonical
+      : undefined
+  const override = canonical ? getSeoOverride(canonical) : undefined
+
+  const finalTitle = override?.title ?? input.title
+  const finalDescription = override?.description ?? input.description
+
   const ogTitle =
-    typeof input.title === 'string'
-      ? input.title
-      : 'absolute' in input.title
-        ? input.title.absolute
-        : input.title.default
+    typeof finalTitle === 'string'
+      ? finalTitle
+      : 'absolute' in finalTitle
+        ? finalTitle.absolute
+        : finalTitle.default
 
   return {
     ...input,
+    title: finalTitle,
+    description: finalDescription,
     openGraph: {
       type: 'website',
       images: [DEFAULT_OG_IMAGE],
       url: './',
       title: ogTitle,
-      description: input.description,
+      description: finalDescription,
       siteName: DEFAULT_SITE_NAME,
       locale: 'en',
       ...input.openGraph,
@@ -41,7 +53,7 @@ export function Metadata(input: Input): Metadata {
       card: 'summary_large_image',
       site: DEFAULT_TWITTER_SITE,
       title: ogTitle,
-      description: input.description,
+      description: finalDescription,
       ...input.twitter,
     },
   }

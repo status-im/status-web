@@ -7,6 +7,7 @@ import { getTranslations } from 'next-intl/server'
 
 import config from '~/config/help/config.json'
 import { METADATA } from '~/config/help/metadata'
+import { getSeoOverride } from '~/config/seo-overrides'
 import { Metadata } from '~app/_metadata'
 import { formatDate } from '~app/_utils/format-time'
 import { Icon } from '~components/assets'
@@ -53,12 +54,14 @@ export async function generateMetadata({ params }: Props) {
   }
 
   const t = await getTranslations('help')
+  const canonical = `/help/${slug.join('/')}`
+  const override = getSeoOverride(canonical)
 
   return Metadata({
-    title: doc.title,
-    description: t('metaDescription'),
+    title: override?.title ?? doc.title,
+    description: override?.description ?? t('metaDescription'),
     alternates: {
-      canonical: `/help/${slug.join('/')}`,
+      canonical,
     },
   })
 }
