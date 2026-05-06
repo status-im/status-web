@@ -9,22 +9,30 @@ export type WalletAccount = {
   derivation: number
 }
 
+export type HardwareWalletInfo = {
+  vendor: string
+  publicKey: string
+  sourceFingerprint?: number
+}
+
 export type WalletMeta = {
   id: string
   name: string
-  type: 'mnemonic' | 'privateKey'
+  type: 'mnemonic' | 'privateKey' | 'hardware-qr'
   accounts: WalletAccount[]
   selectedAccountAddress?: string
+  hardware?: HardwareWalletInfo
 }
 
 // TODO: remove LegacyWalletMeta once no user has legacy wallets; use WalletMeta directly in MetadataStore
 type LegacyWalletMeta = {
   id: string
   name: string
-  type: 'mnemonic' | 'privateKey'
+  type: 'mnemonic' | 'privateKey' | 'hardware-qr'
   activeAccounts?: WalletAccount[]
   accounts?: WalletAccount[]
   selectedAccountAddress?: string
+  hardware?: HardwareWalletInfo
 }
 
 type MetadataStore = Record<string, LegacyWalletMeta>
@@ -55,6 +63,7 @@ function normalizeWallet(wallet: LegacyWalletMeta): WalletMeta {
     type: wallet.type,
     accounts,
     selectedAccountAddress,
+    hardware: wallet.hardware,
   }
 }
 
