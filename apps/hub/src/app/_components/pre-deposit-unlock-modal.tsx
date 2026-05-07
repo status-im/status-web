@@ -163,7 +163,7 @@ const PreDepositUnlockModal = ({
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <div className="space-y-4 px-4 pb-4">
           {/* Vault to unlock */}
-          <div>
+          <div className="space-y-2">
             <p className="text-13 font-500 text-neutral-50">
               {t('vault.vault_to_unlock')}
             </p>
@@ -180,7 +180,7 @@ const PreDepositUnlockModal = ({
           </div>
 
           {/* Amount to be unlocked (read-only) */}
-          <div>
+          <div className="space-y-2">
             <p className="text-13 font-500 text-neutral-50">
               {t('vault.amount_to_unlock')}
             </p>

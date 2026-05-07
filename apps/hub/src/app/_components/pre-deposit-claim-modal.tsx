@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 
+import { InfoIcon } from '@status-im/icons/16'
 import { Button } from '@status-im/status-network/components'
 import { useTranslations } from 'next-intl'
 import { useAccount, useChainId, useSwitchChain } from 'wagmi'
@@ -92,7 +93,7 @@ const PreDepositClaimModal = ({
       blur={hasSwitchError}
     >
       <div className="space-y-4 px-4 pb-4">
-        <div>
+        <div className="space-y-2">
           <p className="text-13 font-500 text-neutral-50">
             {t('vault.amount_to_claim')}
           </p>
@@ -109,17 +110,23 @@ const PreDepositClaimModal = ({
           </div>
         </div>
 
-        <p className="text-13 font-400 text-neutral-50">
-          {t('vault.smol_refuel_question')}{' '}
-          <a
-            href="https://smolrefuel.com/?outboundChain=59144"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-500 text-customisation-50 underline"
-          >
-            {t('vault.smol_refuel_cta')}
-          </a>
-        </p>
+        <div
+          data-customisation="blue"
+          className="flex items-center gap-2 rounded-12 border border-customisation-50/10 bg-customisation-50/5 px-4 py-3"
+        >
+          <InfoIcon className="shrink-0 text-customisation-50" />
+          <p className="text-13 font-400 text-neutral-100">
+            {t('vault.smol_refuel_question')}{' '}
+            <a
+              href="https://smolrefuel.com/?outboundChain=59144"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-500 text-customisation-50 underline"
+            >
+              {t('vault.smol_refuel_cta')}
+            </a>
+          </p>
+        </div>
 
         <div className="flex w-full gap-3 pt-4">
           {isWrongChain ? (
