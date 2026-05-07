@@ -1021,6 +1021,14 @@
       "translation": "0x…",
       "notes": "vault::receiver_placeholder"
     },
+    "smol_refuel_cta": {
+      "translation": "Use Smol Refuel",
+      "notes": "vault::smol_refuel_cta"
+    },
+    "smol_refuel_question": {
+      "translation": "Don't have ETH on Linea to pay for gas?",
+      "notes": "vault::smol_refuel_question"
+    },
     "switch_network_to_claim": {
       "translation": "Switch to Linea to claim",
       "notes": "vault::switch_network_to_claim"

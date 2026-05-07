@@ -10,6 +10,7 @@ import { cva } from 'cva'
 import { useTranslations } from 'next-intl'
 import { formatUnits } from 'viem'
 import { useAccount } from 'wagmi'
+import { linea } from 'wagmi/chains'
 
 import { formatCurrency, formatTokenAmount } from '~/utils/currency'
 import { GUSD_CLAIM_APP_URL, isGUSDVault, type Vault } from '~constants/address'
@@ -251,7 +252,11 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
     <div className={vaultCardStyles()}>
       <div className="mb-6 flex items-start justify-between">
         <div className="flex items-center gap-4">
-          <VaultImage vault={icon} network={vault.network} size="56" />
+          <VaultImage
+            vault={icon}
+            network={(l2PendingAmount ?? 0n) > 0n ? linea.name : vault.network}
+            size="56"
+          />
         </div>
       </div>
 

@@ -101,17 +101,25 @@ const PreDepositClaimModal = ({
               {isPendingLoading ? '...' : formattedAmount}
             </span>
             <div className="flex items-center gap-2">
-              <VaultImage
-                vault={vault.icon}
-                network={vault.network}
-                size="20"
-              />
+              <VaultImage vault={vault.icon} network={linea.name} size="32" />
               <span className="text-15 font-600 text-neutral-100">
                 {vault.token.symbol}
               </span>
             </div>
           </div>
         </div>
+
+        <p className="text-13 font-400 text-neutral-50">
+          {t('vault.smol_refuel_question')}{' '}
+          <a
+            href="https://smolrefuel.com/?outboundChain=59144"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-500 text-customisation-50 underline"
+          >
+            {t('vault.smol_refuel_cta')}
+          </a>
+        </p>
 
         <div className="flex w-full gap-3 pt-4">
           {isWrongChain ? (

@@ -28,7 +28,7 @@ const vaultNetworkImageStyles = cva({
   variants: {
     size: {
       '20': '-bottom-0.5 -right-0.5 size-2',
-      '32': '-bottom-1 -right-1 size-3',
+      '32': '-bottom-1 -right-1 size-4',
       '56': '-bottom-1 -right-1 size-5',
     },
   },
@@ -39,7 +39,7 @@ const vaultNetworkImageStyles = cva({
 
 const sizeMap = {
   '20': { image: 20, network: 8 },
-  '32': { image: 32, network: 12 },
+  '32': { image: 32, network: 16 },
   '56': { image: 56, network: 20 },
 } as const
 

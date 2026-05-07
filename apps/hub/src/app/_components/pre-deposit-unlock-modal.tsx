@@ -171,7 +171,7 @@ const PreDepositUnlockModal = ({
               <VaultImage
                 vault={vault.icon}
                 network={vault.network}
-                size="20"
+                size="32"
               />
               <span className="text-15 font-400 text-neutral-100">
                 {vault.token.symbol}, {vault.token.name}
@@ -192,7 +192,7 @@ const PreDepositUnlockModal = ({
                 <VaultImage
                   vault={vault.icon}
                   network={vault.network}
-                  size="20"
+                  size="32"
                 />
                 <span className="text-15 font-600 text-neutral-100">
                   {vault.token.symbol}
