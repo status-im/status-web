@@ -149,7 +149,7 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
       'Acquire SNT tokens directly via integrated fiat gateways. Review available payment methods and routing options for safe cryptocurrency purchases on mobile.',
   },
   '/help/keycard': {
-    title: 'Keycard Beta Guide for Secure Non-Custodial Wallet ',
+    title: 'Keycard Beta Guide for Secure Non-Custodial Wallet',
     description:
       'Instructions for linking the physical smartcard to mobile devices. Enable contactless authorizations for cryptocurrency transactions and secure app logins.',
   },
@@ -159,7 +159,7 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
       'Master the encrypted chat interface. Find instructions for starting one-on-one conversations, sharing files securely, and configuring private P2P routing.',
   },
   '/help/getting-started/download-status-for-mac': {
-    title: 'Download Status Open Source Web3 Messanger App for Mac',
+    title: 'Download Status Open Source Web3 Messenger App for Mac',
     description:
       'Install the unified Web3 App on macOS environments. Run full communication nodes directly from Apple computers and safely manage digital crypto assets.',
   },
@@ -568,7 +568,7 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
       'Understand localized security layers protecting hardware wallets. Review differences between daily transaction authorizations and complete reset recovery.',
   },
   '/help/communities/set-up-your-channel-permissions': {
-    title: 'Set Up Channel Permissions within Stauts Web3 Chat',
+    title: 'Set Up Channel Permissions within Status Web3 Chat',
     description:
       'Define exact access levels for specific community rooms. Toggle reading, writing, and administrative functions to establish structured internal hierarchy.',
   },
@@ -860,7 +860,7 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
       'Fine-tune localized alerting parameters safely. Ensure critical direct peer-to-peer pings penetrate standard silent modes while preventing general spam.',
   },
   '/help/keycard/create-a-keycard-puk': {
-    title: 'Create a Personal Unblocking Set Key for Your Keycard ',
+    title: 'Create a Personal Unblocking Set Key for Your Keycard',
     description:
       'Generate a backup alphanumeric code during initial hardware setup. Securely store this master password to recover access if your daily PIN is forgotten.',
   },
@@ -880,7 +880,7 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
       'Delete saved public keys from localized address books. Ensure chatkeys are discarded while understanding peer-to-peer history may remain intact locally.',
   },
   '/help/communities/recover-your-status-community': {
-    title: 'Recover Web3 Communities on the Decentralized Messanger',
+    title: 'Recover Web3 Communities on the Decentralized Messenger',
     description:
       'Restore administrative access to decentralized groups. Use original wallet seed phrases to re-authenticate ownership of underlying smart contract logic.',
   },
@@ -900,7 +900,7 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
       'Maintain identical chat histories and contact lists on desktop and mobile. Securely pair node databases over local networks without any central servers.',
   },
   '/help/wallet/send-crypto-to-your-status-wallet': {
-    title: 'Transfer Crypto Easily to Multi-Chain Status Wallet ',
+    title: 'Transfer Crypto Easily to Multi-Chain Status Wallet',
     description:
       'Fund self-custody accounts from external exchanges. Match network chains and verify receiving addresses to ensure incoming digital assets arrive safely.',
   },
@@ -1105,7 +1105,7 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
       'Review why group entry was revoked. Common causes include token balance drops, manual administrator bans, and underlying node synchronization failures.',
   },
   '/help/communities/about-the-community-history-service': {
-    title: 'About the Community History Service for P2P Messenging',
+    title: 'About the Community History Service for P2P Messaging',
     description:
       'Understand decentralized data retention models. Learn how control nodes aggregate and distribute past message payloads so newly added members can read.',
   },
