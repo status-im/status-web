@@ -5,7 +5,7 @@ type SeoOverride = {
 
 export const SEO_OVERRIDES: Record<string, SeoOverride> = {
   '/': {
-    title: 'Private Web3 Messenger and Open Source Crypto Wallet',
+    title: 'Status App | Private Messenger, Web3 Wallet & Browser',
     description:
       'Own cryptocurrency and chat privately without surveillance. Combine censorship resistant communications with decentralized finance tools in one secure app.',
   },
