@@ -70,7 +70,7 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
       'Review the long-term circulation timeline for the utility asset. Track historical genesis block distributions & future unvesting milestones for the supply.',
   },
   '/legal/terms-of-use': {
-    title: 'Terms of Use Rules for Status AP2P Chat App and Wallet',
+    title: 'Terms of Use Rules for Status P2P Chat App and Wallet',
     description:
       'Read the governing conditions for utilizing decentralized software. Review liability limits, strict user obligations, and intellectual property guidelines.',
   },
