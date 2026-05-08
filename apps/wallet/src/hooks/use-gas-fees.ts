@@ -9,6 +9,7 @@ import { fetchTrpcData } from '@/utils/trpc'
 const GAS_FEES_STALE_TIME = 8 * 1000
 const GAS_FEES_REFETCH_INTERVAL = 12 * 1000
 const ALLOWED_GAS_SLIPPAGE_PERCENT = 30n
+const GAS_LIMIT_BUFFER_PERCENT = 10n
 const erc20 = new Interface(['function transfer(address to, uint256 amount)'])
 
 export type GasFees = {
@@ -34,6 +35,7 @@ type UseGasFeesOptions = {
   gasInput?: GasInput | null
   isNative?: boolean
   contractAddress?: string
+  includeGasLimitBuffer?: boolean
 }
 
 export type GasFeeRequestParams = {
@@ -75,13 +77,16 @@ function buildGasFeeParams(
   }
 }
 
-async function requestFeeRate(params: GasFeeRequestParams): Promise<GasFees> {
+async function requestFeeRate(
+  params: GasFeeRequestParams,
+  includeGasLimitBuffer: boolean = true,
+): Promise<GasFees> {
   const normalizedParams: GasFeeRequestParams = {
     ...params,
     value: params.value ? toRpcHex(params.value) : params.value,
   }
 
-  return fetchTrpcData<GasFees>(
+  const gasFees = await fetchTrpcData<GasFees>(
     'nodes.getFeeRate',
     {
       network: 'ethereum',
@@ -89,6 +94,22 @@ async function requestFeeRate(params: GasFeeRequestParams): Promise<GasFees> {
     },
     'Failed to fetch gas fees',
   )
+
+  if (!includeGasLimitBuffer) {
+    return gasFees
+  }
+
+  const estimatedGasLimit = BigInt(gasFees.txParams.gasLimit)
+  const gasLimitWithBuffer =
+    estimatedGasLimit + (estimatedGasLimit * GAS_LIMIT_BUFFER_PERCENT) / 100n
+
+  return {
+    ...gasFees,
+    txParams: {
+      ...gasFees.txParams,
+      gasLimit: `0x${gasLimitWithBuffer.toString(16)}`,
+    },
+  }
 }
 
 export const useGasFees = ({
@@ -96,11 +117,27 @@ export const useGasFees = ({
   gasInput,
   isNative = true,
   contractAddress,
+  includeGasLimitBuffer = true,
 }: UseGasFeesOptions = {}) => {
+  const isGasFeeQueryEnabled =
+    !!gasInput?.to && isAddress(gasInput.to) && !!gasInput?.value && !!address
+
   const query = useQuery<GasFees>({
-    queryKey: ['gas-fees', address, gasInput?.to, gasInput?.value],
+    queryKey: [
+      'gas-fees',
+      address,
+      gasInput?.to,
+      gasInput?.value,
+      includeGasLimitBuffer,
+    ],
     queryFn: async ({ queryKey }) => {
-      const [, from, to, value] = queryKey as [string, string, string, string]
+      const [, from, to, value] = queryKey as [
+        string,
+        string,
+        string,
+        string,
+        boolean,
+      ]
       const params = buildGasFeeParams(
         isNative,
         from,
@@ -108,13 +145,9 @@ export const useGasFees = ({
         value,
         contractAddress,
       )
-      return requestFeeRate(params)
+      return requestFeeRate(params, includeGasLimitBuffer)
     },
-    enabled:
-      !!gasInput?.to &&
-      isAddress(gasInput.to) &&
-      !!gasInput?.value &&
-      !!address,
+    enabled: isGasFeeQueryEnabled,
     staleTime: GAS_FEES_STALE_TIME,
     refetchInterval: GAS_FEES_REFETCH_INTERVAL,
   })
@@ -122,8 +155,9 @@ export const useGasFees = ({
   // Exposed for imperative use cases (e.g. signer-context tx send path) that need fees
   // on-demand, while most UI flows (e.g. token.tsx) can rely on the hook query lifecycle.
   const fetchGasFees = useCallback(
-    (params: GasFeeRequestParams): Promise<GasFees> => requestFeeRate(params),
-    [],
+    (params: GasFeeRequestParams): Promise<GasFees> =>
+      requestFeeRate(params, includeGasLimitBuffer),
+    [includeGasLimitBuffer],
   )
 
   const checkAndRefreshGasFees = async (): Promise<GasFees> => {

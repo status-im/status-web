@@ -222,6 +222,7 @@ const Token = (props: Props) => {
     gasInput: finalTokenDetail ? gasInput : null,
     isNative: isNativeForGas,
     contractAddress: contractAddressForGas,
+    includeGasLimitBuffer: !isNativeForGas,
   })
 
   // Show error toast if fetching gas fees fails
