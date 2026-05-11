@@ -1,6 +1,4 @@
 import { getDefaultConfig } from 'connectkit'
-import { defineChain } from 'viem'
-import { linea as lineaChainConfig } from 'viem/chains'
 import { createConfig, http } from 'wagmi'
 import { type Chain, linea, mainnet } from 'wagmi/chains'
 
@@ -14,34 +12,12 @@ import type {
   Transport,
 } from 'wagmi'
 
-export const statusHoodi = defineChain({
-  // https://github.com/wevm/viem/blob/main/src/chains/definitions/statusNetworkSepolia.ts
-  ...lineaChainConfig,
-  id: 374,
-  name: 'Status Network Hoodi',
-  nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
-  rpcUrls: {
-    default: {
-      http: ['https://public.hoodi.rpc.status.network/'],
-    },
-  },
-  blockExplorers: {
-    default: {
-      name: 'Blockscout',
-      url: 'https://hoodiscan.status.network',
-    },
-  },
-  contracts: {},
-  testnet: true,
-})
-
 const tRpcProxyUrl = (chainId: number) =>
   `${clientEnv.NEXT_PUBLIC_STATUS_API_URL}/api/trpc/rpc.proxy?chainId=${chainId}`
 
 const rpcProxyPaths: Record<number, string> = {
   [mainnet.id]: '/ethereum/mainnet',
   [linea.id]: '/linea/mainnet',
-  [statusHoodi.id]: '/status/hoodi',
 }
 
 const rpcProxyUrl = (chainId: number) => {
@@ -86,9 +62,8 @@ const createTransport = (chainId: number) =>
 
 export const getDefaultWagmiConfig = () =>
   getDefaultConfig({
-    chains: [statusHoodi, mainnet, linea],
+    chains: [mainnet, linea],
     transports: {
-      [statusHoodi.id]: createTransport(statusHoodi.id),
       [mainnet.id]: createTransport(mainnet.id),
       [linea.id]: createTransport(linea.id),
     },

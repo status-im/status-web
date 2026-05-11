@@ -5,10 +5,8 @@ import {
 import { NETWORK_TO_CHAIN_ID } from '@status-im/wallet/constants'
 import { Interface } from 'ethers'
 
-import {
-  fetchTrpcData,
-  type GasFees,
-} from '../../assets/-components/token-helpers'
+import { type GasFees } from '@/hooks/use-gas-fees'
+import { fetchTrpcData } from '@/utils/trpc'
 
 import type { NetworkType } from '@status-im/wallet/data'
 

@@ -5,16 +5,13 @@ import { useEffect, useMemo, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Avatar, Button, Input, useToast } from '@status-im/components'
-import {
-  AlertIcon,
-  CloseIcon,
-  ExternalIcon,
-  InfoIcon,
-} from '@status-im/icons/20'
+import { AlertIcon, CloseIcon, ExternalIcon } from '@status-im/icons/20'
 import { cx } from 'cva'
+import { isAddress } from 'ethers'
 import { Controller, useForm } from 'react-hook-form'
 import * as z from 'zod'
 
+import { GasShiftedError } from '../../constants/errors'
 import { CurrencyAmount } from '../currency-amount'
 import { NetworkLogo } from '../network-logo'
 import { TokenAmount } from '../token-amount'
@@ -57,9 +54,14 @@ type Props = {
   isLoadingFees?: boolean
 }
 
-type TransactionState = 'idle' | 'signing' | 'pending' | 'success' | 'error'
+type TransactionState =
+  | 'idle'
+  | 'signing'
+  | 'pending'
+  | 'success'
+  | 'error'
+  | 'gas-shifted'
 
-const TOAST_PROCESSING_DURATION_MS = 30_000
 const TOAST_SUCCESS_DURATION_MS = 2_000
 const ERROR_STATE_RESET_DELAY_MS = 3_000
 
@@ -238,21 +240,18 @@ const SendAssetsModal = (props: Props) => {
     setTransactionState('signing')
 
     try {
-      handleOnOpenChange(false)
-
-      toast.custom('Processing transaction...', <InfoIcon />, {
-        duration: TOAST_PROCESSING_DURATION_MS,
-      })
       await signTransaction(data)
+      handleOnOpenChange(false)
       toast.positive('Transaction signed and sent', {
         duration: TOAST_SUCCESS_DURATION_MS,
       })
-
-      // State should be pending but setting success
-      // so "Sign Transaction" button is not disabled after tx sent
-      // TODO?: check for tx success on chain
       setTransactionState('success')
     } catch (error) {
+      if (error instanceof GasShiftedError) {
+        setTransactionState('gas-shifted')
+        return
+      }
+      handleOnOpenChange(false)
       setTransactionState('error')
       setTimeout(() => {
         setTransactionState('idle')
@@ -278,6 +277,11 @@ const SendAssetsModal = (props: Props) => {
   const submitButtonLabel = hasActiveSession
     ? 'Send transaction'
     : 'Sign & Send transaction'
+
+  const resetGasShiftedState = () => {
+    if (transactionState !== 'gas-shifted') return
+    setTransactionState('idle')
+  }
 
   return (
     <>
@@ -327,6 +331,10 @@ const SendAssetsModal = (props: Props) => {
                             label="To"
                             id="to"
                             {...field}
+                            onChange={event => {
+                              resetGasShiftedState()
+                              field.onChange(event)
+                            }}
                             isInvalid={!!errors.to}
                             className="pr-8 font-mono text-13"
                             placeholder="Address"
@@ -360,6 +368,10 @@ const SendAssetsModal = (props: Props) => {
                           <input
                             id="amount"
                             {...field}
+                            onChange={event => {
+                              resetGasShiftedState()
+                              field.onChange(event)
+                            }}
                             type="number"
                             min={0}
                             step="any"
@@ -562,8 +574,10 @@ const SendAssetsModal = (props: Props) => {
                                 format="standard"
                               />
                             </span>
-                          ) : (
+                          ) : isAddress(watchedTo ?? '') ? (
                             'Estimating...'
+                          ) : (
+                            '-'
                           )}
                         </div>
                       </div>
@@ -574,6 +588,15 @@ const SendAssetsModal = (props: Props) => {
                     </div>
                   )}
 
+                  {transactionState === 'gas-shifted' && (
+                    <Alert variant="destructive">
+                      <div className="flex w-full items-center justify-between">
+                        <p className="w-full flex-1">
+                          Gas price changed — confirm to continue
+                        </p>
+                      </div>
+                    </Alert>
+                  )}
                   <Button
                     variant="primary"
                     type="submit"
@@ -588,7 +611,11 @@ const SendAssetsModal = (props: Props) => {
                       transactionState === 'pending'
                     }
                   >
-                    {submitButtonLabel}
+                    {transactionState === 'gas-shifted'
+                      ? 'Confirm with new gas price'
+                      : transactionState === 'signing'
+                        ? 'Sending…'
+                        : submitButtonLabel}
                   </Button>
                 </div>
               </form>
