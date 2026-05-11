@@ -4,12 +4,11 @@ import { useState } from 'react'
 
 import { Skeleton } from '@status-im/components'
 import { ExternalIcon } from '@status-im/icons/16'
-import { Button, ButtonLink } from '@status-im/status-network/components'
+import { ButtonLink } from '@status-im/status-network/components'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 
 import { formatCurrency } from '~/utils/currency'
-import { DEMO_MODE, resetAllDemoState } from '~/utils/demo'
 
 import { HubLayout } from '../../_components/hub-layout'
 import { InfoTooltip } from '../../_components/info-tooltip'
@@ -84,18 +83,6 @@ export default function PreDepositPage() {
             >
               {t('common.learn_more')}
             </ButtonLink>
-            {DEMO_MODE && (
-              <Button
-                variant="grey"
-                size="32"
-                onClick={() => {
-                  resetAllDemoState()
-                  window.location.reload()
-                }}
-              >
-                Reset demo
-              </Button>
-            )}
           </div>
         </div>
         <div className="relative flex w-full flex-col gap-2 rounded-32 bg-white-100 px-8 py-4 shadow-1">

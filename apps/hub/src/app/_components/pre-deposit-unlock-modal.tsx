@@ -12,7 +12,6 @@ import { isAddress } from 'viem'
 import { useAccount, useChainId, useSwitchChain } from 'wagmi'
 import { z } from 'zod'
 
-import { DEMO_MODE } from '~/utils/demo'
 import { isGUSDVault, type Vault } from '~constants/address'
 import { usePreDepositUnlock } from '~hooks/usePreDepositUnlock'
 import { useUnlockTxHash } from '~hooks/useUnlockTxHash'
@@ -112,8 +111,7 @@ const PreDepositUnlockModal = ({
   }, [isWrongChain, hasSwitchError])
 
   const handleSubmit = (data: FormValues) => {
-    // DEMO_MODE: skip the balance check so 0-balance wallets can walk the flow.
-    if (!address || (!hasBalance && !DEMO_MODE) || isWrongChain || isGUSD) {
+    if (!address || !hasBalance || isWrongChain || isGUSD) {
       return
     }
 
@@ -274,7 +272,7 @@ const PreDepositUnlockModal = ({
                 className="w-full justify-center"
                 disabled={
                   isUnlocking ||
-                  (!hasBalance && !DEMO_MODE) ||
+                  !hasBalance ||
                   !form.formState.isValid ||
                   !confirmed ||
                   isBalanceLoading

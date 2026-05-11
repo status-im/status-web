@@ -9,7 +9,6 @@ import {
 } from 'viem'
 import { linea, mainnet } from 'viem/chains'
 
-import { DEMO_MODE, useDemoVaultState } from '~/utils/demo'
 import { RPC_URLS } from '~constants/chain'
 
 import type { Vault } from '~constants/address'
@@ -135,10 +134,7 @@ export function useLineaBridgeMessageStatus({
 }: UseLineaBridgeMessageStatusParams) {
   const isSameChain = vault.chainId === linea.id
 
-  // DEMO_MODE — also called when not in demo mode (rules-of-hooks); ignored.
-  const demo = useDemoVaultState(vault)
-
-  const real = useQuery<BridgeMessageStatus>({
+  return useQuery<BridgeMessageStatus>({
     queryKey: ['linea-bridge-message-status', vault.id, unlockTxHash],
     queryFn: async () => {
       if (isSameChain) return 'same-chain'
@@ -149,7 +145,7 @@ export function useLineaBridgeMessageStatus({
 
       return checkMessageStatus(config, unlockTxHash as Hex)
     },
-    enabled: !DEMO_MODE && (isSameChain || !!unlockTxHash),
+    enabled: isSameChain || !!unlockTxHash,
     refetchInterval: query => {
       const status = query.state.data
       if (
@@ -163,29 +159,4 @@ export function useLineaBridgeMessageStatus({
     },
     staleTime: 10_000,
   })
-
-  if (DEMO_MODE) {
-    let status: BridgeMessageStatus
-    if (isSameChain) {
-      status = 'same-chain'
-    } else {
-      switch (demo.phase) {
-        case 'idle':
-          status = 'unknown'
-          break
-        case 'bridging':
-          status = 'pending'
-          break
-        case 'claimable':
-          status = 'claimable'
-          break
-        case 'claimed':
-          status = 'claimed'
-          break
-      }
-    }
-    return { ...real, data: status }
-  }
-
-  return real
 }

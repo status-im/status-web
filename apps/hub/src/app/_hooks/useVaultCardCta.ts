@@ -2,8 +2,6 @@ import { useMemo } from 'react'
 
 import { match, P } from 'ts-pattern'
 
-import { DEMO_MODE } from '~/utils/demo'
-
 import { VAULT_STATE, type VaultState } from './usePreDepositVaultState'
 
 import type { BridgeMessageStatus } from './useLineaBridgeMessageStatus'
@@ -42,10 +40,7 @@ export const getVaultCardCta = ({
   const safeL1Balance = l1Balance ?? 0n
   const safeL2PendingAmount = l2PendingAmount ?? 0n
 
-  // DEMO_MODE: enable the Unlock CTA even when the connected wallet has no
-  // real balance, so anyone can walk the flow. Real balance is still the
-  // displayed number on the card.
-  const hasL1Balance = DEMO_MODE || safeL1Balance > 0n
+  const hasL1Balance = safeL1Balance > 0n
   const hasL2Pending = safeL2PendingAmount > 0n
 
   return match(vaultState)

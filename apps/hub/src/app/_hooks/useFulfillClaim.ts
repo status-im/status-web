@@ -6,7 +6,6 @@ import { useAccount, useConfig, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 import { linea } from 'wagmi/chains'
 
-import { DEMO_MODE, markVaultClaimed, useDemoSign } from '~/utils/demo'
 import { L2ClaimVaultAbi } from '~constants/contracts/L2ClaimVaultAbi'
 import { usePreDepositStateContext } from '~hooks/usePreDepositStateContext'
 import { isUserRejection } from '~utils/wallet'
@@ -31,8 +30,6 @@ export function useFulfillClaim() {
   const { send: sendPreDepositEvent } = usePreDepositStateContext()
   const toast = useToast()
   const t = useTranslations()
-  // DEMO_MODE — also called when not in demo mode (rules-of-hooks); ignored.
-  const signDemo = useDemoSign()
 
   return useMutation({
     mutationKey: [MUTATION_KEY, address],
@@ -41,26 +38,15 @@ export function useFulfillClaim() {
         throw new Error(t('errors.wallet_not_connected'))
       }
 
-      if (!DEMO_MODE && !vault.l2ClaimVaultAddress) {
+      if (!vault.l2ClaimVaultAddress) {
         throw new Error('L2 ClaimVault address not configured')
       }
 
       sendPreDepositEvent({ type: 'START_CLAIM' })
 
       try {
-        // DEMO_MODE: sign-message instead of broadcasting `fulfillClaim()`.
-        if (DEMO_MODE) {
-          await signDemo(vault.name, 'claim')
-          sendPreDepositEvent({ type: 'EXECUTE' })
-          await new Promise(resolve => setTimeout(resolve, 1500))
-          markVaultClaimed(vault)
-          sendPreDepositEvent({ type: 'COMPLETE' })
-          toast.positive(t('vault.claim_successful', { vault: vault.name }))
-          return
-        }
-
         const hash = await writeContractAsync({
-          address: vault.l2ClaimVaultAddress!,
+          address: vault.l2ClaimVaultAddress,
           abi: L2ClaimVaultAbi,
           functionName: 'fulfillClaim',
           args: [[]],

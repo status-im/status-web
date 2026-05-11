@@ -346,8 +346,15 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
         </li>
       </ul>
 
-      {/* CTA: GUSD links out, others use the unlock/claim/bridging button. */}
-      {isGUSD ? (
+      {vault.withdrawEnabled === false ? (
+        <Button
+          size="40"
+          disabled
+          className="mt-auto w-full justify-center lg:w-fit"
+        >
+          {t('vault.coming_soon')}
+        </Button>
+      ) : isGUSD ? (
         <ButtonLink
           href={GUSD_CLAIM_APP_URL}
           target="_blank"

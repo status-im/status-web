@@ -53,6 +53,7 @@ export type BaseVault = {
   network: (typeof mainnet | typeof linea)['name']
   abi: typeof PreDepositVaultAbi
   l2ClaimVaultAddress?: Address
+  withdrawEnabled?: boolean
 }
 
 export type GUSDVault = BaseVault & {
@@ -206,6 +207,7 @@ export const SNT_VAULT: Vault = {
   network: mainnet.name,
   // TODO: replace with linea-deployed L2 ClaimVault address
   l2ClaimVaultAddress: '0x0000000000000000000000000000000000000000',
+  withdrawEnabled: true,
 } as const
 
 export const LINEA_VAULT: Vault = {
@@ -221,6 +223,7 @@ export const LINEA_VAULT: Vault = {
   network: linea.name,
   // TODO: replace with linea-deployed L2 ClaimVault address
   l2ClaimVaultAddress: '0x0000000000000000000000000000000000000000',
+  withdrawEnabled: false,
 } as const
 
 export const WETH_VAULT: Vault = {
@@ -236,6 +239,7 @@ export const WETH_VAULT: Vault = {
   network: mainnet.name,
   // TODO: replace with linea-deployed L2 ClaimVault address
   l2ClaimVaultAddress: '0x0000000000000000000000000000000000000000',
+  withdrawEnabled: true,
 } as const
 
 export const GUSD_VAULT: GUSDVault = {
@@ -249,6 +253,7 @@ export const GUSD_VAULT: GUSDVault = {
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
   network: mainnet.name,
+  withdrawEnabled: false,
   gusdConfig: {
     depositorAddress: GENERIC_DEPOSITOR.address,
     depositorAbi: genericDepositorAbi,

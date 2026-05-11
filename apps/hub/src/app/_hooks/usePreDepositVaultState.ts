@@ -1,6 +1,5 @@
 import { useReadContract } from 'wagmi'
 
-import { DEMO_MODE } from '~/utils/demo'
 import { GUSD_STABLECOINS, isGUSDVault, type Vault } from '~constants/address'
 import { PreDepositVaultAbi } from '~constants/contracts/PreDepositVaultAbi'
 
@@ -21,18 +20,10 @@ export function usePreDepositVaultState(vault: Vault) {
     ? GUSD_STABLECOINS[0].vaultAddress
     : vault.address
 
-  const real = useReadContract({
+  return useReadContract({
     abi: PreDepositVaultAbi,
     address: vaultAddress,
     chainId: vault.chainId,
     functionName: 'getCurrentState',
-    query: { enabled: !DEMO_MODE },
   })
-
-  // DEMO_MODE: pretend every vault is in WITHDRAWALS state so unlock CTAs enable.
-  if (DEMO_MODE) {
-    return { ...real, data: VAULT_STATE.WITHDRAWALS }
-  }
-
-  return real
 }
