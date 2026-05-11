@@ -1,3 +1,10 @@
+export class GasShiftedError extends Error {
+  constructor() {
+    super('Gas price shifted significantly')
+    this.name = 'GasShiftedError'
+  }
+}
+
 export const ERROR_MESSAGES = {
   NETWORK:
     'Couldn’t connect to the network. Please check your internet and try again.',

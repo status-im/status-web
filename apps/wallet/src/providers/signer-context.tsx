@@ -13,7 +13,7 @@ import {
 import { type Address, type Hex } from 'viem'
 import { formatEther } from 'viem/utils'
 
-import { publicClient } from '../lib/public-client'
+import { useGasFees } from '../hooks/use-gas-fees'
 import { apiClient } from './api-client'
 import { usePassword } from './password-context'
 import { useWallet } from './wallet-context'
@@ -55,6 +55,8 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
   const address = useMemo(() => {
     return currentAccount?.address as Address | undefined
   }, [currentAccount])
+
+  const { fetchGasFees } = useGasFees({ address })
 
   const accountName = useMemo(() => {
     // TODO: Use currently selected account name instead when multi-account support is implemented.
@@ -169,30 +171,15 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
       let gasLimit = tx.gas?.toString(16)
 
       if (!maxFeePerGas || !maxPriorityFeePerGas || !gasLimit) {
-        if (!maxFeePerGas || !maxPriorityFeePerGas) {
-          const [block, priorityFee] = await Promise.all([
-            publicClient.getBlock({ blockTag: 'latest' }),
-            publicClient.request({
-              method: 'eth_maxPriorityFeePerGas',
-            }),
-          ])
-
-          const baseFee = block.baseFeePerGas || 0n
-          const priorityFeeBigInt = BigInt(priorityFee as string)
-          maxPriorityFeePerGas = priorityFeeBigInt.toString(16)
-          // maxFeePerGas calculation - https://www.blocknative.com/blog/eip-1559-fees
-          maxFeePerGas = (baseFee * 2n + priorityFeeBigInt).toString(16)
-        }
-
-        if (!gasLimit) {
-          const estimatedGas = await publicClient.estimateGas({
-            account: address,
-            to: tx.to,
-            value: tx.value,
-            data: tx.data,
-          })
-          gasLimit = (estimatedGas + estimatedGas / 10n).toString(16)
-        }
+        const fees = await fetchGasFees({
+          from: address,
+          to: tx.to,
+          value: tx.value.toString(16),
+          data: tx.data,
+        })
+        maxFeePerGas ??= fees.txParams.maxFeePerGas
+        maxPriorityFeePerGas ??= fees.txParams.maxPriorityFeePerGas
+        gasLimit ??= fees.txParams.gasLimit
       }
 
       if (tx.data) {
@@ -269,7 +256,13 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
       }
       return txHash as Hex
     },
-    [currentWallet?.id, address, ensureUnlocked, handleTransactionError],
+    [
+      currentWallet?.id,
+      address,
+      ensureUnlocked,
+      handleTransactionError,
+      fetchGasFees,
+    ],
   )
 
   const signMessage = useCallback(

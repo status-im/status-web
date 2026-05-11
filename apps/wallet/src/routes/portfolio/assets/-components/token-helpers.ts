@@ -1,5 +1,3 @@
-import { Interface } from 'ethers'
-
 import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 
 export type TokenData =
@@ -11,95 +9,7 @@ export type TokenMetadata = NonNullable<
   NonNullable<TokenData['assets']>[NetworkType]
 >['metadata']
 
-export type GasFees = {
-  feeEth: number
-  feeEur: number
-  maxFeeEth: number
-  maxFeeEur: number
-  confirmationTime: string
-  txParams: {
-    gasLimit: string
-    maxFeePerGas: string
-    maxPriorityFeePerGas: string
-  }
-}
-
 export const NETWORKS = ['ethereum'] as const
-
-export const erc20 = new Interface([
-  'function transfer(address to, uint256 amount)',
-])
-
-// Helper function to build tRPC API URL with query parameters
-export function buildTrpcUrl(
-  endpoint: string,
-  params: Record<string, unknown>,
-): URL {
-  const url = new URL(
-    `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/${endpoint}`,
-  )
-  url.searchParams.set(
-    'input',
-    JSON.stringify({
-      json: params,
-    }),
-  )
-  return url
-}
-
-function extractTrpcErrorMessage(body: unknown): string | null {
-  if (typeof body !== 'object' || body === null) {
-    return null
-  }
-
-  const bodyObj = body as {
-    error?: {
-      message?: string
-      json?: { message?: string }
-      data?: { message?: string }
-    }
-  }
-
-  return (
-    bodyObj.error?.json?.message ||
-    bodyObj.error?.data?.message ||
-    bodyObj.error?.message ||
-    null
-  )
-}
-
-// Helper function to fetch data from tRPC API
-export async function fetchTrpcData<T>(
-  endpoint: string,
-  params: Record<string, unknown>,
-  errorMessage: string,
-): Promise<T> {
-  const url = buildTrpcUrl(endpoint, params)
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-
-  const body = await response.json().catch(() => null)
-
-  if (!response.ok) {
-    const message = extractTrpcErrorMessage(body)
-    throw new Error(message || errorMessage)
-  }
-
-  const trpcErrorMessage = extractTrpcErrorMessage(body)
-  if (trpcErrorMessage) {
-    throw new Error(trpcErrorMessage)
-  }
-
-  if (!body?.result?.data?.json) {
-    throw new Error(errorMessage)
-  }
-
-  return body.result.data.json
-}
 
 // Helper function to get token endpoint based on ticker
 export function getTokenEndpoint(
@@ -132,57 +42,6 @@ export function buildTokenQueryParams(
   }
 
   return baseParams
-}
-
-// Helper function to build gas fee estimation parameters
-export function buildGasFeeParams(
-  isNative: boolean,
-  from: string,
-  to: string,
-  value: string,
-  contractAddress?: string,
-): Record<string, unknown> {
-  if (isNative) {
-    return {
-      from,
-      to,
-      value,
-    }
-  }
-
-  if (!contractAddress) {
-    throw new Error('Contract address not found')
-  }
-
-  const amount = BigInt(value)
-  const data = erc20.encodeFunctionData('transfer', [to, amount])
-
-  return {
-    from,
-    to: contractAddress,
-    value: '0x0',
-    data,
-  }
-}
-
-// Helper function to fetch gas fees
-export async function fetchGasFees(
-  from: string,
-  to: string,
-  value: string,
-  isNative: boolean,
-  contractAddress?: string,
-): Promise<GasFees> {
-  const params = buildGasFeeParams(isNative, from, to, value, contractAddress)
-
-  return fetchTrpcData<GasFees>(
-    'nodes.getFeeRate',
-    {
-      network: 'ethereum',
-      params,
-    },
-    'Failed to fetch gas fees',
-  )
 }
 
 export function matchesAsset(asset: AssetData, ticker: string): boolean {

@@ -1,4 +1,4 @@
 export type { NetworkType } from '../data/api/types'
 export { NETWORK_TO_CHAIN_ID } from '../data/api/types'
-export { ERROR_MESSAGES } from './errors'
+export { ERROR_MESSAGES, GasShiftedError } from './errors'
 export { GRADIENTS } from './gradients'
