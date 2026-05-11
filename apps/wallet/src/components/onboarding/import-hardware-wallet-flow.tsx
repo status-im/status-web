@@ -1,22 +1,24 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 
-import { parseConnection } from '@qrkit/core'
-import { useQRScanner } from '@qrkit/react'
 import { Button, Input, Text } from '@status-im/components'
 import { ArrowLeftIcon } from '@status-im/icons/20'
-import { type CreatePasswordFormValues } from '@status-im/wallet/components'
+import {
+  AccountSelect,
+  type CreatePasswordFormValues,
+  type HardwareWalletAccount,
+  ScannerScreen,
+} from '@status-im/wallet/components'
+import { useNavigate } from '@tanstack/react-router'
 
 import { useImportHardwareWallet } from '../../hooks/use-import-hardware-wallet'
 import { useWalletFlowSuccess } from '../../hooks/use-wallet-flow-success'
 import { usePassword } from '../../providers/password-context'
 import { CreatePasswordStep } from './create-password-step'
 
-import type { Account, ScannedUR } from '@qrkit/core'
 import type { SubmitHandler } from 'react-hook-form'
 
 const DEFAULT_HARDWARE_WALLET_NAME = 'Hardware Wallet'
 const DEFAULT_HARDWARE_WALLET_VENDOR = 'air-gapped'
-const DEFAULT_ADDRESS_INDEX = 0
 
 type Props = {
   backHref: string
@@ -24,48 +26,55 @@ type Props = {
   requiresPasswordCreation?: boolean
 }
 
-type PendingImport = {
-  account: Account
-  name: string
-}
+type Phase =
+  | { step: 'scan' }
+  | { step: 'select'; accounts: HardwareWalletAccount[] }
+  | { step: 'confirm'; account: HardwareWalletAccount }
+  | { step: 'password'; account: HardwareWalletAccount; name: string }
 
 export function ImportHardwareWalletFlow({
   backHref,
   successHref,
   requiresPasswordCreation = true,
 }: Props) {
+  const navigate = useNavigate()
   const { importHardwareWalletAsync } = useImportHardwareWallet()
   const { requestPassword } = usePassword()
   const onSuccess = useWalletFlowSuccess(successHref)
-  const [accounts, setAccounts] = useState<Account[]>([])
-  const [selected, setSelected] = useState<Account | null>(null)
-  const [pendingImport, setPendingImport] = useState<PendingImport | null>(null)
+  const [phase, setPhase] = useState<Phase>({ step: 'scan' })
   const [isLoading, setIsLoading] = useState(false)
-  const accountToConfirm =
-    selected ?? (accounts.length === 1 ? accounts[0] : null)
 
   const completeImport = async (
-    account: Account,
+    account: HardwareWalletAccount,
     name: string,
     password?: string,
   ) => {
-    const derivedAddress = account.deriveAddress(DEFAULT_ADDRESS_INDEX)
     const wallet = await importHardwareWalletAsync({
       name,
       password,
       vendor: account.device ?? DEFAULT_HARDWARE_WALLET_VENDOR,
-      address: derivedAddress.address,
-      derivationPath: derivedAddress.derivationPath,
-      publicKey: derivedAddress.publicKey,
-      sourceFingerprint:
-        account.chain === 'evm' ? account.sourceFingerprint : undefined,
+      address: account.address,
+      derivationPath: account.derivationPath,
+      publicKey: account.publicKey,
+      sourceFingerprint: account.sourceFingerprint,
     })
     await onSuccess(wallet, `Imported ${wallet.name}`)
   }
 
-  const handleConfirm = async (account: Account, name: string) => {
+  const handleAccounts = (accounts: HardwareWalletAccount[]) => {
+    if (accounts.length === 1) {
+      setPhase({ step: 'confirm', account: accounts[0] })
+    } else {
+      setPhase({ step: 'select', accounts })
+    }
+  }
+
+  const handleConfirm = async (
+    account: HardwareWalletAccount,
+    name: string,
+  ) => {
     if (requiresPasswordCreation) {
-      setPendingImport({ account, name })
+      setPhase({ step: 'password', account, name })
       return
     }
 
@@ -86,15 +95,11 @@ export function ImportHardwareWalletFlow({
   const handlePasswordSubmit: SubmitHandler<
     CreatePasswordFormValues
   > = async data => {
-    if (!pendingImport) return
+    if (phase.step !== 'password') return
 
     setIsLoading(true)
     try {
-      await completeImport(
-        pendingImport.account,
-        pendingImport.name,
-        data.password,
-      )
+      await completeImport(phase.account, phase.name, data.password)
     } catch (error) {
       console.error(error)
     } finally {
@@ -102,10 +107,10 @@ export function ImportHardwareWalletFlow({
     }
   }
 
-  if (pendingImport) {
+  if (phase.step === 'password') {
     return (
       <CreatePasswordStep
-        onBack={() => setPendingImport(null)}
+        onBack={() => setPhase({ step: 'confirm', account: phase.account })}
         onSubmit={handlePasswordSubmit}
         isLoading={isLoading}
         confirmButtonLabel="Import wallet"
@@ -113,173 +118,36 @@ export function ImportHardwareWalletFlow({
     )
   }
 
-  if (accountToConfirm) {
+  if (phase.step === 'confirm') {
     return (
       <Confirm
-        account={accountToConfirm}
+        account={phase.account}
         isLoading={isLoading}
         onConfirm={handleConfirm}
-        onBack={() => {
-          setSelected(null)
-          if (accounts.length > 1) return
-          setAccounts([])
-        }}
+        onBack={() => setPhase({ step: 'scan' })}
       />
     )
   }
 
-  if (accounts.length > 1) {
+  if (phase.step === 'select') {
+    const byAddress = new Map(phase.accounts.map(a => [a.address, a]))
     return (
       <AccountSelect
-        accounts={accounts}
-        onSelect={setSelected}
-        onBack={() => setAccounts([])}
+        accounts={phase.accounts}
+        onSelect={({ address }) => {
+          const account = byAddress.get(address)
+          if (account) setPhase({ step: 'confirm', account })
+        }}
+        onBack={() => setPhase({ step: 'scan' })}
       />
     )
   }
 
-  return <ScannerScreen backHref={backHref} onAccounts={setAccounts} />
-}
-
-function ScannerScreen({
-  backHref,
-  onAccounts,
-}: {
-  backHref: string
-  onAccounts: (accounts: Account[]) => void
-}) {
-  const [scanError, setScanError] = useState<string | null>(null)
-  const handleScan = useCallback(
-    (result: ScannedUR | string) => {
-      if (typeof result === 'string') {
-        return false
-      }
-
-      try {
-        const foundAccounts = parseConnection(result, { chains: ['evm'] })
-        if (foundAccounts.length === 0) {
-          setScanError('No EVM account found in scanned QR.')
-          return false
-        }
-
-        setScanError(null)
-        onAccounts(foundAccounts)
-        return true
-      } catch (error) {
-        setScanError(
-          error instanceof Error
-            ? `Parse error: ${error.message}`
-            : 'Failed to parse the scanned QR code.',
-        )
-        return false
-      }
-    },
-    [onAccounts],
-  )
-  const {
-    videoRef,
-    progress,
-    error: scannerError,
-  } = useQRScanner({
-    onScan: useCallback(
-      (result: ScannedUR | string) => {
-        return handleScan(result)
-      },
-      [handleScan],
-    ),
-  })
-  const errorMessage = scannerError ?? scanError
-
   return (
-    <div className="flex flex-1 flex-col gap-1">
-      <div className="pb-4">
-        <Button
-          href={backHref}
-          variant="grey"
-          icon={<ArrowLeftIcon color="$neutral-100" />}
-          aria-label="Back"
-          size="32"
-        />
-      </div>
-      <Text size={27} weight="semibold">
-        Connect a hardware wallet
-      </Text>
-      <Text size={15} color="$neutral-50" className="mb-4">
-        Use any air-gapped wallet that supports the ERC-4527 QR standard:
-        Keycard, Keystone, AirGap Vault, NGRAVE, GapSign, and others. On your
-        device, choose Connect Software Wallet and pick the generic QR /
-        MetaMask option, then point the screen at this camera.
-      </Text>
-      <div className="relative aspect-square w-full overflow-hidden rounded-12 bg-neutral-100">
-        <video
-          ref={videoRef}
-          autoPlay
-          playsInline
-          muted
-          className="block size-full object-cover"
-        />
-        {progress !== null && progress < 100 && (
-          <div
-            className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-[12px] text-white-100"
-            style={{ background: 'rgba(9, 16, 28, 0.7)' }}
-          >
-            {progress}%
-          </div>
-        )}
-      </div>
-      {errorMessage && (
-        <p className="mt-2 text-13 text-danger-50">{errorMessage}</p>
-      )}
-    </div>
-  )
-}
-
-function AccountSelect({
-  accounts,
-  onSelect,
-  onBack,
-}: {
-  accounts: Account[]
-  onSelect: (account: Account) => void
-  onBack: () => void
-}) {
-  return (
-    <div className="flex flex-1 flex-col gap-4">
-      <div>
-        <Button
-          onClick={onBack}
-          variant="grey"
-          icon={<ArrowLeftIcon color="$neutral-100" />}
-          aria-label="Back"
-          size="32"
-        />
-      </div>
-      <Text size={27} weight="semibold">
-        Select account
-      </Text>
-      <Text size={15} color="$neutral-50">
-        Multiple accounts were found in the QR code. Select one to import.
-      </Text>
-      <div className="flex flex-col gap-2">
-        {accounts.map(account => {
-          const derived = account.deriveAddress(DEFAULT_ADDRESS_INDEX)
-          return (
-            <button
-              key={derived.address}
-              onClick={() => onSelect(account)}
-              className="flex flex-col gap-1 rounded-12 border border-neutral-10 bg-neutral-2.5 p-3 text-left hover:bg-neutral-5"
-            >
-              <Text size={13} color="$neutral-50">
-                {account.chain === 'evm' ? 'Ethereum' : account.chain}
-              </Text>
-              <Text size={13} weight="medium" className="break-all">
-                {derived.address}
-              </Text>
-            </button>
-          )
-        })}
-      </div>
-    </div>
+    <ScannerScreen
+      onAccounts={handleAccounts}
+      onBack={() => navigate({ to: backHref })}
+    />
   )
 }
 
@@ -289,12 +157,11 @@ function Confirm({
   onConfirm,
   onBack,
 }: {
-  account: Account
+  account: HardwareWalletAccount
   isLoading: boolean
-  onConfirm: (account: Account, name: string) => Promise<void>
+  onConfirm: (account: HardwareWalletAccount, name: string) => Promise<void>
   onBack: () => void
 }) {
-  const derivedAddress = account.deriveAddress(DEFAULT_ADDRESS_INDEX)
   const [name, setName] = useState(
     account.device ?? DEFAULT_HARDWARE_WALLET_NAME,
   )
@@ -340,7 +207,7 @@ function Confirm({
           Address
         </Text>
         <Text size={13} weight="medium" className="break-all">
-          {derivedAddress.address}
+          {account.address}
         </Text>
       </div>
 
