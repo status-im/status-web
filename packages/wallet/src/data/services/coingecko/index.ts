@@ -83,7 +83,6 @@ async function _fetchWithAuth<T>(
       Authorization: `Basic ${credentials}`,
       'Content-Type': 'application/json',
     },
-    cache: 'force-cache',
     next: {
       revalidate,
       tags: [tag],
