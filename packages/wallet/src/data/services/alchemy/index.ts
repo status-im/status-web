@@ -11,6 +11,7 @@ import retry from 'async-retry'
 import { formatEther } from 'ethers'
 
 import { serverEnv } from '../../../config/env.server.mjs'
+import { buildCanonicalTimestamps } from '../../../utils'
 import {
   getRandomApiKey,
   markApiKeyAsRateLimited,
@@ -359,37 +360,8 @@ export async function fetchTokenBalanceHistory(
   )
 
   const now = Math.floor(Date.now() / 1000)
-
-  const requestedDays = days === 'all' ? 3650 : Number(days)
-  const effectiveDays = requestedDays
-
-  let intervalSeconds: number
-  if (requestedDays <= 1) {
-    intervalSeconds = 3600
-  } else if (requestedDays <= 7) {
-    intervalSeconds = 3600
-  } else if (requestedDays <= 30) {
-    intervalSeconds = 4 * 3600
-  } else if (requestedDays <= 90) {
-    intervalSeconds = 12 * 3600
-  } else if (requestedDays <= 365) {
-    intervalSeconds = 24 * 3600
-  } else {
-    intervalSeconds = 7 * 24 * 3600
-  }
-
-  const requestedStartTime = now - effectiveDays * 24 * 3600
-  const timestamps: number[] = []
-
-  for (let time = requestedStartTime; time <= now; time += intervalSeconds) {
-    timestamps.push(time)
-  }
-
-  if (timestamps[timestamps.length - 1] !== now) {
-    timestamps.push(currentTime || now)
-  }
-
-  timestamps.reverse()
+  const anchorTime = currentTime || now
+  const timestamps = buildCanonicalTimestamps(days, anchorTime)
 
   let balance: string
   if (contract) {
