@@ -13,7 +13,6 @@ import { useAccount } from 'wagmi'
 import { formatCurrency, formatTokenAmount } from '~/utils/currency'
 import { isGUSDVault, type Vault } from '~constants/address'
 import { useGUSDStablecoinBreakdown } from '~hooks/useGUSDStablecoinBreakdown'
-import { useGUSDTVL } from '~hooks/useGUSDTVL'
 import { useGUSDUserBalance } from '~hooks/useGUSDUserBalance'
 import { usePreDepositTVL } from '~hooks/usePreDepositTVL'
 import { usePreDepositTVLInUSD } from '~hooks/usePreDepositTVLInUSD'
@@ -115,9 +114,13 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
     vault,
   })
   const { data: totalAssets } = usePreDepositTVL({ vault })
-  const { data: gusdTvl, isLoading: isGUSDTvlLoading } = useGUSDTVL()
   const { data: gusdBreakdown, isLoading: isGUSDBreakdownLoading } =
     useGUSDStablecoinBreakdown({ enabled: isGUSD })
+  const gusdTvlUSD = gusdBreakdown.reduce(
+    (sum, { token, amount }) =>
+      sum + Number(formatUnits(amount, token.decimals)),
+    0
+  )
   const { data: depositedBalance, isLoading: isDepositedBalanceLoading } =
     useUserVaultDeposit({ vault, registerRefetch })
   const { data: gusdBalance, isLoading: isGUSDBalanceLoading } =
@@ -145,11 +148,11 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
         decimals: 2,
         symbol: 'GUSD',
         tokenDecimals: 18,
-        tvlRaw: gusdTvl,
-        tvlUSD: gusdTvl ? Number(formatUnits(gusdTvl, 18)) : 0,
+        tvlRaw: undefined,
+        tvlUSD: gusdTvlUSD,
         balance: gusdBalance,
         isBalanceLoading: isGUSDBalanceLoading,
-        isTvlLoading: isGUSDTvlLoading,
+        isTvlLoading: isGUSDBreakdownLoading,
       }
     : {
         decimals: token.symbol === 'WETH' ? 4 : 0,
@@ -273,7 +276,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
                   .map(({ token, amount }) =>
                     formatTokenAmount(amount, token.symbol, {
                       tokenDecimals: token.decimals,
-                      decimals: token.decimals === 18 ? 2 : 0,
+                      decimals: 2,
                       includeSymbol: true,
                       roundDown: true,
                       compact: true,
