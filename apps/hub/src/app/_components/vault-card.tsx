@@ -273,7 +273,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
                   .map(({ token, amount }) =>
                     formatTokenAmount(amount, token.symbol, {
                       tokenDecimals: token.decimals,
-                      decimals: token.decimals === 18 ? 2 : 0,
+                      decimals: 2,
                       includeSymbol: true,
                       roundDown: true,
                       compact: true,
