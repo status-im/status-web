@@ -4,12 +4,12 @@ import {
   createPublicClient,
   decodeEventLog,
   type Hex,
-  http,
   parseAbiItem,
+  TransactionReceiptNotFoundError,
 } from 'viem'
 import { linea, mainnet } from 'viem/chains'
 
-import { RPC_URLS } from '~constants/chain'
+import { createTransport } from '~constants/chain'
 
 import type { Vault } from '~constants/address'
 
@@ -44,8 +44,8 @@ const MESSAGE_STATUS = {
 type MessageServiceConfig = {
   l1ContractAddress: Address
   l2ContractAddress: Address
-  l1RpcUrl: string
-  l2RpcUrl: string
+  l1ChainId: number
+  l2ChainId: number
 }
 
 function getMessageServiceConfig(
@@ -58,8 +58,8 @@ function getMessageServiceConfig(
       return {
         l1ContractAddress: '0xd19d4B5d358258f05D7B411E21A1460D11B0876F',
         l2ContractAddress: '0x508Ca82Df566dCD1B0DE8296e70a96332cD644ec',
-        l1RpcUrl: RPC_URLS[mainnet.id],
-        l2RpcUrl: RPC_URLS[linea.id],
+        l1ChainId: mainnet.id,
+        l2ChainId: linea.id,
       }
     default:
       return null
@@ -71,12 +71,20 @@ async function checkMessageStatus(
   unlockTxHash: Hex
 ): Promise<BridgeMessageStatus> {
   const l1Client = createPublicClient({
-    transport: http(config.l1RpcUrl),
+    transport: createTransport(config.l1ChainId),
   })
 
-  const receipt = await l1Client.getTransactionReceipt({
-    hash: unlockTxHash,
-  })
+  let receipt
+  try {
+    receipt = await l1Client.getTransactionReceipt({ hash: unlockTxHash })
+  } catch (error) {
+    // Receipt isn't available until the tx is mined; treat as still pending
+    // and let the refetch interval catch up.
+    if (error instanceof TransactionReceiptNotFoundError) {
+      return 'pending'
+    }
+    throw error
+  }
 
   const messageHashes: Hex[] = []
   for (const log of receipt.logs) {
@@ -102,7 +110,7 @@ async function checkMessageStatus(
   }
 
   const l2Client = createPublicClient({
-    transport: http(config.l2RpcUrl),
+    transport: createTransport(config.l2ChainId),
   })
 
   const status = await l2Client.readContract({

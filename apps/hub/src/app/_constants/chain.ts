@@ -25,11 +25,6 @@ const rpcProxyUrl = (chainId: number) => {
   return `${base}${rpcProxyPaths[chainId]}`
 }
 
-export const RPC_URLS = {
-  [mainnet.id]: tRpcProxyUrl(mainnet.id),
-  [linea.id]: tRpcProxyUrl(linea.id),
-} as const
-
 const createPuzzleAuthHooks = () => {
   const origin = new URL(clientEnv.NEXT_PUBLIC_RPC_PROXY_URL!).origin
   const service = PuzzleAuthService.forOrigin(origin)
@@ -60,7 +55,7 @@ const isPuzzleAuthEnabled = Boolean(
 
 const puzzleAuthHooks = isPuzzleAuthEnabled ? createPuzzleAuthHooks() : {}
 
-const createTransport = (chainId: number) =>
+export const createTransport = (chainId: number) =>
   http(isPuzzleAuthEnabled ? rpcProxyUrl(chainId) : tRpcProxyUrl(chainId), {
     ...puzzleAuthHooks,
   })
