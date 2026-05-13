@@ -48,7 +48,7 @@ function ScannerScreen({ onAccounts, onBack }: Props) {
 
       try {
         const foundAccounts = parseConnection(result) //, { chains: ['evm'] })
-        console.log('[scanner] foundAccounts', foundAccounts)
+
         if (foundAccounts.length === 0) {
           setScanError('No EVM account found in scanned QR.')
           return false
