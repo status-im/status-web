@@ -9,6 +9,7 @@ import retry from 'async-retry'
 
 import { serverEnv } from '../../../config/env.server.mjs'
 import erc20TokenList from '../../../constants/erc20.json'
+import { setRevalidationBucket } from '../../../utils'
 import { DEFAULT_TOKEN_IDS } from '../../api/routers/assets'
 import { markApiKeyAsRateLimited } from '../api-key-rotation'
 
@@ -347,6 +348,7 @@ export async function fetchTokenPriceHistory(
   const url = new URL(`${PROXY_BASE_URL}/v1/coins/${coinId}/market_chart`)
   url.searchParams.set('vs_currency', 'usd')
   url.searchParams.set('days', daysParam)
+  setRevalidationBucket(url, revalidate)
 
   return _fetchWithAuth<CoinGeckoMarketChartResponse>(
     url,
@@ -409,6 +411,7 @@ export async function fetchTokensPrice(
     url.searchParams.set('include_24hr_change', 'true')
     url.searchParams.set('include_market_cap', 'true')
     url.searchParams.set('include_24hr_vol', 'true')
+    setRevalidationBucket(url, revalidate)
 
     const priceData = await _fetchWithAuth<CoinGeckoSimplePriceResponse>(
       url,
