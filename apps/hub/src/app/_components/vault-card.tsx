@@ -15,7 +15,6 @@ import { linea } from 'wagmi/chains'
 import { formatCurrency, formatTokenAmount } from '~/utils/currency'
 import { GUSD_CLAIM_APP_URL, isGUSDVault, type Vault } from '~constants/address'
 import { useGUSDStablecoinBreakdown } from '~hooks/useGUSDStablecoinBreakdown'
-import { useGUSDUserBalance } from '~hooks/useGUSDUserBalance'
 import { useLineaBridgeMessageStatus } from '~hooks/useLineaBridgeMessageStatus'
 import { usePreDepositTVL } from '~hooks/usePreDepositTVL'
 import { usePreDepositTVLInUSD } from '~hooks/usePreDepositTVLInUSD'
@@ -124,9 +123,6 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
       sum + Number(formatUnits(amount, token.decimals)),
     0
   )
-  const { data: gusdBalance, isLoading: isGUSDBalanceLoading } =
-    useGUSDUserBalance({ registerRefetch })
-
   const { txHash: unlockTxHash, clearTxHash: clearUnlockTxHash } =
     useUnlockTxHash(vault.id)
   const {
@@ -192,8 +188,8 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
         tokenDecimals: 18,
         tvlRaw: undefined,
         tvlUSD: gusdTvlUSD,
-        balance: gusdBalance,
-        isBalanceLoading: isGUSDBalanceLoading,
+        balance: l1Balance,
+        isBalanceLoading: isL1BalanceLoading,
         isTvlLoading: isGUSDBreakdownLoading,
       }
     : {
