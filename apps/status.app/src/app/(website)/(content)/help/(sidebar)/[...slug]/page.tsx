@@ -53,12 +53,13 @@ export async function generateMetadata({ params }: Props) {
   }
 
   const t = await getTranslations('help')
+  const canonical = `/help/${slug.join('/')}`
 
   return Metadata({
     title: doc.title,
     description: t('metaDescription'),
     alternates: {
-      canonical: `/help/${slug.join('/')}`,
+      canonical,
     },
   })
 }

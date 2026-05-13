@@ -15,7 +15,7 @@ export const metadata = Metadata({
   metadataBase: new URL('https://status.app/'),
 
   title: {
-    template: '%s — Status',
+    template: '%s',
     default: 'Status — Make the jump to web3',
   },
   description:

@@ -96,7 +96,7 @@ const RPC_METHOD_CATEGORY_MAP: Record<
   'collectibles.page': 'permanent',
   'collectibles.collectible': 'permanent',
 
-  // Short: Semi-static data (30 RPM)
+  // Short: Semi-static data (40 RPM)
   eth_getBalance: 'short',
   'nodes.getNonce': 'short',
   eth_getTransactionCount: 'short',
@@ -125,7 +125,7 @@ const RPC_METHOD_CATEGORY_MAP: Record<
  */
 const RPC_CATEGORY_LIMITS: Record<string, number> = {
   permanent: 60,
-  short: 30,
+  short: 40, // default was 30
   minimal: 15,
 }
 

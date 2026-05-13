@@ -31,12 +31,14 @@ export async function generateMetadata({ params }: Props) {
     notFound()
   }
 
+  const canonical = `/specs/${slug.join('/')}`
+
   return Metadata({
     title: doc.title,
     description:
       'Technical deep dives into the inner workings of the Status apps.',
     alternates: {
-      canonical: `/specs/${slug.join('/')}`,
+      canonical,
     },
   })
 }
