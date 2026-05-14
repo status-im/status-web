@@ -8,7 +8,6 @@ import {
   type HardwareWalletAccount,
   ScannerScreen,
 } from '@status-im/wallet/components'
-import { useNavigate } from '@tanstack/react-router'
 
 import { useImportHardwareWallet } from '../../hooks/use-import-hardware-wallet'
 import { useWalletFlowSuccess } from '../../hooks/use-wallet-flow-success'
@@ -37,7 +36,6 @@ export function ImportHardwareWalletFlow({
   successHref,
   requiresPasswordCreation = true,
 }: Props) {
-  const navigate = useNavigate()
   const { importHardwareWalletAsync } = useImportHardwareWallet()
   const { requestPassword } = usePassword()
   const onSuccess = useWalletFlowSuccess(successHref)
@@ -146,7 +144,7 @@ export function ImportHardwareWalletFlow({
   return (
     <ScannerScreen
       onAccounts={handleAccounts}
-      onBack={() => navigate({ to: backHref })}
+      backButtonProps={{ href: backHref }}
     />
   )
 }

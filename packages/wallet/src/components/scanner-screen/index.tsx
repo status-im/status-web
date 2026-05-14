@@ -1,13 +1,11 @@
 'use client'
 
-import { useCallback, useState } from 'react'
+import { type ComponentProps, useCallback, useState } from 'react'
 
-import { parseConnection } from '@qrkit/core'
+import { type Account, parseConnection, type ScannedUR } from '@qrkit/core'
 import { useQRScanner } from '@qrkit/react'
 import { Button, Text } from '@status-im/components'
 import { ArrowLeftIcon } from '@status-im/icons/20'
-
-import type { Account, ScannedUR } from '@qrkit/core'
 
 const DEFAULT_ADDRESS_INDEX = 0
 
@@ -33,12 +31,14 @@ function toHardwareWalletAccount(account: Account): HardwareWalletAccount {
   }
 }
 
+type BackButtonProps = Omit<ComponentProps<typeof Button>, 'children'>
+
 type Props = {
+  backButtonProps?: BackButtonProps
   onAccounts: (accounts: HardwareWalletAccount[]) => void
-  onBack?: () => void
 }
 
-function ScannerScreen({ onAccounts, onBack }: Props) {
+function ScannerScreen({ backButtonProps, onAccounts }: Props) {
   const [scanError, setScanError] = useState<string | null>(null)
   const handleScan = useCallback(
     (result: ScannedUR | string) => {
@@ -47,7 +47,7 @@ function ScannerScreen({ onAccounts, onBack }: Props) {
       }
 
       try {
-        const foundAccounts = parseConnection(result) //, { chains: ['evm'] })
+        const foundAccounts = parseConnection(result, { chains: ['evm'] })
 
         if (foundAccounts.length === 0) {
           setScanError('No EVM account found in scanned QR.')
@@ -84,14 +84,15 @@ function ScannerScreen({ onAccounts, onBack }: Props) {
 
   return (
     <div className="flex flex-1 flex-col gap-1">
-      {onBack && (
+      {backButtonProps && (
         <div className="pb-4">
           <Button
-            onClick={onBack}
             variant="grey"
             icon={<ArrowLeftIcon color="$neutral-100" />}
             aria-label="Back"
             size="32"
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            {...(backButtonProps as any)}
           />
         </div>
       )}

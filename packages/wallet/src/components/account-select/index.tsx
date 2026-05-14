@@ -3,8 +3,6 @@
 import { Button, Text } from '@status-im/components'
 import { ArrowLeftIcon } from '@status-im/icons/20'
 
-import type {} from 'react'
-
 export type SelectableAccount = {
   chain: string
   address: string
