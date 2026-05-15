@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<NextMetadata> {
 
   return Metadata({
     title: {
-      template: '%s — Status',
+      template: '%s',
       default: t('breadcrumb'),
     },
     description: t('description'),
