@@ -4,6 +4,7 @@ export {
   chartIntervalSeconds,
 } from './chart-timestamps'
 export { padHex } from './pad-hex'
+export { setRevalidationBucket } from './revalidation-bucket'
 export { toChecksumAddress } from './to-checksum-address'
 export {
   getTransactionHash,
