@@ -9,7 +9,7 @@ const Link = (
   props: React.ComponentPropsWithRef<typeof NextLink>,
   ref: React.Ref<HTMLAnchorElement>
 ) => {
-  const { locale, ...restProps } = props
+  const { locale, prefetch, ...restProps } = props
   const url =
     typeof restProps.href === 'string'
       ? restProps.href
@@ -40,6 +40,7 @@ const Link = (
   return (
     <IntlLink
       {...restProps}
+      prefetch={prefetch === 'unstable_forceStale' ? undefined : prefetch}
       locale={typeof locale === 'string' ? locale : undefined}
       ref={ref}
     />
