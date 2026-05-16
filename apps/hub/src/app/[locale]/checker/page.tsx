@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { Button } from '@status-im/status-network/components'
 import Image from 'next/image'
+import { mainnet } from 'viem/chains'
+import { usePublicClient } from 'wagmi'
 
 import { HubLayout } from '../../_components/hub-layout'
 import airdropData from '../../_data/airdrop.json'
@@ -75,30 +77,19 @@ function formatApr(value: number) {
   return `${Number(value || 0).toFixed(2)}%`
 }
 
-async function resolveENS(name: string) {
-  const apis = [
-    `https://api.ensideas.com/ens/resolve/${encodeURIComponent(name)}`,
-    `https://ensdata.net/${encodeURIComponent(name)}`,
-  ]
+async function resolveENS(
+  name: string,
+  resolveViaRpc: (() => Promise<string | null>) | undefined
+) {
+  if (!resolveViaRpc) {
+    throw new Error(
+      `Could not resolve ENS name "${name}". Try pasting the 0x address directly.`
+    )
+  }
 
-  for (const url of apis) {
-    try {
-      const response = await fetch(url)
-      if (!response.ok) continue
-
-      const payload = (await response.json()) as {
-        address?: string
-        resolvedAddress?: string
-        addr?: string
-      }
-      const address = payload.address || payload.resolvedAddress || payload.addr
-
-      if (address && ADDRESS_RE.test(address)) {
-        return address
-      }
-    } catch {
-      // Try the next public resolver.
-    }
+  const resolvedAddress = await resolveViaRpc()
+  if (resolvedAddress && ADDRESS_RE.test(resolvedAddress)) {
+    return resolvedAddress
   }
 
   throw new Error(
@@ -169,6 +160,7 @@ function MethodCard({
 }
 
 export default function CheckerPage() {
+  const publicClient = usePublicClient({ chainId: mainnet.id })
   const [input, setInput] = useState('')
   const [status, setStatus] = useState(
     'Enter a wallet address or ENS to check the allocation.'
@@ -213,7 +205,17 @@ export default function CheckerPage() {
       setStatus(`Resolving ${normalizedInput}...`)
 
       try {
-        lookupAddress = (await resolveENS(normalizedInput)).toLowerCase()
+        lookupAddress = (
+          await resolveENS(normalizedInput, async () => {
+            if (!publicClient) return null
+
+            const resolvedAddress = await publicClient.getEnsAddress({
+              name: normalizedInput,
+            })
+
+            return resolvedAddress ?? null
+          })
+        ).toLowerCase()
       } catch (error) {
         setRecord(null)
         setEmptyVisible(false)
@@ -274,7 +276,7 @@ export default function CheckerPage() {
     }
     // records is stable for the static dataset.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [publicClient])
 
   return (
     <HubLayout>
