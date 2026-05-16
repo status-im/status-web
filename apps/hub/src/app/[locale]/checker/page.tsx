@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 
+import { Button } from '@status-im/status-network/components'
 import Image from 'next/image'
 
 import { HubLayout } from '../../_components/hub-layout'
@@ -157,7 +158,7 @@ function MethodCard({
       }`}
     >
       <small className="text-15 text-neutral-50">{label}</small>
-      <strong className="mt-1 block text-27 font-700 text-blue-50">
+      <strong className="mt-1 block text-27 font-700 text-purple">
         {value}
       </strong>
       {copy && (
@@ -280,7 +281,7 @@ export default function CheckerPage() {
       <div className="mx-auto flex max-w-[1120px] flex-col gap-10 p-4 pb-12 lg:py-14">
         <section className="flex flex-col gap-6">
           <div className="max-w-[760px]">
-            <p className="mb-3 text-13 font-700 uppercase text-blue-50">
+            <p className="mb-3 text-13 font-700 uppercase text-purple">
               Pre-deposit vaults
             </p>
             <h1 className="text-40 font-700 leading-[0.95] tracking-[-0.03em] text-neutral-100 lg:text-64">
@@ -311,18 +312,20 @@ export default function CheckerPage() {
                 id="checker-address"
                 value={input}
                 onChange={event => setInput(event.target.value)}
-                className="min-h-14 min-w-0 rounded-12 border border-neutral-20 bg-white-100 px-4 text-15 text-neutral-100 outline-none transition focus:border-blue-50"
+                className="min-h-14 min-w-0 rounded-12 border border-neutral-20 bg-white-100 px-4 text-15 text-neutral-100 outline-none transition focus:border-purple"
                 type="text"
                 spellCheck="false"
                 placeholder="0x... or vitalik.eth"
                 aria-describedby="checker-status"
               />
-              <button
+              <Button
                 type="submit"
-                className="min-h-14 rounded-12 bg-blue-50 px-7 text-15 font-700 text-white-100"
+                variant="primary"
+                size="40"
+                className="min-h-14 px-7"
               >
                 Check
-              </button>
+              </Button>
             </div>
             <p
               id="checker-status"
@@ -340,7 +343,7 @@ export default function CheckerPage() {
           <section className="rounded-20 border border-neutral-10 bg-white-100 p-5 shadow-1 lg:p-8">
             <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
               <div>
-                <p className="break-all text-13 font-700 uppercase text-blue-50">
+                <p className="break-all text-13 font-700 uppercase text-purple">
                   {record.wallet}
                 </p>
                 <h2 className="mt-2 text-27 font-700 text-neutral-100">
@@ -430,7 +433,7 @@ export default function CheckerPage() {
               </div>
             </div>
 
-            <p className="mt-6 border-l-4 border-blue-50 pl-4 text-15 text-neutral-70">
+            <p className="mt-6 border-l-4 border-purple pl-4 text-15 text-neutral-70">
               {ready
                 ? `Linea Mainnet eligibility: ${record.reason || 'eligible'}`
                 : `Linea Mainnet status: address not verified. ${
@@ -484,7 +487,7 @@ export default function CheckerPage() {
 
         <section id="methodology" className="flex flex-col gap-4">
           <div>
-            <p className="mb-3 text-13 font-700 uppercase text-blue-50">
+            <p className="mb-3 text-13 font-700 uppercase text-purple">
               Methodology
             </p>
             <h2 className="max-w-[760px] text-27 font-700 leading-[1.05] text-neutral-100 lg:text-40">
@@ -506,7 +509,7 @@ export default function CheckerPage() {
                 value="6M LINEA + 10.5M SNT rewards"
               />
             </div>
-            <p className="mt-5 border-l-4 border-blue-50 pl-4 text-15 text-neutral-70">
+            <p className="mt-5 border-l-4 border-purple pl-4 text-15 text-neutral-70">
               Your share = average daily TVL share x multiplier, then
               renormalized so the full pool is distributed.
             </p>
@@ -576,7 +579,7 @@ export default function CheckerPage() {
               If you do not have one yet, follow{' '}
               <a
                 href="https://help.safe.global/articles/9317165368-deploying-a-multi-chain-safe?lang=en"
-                className="font-700 text-blue-50 underline"
+                className="font-700 text-purple underline hover:text-purple-dark"
               >
                 Safe&apos;s official multi-chain deployment guide
               </a>
