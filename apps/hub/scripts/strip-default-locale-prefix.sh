@@ -112,7 +112,35 @@ if [[ -f "$OUT_DIR/${LOCALE}.txt" ]]; then
   mv "$OUT_DIR/${LOCALE}.txt" "$OUT_DIR/index.txt"
 fi
 
-# 5. Remove the /en directory
+# 5. Create clean URL aliases for default-locale static pages.
+#
+# Next static export emits flat files like checker.html when trailingSlash is
+# disabled. Some static hosts resolve /checker to checker.html, but simple file
+# servers do not. Keep the flat files and also create checker/index.html so
+# /checker works consistently in previews and static deployments.
+echo "🔗 Creating clean URL aliases..."
+find "$OUT_DIR" -maxdepth 1 -type f -name "*.html" \
+  ! -name "index.html" \
+  ! -name "404.html" \
+  -print0 | while IFS= read -r -d '' html_file; do
+    page_name="$(basename "$html_file" .html)"
+    page_dir="$OUT_DIR/$page_name"
+
+    # Do not overwrite real asset or route directories.
+    if [[ -e "$page_dir" ]]; then
+      continue
+    fi
+
+    mkdir -p "$page_dir"
+    cp "$html_file" "$page_dir/index.html"
+
+    txt_file="$OUT_DIR/$page_name.txt"
+    if [[ -f "$txt_file" ]]; then
+      cp "$txt_file" "$page_dir/index.txt"
+    fi
+  done
+
+# 6. Remove the /en directory
 echo "🗑️  Removing /${LOCALE}/..."
 # Extra safety: ensure OUT_DIR is not empty or whitespace-only before removing
 if [[ -z "${OUT_DIR//[[:space:]]/}" ]]; then
