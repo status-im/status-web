@@ -10,6 +10,7 @@ import globals from 'globals'
 export default [
   {
     ignores: [
+      'next-env.d.ts',
       '**/.next',
       '**/dist',
       '**/node_modules',
