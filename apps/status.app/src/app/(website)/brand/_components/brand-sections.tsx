@@ -1,8 +1,9 @@
+'use client'
+
 import { Text } from '@status-im/components'
 import { DownloadIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
 
-import { rgbToHex } from '~app/_utils/rgb-to-hex'
 import { Image as AssetImage } from '~components/assets'
 
 import { CopyHexButton } from './copy-hex-button'
@@ -10,16 +11,6 @@ import { DownloadImageButton } from './download-image-button'
 import { DownloadZipButton } from './download-zip-button'
 
 import type { ImageType, ZipFileId } from '~components/assets'
-
-export function transformColor(name: string, rgba: string, invert = false) {
-  const [r, g, b] = rgba.match(/\d+/g)!.map(Number)
-  return {
-    name,
-    rgb: { r, g, b },
-    hex: rgbToHex({ r, g, b }),
-    invert,
-  }
-}
 
 type BrandSectionProps = {
   title: string

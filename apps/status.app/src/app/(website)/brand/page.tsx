@@ -1,10 +1,11 @@
 import { customisation, neutral, white } from '@status-im/colors'
-import { Text } from '@status-im/components'
+import { JSONLDScript, Text } from '@status-im/components'
 import { DownloadIcon } from '@status-im/icons/20'
 import { getTranslations } from 'next-intl/server'
 
-import { jsonLD, JSONLDScript } from '~/utils/json-ld'
+import { jsonLD } from '~/utils/json-ld'
 import { Metadata } from '~app/_metadata'
+import { rgbToHex } from '~app/_utils/rgb-to-hex'
 import { Body } from '~components/body'
 import { ParallaxCircle } from '~website/_components/parallax-circle'
 
@@ -13,12 +14,21 @@ import {
   AssetSection,
   ColorSection,
   LogoSection,
-  transformColor,
 } from './_components/brand-sections'
 import { DownloadZipButton } from './_components/download-zip-button'
 
 import type { ImageAlt } from '~components/assets'
 import type { Metadata as NextMetadata } from 'next'
+
+function transformColor(name: string, rgba: string, invert = false) {
+  const [r, g, b] = rgba.match(/\d+/g)!.map(Number)
+  return {
+    name,
+    rgb: { r, g, b },
+    hex: rgbToHex({ r, g, b }),
+    invert,
+  }
+}
 
 export async function generateMetadata(): Promise<NextMetadata> {
   const t = await getTranslations('brand')
