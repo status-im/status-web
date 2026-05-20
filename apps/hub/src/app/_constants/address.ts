@@ -203,12 +203,12 @@ export const SNT_VAULT: Vault = {
   apr: '',
   rewards: ['LINEA', 'vault.native_apps_points'],
   icon: 'SNT',
-  address: '0x493957E168aCCdDdf849913C3d60988c652935Cd',
+  address: '0xccd6bdfe5fdbaee2f63284aeb06a6eb3f6fe6f1a',
   token: SNT_TOKEN,
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
   network: mainnet.name,
-  l2ClaimVaultAddress: '0x1C69FaEE16CaFc36F59706a19B3738978DFC8531',
+  l2ClaimVaultAddress: '0x77b59d16DaAd925d69F90309c0bc21be686c107b',
   withdrawEnabled: true,
 } as const
 
@@ -218,13 +218,13 @@ export const LINEA_VAULT: Vault = {
   apr: '',
   rewards: ['SNT', 'vault.native_apps_points'],
   icon: 'LINEA',
-  address: '0xb223cA53A53A5931426b601Fa01ED2425D8540fB',
+  address: '0x7Ac228CBE855313fad7048CeC87DD5b591721825',
   token: LINEA_TOKEN,
   abi: PreDepositVaultAbi,
   chainId: linea.id,
   network: linea.name,
   l2ClaimVaultAddress: '0xb223cA53A53A5931426b601Fa01ED2425D8540fB',
-  withdrawEnabled: false,
+  withdrawEnabled: true,
 } as const
 
 export const WETH_VAULT: Vault = {
@@ -233,12 +233,12 @@ export const WETH_VAULT: Vault = {
   apr: '',
   rewards: ['SNT, LINEA', 'vault.native_apps_points'],
   icon: 'WETH',
-  address: '0xc71Ec84Ee70a54000dB3370807bfAF4309a67a1f',
+  address: '0xbEc2Be11706c63558266f6515306fb152252F207',
   token: WETH_TOKEN,
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
   network: mainnet.name,
-  l2ClaimVaultAddress: '0xA613E0373A5Baf4f5c56F8f6EAf6062c63a6750b',
+  l2ClaimVaultAddress: '0x357A314D12fb5af0617b7e0CFc6d214B28858275',
   withdrawEnabled: true,
 } as const
 
@@ -253,7 +253,7 @@ export const GUSD_VAULT: GUSDVault = {
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
   network: mainnet.name,
-  withdrawEnabled: false,
+  withdrawEnabled: true,
   gusdConfig: {
     depositorAddress: GENERIC_DEPOSITOR.address,
     depositorAbi: genericDepositorAbi,
