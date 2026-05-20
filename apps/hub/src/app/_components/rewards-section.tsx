@@ -46,7 +46,7 @@ const RewardsSection = () => {
         <br />
         {t('rewards.predeposit_end')}{' '}
         <Link
-          href=""
+          href="https://status.network/blog/pre-deposit-vaults-withdrawal-timeline-and-rewards-distribution"
           target="_blank"
           rel="noopener noreferrer"
           className="text-purple hover:text-purple-dark"
