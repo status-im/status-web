@@ -1065,6 +1065,10 @@
       "translation": "I confirm the receiver address above is one I control on Linea Mainnet.",
       "notes": "vault::unlock_confirmation"
     },
+    "unlock_gas_confirmation": {
+      "translation": "I confirm the receiver address above contains ETH on Linea Mainnet to pay for gas fees",
+      "notes": "vault::unlock_gas_confirmation"
+    },
     "unlock_description": {
       "translation": "Withdraw your pre-deposit. Funds and rewards will be delivered to the receiver address on Linea.",
       "notes": "vault::unlock_description"

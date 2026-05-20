@@ -1061,6 +1061,10 @@
       "translation": "위의 수신자 주소가 제가 Linea Mainnet에서 관리하는 주소임을 확인합니다.",
       "notes": "vault::unlock_confirmation"
     },
+    "unlock_gas_confirmation": {
+      "translation": "위 수령 주소가 가스비 지불을 위한 ETH를 Linea 메인넷에 보유하고 있음을 확인합니다.",
+      "notes": "vault::unlock_gas_confirmation"
+    },
     "unlock_description": {
       "translation": "사전 예치를 출금합니다. 자금과 보상은 Linea의 수신자 주소로 전송됩니다.",
       "notes": "vault::unlock_description"

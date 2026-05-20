@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Checkbox } from '@status-im/components'
 import { AlertIcon } from '@status-im/icons/12'
+import { InfoIcon } from '@status-im/icons/16'
 import { Button } from '@status-im/status-network/components'
 import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
@@ -66,6 +67,7 @@ const PreDepositUnlockModal = ({
   const { switchChain, isPending: isSwitchingChain } = useSwitchChain()
   const [hasSwitchError, setHasSwitchError] = useState(false)
   const [confirmed, setConfirmed] = useState(false)
+  const [gasConfirmed, setGasConfirmed] = useState(false)
 
   const isGUSD = isGUSDVault(vault)
   const isSameChain = isLINEAVault(vault)
@@ -98,6 +100,7 @@ const PreDepositUnlockModal = ({
   useEffect(() => {
     if (!open) {
       setConfirmed(false)
+      setGasConfirmed(false)
     }
   }, [open])
 
@@ -156,6 +159,7 @@ const PreDepositUnlockModal = ({
       onClose={() => {
         form.reset()
         setConfirmed(false)
+        setGasConfirmed(false)
       }}
       title={isSameChain ? t('vault.claim_title') : t('vault.unlock_title')}
       description={t('vault.unlock_description')}
@@ -242,6 +246,40 @@ const PreDepositUnlockModal = ({
               {t('vault.unlock_confirmation')}
             </span>
           </label>
+
+          {/* Gas Confirmation checkbox */}
+          <label className="flex cursor-pointer items-start gap-3">
+            <div className="flex shrink-0 items-center">
+              <Checkbox
+                checked={gasConfirmed}
+                onCheckedChange={checked => setGasConfirmed(checked === true)}
+                disabled={isGUSD}
+              />
+            </div>
+            <span className="text-13 text-neutral-50">
+              {t('vault.unlock_gas_confirmation')}
+            </span>
+          </label>
+
+          {!gasConfirmed && (
+            <div
+              data-customisation="blue"
+              className="flex items-center gap-2 rounded-12 border border-customisation-50/10 bg-customisation-50/5 px-4 py-3"
+            >
+              <InfoIcon className="shrink-0 text-customisation-50" />
+              <p className="text-13 font-400 text-neutral-100">
+                {t('vault.smol_refuel_question')}{' '}
+                <a
+                  href="https://smolrefuel.com/?outboundChain=59144"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-500 text-customisation-50 underline"
+                >
+                  {t('vault.smol_refuel_cta')}
+                </a>
+              </p>
+            </div>
+          )}
 
           {/* Actions */}
           <div className="flex w-full gap-3 pt-4">
