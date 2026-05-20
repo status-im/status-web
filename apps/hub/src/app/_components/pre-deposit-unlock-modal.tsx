@@ -10,10 +10,9 @@ import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 import { isAddress } from 'viem'
 import { useAccount, useChainId, useSwitchChain } from 'wagmi'
-import { linea } from 'wagmi/chains'
 import { z } from 'zod'
 
-import { isGUSDVault, type Vault } from '~constants/address'
+import { isGUSDVault, isLINEAVault, type Vault } from '~constants/address'
 import { usePreDepositUnlock } from '~hooks/usePreDepositUnlock'
 import { useUnlockTxHash } from '~hooks/useUnlockTxHash'
 import { useVaultBalanceReadiness } from '~hooks/useVaultBalanceReadiness'
@@ -69,7 +68,7 @@ const PreDepositUnlockModal = ({
   const [confirmed, setConfirmed] = useState(false)
 
   const isGUSD = isGUSDVault(vault)
-  const isSameChain = vault.chainId === linea.id
+  const isSameChain = isLINEAVault(vault)
 
   const {
     l1Balance: depositedBalance,
