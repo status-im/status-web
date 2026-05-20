@@ -1,3 +1,5 @@
+import { useCallback, useEffect } from 'react'
+
 import { isGUSDVault, type Vault } from '~constants/address'
 
 import { useGUSDUserBalance } from './useGUSDUserBalance'
@@ -30,7 +32,6 @@ export function useVaultBalanceReadiness({
   } = useUserVaultDeposit({
     vault,
     enabled: !isGUSD,
-    registerRefetch: isGUSD ? undefined : registerRefetch,
   })
   const {
     data: gusdBalance,
@@ -38,7 +39,6 @@ export function useVaultBalanceReadiness({
     refetch: refetchGUSDBalance,
   } = useGUSDUserBalance({
     enabled: isGUSD,
-    registerRefetch: isGUSD ? registerRefetch : undefined,
   })
   const {
     data: l2PendingAmount,
@@ -58,9 +58,13 @@ export function useVaultBalanceReadiness({
 
   const refetchL1Balance = isGUSD ? refetchGUSDBalance : refetchDepositedBalance
 
-  const refetchBalances = async () => {
+  const refetchBalances = useCallback(async () => {
     await Promise.all([refetchL1Balance(), refetchL2PendingWithdrawal()])
-  }
+  }, [refetchL1Balance, refetchL2PendingWithdrawal])
+
+  useEffect(() => {
+    registerRefetch?.(vault.id, refetchBalances)
+  }, [vault.id, registerRefetch, refetchBalances])
 
   return {
     isGUSD,

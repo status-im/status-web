@@ -9,15 +9,22 @@ import { ConnectKitButton } from 'connectkit'
 import { cva } from 'cva'
 import { useTranslations } from 'next-intl'
 import { formatUnits } from 'viem'
-import { useAccount } from 'wagmi'
+import { useAccount, useWaitForTransactionReceipt } from 'wagmi'
 import { linea } from 'wagmi/chains'
 
+import { shortenAddress } from '~/utils/address'
 import { formatCurrency, formatTokenAmount } from '~/utils/currency'
-import { GUSD_CLAIM_APP_URL, isGUSDVault, type Vault } from '~constants/address'
+import {
+  GUSD_CLAIM_APP_URL,
+  isGUSDVault,
+  isLINEAVault,
+  type Vault,
+} from '~constants/address'
 import { useGUSDStablecoinBreakdown } from '~hooks/useGUSDStablecoinBreakdown'
 import { useLineaBridgeMessageStatus } from '~hooks/useLineaBridgeMessageStatus'
 import { usePreDepositTVL } from '~hooks/usePreDepositTVL'
 import { usePreDepositTVLInUSD } from '~hooks/usePreDepositTVLInUSD'
+import { useUnlockReceiver } from '~hooks/useUnlockReceiver'
 import { useUnlockTxHash } from '~hooks/useUnlockTxHash'
 import { useVaultBalanceReadiness } from '~hooks/useVaultBalanceReadiness'
 import { useVaultCardCta, type VaultCardAction } from '~hooks/useVaultCardCta'
@@ -111,6 +118,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
   const isGUSD = isGUSDVault(vault)
   const t = useTranslations()
   const toast = useToast()
+  const { address: connectedAddress } = useAccount()
 
   const { data: tvlData, isLoading: isTvlLoading } = usePreDepositTVLInUSD({
     vault,
@@ -125,6 +133,11 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
   )
   const { txHash: unlockTxHash, clearTxHash: clearUnlockTxHash } =
     useUnlockTxHash(vault.id)
+  const { receiver: unlockReceiver } = useUnlockReceiver({ vault })
+  const isExternalReceiver =
+    !!unlockReceiver &&
+    !!connectedAddress &&
+    unlockReceiver.toLowerCase() !== connectedAddress.toLowerCase()
   const {
     l1Balance,
     l2PendingAmount,
@@ -140,6 +153,26 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
     vault,
     unlockTxHash,
   })
+
+  const isSameChain = isLINEAVault(vault)
+  const { data: unlockReceipt } = useWaitForTransactionReceipt({
+    hash: unlockTxHash as `0x${string}` | undefined,
+    chainId: vault.chainId,
+    query: { enabled: !!unlockTxHash && isSameChain },
+  })
+
+  useEffect(() => {
+    if (isSameChain && unlockReceipt && unlockTxHash) {
+      clearUnlockTxHash()
+      refetchL1Balance()
+    }
+  }, [
+    isSameChain,
+    unlockReceipt,
+    unlockTxHash,
+    clearUnlockTxHash,
+    refetchL1Balance,
+  ])
 
   // Clear stored unlock tx once L2 pending appears (bridge complete).
   useEffect(() => {
@@ -209,6 +242,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
     l2PendingAmount,
     bridgeStatus,
     hasUnlockTxHash: !!unlockTxHash,
+    isSameChain,
   })
 
   const formattedTVL = formatCurrency(vaultDisplay.tvlUSD, {
@@ -367,6 +401,12 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
         >
           {t('vault.gusd_claim_link')}
         </ButtonLink>
+      ) : isExternalReceiver && unlockReceiver ? (
+        <div className="mt-auto rounded-12 border border-neutral-20 px-4 py-3 text-13 text-neutral-50">
+          {t('vault.sent_to_receiver', {
+            address: shortenAddress(unlockReceiver),
+          })}
+        </div>
       ) : (
         <Button
           size="40"
