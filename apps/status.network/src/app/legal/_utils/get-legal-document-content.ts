@@ -1,6 +1,7 @@
 import fs from 'fs/promises'
 import path from 'path'
 import { legalComponents } from '~/app/_components/content'
+import { getGitFileLastEdited } from '~/app/_utils/get-git-file-last-edited'
 import { compileMDX } from 'next-mdx-remote/rsc'
 import rehypeSlug from 'rehype-slug'
 import remarkGfm from 'remark-gfm'
@@ -44,10 +45,21 @@ export async function getLegalDocumentContent(documentName: DocumentName) {
     ? path.resolve(`content/legal-external/${documentName}.md`)
     : path.resolve(`content/legal/${documentName}.md`)
 
-  const [fileContent, { mtime: lastEdited }] = await Promise.all([
+  const relativePath = isExternal
+    ? `${documentName}.md`
+    : `content/legal/${documentName}.md`
+  const gitDir = isExternal ? path.resolve('content/legal-external') : undefined
+
+  const [fileContent, lastEdited] = await Promise.all([
     fs.readFile(filePath, 'utf8'),
-    fs.stat(filePath),
+    getGitFileLastEdited(relativePath, { gitDir }),
   ])
+
+  if (!lastEdited) {
+    throw new Error(
+      `Could not resolve last edited date from git for "${relativePath}"`,
+    )
+  }
 
   const { title: extractedTitle, contentWithoutTitle } =
     extractTitleFromHeadline(fileContent)
