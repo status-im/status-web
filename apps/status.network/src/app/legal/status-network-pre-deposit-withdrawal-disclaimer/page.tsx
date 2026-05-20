@@ -3,7 +3,11 @@ import { formatDate } from '~app/_utils/format-date'
 import { getLegalDocumentContent } from '../_utils/get-legal-document-content'
 
 export const metadata = Metadata({
-  title: 'Status Network Pre-Deposit Withdrawal Disclaimer',
+  title: 'Pre-Deposit Withdrawal Disclaimer',
+  description: 'Status Network Pre-Deposit Withdrawal Disclaimer',
+  alternates: {
+    canonical: '/legal/status-network-pre-deposit-withdrawal-disclaimer',
+  },
 })
 
 export default async function StatusNetworkPreDepositDisclaimerPage() {
