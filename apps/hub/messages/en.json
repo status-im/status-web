@@ -714,8 +714,12 @@
       "notes": "rewards::disclaimer"
     },
     "predeposit_end": {
-      "translation": "Pre-deposit period has ended. Fund reward claiming is now available",
+      "translation": "Pre-deposit withdrawal period is now open and pre-depositors are able to withdraw their assets through Status Network Hub. Eligible pre-depositors will be airdropped accrued yield and liquid rewards. For more details see",
       "notes": "rewards::predeposit_end"
+    },
+    "predeposit_end_link": {
+      "translation": "this blog post",
+      "notes": "rewards::predeposit_end_link"
     }
   },
   "pre_deposits": {

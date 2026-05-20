@@ -44,7 +44,15 @@ const RewardsSection = () => {
         .
         <br />
         <br />
-        {t('rewards.predeposit_end')}
+        {t('rewards.predeposit_end')}{' '}
+        <Link
+          href=""
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-purple hover:text-purple-dark"
+        >
+          {t('rewards.predeposit_end_link')}.
+        </Link>
       </p>
     </div>
   )

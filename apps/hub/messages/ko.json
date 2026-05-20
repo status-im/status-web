@@ -714,8 +714,12 @@
       "notes": "rewards::disclaimer"
     },
     "predeposit_end": {
-      "translation": "사전 예치 기간이 종료되었습니다. 이제 펀드 보상 청구가 가능합니다.",
+      "translation": "사전 예치금 출금 기간이 시작되었으며, 사전 예치 참여자는 이제 Status Network Hub를 통해 자산을 출금할 수 있습니다. 자격을 충족한 사전 예치 참여자에게는 누적 수익 및 유동성 보상이 에어드롭될 예정입니다. 자세한 내용은",
       "notes": "rewards::predeposit_end"
+    },
+    "predeposit_end_link": {
+      "translation": "이 블로그 게시물을 참고하세요",
+      "notes": "rewards::predeposit_end_link"
     }
   },
   "pre_deposits": {
