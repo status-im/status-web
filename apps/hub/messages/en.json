@@ -740,34 +740,54 @@
       "notes": "pre_deposits::faq"
     },
     "faq_items": {
-      "when_unlocked": {
+      "receiver_address_change": {
         "title": {
-          "translation": "When will deposits be unlocked?",
-          "notes": "pre_deposits::faq_items::when_unlocked::title"
+          "translation": "Can I change the address where I receive my withdrawal?",
+          "notes": "pre_deposits::faq_items::receiver_address_change::title"
         },
         "content": {
-          "translation": "Pre-deposits will be unlocked once bridged to Status Network Mainnet. Upon withdrawal, you will be able to stake and/or lock SNT in staking vaults on the L2. You will have the flexibility to create up to 20 separate vaults, each with customizable parameters including staking duration and corresponding reward multipliers. For all bridged tokens (including LINEA, ETH and GUSD at launch), you will be able to select which apps to provide liquidity to and continue to earn incentives.",
-          "notes": "pre_deposits::faq_items::when_unlocked::content"
+          "translation": "Yes, you can change the receiver address during the Unlock step. If you don't change it, assets will be sent to your original depositor address on Linea.",
+          "notes": "pre_deposits::faq_items::receiver_address_change::content"
         }
       },
-      "wallet_warning": {
+      "unlock_time_length": {
         "title": {
-          "translation": "Why am I receiving a wallet warning when trying to deposit?",
-          "notes": "pre_deposits::faq_items::wallet_warning::title"
+          "translation": "How long does the unlock take?",
+          "notes": "pre_deposits::faq_items::unlock_time_length::title"
         },
         "content": {
-          "translation": "This warning may indicate insufficient ETH on your source chain to pay for gas fees. Ensure you have enough Linea L2 ETH available when depositing LINEA tokens, or Ethereum L1 ETH for other deposit types. It's to solve this gas friction that we're launching Status Network - the first natively gasless L2.",
-          "notes": "pre_deposits::faq_items::wallet_warning::content"
+          "translation": "For ETH and SNT vaults (deposited on Ethereum), it takes approximately 20 minutes for assets to arrive on Linea. For LINEA vaults, the process is faster since assets are already on Linea.",
+          "notes": "pre_deposits::faq_items::unlock_time_length::content"
         }
       },
-      "incentive_rewards": {
+      "rewards_claiming": {
         "title": {
-          "translation": "What are the total incentive rewards for pre-depositors?",
-          "notes": "pre_deposits::faq_items::incentive_rewards::title"
+          "translation": "What about my rewards?",
+          "notes": "pre_deposits::faq_items::rewards_claiming::title"
         },
         "content": {
-          "translation": "A liquid reward pool of 15M SNT and 20M LINEA tokens will be available for pre-depositors across vaults. The final allocation of liquid incentives and Karma will be based on vaults TVL and time in the vaults + potential multipliers for activity on testnets v1 and v2.",
-          "notes": "pre_deposits::faq_items::incentive_rewards::content"
+          "translation": "Rewards (SNT + LINEA) and accrued yield (ETH, GUSD) are distributed through a separate process from this withdrawal flow. They will be airdropped directly to your wallet on Linea Mainnet — no action required to receive them, as long as your wallet is accessible at the same address on Linea Mainnet.",
+          "notes": "pre_deposits::faq_items::rewards_claiming::content"
+        }
+      },
+      "gusd_claiming": {
+        "title": {
+          "translation": "What about GUSD?",
+          "notes": "pre_deposits::faq_items::gusd_claiming::title"
+        },
+        "content": {
+          "translation": "The withdrawal process for GUSD differs from the other vaults, and details will be announced separately soon.",
+          "notes": "pre_deposits::faq_items::gusd_claiming::content"
+        }
+      },
+      "no_gas": {
+        "title": {
+          "translation": "I don't have ETH on Linea for gas. What do I do?",
+          "notes": "pre_deposits::faq_items::no_gas::title"
+        },
+        "content": {
+          "translation": "Use SmolRefuel to swap a small amount of tokens to ETH on Linea.",
+          "notes": "pre_deposits::faq_items::no_gas::content"
         }
       }
     }

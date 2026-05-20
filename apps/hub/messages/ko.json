@@ -740,34 +740,54 @@
       "notes": "pre_deposits::faq"
     },
     "faq_items": {
-      "when_unlocked": {
+      "receiver_address_change": {
         "title": {
-          "translation": "예치금은 언제 잠금 해제되나요?",
-          "notes": "pre_deposits::faq_items::when_unlocked::title"
+          "translation": "출금을 받을 주소를 변경할 수 있나요?\n",
+          "notes": "pre_deposits::faq_items::receiver_address_change::title"
         },
         "content": {
-          "translation": "사전 예치금은 스테이터스 네트워크 메인넷으로 브릿지된 후 잠금 해제됩니다. 메인넷에서 출금 시, SNT를 스테이킹 금고에 스테이킹 또는 다시 잠금시킬 수 있습니다. 이 옵션에서는 최대 20개의 개별 금고를 생성할 수 있고, 각 금고마다 스테이킹 기간과 그에 해당하는 보상 배수를 다르게 설정하실 수 있도록 기능을 제공할 예정입니다. 그 외에도 모든 브릿지된 토큰(LINEA, ETH, GUSD 포함)은 출시 시 지원하는 여러 앱들 중 선택하셔서 유동성으로 제공하고 인센티브를 계속 획득하실 수 있습니다.",
-          "notes": "pre_deposits::faq_items::when_unlocked::content"
+          "translation": "네, Unlock 단계에서 수령 주소를 변경할 수 있습니다. 변경하지 않으면 자산은 원래의 Linea 입금 주소로 전송됩니다.",
+          "notes": "pre_deposits::faq_items::receiver_address_change::content"
         }
       },
-      "wallet_warning": {
+      "unlock_time_length": {
         "title": {
-          "translation": "예치 시 지갑에서 경고가 뜨는 이유는 무엇인가요?",
-          "notes": "pre_deposits::faq_items::wallet_warning::title"
+          "translation": "Unlock에는 얼마나 걸리나요?\n",
+          "notes": "pre_deposits::faq_items::unlock_time_length::title"
         },
         "content": {
-          "translation": "지갑에 가스 수수료를 지불하기에 충분한 ETH를 출금 체인에 보유하고 계신지 확인하세요. LINEA 토큰을 예치할 때는 Linea L2에 충분한 ETH를, 다른 예치 유형들의 경우 이더리움 L1 ETH를 보유해야 합니다. 스테이터스 네트워크는 이러한 가스 문제를 해결하기 위해 첫 번째 네이티브 가스리스 L2를 준비하고 있는 것입니다.",
-          "notes": "pre_deposits::faq_items::wallet_warning::content"
+          "translation": "ETH 및 SNT 볼트(이더리움에 예치된 경우)의 경우, 자산이 Linea에 도착하는 데 약 20분 정도 소요됩니다. LINEA 볼트의 경우 자산이 이미 Linea에 있기 때문에 처리 속도가 더 빠릅니다.",
+          "notes": "pre_deposits::faq_items::unlock_time_length::content"
         }
       },
-      "incentive_rewards": {
+      "rewards_claiming": {
         "title": {
-          "translation": "사전 예치자를 위한 총 인센티브 보상은 얼마인가요?",
-          "notes": "pre_deposits::faq_items::incentive_rewards::title"
+          "translation": "보상은 어떻게 되나요?",
+          "notes": "pre_deposits::faq_items::rewards_claiming::title"
         },
         "content": {
-          "translation": "사전예치자들을 위해 총 1,500만 SNT와 2,000만 LINEA 토큰으로 구성된 유동 보상 풀이 모든 금고에 걸쳐 준비되어 있습니다. 최종적인 유동 인센티브와 Karma 배분은 각 금고의 총 예치액(TVL)과 예치 기간을 기반으로 결정되며, 테스트넷 v1과 v2에서의 활동에 대한 추가 배수(multiplier)가 적용될 수 있습니다.",
-          "notes": "pre_deposits::faq_items::incentive_rewards::content"
+          "translation": "보상(SNT + LINEA) 및 누적 수익(ETH, GUSD)은 이번 출금 절차와는 별도의 프로세스를 통해 분배됩니다. 해당 보상은 Linea 메인넷의 지갑으로 직접 에어드롭되며, Linea 메인넷에서 동일한 주소의 지갑에 접근할 수 있다면 별도의 조치는 필요하지 않습니다.",
+          "notes": "pre_deposits::faq_items::rewards_claiming::content"
+        }
+      },
+      "gusd_claiming": {
+        "title": {
+          "translation": "GUSD는 어떻게 되나요?",
+          "notes": "pre_deposits::faq_items::gusd_claiming::title"
+        },
+        "content": {
+          "translation": "GUSD의 출금 절차는 다른 볼트와 다르며, 자세한 내용은 곧 별도로 안내될 예정입니다.",
+          "notes": "pre_deposits::faq_items::gusd_claiming::content"
+        }
+      },
+      "no_gas": {
+        "title": {
+          "translation": "Linea에서 가스비로 사용할 ETH가 없습니다. 어떻게 해야 하나요?",
+          "notes": "pre_deposits::faq_items::no_gas::title"
+        },
+        "content": {
+          "translation": "Linea에서 소량의 토큰을 ETH로 교환하려면 SmolRefuel을 사용하세요.",
+          "notes": "pre_deposits::faq_items::no_gas::content"
         }
       }
     }
