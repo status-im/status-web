@@ -33,6 +33,12 @@ export function usePreDepositActionStatusContent(
       state: 'pending',
       showCloseButton: false,
     }))
+    .with({ type: 'unlock', step: 'processing', isSameChain: true }, () => ({
+      title: t('action_status.claiming'),
+      description: t('action_status.wait_moment_ellipsis'),
+      state: 'processing',
+      showCloseButton: true,
+    }))
     .with({ type: 'unlock', step: 'processing' }, () => ({
       title: t('action_status.unlocking_vault'),
       description: t('action_status.unlock_processing_description'),

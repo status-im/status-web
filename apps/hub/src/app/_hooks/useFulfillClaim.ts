@@ -1,10 +1,11 @@
 import { useToast } from '@status-im/components'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
 import { BaseError } from 'viem'
 import { useAccount, useConfig, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 import { linea } from 'wagmi/chains'
+import { readContractQueryKey } from 'wagmi/query'
 
 import { L2ClaimVaultAbi } from '~constants/contracts/L2ClaimVaultAbi'
 import { usePreDepositStateContext } from '~hooks/usePreDepositStateContext'
@@ -27,6 +28,7 @@ export function useFulfillClaim() {
   const { address } = useAccount()
   const { writeContractAsync } = useWriteContract()
   const config = useConfig()
+  const queryClient = useQueryClient()
   const { send: sendPreDepositEvent } = usePreDepositStateContext()
   const toast = useToast()
   const t = useTranslations()
@@ -65,6 +67,16 @@ export function useFulfillClaim() {
         if (status === 'reverted') {
           throw new Error(t('errors.transaction_reverted'))
         }
+
+        await queryClient.invalidateQueries({
+          queryKey: readContractQueryKey({
+            abi: L2ClaimVaultAbi,
+            address: vault.l2ClaimVaultAddress,
+            chainId: linea.id,
+            functionName: 'pendingWithdrawal',
+            args: [address],
+          }),
+        })
 
         sendPreDepositEvent({ type: 'COMPLETE' })
         toast.positive(t('vault.claim_successful', { vault: vault.name }))

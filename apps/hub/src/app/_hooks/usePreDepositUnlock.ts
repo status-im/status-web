@@ -6,10 +6,10 @@ import { useAccount, useConfig, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 
 import { PreDepositVaultAbi } from '~constants/contracts/PreDepositVaultAbi'
+import { isLINEAVault, type Vault } from '~constants/index'
 import { usePreDepositStateContext } from '~hooks/usePreDepositStateContext'
 import { isUserRejection } from '~utils/wallet'
 
-import type { Vault } from '~constants/index'
 import type { Address } from 'viem'
 
 export interface PreDepositUnlockParams {
@@ -53,7 +53,13 @@ export function usePreDepositUnlock() {
         throw new Error(t('vault.no_balance_to_unlock'))
       }
 
-      sendPreDepositEvent({ type: 'START_UNLOCK' })
+      const isSameChain = isLINEAVault(vault)
+
+      sendPreDepositEvent({
+        type: 'START_UNLOCK',
+        amount: amountWei.toString(),
+        isSameChain,
+      })
 
       try {
         const hash = await writeContractAsync({
@@ -80,7 +86,11 @@ export function usePreDepositUnlock() {
         }
 
         sendPreDepositEvent({ type: 'COMPLETE' })
-        toast.positive(t('vault.unlock_successful', { vault: vault.name }))
+        if (isSameChain) {
+          toast.positive(t('vault.claim_successful', { vault: vault.name }))
+        } else {
+          toast.positive(t('vault.unlock_successful', { vault: vault.name }))
+        }
       } catch (error) {
         onClearTxHash?.()
         const isRejected = isUserRejection(error)

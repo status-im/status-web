@@ -67,6 +67,10 @@ export function isGUSDVault(vault: Vault): vault is GUSDVault {
   return vault.id === 'GUSD' && 'gusdConfig' in vault
 }
 
+export function isLINEAVault(vault: Vault): boolean {
+  return vault.id === 'LINEA' && vault.chainId === linea.id
+}
+
 export const STAKING_MANAGER = {
   address: '0x2Bc5b2a5F580064aaB6fbC1ee30113CD808582aC' as Address,
   abi: stakingManagerAbi as Abi,
@@ -187,8 +191,7 @@ export const BRIDGE_COORDINATOR_L1 = {
 
 export const STATUS_L2_CHAIN_NICKNAME = keccak256(stringToHex('Status_L2'))
 
-// TODO: replace with the actual GUSD claim app URL
-export const GUSD_CLAIM_APP_URL = 'https://hub.status.network'
+export const GUSD_CLAIM_APP_URL = 'https://app.generic.money/'
 
 // ============================================================================
 // Vaults
@@ -205,8 +208,7 @@ export const SNT_VAULT: Vault = {
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
   network: mainnet.name,
-  // TODO: replace with linea-deployed L2 ClaimVault address
-  l2ClaimVaultAddress: '0x0000000000000000000000000000000000000000',
+  l2ClaimVaultAddress: '0x1C69FaEE16CaFc36F59706a19B3738978DFC8531',
   withdrawEnabled: true,
 } as const
 
@@ -221,8 +223,7 @@ export const LINEA_VAULT: Vault = {
   abi: PreDepositVaultAbi,
   chainId: linea.id,
   network: linea.name,
-  // TODO: replace with linea-deployed L2 ClaimVault address
-  l2ClaimVaultAddress: '0x0000000000000000000000000000000000000000',
+  l2ClaimVaultAddress: '0xb223cA53A53A5931426b601Fa01ED2425D8540fB',
   withdrawEnabled: false,
 } as const
 
@@ -237,8 +238,7 @@ export const WETH_VAULT: Vault = {
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
   network: mainnet.name,
-  // TODO: replace with linea-deployed L2 ClaimVault address
-  l2ClaimVaultAddress: '0x0000000000000000000000000000000000000000',
+  l2ClaimVaultAddress: '0xA613E0373A5Baf4f5c56F8f6EAf6062c63a6750b',
   withdrawEnabled: true,
 } as const
 
@@ -253,7 +253,7 @@ export const GUSD_VAULT: GUSDVault = {
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
   network: mainnet.name,
-  withdrawEnabled: false,
+  withdrawEnabled: true,
   gusdConfig: {
     depositorAddress: GENERIC_DEPOSITOR.address,
     depositorAbi: genericDepositorAbi,

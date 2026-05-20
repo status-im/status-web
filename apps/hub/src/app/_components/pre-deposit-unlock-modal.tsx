@@ -10,6 +10,7 @@ import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 import { isAddress } from 'viem'
 import { useAccount, useChainId, useSwitchChain } from 'wagmi'
+import { linea } from 'wagmi/chains'
 import { z } from 'zod'
 
 import { isGUSDVault, type Vault } from '~constants/address'
@@ -68,11 +69,13 @@ const PreDepositUnlockModal = ({
   const [confirmed, setConfirmed] = useState(false)
 
   const isGUSD = isGUSDVault(vault)
+  const isSameChain = vault.chainId === linea.id
 
   const {
     l1Balance: depositedBalance,
     isL1BalanceLoading: isBalanceLoading,
     hasL1Balance: hasBalance,
+    refetchL1Balance,
     refetchL2PendingWithdrawal,
   } = useVaultBalanceReadiness({ vault })
   const { mutate: unlock, isPending: isUnlocking } = usePreDepositUnlock()
@@ -127,6 +130,7 @@ const PreDepositUnlockModal = ({
       },
       {
         onSuccess: () => {
+          void refetchL1Balance()
           if (vault.l2ClaimVaultAddress) {
             void refetchL2PendingWithdrawal()
           }
@@ -154,7 +158,7 @@ const PreDepositUnlockModal = ({
         form.reset()
         setConfirmed(false)
       }}
-      title={t('vault.unlock_title')}
+      title={isSameChain ? t('vault.claim_title') : t('vault.unlock_title')}
       description={t('vault.unlock_description')}
       blur={hasSwitchError}
     >
@@ -278,7 +282,7 @@ const PreDepositUnlockModal = ({
                   isBalanceLoading
                 }
               >
-                {t('vault.unlock_vault')}
+                {isSameChain ? t('vault.claim') : t('vault.unlock_vault')}
               </Button>
             )}
           </div>

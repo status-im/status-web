@@ -10,10 +10,11 @@ export type PreDepositState =
       type: PreDepositOperation
       step: PreDepositStep
       amount?: string
+      isSameChain?: boolean
     }
 
 export type PreDepositEvent =
-  | { type: 'START_UNLOCK'; amount?: string }
+  | { type: 'START_UNLOCK'; amount?: string; isSameChain: boolean }
   | { type: 'START_CLAIM' }
   | { type: 'EXECUTE' }
   | { type: 'REJECT' }
@@ -27,7 +28,12 @@ function transition(
 ): PreDepositState {
   switch (event.type) {
     case 'START_UNLOCK':
-      return { type: 'unlock', step: 'initialize', amount: event.amount }
+      return {
+        type: 'unlock',
+        step: 'initialize',
+        amount: event.amount,
+        isSameChain: event.isSameChain,
+      }
     case 'START_CLAIM':
       return { type: 'claim', step: 'initialize' }
     case 'EXECUTE':

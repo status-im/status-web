@@ -60,6 +60,8 @@ const PreDepositClaimModal = ({
   const handleContinue = () => {
     if (!address || !hasPending || isWrongChain) return
 
+    onOpenChange(false)
+
     fulfillClaim(
       { vault },
       {
@@ -67,7 +69,6 @@ const PreDepositClaimModal = ({
           clearUnlockTxHash()
           void refetchL2PendingWithdrawal()
           onClaimSuccess?.()
-          onOpenChange(false)
         },
       }
     )

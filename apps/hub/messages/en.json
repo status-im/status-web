@@ -985,6 +985,10 @@
       "translation": "Bridging…",
       "notes": "vault::bridging"
     },
+    "sent_to_receiver": {
+      "translation": "Sent to {address}",
+      "notes": "vault::sent_to_receiver"
+    },
     "claim": {
       "translation": "Claim",
       "notes": "vault::claim"
