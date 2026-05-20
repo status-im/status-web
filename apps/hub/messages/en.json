@@ -706,7 +706,7 @@
       "notes": "rewards::audited_link"
     },
     "deposit_confirmation": {
-      "translation": "By depositing assets into the vaults, you confirm that you have read and accepted this",
+      "translation": "The withdrawal of assets from the vaults and the receipt of any accrued yield or liquid rewards is subject to this",
       "notes": "rewards::deposit_confirmation"
     },
     "disclaimer": {
@@ -714,7 +714,7 @@
       "notes": "rewards::disclaimer"
     },
     "predeposit_end": {
-      "translation": "Pre-deposit period has now ended. Fund unlock and reward claiming will be available soon",
+      "translation": "Pre-deposit period has ended. Fund reward claiming is now available",
       "notes": "rewards::predeposit_end"
     }
   },
@@ -1302,7 +1302,7 @@
       "notes": "footer::brand_assets"
     },
     "pre_deposit_disclaimer": {
-      "translation": "Pre-deposits disclaimer",
+      "translation": "Pre-deposits withdrawal disclaimer",
       "notes": "footer::pre_deposit_disclaimer"
     }
   },

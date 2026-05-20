@@ -706,7 +706,7 @@
       "notes": "rewards::audited_link"
     },
     "deposit_confirmation": {
-      "translation": "자산을 금고에 예치함으로써 귀하는 다음을 읽고 수락했음을 확인합니다: ",
+      "translation": "금고(vault)에서 자산을 출금하고 발생한 수익(yield) 또는 유동성 보상을 수령하는 것은 다음 사항의 적용을 받습니다: ",
       "notes": "rewards::deposit_confirmation"
     },
     "disclaimer": {
@@ -714,7 +714,7 @@
       "notes": "rewards::disclaimer"
     },
     "predeposit_end": {
-      "translation": "입금 기간이 종료되었습니다. 자산 인출 및 보상 수령은 곧 가능해집니다.",
+      "translation": "사전 예치 기간이 종료되었습니다. 이제 펀드 보상 청구가 가능합니다.",
       "notes": "rewards::predeposit_end"
     }
   },
@@ -1298,7 +1298,7 @@
       "notes": "footer::brand_assets"
     },
     "pre_deposit_disclaimer": {
-      "translation": "사전예치 면책 조항",
+      "translation": "사전 예치금 출금 면책 조항",
       "notes": "footer::pre_deposit_disclaimer"
     }
   },

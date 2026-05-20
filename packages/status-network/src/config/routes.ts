@@ -14,8 +14,8 @@ export const BRAND = {
 
 export const LEGAL = {
   preDepositDisclaimer: {
-    name: 'Pre-Deposit Disclaimer',
-    href: 'https://status.network/legal/status-network-pre-deposit-disclaimer',
+    name: 'Pre-Deposit Withdrawal Disclaimer',
+    href: 'https://status.network/legal/status-network-pre-deposit-withdrawal-disclaimer',
   },
   termsOfUse: {
     name: 'Terms of Use',
