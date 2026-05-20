@@ -76,7 +76,7 @@ export default function PreDepositPage() {
           <div className="flex flex-col items-end gap-2 self-start">
             <ButtonLink
               variant="outline"
-              href="https://status.app/blog/status-network-pre-deposit-vaults-be-early-to-the-gasless-l2"
+              href="https://status.network/blog/pre-deposit-vaults-withdrawal-timeline-and-rewards-distribution"
               className="self-start bg-white-100"
               size="32"
               icon={<ExternalIcon className="text-neutral-50" />}
