@@ -3,16 +3,16 @@ import { formatDate } from '~app/_utils/format-date'
 import { getLegalDocumentContent } from '../_utils/get-legal-document-content'
 
 export const metadata = Metadata({
-  title: 'Pre-Deposit Disclaimer',
-  description: 'Status Network Pre-Deposit Disclaimer',
+  title: 'Pre-Deposit Withdrawal Disclaimer',
+  description: 'Status Network Pre-Deposit Withdrawal Disclaimer',
   alternates: {
-    canonical: '/legal/status-network-pre-deposit-disclaimer',
+    canonical: '/legal/status-network-pre-deposit-withdrawal-disclaimer',
   },
 })
 
 export default async function StatusNetworkPreDepositDisclaimerPage() {
   const { meta, content } = await getLegalDocumentContent(
-    'status-network-pre-deposit-disclaimer',
+    'status-network-pre-deposit-withdrawal-disclaimer',
   )
 
   return (

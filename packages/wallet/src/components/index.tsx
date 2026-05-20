@@ -1,6 +1,7 @@
 export type * from '../types'
 export * from '../utils/variants'
 export { AccountMenu } from './account-menu'
+export { AccountSelect, type AccountSelectProps } from './account-select'
 export { ActivityList, type ActivityListProps } from './activity-list'
 export { ActivityItemSkeleton } from './activity-list/components/activity-item-skeleton'
 export { ActivityListSkeleton } from './activity-list/components/activity-list-skeleton'
@@ -56,6 +57,11 @@ export { PinExtension } from './pin-extension'
 export { ReceiveCryptoDrawer } from './receive-crypto-drawer'
 export { RecoveryPhraseDialog } from './recovery-phrase-dialog'
 export { RecoveryPhraseTextarea } from './recovery-phrase-textarea'
+export {
+  type HardwareWalletAccount,
+  ScannerScreen,
+  type ScannerScreenProps,
+} from './scanner-screen'
 export {
   type SendAssetsFormData,
   SendAssetsModal,

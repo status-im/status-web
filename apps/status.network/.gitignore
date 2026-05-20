@@ -42,3 +42,6 @@ next-env.d.ts
 
 # sitemap
 public/sitemap.xml
+
+# generated at build/dev from git history
+src/generated/legal-last-edited.json
