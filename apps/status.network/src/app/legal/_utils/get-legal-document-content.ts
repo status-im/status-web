@@ -10,7 +10,10 @@ const frontmatterSchema = z.object({
   title: z.string().optional(),
 })
 
-const EXTERNAL_DOCUMENTS = ['status-network-pre-deposit-disclaimer'] as const
+const EXTERNAL_DOCUMENTS = [
+  'status-network-pre-deposit-disclaimer',
+  'status-network-pre-deposit-withdrawal-disclaimer',
+] as const
 
 type ExternalDocument = (typeof EXTERNAL_DOCUMENTS)[number]
 
