@@ -1,28 +1,16 @@
 import fs from 'fs/promises'
 import path from 'path'
 import { legalComponents } from '~/app/_components/content'
-import { getGitFileLastEdited } from '~/app/_utils/get-git-file-last-edited'
 import { compileMDX } from 'next-mdx-remote/rsc'
 import rehypeSlug from 'rehype-slug'
 import remarkGfm from 'remark-gfm'
 import { z } from 'zod'
+import { getLegalLastEdited } from './get-legal-last-edited'
+import { externalDocumentSet, type DocumentName } from './legal-documents'
 
 const frontmatterSchema = z.object({
   title: z.string().optional(),
 })
-
-const EXTERNAL_DOCUMENTS = [
-  'status-network-pre-deposit-disclaimer',
-  'status-network-pre-deposit-withdrawal-disclaimer',
-] as const
-
-type ExternalDocument = (typeof EXTERNAL_DOCUMENTS)[number]
-
-type LocalDocument = 'privacy-policy' | 'terms-of-use'
-
-type DocumentName = LocalDocument | ExternalDocument
-
-const externalDocumentSet = new Set<string>(EXTERNAL_DOCUMENTS)
 
 function extractTitleFromHeadline(content: string): {
   title: string | undefined
@@ -45,21 +33,8 @@ export async function getLegalDocumentContent(documentName: DocumentName) {
     ? path.resolve(`content/legal-external/${documentName}.md`)
     : path.resolve(`content/legal/${documentName}.md`)
 
-  const relativePath = isExternal
-    ? `${documentName}.md`
-    : `content/legal/${documentName}.md`
-  const gitDir = isExternal ? path.resolve('content/legal-external') : undefined
-
-  const [fileContent, lastEdited] = await Promise.all([
-    fs.readFile(filePath, 'utf8'),
-    getGitFileLastEdited(relativePath, { gitDir }),
-  ])
-
-  if (!lastEdited) {
-    throw new Error(
-      `Could not resolve last edited date from git for "${relativePath}"`,
-    )
-  }
+  const fileContent = await fs.readFile(filePath, 'utf8')
+  const lastEdited = getLegalLastEdited(documentName)
 
   const { title: extractedTitle, contentWithoutTitle } =
     extractTitleFromHeadline(fileContent)

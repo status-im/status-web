@@ -4,14 +4,15 @@
   "private": true,
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "predev": "pnpm install",
+    "predev": "pnpm install && node scripts/generate-legal-last-edited.mjs",
     "dev": "next dev --port 3002",
-    "build": "next build",
+    "generate:legal-dates": "node scripts/generate-legal-last-edited.mjs",
+    "build": "node scripts/generate-legal-last-edited.mjs && next build",
     "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write . --ignore-path .gitignore",
-    "check": "tsc --noEmit",
+    "check": "node scripts/generate-legal-last-edited.mjs && tsc --noEmit",
     "clean": "rimraf .next .vercel/output node_modules"
   },
   "dependencies": {
