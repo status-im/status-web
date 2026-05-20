@@ -316,6 +316,7 @@ const PreDepositUnlockModal = ({
                   !hasBalance ||
                   !form.formState.isValid ||
                   !confirmed ||
+                  !gasConfirmed ||
                   isBalanceLoading
                 }
               >
