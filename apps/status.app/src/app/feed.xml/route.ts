@@ -30,10 +30,13 @@ export async function GET() {
   const feedUrl = `${site}/feed.xml`
   const { posts } = await getPosts({ limit: FEED_ITEM_LIMIT })
 
-  const updated = toIso(posts[0]?.updated_at ?? posts[0]?.published_at)
+  const visiblePosts = posts.filter(post => !!post.slug)
 
-  const entries = posts
-    .filter(post => !!post.slug)
+  const updated = toIso(
+    visiblePosts[0]?.updated_at ?? visiblePosts[0]?.published_at
+  )
+
+  const entries = visiblePosts
     .map(post => {
       const url = `${site}/blog/${post.slug}`
       const title = escapeXml(post.title ?? '')
@@ -56,7 +59,7 @@ export async function GET() {
         `    <published>${published}</published>`,
         `    <updated>${entryUpdated}</updated>`,
         ...(authors ? [authors] : []),
-        `    <summary><![CDATA[${summary}]]></summary>`,
+        `    <summary>${escapeXml(summary)}</summary>`,
         '  </entry>',
       ].join('\n')
     })
