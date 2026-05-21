@@ -20,7 +20,7 @@ const PromoBar = () => {
           variant="outline"
           size="24"
           icon={<ExternalIcon />}
-          href="https://status.network/blog/status-network-merges-with-linea-scaling-gasless-privacy-upstream"
+          href="https://hub.status.network/pre-deposits"
           aria-label={t('common.visit_hub_aria')}
           className="shrink-0"
         >

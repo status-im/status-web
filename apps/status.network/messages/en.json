@@ -52,15 +52,15 @@
       "notes": "common::testnet_live"
     },
     "promo_message": {
-      "translation": "Status Network merges with Linea! Predeposit withdrawals opening soon",
+      "translation": "Vaults withdrawals are now enabled",
       "notes": "common::promo_message"
     },
     "visit_hub": {
-      "translation": "Read more",
+      "translation": "withdraw now",
       "notes": "common::visit_hub"
     },
     "visit_hub_aria": {
-      "translation": "Read more (opens in new tab)",
+      "translation": "withdraw now (opens in new tab)",
       "notes": "common::visit_hub_aria"
     }
   },
