@@ -784,6 +784,16 @@
           "notes": "pre_deposits::faq_items::gusd_claiming::content"
         }
       },
+      "linea_vault": {
+        "title": {
+          "translation": "When will LINEA vault withdrawals be available?",
+          "notes": "pre_deposits::faq_items::linea_vault::title"
+        },
+        "content": {
+          "translation": "LINEA vault withdrawals will open later than the other vaults due to additional development and audit work. Once available, the process will follow the same steps as ETH and SNT withdrawals.",
+          "notes": "pre_deposits::faq_items::linea_vault::content"
+        }
+      },
       "no_gas": {
         "title": {
           "translation": "I don't have ETH on Linea for gas. What do I do?",

@@ -746,51 +746,61 @@
     "faq_items": {
       "receiver_address_change": {
         "title": {
-          "translation": "출금을 받을 주소를 변경할 수 있나요?\n",
+          "translation": "출금 수령 주소를 변경할 수 있나요?",
           "notes": "pre_deposits::faq_items::receiver_address_change::title"
         },
         "content": {
-          "translation": "네, Unlock 단계에서 수령 주소를 변경할 수 있습니다. 변경하지 않으면 자산은 원래의 Linea 입금 주소로 전송됩니다.",
+          "translation": "네, 잠금 해제(Unlock) 단계에서 수령 주소를 변경할 수 있습니다. 변경하지 않으면 Linea의 원래 예치 주소로 전송됩니다.",
           "notes": "pre_deposits::faq_items::receiver_address_change::content"
         }
       },
       "unlock_time_length": {
         "title": {
-          "translation": "Unlock에는 얼마나 걸리나요?\n",
+          "translation": "잠금 해제는 얼마나 걸리나요?",
           "notes": "pre_deposits::faq_items::unlock_time_length::title"
         },
         "content": {
-          "translation": "ETH 및 SNT 볼트(이더리움에 예치된 경우)의 경우, 자산이 Linea에 도착하는 데 약 20분 정도 소요됩니다. LINEA 볼트의 경우 자산이 이미 Linea에 있기 때문에 처리 속도가 더 빠릅니다.",
+          "translation": "ETH, SNT 금고(이더리움에서 예치)의 경우 Linea로 자산이 도착하는 데 약 20분 정도 소요됩니다. LINEA 금고는 이미 Linea에 있으므로 더 빠르게 처리됩니다.",
           "notes": "pre_deposits::faq_items::unlock_time_length::content"
         }
       },
       "rewards_claiming": {
         "title": {
-          "translation": "보상은 어떻게 되나요?",
+          "translation": "보상은 어떻게 받나요?",
           "notes": "pre_deposits::faq_items::rewards_claiming::title"
         },
         "content": {
-          "translation": "보상(SNT + LINEA) 및 누적 수익(ETH, GUSD)은 이번 출금 절차와는 별도의 프로세스를 통해 분배됩니다. 해당 보상은 Linea 메인넷의 지갑으로 직접 에어드롭되며, Linea 메인넷에서 동일한 주소의 지갑에 접근할 수 있다면 별도의 조치는 필요하지 않습니다.",
+          "translation": "보상(SNT + LINEA)과 누적된 수익(ETH, GUSD)은 이 가이드의 출금 절차와 별개의 과정으로 분배됩니다. Linea 메인넷의 지갑으로 직접 에어드롭될 예정이며, 예치 시 사용한 주소와 동일한 주소로 Linea 메인넷에서 접근이 가능하다면 별도의 작업은 필요하지 않습니다. 보상 분배의 일정과 산정 방식은 확정되는 대로 별도로 안내드릴 예정입니다.",
           "notes": "pre_deposits::faq_items::rewards_claiming::content"
         }
       },
       "gusd_claiming": {
         "title": {
-          "translation": "GUSD는 어떻게 되나요?",
+          "translation": "GUSD는 어떻게 출금하나요?",
           "notes": "pre_deposits::faq_items::gusd_claiming::title"
         },
         "content": {
-          "translation": "GUSD의 출금 절차는 다른 볼트와 다르며, 자세한 내용은 곧 별도로 안내될 예정입니다.",
+          "translation": "GUSD의 출금 절차는 다른 금고들과 다르며, 자세한 내용은 일정에 가까워질 무렵 별도로 안내드릴 예정입니다.",
           "notes": "pre_deposits::faq_items::gusd_claiming::content"
+        }
+      },
+      "linea_vault": {
+        "title": {
+          "translation": "LINEA 금고는 언제 출금할 수 있나요?",
+          "notes": "pre_deposits::faq_items::linea_vault::title"
+        },
+        "content": {
+          "translation": "LINEA 금고는 추가 개발과 감사 작업이 필요해 다른 금고보다 늦게 열립니다. 출금이 열리면, ETH 및 SNT와 동일한 절차로 진행됩니다.",
+          "notes": "pre_deposits::faq_items::linea_vault::content"
         }
       },
       "no_gas": {
         "title": {
-          "translation": "Linea에서 가스비로 사용할 ETH가 없습니다. 어떻게 해야 하나요?",
+          "translation": "Linea에 가스비용 ETH가 없어요. 어떻게 하나요?",
           "notes": "pre_deposits::faq_items::no_gas::title"
         },
         "content": {
-          "translation": "Linea에서 소량의 토큰을 ETH로 교환하려면 SmolRefuel을 사용하세요.",
+          "translation": "SmolRefuel을 이용하면 소량의 토큰을 Linea의 ETH로 교환할 수 있습니다.",
           "notes": "pre_deposits::faq_items::no_gas::content"
         }
       }

@@ -25,6 +25,10 @@ export function getFaqItems(t: Translations): AccordionItem[] {
       content: t('pre_deposits.faq_items.gusd_claiming.content'),
     },
     {
+      title: t('pre_deposits.faq_items.linea_vault.title'),
+      content: t('pre_deposits.faq_items.linea_vault.content'),
+    },
+    {
       title: t('pre_deposits.faq_items.no_gas.title'),
       content: t('pre_deposits.faq_items.no_gas.content'),
     },
