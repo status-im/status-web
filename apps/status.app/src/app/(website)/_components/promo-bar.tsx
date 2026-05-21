@@ -14,7 +14,7 @@ const PromoBar = async () => {
           {t('message')}
         </span>
         <a
-          href="https://status.network/blog/status-network-merges-with-linea-scaling-gasless-privacy-upstream"
+          href="https://hub.status.network/pre-deposits"
           className={cx(
             'inline-flex w-fit shrink-0 cursor-pointer select-none items-center gap-1 border text-15 font-500 transition-all',
             'border-neutral-30 text-white-100 hover:border-neutral-40 hover:text-white-80',

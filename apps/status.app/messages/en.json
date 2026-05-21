@@ -57,9 +57,9 @@
     "messari": "Messari Transparency Verified"
   },
   "promo": {
-    "message": "Status Network merges with Linea! Predeposit withdrawals opening soon",
-    "visitHub": "Read more",
-    "visitHubAria": "Read more (opens in new tab)"
+    "message": "Vaults withdrawals are now enabled",
+    "visitHub": "withdraw now",
+    "visitHubAria": "withdraw now (opens in new tab)"
   },
   "prefooter": {
     "title": "Be unstoppable",
