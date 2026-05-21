@@ -29,13 +29,7 @@ import { useUnlockTxHash } from '~hooks/useUnlockTxHash'
 import { useVaultBalanceReadiness } from '~hooks/useVaultBalanceReadiness'
 import { useVaultCardCta, type VaultCardAction } from '~hooks/useVaultCardCta'
 
-import {
-  DollarIcon,
-  GusdIcon,
-  KarmaCircleIcon,
-  PlusIcon,
-  SumIcon,
-} from './icons'
+import { DollarIcon, GusdIcon, PlusIcon, SumIcon } from './icons'
 import { VaultImage } from './vault-image'
 
 type Props = {
@@ -206,13 +200,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
     pendingActionRef.current = null
   }, [isConnected, onClaim, onUnlock, pendingActionRef, vault])
 
-  const rewardsLine = rewards
-    .map(reward =>
-      reward.startsWith('vault.')
-        ? t(reward as 'vault.native_apps_points')
-        : reward
-    )
-    .join(', ')
+  const rewardsLine = t(rewards)
 
   const vaultDisplay = isGUSD
     ? {
@@ -319,12 +307,6 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
       )}
 
       <ul className="my-4 space-y-2">
-        <li className="flex items-center gap-2 text-15">
-          <span className="text-purple">
-            <KarmaCircleIcon />
-          </span>
-          <span className="text-neutral-100">KARMA</span>
-        </li>
         <li className="flex items-center gap-2 text-15">
           <span className="text-neutral-50">
             <PlusIcon />

@@ -931,9 +931,21 @@
       "translation": "Unlock",
       "notes": "vault::unlock_label"
     },
-    "native_apps_points": {
-      "translation": "native apps points",
-      "notes": "vault::native_apps_points"
+    "rewards_eth": {
+      "translation": "SNT + LINEA rewards, accrued ETH yield",
+      "notes": "vault::rewards_eth"
+    },
+    "rewards_snt": {
+      "translation": "LINEA rewards",
+      "notes": "vault::rewards_snt"
+    },
+    "rewards_linea": {
+      "translation": "SNT rewards",
+      "notes": "vault::rewards_linea"
+    },
+    "rewards_gusd": {
+      "translation": "SNT + LINEA rewards, accrued GUSD yield",
+      "notes": "vault::rewards_gusd"
     },
     "eth_wrapped_success": {
       "translation": "ETH wrapped successfully. You can now proceed with deposit.",

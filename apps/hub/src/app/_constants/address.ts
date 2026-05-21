@@ -41,12 +41,18 @@ export type GUSDConfig = {
   outputToken: Token
 }
 
+type VaultRewardsKey =
+  | 'vault.rewards_eth'
+  | 'vault.rewards_snt'
+  | 'vault.rewards_linea'
+  | 'vault.rewards_gusd'
+
 export type BaseVault = {
   id: string
   name: string
   address: Address
   apr: string
-  rewards: string[]
+  rewards: VaultRewardsKey
   icon: string
   token: Token
   chainId: number
@@ -201,7 +207,7 @@ export const SNT_VAULT: Vault = {
   id: 'SNT',
   name: 'SNT Vault',
   apr: '',
-  rewards: ['LINEA', 'vault.native_apps_points'],
+  rewards: 'vault.rewards_snt',
   icon: 'SNT',
   address: '0x493957E168aCCdDdf849913C3d60988c652935Cd',
   token: SNT_TOKEN,
@@ -216,7 +222,7 @@ export const LINEA_VAULT: Vault = {
   id: 'LINEA',
   name: 'LINEA Vault',
   apr: '',
-  rewards: ['SNT', 'vault.native_apps_points'],
+  rewards: 'vault.rewards_linea',
   icon: 'LINEA',
   address: '0xb223cA53A53A5931426b601Fa01ED2425D8540fB',
   token: LINEA_TOKEN,
@@ -231,7 +237,7 @@ export const WETH_VAULT: Vault = {
   id: 'WETH',
   name: 'WETH vault',
   apr: '',
-  rewards: ['SNT, LINEA', 'vault.native_apps_points'],
+  rewards: 'vault.rewards_eth',
   icon: 'WETH',
   address: '0xc71Ec84Ee70a54000dB3370807bfAF4309a67a1f',
   token: WETH_TOKEN,
@@ -246,7 +252,7 @@ export const GUSD_VAULT: GUSDVault = {
   id: 'GUSD',
   name: 'GUSD Vault',
   apr: '',
-  rewards: ['SNT, LINEA', 'vault.native_apps_points'],
+  rewards: 'vault.rewards_gusd',
   icon: 'GUSD',
   address: GENERIC_DEPOSITOR.address,
   token: DEFAULT_GUSD_STABLECOIN,
@@ -265,7 +271,7 @@ export const GUSD_VAULT: GUSDVault = {
   },
 }
 
-export const VAULTS: Vault[] = [WETH_VAULT, GUSD_VAULT, SNT_VAULT, LINEA_VAULT]
+export const VAULTS: Vault[] = [WETH_VAULT, SNT_VAULT, LINEA_VAULT, GUSD_VAULT]
 
 export const KARMA = {
   address: '0x0700bE6f329cC48C38144f71c898b72795dB6C1b' as Address,
