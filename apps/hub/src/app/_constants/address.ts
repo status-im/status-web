@@ -41,12 +41,18 @@ export type GUSDConfig = {
   outputToken: Token
 }
 
+type VaultRewardsKey =
+  | 'vault.rewards_eth'
+  | 'vault.rewards_snt'
+  | 'vault.rewards_linea'
+  | 'vault.rewards_gusd'
+
 export type BaseVault = {
   id: string
   name: string
   address: Address
   apr: string
-  rewards: string
+  rewards: VaultRewardsKey
   icon: string
   token: Token
   chainId: number

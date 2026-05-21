@@ -200,7 +200,7 @@ const VaultCardContent: FC<VaultCardContentProps> = ({
     pendingActionRef.current = null
   }, [isConnected, onClaim, onUnlock, pendingActionRef, vault])
 
-  const rewardsLine = t(rewards as 'vault.rewards_eth')
+  const rewardsLine = t(rewards)
 
   const vaultDisplay = isGUSD
     ? {
