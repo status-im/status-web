@@ -77,7 +77,7 @@ pipeline {
       steps {
         script {
           nix.develop(
-            'pnpm build',
+            'pnpm turbo run build --filter=hub...',
             pure: false,
           )
         }
