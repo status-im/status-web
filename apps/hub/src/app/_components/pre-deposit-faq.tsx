@@ -9,16 +9,28 @@ type Translations = ReturnType<typeof useTranslations>
 export function getFaqItems(t: Translations): AccordionItem[] {
   return [
     {
-      title: t('pre_deposits.faq_items.when_unlocked.title'),
-      content: t('pre_deposits.faq_items.when_unlocked.content'),
+      title: t('pre_deposits.faq_items.receiver_address_change.title'),
+      content: t('pre_deposits.faq_items.receiver_address_change.content'),
     },
     {
-      title: t('pre_deposits.faq_items.wallet_warning.title'),
-      content: t('pre_deposits.faq_items.wallet_warning.content'),
+      title: t('pre_deposits.faq_items.unlock_time_length.title'),
+      content: t('pre_deposits.faq_items.unlock_time_length.content'),
     },
     {
-      title: t('pre_deposits.faq_items.incentive_rewards.title'),
-      content: t('pre_deposits.faq_items.incentive_rewards.content'),
+      title: t('pre_deposits.faq_items.rewards_claiming.title'),
+      content: t('pre_deposits.faq_items.rewards_claiming.content'),
+    },
+    {
+      title: t('pre_deposits.faq_items.gusd_claiming.title'),
+      content: t('pre_deposits.faq_items.gusd_claiming.content'),
+    },
+    {
+      title: t('pre_deposits.faq_items.linea_vault.title'),
+      content: t('pre_deposits.faq_items.linea_vault.content'),
+    },
+    {
+      title: t('pre_deposits.faq_items.no_gas.title'),
+      content: t('pre_deposits.faq_items.no_gas.content'),
     },
   ]
 }

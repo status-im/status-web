@@ -52,6 +52,8 @@ export type BaseVault = {
   chainId: number
   network: (typeof mainnet | typeof linea)['name']
   abi: typeof PreDepositVaultAbi
+  l2ClaimVaultAddress?: Address
+  withdrawEnabled?: boolean
 }
 
 export type GUSDVault = BaseVault & {
@@ -63,6 +65,10 @@ export type Vault = BaseVault | GUSDVault
 
 export function isGUSDVault(vault: Vault): vault is GUSDVault {
   return vault.id === 'GUSD' && 'gusdConfig' in vault
+}
+
+export function isLINEAVault(vault: Vault): boolean {
+  return vault.id === 'LINEA' && vault.chainId === linea.id
 }
 
 export const STAKING_MANAGER = {
@@ -185,6 +191,8 @@ export const BRIDGE_COORDINATOR_L1 = {
 
 export const STATUS_L2_CHAIN_NICKNAME = keccak256(stringToHex('Status_L2'))
 
+export const GUSD_CLAIM_APP_URL = 'https://app.generic.money/'
+
 // ============================================================================
 // Vaults
 // ============================================================================
@@ -200,6 +208,8 @@ export const SNT_VAULT: Vault = {
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
   network: mainnet.name,
+  l2ClaimVaultAddress: '0x1C69FaEE16CaFc36F59706a19B3738978DFC8531',
+  withdrawEnabled: true,
 } as const
 
 export const LINEA_VAULT: Vault = {
@@ -213,6 +223,8 @@ export const LINEA_VAULT: Vault = {
   abi: PreDepositVaultAbi,
   chainId: linea.id,
   network: linea.name,
+  l2ClaimVaultAddress: '0xb223cA53A53A5931426b601Fa01ED2425D8540fB',
+  withdrawEnabled: false,
 } as const
 
 export const WETH_VAULT: Vault = {
@@ -226,6 +238,8 @@ export const WETH_VAULT: Vault = {
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
   network: mainnet.name,
+  l2ClaimVaultAddress: '0xA613E0373A5Baf4f5c56F8f6EAf6062c63a6750b',
+  withdrawEnabled: true,
 } as const
 
 export const GUSD_VAULT: GUSDVault = {
@@ -239,6 +253,7 @@ export const GUSD_VAULT: GUSDVault = {
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
   network: mainnet.name,
+  withdrawEnabled: false,
   gusdConfig: {
     depositorAddress: GENERIC_DEPOSITOR.address,
     depositorAbi: genericDepositorAbi,

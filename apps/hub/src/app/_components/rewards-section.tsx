@@ -23,8 +23,6 @@ const RewardsSection = () => {
         ))}
       </div>
       <p className="text-15 text-neutral-60">
-        {t('rewards.description')}
-        <br />
         {t('rewards.audited_prefix')}{' '}
         <Link
           href="https://github.com/aragon/status-predeposit-vaults/blob/development/audit/report-aragon-pre-deposit-vaults.pdf"
@@ -36,7 +34,7 @@ const RewardsSection = () => {
         </Link>
         . {t('rewards.deposit_confirmation')}{' '}
         <Link
-          href="https://status.network/legal/status-network-pre-deposit-disclaimer"
+          href="https://status.network/legal/status-network-pre-deposit-withdrawal-disclaimer"
           target="_blank"
           rel="noopener noreferrer"
           className="text-purple hover:text-purple-dark"
@@ -46,7 +44,15 @@ const RewardsSection = () => {
         .
         <br />
         <br />
-        {t('rewards.predeposit_end')}
+        {t('rewards.predeposit_end')}{' '}
+        <Link
+          href="https://status.network/blog/pre-deposit-vaults-withdrawal-timeline-and-rewards-distribution"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-purple hover:text-purple-dark"
+        >
+          {t('rewards.predeposit_end_link')}.
+        </Link>
       </p>
     </div>
   )

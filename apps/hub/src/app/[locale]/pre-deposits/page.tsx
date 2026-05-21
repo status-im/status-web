@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+
 import { Skeleton } from '@status-im/components'
 import { ExternalIcon } from '@status-im/icons/16'
 import { ButtonLink } from '@status-im/status-network/components'
@@ -10,13 +12,14 @@ import { formatCurrency } from '~/utils/currency'
 
 import { HubLayout } from '../../_components/hub-layout'
 import { InfoTooltip } from '../../_components/info-tooltip'
+import { PreDepositClaimModal } from '../../_components/pre-deposit-claim-modal'
 import { getFaqItems, PreDepositFaq } from '../../_components/pre-deposit-faq'
-import { PreDepositModal } from '../../_components/pre-deposit-modal'
+import { PreDepositUnlockModal } from '../../_components/pre-deposit-unlock-modal'
 import { RewardsSection } from '../../_components/rewards-section'
 import { VaultCard } from '../../_components/vault-card'
-import { VAULTS } from '../../_constants/address'
+import { type Vault, VAULTS } from '../../_constants/address'
 import { useTotalTVL } from '../../_hooks/useTotalTVL'
-import { useVaultSelection } from '../../_hooks/useVaultSelection'
+import { useVaultRefetch } from '../../_hooks/useVaultRefetch'
 import { jsonLD, JSONLDScript } from '../../_utils/json-ld'
 
 const breadcrumbListSchema = jsonLD.breadcrumbList([
@@ -36,21 +39,16 @@ const softwareApplicationSchema = jsonLD.softwareApplication({
   operatingSystem: 'Web',
   url: 'https://hub.status.network/pre-deposits',
   description:
-    'Pre-deposit assets to support liquidity and earn yield on Status Network.',
+    'Withdraw assets from Status Network pre-deposit vaults on Linea.',
 })
+
+type WithdrawAction = { kind: 'unlock' | 'claim'; vault: Vault } | null
 
 export default function PreDepositPage() {
   const t = useTranslations()
   const { data: totalTVL, isLoading: isLoadingTVL } = useTotalTVL()
-  const {
-    selectedVault,
-    setSelectedVault,
-    defaultVault,
-    activeVaults,
-    registerRefetch,
-    handleDepositSuccess,
-    isModalOpen,
-  } = useVaultSelection()
+  const { registerRefetch, refetchVault } = useVaultRefetch()
+  const [withdrawAction, setWithdrawAction] = useState<WithdrawAction>(null)
 
   const formattedTVL = totalTVL ? formatCurrency(totalTVL) : '$0'
 
@@ -75,10 +73,10 @@ export default function PreDepositPage() {
             </h1>
             <RewardsSection />
           </div>
-          <div className="self-start">
+          <div className="flex flex-col items-end gap-2 self-start">
             <ButtonLink
               variant="outline"
-              href="https://status.app/blog/status-network-pre-deposit-vaults-be-early-to-the-gasless-l2"
+              href="https://status.network/blog/pre-deposit-vaults-withdrawal-timeline-and-rewards-distribution"
               className="self-start bg-white-100"
               size="32"
               icon={<ExternalIcon className="text-neutral-50" />}
@@ -107,7 +105,8 @@ export default function PreDepositPage() {
             <VaultCard
               key={vault.id}
               vault={vault}
-              onDeposit={() => setSelectedVault(vault)}
+              onUnlock={vault => setWithdrawAction({ kind: 'unlock', vault })}
+              onClaim={vault => setWithdrawAction({ kind: 'claim', vault })}
               registerRefetch={registerRefetch}
             />
           ))}
@@ -127,14 +126,22 @@ export default function PreDepositPage() {
           className="relative m-auto"
         />
       </div>
-      <PreDepositModal
-        open={isModalOpen}
-        onOpenChange={open => !open && setSelectedVault(null)}
-        vault={selectedVault ?? defaultVault}
-        vaults={activeVaults}
-        setActiveVault={setSelectedVault}
-        onDepositSuccess={handleDepositSuccess}
-      />
+      {withdrawAction?.kind === 'unlock' && (
+        <PreDepositUnlockModal
+          open
+          onOpenChange={open => !open && setWithdrawAction(null)}
+          vault={withdrawAction.vault}
+          onUnlockSuccess={() => refetchVault(withdrawAction.vault)}
+        />
+      )}
+      {withdrawAction?.kind === 'claim' && (
+        <PreDepositClaimModal
+          open
+          onOpenChange={open => !open && setWithdrawAction(null)}
+          vault={withdrawAction.vault}
+          onClaimSuccess={() => refetchVault(withdrawAction.vault)}
+        />
+      )}
     </HubLayout>
   )
 }
