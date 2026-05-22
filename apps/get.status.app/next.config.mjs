@@ -1,8 +1,8 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import '../status.app/src/config/env.server.mjs'
-import '../status.app/src/config/env.client.mjs'
+import './src/config/env.server.mjs'
+import './src/config/env.client.mjs'
 
 import createNextIntlPlugin from 'next-intl/plugin'
 
@@ -15,6 +15,9 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 const turbopackAliases = {
   '~/config/routes': './src/config/routes.ts',
   '~/config/site-scope': './src/config/site-scope.ts',
+  '~/config/env.server.mjs': './src/config/env.server.mjs',
+  '~/config/env.client.mjs': './src/config/env.client.mjs',
+  '~website/_lib/ghost': './src/stubs/ghost.ts',
   '~': '../status.app/src',
   '~components': '../status.app/src/app/_components',
   '~hooks': '../status.app/src/app/_hooks',
@@ -28,6 +31,9 @@ const turbopackAliases = {
 const webpackAliases = {
   '~/config/routes': path.join(__dirname, 'src/config/routes.ts'),
   '~/config/site-scope': path.join(__dirname, 'src/config/site-scope.ts'),
+  '~/config/env.server.mjs': path.join(__dirname, 'src/config/env.server.mjs'),
+  '~/config/env.client.mjs': path.join(__dirname, 'src/config/env.client.mjs'),
+  '~website/_lib/ghost': path.join(__dirname, 'src/stubs/ghost.ts'),
   '~': path.join(statusAppRoot, 'src'),
   '~components': path.join(statusAppRoot, 'src/app/_components'),
   '~hooks': path.join(statusAppRoot, 'src/app/_hooks'),

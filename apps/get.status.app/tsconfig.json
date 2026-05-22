@@ -25,8 +25,14 @@
     "plugins": [{ "name": "next" }],
     "baseUrl": ".",
     "paths": {
+      "@tryghost/content-api": [
+        "../status.app/node_modules/@types/tryghost__content-api"
+      ],
       "~/config/routes": ["./src/config/routes.ts"],
       "~/config/site-scope": ["./src/config/site-scope.ts"],
+      "~/config/env.server.mjs": ["./src/config/env.server.mjs"],
+      "~/config/env.client.mjs": ["./src/config/env.client.mjs"],
+      "~website/_lib/ghost": ["./src/stubs/ghost.ts"],
       "~/config/*": ["../status.app/src/config/*"],
       "~components/*": ["../status.app/src/app/_components/*"],
       "~hooks/*": ["../status.app/src/app/_hooks/*"],

@@ -9,6 +9,7 @@
     "start": "next start --port 3005",
     "lint": "next lint --dir=src --ext=.ts --ext=.tsx",
     "types:check": "tsc --noEmit",
+    "env:check": "node -r dotenv/config ./src/config/env.server.mjs dotenv_config_path=./.env.local && node -r dotenv/config ./src/config/env.client.mjs dotenv_config_path=./.env.local && :",
     "clean": "rimraf .next node_modules .turbo"
   },
   "dependencies": {

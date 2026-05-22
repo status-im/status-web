@@ -14,11 +14,13 @@ Navigation and footer only link to routes available on this site (see `src/confi
 
 ## Development
 
-Uses the same environment variables as `status.app` (Ghost, Infura, Hasura, etc.). Copy or symlink env files from `apps/status.app`:
+Environment variables are defined in this app — not the full `status.app` set. Copy the example file:
 
 ```bash
-ln -sf ../status.app/.env.local .env.local
+cp .env.example .env.local
 ```
+
+Only `GITHUB_TOKEN` is commonly needed locally (latest release tags in nav and `/apps`). Everything else is optional.
 
 ```bash
 pnpm --filter get.status.app dev
