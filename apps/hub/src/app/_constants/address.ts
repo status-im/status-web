@@ -224,7 +224,7 @@ export const LINEA_VAULT: Vault = {
   chainId: linea.id,
   network: linea.name,
   l2ClaimVaultAddress: '0xb223cA53A53A5931426b601Fa01ED2425D8540fB',
-  withdrawEnabled: false,
+  withdrawEnabled: true,
 } as const
 
 export const WETH_VAULT: Vault = {
