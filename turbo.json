@@ -1,7 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.v2.json",
   "globalPassThroughEnv": ["PORT"],
-  "concurrency": "15",
+  "concurrency": "20",
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
@@ -15,7 +15,8 @@
       ]
     },
     "dev": {
-      "cache": false
+      "cache": false,
+      "persistent": true
     },
     "lint": {},
     "typecheck": {},

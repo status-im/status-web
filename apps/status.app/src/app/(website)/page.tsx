@@ -3,7 +3,8 @@ import { ExternalIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
 import { getTranslations } from 'next-intl/server'
 
-import { ROUTES } from '~/config/routes'
+import { KEYCARD_STORE_URL } from '~/config/routes'
+import { isGetSite } from '~/config/site-scope'
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
 import { Metadata } from '~app/_metadata'
 import { Image, Video } from '~components/assets'
@@ -40,9 +41,11 @@ export default async function HomePage() {
   const t = await getTranslations('home')
   const td = await getTranslations('download')
 
-  const { posts: allPosts } = await getPosts({ limit: 10 })
-  const releaseResult = findLatestReleasePost(allPosts)
-  const posts = allPosts.slice(0, 3)
+  const { posts: allPosts } = isGetSite
+    ? { posts: [] }
+    : await getPosts({ limit: 10 })
+  const releaseResult = isGetSite ? null : findLatestReleasePost(allPosts)
+  const posts = isGetSite ? [] : allPosts.slice(0, 3)
 
   const featureList: FeatureListProps['list'] = [
     {
@@ -77,32 +80,34 @@ export default async function HomePage() {
     },
   ]
 
-  const prefooterList = [
-    {
-      title: t('prefooterManifestoTitle'),
-      description: t('prefooterManifestoDescription'),
-      link: {
-        label: t('prefooterManifestoLink'),
-        href: ROUTES.organization[0].href,
-      },
-    },
-    {
-      title: t('prefooterSntTitle'),
-      description: t('prefooterSntDescription'),
-      link: {
-        label: t('prefooterSntLink'),
-        href: ROUTES.snt[0].href,
-      },
-    },
-    {
-      title: t('prefooterNetworkTitle'),
-      description: t('prefooterNetworkDescription'),
-      link: {
-        label: t('prefooterNetworkLink'),
-        href: ROUTES.ecosystem[1].href,
-      },
-    },
-  ]
+  const prefooterList = isGetSite
+    ? []
+    : [
+        {
+          title: t('prefooterManifestoTitle'),
+          description: t('prefooterManifestoDescription'),
+          link: {
+            label: t('prefooterManifestoLink'),
+            href: '/manifesto',
+          },
+        },
+        {
+          title: t('prefooterSntTitle'),
+          description: t('prefooterSntDescription'),
+          link: {
+            label: t('prefooterSntLink'),
+            href: '/snt',
+          },
+        },
+        {
+          title: t('prefooterNetworkTitle'),
+          description: t('prefooterNetworkDescription'),
+          link: {
+            label: t('prefooterNetworkLink'),
+            href: 'https://status.network',
+          },
+        },
+      ]
 
   const organizationSchema = jsonLD.organization({
     description:
@@ -449,7 +454,13 @@ export default async function HomePage() {
 
                 <Text size={19}>{t('keycardDescription')}</Text>
               </div>
-              <Button variant="outline" href="/keycard">
+              <Button
+                variant="outline"
+                href={isGetSite ? KEYCARD_STORE_URL : '/keycard'}
+                {...(isGetSite
+                  ? { target: '_blank', rel: 'noopener noreferrer' }
+                  : {})}
+              >
                 {t('keycardLink')}
               </Button>
             </div>
@@ -461,69 +472,73 @@ export default async function HomePage() {
           </div>
         </div>
 
-        {/* BLOG */}
-        <div className="relative z-30 flex-1 bg-white-100 py-40">
-          <div className="container">
-            <div className="mb-6 flex items-center justify-between">
-              <h3 className="text-27 font-semibold">{t('blogTitle')}</h3>
-              <Button
-                variant="outline"
-                href={ROUTES.collaborate[2].href}
-                size="32"
-              >
-                {t('blogLink')}
-              </Button>
-            </div>
-            {posts.length > 0 && (
-              <PostGrid posts={posts} isLoading={false} hasNextPage={false} />
-            )}
-          </div>
-        </div>
-
-        {/* PRE-FOOTER */}
-        <div className="relative z-10 bg-white-100">
-          <div className="absolute inset-x-1/2 top-0 z-10 h-px w-screen -translate-x-1/2 border-t border-dashed border-neutral-30" />
-          <div className="relative mx-auto max-w-[1264px] overflow-hidden">
-            <div className="justify-center divide-y divide-dashed divide-neutral-30 py-12 lg:grid lg:grid-cols-3 lg:divide-x lg:divide-y-0 lg:py-0">
-              {prefooterList.map(({ title, description, link }) => (
-                <div
-                  key={title}
-                  className="relative px-5 pb-4 pt-12 2md:px-10 2md:py-16 lg:py-40"
-                >
-                  <div
-                    role="presentation"
-                    className="absolute inset-y-0 -left-px hidden h-full w-px bg-gradient-to-t from-white-100 from-5% md:block"
-                  />
-                  <div className="mb-6 max-w-[400px] gap-1">
-                    <h3>
-                      <Text size={27} weight="semibold">
-                        {title}
-                      </Text>
-                    </h3>
-                    <Text size={19}>{description}</Text>
-                  </div>
-                  <div className="flex">
-                    <Button variant="outline" href={link.href}>
-                      {link.label}
-                    </Button>
-                  </div>
+        {!isGetSite && (
+          <>
+            {/* BLOG */}
+            <div className="relative z-30 flex-1 bg-white-100 py-40">
+              <div className="container">
+                <div className="mb-6 flex items-center justify-between">
+                  <h3 className="text-27 font-semibold">{t('blogTitle')}</h3>
+                  <Button variant="outline" href="/blog" size="32">
+                    {t('blogLink')}
+                  </Button>
                 </div>
-              ))}
+                {posts.length > 0 && (
+                  <PostGrid
+                    posts={posts}
+                    isLoading={false}
+                    hasNextPage={false}
+                  />
+                )}
+              </div>
             </div>
 
-            {/* STICKER */}
-            <div className="absolute left-[150px] top-[-65px] 2md:left-[423px]">
-              <Image
-                id="Non Beta Release/Stickers/01:455:455"
-                alt="A sticker showing the Status logo"
-                aria-hidden
-                className="!aspect-square"
-                width={152}
-                height={152}
-              />
+            {/* PRE-FOOTER */}
+            <div className="relative z-10 bg-white-100">
+              <div className="absolute inset-x-1/2 top-0 z-10 h-px w-screen -translate-x-1/2 border-t border-dashed border-neutral-30" />
+              <div className="relative mx-auto max-w-[1264px] overflow-hidden">
+                <div className="justify-center divide-y divide-dashed divide-neutral-30 py-12 lg:grid lg:grid-cols-3 lg:divide-x lg:divide-y-0 lg:py-0">
+                  {prefooterList.map(({ title, description, link }) => (
+                    <div
+                      key={title}
+                      className="relative px-5 pb-4 pt-12 2md:px-10 2md:py-16 lg:py-40"
+                    >
+                      <div
+                        role="presentation"
+                        className="absolute inset-y-0 -left-px hidden h-full w-px bg-gradient-to-t from-white-100 from-5% md:block"
+                      />
+                      <div className="mb-6 max-w-[400px] gap-1">
+                        <h3>
+                          <Text size={27} weight="semibold">
+                            {title}
+                          </Text>
+                        </h3>
+                        <Text size={19}>{description}</Text>
+                      </div>
+                      <div className="flex">
+                        <Button variant="outline" href={link.href}>
+                          {link.label}
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* STICKER */}
+                <div className="absolute left-[150px] top-[-65px] 2md:left-[423px]">
+                  <Image
+                    id="Non Beta Release/Stickers/01:455:455"
+                    alt="A sticker showing the Status logo"
+                    aria-hidden
+                    className="!aspect-square"
+                    width={152}
+                    height={152}
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </>
+        )}
       </Body>
     </>
   )

@@ -1,4 +1,4 @@
-import './_styles/global.css'
+import '../../../status.app/src/app/_styles/global.css'
 
 import { ToastContainer } from '@status-im/components'
 import { Analytics } from '@vercel/analytics/next'
@@ -7,12 +7,12 @@ import Script from 'next/script'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 
-import { PlatformDetector } from './_components/platform-detector'
-import { Metadata } from './_metadata'
-import { Providers } from './_providers'
+import { PlatformDetector } from '~app/_components/platform-detector'
+import { Metadata } from '~app/_metadata'
+import { Providers } from '~app/_providers'
 
 export const metadata = Metadata({
-  metadataBase: new URL('https://status.app/'),
+  metadataBase: new URL('https://get.status.app/'),
 
   title: {
     template: '%s',
@@ -34,12 +34,12 @@ export const metadata = Metadata({
     ios: {
       app_store_id: '6754166924',
       app_name: 'Status - privacy super app',
-      url: 'https://status.app',
+      url: 'https://get.status.app',
     },
     android: {
       package: 'app.status.mobile',
       app_name: 'Status - privacy super app',
-      url: 'https://status.app',
+      url: 'https://get.status.app',
     },
   },
 })
@@ -59,7 +59,11 @@ export default async function RootLayout({ children }: Props) {
   const [locale, messages] = await Promise.all([getLocale(), getMessages()])
 
   return (
-    <html lang={locale} className={inter.variable} suppressHydrationWarning>
+    <html
+      lang={locale}
+      className={inter.variable}
+      suppressHydrationWarning
+    >
       <head>
         <link rel="preconnect" href="https://res.cloudinary.com" />
         <meta
@@ -82,22 +86,18 @@ export default async function RootLayout({ children }: Props) {
         </div>
         <ToastContainer />
         <Analytics debug={false} />
-        <Analytics />
         <Script
           strategy="afterInteractive"
           src="https://umami.bi.status.im/script.js"
           data-website-id="785550f6-3fea-4df0-aebe-2d5a999e6d49"
-          data-domains="status.app"
+          data-domains="get.status.app"
           data-exclude-hash="true"
         />
-        {/* <VercelToolbar /> */}
       </body>
     </html>
   )
 }
 
-// inspired by the implementation of next-themes
-// https://github.com/pacocoursey/next-themes/blob/main/next-themes/src/index.tsx
 const platformScript = () => {
   const d = document.documentElement
   const userAgent = navigator.userAgent.toLowerCase()
