@@ -12,7 +12,6 @@
     "browser": "Browser",
     "desktop": "Desktop",
     "mobile": "Mobile",
-    "legacyMobile": "Legacy mobile",
     "ecosystem": "Ecosystem",
     "keycard": "Keycard",
     "statusNetwork": "Status Network",

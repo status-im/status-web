@@ -21,10 +21,6 @@ export const ROUTES = {
     { nameKey: 'browser', href: '/#browser' },
     { nameKey: 'desktop', href: '/apps#desktop' },
     { nameKey: 'mobile', href: '/apps#mobile' },
-    {
-      nameKey: 'legacyMobile',
-      href: 'https://status.app/blog/migrate-from-status-legacy-to-unified-status-mobile-app',
-    },
   ],
 } as const
 
