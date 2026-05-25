@@ -18,7 +18,6 @@ export {
 
 export const ROUTES = {
   apps: [
-    { nameKey: 'browser', href: '/#browser' },
     { nameKey: 'desktop', href: '/apps#desktop' },
     { nameKey: 'mobile', href: '/apps#mobile' },
   ],

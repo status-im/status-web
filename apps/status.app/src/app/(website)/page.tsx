@@ -369,52 +369,56 @@ export default async function HomePage() {
           </div>
         </ColorTheme>
         <div className="relative inset-x-1/2 top-0 z-10 h-px w-screen -translate-x-1/2 border-t border-dashed border-neutral-30" />
-        <ColorTheme theme="blue" id="browser">
-          <div className="relative z-20 size-full pb-[61px] pt-[68px]">
-            <div className="absolute bottom-[200px] left-[-230px] z-10 xl:left-[-350px]">
-              <ParallaxCircle />
-            </div>
-
-            <div className="relative z-20 mx-auto grid max-w-[1424px] grid-cols-1 overflow-hidden rounded-20 bg-white-100 px-5 shadow-2 xl:grid-cols-2 xl:px-0">
-              <div className="p-12 px-5 xl:px-10 xl:pl-12 2xl:pr-28">
-                <div className="mb-4 flex">
-                  <FeatureTag type="extension" />
+        {!isGetSite && (
+          <>
+            <ColorTheme theme="blue" id="browser">
+              <div className="relative z-20 size-full pb-[61px] pt-[68px]">
+                <div className="absolute bottom-[200px] left-[-230px] z-10 xl:left-[-350px]">
+                  <ParallaxCircle />
                 </div>
-                <h3 className="mb-2 text-40 font-bold xl:text-64">
-                  {t('extensionTitle')
-                    .split('\n')
-                    .map((line, i) => (
-                      <span key={i}>
-                        {i > 0 && <br />}
-                        {line}
-                      </span>
-                    ))}
-                </h3>
-                <p className="mb-20 max-w-[462px] text-19 font-regular xl:mb-44 xl:text-27">
-                  {t('extensionDescription')}
-                </p>
 
-                <div className="flex flex-col items-start rounded-20 bg-white-20">
-                  <DownloadExtensionButton
-                    source="homepage-section"
-                    variant="primary"
-                    size="40"
-                  >
-                    {td('downloadForChrome')}
-                  </DownloadExtensionButton>
+                <div className="relative z-20 mx-auto grid max-w-[1424px] grid-cols-1 overflow-hidden rounded-20 bg-white-100 px-5 shadow-2 xl:grid-cols-2 xl:px-0">
+                  <div className="p-12 px-5 xl:px-10 xl:pl-12 2xl:pr-28">
+                    <div className="mb-4 flex">
+                      <FeatureTag type="extension" />
+                    </div>
+                    <h3 className="mb-2 text-40 font-bold xl:text-64">
+                      {t('extensionTitle')
+                        .split('\n')
+                        .map((line, i) => (
+                          <span key={i}>
+                            {i > 0 && <br />}
+                            {line}
+                          </span>
+                        ))}
+                    </h3>
+                    <p className="mb-20 max-w-[462px] text-19 font-regular xl:mb-44 xl:text-27">
+                      {t('extensionDescription')}
+                    </p>
+
+                    <div className="flex flex-col items-start rounded-20 bg-white-20">
+                      <DownloadExtensionButton
+                        source="homepage-section"
+                        variant="primary"
+                        size="40"
+                      >
+                        {td('downloadForChrome')}
+                      </DownloadExtensionButton>
+                    </div>
+                  </div>
+                  <Image
+                    className="max-xl:mb-[-20%] xl:absolute xl:left-[42%] xl:top-[-44%]"
+                    width={1063}
+                    height={1195}
+                    id="Homepage/Screens/Extension Section/Extension_01:2127:2390"
+                    alt="Status Portfolio Wallet browser extension interface showing portfolio tracking features"
+                  />
                 </div>
               </div>
-              <Image
-                className="max-xl:mb-[-20%] xl:absolute xl:left-[42%] xl:top-[-44%]"
-                width={1063}
-                height={1195}
-                id="Homepage/Screens/Extension Section/Extension_01:2127:2390"
-                alt="Status Portfolio Wallet browser extension interface showing portfolio tracking features"
-              />
-            </div>
-          </div>
-        </ColorTheme>
-        <div className="relative inset-x-1/2 top-0 z-10 h-px w-screen -translate-x-1/2 border-t border-dashed border-neutral-30" />
+            </ColorTheme>
+            <div className="relative inset-x-1/2 top-0 z-10 h-px w-screen -translate-x-1/2 border-t border-dashed border-neutral-30" />
+          </>
+        )}
         <div className="flex flex-col items-center">
           <div
             className={cx([
