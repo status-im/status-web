@@ -116,20 +116,34 @@ export const invalidateSession = async (): Promise<boolean> => {
 
 // note: see https://github.com/nextauthjs/next-auth/blob/3d5c3043ea07036db547b8be5444f22a5e2fa289/packages/core/src/lib/utils/env.ts#L75-L84 for source
 // note: see https://github.com/nextauthjs/next-auth/issues/3419#issuecomment-1013980190 for motivation
+//
+// Order of precedence:
+//   1. SITE_URL — a fixed, operator-controlled origin (set this on self-host).
+//   2. Hardcoded `https://status.app` for Vercel production deployments.
+//   3. Vercel preview — read `x-forwarded-*` (Vercel sanitizes the host header).
+//   4. Local dev — `http://localhost:PORT`.
+//
+// `x-forwarded-host` is intentionally NOT trusted on self-hosted without
+// SITE_URL — see https://owasp.org/www-project-web-security-testing-guide/v42/4-Web_Application_Security_Testing/07-Input_Validation_Testing/17-Testing_for_Host_Header_Injection
 export async function getBaseUrl(): Promise<string> {
+  if (serverEnv.SITE_URL) {
+    return serverEnv.SITE_URL.replace(/\/$/, '')
+  }
+
   if (serverEnv.VERCEL_ENV === 'production') {
     return 'https://status.app'
   }
 
   if (serverEnv.VERCEL) {
+    const requestHeaders = await headers()
     const host =
-      (await headers()).get('x-forwarded-host') ?? (await headers()).get('host')
-    const protocol = (await headers()).get('x-forwarded-proto') ?? 'https'
+      requestHeaders.get('x-forwarded-host') ?? requestHeaders.get('host')
+    const protocol = requestHeaders.get('x-forwarded-proto') ?? 'https'
 
     return `${protocol.replace(':', '')}://${host}`
   }
 
-  return `http://localhost:${serverEnv.PORT ?? 3000}`
+  return `http://localhost:${serverEnv.PORT ?? 3001}`
 }
 
 export async function getRedirectUrl() {

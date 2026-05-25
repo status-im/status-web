@@ -1,0 +1,48 @@
+# Build context for `docker build -f apps/<app>/Dockerfile .` (context = repo root).
+# Files NOT to send to the Docker daemon.
+
+# Build artifacts everywhere
+**/.next
+**/out
+**/.contentlayer*
+**/.turbo
+**/.vercel
+**/dist
+**/build
+**/.output
+
+# Dependencies (Dockerfile reinstalls)
+**/node_modules
+**/.pnpm-store
+
+# Local env (build args carry build-time vars; runtime env comes from --env-file)
+**/.env
+**/.env.*
+!**/.env.example
+
+# VCS / IDE / OS noise
+.git
+.gitignore
+.github
+.vscode
+.idea
+.DS_Store
+
+# Tests / coverage / fixtures
+**/*.test.*
+**/*.spec.*
+**/coverage
+**/playwright-report
+**/test-results
+e2e
+
+# Docs / misc not needed at build time
+**/*.log
+**/.npm
+**/.pnpm-debug.log
+**/.eslintcache
+
+# Wallet/connector/extension build outputs (other apps in the workspace)
+apps/wallet/.output
+apps/connector/build
+apps/community-dapp/dist

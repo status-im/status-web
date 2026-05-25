@@ -1,10 +1,12 @@
 import { Octokit } from '@octokit/rest'
-import { track } from '@vercel/analytics/server'
 import { NextResponse } from 'next/server'
 import { match } from 'ts-pattern'
 import { z } from 'zod'
 
+import { track } from '~server/services/umami'
+
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
 
 const octokit = new Octokit()
 
@@ -19,7 +21,7 @@ const querySchema = z.object({
 })
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ platform: string }> }
 ) {
   const result = querySchema.safeParse({
@@ -38,11 +40,15 @@ export async function GET(
       repo: 'status-app',
     })
 
-    await track('Download', {
-      platform: 'android',
-      version: release.data.tag_name,
-      store: 'direct',
-    })
+    await track(
+      'Download',
+      {
+        platform: 'android',
+        version: release.data.tag_name,
+        store: 'direct',
+      },
+      request
+    )
 
     const { browser_download_url: downloadUrl } = release.data.assets.find(
       asset => asset.name.endsWith('arm64.apk')
@@ -81,6 +87,12 @@ export async function GET(
           )!
       )
       .exhaustive()
+
+    await track(
+      'Download',
+      { platform, version: release.data.tag_name, store: 'direct' },
+      request
+    )
 
     const response = NextResponse.redirect(downloadUrl)
 

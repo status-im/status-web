@@ -13,6 +13,9 @@ import {
   KEYCLOAK_VERIFIER_COOKIE_NAME,
 } from '~server/services/auth'
 
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 /*
   fixme: add some `app/login/page.tsx` to redirect users without a permission to and to display other possible errors
   instead of just returning a reponse with a status code or redirecting to `/login/keycloak` and possibly causing `ERR_TOO_MANY_REDIRECTS`
@@ -44,7 +47,7 @@ export async function GET(request: Request): Promise<Response> {
     tokens = await keycloak.validateAuthorizationCode(
       code,
       storedVerifier,
-      `${getBaseUrl()}/login/keycloak/callback`
+      `${await getBaseUrl()}/login/keycloak/callback`
     )
   } catch (error) {
     console.error(error)
@@ -52,20 +55,24 @@ export async function GET(request: Request): Promise<Response> {
     redirect('/login/keycloak')
   }
 
+  const secure =
+    serverEnv.NODE_ENV === 'production' &&
+    serverEnv.VERCEL_ENV !== 'development'
+
   ;(await cookies()).set(
     KEYCLOAK_ACCESS_TOKEN_COOKIE_NAME,
     tokens.accessToken,
     {
       path: '/',
       expires: addDays(new Date(), 30),
-      secure: serverEnv.VERCEL_ENV !== 'development',
+      secure,
       httpOnly: true,
       sameSite: 'lax',
     }
   )
   ;(await cookies()).set(KEYCLOAK_ID_TOKEN_COOKIE_NAME, tokens.idToken, {
     path: '/',
-    secure: serverEnv.VERCEL_ENV !== 'development',
+    secure,
     httpOnly: true,
     sameSite: 'lax',
   })

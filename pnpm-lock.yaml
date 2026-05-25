@@ -1037,10 +1037,10 @@ importers:
         version: 3.6.0
       drizzle-orm:
         specifier: ^0.31.0
-        version: 0.31.4(@neondatabase/serverless@0.7.2)(@opentelemetry/api@1.9.0)(@types/pg@8.6.6)(@types/react@19.1.2)(@vercel/postgres@0.8.0)(react@19.1.2)
+        version: 0.31.4(@neondatabase/serverless@0.7.2)(@opentelemetry/api@1.9.0)(@types/pg@8.20.0)(@types/react@19.1.2)(@vercel/postgres@0.8.0)(pg@8.21.0)(react@19.1.2)
       drizzle-zod:
         specifier: ^0.5.1
-        version: 0.5.1(drizzle-orm@0.31.4(@neondatabase/serverless@0.7.2)(@opentelemetry/api@1.9.0)(@types/pg@8.6.6)(@types/react@19.1.2)(@vercel/postgres@0.8.0)(react@19.1.2))(zod@3.25.76)
+        version: 0.5.1(drizzle-orm@0.31.4(@neondatabase/serverless@0.7.2)(@opentelemetry/api@1.9.0)(@types/pg@8.20.0)(@types/react@19.1.2)(@vercel/postgres@0.8.0)(pg@8.21.0)(react@19.1.2))(zod@3.25.76)
       emoji-datasource-twitter:
         specifier: ^15.1.2
         version: 15.1.2
@@ -1567,9 +1567,6 @@ importers:
       '@vercel/analytics':
         specifier: ^1.2.2
         version: 1.5.0(next@15.5.16(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.58.2)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)(sass@1.94.0))(react@19.1.2)(svelte@4.2.2)(vue@3.3.4)
-      '@vercel/postgres':
-        specifier: ^0.8.0
-        version: 0.8.0
       '@vercel/toolbar':
         specifier: ^0.1.5
         version: 0.1.41(@vercel/analytics@1.5.0(next@15.5.16(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.58.2)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)(sass@1.94.0))(react@19.1.2)(svelte@4.2.2)(vue@3.3.4))(next@15.5.16(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.58.2)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)(sass@1.94.0))(react-dom@19.1.2(react@19.1.2))(react@19.1.2)(vite@6.3.5(@types/node@22.19.1)(jiti@2.6.1)(less@4.4.2)(lightningcss@1.30.2)(sass@1.94.0)(terser@5.44.1)(tsx@4.20.6)(yaml@2.8.1))
@@ -1638,10 +1635,10 @@ importers:
         version: 3.6.0
       drizzle-orm:
         specifier: ^0.31.0
-        version: 0.31.4(@neondatabase/serverless@0.7.2)(@opentelemetry/api@1.9.0)(@types/pg@8.6.6)(@types/react@19.1.2)(@vercel/postgres@0.8.0)(react@19.1.2)
+        version: 0.31.4(@neondatabase/serverless@0.7.2)(@opentelemetry/api@1.9.0)(@types/pg@8.20.0)(@types/react@19.1.2)(@vercel/postgres@0.8.0)(pg@8.21.0)(react@19.1.2)
       drizzle-zod:
         specifier: ^0.5.1
-        version: 0.5.1(drizzle-orm@0.31.4(@neondatabase/serverless@0.7.2)(@opentelemetry/api@1.9.0)(@types/pg@8.6.6)(@types/react@19.1.2)(@vercel/postgres@0.8.0)(react@19.1.2))(zod@3.25.76)
+        version: 0.5.1(drizzle-orm@0.31.4(@neondatabase/serverless@0.7.2)(@opentelemetry/api@1.9.0)(@types/pg@8.20.0)(@types/react@19.1.2)(@vercel/postgres@0.8.0)(pg@8.21.0)(react@19.1.2))(zod@3.25.76)
       emoji-datasource-twitter:
         specifier: ^15.1.2
         version: 15.1.2
@@ -1693,6 +1690,9 @@ importers:
       parallax-controller:
         specifier: ^1.7.1
         version: 1.7.1
+      pg:
+        specifier: ^8.13.1
+        version: 8.21.0
       prettier-plugin-tailwindcss:
         specifier: ^0.6.6
         version: 0.6.14(@ianvs/prettier-plugin-sort-imports@4.7.0(@vue/compiler-sfc@3.3.4)(prettier@3.6.2))(prettier@3.6.2)
@@ -1811,6 +1811,9 @@ importers:
       '@types/node':
         specifier: ^22.5.5
         version: 22.19.1
+      '@types/pg':
+        specifier: ^8.11.10
+        version: 8.20.0
       '@types/prettier':
         specifier: ^3.0.0
         version: 3.0.0
@@ -10954,6 +10957,9 @@ packages:
   '@types/pbkdf2@3.1.2':
     resolution: {integrity: sha512-uRwJqmiXmh9++aSu1VNEn3iIxWOhd8AHXNSdlaLfdAAdSTY9jYVeGWnzejM3dvrkbqE3/hyQkQQ29IFATEGlew==}
 
+  '@types/pg@8.20.0':
+    resolution: {integrity: sha512-bEPFOaMAHTEP1EzpvHTbmwR8UsFyHSKsRisLIHVMXnpNefSbGA1bD6CVy+qKjGSqmZqNqBDV2azOBo8TgkcVow==}
+
   '@types/pg@8.6.6':
     resolution: {integrity: sha512-O2xNmXebtwVekJDD+02udOncjVcMZQuTEQEMpKJ0ZRf5E7/9JJX3izhKUcUifBkyKpljyUM6BTgy2trmviKlpw==}
 
@@ -19209,16 +19215,42 @@ packages:
   periscopic@3.1.0:
     resolution: {integrity: sha512-vKiQ8RRtkl9P+r/+oefh25C3fhybptkHKCZSPlcXiJux2tJF55GnEj3BVn4A5gKfq9NWWXXrxkHBwVPUfH0opw==}
 
+  pg-cloudflare@1.4.0:
+    resolution: {integrity: sha512-Vo7z/6rrQYxpNRylp4Tlob2elzbh+N/MOQbxFVWCxS7oEx6jF53GTJFxK2WWpKuBRkmiin4Mt+xofFDjx09R0A==}
+
+  pg-connection-string@2.13.0:
+    resolution: {integrity: sha512-EMnU9E2fSULdsbErBbMaXJvFeD9B4+nPcM3f+4lsiCR0BHLPrLVjv3DbyM2hgQQviKJaTWIRRTjKjWlHg3p2ig==}
+
   pg-int8@1.0.1:
     resolution: {integrity: sha512-WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==}
     engines: {node: '>=4.0.0'}
 
+  pg-pool@3.14.0:
+    resolution: {integrity: sha512-gKtPkFdQPU3DksooVLi9LsjZxrsBUZIpa+7aVx+LV5pNh0KzP4Zleud2po+ConrxbuXGBJ6Hfer6hdgpIBpBaw==}
+    peerDependencies:
+      pg: '>=8.0'
+
   pg-protocol@1.10.3:
     resolution: {integrity: sha512-6DIBgBQaTKDJyxnXaLiLR8wBpQQcGWuAESkRBX/t6OwA8YsqP+iVSiond2EDy6Y/dsGk8rh/jtax3js5NeV7JQ==}
+
+  pg-protocol@1.14.0:
+    resolution: {integrity: sha512-n5taZ1kO3s9ngDTVxsEznOqCyToTgz0FLuPq0B33COy5pPpuWJpY3/2oRBVETuOgzdqRXfWpM9HIhp2LBBT1BA==}
 
   pg-types@2.2.0:
     resolution: {integrity: sha512-qTAAlrEsl8s4OiEQY69wDvcMIdQN6wdz5ojQiOy6YRMuynxenON0O5oCpJI6lshc6scgAY8qvJ2On/p+CXY0GA==}
     engines: {node: '>=4'}
+
+  pg@8.21.0:
+    resolution: {integrity: sha512-AUP1EYJuHraQGsVoCQVIcM7TEJVGtDzxWtGFZd8rds9d+CCXlU5Js1rYgfLNvxy9iJrpHjGrRjoi/3BT9fRyiA==}
+    engines: {node: '>= 16.0.0'}
+    peerDependencies:
+      pg-native: '>=3.0.1'
+    peerDependenciesMeta:
+      pg-native:
+        optional: true
+
+  pgpass@1.0.5:
+    resolution: {integrity: sha512-FdW9r/jQZhSeohs1Z3sI1yxFQNFvMcnmfuj4WBMUTxOrAyLMaTcE1aAMBiTlbMNaXvBCQuVi0R7hd8udDSP7ug==}
 
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
@@ -32226,7 +32258,7 @@ snapshots:
       debug: 4.4.3(supports-color@8.1.1)
       invariant: 2.2.4
       metro: 0.83.3(bufferutil@4.0.8)(utf-8-validate@6.0.3)
-      metro-config: 0.83.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      metro-config: 0.83.3(bufferutil@4.0.8)(utf-8-validate@6.0.3)
       metro-core: 0.83.3
       semver: 7.7.3
     transitivePeerDependencies:
@@ -32255,7 +32287,7 @@ snapshots:
       debug: 4.4.3(supports-color@8.1.1)
       invariant: 2.2.4
       metro: 0.83.3(bufferutil@4.0.9)(utf-8-validate@6.0.3)
-      metro-config: 0.83.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      metro-config: 0.83.3(bufferutil@4.0.9)(utf-8-validate@6.0.3)
       metro-core: 0.83.3
       semver: 7.7.3
     transitivePeerDependencies:
@@ -35645,6 +35677,12 @@ snapshots:
   '@types/pbkdf2@3.1.2':
     dependencies:
       '@types/node': 22.19.1
+
+  '@types/pg@8.20.0':
+    dependencies:
+      '@types/node': 22.19.1
+      pg-protocol: 1.10.3
+      pg-types: 2.2.0
 
   '@types/pg@8.6.6':
     dependencies:
@@ -41804,18 +41842,19 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.31.4(@neondatabase/serverless@0.7.2)(@opentelemetry/api@1.9.0)(@types/pg@8.6.6)(@types/react@19.1.2)(@vercel/postgres@0.8.0)(react@19.1.2):
+  drizzle-orm@0.31.4(@neondatabase/serverless@0.7.2)(@opentelemetry/api@1.9.0)(@types/pg@8.20.0)(@types/react@19.1.2)(@vercel/postgres@0.8.0)(pg@8.21.0)(react@19.1.2):
     optionalDependencies:
       '@neondatabase/serverless': 0.7.2
       '@opentelemetry/api': 1.9.0
-      '@types/pg': 8.6.6
+      '@types/pg': 8.20.0
       '@types/react': 19.1.2
       '@vercel/postgres': 0.8.0
+      pg: 8.21.0
       react: 19.1.2
 
-  drizzle-zod@0.5.1(drizzle-orm@0.31.4(@neondatabase/serverless@0.7.2)(@opentelemetry/api@1.9.0)(@types/pg@8.6.6)(@types/react@19.1.2)(@vercel/postgres@0.8.0)(react@19.1.2))(zod@3.25.76):
+  drizzle-zod@0.5.1(drizzle-orm@0.31.4(@neondatabase/serverless@0.7.2)(@opentelemetry/api@1.9.0)(@types/pg@8.20.0)(@types/react@19.1.2)(@vercel/postgres@0.8.0)(pg@8.21.0)(react@19.1.2))(zod@3.25.76):
     dependencies:
-      drizzle-orm: 0.31.4(@neondatabase/serverless@0.7.2)(@opentelemetry/api@1.9.0)(@types/pg@8.6.6)(@types/react@19.1.2)(@vercel/postgres@0.8.0)(react@19.1.2)
+      drizzle-orm: 0.31.4(@neondatabase/serverless@0.7.2)(@opentelemetry/api@1.9.0)(@types/pg@8.20.0)(@types/react@19.1.2)(@vercel/postgres@0.8.0)(pg@8.21.0)(react@19.1.2)
       zod: 3.25.76
 
   dset@3.1.4: {}
@@ -46879,6 +46918,22 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  metro-config@0.83.3(bufferutil@4.0.8)(utf-8-validate@6.0.3):
+    dependencies:
+      connect: 3.7.0
+      flow-enums-runtime: 0.0.6
+      jest-validate: 29.7.0
+      metro: 0.83.3(bufferutil@4.0.8)(utf-8-validate@6.0.3)
+      metro-cache: 0.83.3
+      metro-core: 0.83.3
+      metro-runtime: 0.83.3
+      yaml: 2.8.1
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    optional: true
+
   metro-config@0.83.3(bufferutil@4.0.9)(utf-8-validate@5.0.10):
     dependencies:
       connect: 3.7.0
@@ -46893,6 +46948,22 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
+
+  metro-config@0.83.3(bufferutil@4.0.9)(utf-8-validate@6.0.3):
+    dependencies:
+      connect: 3.7.0
+      flow-enums-runtime: 0.0.6
+      jest-validate: 29.7.0
+      metro: 0.83.3(bufferutil@4.0.9)(utf-8-validate@6.0.3)
+      metro-cache: 0.83.3
+      metro-core: 0.83.3
+      metro-runtime: 0.83.3
+      yaml: 2.8.1
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    optional: true
 
   metro-core@0.83.3:
     dependencies:
@@ -47053,7 +47124,7 @@ snapshots:
       metro-babel-transformer: 0.83.3
       metro-cache: 0.83.3
       metro-cache-key: 0.83.3
-      metro-config: 0.83.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      metro-config: 0.83.3(bufferutil@4.0.8)(utf-8-validate@6.0.3)
       metro-core: 0.83.3
       metro-file-map: 0.83.3
       metro-resolver: 0.83.3
@@ -47148,7 +47219,7 @@ snapshots:
       metro-babel-transformer: 0.83.3
       metro-cache: 0.83.3
       metro-cache-key: 0.83.3
-      metro-config: 0.83.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      metro-config: 0.83.3(bufferutil@4.0.9)(utf-8-validate@6.0.3)
       metro-core: 0.83.3
       metro-file-map: 0.83.3
       metro-resolver: 0.83.3
@@ -49021,9 +49092,20 @@ snapshots:
       estree-walker: 3.0.3
       is-reference: 3.0.3
 
+  pg-cloudflare@1.4.0:
+    optional: true
+
+  pg-connection-string@2.13.0: {}
+
   pg-int8@1.0.1: {}
 
+  pg-pool@3.14.0(pg@8.21.0):
+    dependencies:
+      pg: 8.21.0
+
   pg-protocol@1.10.3: {}
+
+  pg-protocol@1.14.0: {}
 
   pg-types@2.2.0:
     dependencies:
@@ -49032,6 +49114,20 @@ snapshots:
       postgres-bytea: 1.0.0
       postgres-date: 1.0.7
       postgres-interval: 1.2.0
+
+  pg@8.21.0:
+    dependencies:
+      pg-connection-string: 2.13.0
+      pg-pool: 3.14.0(pg@8.21.0)
+      pg-protocol: 1.14.0
+      pg-types: 2.2.0
+      pgpass: 1.0.5
+    optionalDependencies:
+      pg-cloudflare: 1.4.0
+
+  pgpass@1.0.5:
+    dependencies:
+      split2: 4.2.0
 
   picocolors@1.1.1: {}
 
