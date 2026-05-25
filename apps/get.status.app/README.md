@@ -34,3 +34,18 @@ Runs on port **3005** (hub uses 3003).
 
 - `content/legal` → symlink to `status.app/content/legal`
 - `public` → symlink to `status.app/public`
+
+### Cloudinary
+
+Uses the same Cloudinary account and asset ID format as `status.app` (`dhgck7ebz`), but keeps its own generated types in `src/app/_components/assets/types.ts` so new media for this site does not require re-running `status.app`’s sync.
+
+- Reused pages pull IDs from the filtered type union (homepage, apps, download UI, etc.).
+- Upload **get-only** assets under the `Get.status.app/` folder in Cloudinary.
+
+```bash
+# One-time bootstrap from status.app types (no API keys)
+pnpm --filter get.status.app bootstrap:cloudinary
+
+# Refresh from Cloudinary (needs CLOUDINARY_* in .env.local)
+pnpm --filter get.status.app sync:cloudinary
+```

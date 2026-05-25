@@ -246,8 +246,11 @@
     "./migrations/**/*": [
       "pnpm db:check"
     ],
-    "*.{ts,tsx,js,jsx,mjs}": [
+    "*.{ts,tsx,js,jsx}": [
       "eslint",
+      "prettier --write"
+    ],
+    "scripts/**/*.mjs": [
       "prettier --write"
     ],
     "content/**/*.{md,mdx}": [

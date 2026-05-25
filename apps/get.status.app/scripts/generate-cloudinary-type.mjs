@@ -2,10 +2,13 @@ import { z } from 'zod'
 
 import {
   fetchResources,
+  filterByPrefixes,
   generateTypesContent,
   getResourceUrls,
   writeTypesFile,
-} from './cloudinary-shared.mjs'
+} from '../../status.app/scripts/cloudinary-shared.mjs'
+
+import { GET_STATUS_APP_CLOUDINARY_PREFIXES } from './cloudinary-prefixes.mjs'
 
 const env = z
   .object({
@@ -25,10 +28,17 @@ const credentials = {
 }
 
 const [images, videos, zipFiles] = await Promise.all(
-  getResourceUrls().map(url => fetchResources(url, credentials)),
+  getResourceUrls().map(async url => {
+    const resources = await fetchResources(url, credentials)
+    return filterByPrefixes(resources, GET_STATUS_APP_CLOUDINARY_PREFIXES)
+  }),
 )
 
 await writeTypesFile(
   'src/app/_components/assets/types.ts',
   generateTypesContent({ images, videos, zipFiles }),
+)
+
+console.log(
+  `Synced ${images.length} images, ${videos.length} videos, ${zipFiles.length} raw files for get.status.app`,
 )
