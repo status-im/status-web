@@ -2,8 +2,6 @@ import { Divider } from '~app/_components/divider'
 import { Footer } from '~app/_components/footer'
 import { BlogHeader } from '../../_components/blog/blog-header'
 
-export const dynamic = 'force-dynamic'
-
 type Props = {
   children: React.ReactNode
 }

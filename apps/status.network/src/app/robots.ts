@@ -1,5 +1,7 @@
 import type { MetadataRoute } from 'next'
 
+export const dynamic = 'force-static'
+
 export default function robots(): MetadataRoute.Robots {
   const baseUrl = 'https://status.network'
 
@@ -8,7 +10,6 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/api/*'],
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,

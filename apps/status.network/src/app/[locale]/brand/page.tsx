@@ -4,7 +4,7 @@ import { Divider } from '~app/_components/divider'
 import { Metadata } from '~app/_metadata'
 import { transformColor } from '~app/_utils/colors'
 import { jsonLD, JSONLDScript } from '~app/_utils/json-ld'
-import { useTranslations } from 'next-intl'
+import { getTranslations } from 'next-intl/server'
 import Image from 'next/image'
 import { ColorSection } from './_components/color-section'
 import { DownloadZipButton } from './_components/download-zip-button'
@@ -31,8 +31,9 @@ const organizationSchema = jsonLD.organization({
   description: 'Get Status Network brand assets.',
 })
 
-export default function BrandPage() {
-  const t = useTranslations()
+export default async function BrandPage() {
+  const t = await getTranslations()
+  const downloadButtonLabel = t('brand.download_button')
 
   return (
     <>
@@ -52,6 +53,7 @@ export default function BrandPage() {
 
       <div className="relative px-4 pb-10 lg:px-[120px] lg:pb-[77px] lg:pt-10">
         <LogoSection
+          downloadButtonLabel={downloadButtonLabel}
           title={t('brand.logo_title')}
           description={t('brand.logo_description')}
           fileName="logo.zip"
@@ -74,6 +76,7 @@ export default function BrandPage() {
           ]}
         />
         <LogoSection
+          downloadButtonLabel={downloadButtonLabel}
           title={t('brand.logo_variation_title')}
           description={t('brand.logo_variation_description')}
           fileName="logo-variation.zip"
@@ -96,6 +99,7 @@ export default function BrandPage() {
           ]}
         />
         <LogoSection
+          downloadButtonLabel={downloadButtonLabel}
           title={t('brand.mark_only_title')}
           description={t('brand.mark_only_description')}
           fileName="mark.zip"
@@ -122,6 +126,7 @@ export default function BrandPage() {
 
       <div className="relative bg-[#1B273D05] px-4 py-10 lg:px-[120px] lg:py-[118px]">
         <ColorSection
+          downloadButtonLabel={downloadButtonLabel}
           title={t('brand.main_colors_title')}
           description={t('brand.main_colors_description')}
           colors={[

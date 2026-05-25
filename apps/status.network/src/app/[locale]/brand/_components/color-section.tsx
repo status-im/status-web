@@ -12,12 +12,13 @@ type Color = {
 const ColorSection = (
   props: Omit<BrandSectionProps, 'children' | 'fileName'> & {
     colors: Color[]
+    downloadButtonLabel: string
   },
 ) => {
-  const { colors, ...sectionProps } = props
+  const { colors, downloadButtonLabel, ...sectionProps } = props
 
   return (
-    <BrandSection {...sectionProps}>
+    <BrandSection {...sectionProps} downloadButtonLabel={downloadButtonLabel}>
       {colors.map(({ hex, rgb, name, invert }) => {
         const textColor = invert ? neutral['100'] : white['100']
         const textToRgbColor = invert ? neutral['50'] : white['60']

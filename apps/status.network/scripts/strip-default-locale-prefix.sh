@@ -1,0 +1,133 @@
+#!/bin/bash
+# Strip default locale prefix (/en) from static export.
+#
+# Why: next-intl requires explicit locale prefixes for static exports (output: 'export').
+# The `localePrefix: 'as-needed'` option is not supported without middleware.
+# See: https://next-intl.dev/docs/routing/middleware#usage-without-proxy--middleware-static-export
+#
+# This script allows the default locale (English) to be served at root (/)
+# while other locales like /ko remain prefixed, by:
+#   1. Copying files from /en to root
+#   2. Rewriting href="/en/..." to href="/..." in all files
+#   3. Fixing sitemap URLs
+#   4. Removing the /en directory
+#
+# Usage: ./scripts/strip-default-locale-prefix.sh [out-dir] [locale]
+
+set -e
+
+OUT_DIR="${1:-out}"
+LOCALE="${2:-en}"
+
+echo "🌐 Strip /${LOCALE}/ prefix from ${OUT_DIR}/"
+
+# Check directories exist
+if [[ ! -d "$OUT_DIR" ]]; then
+  echo "❌ ${OUT_DIR}/ not found"
+  echo "   Ensure 'output: \"export\"' is enabled in next.config.ts"
+  exit 1
+fi
+
+if [[ ! -d "$OUT_DIR/$LOCALE" ]]; then
+  echo "⚠️  ${OUT_DIR}/${LOCALE}/ not found - skipping locale prefix stripping"
+  echo "   (This is fine if the app doesn't use locale-prefixed routes yet)"
+  exit 0
+fi
+
+# 1. Copy /en/* to root
+echo "📦 Copying /${LOCALE}/ to root..."
+cp -r "$OUT_DIR/$LOCALE"/* "$OUT_DIR/"
+
+# 2. Rewrite links in HTML/JS/JSON (using perl for cross-platform compatibility)
+echo "🔧 Rewriting links..."
+
+# Process all files at root and in _next (skip other locale dirs like /ko)
+find "$OUT_DIR" -type f \( -name "*.html" -o -name "*.js" -o -name "*.json" -o -name "*.txt" \) \
+  ! -path "$OUT_DIR/??/*" \
+  -exec perl -pi -e "
+    # Match status.network/en/ URLs (our domain - full URLs in meta tags, etc.)
+    s|https://status\.network/${LOCALE}/|https://status.network/|g;
+    s|https://status\.network/${LOCALE}\"|https://status.network/\"|g;
+    s|https://status\.network/${LOCALE}'|https://status.network/'|g;
+    s|https://status\.network/${LOCALE}<|https://status.network/<|g;
+    s|status\.network/${LOCALE}/|status.network/|g;
+    s|status\.network/${LOCALE}\"|status.network/\"|g;
+    # HTML href attributes - only match internal URLs (starting with /)
+    s|href=\"/${LOCALE}/|href=\"/|g;
+    s|href=\"/${LOCALE}\"|href=\"/\"|g;
+    s|href='/${LOCALE}/|href='/|g;
+    s|href='/${LOCALE}'|href='/'|g;
+    # Internal paths in double quotes - match \"/en/ but NOT https://.../en/
+    s|([\s,:=\(])\"${LOCALE}/|\1\"/|g;
+    s|([\s,\(])\"${LOCALE}\"/|\1\"/|g;
+    s|([\s,\(])\"${LOCALE}\"([\"'\s,;\)\]\}])|\1\"/\"\2|g;
+    s|([\s,\(])\"${LOCALE}\"</|\1\"/\"</|g;
+    s|^\"${LOCALE}/|\"/|g;
+    s|^\"${LOCALE}\"/|\"/|g;
+    s|^\"${LOCALE}\"([\"'\s,;\)\]\}])|\"/\"\1|g;
+    s|^\"${LOCALE}\"</|\"/\"</|g;
+    # Single-quoted strings - only internal URLs
+    s|([\s,:=\(])'${LOCALE}/|\1'/|g;
+    s|([\s,:=\(])'${LOCALE}'|\1'/'|g;
+    s|^'${LOCALE}/|'/|g;
+    s|^'${LOCALE}'|'/'|g;
+    # Escaped quotes in JSON (e.g., \"/en/\") - only internal paths
+    s|\\\\\"${LOCALE}/|\\\\\"/|g;
+  " {} +
+
+# 3. Fix sitemap URLs
+if [[ -f "$OUT_DIR/sitemap.xml" ]]; then
+  echo "🗺️  Fixing sitemap URLs..."
+  perl -pi -e "
+    s|/${LOCALE}/|/|g;
+    s|/${LOCALE}</loc>|/</loc>|g;
+  " "$OUT_DIR/sitemap.xml"
+fi
+
+if [[ -f "$OUT_DIR/sitemap-0.xml" ]]; then
+  echo "🗺️  Fixing sitemap-0.xml URLs..."
+  perl -pi -e "s|/${LOCALE}/|/|g; s|/${LOCALE}</loc>|/</loc>|g" "$OUT_DIR/sitemap-0.xml"
+fi
+
+# 4. Rename en.html to index.html (so / serves English homepage)
+if [[ -f "$OUT_DIR/${LOCALE}.html" ]]; then
+  echo "📄 Renaming ${LOCALE}.html to index.html..."
+  mv "$OUT_DIR/${LOCALE}.html" "$OUT_DIR/index.html"
+fi
+
+if [[ -f "$OUT_DIR/${LOCALE}.txt" ]]; then
+  echo "📄 Renaming ${LOCALE}.txt to index.txt..."
+  mv "$OUT_DIR/${LOCALE}.txt" "$OUT_DIR/index.txt"
+fi
+
+# 5. Create clean URL aliases for default-locale static pages.
+echo "🔗 Creating clean URL aliases..."
+find "$OUT_DIR" -maxdepth 1 -type f -name "*.html" \
+  ! -name "index.html" \
+  ! -name "404.html" \
+  -print0 | while IFS= read -r -d '' html_file; do
+    page_name="$(basename "$html_file" .html)"
+    page_dir="$OUT_DIR/$page_name"
+
+    if [[ -e "$page_dir" ]]; then
+      continue
+    fi
+
+    mkdir -p "$page_dir"
+    cp "$html_file" "$page_dir/index.html"
+
+    txt_file="$OUT_DIR/$page_name.txt"
+    if [[ -f "$txt_file" ]]; then
+      cp "$txt_file" "$page_dir/index.txt"
+    fi
+  done
+
+# 6. Remove the /en directory
+echo "🗑️  Removing /${LOCALE}/..."
+if [[ -z "${OUT_DIR//[[:space:]]/}" ]]; then
+  echo "❌ OUT_DIR is empty or whitespace-only; refusing to remove locale directory"
+  exit 1
+fi
+rm -rf "${OUT_DIR:?}/$LOCALE"
+
+echo "✅ Done!"

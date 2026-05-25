@@ -10,17 +10,11 @@ export const metadata = Metadata({
   pathname: '/blog',
 })
 
-type Props = {
-  searchParams: Promise<Record<string, string | string[] | undefined>>
-}
+export const dynamic = 'force-static'
 
-export default async function BlogPage({ searchParams }: Props) {
-  const resolvedParams = await searchParams
-  const selectedTag =
-    typeof resolvedParams.tag === 'string' ? resolvedParams.tag : undefined
-
+export default async function BlogPage() {
   const [{ posts }, t] = await Promise.all([
-    getPosts({ limit: 'all', tag: selectedTag }),
+    getPosts({ limit: 'all' }),
     getTranslations(),
   ])
 

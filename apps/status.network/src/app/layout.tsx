@@ -3,7 +3,6 @@ import { Inter } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
 import { cx } from 'cva'
-import { getLocale } from 'next-intl/server'
 import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, Metadata } from './_metadata'
 import { jsonLD, JSONLDScript } from './_utils/json-ld'
 
@@ -85,11 +84,9 @@ type Props = {
   children: React.ReactNode
 }
 
-export default async function RootLayout({ children }: Props) {
-  const locale = await getLocale()
-
+export default function RootLayout({ children }: Props) {
   return (
-    <html lang={locale}>
+    <html lang="en">
       <body
         className={cx(
           inter.variable,
