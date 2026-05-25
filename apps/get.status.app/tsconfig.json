@@ -33,6 +33,9 @@
       "~/config/env.server.mjs": ["./src/config/env.server.mjs"],
       "~/config/env.client.mjs": ["./src/config/env.client.mjs"],
       "~website/_lib/ghost": ["./src/stubs/ghost.ts"],
+      "~website/_components/latest-version-tag": [
+        "./src/website/latest-version-tag.tsx"
+      ],
       "~/config/*": ["../status.app/src/config/*"],
       "~components/assets/*": ["./src/app/_components/assets/*"],
       "~components/*": ["../status.app/src/app/_components/*"],

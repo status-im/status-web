@@ -22,7 +22,7 @@ import appStoreSrc from '~public/images/app-store.png'
 import googlePlaySrc from '~public/images/google-play.png'
 import { useLatestReleaseTags } from '~website/_context/latest-release-tag-context'
 
-import { LatestVersionTag } from './latest-version-tag'
+import { LatestVersionTag } from '~website/_components/latest-version-tag'
 
 type Props = Pick<React.ComponentProps<typeof Button>, 'variant' | 'size'> & {
   children?: React.ReactElement<React.ComponentProps<typeof Button>>

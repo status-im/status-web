@@ -12,23 +12,55 @@ Scoped download-focused site that reuses [`status.app`](../status.app) component
 
 Navigation and footer only link to routes available on this site (see `src/config/routes.ts`).
 
-## Development
+## Environment
 
-Environment variables are defined in this app — not the full `status.app` set. Copy the example file:
+Environment variables are defined in this app — not the full `status.app` set.
 
 ```bash
+cd apps/get.status.app
 cp .env.example .env.local
 ```
 
-Only `GITHUB_TOKEN` is commonly needed locally (latest release tags in nav and `/apps`). Everything else is optional.
+Or pull from Vercel:
+
+```bash
+cd apps/get.status.app
+vercel env pull .env.local
+```
+
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `GITHUB_TOKEN` | no | Not used — tags show “Latest”; downloads resolve the release in the browser |
+| `CLOUDINARY_API_KEY` / `CLOUDINARY_API_SECRET` | no | `pnpm sync:cloudinary` only |
+
+`pnpm env:check` validates env vars (runs automatically before `pnpm build`).
+
+## Development
 
 ```bash
 pnpm --filter get.status.app dev
 ```
 
-From the monorepo root, `pnpm dev` also starts this app (no separate `predev` install — root `predev` handles that once).
+Runs on **http://127.0.0.1:3005** (hub uses 3003, status.network uses 3002).
 
-Runs on port **3005** (hub uses 3003).
+## Static export (self-hosted)
+
+Production builds use `output: 'export'` and write static files to `out/`.
+
+```bash
+pnpm --filter get.status.app build
+pnpm --filter get.status.app start   # serves out/ on port 3005
+```
+
+Or in one step:
+
+```bash
+pnpm --filter get.status.app preview:production
+```
+
+`postbuild` runs `next-sitemap`, adds static `/api/download/*` pages that fetch the latest GitHub release in the browser (1h session cache), and copies `serve.json` for `serve` (`cleanUrls`).
+
+Deploy via [`Jenkinsfile.website`](../../Jenkinsfile.website) with `APP_NAME=get.status.app` (branches `deploy-get-status-app-main` / `deploy-get-status-app-develop`, domains `get.status.app` / `dev.get.status.app`).
 
 ## Shared assets
 
@@ -46,6 +78,6 @@ Uses the same Cloudinary account and asset ID format as `status.app` (`dhgck7ebz
 # One-time bootstrap from status.app types (no API keys)
 pnpm --filter get.status.app bootstrap:cloudinary
 
-# Refresh from Cloudinary (needs CLOUDINARY_* in .env.local)
+# Refresh from Cloudinary (needs CLOUDINARY_* in .env or .env.local)
 pnpm --filter get.status.app sync:cloudinary
 ```

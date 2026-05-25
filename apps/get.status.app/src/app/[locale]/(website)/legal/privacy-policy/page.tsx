@@ -1,3 +1,5 @@
+export const dynamic = 'force-static'
+
 import PrivacyPolicyPage, {
   generateMetadata,
 } from '../../../../../../../status.app/src/app/(website)/legal/privacy-policy/page'

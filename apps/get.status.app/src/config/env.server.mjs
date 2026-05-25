@@ -17,12 +17,21 @@ export const envSchema = z.object({
       z.literal('development'),
     ])
     .optional(),
+  NODE_ENV: z
+    .enum(['development', 'production', 'test'])
+    .default('development'),
   PORT: z.coerce.number().optional(),
   /** Used for latest release metadata in the nav and apps page. */
   GITHUB_TOKEN: z.string().optional(),
 })
 
-const result = envSchema.safeParse(process.env)
+const result = envSchema.safeParse({
+  VERCEL: process.env.VERCEL,
+  VERCEL_ENV: process.env.VERCEL_ENV,
+  NODE_ENV: process.env.NODE_ENV,
+  PORT: process.env.PORT,
+  GITHUB_TOKEN: process.env.GITHUB_TOKEN,
+})
 
 if (!result.success) {
   handleError(result.error)

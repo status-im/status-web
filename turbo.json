@@ -69,6 +69,11 @@
         "NEXT_PUBLIC_GHOST_API_KEY"
       ]
     },
+    "get.status.app#build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "out/**"],
+      "passThroughEnv": ["GITHUB_TOKEN"]
+    },
     "comment_build:content": {
       "cache": true,
       "persistent": true,
