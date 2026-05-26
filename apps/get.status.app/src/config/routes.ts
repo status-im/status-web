@@ -1,9 +1,7 @@
 export {
-  KEYCARD_STORE_URL,
   LEGAL,
   MESSARI_URL,
   SECURITY,
-  SOCIALS,
   STATUS_CONNECTOR_CHROME_URL,
   STATUS_DESKTOP_DOWNLOAD_URL_LINUX,
   STATUS_DESKTOP_DOWNLOAD_URL_MACOS_INTEL,
@@ -15,6 +13,9 @@ export {
   STATUS_MOBILE_GOOGLE_PLAY_URL,
   STATUS_PORTFOLIO_WALLET_CHROME_URL,
 } from '../../../status.app/src/config/routes'
+
+// No social links on the get site.
+export const SOCIALS = {} as const
 
 export const ROUTES = {
   apps: [
