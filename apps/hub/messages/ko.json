@@ -931,9 +931,21 @@
       "translation": "잠금 해제",
       "notes": "vault::unlock_label"
     },
-    "native_apps_points": {
-      "translation": "네이티브 앱 포인트",
-      "notes": "vault::native_apps_points"
+    "rewards_eth": {
+      "translation": "SNT + LINEA 보상, 누적 ETH 수익",
+      "notes": "vault::rewards_eth"
+    },
+    "rewards_snt": {
+      "translation": "LINEA 보상",
+      "notes": "vault::rewards_snt"
+    },
+    "rewards_linea": {
+      "translation": "SNT 보상",
+      "notes": "vault::rewards_linea"
+    },
+    "rewards_gusd": {
+      "translation": "SNT + LINEA 보상, 누적 GUSD 수익",
+      "notes": "vault::rewards_gusd"
     },
     "eth_wrapped_success": {
       "translation": "ETH 래핑이 완료되었습니다. 이제 예치를 진행할 수 있습니다.",
@@ -1018,6 +1030,10 @@
     "bridging": {
       "translation": "브리징 중…",
       "notes": "vault::bridging"
+    },
+    "sent_to_receiver": {
+      "translation": "{address}로 전송됨",
+      "notes": "vault::sent_to_receiver"
     },
     "claim": {
       "translation": "청구",
