@@ -706,7 +706,7 @@
       "notes": "rewards::audited_link"
     },
     "deposit_confirmation": {
-      "translation": "자산을 금고에 예치함으로써 귀하는 다음을 읽고 수락했음을 확인합니다: ",
+      "translation": "금고(vault)에서 자산을 출금하고 발생한 수익(yield) 또는 유동성 보상을 수령하는 것은 다음 사항의 적용을 받습니다: ",
       "notes": "rewards::deposit_confirmation"
     },
     "disclaimer": {
@@ -714,8 +714,12 @@
       "notes": "rewards::disclaimer"
     },
     "predeposit_end": {
-      "translation": "입금 기간이 종료되었습니다. 자산 인출 및 보상 수령은 곧 가능해집니다.",
+      "translation": "사전 예치금 출금 기간이 시작되었으며, 사전 예치 참여자는 이제 Status Network Hub를 통해 자산을 출금할 수 있습니다. 자격을 충족한 사전 예치 참여자에게는 누적 수익 및 유동성 보상이 에어드롭될 예정입니다. 자세한 내용은",
       "notes": "rewards::predeposit_end"
+    },
+    "predeposit_end_link": {
+      "translation": "이 블로그 게시물을 참고하세요",
+      "notes": "rewards::predeposit_end_link"
     }
   },
   "pre_deposits": {
@@ -740,34 +744,64 @@
       "notes": "pre_deposits::faq"
     },
     "faq_items": {
-      "when_unlocked": {
+      "receiver_address_change": {
         "title": {
-          "translation": "예치금은 언제 잠금 해제되나요?",
-          "notes": "pre_deposits::faq_items::when_unlocked::title"
+          "translation": "출금 수령 주소를 변경할 수 있나요?",
+          "notes": "pre_deposits::faq_items::receiver_address_change::title"
         },
         "content": {
-          "translation": "사전 예치금은 스테이터스 네트워크 메인넷으로 브릿지된 후 잠금 해제됩니다. 메인넷에서 출금 시, SNT를 스테이킹 금고에 스테이킹 또는 다시 잠금시킬 수 있습니다. 이 옵션에서는 최대 20개의 개별 금고를 생성할 수 있고, 각 금고마다 스테이킹 기간과 그에 해당하는 보상 배수를 다르게 설정하실 수 있도록 기능을 제공할 예정입니다. 그 외에도 모든 브릿지된 토큰(LINEA, ETH, GUSD 포함)은 출시 시 지원하는 여러 앱들 중 선택하셔서 유동성으로 제공하고 인센티브를 계속 획득하실 수 있습니다.",
-          "notes": "pre_deposits::faq_items::when_unlocked::content"
+          "translation": "네, 잠금 해제(Unlock) 단계에서 수령 주소를 변경할 수 있습니다. 변경하지 않으면 Linea의 원래 예치 주소로 전송됩니다.",
+          "notes": "pre_deposits::faq_items::receiver_address_change::content"
         }
       },
-      "wallet_warning": {
+      "unlock_time_length": {
         "title": {
-          "translation": "예치 시 지갑에서 경고가 뜨는 이유는 무엇인가요?",
-          "notes": "pre_deposits::faq_items::wallet_warning::title"
+          "translation": "잠금 해제는 얼마나 걸리나요?",
+          "notes": "pre_deposits::faq_items::unlock_time_length::title"
         },
         "content": {
-          "translation": "지갑에 가스 수수료를 지불하기에 충분한 ETH를 출금 체인에 보유하고 계신지 확인하세요. LINEA 토큰을 예치할 때는 Linea L2에 충분한 ETH를, 다른 예치 유형들의 경우 이더리움 L1 ETH를 보유해야 합니다. 스테이터스 네트워크는 이러한 가스 문제를 해결하기 위해 첫 번째 네이티브 가스리스 L2를 준비하고 있는 것입니다.",
-          "notes": "pre_deposits::faq_items::wallet_warning::content"
+          "translation": "ETH, SNT 금고(이더리움에서 예치)의 경우 Linea로 자산이 도착하는 데 약 20분 정도 소요됩니다. LINEA 금고는 이미 Linea에 있으므로 더 빠르게 처리됩니다.",
+          "notes": "pre_deposits::faq_items::unlock_time_length::content"
         }
       },
-      "incentive_rewards": {
+      "rewards_claiming": {
         "title": {
-          "translation": "사전 예치자를 위한 총 인센티브 보상은 얼마인가요?",
-          "notes": "pre_deposits::faq_items::incentive_rewards::title"
+          "translation": "보상은 어떻게 받나요?",
+          "notes": "pre_deposits::faq_items::rewards_claiming::title"
         },
         "content": {
-          "translation": "사전예치자들을 위해 총 1,500만 SNT와 2,000만 LINEA 토큰으로 구성된 유동 보상 풀이 모든 금고에 걸쳐 준비되어 있습니다. 최종적인 유동 인센티브와 Karma 배분은 각 금고의 총 예치액(TVL)과 예치 기간을 기반으로 결정되며, 테스트넷 v1과 v2에서의 활동에 대한 추가 배수(multiplier)가 적용될 수 있습니다.",
-          "notes": "pre_deposits::faq_items::incentive_rewards::content"
+          "translation": "보상(SNT + LINEA)과 누적된 수익(ETH, GUSD)은 이 가이드의 출금 절차와 별개의 과정으로 분배됩니다. Linea 메인넷의 지갑으로 직접 에어드롭될 예정이며, 예치 시 사용한 주소와 동일한 주소로 Linea 메인넷에서 접근이 가능하다면 별도의 작업은 필요하지 않습니다. 보상 분배의 일정과 산정 방식은 확정되는 대로 별도로 안내드릴 예정입니다.",
+          "notes": "pre_deposits::faq_items::rewards_claiming::content"
+        }
+      },
+      "gusd_claiming": {
+        "title": {
+          "translation": "GUSD는 어떻게 출금하나요?",
+          "notes": "pre_deposits::faq_items::gusd_claiming::title"
+        },
+        "content": {
+          "translation": "GUSD의 출금 절차는 다른 금고들과 다르며, 자세한 내용은 일정에 가까워질 무렵 별도로 안내드릴 예정입니다.",
+          "notes": "pre_deposits::faq_items::gusd_claiming::content"
+        }
+      },
+      "linea_vault": {
+        "title": {
+          "translation": "LINEA 금고는 언제 출금할 수 있나요?",
+          "notes": "pre_deposits::faq_items::linea_vault::title"
+        },
+        "content": {
+          "translation": "LINEA 금고는 추가 개발과 감사 작업이 필요해 다른 금고보다 늦게 열립니다. 출금이 열리면, ETH 및 SNT와 동일한 절차로 진행됩니다.",
+          "notes": "pre_deposits::faq_items::linea_vault::content"
+        }
+      },
+      "no_gas": {
+        "title": {
+          "translation": "Linea에 가스비용 ETH가 없어요. 어떻게 하나요?",
+          "notes": "pre_deposits::faq_items::no_gas::title"
+        },
+        "content": {
+          "translation": "SmolRefuel을 이용하면 소량의 토큰을 Linea의 ETH로 교환할 수 있습니다.",
+          "notes": "pre_deposits::faq_items::no_gas::content"
         }
       }
     }
@@ -897,9 +931,21 @@
       "translation": "잠금 해제",
       "notes": "vault::unlock_label"
     },
-    "native_apps_points": {
-      "translation": "네이티브 앱 포인트",
-      "notes": "vault::native_apps_points"
+    "rewards_eth": {
+      "translation": "SNT + LINEA 보상, 누적 ETH 수익",
+      "notes": "vault::rewards_eth"
+    },
+    "rewards_snt": {
+      "translation": "LINEA 보상",
+      "notes": "vault::rewards_snt"
+    },
+    "rewards_linea": {
+      "translation": "SNT 보상",
+      "notes": "vault::rewards_linea"
+    },
+    "rewards_gusd": {
+      "translation": "SNT + LINEA 보상, 누적 GUSD 수익",
+      "notes": "vault::rewards_gusd"
     },
     "eth_wrapped_success": {
       "translation": "ETH 래핑이 완료되었습니다. 이제 예치를 진행할 수 있습니다.",
@@ -968,6 +1014,106 @@
     "gusd_deposit_successful": {
       "translation": "{amount} {symbol} 입금 성공",
       "notes": "vault::gusd_deposit_successful"
+    },
+    "amount_to_claim": {
+      "translation": "Amount to claim",
+      "notes": "TODO ko: vault::amount_to_claim"
+    },
+    "amount_to_unlock": {
+      "translation": "잠금 해제할 금액",
+      "notes": "vault::amount_to_unlock"
+    },
+    "bridge_arrived": {
+      "translation": "{vault} 자금이 Linea에 도착했습니다",
+      "notes": "vault::bridge_arrived"
+    },
+    "bridging": {
+      "translation": "브리징 중…",
+      "notes": "vault::bridging"
+    },
+    "sent_to_receiver": {
+      "translation": "{address}로 전송됨",
+      "notes": "vault::sent_to_receiver"
+    },
+    "claim": {
+      "translation": "청구",
+      "notes": "vault::claim"
+    },
+    "claim_description": {
+      "translation": "잠금 해제된 자금을 받으려면 Linea에서 트랜잭션에 서명하세요.",
+      "notes": "vault::claim_description"
+    },
+    "claim_successful": {
+      "translation": "{vault}에서 성공적으로 청구했습니다",
+      "notes": "vault::claim_successful"
+    },
+    "claim_title": {
+      "translation": "Vault에서 청구",
+      "notes": "vault::claim_title"
+    },
+    "gusd_claim_link": {
+      "translation": "GUSD 앱에서 청구",
+      "notes": "vault::gusd_claim_link"
+    },
+    "invalid_address": {
+      "translation": "유효한 이더리움 주소를 입력하세요",
+      "notes": "vault::invalid_address"
+    },
+    "no_balance_to_unlock": {
+      "translation": "잠금 해제할 잔액이 없습니다",
+      "notes": "vault::no_balance_to_unlock"
+    },
+    "receiver_address": {
+      "translation": "Linea의 수신자 주소",
+      "notes": "vault::receiver_address"
+    },
+    "receiver_placeholder": {
+      "translation": "0x…",
+      "notes": "vault::receiver_placeholder"
+    },
+    "smol_refuel_cta": {
+      "translation": "Smol Refuel 사용",
+      "notes": "vault::smol_refuel_cta"
+    },
+    "smol_refuel_question": {
+      "translation": "가스비를 지불할 Linea ETH가 없으신가요?",
+      "notes": "vault::smol_refuel_question"
+    },
+    "switch_network_to_claim": {
+      "translation": "청구하려면 Linea로 전환",
+      "notes": "vault::switch_network_to_claim"
+    },
+    "switch_network_to_unlock": {
+      "translation": "잠금 해제하려면 네트워크 전환",
+      "notes": "vault::switch_network_to_unlock"
+    },
+    "unlock_confirmation": {
+      "translation": "위의 수신자 주소가 제가 Linea Mainnet에서 관리하는 주소임을 확인합니다.",
+      "notes": "vault::unlock_confirmation"
+    },
+    "unlock_gas_confirmation": {
+      "translation": "위 수령 주소가 가스비 지불을 위한 ETH를 Linea 메인넷에 보유하고 있음을 확인합니다.",
+      "notes": "vault::unlock_gas_confirmation"
+    },
+    "unlock_description": {
+      "translation": "사전 예치를 출금합니다. 자금과 보상은 Linea의 수신자 주소로 전송됩니다.",
+      "notes": "vault::unlock_description"
+    },
+    "unlock_successful": {
+      "translation": "{vault} 잠금 해제 완료",
+      "notes": "vault::unlock_successful"
+    },
+    "unlock_title": {
+      "translation": "Vault 잠금 해제",
+      "notes": "vault::unlock_title"
+    },
+    "unlock_vault": {
+      "translation": "Vault 잠금 해제",
+      "notes": "vault::unlock_vault"
+    },
+    "vault_to_unlock": {
+      "translation": "잠금 해제할 vault",
+      "notes": "vault::vault_to_unlock"
     }
   },
   "action_status": {
@@ -1054,6 +1200,34 @@
     "wait_moment_ellipsis": {
       "translation": "잠시만 기다려주세요...",
       "notes": "action_status::wait_moment_ellipsis"
+    },
+    "claiming": {
+      "translation": "청구 중",
+      "notes": "action_status::claiming"
+    },
+    "ready_to_claim": {
+      "translation": "청구 준비 완료",
+      "notes": "action_status::ready_to_claim"
+    },
+    "ready_to_unlock_vault": {
+      "translation": "Vault 잠금 해제 준비 완료",
+      "notes": "action_status::ready_to_unlock_vault"
+    },
+    "request_failed": {
+      "translation": "요청 실패",
+      "notes": "action_status::request_failed"
+    },
+    "transaction_failed_retry": {
+      "translation": "트랜잭션 실패. 다시 시도해 주세요.",
+      "notes": "action_status::transaction_failed_retry"
+    },
+    "unlock_processing_description": {
+      "translation": "자금을 Linea로 브리징하는 중… 이 대화상자는 닫아도 됩니다.",
+      "notes": "action_status::unlock_processing_description"
+    },
+    "unlocking_vault": {
+      "translation": "Vault 잠금 해제 중",
+      "notes": "action_status::unlocking_vault"
     }
   },
   "emergency": {
@@ -1178,7 +1352,7 @@
       "notes": "footer::brand_assets"
     },
     "pre_deposit_disclaimer": {
-      "translation": "사전예치 면책 조항",
+      "translation": "사전 예치금 출금 면책 조항",
       "notes": "footer::pre_deposit_disclaimer"
     }
   },
@@ -1202,6 +1376,10 @@
     "retry": {
       "translation": "다시 시도",
       "notes": "network_switch_error::retry"
+    },
+    "description_linea": {
+      "translation": "Switch to Linea Mainnet to continue.",
+      "notes": "TODO ko: network_switch_error::description_linea"
     }
   },
   "errors": {
@@ -1215,7 +1393,7 @@
     },
     "transaction_reverted": {
       "translation": "트랜잭션이 되돌려졌습니다",
-      "notes": "errors::transaction_reverted"
+      "notes": "errors::transaction_reverted_short"
     },
     "failed_fetch_vaults": {
       "translation": "스테이킹 금고 정보를 불러오지 못했습니다: {error}",
@@ -1272,10 +1450,6 @@
     "failed_fetch_reset_time": {
       "translation": "재설정 시간을 불러오지 못했습니다",
       "notes": "errors::failed_fetch_reset_time"
-    },
-    "transaction_reverted": {
-      "translation": "트랜잭션이 되돌려졌습니다",
-      "notes": "errors::transaction_reverted_short"
     },
     "token_required": {
       "translation": "토큰이 필요합니다",

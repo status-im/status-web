@@ -86,7 +86,7 @@ export function BaseVaultModal(props: BaseVaultModalProps) {
               </button>
             </Dialog.Close>
 
-            <div className="flex flex-col items-center p-4">
+            <div className="flex flex-col items-center gap-2 p-4">
               <Dialog.Title asChild>
                 <div className="flex w-full items-center gap-1.5">
                   <span className="shrink-0 grow basis-0 text-19 font-semibold text-neutral-100">

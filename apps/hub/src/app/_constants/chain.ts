@@ -55,7 +55,7 @@ const isPuzzleAuthEnabled = Boolean(
 
 const puzzleAuthHooks = isPuzzleAuthEnabled ? createPuzzleAuthHooks() : {}
 
-const createTransport = (chainId: number) =>
+export const createTransport = (chainId: number) =>
   http(isPuzzleAuthEnabled ? rpcProxyUrl(chainId) : tRpcProxyUrl(chainId), {
     ...puzzleAuthHooks,
   })

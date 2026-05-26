@@ -41,17 +41,25 @@ export type GUSDConfig = {
   outputToken: Token
 }
 
+type VaultRewardsKey =
+  | 'vault.rewards_eth'
+  | 'vault.rewards_snt'
+  | 'vault.rewards_linea'
+  | 'vault.rewards_gusd'
+
 export type BaseVault = {
   id: string
   name: string
   address: Address
   apr: string
-  rewards: string[]
+  rewards: VaultRewardsKey
   icon: string
   token: Token
   chainId: number
   network: (typeof mainnet | typeof linea)['name']
   abi: typeof PreDepositVaultAbi
+  l2ClaimVaultAddress?: Address
+  withdrawEnabled?: boolean
 }
 
 export type GUSDVault = BaseVault & {
@@ -63,6 +71,10 @@ export type Vault = BaseVault | GUSDVault
 
 export function isGUSDVault(vault: Vault): vault is GUSDVault {
   return vault.id === 'GUSD' && 'gusdConfig' in vault
+}
+
+export function isLINEAVault(vault: Vault): boolean {
+  return vault.id === 'LINEA' && vault.chainId === linea.id
 }
 
 export const STAKING_MANAGER = {
@@ -185,6 +197,8 @@ export const BRIDGE_COORDINATOR_L1 = {
 
 export const STATUS_L2_CHAIN_NICKNAME = keccak256(stringToHex('Status_L2'))
 
+export const GUSD_CLAIM_APP_URL = 'https://app.generic.money/'
+
 // ============================================================================
 // Vaults
 // ============================================================================
@@ -193,52 +207,59 @@ export const SNT_VAULT: Vault = {
   id: 'SNT',
   name: 'SNT Vault',
   apr: '',
-  rewards: ['LINEA', 'vault.native_apps_points'],
+  rewards: 'vault.rewards_snt',
   icon: 'SNT',
   address: '0x493957E168aCCdDdf849913C3d60988c652935Cd',
   token: SNT_TOKEN,
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
   network: mainnet.name,
+  l2ClaimVaultAddress: '0x1C69FaEE16CaFc36F59706a19B3738978DFC8531',
+  withdrawEnabled: true,
 } as const
 
 export const LINEA_VAULT: Vault = {
   id: 'LINEA',
   name: 'LINEA Vault',
   apr: '',
-  rewards: ['SNT', 'vault.native_apps_points'],
+  rewards: 'vault.rewards_linea',
   icon: 'LINEA',
   address: '0xb223cA53A53A5931426b601Fa01ED2425D8540fB',
   token: LINEA_TOKEN,
   abi: PreDepositVaultAbi,
   chainId: linea.id,
   network: linea.name,
+  l2ClaimVaultAddress: '0xb223cA53A53A5931426b601Fa01ED2425D8540fB',
+  withdrawEnabled: false,
 } as const
 
 export const WETH_VAULT: Vault = {
   id: 'WETH',
   name: 'WETH vault',
   apr: '',
-  rewards: ['SNT, LINEA', 'vault.native_apps_points'],
+  rewards: 'vault.rewards_eth',
   icon: 'WETH',
   address: '0xc71Ec84Ee70a54000dB3370807bfAF4309a67a1f',
   token: WETH_TOKEN,
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
   network: mainnet.name,
+  l2ClaimVaultAddress: '0xA613E0373A5Baf4f5c56F8f6EAf6062c63a6750b',
+  withdrawEnabled: true,
 } as const
 
 export const GUSD_VAULT: GUSDVault = {
   id: 'GUSD',
   name: 'GUSD Vault',
   apr: '',
-  rewards: ['SNT, LINEA', 'vault.native_apps_points'],
+  rewards: 'vault.rewards_gusd',
   icon: 'GUSD',
   address: GENERIC_DEPOSITOR.address,
   token: DEFAULT_GUSD_STABLECOIN,
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
   network: mainnet.name,
+  withdrawEnabled: false,
   gusdConfig: {
     depositorAddress: GENERIC_DEPOSITOR.address,
     depositorAbi: genericDepositorAbi,
@@ -250,7 +271,7 @@ export const GUSD_VAULT: GUSDVault = {
   },
 }
 
-export const VAULTS: Vault[] = [WETH_VAULT, GUSD_VAULT, SNT_VAULT, LINEA_VAULT]
+export const VAULTS: Vault[] = [WETH_VAULT, SNT_VAULT, LINEA_VAULT, GUSD_VAULT]
 
 export const KARMA = {
   address: '0x0700bE6f329cC48C38144f71c898b72795dB6C1b' as Address,
