@@ -13,8 +13,7 @@
     "mobile": "Mobile",
     "termsOfUse": "Terms of Use",
     "privacyNotice": "Privacy Notice",
-    "privacyPolicy": "Privacy Policy",
-    "security": "Security",
+    "privacyPolicy": "Privacy Policy"
   },
   "footer": {
     "copyright": "© Status Research & Development GmbH",
@@ -28,6 +27,11 @@
     "title": "Oh no! It looks like you're lost",
     "description": "The page you were looking for doesn't exist",
     "goHome": "Go to status.app homepage"
+  },
+  "languageSelector": {
+    "englishLabel": "English (EN)",
+    "englishNativeLabel": "English",
+    "helpTranslate": "Help translate the website"
   },
   "common": {
     "new": "NEW",
@@ -66,12 +70,17 @@
     "downloadApk": "Download APK file",
     "scanQrTitle": "Scan QR to download",
     "scanQrDescription": "Point your camera at the code to install Status straight to your phone.",
-    "connectorThanks": "Thanks for downloading!\u00a0\ud83c\udf89",
+    "connectorThanks": "Thanks for downloading! 🎉",
     "connectorTitle": "Want to improve your Status experience?",
     "connectorDescription": "Connect to the apps you use with the Status Wallet Connector browser extension, and keep your keys protected inside Status.",
     "connectorDocsQuestion": "Want to learn how it works?",
     "connectorDocsLink": "Check out our docs",
     "close": "Close"
+  },
+  "features": {
+    "communities": "Communities",
+    "messenger": "Messenger",
+    "wallet": "Wallet"
   },
   "home": {
     "heroTitle": "Private, secure\nby design",
@@ -95,13 +104,6 @@
     "multiChainSupportDescription": "See everything you hold in a single, always-current list. Balances update in real time across the networks you use, so you never juggle multiple apps just to know where you stand.",
     "nftsTitle": "Your digital collection",
     "nftsDescription": "Keep all of your digital items together in one gallery. View what you own, show it off and carry it with you across every device, all from inside the app.",
-    "extensionTitle": "Status Portfolio\nWallet (Beta)",
-    "extensionDescription": "Manage your assets straight from your browser. Status Portfolio Wallet (Beta) gives you live balances and a clean overview of everything you hold, with the keys held only by you. Install it in Chrome and keep it in sync with the app.",
-    "keycardTitle": "Use Status\nwith Keycard",
-    "keycardDescription": "A secure, contactless companion card that keeps your keys completely offline. Tap to sign in and approve actions, so your account stays protected even if your phone or laptop is lost.",
-    "keycardLink": "Learn More",
-    "blogTitle": "Stay up to date",
-    "blogLink": "View Blog",
     "openSource": "Open source",
     "openSourceDescription": "Every layer is open to read, audit and fork: the Status backend, the StatusQ and NimQML interface, and the Logos Messaging (formerly Waku) protocol. Nothing about how Status works is hidden.",
     "decentralised": "No middlemen",
@@ -113,8 +115,8 @@
     "permissionless": "No gatekeepers",
     "permissionlessDescription": "There is no central account registry, so no one can suspend, shadow-ban or lock you out. You join with an anonymous identity and reach anyone, anywhere.",
     "freeAndAdFree": "Free and ad-free",
-    "freeAndAdFreeDescription": "No ads. No paid tier. No imposed limits. Status runs no ad network and no tracking, so the app stays free and your data stays yours.",
-    },
+    "freeAndAdFreeDescription": "No ads. No paid tier. No imposed limits. Status runs no ad network and no tracking, so the app stays free and your data stays yours."
+  },
   "apps": {
     "metaTitle": "Apps",
     "metaDescription": "Use Status on the go with the mobile app, or get the full set of features on desktop. Private messaging, asset management and a built-in browser, on every device you own.",
@@ -140,46 +142,5 @@
     "desktopWalletScreenshotAlt": "Desktop screenshot showing the asset management feature included in the Status app",
     "desktopMessengerScreenshotAlt": "Desktop screenshot showing the messenger feature included in the Status app",
     "desktopCommunityScreenshotAlt": "Desktop screenshot showing the community feature included in the Status app"
-  },
-  "brand": {
-    "metaTitle": "Brand",
-    "metaDescription": "Get Status brand assets.",
-    "title": "Get Status brand assets.",
-    "heroTitle": "Get Status brand assets",
-    "heroDescription": "This ZIP file contains Status logos, partnership badges, and product assets.",
-    "download": "Download",
-    "ourLogo": "Our logo",
-    "withTypo": "With typo in multiple versions",
-    "markOnly": "Mark only",
-    "withoutTypo": "Without typo in multiple versions",
-    "otherVariants": "Other variants",
-    "withAndWithoutTypo": "With and without typo",
-    "mainColors": "Main colors",
-    "mainColorsPalette": "Our main colors palette",
-    "customColors": "Custom colors",
-    "accentColors": "Our accent colors",
-    "productAssets": "Product assets",
-    "productScreenshots": "Screenshots of our product",
-    "downloadAssets": "Download assets",
-    "downloadAssetsDescription": "This ZIP file contains Status logo, variants, and product assets.",
-    "downloadImage": "Download image",
-    "copyHex": "Copy hex",
-    "colorCopied": "Color copied!",
-    "dark": "Dark",
-    "white": "White",
-    "blue": "Blue",
-    "purple": "Purple",
-    "orange": "Orange",
-    "army": "Army",
-    "turquoise": "Turquoise",
-    "sky": "Sky",
-    "yellow": "Yellow",
-    "pink": "Pink",
-    "copper": "Copper",
-    "camel": "Camel",
-    "magenta": "Magenta",
-    "profileAssetsAlt": "Mobile app screenshot showing the profile assets in the Status app",
-    "communityAssetsAlt": "Mobile app screenshot showing the community feature assets in the Status app",
-    "walletAssetsAlt": "Mobile app screenshot showing the asset management feature assets in the Status app"
   }
 }
