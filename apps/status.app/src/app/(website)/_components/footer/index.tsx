@@ -2,6 +2,7 @@ import NextImage from 'next/image'
 import { getTranslations } from 'next-intl/server'
 
 import { LEGAL, MESSARI_URL, ROUTES, SECURITY, SOCIALS } from '~/config/routes'
+import { isGetSite } from '~/config/site-scope'
 import { Link } from '~components/link'
 import { Logo } from '~components/logo'
 
@@ -50,12 +51,14 @@ export const Footer = async () => {
             >
               {tn(LEGAL.privacyPolicy.nameKey)}
             </Link>
-            <Link
-              href={SECURITY.href}
-              className="text-13 text-neutral-40 transition-colors hover:text-neutral-50"
-            >
-              {tn(SECURITY.nameKey)}
-            </Link>
+            {!isGetSite && (
+              <Link
+                href={SECURITY.href}
+                className="text-13 text-neutral-40 transition-colors hover:text-neutral-50"
+              >
+                {tn(SECURITY.nameKey)}
+              </Link>
+            )}
           </div>
         </div>
 
