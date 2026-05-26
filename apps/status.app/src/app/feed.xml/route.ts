@@ -2,6 +2,7 @@ import { baseUrl } from '~website/_lib/base-url'
 import { getPosts } from '~website/_lib/ghost'
 
 const FEED_ITEM_LIMIT = 20
+const FEED_TAG = 'status'
 const FEED_TITLE = 'Status'
 const FEED_SUBTITLE =
   'The open-source, decentralised wallet and messenger. Own your crypto and chat privately.'
@@ -28,7 +29,7 @@ function toIso(date: string | undefined | null): string {
 export async function GET() {
   const site = baseUrl()
   const feedUrl = `${site}/feed.xml`
-  const { posts } = await getPosts({ limit: FEED_ITEM_LIMIT })
+  const { posts } = await getPosts({ limit: FEED_ITEM_LIMIT, tag: FEED_TAG })
 
   const visiblePosts = posts.filter(post => !!post.slug)
 
