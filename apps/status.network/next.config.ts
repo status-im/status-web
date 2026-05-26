@@ -17,6 +17,24 @@ const nextConfig: NextConfig = {
       pathname: '/content/images/**',
     })),
   },
+  async redirects() {
+    return [
+      {
+        source:
+          '/blog/pre-deposit-vaults-withdrawal-timeline-and-rewards-distribution',
+        destination:
+          'https://status.app/blog/pre-deposit-vaults-withdrawal-timeline-and-rewards-distribution',
+        statusCode: 301,
+      },
+      {
+        source:
+          '/blog/status-network-merges-with-linea-scaling-gasless-privacy-upstream',
+        destination:
+          'https://status.app/blog/status-network-merges-with-linea-scaling-gasless-privacy-upstream',
+        statusCode: 301,
+      },
+    ]
+  },
 }
 
 export default withNextIntl(nextConfig)
