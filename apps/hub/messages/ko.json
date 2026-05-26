@@ -1079,6 +1079,10 @@
       "translation": "가스비를 지불할 Linea ETH가 없으신가요?",
       "notes": "vault::smol_refuel_question"
     },
+    "multi_step_notice": {
+      "translation": "출금은 여러 단계로 이루어진 프로세스입니다. Unlock이 완료된 후 다음 단계를 진행하기 위해 이 페이지로 다시 돌아와 주세요.",
+      "notes": "vault::two_step_notice"
+    },
     "switch_network_to_claim": {
       "translation": "청구하려면 Linea로 전환",
       "notes": "vault::switch_network_to_claim"

@@ -1079,6 +1079,10 @@
       "translation": "Don't have ETH on Linea to pay for gas?",
       "notes": "vault::smol_refuel_question"
     },
+    "multi_step_notice": {
+      "translation": "Withdrawal is a multi-step process, please return to this page to complete next step after unlock is finished.",
+      "notes": "vault::two_step_notice"
+    },
     "switch_network_to_claim": {
       "translation": "Switch to Linea to claim",
       "notes": "vault::switch_network_to_claim"

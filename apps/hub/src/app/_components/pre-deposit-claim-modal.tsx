@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl'
 import { useAccount, useChainId, useSwitchChain } from 'wagmi'
 import { linea } from 'wagmi/chains'
 
+import Stepper from '~components/stepper'
 import { type Vault } from '~constants/address'
 import { useFulfillClaim } from '~hooks/useFulfillClaim'
 import { useUnlockTxHash } from '~hooks/useUnlockTxHash'
@@ -160,6 +161,9 @@ const PreDepositClaimModal = ({
               {t('vault.claim')}
             </Button>
           )}
+        </div>
+        <div>
+          <Stepper numberOfSteps={2} activeStep={1} />
         </div>
       </div>
       <NetworkSwitchErrorDialog
