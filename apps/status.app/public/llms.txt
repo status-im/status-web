@@ -1,0 +1,23 @@
+# Status: The Sovereign Gateway to Web3
+
+> Status is an open-source privacy super app that integrates secure messaging, a decentralized non-custodial crypto wallet, and a private Web3 browser. It is censorship-resistant, surveillance-free, and operates on a unified peer-to-peer codebase across mobile and desktop platforms.
+
+## Core Platform
+- [Private Web3 Messenger and Open Source Crypto Wallet](https://status.app/): Own cryptocurrency and chat privately without surveillance. Combine censorship resistant communications with decentralized finance tools in one secure app.
+- [Download the Status Desktop App and Mobile App Suite](https://status.app/apps): Access secure chat and web3 wallets on the go or at desktops. Connect to decentralized applications using iOS, Android, macOS, Windows, and Linux.
+- [App Manifesto: Censorship Resistant Messaging Tools](https://status.app/manifesto): Read the core philosophy on digital sovereignty. We build private messaging app features to protect communication and defend global human rights safely online.
+- [Security Protocols for Secure Messenger 2026](https://status.app/security): Review commitments to code safety and cryptography. Find instructions for submitting zero-day bug reports directly to open source engineering teams.
+
+## Network & Token (SNT)
+- [SNT Community Token for Web3 Chat and Crypto Wallet](https://status.app/snt): Vote on development priorities and reserve ENS names. Hold the native utility asset to participate directly in decentralized governance decisions securely.
+- [SNT Crypto Exchanges List for the Status Web3 App](https://status.app/snt/exchanges): Find platforms supporting the app utility token. Review centralized and decentralized markets offering liquidity, trading pairs, and volume for SNT tokens.
+- [SNT Token Release Schedule for Open Source Apps](https://status.app/snt/release-schedule): Review the long-term circulation timeline for the utility asset. Track historical genesis block distributions and future unvesting milestones for the supply.
+
+## Hardware Integration
+- [Get a Keycard to Secure Open Source Web3 Wallets](https://status.app/keycard): Order the secure contactless smartcard. Authorize transactions with a simple tap and keep private keys physically isolated from internet vulnerable devices.
+
+## Company & Community Updates
+- [Blog: Updates on the Decentralized Messenger Client](https://status.app/blog): Read deep dives into cryptography and human rights. Stay current with software releases and technical notes for non-custodial crypto wallets.
+- [App Development Epics: Open Source Web3 App Status](https://status.app/insights/epics): Track engineering progress for the private messaging app. Review active coding phases and technical milestones for secure decentralized communication tools.
+- [Meet the Contributors Building Web3 Wallet Apps](https://status.app/team): We are a global group of ninety builders defending human rights. Learn about the organizational structure of the censorship resistant text messaging team.
+- [Help Translate the Decentralized Messenger Client](https://status.app/translations): Contribute to global digital freedom by adapting software interfaces into new languages. Join volunteer localization teams and review active bounties.
