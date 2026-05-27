@@ -62,6 +62,12 @@ export default async function RootLayout({ children }: Props) {
     <html lang={locale} className={inter.variable} suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://res.cloudinary.com" />
+        <link
+          rel="alternate"
+          type="application/atom+xml"
+          title="Status.app Updates"
+          href="https://status.app/feed.xml"
+        />
         <meta
           property="article:publisher"
           content="https://www.facebook.com/ethstatus"
