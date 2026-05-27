@@ -1,5 +1,4 @@
 export {
-  KEYCARD_STORE_URL,
   LEGAL,
   MESSARI_URL,
   SECURITY,
