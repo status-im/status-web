@@ -1080,7 +1080,7 @@
       "notes": "vault::smol_refuel_question"
     },
     "multi_step_notice": {
-      "translation": "Withdrawal is a multi-step process, please return to this page to complete next step after unlock is finished.",
+      "translation": "Withdrawal is a multi-step process, please return to this page to complete the last step to withdraw after funds have been unlocked.",
       "notes": "vault::two_step_notice"
     },
     "switch_network_to_claim": {
