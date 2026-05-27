@@ -2,7 +2,13 @@ import { ExternalIcon } from '@status-im/icons/12'
 import { cx } from 'class-variance-authority'
 import { getTranslations } from 'next-intl/server'
 
+import { isGetSite } from '~/config/site-scope'
+
 const PromoBar = async () => {
+  if (isGetSite) {
+    return null
+  }
+
   const t = await getTranslations('promo')
   return (
     <div

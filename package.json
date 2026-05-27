@@ -14,6 +14,7 @@
       "apps/community-dapp",
       "apps/hub",
       "apps/status.app",
+      "apps/get.status.app",
       "apps/status.network",
       "apps/connector",
       "apps/portfolio",

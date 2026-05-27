@@ -3,7 +3,8 @@ import { ExternalIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
 import { getTranslations } from 'next-intl/server'
 
-import { ROUTES } from '~/config/routes'
+import { KEYCARD_STORE_URL } from '~/config/routes'
+import { isGetSite } from '~/config/site-scope'
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
 import { Metadata } from '~app/_metadata'
 import { Image, Video } from '~components/assets'
@@ -40,9 +41,11 @@ export default async function HomePage() {
   const t = await getTranslations('home')
   const td = await getTranslations('download')
 
-  const { posts: allPosts } = await getPosts({ limit: 10 })
-  const releaseResult = findLatestReleasePost(allPosts)
-  const posts = allPosts.slice(0, 3)
+  const { posts: allPosts } = isGetSite
+    ? { posts: [] }
+    : await getPosts({ limit: 10 })
+  const releaseResult = isGetSite ? null : findLatestReleasePost(allPosts)
+  const posts = isGetSite ? [] : allPosts.slice(0, 3)
 
   const featureList: FeatureListProps['list'] = [
     {
@@ -77,32 +80,34 @@ export default async function HomePage() {
     },
   ]
 
-  const prefooterList = [
-    {
-      title: t('prefooterManifestoTitle'),
-      description: t('prefooterManifestoDescription'),
-      link: {
-        label: t('prefooterManifestoLink'),
-        href: ROUTES.organization[0].href,
-      },
-    },
-    {
-      title: t('prefooterSntTitle'),
-      description: t('prefooterSntDescription'),
-      link: {
-        label: t('prefooterSntLink'),
-        href: ROUTES.snt[0].href,
-      },
-    },
-    {
-      title: t('prefooterNetworkTitle'),
-      description: t('prefooterNetworkDescription'),
-      link: {
-        label: t('prefooterNetworkLink'),
-        href: ROUTES.ecosystem[1].href,
-      },
-    },
-  ]
+  const prefooterList = isGetSite
+    ? []
+    : [
+        {
+          title: t('prefooterManifestoTitle'),
+          description: t('prefooterManifestoDescription'),
+          link: {
+            label: t('prefooterManifestoLink'),
+            href: '/manifesto',
+          },
+        },
+        {
+          title: t('prefooterSntTitle'),
+          description: t('prefooterSntDescription'),
+          link: {
+            label: t('prefooterSntLink'),
+            href: '/snt',
+          },
+        },
+        {
+          title: t('prefooterNetworkTitle'),
+          description: t('prefooterNetworkDescription'),
+          link: {
+            label: t('prefooterNetworkLink'),
+            href: 'https://status.network',
+          },
+        },
+      ]
 
   const organizationSchema = jsonLD.organization({
     description:
@@ -364,52 +369,56 @@ export default async function HomePage() {
           </div>
         </ColorTheme>
         <div className="relative inset-x-1/2 top-0 z-10 h-px w-screen -translate-x-1/2 border-t border-dashed border-neutral-30" />
-        <ColorTheme theme="blue" id="browser">
-          <div className="relative z-20 size-full pb-[61px] pt-[68px]">
-            <div className="absolute bottom-[200px] left-[-230px] z-10 xl:left-[-350px]">
-              <ParallaxCircle />
-            </div>
-
-            <div className="relative z-20 mx-auto grid max-w-[1424px] grid-cols-1 overflow-hidden rounded-20 bg-white-100 px-5 shadow-2 xl:grid-cols-2 xl:px-0">
-              <div className="p-12 px-5 xl:px-10 xl:pl-12 2xl:pr-28">
-                <div className="mb-4 flex">
-                  <FeatureTag type="extension" />
+        {!isGetSite && (
+          <>
+            <ColorTheme theme="blue" id="browser">
+              <div className="relative z-20 size-full pb-[61px] pt-[68px]">
+                <div className="absolute bottom-[200px] left-[-230px] z-10 xl:left-[-350px]">
+                  <ParallaxCircle />
                 </div>
-                <h3 className="mb-2 text-40 font-bold xl:text-64">
-                  {t('extensionTitle')
-                    .split('\n')
-                    .map((line, i) => (
-                      <span key={i}>
-                        {i > 0 && <br />}
-                        {line}
-                      </span>
-                    ))}
-                </h3>
-                <p className="mb-20 max-w-[462px] text-19 font-regular xl:mb-44 xl:text-27">
-                  {t('extensionDescription')}
-                </p>
 
-                <div className="flex flex-col items-start rounded-20 bg-white-20">
-                  <DownloadExtensionButton
-                    source="homepage-section"
-                    variant="primary"
-                    size="40"
-                  >
-                    {td('downloadForChrome')}
-                  </DownloadExtensionButton>
+                <div className="relative z-20 mx-auto grid max-w-[1424px] grid-cols-1 overflow-hidden rounded-20 bg-white-100 px-5 shadow-2 xl:grid-cols-2 xl:px-0">
+                  <div className="p-12 px-5 xl:px-10 xl:pl-12 2xl:pr-28">
+                    <div className="mb-4 flex">
+                      <FeatureTag type="extension" />
+                    </div>
+                    <h3 className="mb-2 text-40 font-bold xl:text-64">
+                      {t('extensionTitle')
+                        .split('\n')
+                        .map((line, i) => (
+                          <span key={i}>
+                            {i > 0 && <br />}
+                            {line}
+                          </span>
+                        ))}
+                    </h3>
+                    <p className="mb-20 max-w-[462px] text-19 font-regular xl:mb-44 xl:text-27">
+                      {t('extensionDescription')}
+                    </p>
+
+                    <div className="flex flex-col items-start rounded-20 bg-white-20">
+                      <DownloadExtensionButton
+                        source="homepage-section"
+                        variant="primary"
+                        size="40"
+                      >
+                        {td('downloadForChrome')}
+                      </DownloadExtensionButton>
+                    </div>
+                  </div>
+                  <Image
+                    className="max-xl:mb-[-20%] xl:absolute xl:left-[42%] xl:top-[-44%]"
+                    width={1063}
+                    height={1195}
+                    id="Homepage/Screens/Extension Section/Extension_01:2127:2390"
+                    alt="Status Portfolio Wallet browser extension interface showing portfolio tracking features"
+                  />
                 </div>
               </div>
-              <Image
-                className="max-xl:mb-[-20%] xl:absolute xl:left-[42%] xl:top-[-44%]"
-                width={1063}
-                height={1195}
-                id="Homepage/Screens/Extension Section/Extension_01:2127:2390"
-                alt="Status Portfolio Wallet browser extension interface showing portfolio tracking features"
-              />
-            </div>
-          </div>
-        </ColorTheme>
-        <div className="relative inset-x-1/2 top-0 z-10 h-px w-screen -translate-x-1/2 border-t border-dashed border-neutral-30" />
+            </ColorTheme>
+            <div className="relative inset-x-1/2 top-0 z-10 h-px w-screen -translate-x-1/2 border-t border-dashed border-neutral-30" />
+          </>
+        )}
         <div className="flex flex-col items-center">
           <div
             className={cx([
@@ -449,7 +458,13 @@ export default async function HomePage() {
 
                 <Text size={19}>{t('keycardDescription')}</Text>
               </div>
-              <Button variant="outline" href="/keycard">
+              <Button
+                variant="outline"
+                href={isGetSite ? KEYCARD_STORE_URL : '/keycard'}
+                {...(isGetSite
+                  ? { target: '_blank', rel: 'noopener noreferrer' }
+                  : {})}
+              >
                 {t('keycardLink')}
               </Button>
             </div>
@@ -461,69 +476,73 @@ export default async function HomePage() {
           </div>
         </div>
 
-        {/* BLOG */}
-        <div className="relative z-30 flex-1 bg-white-100 py-40">
-          <div className="container">
-            <div className="mb-6 flex items-center justify-between">
-              <h3 className="text-27 font-semibold">{t('blogTitle')}</h3>
-              <Button
-                variant="outline"
-                href={ROUTES.collaborate[2].href}
-                size="32"
-              >
-                {t('blogLink')}
-              </Button>
-            </div>
-            {posts.length > 0 && (
-              <PostGrid posts={posts} isLoading={false} hasNextPage={false} />
-            )}
-          </div>
-        </div>
-
-        {/* PRE-FOOTER */}
-        <div className="relative z-10 bg-white-100">
-          <div className="absolute inset-x-1/2 top-0 z-10 h-px w-screen -translate-x-1/2 border-t border-dashed border-neutral-30" />
-          <div className="relative mx-auto max-w-[1264px] overflow-hidden">
-            <div className="justify-center divide-y divide-dashed divide-neutral-30 py-12 lg:grid lg:grid-cols-3 lg:divide-x lg:divide-y-0 lg:py-0">
-              {prefooterList.map(({ title, description, link }) => (
-                <div
-                  key={title}
-                  className="relative px-5 pb-4 pt-12 2md:px-10 2md:py-16 lg:py-40"
-                >
-                  <div
-                    role="presentation"
-                    className="absolute inset-y-0 -left-px hidden h-full w-px bg-gradient-to-t from-white-100 from-5% md:block"
-                  />
-                  <div className="mb-6 max-w-[400px] gap-1">
-                    <h3>
-                      <Text size={27} weight="semibold">
-                        {title}
-                      </Text>
-                    </h3>
-                    <Text size={19}>{description}</Text>
-                  </div>
-                  <div className="flex">
-                    <Button variant="outline" href={link.href}>
-                      {link.label}
-                    </Button>
-                  </div>
+        {!isGetSite && (
+          <>
+            {/* BLOG */}
+            <div className="relative z-30 flex-1 bg-white-100 py-40">
+              <div className="container">
+                <div className="mb-6 flex items-center justify-between">
+                  <h3 className="text-27 font-semibold">{t('blogTitle')}</h3>
+                  <Button variant="outline" href="/blog" size="32">
+                    {t('blogLink')}
+                  </Button>
                 </div>
-              ))}
+                {posts.length > 0 && (
+                  <PostGrid
+                    posts={posts}
+                    isLoading={false}
+                    hasNextPage={false}
+                  />
+                )}
+              </div>
             </div>
 
-            {/* STICKER */}
-            <div className="absolute left-[150px] top-[-65px] 2md:left-[423px]">
-              <Image
-                id="Non Beta Release/Stickers/01:455:455"
-                alt="A sticker showing the Status logo"
-                aria-hidden
-                className="!aspect-square"
-                width={152}
-                height={152}
-              />
+            {/* PRE-FOOTER */}
+            <div className="relative z-10 bg-white-100">
+              <div className="absolute inset-x-1/2 top-0 z-10 h-px w-screen -translate-x-1/2 border-t border-dashed border-neutral-30" />
+              <div className="relative mx-auto max-w-[1264px] overflow-hidden">
+                <div className="justify-center divide-y divide-dashed divide-neutral-30 py-12 lg:grid lg:grid-cols-3 lg:divide-x lg:divide-y-0 lg:py-0">
+                  {prefooterList.map(({ title, description, link }) => (
+                    <div
+                      key={title}
+                      className="relative px-5 pb-4 pt-12 2md:px-10 2md:py-16 lg:py-40"
+                    >
+                      <div
+                        role="presentation"
+                        className="absolute inset-y-0 -left-px hidden h-full w-px bg-gradient-to-t from-white-100 from-5% md:block"
+                      />
+                      <div className="mb-6 max-w-[400px] gap-1">
+                        <h3>
+                          <Text size={27} weight="semibold">
+                            {title}
+                          </Text>
+                        </h3>
+                        <Text size={19}>{description}</Text>
+                      </div>
+                      <div className="flex">
+                        <Button variant="outline" href={link.href}>
+                          {link.label}
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* STICKER */}
+                <div className="absolute left-[150px] top-[-65px] 2md:left-[423px]">
+                  <Image
+                    id="Non Beta Release/Stickers/01:455:455"
+                    alt="A sticker showing the Status logo"
+                    aria-hidden
+                    className="!aspect-square"
+                    width={152}
+                    height={152}
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </>
+        )}
       </Body>
     </>
   )

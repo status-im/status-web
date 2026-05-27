@@ -1,0 +1,56 @@
+{
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+    "noFallthroughCasesInSwitch": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noEmit": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "preserveSymlinks": false,
+    "jsx": "preserve",
+    "plugins": [{ "name": "next" }],
+    "baseUrl": ".",
+    "paths": {
+      "@tryghost/content-api": [
+        "../status.app/node_modules/@types/tryghost__content-api"
+      ],
+      "~/config/routes": ["./src/config/routes.ts"],
+      "~/config/site-scope": ["./src/config/site-scope.ts"],
+      "~/config/env.server.mjs": ["./src/config/env.server.mjs"],
+      "~/config/env.client.mjs": ["./src/config/env.client.mjs"],
+      "~website/_lib/ghost": ["./src/stubs/ghost.ts"],
+      "~/config/*": ["../status.app/src/config/*"],
+      "~components/assets/*": ["./src/app/_components/assets/*"],
+      "~components/*": ["../status.app/src/app/_components/*"],
+      "~hooks/*": ["../status.app/src/app/_hooks/*"],
+      "~website/*": ["../status.app/src/app/(website)/*"],
+      "~server/*": ["../status.app/src/server/*"],
+      "~app/*": ["../status.app/src/app/*"],
+      "~public/*": ["../status.app/public/*"],
+      "~/*": ["../status.app/src/*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "env.d.ts",
+    "../status.app/global.d.ts",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": ["node_modules", ".next"]
+}
