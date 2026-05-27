@@ -70,24 +70,26 @@ export const Footer = async () => {
           <span className="text-13">{t('messari')}</span>
         </Link>
 
-        <div className="flex gap-6 lg:gap-3">
-          {Object.values(SOCIALS).map(social => {
-            return (
-              <Link
-                href={social.href}
-                key={social.nameKey}
-                className="transition-opacity hover:opacity-[60%]"
-              >
-                <NextImage
-                  src={social.src}
-                  alt={tn(social.nameKey)}
-                  width={20}
-                  height={20}
-                />
-              </Link>
-            )
-          })}
-        </div>
+        {!isGetSite && (
+          <div className="flex gap-6 lg:gap-3">
+            {Object.values(SOCIALS).map(social => {
+              return (
+                <Link
+                  href={social.href}
+                  key={social.nameKey}
+                  className="transition-opacity hover:opacity-[60%]"
+                >
+                  <NextImage
+                    src={social.src}
+                    alt={tn(social.nameKey)}
+                    width={20}
+                    height={20}
+                  />
+                </Link>
+              )
+            })}
+          </div>
+        )}
       </div>
     </footer>
   )

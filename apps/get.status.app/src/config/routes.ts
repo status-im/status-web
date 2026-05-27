@@ -2,6 +2,7 @@ export {
   LEGAL,
   MESSARI_URL,
   SECURITY,
+  SOCIALS,
   STATUS_CONNECTOR_CHROME_URL,
   STATUS_DESKTOP_DOWNLOAD_URL_LINUX,
   STATUS_DESKTOP_DOWNLOAD_URL_MACOS_INTEL,
@@ -13,13 +14,6 @@ export {
   STATUS_MOBILE_GOOGLE_PLAY_URL,
   STATUS_PORTFOLIO_WALLET_CHROME_URL,
 } from '../../../status.app/src/config/routes'
-
-import type { SOCIALS as StatusAppSocials } from '../../../status.app/src/config/routes'
-
-type Social = (typeof StatusAppSocials)[keyof typeof StatusAppSocials]
-
-// No social links on the get site.
-export const SOCIALS: Record<string, Social> = {}
 
 export const ROUTES = {
   apps: [
