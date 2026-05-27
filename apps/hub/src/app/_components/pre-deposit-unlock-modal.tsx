@@ -13,6 +13,7 @@ import { isAddress } from 'viem'
 import { useAccount, useChainId, useSwitchChain } from 'wagmi'
 import { z } from 'zod'
 
+import Stepper from '~components/stepper'
 import { isGUSDVault, isLINEAVault, type Vault } from '~constants/address'
 import { usePreDepositUnlock } from '~hooks/usePreDepositUnlock'
 import { useUnlockTxHash } from '~hooks/useUnlockTxHash'
@@ -324,6 +325,16 @@ const PreDepositUnlockModal = ({
               </Button>
             )}
           </div>
+          {!isSameChain && (
+            <div>
+              <Stepper numberOfSteps={2} activeStep={0} />
+              <i>
+                <p className="mt-4 text-13 font-400 text-neutral-100">
+                  {t('vault.multi_step_notice')}
+                </p>
+              </i>
+            </div>
+          )}
         </div>
       </form>
       <NetworkSwitchErrorDialog
