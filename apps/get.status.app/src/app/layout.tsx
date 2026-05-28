@@ -8,21 +8,33 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 
 import { PlatformDetector } from '~app/_components/platform-detector'
-import { Metadata } from '~app/_metadata'
 import { Providers } from '~app/_providers'
 
-export const metadata = Metadata({
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
   metadataBase: new URL('https://get.status.app/'),
 
-  title: {
-    template: '%s',
-    default: 'Status App: secure peer-to-peer private messenger',
-  },
+  title: 'Status App: secure peer-to-peer private messenger',
   description:
     'Status App combines an end-to-end encrypted messenger and a secure browser into a private, decentralized ecosystem with no phone number or email required.',
 
   alternates: {
     canonical: './',
+  },
+
+  openGraph: {
+    type: 'website',
+    url: 'https://get.status.app',
+    title: 'Status App: secure peer-to-peer private messenger',
+    description:
+      'Status App combines an end-to-end encrypted messenger and a secure browser into a private, decentralized ecosystem with no phone number or email required.',
+    siteName: 'Status App',
+    images: [
+      {
+        url: 'https://res.cloudinary.com/dhgck7ebz/image/upload/v1779884371/get.status.app/Hero_app.png',
+      },
+    ],
   },
 
   appLinks: {
@@ -37,7 +49,7 @@ export const metadata = Metadata({
       url: 'https://get.status.app',
     },
   },
-})
+}
 
 const inter = Inter({
   variable: '--font-sans',

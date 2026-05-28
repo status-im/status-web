@@ -85,6 +85,8 @@
   "home": {
     "heroTitle": "Private, secure\nby design",
     "heroDescription": "Message privately, manage your assets and browse the open web from one app that you alone control. No phone number, no tracking, no company in the middle.",
+    "migrateBanner": "Still on the Status Legacy mobile app? Migrate now.",
+    "learnMore": "Learn more",
     "keycardTitle": "Streamlined Workspace\nThe Ultimate App for Coordinated Group Projects",
     "keycardDescription": "Managing separate group chats, document links, and shared files across multiple window tabs often leaves your desktop cluttered and your focus fragmented. Status Desktop unifies your entire collaborative environment into a single, high-performance local application designed specifically to streamline how you stay connected. Instead of forcing you to constantly toggle between personal messaging clients, community servers, and internet browsers just to keep up with your daily coordination, everything is smoothly bundled into one clean workspace. You can coordinate with project teams, monitor active data feeds, and browse critical online references simultaneously without ever losing your place or interrupting your conversations.",
     "builtDifferent": "Built different",
