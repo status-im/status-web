@@ -7,6 +7,7 @@ import { match } from 'ts-pattern'
 
 import { useIntersectionObserver } from '~hooks/use-intersection-observer'
 import {
+  getLearnPosts,
   getPosts,
   getPostsByAuthorSlug,
   getPostsByTagSlug,
@@ -17,7 +18,7 @@ import { PostGrid } from './post-grid'
 import type { PostOrPage, PostsOrPages } from '@tryghost/content-api'
 
 type Props = {
-  type: 'posts' | 'author' | 'tag'
+  type: 'posts' | 'author' | 'tag' | 'learn'
   initialPosts: PostOrPage[]
   meta: PostsOrPages['meta']
   queryKey: string
@@ -77,6 +78,7 @@ export const InfinitePostGrid = (props: Props) => {
         .with('posts', () => getPosts({ page }))
         .with('author', () => getPostsByAuthorSlug(tag, page))
         .with('tag', () => getPostsByTagSlug(tag, page))
+        .with('learn', () => getLearnPosts({ page }))
         .exhaustive()
 
       return response!

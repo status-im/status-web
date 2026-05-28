@@ -37,6 +37,7 @@
     "repos": "Repos",
     "insights": "Insights",
     "specs": "Specs",
+    "learn": "Learn",
     "snt": "SNT",
     "token": "Token",
     "releaseSchedule": "Release schedule",
@@ -211,6 +212,10 @@
     "desktopWalletScreenshotAlt": "Desktop screenshot showing the wallet feature included in the Status app",
     "desktopMessengerScreenshotAlt": "Desktop screenshot showing the messenger feature included in the Status app",
     "desktopCommunityScreenshotAlt": "Desktop screenshot showing the community feature included in the Status app"
+  },
+  "learn": {
+    "title": "Learn.",
+    "description": "Guides, explainers, and deep dives on web3, privacy, and self-custody."
   },
   "blog": {
     "title": "Blog.",

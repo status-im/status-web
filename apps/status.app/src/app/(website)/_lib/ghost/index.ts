@@ -19,11 +19,30 @@ export const HIDDEN_FROM_LIST_TAGS = ['desktop-news', 'mobile-news']
 // Tags completely blocked (list + URL)
 export const DISALLOWED_TAGS = ['status-network-blog']
 
-const ALL_EXCLUDED_TAGS = [...HIDDEN_FROM_LIST_TAGS, ...DISALLOWED_TAGS]
+// Tag for posts published exclusively under the /learn section.
+// Excluded from /blog listings and default Ghost fetchers; surfaced via
+// dedicated getLearnPosts* fetchers below. Direct /blog/[slug] URLs still
+// resolve so canonical SEO URLs remain stable.
+export const LEARN_TAG = 'status-insights'
+
+const ALL_EXCLUDED_TAGS = [
+  ...HIDDEN_FROM_LIST_TAGS,
+  ...DISALLOWED_TAGS,
+  LEARN_TAG,
+]
 
 const EXCLUDED_TAGS_FILTER = ALL_EXCLUDED_TAGS.map(tag => `tag:-${tag}`).join(
   '+'
 )
+
+// Exclusion filter for /learn fetches: keeps the global exclusions
+// (hidden/disallowed tags) but allows LEARN_TAG itself.
+const LEARN_FETCH_EXCLUDED_TAGS_FILTER = [
+  ...HIDDEN_FROM_LIST_TAGS,
+  ...DISALLOWED_TAGS,
+]
+  .map(tag => `tag:-${tag}`)
+  .join('+')
 
 function hasDisallowedTag(post: { tags?: Array<{ slug?: string | null }> }) {
   return post.tags?.some(
@@ -214,6 +233,64 @@ export const getTagsForSitemap = async (): Promise<TagSitemapEntry[]> => {
       .map(tag => ({ slug: tag.slug }))
   } catch (error) {
     console.error('Failed to fetch tags for sitemap from Ghost API:', error)
+    return []
+  }
+}
+
+type LearnParams = { page?: number; limit?: number }
+
+export const getLearnPosts = async (params: LearnParams = {}) => {
+  const { page = 1, limit = 12 } = params
+
+  try {
+    const response = await ghost.posts.browse({
+      include: ['tags', 'authors'],
+      order: 'published_at DESC',
+      limit,
+      page,
+      filter: `tag:${LEARN_TAG}+visibility:public+${LEARN_FETCH_EXCLUDED_TAGS_FILTER}`,
+    })
+
+    return { posts: [...response], meta: response.meta }
+  } catch (error) {
+    console.error('Failed to fetch /learn posts from Ghost API:', error)
+    return {
+      posts: [],
+      meta: {
+        pagination: {
+          page: 1,
+          limit,
+          pages: 0,
+          total: 0,
+          next: null,
+          prev: null,
+        },
+      },
+    }
+  }
+}
+
+export const getLearnPostsForSitemap = async (): Promise<
+  PostSitemapEntry[]
+> => {
+  try {
+    const posts = await ghost.posts.browse({
+      limit: clientEnv.NEXT_PUBLIC_VERCEL_ENV === 'production' ? 'all' : 50,
+      fields: 'slug,updated_at,published_at',
+      filter: `tag:${LEARN_TAG}+visibility:public+${LEARN_FETCH_EXCLUDED_TAGS_FILTER}`,
+    })
+
+    return posts
+      .filter(post => !!post.slug)
+      .map(post => ({
+        slug: post.slug,
+        updatedAt: post.updated_at ?? post.published_at ?? '',
+      }))
+  } catch (error) {
+    console.error(
+      'Failed to fetch /learn posts for sitemap from Ghost API:',
+      error
+    )
     return []
   }
 }
