@@ -11,6 +11,38 @@ const ghost = GhostContentAPI({
   version: 'v5.0',
 })
 
+// Dedicated Ghost client for /learn fetches. Skips the Next.js data cache so
+// editorial changes (new posts, retitles, unpublishes) surface immediately
+// instead of waiting up to an hour for the default 1h fetch revalidation.
+const ghostLive = GhostContentAPI({
+  url: clientEnv.NEXT_PUBLIC_GHOST_API_URL,
+  key: clientEnv.NEXT_PUBLIC_GHOST_API_KEY,
+  version: 'v5.0',
+  makeRequest: async ({
+    url,
+    method,
+    params,
+    headers,
+  }: {
+    url: string
+    method: string
+    params: Record<string, string>
+    headers: Record<string, string>
+  }) => {
+    const queryString = new URLSearchParams(params).toString()
+    const fullUrl = `${url}${queryString ? `?${queryString}` : ''}`
+    const response = await fetch(fullUrl, {
+      method: method.toUpperCase(),
+      headers,
+      cache: 'no-store',
+    })
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    return response.json()
+  },
+})
+
 type Params = { page?: number; limit?: number; tag?: string }
 
 // Tags hidden from blog list but accessible by direct URL
@@ -243,7 +275,7 @@ export const getLearnPosts = async (params: LearnParams = {}) => {
   const { page = 1, limit = 12 } = params
 
   try {
-    const response = await ghost.posts.browse({
+    const response = await ghostLive.posts.browse({
       include: ['tags', 'authors'],
       order: 'published_at DESC',
       limit,
@@ -274,7 +306,7 @@ export const getLearnPostsForSitemap = async (): Promise<
   PostSitemapEntry[]
 > => {
   try {
-    const posts = await ghost.posts.browse({
+    const posts = await ghostLive.posts.browse({
       limit: clientEnv.NEXT_PUBLIC_VERCEL_ENV === 'production' ? 'all' : 50,
       fields: 'slug,updated_at,published_at',
       filter: `tag:${LEARN_TAG}+visibility:public+${LEARN_FETCH_EXCLUDED_TAGS_FILTER}`,

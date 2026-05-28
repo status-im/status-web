@@ -9,7 +9,7 @@ import { PostCard } from '~website/blog/_components/post-card'
 
 import type { Metadata as NextMetadata } from 'next'
 
-export const revalidate = 3600
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata(): Promise<NextMetadata> {
   const t = await getTranslations('learn')
