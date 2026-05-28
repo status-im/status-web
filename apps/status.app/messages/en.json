@@ -215,7 +215,8 @@
   },
   "learn": {
     "title": "Learn.",
-    "description": "Guides, explainers, and deep dives on web3, privacy, and self-custody."
+    "description": "Guides, explainers, and deep dives on web3, privacy, and self-custody.",
+    "noPosts": "No articles yet. Check back soon."
   },
   "blog": {
     "title": "Blog.",

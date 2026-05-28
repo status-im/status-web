@@ -5,7 +5,7 @@ import { jsonLD, JSONLDScript } from '~/utils/json-ld'
 import { Metadata } from '~app/_metadata'
 import { Body } from '~components/body'
 import { getLearnPosts } from '~website/_lib/ghost'
-import { InfinitePostGrid } from '~website/blog/_components/infinite-post-grid'
+import { PostCard } from '~website/blog/_components/post-card'
 
 import type { Metadata as NextMetadata } from 'next'
 
@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<NextMetadata> {
 
 export default async function LearnPage() {
   const t = await getTranslations('learn')
-  const { posts: initialPosts, meta } = await getLearnPosts()
+  const { posts } = await getLearnPosts({ limit: 100 })
 
   const websiteSchema = jsonLD.website({
     name: 'Status Learn',
@@ -44,12 +44,17 @@ export default async function LearnPage() {
               <Text size={19}>{t('description')}</Text>
             </div>
 
-            <InfinitePostGrid
-              type="learn"
-              initialPosts={initialPosts}
-              meta={meta}
-              queryKey="learn"
-            />
+            {posts.length > 0 ? (
+              <div className="grid auto-rows-[1fr] grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-5">
+                {posts.map(post => (
+                  <PostCard key={post.id} post={post} />
+                ))}
+              </div>
+            ) : (
+              <div className="rounded-20 border border-neutral-10 bg-white-100 p-6 shadow-1">
+                <Text size={19}>{t('noPosts')}</Text>
+              </div>
+            )}
           </div>
         </div>
       </Body>
