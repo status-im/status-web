@@ -16,18 +16,13 @@ export const metadata = Metadata({
 
   title: {
     template: '%s',
-    default: 'Status — Make the jump to web3',
+    default: 'Status App: secure peer-to-peer private messenger',
   },
   description:
-    'The open-source, decentralised wallet and messenger. Own your crypto and chat privately.',
+    'Status App combines an end-to-end encrypted messenger and a secure browser into a private, decentralized ecosystem with no phone number or email required.',
 
   alternates: {
     canonical: './',
-  },
-
-  twitter: {
-    card: 'summary_large_image',
-    site: '@ethstatus',
   },
 
   appLinks: {
@@ -59,17 +54,9 @@ export default async function RootLayout({ children }: Props) {
   const [locale, messages] = await Promise.all([getLocale(), getMessages()])
 
   return (
-    <html
-      lang={locale}
-      className={inter.variable}
-      suppressHydrationWarning
-    >
+    <html lang={locale} className={inter.variable} suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://res.cloudinary.com" />
-        <meta
-          property="article:publisher"
-          content="https://www.facebook.com/ethstatus"
-        />
       </head>
       <body data-customisation="blue" suppressHydrationWarning>
         <script

@@ -3,7 +3,6 @@ import { ExternalIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
 import { getTranslations } from 'next-intl/server'
 
-import { KEYCARD_STORE_URL } from '~/config/routes'
 import { isGetSite } from '~/config/site-scope'
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
 import { Metadata } from '~app/_metadata'
@@ -109,19 +108,28 @@ export default async function HomePage() {
         },
       ]
 
-  const organizationSchema = jsonLD.organization({
-    description:
-      'Private, secure by design. Transact, Message, Browse on your Terms.',
-  })
+  const statusWebsiteDescription =
+    'Private, secure by design. Transact, Message, Browse on your Terms.'
 
-  const websiteSchema = jsonLD.website({
-    description:
-      'Private, secure by design. Transact, Message, Browse on your Terms.',
-  })
+  const schema = isGetSite
+    ? jsonLD.website({
+        name: 'Status App',
+        url: 'https://get.status.app',
+        description:
+          'Private, secure by design. Manager Assets, Message, Browse on your Terms.',
+      })
+    : [
+        jsonLD.organization({
+          description: statusWebsiteDescription,
+        }),
+        jsonLD.website({
+          description: statusWebsiteDescription,
+        }),
+      ]
 
   return (
     <>
-      <JSONLDScript schema={[organizationSchema, websiteSchema]} />
+      <JSONLDScript schema={schema} />
       {/* HERO */}
       <div
         data-theme="dark"
@@ -190,7 +198,11 @@ export default async function HomePage() {
 
           <div className="relative hidden xl:block">
             <Image
-              id="Homepage/Hero/device-mockups:2128:1292"
+              id={
+                isGetSite
+                  ? 'v1779884371/get.status.app/Hero_app.png:2128:1292'
+                  : 'Homepage/Hero/device-mockups:2128:1292'
+              }
               alt="Status app showing wallet and messenger on devices"
               width={2128}
               height={1292}
@@ -199,7 +211,11 @@ export default async function HomePage() {
           </div>
           <div className="relative mb-[-80px] xl:hidden">
             <Image
-              id="Homepage/Hero/device-mockups-mobile:1267:770"
+              id={
+                isGetSite
+                  ? 'v1779884371/get.status.app/Hero_app.png:1267:770'
+                  : 'Homepage/Hero/device-mockups-mobile:1267:770'
+              }
               alt="Status app showing wallet and messenger on devices"
               width={1267}
               height={770}
@@ -263,7 +279,11 @@ export default async function HomePage() {
                   />
                 </div>
               }
-              imageId="Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800"
+              imageId={
+                isGetSite
+                  ? 'v1779884880/get.status.app/Desktop_Wallet_function.png:2880:1800'
+                  : 'Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800'
+              }
               imageAlt="Desktop screenshot showing the wallet feature included in the Status app"
             />
           </ColorTheme>
@@ -435,7 +455,11 @@ export default async function HomePage() {
             <div className="flex-1">
               <div className="-ml-30 sm:-ml-24 lg:-ml-52 xl:-ml-44 2xl:-ml-60">
                 <Video
-                  id="Non Beta Release/Animations/Keycard_01:911:720"
+                  id={
+                    isGetSite
+                      ? 'v1779884272/get.status.app/Animation_Privacy.mp4:911:720'
+                      : 'Non Beta Release/Animations/Keycard_01:911:720'
+                  }
                   posterId="Non Beta Release/Animations/Frames/Keycard_01_Frame:456:360"
                   className="w-full min-w-[390px] md:min-w-[613px] 2md:min-w-[386px] lg:min-w-[470px] xl:min-w-[544px] 2xl:min-w-[792px]"
                 />
@@ -458,15 +482,17 @@ export default async function HomePage() {
 
                 <Text size={19}>{t('keycardDescription')}</Text>
               </div>
-              <Button
-                variant="outline"
-                href={isGetSite ? KEYCARD_STORE_URL : '/keycard'}
-                {...(isGetSite
-                  ? { target: '_blank', rel: 'noopener noreferrer' }
-                  : {})}
-              >
-                {t('keycardLink')}
-              </Button>
+              {isGetSite ? (
+                <DownloadDesktopButton
+                  variant="outline"
+                  size="40"
+                  show="single"
+                />
+              ) : (
+                <Button variant="outline" href="/keycard">
+                  {t('keycardLink')}
+                </Button>
+              )}
             </div>
 
             <ParallaxCircle
