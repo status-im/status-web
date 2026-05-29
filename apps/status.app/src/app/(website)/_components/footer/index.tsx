@@ -59,6 +59,14 @@ export const Footer = async () => {
                 {tn(SECURITY.nameKey)}
               </Link>
             )}
+            {!isGetSite && (
+              <Link
+                href="/learn"
+                className="text-13 text-neutral-40 transition-colors hover:text-neutral-50"
+              >
+                {tn('learn')}
+              </Link>
+            )}
           </div>
         </div>
 
