@@ -259,7 +259,7 @@ export const GUSD_VAULT: GUSDVault = {
   abi: PreDepositVaultAbi,
   chainId: mainnet.id,
   network: mainnet.name,
-  withdrawEnabled: false,
+  withdrawEnabled: true,
   gusdConfig: {
     depositorAddress: GENERIC_DEPOSITOR.address,
     depositorAbi: genericDepositorAbi,
