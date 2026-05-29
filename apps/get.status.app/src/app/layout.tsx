@@ -59,11 +59,7 @@ export default async function RootLayout({ children }: Props) {
   const [locale, messages] = await Promise.all([getLocale(), getMessages()])
 
   return (
-    <html
-      lang={locale}
-      className={inter.variable}
-      suppressHydrationWarning
-    >
+    <html lang={locale} className={inter.variable} suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://res.cloudinary.com" />
         <meta
