@@ -116,6 +116,8 @@
     "permissionlessDescription": "There is no central account registry, so no one can suspend, shadow-ban or lock you out. You join with an anonymous identity and reach anyone, anywhere.",
     "freeAndAdFree": "Free and ad-free",
     "freeAndAdFreeDescription": "No ads. No paid tier. No imposed limits. Status runs no ad network and no tracking, so the app stays free and your data stays yours."
+    "keycardTitle": "Unified Group\Project Workspace",
+    "keycardDescription": "Ditch the clutter of scattered chats, links, and browser tabs. Status Desktop unifies your entire collaborative environment into a single, high-performance local app. Coordinate with your team and access critical data simultaneously without losing your focus."
   },
   "apps": {
     "metaTitle": "Apps",
