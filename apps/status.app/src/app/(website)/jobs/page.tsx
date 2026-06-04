@@ -18,7 +18,7 @@ import type { ImageId } from '~components/assets'
 import type { FeatureListProps } from '~website/_components/feature-list'
 import type { Metadata as NextMetadata } from 'next'
 
-export const revalidate = 3600 // 1 hour
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata(): Promise<NextMetadata> {
   const t = await getTranslations('jobs')

@@ -91,9 +91,7 @@ export const getStatusJob = async (id: string): Promise<Job | null> => {
       `${GREENHOUSE_API_URL}/${serverEnv.GREENHOUSE_STATUS_BOARD_ID}/jobs/${id}?questions=true`,
       {
         headers,
-        next: {
-          revalidate: 300, // 5 minutes
-        },
+        cache: 'no-store',
       }
     )
 
@@ -118,9 +116,7 @@ export const getStatusJobs = async (): Promise<Jobs> => {
       `${GREENHOUSE_API_URL}/${serverEnv.GREENHOUSE_STATUS_BOARD_ID}/jobs?content=true`,
       {
         headers,
-        next: {
-          revalidate: 300, // 5 minutes,
-        },
+        cache: 'no-store',
       }
     )
 

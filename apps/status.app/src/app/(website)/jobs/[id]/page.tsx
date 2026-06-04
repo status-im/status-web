@@ -17,7 +17,7 @@ import { ApplicationFormDialog } from './_components/application-form-dialog'
 
 import type { ReactElement } from 'react'
 
-export const revalidate = 3600 // 1 hour
+export const dynamic = 'force-dynamic'
 export const dynamicParams = true
 
 export async function generateStaticParams() {
