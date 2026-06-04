@@ -76,10 +76,14 @@ const emptyJobs: Jobs = {
 const isJob = (value: unknown): value is Job =>
   typeof value === 'object' &&
   value !== null &&
+  !('error' in value) &&
   'id' in value &&
   'title' in value &&
   'content' in value &&
-  'location' in value
+  'location' in value &&
+  typeof (value as Job).location === 'object' &&
+  (value as Job).location !== null &&
+  'name' in (value as Job).location
 
 export const getStatusJob = async (id: string): Promise<Job | null> => {
   try {
