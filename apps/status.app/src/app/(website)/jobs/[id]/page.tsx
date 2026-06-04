@@ -1,4 +1,4 @@
-import { Button, Tag, Text } from '@status-im/components'
+import { Tag, Text } from '@status-im/components'
 import { cx } from 'class-variance-authority'
 import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
@@ -38,6 +38,16 @@ export async function generateMetadata({ params }: Props) {
   const job = await getStatusJob(id)
   const t = await getTranslations('jobs')
 
+  if (!job) {
+    return Metadata({
+      title: t('metaTitle'),
+      description: t('metaDescription'),
+      alternates: {
+        canonical: `/jobs/${id}`,
+      },
+    })
+  }
+
   return Metadata({
     title: `${job.title}, ${job.location.name}`,
     description: t('metaDescription'),
@@ -55,8 +65,8 @@ export default async function JobsDetailPage(props: Props) {
   const { id: jobId } = await params
   const job = await getStatusJob(jobId)
 
-  if (!job) {
-    return redirect('/jobs')
+  if (!job?.content) {
+    redirect('/jobs')
   }
 
   // note: decodes html entities https://github.com/orgs/rehypejs/discussions/51#discussioncomment-367057
@@ -118,9 +128,7 @@ export default async function JobsDetailPage(props: Props) {
             <Text size={15}>{t('submitApplication')}</Text>
           </div>
 
-          <ApplicationFormDialog job={job}>
-            <Button size="32">{t('applyNow')}</Button>
-          </ApplicationFormDialog>
+          <ApplicationFormDialog job={job} />
         </div>
       </div>
     </Body>
