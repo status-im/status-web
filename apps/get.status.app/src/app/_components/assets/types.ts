@@ -1,22 +1,26 @@
 export type ImageType =
   | {
-      id: 'v1779884371/get.status.app/Hero_app.png:2128:1292'
+      id: 'get.status.app/Hero_app:2128:1292'
       alt: 'Status app showing wallet and messenger on devices'
     }
   | {
-      id: 'v1779884371/get.status.app/Hero_app.png:1267:770'
+      id: 'get.status.app/Hero_app:1267:770'
       alt: 'Status app showing wallet and messenger on devices'
     }
   | {
-      id: 'v1779884880/get.status.app/Desktop_Wallet_function.png:2880:1800'
+      id: 'get.status.app/Desktop_Wallet_function:2880:1800'
       alt: 'Desktop screenshot showing the wallet feature included in the Status app'
     }
   | {
-      id: 'v1779884947/get.status.app/Mobile_WalletFunction.png:750:1624'
+      id: 'get.status.app/Mobile_WalletFunction:750:1624'
       alt: 'Mobile app screenshot showing the wallet feature included in the Status app'
     }
   | {
-      id: 'v1779892335/get.status.app/Connector_NOCRYPTO.png:1102:1012'
+      id: 'get.status.app/Connector_NOCRYPTO:1102:1012'
+      alt: ''
+    }
+  | {
+      id: 'get.status.app/Animation_Privacy_Frame:456:360'
       alt: ''
     }
   | {
@@ -466,7 +470,7 @@ export type VideoId =
   | '404 Error/Animations/Error_404:1695:960'
   | '404 Error/Animations/Error_404_Mobile:1040:1467'
   | 'Non Beta Release/Animations/Keycard_01:911:720'
-  | 'v1779884272/get.status.app/Animation_Privacy.mp4:911:720'
+  | 'get.status.app/Animation_Privacy:911:720'
   | 'Non Beta Release/Animations/Messenger_01_Bottom:1512:781'
   | 'Non Beta Release/Animations/Messenger_01_Bottom_HEVC:1512:780'
   | 'Non Beta Release/Animations/Messenger_01_Top:1512:522'

@@ -145,7 +145,7 @@ export default async function AppsPage() {
                 images: [
                   {
                     id: isGetSite
-                      ? 'v1779884947/get.status.app/Mobile_WalletFunction.png:750:1624'
+                      ? 'get.status.app/Mobile_WalletFunction:750:1624'
                       : 'Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624',
                     alt: t(
                       'mobileWalletScreenshotAlt'
@@ -189,7 +189,7 @@ export default async function AppsPage() {
                 images: [
                   {
                     id: isGetSite
-                      ? 'v1779884880/get.status.app/Desktop_Wallet_function.png:2880:1800'
+                      ? 'get.status.app/Desktop_Wallet_function:2880:1800'
                       : 'Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800',
                     alt: t(
                       'desktopWalletScreenshotAlt'

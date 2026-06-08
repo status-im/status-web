@@ -200,7 +200,7 @@ export default async function HomePage() {
             <Image
               id={
                 isGetSite
-                  ? 'v1779884371/get.status.app/Hero_app.png:2128:1292'
+                  ? 'get.status.app/Hero_app:2128:1292'
                   : 'Homepage/Hero/device-mockups:2128:1292'
               }
               alt="Status app showing wallet and messenger on devices"
@@ -213,7 +213,7 @@ export default async function HomePage() {
             <Image
               id={
                 isGetSite
-                  ? 'v1779884371/get.status.app/Hero_app.png:1267:770'
+                  ? 'get.status.app/Hero_app:1267:770'
                   : 'Homepage/Hero/device-mockups-mobile:1267:770'
               }
               alt="Status app showing wallet and messenger on devices"
@@ -281,7 +281,7 @@ export default async function HomePage() {
               }
               imageId={
                 isGetSite
-                  ? 'v1779884880/get.status.app/Desktop_Wallet_function.png:2880:1800'
+                  ? 'get.status.app/Desktop_Wallet_function:2880:1800'
                   : 'Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800'
               }
               imageAlt="Desktop screenshot showing the wallet feature included in the Status app"
@@ -457,10 +457,14 @@ export default async function HomePage() {
                 <Video
                   id={
                     isGetSite
-                      ? 'v1779884272/get.status.app/Animation_Privacy.mp4:911:720'
+                      ? 'get.status.app/Animation_Privacy:911:720'
                       : 'Non Beta Release/Animations/Keycard_01:911:720'
                   }
-                  posterId="Non Beta Release/Animations/Frames/Keycard_01_Frame:456:360"
+                  posterId={
+                    isGetSite
+                      ? 'get.status.app/Animation_Privacy_Frame:456:360'
+                      : 'Non Beta Release/Animations/Frames/Keycard_01_Frame:456:360'
+                  }
                   className="w-full min-w-[390px] md:min-w-[613px] 2md:min-w-[386px] lg:min-w-[470px] xl:min-w-[544px] 2xl:min-w-[792px]"
                 />
               </div>

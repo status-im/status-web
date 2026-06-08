@@ -1,6 +1,12 @@
 import AppsPage from '../../../../../../status.app/src/app/(website)/apps/page'
+import { cloudinaryLoader } from '../../../_components/assets/loader'
 
 import type { Metadata } from 'next'
+
+const GET_SITE_OG_IMAGE = cloudinaryLoader({
+  src: 'get.status.app/Hero_app',
+  width: 1200,
+})
 
 export default AppsPage
 
@@ -23,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: 'Status App',
       images: [
         {
-          url: 'https://res.cloudinary.com/dhgck7ebz/image/upload/v1779884371/get.status.app/Hero_app.png',
+          url: GET_SITE_OG_IMAGE,
         },
       ],
     },

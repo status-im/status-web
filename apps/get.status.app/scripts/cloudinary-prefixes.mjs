@@ -6,6 +6,7 @@ export const CLOUDINARY_CLOUD_NAME = 'dhgck7ebz'
  * Upload new get.status.app media under `Get.status.app/` in Cloudinary.
  */
 export const GET_STATUS_APP_CLOUDINARY_PREFIXES = [
+  'get.status.app/',
   'Get.status.app/',
   'Homepage/',
   'Non Beta Release/',

@@ -10,7 +10,14 @@ import { getLocale, getMessages } from 'next-intl/server'
 import { PlatformDetector } from '~app/_components/platform-detector'
 import { Providers } from '~app/_providers'
 
+import { cloudinaryLoader } from './_components/assets/loader'
+
 import type { Metadata } from 'next'
+
+const GET_SITE_OG_IMAGE = cloudinaryLoader({
+  src: 'get.status.app/Hero_app',
+  width: 1200,
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://get.status.app/'),
@@ -32,7 +39,7 @@ export const metadata: Metadata = {
     siteName: 'Status App',
     images: [
       {
-        url: 'https://res.cloudinary.com/dhgck7ebz/image/upload/v1779884371/get.status.app/Hero_app.png',
+        url: GET_SITE_OG_IMAGE,
       },
     ],
   },

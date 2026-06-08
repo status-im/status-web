@@ -33,7 +33,7 @@ const DownloadConnectorSection = (props: Props) => {
         <Image
           id={
             isGetSite
-              ? 'v1779892335/get.status.app/Connector_NOCRYPTO.png:1102:1012'
+              ? 'get.status.app/Connector_NOCRYPTO:1102:1012'
               : 'Platforms/Screens/Extension Screens/Connector_04:1102:1012'
           }
           alt=""
