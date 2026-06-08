@@ -87,8 +87,6 @@
     "heroDescription": "Message privately, manage your assets and browse the open web from one app that you alone control. No phone number, no tracking, no company in the middle.",
     "migrateBanner": "Still on the Status Legacy mobile app? Migrate now.",
     "learnMore": "Learn more",
-    "keycardTitle": "Streamlined Workspace\nThe Ultimate App for Coordinated Group Projects",
-    "keycardDescription": "Managing separate group chats, document links, and shared files across multiple window tabs often leaves your desktop cluttered and your focus fragmented. Status Desktop unifies your entire collaborative environment into a single, high-performance local application designed specifically to streamline how you stay connected. Instead of forcing you to constantly toggle between personal messaging clients, community servers, and internet browsers just to keep up with your daily coordination, everything is smoothly bundled into one clean workspace. You can coordinate with project teams, monitor active data feeds, and browse critical online references simultaneously without ever losing your place or interrupting your conversations.",
     "builtDifferent": "Built different",
     "walletTitle": "Send, receive\nand manage\nyour assets",
     "walletDescription": "Full asset management, built right into the app. Send, receive and organise everything you hold, with clear balances and a history you can actually read. Your keys stay with you the entire time, so you are always the only one in control.",
@@ -119,7 +117,9 @@
     "permissionless": "No gatekeepers",
     "permissionlessDescription": "There is no central account registry, so no one can suspend, shadow-ban or lock you out. You join with an anonymous identity and reach anyone, anywhere.",
     "freeAndAdFree": "Free and ad-free",
-    "freeAndAdFreeDescription": "No ads. No paid tier. No imposed limits. Status runs no ad network and no tracking, so the app stays free and your data stays yours."
+    "freeAndAdFreeDescription": "No ads. No paid tier. No imposed limits. Status runs no ad network and no tracking, so the app stays free and your data stays yours.",
+    "keycardTitle": "Unified Group\nProject Workspace",
+    "keycardDescription": "Ditch the clutter of scattered chats, links, and browser tabs. Status Desktop unifies your entire collaborative environment into a single, high-performance local app. Coordinate with your team and access critical data simultaneously without losing your focus."
   },
   "apps": {
     "metaTitle": "Apps",
