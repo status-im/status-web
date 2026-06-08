@@ -8,26 +8,40 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 
 import { PlatformDetector } from '~app/_components/platform-detector'
-import { Metadata } from '~app/_metadata'
 import { Providers } from '~app/_providers'
 
-export const metadata = Metadata({
+import { cloudinaryLoader } from './_components/assets/loader'
+
+import type { Metadata } from 'next'
+
+const GET_SITE_OG_IMAGE = cloudinaryLoader({
+  src: 'get.status.app/Hero_app',
+  width: 1200,
+})
+
+export const metadata: Metadata = {
   metadataBase: new URL('https://get.status.app/'),
 
-  title: {
-    template: '%s',
-    default: 'Status — Make the jump to web3',
-  },
+  title: 'Status App: secure peer-to-peer private messenger',
   description:
-    'The open-source, decentralised wallet and messenger. Own your crypto and chat privately.',
+    'Status App combines an end-to-end encrypted messenger and a secure browser into a private, decentralized ecosystem with no phone number or email required.',
 
   alternates: {
     canonical: './',
   },
 
-  twitter: {
-    card: 'summary_large_image',
-    site: '@ethstatus',
+  openGraph: {
+    type: 'website',
+    url: 'https://get.status.app',
+    title: 'Status App: secure peer-to-peer private messenger',
+    description:
+      'Status App combines an end-to-end encrypted messenger and a secure browser into a private, decentralized ecosystem with no phone number or email required.',
+    siteName: 'Status App',
+    images: [
+      {
+        url: GET_SITE_OG_IMAGE,
+      },
+    ],
   },
 
   appLinks: {
@@ -42,7 +56,7 @@ export const metadata = Metadata({
       url: 'https://get.status.app',
     },
   },
-})
+}
 
 const inter = Inter({
   variable: '--font-sans',
@@ -62,10 +76,6 @@ export default async function RootLayout({ children }: Props) {
     <html lang={locale} className={inter.variable} suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://res.cloudinary.com" />
-        <meta
-          property="article:publisher"
-          content="https://www.facebook.com/ethstatus"
-        />
       </head>
       <body data-customisation="blue" suppressHydrationWarning>
         <script

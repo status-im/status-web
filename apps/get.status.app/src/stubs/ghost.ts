@@ -28,9 +28,11 @@ export async function getPosts(
   }
 }
 
-// Never called on get.status.app (guarded by isGetSite in the shared page); the
-// parameter exists only for type compatibility with the real ghost lib signature.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function findLatestReleasePost(_posts: PostOrPage[]): PostOrPage | null {
+export function findLatestReleasePost(): PostOrPage | null
+export function findLatestReleasePost(_posts: PostOrPage[]): PostOrPage | null
+export function findLatestReleasePost(
+  _posts?: PostOrPage[]
+): PostOrPage | null {
+  void _posts
   return null
 }

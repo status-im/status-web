@@ -4,7 +4,11 @@ import { forwardRef } from 'react'
 
 import Head from 'next/head'
 
-import { createCloudinaryUrl } from './loader'
+import {
+  createCloudinaryUrl,
+  createCloudinaryVideoMovUrl,
+  createCloudinaryVideoUrl,
+} from './loader'
 
 import type { ImageId, VideoId } from './types'
 import type { ForwardedRef } from 'react'
@@ -30,8 +34,8 @@ const Video = forwardRef(
     const aspectRatio = Math.round((Number(width) / Number(height)) * 100) / 100
 
     const posterSrc = createCloudinaryUrl(posterId)
-    const movSrc = `https://res.cloudinary.com/dhgck7ebz/video/upload/v1/${publicId}_HEVC.mov`
-    const webmSrc = `https://res.cloudinary.com/dhgck7ebz/video/upload/f_auto:video,q_auto/v1/${publicId}`
+    const movSrc = createCloudinaryVideoMovUrl(publicId)
+    const webmSrc = createCloudinaryVideoUrl(publicId)
 
     return (
       <>

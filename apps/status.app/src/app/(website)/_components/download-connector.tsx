@@ -5,6 +5,7 @@ import { ArrowRightIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
 import { useTranslations } from 'next-intl'
 
+import { isGetSite } from '~/config/site-scope'
 import { Image } from '~components/assets'
 
 type Props = {
@@ -30,7 +31,11 @@ const DownloadConnectorSection = (props: Props) => {
         )}
       >
         <Image
-          id="Platforms/Screens/Extension Screens/Connector_04:1102:1012"
+          id={
+            isGetSite
+              ? 'get.status.app/Connector_NOCRYPTO:1102:1012'
+              : 'Platforms/Screens/Extension Screens/Connector_04:1102:1012'
+          }
           alt=""
           width={551}
           height={506}

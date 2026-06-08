@@ -3,7 +3,6 @@ import { ExternalIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
 import { getTranslations } from 'next-intl/server'
 
-import { KEYCARD_STORE_URL } from '~/config/routes'
 import { isGetSite } from '~/config/site-scope'
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
 import { Metadata } from '~app/_metadata'
@@ -109,19 +108,28 @@ export default async function HomePage() {
         },
       ]
 
-  const organizationSchema = jsonLD.organization({
-    description:
-      'Private, secure by design. Transact, Message, Browse on your Terms.',
-  })
+  const statusWebsiteDescription =
+    'Private, secure by design. Transact, Message, Browse on your Terms.'
 
-  const websiteSchema = jsonLD.website({
-    description:
-      'Private, secure by design. Transact, Message, Browse on your Terms.',
-  })
+  const schema = isGetSite
+    ? jsonLD.website({
+        name: 'Status App',
+        url: 'https://get.status.app',
+        description:
+          'Private, secure by design. Manager Assets, Message, Browse on your Terms.',
+      })
+    : [
+        jsonLD.organization({
+          description: statusWebsiteDescription,
+        }),
+        jsonLD.website({
+          description: statusWebsiteDescription,
+        }),
+      ]
 
   return (
     <>
-      <JSONLDScript schema={[organizationSchema, websiteSchema]} />
+      <JSONLDScript schema={schema} />
       {/* HERO */}
       <div
         data-theme="dark"
@@ -190,7 +198,11 @@ export default async function HomePage() {
 
           <div className="relative hidden xl:block">
             <Image
-              id="Homepage/Hero/device-mockups:2128:1292"
+              id={
+                isGetSite
+                  ? 'get.status.app/Hero_app:2128:1292'
+                  : 'Homepage/Hero/device-mockups:2128:1292'
+              }
               alt="Status app showing wallet and messenger on devices"
               width={2128}
               height={1292}
@@ -199,7 +211,11 @@ export default async function HomePage() {
           </div>
           <div className="relative mb-[-80px] xl:hidden">
             <Image
-              id="Homepage/Hero/device-mockups-mobile:1267:770"
+              id={
+                isGetSite
+                  ? 'get.status.app/Hero_app:1267:770'
+                  : 'Homepage/Hero/device-mockups-mobile:1267:770'
+              }
               alt="Status app showing wallet and messenger on devices"
               width={1267}
               height={770}
@@ -263,7 +279,11 @@ export default async function HomePage() {
                   />
                 </div>
               }
-              imageId="Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800"
+              imageId={
+                isGetSite
+                  ? 'get.status.app/Desktop_Wallet_function:2880:1800'
+                  : 'Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800'
+              }
               imageAlt="Desktop screenshot showing the wallet feature included in the Status app"
             />
           </ColorTheme>
@@ -424,49 +444,88 @@ export default async function HomePage() {
             className={cx([
               'container pb-5',
               'relative flex flex-col-reverse 2md:flex-row',
-              '2md:grid-cols-2 2md:items-center 2md:gap-14 lg:gap-12 xl:gap-[102px] 2xl:gap-[140px]',
+              '2md:grid-cols-2 2md:items-center',
+              isGetSite
+                ? 'gap-0'
+                : '2md:gap-14 lg:gap-12 xl:gap-[102px] 2xl:gap-[140px]',
             ])}
           >
-            <div className="absolute inset-x-1/2 top-0 z-20 h-20 w-screen -translate-x-1/2 bg-gradient-to-b from-white-100 to-transparent" />
             {/* Dividers */}
 
             <div className="absolute inset-x-1/2 top-0 z-10 h-px w-screen -translate-x-1/2 border-t border-dashed border-neutral-30" />
             <div className="absolute inset-x-1/2 bottom-0 z-10 h-px w-screen -translate-x-1/2 border-b border-dashed border-neutral-30" />
-            <div className="flex-1">
-              <div className="-ml-30 sm:-ml-24 lg:-ml-52 xl:-ml-44 2xl:-ml-60">
-                <Video
-                  id="Non Beta Release/Animations/Keycard_01:911:720"
-                  posterId="Non Beta Release/Animations/Frames/Keycard_01_Frame:456:360"
-                  className="w-full min-w-[390px] md:min-w-[613px] 2md:min-w-[386px] lg:min-w-[470px] xl:min-w-[544px] 2xl:min-w-[792px]"
-                />
-              </div>
+            <div className="flex">
+              {isGetSite ? (
+                <div className="max-w-[390px] overflow-hidden md:max-w-[580px] 2md:mt-12 2md:max-w-[360px] lg:max-w-[440px] xl:max-w-[510px] 2xl:max-w-[720px]">
+                  <Image
+                    id="get.status.app/Create_Community_Banner_Left_Frame_cc8nvh:911:720"
+                    alt=""
+                    width={911}
+                    height={720}
+                    className="w-full min-w-[390px] md:min-w-[613px] 2md:min-w-[386px] lg:min-w-[470px] xl:min-w-[544px] 2xl:min-w-[792px]"
+                  />
+                </div>
+              ) : (
+                <div className="-ml-30 sm:-ml-24 lg:-ml-52 xl:-ml-44 2xl:-ml-60">
+                  <Video
+                    id="Non Beta Release/Animations/Keycard_01:911:720"
+                    posterId="Non Beta Release/Animations/Frames/Keycard_01_Frame:456:360"
+                    className="w-full min-w-[390px] md:min-w-[613px] 2md:min-w-[386px] lg:min-w-[470px] xl:min-w-[544px] 2xl:min-w-[792px]"
+                  />
+                </div>
+              )}
             </div>
 
-            <div className="relative z-20 flex flex-1 flex-col items-start gap-8 px-5 py-12 sm:pt-24 2md:pt-10 lg:p-0">
-              <div className="flex max-w-none flex-1 flex-col gap-4 lg:gap-5 2xl:max-w-[462px]">
+            <div
+              className={cx(
+                'relative z-20 flex flex-1 flex-col items-start gap-8 px-5 py-12 sm:pt-24 2md:pt-10 lg:p-0',
+                isGetSite && '2md:-ml-4 lg:-ml-6 xl:-ml-8 2xl:-ml-10'
+              )}
+            >
+              <div
+                className={cx(
+                  'flex max-w-none flex-1 flex-col gap-4 lg:gap-5',
+                  isGetSite ? '2xl:max-w-[520px]' : '2xl:max-w-[462px]'
+                )}
+              >
                 <div className="flex flex-col">
-                  <h2 className="relative inline-block whitespace-nowrap text-40 font-bold lg:text-64">
-                    {t('keycardTitle').split('\n')[0]}
-                  </h2>
-                  <h2 className="relative inline-block whitespace-nowrap text-40 font-bold lg:text-64">
-                    {t('keycardTitle').split('\n').slice(1).join(' ')}
-                    <span className="inline-block w-3 pt-1 align-top lg:w-4 lg:pt-[9px]">
-                      <CopyrightSymbol />
-                    </span>
-                  </h2>
+                  {isGetSite ? (
+                    <>
+                      <h2 className="relative inline-block whitespace-nowrap text-40 font-bold lg:text-64">
+                        {t('keycardTitle').split('\n')[0]}
+                      </h2>
+                      <h2 className="relative inline-block whitespace-nowrap text-40 font-bold lg:text-64">
+                        {t('keycardTitle').split('\n').slice(1).join(' ')}
+                      </h2>
+                    </>
+                  ) : (
+                    <>
+                      <h2 className="relative inline-block whitespace-nowrap text-40 font-bold lg:text-64">
+                        {t('keycardTitle').split('\n')[0]}
+                      </h2>
+                      <h2 className="relative inline-block whitespace-nowrap text-40 font-bold lg:text-64">
+                        {t('keycardTitle').split('\n').slice(1).join(' ')}
+                        <span className="inline-block w-3 pt-1 align-top lg:w-4 lg:pt-[9px]">
+                          <CopyrightSymbol />
+                        </span>
+                      </h2>
+                    </>
+                  )}
                 </div>
 
                 <Text size={19}>{t('keycardDescription')}</Text>
               </div>
-              <Button
-                variant="outline"
-                href={isGetSite ? KEYCARD_STORE_URL : '/keycard'}
-                {...(isGetSite
-                  ? { target: '_blank', rel: 'noopener noreferrer' }
-                  : {})}
-              >
-                {t('keycardLink')}
-              </Button>
+              {isGetSite ? (
+                <DownloadDesktopButton
+                  variant="outline"
+                  size="40"
+                  show="single"
+                />
+              ) : (
+                <Button variant="outline" href="/keycard">
+                  {t('keycardLink')}
+                </Button>
+              )}
             </div>
 
             <ParallaxCircle

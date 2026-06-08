@@ -40,7 +40,7 @@ Runs on port **3005** (hub uses 3003).
 Uses the same Cloudinary account and asset ID format as `status.app` (`dhgck7ebz`), but keeps its own generated types in `src/app/_components/assets/types.ts` so new media for this site does not require re-running `status.app`’s sync.
 
 - Reused pages pull IDs from the filtered type union (homepage, apps, download UI, etc.).
-- Upload **get-only** assets under the `Get.status.app/` folder in Cloudinary.
+- Upload **get-only** assets under the `get.status.app/` folder in Cloudinary.
 
 ```bash
 # One-time bootstrap from status.app types (no API keys)

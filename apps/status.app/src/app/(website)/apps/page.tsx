@@ -3,6 +3,7 @@ import { DesktopIcon, MobileIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
 import { getTranslations } from 'next-intl/server'
 
+import { isGetSite } from '~/config/site-scope'
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
 import { Metadata } from '~app/_metadata'
 import { Image, ScreenImage } from '~components/assets'
@@ -36,9 +37,16 @@ export async function generateMetadata(): Promise<NextMetadata> {
 export default async function AppsPage() {
   const t = await getTranslations('apps')
 
-  const organizationSchema = jsonLD.organization({
-    description: t('metaDescription'),
-  })
+  const schema = isGetSite
+    ? jsonLD.website({
+        name: 'Status App',
+        url: 'https://get.status.app',
+        description:
+          'Private, secure by design. Manager Assets, Message, Browse on your Terms.',
+      })
+    : jsonLD.organization({
+        description: t('metaDescription'),
+      })
 
   const DESKTOP_FEATURE_LIST: FeatureListProps['list'] = [
     {
@@ -60,7 +68,7 @@ export default async function AppsPage() {
 
   return (
     <>
-      <JSONLDScript schema={organizationSchema} />
+      <JSONLDScript schema={schema} />
       <Body>
         <div className="relative">
           <HeroSection
@@ -136,7 +144,9 @@ export default async function AppsPage() {
                 label: t('wallet'),
                 images: [
                   {
-                    id: 'Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624',
+                    id: isGetSite
+                      ? 'get.status.app/Mobile_WalletFunction:750:1624'
+                      : 'Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624',
                     alt: t(
                       'mobileWalletScreenshotAlt'
                     ) as ImageAlt['Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624'],
@@ -178,7 +188,9 @@ export default async function AppsPage() {
                 label: t('wallet'),
                 images: [
                   {
-                    id: 'Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800',
+                    id: isGetSite
+                      ? 'get.status.app/Desktop_Wallet_function:2880:1800'
+                      : 'Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800',
                     alt: t(
                       'desktopWalletScreenshotAlt'
                     ) as ImageAlt['Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800'],

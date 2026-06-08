@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "title": "Status — Private Messenger, Wallet & Browser",
+    "title": "Status App: secure peer-to-peer private messenger",
     "titleTemplate": "%s",
-    "description": "Status is a private messenger, asset manager and secure browser in one app. No phone number or email needed, no tracking, and you stay in full control.",
+    "description": "Status App combines an end-to-end encrypted messenger and a secure browser into a private, decentralized ecosystem with no phone number or email required.",
     "appName": "Status — Privacy. Anywhere",
     "notFoundTitle": "404 — Page Not Found",
     "notFoundDescription": "The page you were looking for could not be found. Return to the Status homepage."
@@ -85,6 +85,8 @@
   "home": {
     "heroTitle": "Private, secure\nby design",
     "heroDescription": "Message privately, manage your assets and browse the open web from one app that you alone control. No phone number, no tracking, no company in the middle.",
+    "migrateBanner": "Still on the Status Legacy mobile app? Migrate now.",
+    "learnMore": "Learn more",
     "builtDifferent": "Built different",
     "walletTitle": "Send, receive\nand manage\nyour assets",
     "walletDescription": "Full asset management, built right into the app. Send, receive and organise everything you hold, with clear balances and a history you can actually read. Your keys stay with you the entire time, so you are always the only one in control.",
@@ -115,8 +117,8 @@
     "permissionless": "No gatekeepers",
     "permissionlessDescription": "There is no central account registry, so no one can suspend, shadow-ban or lock you out. You join with an anonymous identity and reach anyone, anywhere.",
     "freeAndAdFree": "Free and ad-free",
-    "freeAndAdFreeDescription": "No ads. No paid tier. No imposed limits. Status runs no ad network and no tracking, so the app stays free and your data stays yours."
-    "keycardTitle": "Unified Group\Project Workspace",
+    "freeAndAdFreeDescription": "No ads. No paid tier. No imposed limits. Status runs no ad network and no tracking, so the app stays free and your data stays yours.",
+    "keycardTitle": "Unified Group\nProject Workspace",
     "keycardDescription": "Ditch the clutter of scattered chats, links, and browser tabs. Status Desktop unifies your entire collaborative environment into a single, high-performance local app. Coordinate with your team and access critical data simultaneously without losing your focus."
   },
   "apps": {
