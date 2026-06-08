@@ -66,38 +66,76 @@ const headers: RequestInit['headers'] = {
 
 const GREENHOUSE_API_URL = 'https://boards-api.greenhouse.io/v1/boards'
 
+const emptyJobs: Jobs = {
+  jobs: [],
+  meta: {
+    total: 0,
+  },
+}
+
+const isJob = (value: unknown): value is Job =>
+  typeof value === 'object' &&
+  value !== null &&
+  !('error' in value) &&
+  'id' in value &&
+  'title' in value &&
+  'content' in value &&
+  'location' in value &&
+  typeof (value as Job).location === 'object' &&
+  (value as Job).location !== null &&
+  'name' in (value as Job).location
+
+export const getStatusJob = async (id: string): Promise<Job | null> => {
+  try {
+    const response = await fetch(
+      `${GREENHOUSE_API_URL}/${serverEnv.GREENHOUSE_STATUS_BOARD_ID}/jobs/${id}?questions=true`,
+      {
+        headers,
+        cache: 'no-store',
+      }
+    )
+
+    if (!response.ok) {
+      return null
+    }
+
+    const job = await response.json()
+
+    return isJob(job) ? job : null
+  } catch (error) {
+    console.error(
+      `Failed to fetch status job ${id} from Greenhouse API:`,
+      error
+    )
+    return null
+  }
+}
 export const getStatusJobs = async (): Promise<Jobs> => {
   try {
-    return await fetch(
+    const response = await fetch(
       `${GREENHOUSE_API_URL}/${serverEnv.GREENHOUSE_STATUS_BOARD_ID}/jobs?content=true`,
       {
         headers,
-        next: {
-          revalidate: 300, // 5 minutes,
-        },
+        cache: 'no-store',
       }
-    ).then(res => res.json())
+    )
+
+    if (!response.ok) {
+      return emptyJobs
+    }
+
+    const data = await response.json()
+
+    if (!Array.isArray(data?.jobs)) {
+      return emptyJobs
+    }
+
+    return data
   } catch (error) {
     console.error('Failed to fetch status jobs from Greenhouse API:', error)
-    return {
-      jobs: [],
-      meta: {
-        total: 0,
-      },
-    }
+    return emptyJobs
   }
 }
-
-export const getStatusJob = async (id: string): Promise<Job> =>
-  await fetch(
-    `${GREENHOUSE_API_URL}/${serverEnv.GREENHOUSE_STATUS_BOARD_ID}/jobs/${id}?questions=true`,
-    {
-      headers,
-      next: {
-        revalidate: 300, // 5 minutes
-      },
-    }
-  ).then(res => res.json())
 
 export const getLogosJobs = async (): Promise<Jobs> =>
   await fetch(
