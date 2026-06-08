@@ -1,3 +1,5 @@
+import { BlogPostDetailHydrated } from '~app/_components/blog/blog-post-detail-hydrated'
+import { PostCard } from '~app/_components/blog/post-card'
 import { ghostPostToDetail } from '~app/_lib/blog-post-detail'
 import { getCodeInjectionJsonLd, getPostFAQItems } from '~app/_lib/faq'
 import { getPostBySlug, getPostsByTagSlug, getPostSlugs } from '~app/_lib/ghost'
@@ -6,8 +8,6 @@ import { Metadata } from '~app/_metadata'
 import { jsonLD, JSONLDScript } from '~app/_utils/json-ld'
 import { getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
-import { BlogPostDetailHydrated } from '../../../_components/blog/blog-post-detail-hydrated'
-import { PostCard } from '../../../_components/blog/post-card'
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>

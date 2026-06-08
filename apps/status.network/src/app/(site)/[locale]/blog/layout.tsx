@@ -1,6 +1,6 @@
+import { BlogHeader } from '~app/_components/blog/blog-header'
 import { Divider } from '~app/_components/divider'
 import { Footer } from '~app/_components/footer'
-import { BlogHeader } from '../../_components/blog/blog-header'
 
 type Props = {
   children: React.ReactNode

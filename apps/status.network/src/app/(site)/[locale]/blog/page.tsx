@@ -1,8 +1,8 @@
+import { HighlightedPostCard, PostCard } from '~app/_components/blog/post-card'
 import { getPosts } from '~app/_lib/ghost'
 import { Metadata } from '~app/_metadata'
 import { jsonLD, JSONLDScript } from '~app/_utils/json-ld'
 import { getTranslations } from 'next-intl/server'
-import { HighlightedPostCard, PostCard } from '../../_components/blog/post-card'
 
 export const metadata = Metadata({
   title: 'Blog',

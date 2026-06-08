@@ -1,10 +1,14 @@
 import { Analytics } from '@vercel/analytics/next'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
-import './globals.css'
+import '../../globals.css'
+import { routing } from '~/i18n/routing'
 import { cx } from 'cva'
-import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, Metadata } from './_metadata'
-import { jsonLD, JSONLDScript } from './_utils/json-ld'
+import { hasLocale, NextIntlClientProvider } from 'next-intl'
+import { getMessages, setRequestLocale } from 'next-intl/server'
+import { notFound } from 'next/navigation'
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, Metadata } from '../../_metadata'
+import { jsonLD, JSONLDScript } from '../../_utils/json-ld'
 
 const inter = Inter({
   variable: '--font-inter',
@@ -80,13 +84,32 @@ export const metadata = Metadata({
   },
 })
 
-type Props = {
-  children: React.ReactNode
+export const dynamic = 'force-static'
+
+export function generateStaticParams() {
+  return routing.locales.map(locale => ({ locale }))
 }
 
-export default function RootLayout({ children }: Props) {
+export const dynamicParams = false
+
+type Props = {
+  children: React.ReactNode
+  params: Promise<{ locale: string }>
+}
+
+export default async function LocaleLayout({ children, params }: Props) {
+  const { locale } = await params
+
+  if (!hasLocale(routing.locales, locale)) {
+    notFound()
+  }
+
+  setRequestLocale(locale)
+
+  const messages = await getMessages()
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body
         className={cx(
           inter.variable,
@@ -102,7 +125,9 @@ export default function RootLayout({ children }: Props) {
             softwareApplicationSchema,
           ]}
         />
-        {children}
+        <NextIntlClientProvider messages={messages} locale={locale}>
+          {children}
+        </NextIntlClientProvider>
         <Analytics />
         <Script
           strategy="afterInteractive"
