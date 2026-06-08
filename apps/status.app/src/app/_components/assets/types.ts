@@ -24,6 +24,10 @@ export type ImageType =
       alt: ''
     }
   | {
+      id: 'get.status.app/Create_Community_Banner_Left_Frame_cc8nvh:911:720'
+      alt: ''
+    }
+  | {
       id: 'Homepage/Hero/device-mockups-mobile:1267:770'
       alt: 'Status app showing wallet and messenger on devices'
     }
