@@ -57,11 +57,6 @@ pipeline {
       description: 'Ghost Content API URL (status.network).',
       defaultValue: params.GHOST_API_URL ?: 'https://our.status.im'
     )
-    string(
-      name: 'GHOST_API_KEY',
-      description: 'Ghost Content API key (status.network).',
-      defaultValue: params.GHOST_API_KEY ?: ''
-    )
   }
 
   environment {
@@ -98,19 +93,11 @@ pipeline {
         }
         dir("${env.WORKSPACE}/apps/${params.APP_NAME}") {
           script {
-            def buildEnv = ''
             if (params.APP_NAME == 'status.network') {
-              buildEnv = """
-                GHOST_API_URL='${params.GHOST_API_URL}' \\
-                GHOST_API_KEY='${params.GHOST_API_KEY}' \\
-                NEXT_PUBLIC_GHOST_API_URL='${params.GHOST_API_URL}' \\
-                NEXT_PUBLIC_GHOST_API_KEY='${params.GHOST_API_KEY}' \\
-              """
+              buildStatusNetworkApp()
+            } else {
+              nix.develop('pnpm build', pure: false)
             }
-            nix.develop(
-              "${buildEnv} pnpm build",
-              pure: false,
-            )
             jenkins.genBuildMetaJSON('out/build.json')
           }
         }
@@ -179,5 +166,20 @@ def deployDomain() {
       return isMainBranch() ? 'status.network' : 'dev.status.network'
     default:
       error("Unknown app: ${params.APP_NAME}.")
+  }
+}
+
+/* Secret text credential ID in Jenkins (Manage Credentials). */
+def buildStatusNetworkApp() {
+  withCredentials([
+    string(credentialsId: 'status-network-ghost-api-key', variable: 'GHOST_API_KEY'),
+  ]) {
+    withEnv([
+      "GHOST_API_URL=${params.GHOST_API_URL}",
+      "NEXT_PUBLIC_GHOST_API_URL=${params.GHOST_API_URL}",
+      "NEXT_PUBLIC_GHOST_API_KEY=${env.GHOST_API_KEY}",
+    ]) {
+      nix.develop('pnpm build', pure: false)
+    }
   }
 }

@@ -80,4 +80,4 @@ pnpm start   # serve out/ on port 3002
 
 ## Deploying
 
-Deployment is handled via [`Jenkinsfile.website`](../../Jenkinsfile.website). Jenkins sets `GHOST_*` and `NEXT_PUBLIC_GHOST_*` from the same parameters when building `status.network`.
+Deployment is handled via [`Jenkinsfile.website`](../../Jenkinsfile.website). Jenkins reads the Ghost API key from the `status-network-ghost-api-key` secret-text credential and passes it via `withCredentials` / `withEnv` (not the shell command line) when building `status.network`.
