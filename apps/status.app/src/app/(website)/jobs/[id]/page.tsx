@@ -1,4 +1,4 @@
-import { Button, Tag, Text } from '@status-im/components'
+import { Tag, Text } from '@status-im/components'
 import { cx } from 'class-variance-authority'
 import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
@@ -17,14 +17,22 @@ import { ApplicationFormDialog } from './_components/application-form-dialog'
 
 import type { ReactElement } from 'react'
 
-export const revalidate = 3600 // 1 hour
+export const dynamic = 'force-dynamic'
 export const dynamicParams = true
 
 export async function generateStaticParams() {
   const { jobs = [] } = await getStatusJobs()
-  return jobs.map(job => ({
-    id: job.id.toString(),
-  })) satisfies Array<Awaited<Props['params']>>
+
+  const params = await Promise.all(
+    jobs.map(async job => {
+      const detail = await getStatusJob(job.id.toString())
+      return detail?.content ? { id: job.id.toString() } : null
+    })
+  )
+
+  return params.filter(
+    (param): param is { id: string } => param !== null
+  ) satisfies Array<Awaited<Props['params']>>
 }
 
 type Props = {
@@ -37,6 +45,16 @@ export async function generateMetadata({ params }: Props) {
   const id = (await params).id
   const job = await getStatusJob(id)
   const t = await getTranslations('jobs')
+
+  if (!job) {
+    return Metadata({
+      title: t('metaTitle'),
+      description: t('metaDescription'),
+      alternates: {
+        canonical: `/jobs/${id}`,
+      },
+    })
+  }
 
   return Metadata({
     title: `${job.title}, ${job.location.name}`,
@@ -55,27 +73,39 @@ export default async function JobsDetailPage(props: Props) {
   const { id: jobId } = await params
   const job = await getStatusJob(jobId)
 
-  if (!job) {
-    return redirect('/jobs')
+  if (!job?.content) {
+    redirect('/jobs')
   }
 
-  // note: decodes html entities https://github.com/orgs/rehypejs/discussions/51#discussioncomment-367057
-  // note: returns `type: 'text'`
-  const result = unified()
-    .use(rehypeParse, { fragment: true })
-    .parse(job.content)
+  let content: ReactElement
+  try {
+    // note: decodes html entities https://github.com/orgs/rehypejs/discussions/51#discussioncomment-367057
+    // note: returns `type: 'text'`
+    const result = unified()
+      .use(rehypeParse, { fragment: true })
+      .parse(job.content)
 
-  const rehypeReactOptions: Options = {
-    ...production,
-    components: jobsComponents,
+    const rehypeReactOptions: Options = {
+      ...production,
+      components: jobsComponents,
+    }
+
+    const firstChild = result.children[0] as { type?: string; value?: string }
+    const html =
+      firstChild?.type === 'text' && firstChild.value
+        ? firstChild.value
+        : job.content
+
+    const contentResult = await unified()
+      .use(rehypeParse, { fragment: true })
+      .use(rehypeReact, rehypeReactOptions)
+      .process(html)
+
+    content = contentResult.result as ReactElement
+  } catch (error) {
+    console.error(`Failed to parse job content for ${jobId}:`, error)
+    redirect('/jobs')
   }
-
-  const contentResult = await unified()
-    .use(rehypeParse, { fragment: true })
-    .use(rehypeReact, rehypeReactOptions)
-    .process((result.children[0] as any).value)
-
-  const content = contentResult.result as ReactElement
 
   return (
     <Body>
@@ -94,7 +124,7 @@ export default async function JobsDetailPage(props: Props) {
 
       <div className="mx-auto max-w-[742px] px-5">
         <div className="flex flex-col items-start gap-4 pb-6 pt-12 xl:pt-20">
-          <Tag size="24" label={job.departments[0].name} />
+          <Tag size="24" label={job.departments[0]?.name ?? 'Status'} />
           <h1 className="text-40 font-bold xl:text-64">{job.title}</h1>
           <Text size={19} color="$neutral-50">
             {job.location.name}
@@ -118,9 +148,7 @@ export default async function JobsDetailPage(props: Props) {
             <Text size={15}>{t('submitApplication')}</Text>
           </div>
 
-          <ApplicationFormDialog job={job}>
-            <Button size="32">{t('applyNow')}</Button>
-          </ApplicationFormDialog>
+          <ApplicationFormDialog job={job} />
         </div>
       </div>
     </Body>
