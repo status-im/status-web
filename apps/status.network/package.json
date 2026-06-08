@@ -5,7 +5,7 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "predev": "node scripts/generate-legal-last-edited.mjs",
-    "dev": "next dev --port 3002 --hostname 127.0.0.1",
+    "dev": "next dev --port 3002",
     "generate:legal-dates": "node scripts/generate-legal-last-edited.mjs",
     "prebuild": "node scripts/check-build-env.mjs && node scripts/generate-legal-last-edited.mjs",
     "build": "next build",

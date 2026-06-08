@@ -54,7 +54,7 @@ cd apps/status.network
 pnpm dev
 ```
 
-Open <http://127.0.0.1:3002>.
+Open <http://localhost:3002>.
 
 Without Ghost env vars, marketing pages work; `/blog` lists no posts and client refresh is skipped.
 
@@ -67,7 +67,7 @@ cd apps/status.network
 pnpm preview:production
 ```
 
-This runs `prebuild` (env check + legal dates), `build`, sitemap, locale stripping, copies `serve.json` into `out/`, then serves on <http://127.0.0.1:3002>.
+This runs `prebuild` (env check + legal dates), `build`, sitemap, locale stripping, copies `serve.json` into `out/`, then serves on <http://localhost:3002>.
 
 Stop `pnpm dev` first if port 3002 is already in use (otherwise `serve` picks another port).
 
