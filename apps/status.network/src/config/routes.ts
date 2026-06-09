@@ -31,7 +31,7 @@ export function getLocalizedRoutes(
       { name: t('navigation.partners'), href: '#partners' },
       { name: t('navigation.network'), href: '#network' },
       { name: t('navigation.tokenomics'), href: '#tokenomics' },
-      { name: t('navigation.blog'), href: '#blog' },
+      { name: t('navigation.blog'), href: '/blog' },
     ],
     Docs: `https://docs.status.network${localePrefix}/`,
     Bridge: 'https://bridge.status.network/ ',
