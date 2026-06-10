@@ -61,8 +61,13 @@
     },
     "status.network#build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**"],
-      "passThroughEnv": ["GHOST_API_URL", "GHOST_API_KEY"]
+      "outputs": [".next/**", "out/**"],
+      "passThroughEnv": [
+        "GHOST_API_URL",
+        "GHOST_API_KEY",
+        "NEXT_PUBLIC_GHOST_API_URL",
+        "NEXT_PUBLIC_GHOST_API_KEY"
+      ]
     },
     "comment_build:content": {
       "cache": true,

@@ -1,4 +1,3 @@
-import { getTranslations } from 'next-intl/server'
 import { ButtonLink } from './_components/button-link'
 import { Metadata } from './_metadata'
 
@@ -11,17 +10,21 @@ export const metadata = Metadata({
   },
 })
 
-export default async function NotFound() {
-  const t = await getTranslations()
+// Outside [locale] routes — use static copy (no next-intl request context).
+const NOT_FOUND_COPY = {
+  title: "This is not the page you're looking for",
+  takeMeHome: 'Take me home',
+} as const
 
+export default function NotFound() {
   return (
     <main className="flex min-h-[calc(100dvh-189px)] flex-1 items-center justify-center px-5 lg:min-h-[calc(100dvh-118px)]">
       <div className="flex max-w-[696px] flex-col items-center gap-8">
         <h1 className="text-center text-40 font-700 lg:text-64">
-          {t('not_found.title')}
+          {NOT_FOUND_COPY.title}
         </h1>
 
-        <ButtonLink href="/">{t('not_found.take_me_home')}</ButtonLink>
+        <ButtonLink href="/">{NOT_FOUND_COPY.takeMeHome}</ButtonLink>
       </div>
     </main>
   )

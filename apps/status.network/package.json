@@ -4,15 +4,20 @@
   "private": true,
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "predev": "pnpm install && node scripts/generate-legal-last-edited.mjs",
+    "predev": "node scripts/generate-legal-last-edited.mjs",
     "dev": "next dev --port 3002",
     "generate:legal-dates": "node scripts/generate-legal-last-edited.mjs",
-    "build": "node scripts/generate-legal-last-edited.mjs && next build",
-    "postbuild": "next-sitemap",
-    "start": "next start",
+    "prebuild": "node scripts/generate-legal-last-edited.mjs && pnpm env:check",
+    "env:check": "node -r dotenv/config ./src/config/env.server.mjs dotenv_config_path=./.env && node -r dotenv/config ./src/config/env.client.mjs dotenv_config_path=./.env && :",
+    "build": "next build",
+    "build:export": "next build",
+    "build:strip-locale": "bash scripts/strip-default-locale-prefix.sh",
+    "postbuild": "next-sitemap && pnpm build:strip-locale && cp serve.json out/serve.json",
+    "start": "serve out -l 3002",
+    "preview:production": "pnpm build && pnpm start",
     "lint": "next lint",
     "format": "prettier --write . --ignore-path .gitignore",
-    "check": "node scripts/generate-legal-last-edited.mjs && tsc --noEmit",
+    "check": "node scripts/generate-legal-last-edited.mjs && tsc --noEmit && pnpm env:check",
     "clean": "rimraf .next .vercel/output node_modules"
   },
   "dependencies": {
@@ -39,6 +44,8 @@
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
+    "@next/env": "15.5.16",
+    "dotenv": "^16.4.5",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -51,6 +58,7 @@
     "postcss": "^8.5.1",
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.6.11",
+    "serve": "^14.2.5",
     "tailwindcss": "^3.4.11",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.22.0"
