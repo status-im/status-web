@@ -39,11 +39,7 @@ vercel env pull .env.local
 | `NEXT_PUBLIC_GHOST_API_URL` | yes (same URL as `GHOST_API_URL`) | Client refresh after deploy |
 | `NEXT_PUBLIC_GHOST_API_KEY` | yes (same value as `GHOST_API_KEY`) | Client refresh after deploy |
 
-`pnpm env:check` validates env vars from `.env.local` (runs automatically before `pnpm build`). Refresh the committed slug list when posts change and Ghost is unavailable:
-
-```bash
-pnpm sync:blog-slugs
-```
+`pnpm env:check` validates env vars from `.env.local` (runs automatically before `pnpm build`).
 
 ## Development (`next dev`)
 

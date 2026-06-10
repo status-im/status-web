@@ -3,7 +3,6 @@ import { PostCard } from '~app/_components/blog/post-card'
 import { ghostPostToDetail } from '~app/_lib/blog-post-detail'
 import { getCodeInjectionJsonLd, getPostFAQItems } from '~app/_lib/faq'
 import { getPostBySlug, getPostsByTagSlug, getPostSlugs } from '~app/_lib/ghost'
-import { getNetworkBlogSlugFallback } from '~app/_lib/network-blog-slugs'
 import { Metadata } from '~app/_metadata'
 import { jsonLD, JSONLDScript } from '~app/_utils/json-ld'
 import { getTranslations } from 'next-intl/server'
@@ -14,21 +13,11 @@ type Props = {
 }
 
 export async function generateStaticParams() {
-  let slugs = process.env.GHOST_API_KEY ? await getPostSlugs() : []
-
-  if (slugs.length === 0) {
-    const fallback = getNetworkBlogSlugFallback()
-    if (fallback.length > 0) {
-      console.warn(
-        'Using content/network-blog-slugs.json fallback for static export. Run `pnpm sync:blog-slugs` after setting Ghost env vars to refresh.',
-      )
-      slugs = fallback
-    }
-  }
+  const slugs = await getPostSlugs()
 
   if (slugs.length === 0) {
     throw new Error(
-      'No status.network blog slugs for static export. Set GHOST_API_KEY in .env.local and run `pnpm build`, or run `pnpm sync:blog-slugs` to populate content/network-blog-slugs.json.',
+      'No status.network blog slugs for static export. Set GHOST_API_KEY in .env.local and run `pnpm build`.',
     )
   }
 
