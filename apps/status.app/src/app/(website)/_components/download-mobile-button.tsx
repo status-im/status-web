@@ -20,9 +20,8 @@ import { useMobileOperatingSystem } from '~hooks/use-mobile-operating-system'
 import appStoreSrc from '~public/images/app-store.png'
 // import fDroidSrc from '~public/images/f-droid.png'
 import googlePlaySrc from '~public/images/google-play.png'
-import { useLatestReleaseTags } from '~website/_context/latest-release-tag-context'
-
 import { LatestVersionTag } from '~website/_components/latest-version-tag'
+import { useLatestReleaseTags } from '~website/_context/latest-release-tag-context'
 
 type Props = Pick<React.ComponentProps<typeof Button>, 'variant' | 'size'> & {
   children?: React.ReactElement<React.ComponentProps<typeof Button>>
