@@ -14,13 +14,6 @@ type Props = {
 
 export async function generateStaticParams() {
   const slugs = await getPostSlugs()
-
-  if (slugs.length === 0) {
-    throw new Error(
-      'No status.network blog slugs for static export. Set GHOST_API_KEY in .env.local and run `pnpm build`.',
-    )
-  }
-
   return slugs.map(slug => ({ slug }))
 }
 
