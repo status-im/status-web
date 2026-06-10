@@ -1,12 +1,10 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import './src/config/env.server.mjs'
+import { serverEnv } from './src/config/env.server.mjs'
 import './src/config/env.client.mjs'
 
 import createNextIntlPlugin from 'next-intl/plugin'
-
-import { serverEnv } from './src/config/env.server.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const statusAppRoot = path.join(__dirname, '../status.app')
@@ -20,6 +18,7 @@ const turbopackAliases = {
   '~/config/env.server.mjs': './src/config/env.server.mjs',
   '~/config/env.client.mjs': './src/config/env.client.mjs',
   '~website/_lib/ghost': './src/stubs/ghost.ts',
+  '~components/assets$': './src/app/_components/assets',
   '~components/assets': './src/app/_components/assets',
   '~components': '../status.app/src/app/_components',
   '~hooks': '../status.app/src/app/_hooks',
@@ -37,6 +36,7 @@ const webpackAliases = {
   '~/config/env.server.mjs': path.join(__dirname, 'src/config/env.server.mjs'),
   '~/config/env.client.mjs': path.join(__dirname, 'src/config/env.client.mjs'),
   '~website/_lib/ghost': path.join(__dirname, 'src/stubs/ghost.ts'),
+  '~components/assets$': path.join(__dirname, 'src/app/_components/assets'),
   '~components/assets': path.join(__dirname, 'src/app/_components/assets'),
   '~components': path.join(statusAppRoot, 'src/app/_components'),
   '~hooks': path.join(statusAppRoot, 'src/app/_hooks'),
