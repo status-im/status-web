@@ -10,8 +10,8 @@ export function Table(props: {
   const { hasShadow = false, children } = props
 
   const table = (
-    <div className="w-min overflow-hidden rounded-12 border border-neutral-20">
-      <table className="w-[540px] group-[.group]:max-w-[calc(540px-2rem)]">
+    <div className="w-fit min-w-full overflow-hidden rounded-12 border border-neutral-20">
+      <table className="w-full group-[.group]:max-w-[calc(540px-2rem)]">
         {children}
       </table>
     </div>
