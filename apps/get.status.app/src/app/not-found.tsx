@@ -1,4 +1,8 @@
+import Link from 'next/link'
+
 import type { Metadata } from 'next'
+
+export const dynamic = 'force-static'
 
 export const metadata: Metadata = {
   title: '404 — Page Not Found',
@@ -20,9 +24,9 @@ export default function NotFound() {
         <h1 className="text-19 font-semibold">{NOT_FOUND_COPY.title}</h1>
         <p className="text-15">{NOT_FOUND_COPY.description}</p>
       </div>
-      <a className="underline" href="/">
+      <Link className="underline" href="/">
         {NOT_FOUND_COPY.goHome}
-      </a>
+      </Link>
     </main>
   )
 }

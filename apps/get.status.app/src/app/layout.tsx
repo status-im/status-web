@@ -5,11 +5,12 @@ import { Analytics } from '@vercel/analytics/next'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
 import { NextIntlClientProvider } from 'next-intl'
-import { getLocale, getMessages } from 'next-intl/server'
 
 import { PlatformDetector } from '~app/_components/platform-detector'
 import { Providers } from '~app/_providers'
 
+import messages from '../../messages/en.json'
+import { routing } from '../i18n/routing'
 import { cloudinaryLoader } from './_components/assets/loader'
 
 import type { Metadata } from 'next'
@@ -69,8 +70,8 @@ type Props = {
   children: React.ReactNode
 }
 
-export default async function RootLayout({ children }: Props) {
-  const [locale, messages] = await Promise.all([getLocale(), getMessages()])
+export default function RootLayout({ children }: Props) {
+  const locale = routing.defaultLocale
 
   return (
     <html lang={locale} className={inter.variable} suppressHydrationWarning>
