@@ -39,7 +39,7 @@ vercel env pull .env.local
 | `NEXT_PUBLIC_GHOST_API_URL` | yes (same URL as `GHOST_API_URL`) | Client refresh after deploy |
 | `NEXT_PUBLIC_GHOST_API_KEY` | yes (same value as `GHOST_API_KEY`) | Client refresh after deploy |
 
-`pnpm env:check` validates env vars from `.env.local` (runs automatically before `pnpm build`).
+`pnpm env:check` validates env vars from `.env.local` (runs automatically before `pnpm build`). When Ghost is unavailable at build time, `/blog/[slug]` routes fall back to the committed slug list in `content/network-blog-slugs.json` (update that file when new posts ship).
 
 ## Development (`next dev`)
 

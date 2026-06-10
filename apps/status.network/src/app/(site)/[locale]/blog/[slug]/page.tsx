@@ -7,17 +7,28 @@ import { Metadata } from '~app/_metadata'
 import { jsonLD, JSONLDScript } from '~app/_utils/json-ld'
 import { getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
+import networkBlogSlugFallback from '../../../../../../content/network-blog-slugs.json'
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>
 }
 
 export async function generateStaticParams() {
-  const slugs = await getPostSlugs()
+  let slugs = await getPostSlugs()
+
+  if (slugs.length === 0) {
+    const fallback = networkBlogSlugFallback
+    if (fallback.length > 0) {
+      console.info(
+        `No blog slugs from Ghost API; using ${fallback.length} slug(s) from content/network-blog-slugs.json.`,
+      )
+      slugs = fallback
+    }
+  }
 
   if (slugs.length === 0) {
     throw new Error(
-      'No status.network blog slugs for static export. Set GHOST_API_KEY in .env.local and run `pnpm build`.',
+      'No status.network blog slugs for static export. Set GHOST_API_KEY in .env.local and run `pnpm build`, or add slugs to content/network-blog-slugs.json.',
     )
   }
 
