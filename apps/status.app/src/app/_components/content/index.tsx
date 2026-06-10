@@ -425,6 +425,36 @@ export const blogComponents = {
   h2: (props: ComponentProps<'h2'>) => {
     return baseComponents.h2({ ...props, mb: 'mb-4', mt: 'mt-6' })
   },
+  blockquote: (props: ComponentProps<'blockquote'>) => {
+    return baseComponents.blockquote({ ...props, size: 19 })
+  },
+  // note: Ghost posts contain raw HTML tables without classes
+  table: (props: ComponentProps<'table'>) => {
+    return (
+      <div className="my-5 overflow-x-auto">
+        <div className="w-fit min-w-full overflow-hidden rounded-12 border border-neutral-20">
+          <table {...props} className="w-full" />
+        </div>
+      </div>
+    )
+  },
+  thead: (props: ComponentProps<'thead'>) => {
+    return <thead {...props} className="border-b border-neutral-10" />
+  },
+  tbody: (props: ComponentProps<'tbody'>) => {
+    return <tbody {...props} className="divide-y divide-neutral-10" />
+  },
+  th: (props: ComponentProps<'th'>) => {
+    return (
+      <th
+        {...props}
+        className="whitespace-nowrap bg-neutral-5 p-3 text-left text-15 font-medium text-neutral-50"
+      />
+    )
+  },
+  td: (props: ComponentProps<'td'>) => {
+    return <td {...props} className="p-3 align-top text-15" />
+  },
 }
 
 export const jobsComponents = {
