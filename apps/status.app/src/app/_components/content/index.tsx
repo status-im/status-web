@@ -196,8 +196,15 @@ const baseComponents = {
       </h6>
     )
   },
-  blockquote: (props: ComponentProps<'blockquote'> & { size?: 19 | 27 }) => {
-    const { children, size = 27, ...rest } = props
+  blockquote: (
+    props: ComponentProps<'blockquote'> & { size?: 19 | 27; border?: string }
+  ) => {
+    const {
+      children,
+      size = 27,
+      border = 'border-l border-dashed border-neutral-30 pl-6',
+      ...rest
+    } = props
 
     const blockquoteChildren = Children.toArray(children).filter(
       child => child !== '\n'
@@ -206,10 +213,7 @@ const baseComponents = {
     return (
       <blockquote
         {...rest}
-        className={cx(
-          blockquoteParagraphTextSize[size],
-          'mt-5 border-l border-dashed border-neutral-30 !pt-0 pl-6'
-        )}
+        className={cx(blockquoteParagraphTextSize[size], border, 'mt-5 !pt-0')}
       >
         {/* {children} */}
         {/* {renderText({ children, size: paragraphTextSize[size] }))} */}
@@ -426,7 +430,11 @@ export const blogComponents = {
     return baseComponents.h2({ ...props, mb: 'mb-4', mt: 'mt-6' })
   },
   blockquote: (props: ComponentProps<'blockquote'>) => {
-    return baseComponents.blockquote({ ...props, size: 19 })
+    return baseComponents.blockquote({
+      ...props,
+      size: 19,
+      border: 'border-l-2 border-neutral-40 pl-4',
+    })
   },
   // note: Ghost posts contain raw HTML tables without classes
   table: (props: ComponentProps<'table'>) => {
