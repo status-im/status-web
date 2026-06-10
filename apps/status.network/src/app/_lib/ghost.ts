@@ -115,13 +115,18 @@ export async function getPostBySlug(slug: string): Promise<GhostPost | null> {
 }
 
 export async function getPostSlugs(): Promise<string[]> {
-  const response = await fetchPosts({
-    fields: 'slug',
-    limit: 'all',
-    filter: `tag:${NETWORK_BLOG_TAG}+visibility:public+${DISALLOWED_TAGS_FILTER}`,
-  })
+  try {
+    const response = await fetchPosts({
+      fields: 'slug',
+      limit: 'all',
+      filter: `tag:${NETWORK_BLOG_TAG}+visibility:public+${DISALLOWED_TAGS_FILTER}`,
+    })
 
-  return response.posts.map(post => post.slug)
+    return response.posts.map(post => post.slug)
+  } catch (error) {
+    console.error('Failed to fetch post slugs from Ghost API:', error)
+    return []
+  }
 }
 
 export async function getLatestPostsByTag(
