@@ -20,7 +20,6 @@ const turbopackAliases = {
   '~/config/env.server.mjs': './src/config/env.server.mjs',
   '~/config/env.client.mjs': './src/config/env.client.mjs',
   '~website/_lib/ghost': './src/stubs/ghost.ts',
-  '~website/_components/latest-version-tag': './src/website/latest-version-tag.tsx',
   '~components/assets': './src/app/_components/assets',
   '~components': '../status.app/src/app/_components',
   '~hooks': '../status.app/src/app/_hooks',
@@ -38,10 +37,6 @@ const webpackAliases = {
   '~/config/env.server.mjs': path.join(__dirname, 'src/config/env.server.mjs'),
   '~/config/env.client.mjs': path.join(__dirname, 'src/config/env.client.mjs'),
   '~website/_lib/ghost': path.join(__dirname, 'src/stubs/ghost.ts'),
-  '~website/_components/latest-version-tag': path.join(
-    __dirname,
-    'src/website/latest-version-tag.tsx',
-  ),
   '~components/assets': path.join(__dirname, 'src/app/_components/assets'),
   '~components': path.join(statusAppRoot, 'src/app/_components'),
   '~hooks': path.join(statusAppRoot, 'src/app/_hooks'),

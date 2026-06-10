@@ -30,7 +30,7 @@ vercel env pull .env.local
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
-| `GITHUB_TOKEN` | no | Not used — tags show “Latest”; downloads resolve the release in the browser |
+| `GITHUB_TOKEN` | no | Not used — version tags are hidden; downloads resolve the release in the browser |
 | `CLOUDINARY_API_KEY` / `CLOUDINARY_API_SECRET` | no | `pnpm sync:cloudinary` only |
 
 `pnpm env:check` validates env vars (runs automatically before `pnpm build`).

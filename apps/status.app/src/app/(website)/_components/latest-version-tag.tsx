@@ -16,7 +16,7 @@ export function LatestVersionTag(props: Props) {
   const latestReleaseTags = useLatestReleaseTags()
 
   if (!latestReleaseTags[platform]) {
-    return <Tag size="32" {...tagProps} label={t('latest')} />
+    return null
   }
 
   return (
