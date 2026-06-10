@@ -30,7 +30,6 @@ vercel env pull .env.local
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
-| `GITHUB_TOKEN` | no | Not used — version tags are hidden; downloads resolve the release in the browser |
 | `CLOUDINARY_API_KEY` / `CLOUDINARY_API_SECRET` | no | `pnpm sync:cloudinary` only |
 
 `pnpm env:check` validates env vars (runs automatically before `pnpm build`).
@@ -42,6 +41,8 @@ pnpm --filter get.status.app dev
 ```
 
 Runs on **http://127.0.0.1:3005** (hub uses 3003, status.network uses 3002).
+
+`/api/download/*` links (from re-exported status.app route constants) are **not available in `next dev`** — they are plain static HTML written into `out/` during `postbuild`. Use `pnpm preview:production` to test download redirects locally.
 
 ## Static export (self-hosted)
 
@@ -58,7 +59,7 @@ Or in one step:
 pnpm --filter get.status.app preview:production
 ```
 
-`postbuild` runs `next-sitemap`, adds static `/api/download/*` pages that fetch the latest GitHub release in the browser (1h session cache), and copies `serve.json` for `serve` (`cleanUrls`).
+`postbuild` writes static `/api/download/*` redirect pages (client-side GitHub fetch, 1h session cache), runs `next-sitemap`, strips the default locale prefix from `out/`, and copies `serve.json` for `serve` (`cleanUrls`).
 
 Deploy via [`Jenkinsfile.website`](../../Jenkinsfile.website) with `APP_NAME=get.status.app` (branches `deploy-get-status-app-main` / `deploy-get-status-app-develop`, domains `get.status.app` / `dev.get.status.app`).
 

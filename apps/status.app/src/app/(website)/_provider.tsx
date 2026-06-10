@@ -4,12 +4,15 @@ import { useMemo } from 'react'
 
 import { LatestReleaseTagsContext } from './_context/latest-release-tag-context'
 
-import type { GitHubRelease } from '~server/services/github'
+/** Subset of GitHub release data used by the website shell (nav version tags). */
+type ReleaseTagSource = {
+  tag_name: string
+}
 
 type Props = {
   children: React.ReactNode
-  mobileRelease: GitHubRelease | null
-  desktopRelease: GitHubRelease | null
+  mobileRelease: ReleaseTagSource | null
+  desktopRelease: ReleaseTagSource | null
 }
 
 export function WebsiteProvider(props: Props) {

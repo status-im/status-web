@@ -71,8 +71,7 @@
     },
     "get.status.app#build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "out/**"],
-      "passThroughEnv": ["GITHUB_TOKEN"]
+      "outputs": [".next/**", "out/**"]
     },
     "comment_build:content": {
       "cache": true,

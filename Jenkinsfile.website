@@ -61,16 +61,6 @@ pipeline {
       description: 'Ghost Content API URL (status.network).',
       defaultValue: params.GHOST_API_URL ?: 'https://our.status.im'
     )
-    string(
-      name: 'GHOST_API_KEY',
-      description: 'Ghost Content API key (status.network).',
-      defaultValue: params.GHOST_API_KEY ?: ''
-    )
-    string(
-      name: 'GITHUB_TOKEN',
-      description: 'GitHub token for release metadata and download redirects (get.status.app).',
-      defaultValue: params.GITHUB_TOKEN ?: ''
-    )
   }
 
   environment {
@@ -110,9 +100,6 @@ pipeline {
             switch (params.APP_NAME) {
               case 'status.network':
                 buildStatusNetworkApp()
-                break
-              case 'get.status.app':
-                buildGetStatusApp()
                 break
               default:
                 nix.develop('pnpm build', pure: false)
@@ -189,14 +176,6 @@ def deployDomain() {
       return isMainBranch() ? 'get.status.app' : 'dev.get.status.app'
     default:
       error("Unknown app: ${params.APP_NAME}.")
-  }
-}
-
-def buildGetStatusApp() {
-  withEnv([
-    "GITHUB_TOKEN=${params.GITHUB_TOKEN}",
-  ]) {
-    nix.develop('pnpm build', pure: false)
   }
 }
 
