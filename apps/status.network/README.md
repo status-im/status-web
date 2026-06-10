@@ -34,12 +34,12 @@ vercel env pull .env.local
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
-| `GHOST_API_URL` | optional (defaults to `https://our.status.im`) | Server fetch at build/dev |
-| `GHOST_API_KEY` | **yes** for `pnpm build` | Pre-render `/blog` pages |
-| `NEXT_PUBLIC_GHOST_API_URL` | recommended | Client refresh after deploy |
-| `NEXT_PUBLIC_GHOST_API_KEY` | recommended | Client refresh after deploy |
+| `GHOST_API_URL` | yes | Server fetch at build/dev |
+| `GHOST_API_KEY` | yes | Pre-render `/blog` pages from live Ghost data |
+| `NEXT_PUBLIC_GHOST_API_URL` | yes (same URL as `GHOST_API_URL`) | Client refresh after deploy |
+| `NEXT_PUBLIC_GHOST_API_KEY` | yes (same value as `GHOST_API_KEY`) | Client refresh after deploy |
 
-Optional: refresh committed slug list (used if the API returns no posts during build):
+`pnpm env:check` validates env vars from `.env.local` (runs automatically before `pnpm build`). Refresh the committed slug list when posts change and Ghost is unavailable:
 
 ```bash
 pnpm sync:blog-slugs

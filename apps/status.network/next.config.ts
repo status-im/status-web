@@ -1,6 +1,6 @@
 import type { NextConfig } from 'next'
 import createNextIntlPlugin from 'next-intl/plugin'
-import { serverEnv } from './src/app/_constants/env.server.mjs'
+import { serverEnv } from './src/config/env.server.mjs'
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 const GHOST_IMAGE_HOSTS = ['our.status.im', 'demo.ghost.io']

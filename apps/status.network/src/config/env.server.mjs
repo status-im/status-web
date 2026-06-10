@@ -16,10 +16,20 @@ export const envSchema = z.object({
       z.literal('development'),
     ])
     .optional(),
-  NODE_ENV: z.string(),
+  NODE_ENV: z
+    .enum(['development', 'production', 'test'])
+    .default('development'),
+  GHOST_API_URL: z.string(),
+  GHOST_API_KEY: z.string(),
 })
 
-const result = envSchema.safeParse(process.env)
+const result = envSchema.safeParse({
+  VERCEL: process.env.VERCEL,
+  VERCEL_ENV: process.env.VERCEL_ENV,
+  NODE_ENV: process.env.NODE_ENV,
+  GHOST_API_URL: process.env.GHOST_API_URL,
+  GHOST_API_KEY: process.env.GHOST_API_KEY,
+})
 
 if (!result.success) {
   handleError(result.error)

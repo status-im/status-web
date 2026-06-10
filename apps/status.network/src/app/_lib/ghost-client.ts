@@ -1,4 +1,4 @@
-import { clientEnv } from '../_constants/env.client.mjs'
+import { clientEnv } from '~/config/env.client.mjs'
 import type { BlogPostDetail } from './blog-post-detail'
 import {
   DEFAULT_GHOST_URL,
