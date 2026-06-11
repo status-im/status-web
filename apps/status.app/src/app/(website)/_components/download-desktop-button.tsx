@@ -21,7 +21,10 @@ import {
 import { isGetSite } from '~/config/site-scope'
 import { trackEvent } from '~app/_utils/track'
 import { useLatestReleaseTags } from '~website/_context/latest-release-tag-context'
-import { startLatestDownload } from '~website/_lib/download-latest'
+import {
+  type DownloadPlatform,
+  startLatestDownload,
+} from '~website/_lib/download-latest'
 
 import { DownloadConnectorDialog } from './download-connector-dialog'
 
@@ -299,14 +302,51 @@ const MacOSDownloadButton = (props: DownloadButtonProps) => {
   )
 }
 
+const desktopAppsHref =
+  ROUTES.apps.find(route => route.nameKey === 'desktop')?.href ??
+  '/apps#desktop'
+
+const getDesktopDownloadPlatform = (
+  platform: string | null
+): DownloadPlatform => {
+  switch (platform) {
+    case 'ios':
+      return 'macos-silicon'
+    case 'android':
+      return 'windows'
+    default:
+      return 'macos-silicon'
+  }
+}
+
 const DesktopDownloadButton = (props: DownloadButtonProps) => {
+  const { source, ...buttonProps } = props
+  const latestReleaseTags = useLatestReleaseTags()
   const t = useTranslations('download')
+
+  const handleClick = (event: React.MouseEvent) => {
+    if (isGetSite) {
+      event.preventDefault()
+      const platform = document.documentElement.getAttribute('data-platform')
+      void startLatestDownload(getDesktopDownloadPlatform(platform))
+    }
+
+    trackEvent('Download', {
+      store: 'direct',
+      platform: getDesktopDownloadPlatform(
+        document.documentElement.getAttribute('data-platform')
+      ),
+      version: latestReleaseTags.desktop ?? 'unknown',
+      source,
+    })
+  }
+
   return (
     <>
       <div className="hidden ios:contents android:contents unknown:contents">
         <Button
-          {...props}
-          href={ROUTES.apps[1].href}
+          {...buttonProps}
+          href={isGetSite ? undefined : desktopAppsHref}
           iconBefore={
             <DesktopIcon
               className={match(props.variant)
@@ -315,6 +355,7 @@ const DesktopDownloadButton = (props: DownloadButtonProps) => {
                 .otherwise(() => undefined)}
             />
           }
+          onClick={handleClick}
         >
           {t('downloadForDesktop')}
         </Button>
