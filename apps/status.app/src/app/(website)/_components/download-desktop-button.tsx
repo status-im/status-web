@@ -18,8 +18,10 @@ import {
   STATUS_DESKTOP_DOWNLOAD_URL_MACOS_SILICON,
   STATUS_DESKTOP_DOWNLOAD_URL_WINDOWS,
 } from '~/config/routes'
+import { isGetSite } from '~/config/site-scope'
 import { trackEvent } from '~app/_utils/track'
 import { useLatestReleaseTags } from '~website/_context/latest-release-tag-context'
+import { startLatestDownload } from '~website/_lib/download-latest'
 
 import { DownloadConnectorDialog } from './download-connector-dialog'
 
@@ -155,7 +157,12 @@ const LinuxDownloadButton = (props: DownloadButtonProps) => {
   const latestReleaseTags = useLatestReleaseTags()
   const t = useTranslations('download')
 
-  const handleClick = () => {
+  const handleClick = (event: React.MouseEvent) => {
+    if (isGetSite) {
+      event.preventDefault()
+      void startLatestDownload('linux')
+    }
+
     trackEvent('Download', {
       store: 'direct',
       platform: 'linux',
@@ -169,7 +176,7 @@ const LinuxDownloadButton = (props: DownloadButtonProps) => {
         <DownloadConnectorDialog>
           <Button
             {...buttonProps}
-            href={STATUS_DESKTOP_DOWNLOAD_URL_LINUX}
+            href={isGetSite ? undefined : STATUS_DESKTOP_DOWNLOAD_URL_LINUX}
             icon={<LinuxIcon />}
             aria-label={t('downloadForLinux')}
             onClick={handleClick}
@@ -180,7 +187,7 @@ const LinuxDownloadButton = (props: DownloadButtonProps) => {
         <DownloadConnectorDialog>
           <Button
             {...buttonProps}
-            href={STATUS_DESKTOP_DOWNLOAD_URL_LINUX}
+            href={isGetSite ? undefined : STATUS_DESKTOP_DOWNLOAD_URL_LINUX}
             iconBefore={<LinuxIcon />}
             onClick={handleClick}
           >
@@ -197,7 +204,12 @@ const WindowsDownloadButton = (props: DownloadButtonProps) => {
   const latestReleaseTags = useLatestReleaseTags()
   const t = useTranslations('download')
 
-  const handleClick = () => {
+  const handleClick = (event: React.MouseEvent) => {
+    if (isGetSite) {
+      event.preventDefault()
+      void startLatestDownload('windows')
+    }
+
     trackEvent('Download', {
       store: 'direct',
       platform: 'windows',
@@ -212,7 +224,7 @@ const WindowsDownloadButton = (props: DownloadButtonProps) => {
         <DownloadConnectorDialog>
           <Button
             {...buttonProps}
-            href={STATUS_DESKTOP_DOWNLOAD_URL_WINDOWS}
+            href={isGetSite ? undefined : STATUS_DESKTOP_DOWNLOAD_URL_WINDOWS}
             icon={<WindowsIcon />}
             aria-label={t('downloadForWindows')}
             onClick={handleClick}
@@ -223,7 +235,7 @@ const WindowsDownloadButton = (props: DownloadButtonProps) => {
         <DownloadConnectorDialog>
           <Button
             {...buttonProps}
-            href={STATUS_DESKTOP_DOWNLOAD_URL_WINDOWS}
+            href={isGetSite ? undefined : STATUS_DESKTOP_DOWNLOAD_URL_WINDOWS}
             iconBefore={<WindowsIcon />}
             onClick={handleClick}
           >
@@ -240,7 +252,12 @@ const MacOSDownloadButton = (props: DownloadButtonProps) => {
   const latestReleaseTags = useLatestReleaseTags()
   const t = useTranslations('download')
 
-  const handleClick = () => {
+  const handleClick = (event: React.MouseEvent) => {
+    if (isGetSite) {
+      event.preventDefault()
+      void startLatestDownload('macos-silicon')
+    }
+
     trackEvent('Download', {
       platform: 'macos-silicon',
       version: latestReleaseTags.desktop ?? 'unknown',
@@ -255,7 +272,9 @@ const MacOSDownloadButton = (props: DownloadButtonProps) => {
         <DownloadConnectorDialog>
           <Button
             {...buttonProps}
-            href={STATUS_DESKTOP_DOWNLOAD_URL_MACOS_SILICON}
+            href={
+              isGetSite ? undefined : STATUS_DESKTOP_DOWNLOAD_URL_MACOS_SILICON
+            }
             icon={<AppleIcon />}
             aria-label={t('downloadForMacOS')}
             onClick={handleClick}
@@ -266,7 +285,9 @@ const MacOSDownloadButton = (props: DownloadButtonProps) => {
         <DownloadConnectorDialog>
           <Button
             {...buttonProps}
-            href={STATUS_DESKTOP_DOWNLOAD_URL_MACOS_SILICON}
+            href={
+              isGetSite ? undefined : STATUS_DESKTOP_DOWNLOAD_URL_MACOS_SILICON
+            }
             iconBefore={<AppleIcon />}
             onClick={handleClick}
           >

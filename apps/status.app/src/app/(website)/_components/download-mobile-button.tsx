@@ -13,6 +13,7 @@ import {
   // STATUS_MOBILE_F_DROID_URL,
   STATUS_MOBILE_GOOGLE_PLAY_URL,
 } from '~/config/routes'
+import { isGetSite } from '~/config/site-scope'
 import { trackEvent } from '~app/_utils/track'
 import { ScreenImage } from '~components/assets'
 import { Dialog } from '~components/dialog'
@@ -22,6 +23,7 @@ import appStoreSrc from '~public/images/app-store.png'
 import googlePlaySrc from '~public/images/google-play.png'
 import { LatestVersionTag } from '~website/_components/latest-version-tag'
 import { useLatestReleaseTags } from '~website/_context/latest-release-tag-context'
+import { startLatestDownload } from '~website/_lib/download-latest'
 
 type Props = Pick<React.ComponentProps<typeof Button>, 'variant' | 'size'> & {
   children?: React.ReactElement<React.ComponentProps<typeof Button>>
@@ -163,8 +165,13 @@ export const DownloadMobileButton = (props: Props) => {
                 <Button
                   variant="outline"
                   iconBefore={<DownloadIcon />}
-                  href={STATUS_MOBILE_APK_URL}
-                  onClick={() => {
+                  href={isGetSite ? undefined : STATUS_MOBILE_APK_URL}
+                  onClick={(event: React.MouseEvent) => {
+                    if (isGetSite) {
+                      event.preventDefault()
+                      void startLatestDownload('android')
+                    }
+
                     trackEvent('Download', {
                       store: 'direct',
                       platform: 'android',
@@ -177,7 +184,7 @@ export const DownloadMobileButton = (props: Props) => {
               </div>
             )}
 
-            {mobileOS === null && (
+            {mobileOS === null && !isGetSite && (
               <div className="mt-10 flex items-center justify-between gap-4 rounded-20 border border-neutral-30 p-3 pl-6 xl:mr-20 xl:flex-col xl:items-start xl:p-4 xl:pt-3">
                 <div>
                   <div className="text-19 font-semibold text-neutral-100">

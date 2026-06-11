@@ -42,7 +42,7 @@ pnpm --filter get.status.app dev
 
 Runs on **http://127.0.0.1:3005** (hub uses 3003, status.network uses 3002).
 
-`/api/download/*` links (from re-exported status.app route constants) are **not available in `next dev`** — they are plain static HTML written into `out/` during `postbuild`. Use `pnpm preview:production` to test download redirects locally.
+Desktop and APK download buttons fetch the latest GitHub release in the browser on click (1h session cache). App Store and Google Play links go directly to the stores.
 
 ## Static export (self-hosted)
 
@@ -59,7 +59,7 @@ Or in one step:
 pnpm --filter get.status.app preview:production
 ```
 
-`postbuild` writes static `/api/download/*` redirect pages (client-side GitHub fetch, 1h session cache), runs `next-sitemap`, strips the default locale prefix from `out/`, and copies `serve.json` for `serve` (`cleanUrls`).
+`postbuild` runs `next-sitemap`, strips the default locale prefix from `out/`, and copies `serve.json` for `serve` (`cleanUrls`).
 
 Deploy via [`Jenkinsfile.website`](../../Jenkinsfile.website) with `APP_NAME=get.status.app` (branches `deploy-get-status-app-main` / `deploy-get-status-app-develop`, domains `get.status.app` / `dev.get.status.app`).
 
