@@ -34,6 +34,7 @@
       "~/config/env.client.mjs": ["./src/config/env.client.mjs"],
       "~website/_lib/ghost": ["./src/stubs/ghost.ts"],
       "~/config/*": ["../status.app/src/config/*"],
+      "~components/assets": ["./src/app/_components/assets/index.tsx"],
       "~components/assets/*": ["./src/app/_components/assets/*"],
       "~components/*": ["../status.app/src/app/_components/*"],
       "~hooks/*": ["../status.app/src/app/_hooks/*"],

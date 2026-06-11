@@ -1,4 +1,4 @@
-/** *
+/**
  * @param {import('zod').ZodError} error
  */
 export function handleError(error) {
@@ -20,6 +20,9 @@ export function handleError(error) {
     failedVariables.join(', ')
   )
   console.info(
-    'ℹ️ Copy .env.example to .env.local and fill in the values you need.'
+    'ℹ️ Pull environment variables from Vercel (or provide your own): vercel env pull .env.local'
+  )
+  console.info(
+    'ℹ️ If exited while committing, add the variables to the example .env'
   )
 }

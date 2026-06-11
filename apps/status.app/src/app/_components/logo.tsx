@@ -3,8 +3,7 @@
 import { match, P } from 'ts-pattern'
 
 import { usePathname } from '~/i18n/navigation'
-
-import { Image } from './assets'
+import { Image } from '~components/assets'
 
 type Props = {
   label?: boolean

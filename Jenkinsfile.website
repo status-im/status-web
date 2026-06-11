@@ -25,7 +25,11 @@ pipeline {
     choice(
       name: 'APP_NAME',
       description: 'Name of app from apps folder.',
-      choices: choiceFromJobName(params.APP_NAME, ['hub', 'status.network']),
+      choices: choiceFromJobName(params.APP_NAME, [
+        'hub',
+        'status.network',
+        'get.status.app',
+      ]),
     )
     string(
       name: 'NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID',
@@ -93,10 +97,12 @@ pipeline {
         }
         dir("${env.WORKSPACE}/apps/${params.APP_NAME}") {
           script {
-            if (params.APP_NAME == 'status.network') {
-              buildStatusNetworkApp()
-            } else {
-              nix.develop('pnpm build', pure: false)
+            switch (params.APP_NAME) {
+              case 'status.network':
+                buildStatusNetworkApp()
+                break
+              default:
+                nix.develop('pnpm build', pure: false)
             }
             jenkins.genBuildMetaJSON('out/build.json')
           }
@@ -153,6 +159,8 @@ def deployBranch() {
       return isMainBranch() ? 'deploy-hub-main' : 'deploy-hub-develop'
     case 'status.network':
       return isMainBranch() ? 'deploy-status-network-main' : 'deploy-status-network-develop'
+    case 'get.status.app':
+      return isMainBranch() ? 'deploy-get-status-app-main' : 'deploy-get-status-app-develop'
     default:
       error("Unknown app: ${params.APP_NAME}.")
   }
@@ -164,6 +172,8 @@ def deployDomain() {
       return isMainBranch() ? 'hub.status.network' : 'dev.hub.status.network'
     case 'status.network':
       return isMainBranch() ? 'status.network' : 'dev.status.network'
+    case 'get.status.app':
+      return isMainBranch() ? 'get.status.app' : 'dev.get.status.app'
     default:
       error("Unknown app: ${params.APP_NAME}.")
   }
