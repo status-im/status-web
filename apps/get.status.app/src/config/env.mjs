@@ -6,5 +6,5 @@ import { loadEnvConfig } from '@next/env'
 
 loadEnvConfig(
   path.resolve(process.cwd()),
-  process.env.NODE_ENV !== 'production',
+  process.env.NODE_ENV !== 'production'
 )
