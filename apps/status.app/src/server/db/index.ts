@@ -1,19 +1,22 @@
-// note: https://orm.drizzle.team/learn/tutorials/drizzle-with-frameworks/drizzle-nextjs-neon#project-file-structure project file structure example
+// note: https://orm.drizzle.team/docs/get-started-postgresql#node-postgres
 import 'server-only'
 
-import { createPool } from '@vercel/postgres'
-import { drizzle } from 'drizzle-orm/vercel-postgres'
+import { drizzle } from 'drizzle-orm/node-postgres'
+import { Pool } from 'pg'
 
 import { serverEnv } from '~/config/env.server.mjs'
 
 import * as schema from './schema'
 
 /**
- * >Creating a client is preferred over the sql helper if you need to make multiple queries or want to run transactions, as sql will connect for every query.
- * >– https://vercel.com/docs/storage/vercel-postgres/sdk#db
+ * Single pg Pool reused across requests. Works against any Postgres
+ * (self-hosted, RDS, Neon over the TCP protocol, etc.).
+ *
+ * `connectionString` is optional during `next build` (runtime-only secret);
+ * pg lazily connects on the first query.
  */
-const client = createPool({
+const pool = new Pool({
   connectionString: serverEnv.POSTGRES_URL,
 })
 
-export const db = drizzle(client, { schema })
+export const db = drizzle(pool, { schema })

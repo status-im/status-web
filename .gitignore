@@ -110,3 +110,4 @@ web-build/
 
 # Foundry dependencies
 packages/community-contracts/lib/
+.env*.local
