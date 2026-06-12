@@ -10,8 +10,8 @@ export function Table(props: {
   const { hasShadow = false, children } = props
 
   const table = (
-    <div className="overflow-hidden rounded-12 border border-neutral-20">
-      <table className="w-full group-[.group]:max-w-[calc(540px-2rem)]">
+    <div className="inline-block min-w-full overflow-hidden rounded-12 border border-neutral-20 align-top">
+      <table className="min-w-full group-[.group]:max-w-[calc(540px-2rem)]">
         {children}
       </table>
     </div>
@@ -21,7 +21,9 @@ export function Table(props: {
     <div className="overflow-x-auto">
       <div className="w-full max-[542px]:pb-4 max-[542px]:pr-12">
         {hasShadow ? (
-          <div className="w-full rounded-12 shadow-1">{table}</div>
+          <div className="inline-block min-w-full rounded-12 shadow-1">
+            {table}
+          </div>
         ) : (
           table
         )}
