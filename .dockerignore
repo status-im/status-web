@@ -41,6 +41,17 @@ e2e
 **/.npm
 **/.pnpm-debug.log
 **/.eslintcache
+README.md
+**/README.md
+# Docker / compose (referenced via -f, not COPY'd)
+Dockerfile*
+compose.y*ml
+docker-compose.y*ml
+
+# TLS keys and local certs
+*.pem
+*.key
+*.crt
 
 # Wallet/connector/extension build outputs (other apps in the workspace)
 apps/wallet/.output

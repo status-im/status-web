@@ -3,8 +3,14 @@
 # Multi-stage Docker build for self-hosting `apps/status.app` (Next.js 15).
 #
 # Layout: build context is the monorepo root.
-# Build:  docker build -f apps/status.app/Dockerfile -t status-web/status.app:dev .
-# Run:    docker run --rm -p 3001:3001 --env-file apps/status.app/.env.local status-web/status.app:dev
+# Build:  docker build -f apps/status.app/Dockerfile \
+#             --secret id=infura_api_key,env=INFURA_API_KEY \
+#             --secret id=greenhouse_api_key,env=GREENHOUSE_API_KEY \
+#             --secret id=github_token,env=GITHUB_TOKEN \
+#             --build-arg NEXT_PUBLIC_GHOST_API_URL=... \
+#             ... \
+#             -t status-web/status.app:dev .
+# Run:    see package.json `start:docker` (pass runtime secrets via -e, not --env-file)
 #
 # Uses Next.js standalone output (`output: 'standalone'`) to ship only the
 # files actually needed at runtime — server.js, traced node_modules, .next/static.
@@ -57,17 +63,13 @@ RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
 # ────────────────────────────────────────────────────────────────────────────
 FROM deps AS build
 
-# Build-time env (NEXT_PUBLIC_* are inlined into client bundles; required for SSG/ISR).
-ARG GHOST_API_URL
+# NEXT_PUBLIC_* are inlined into client bundles; required for SSG/ISR.
 ARG NEXT_PUBLIC_GHOST_API_URL
 ARG NEXT_PUBLIC_GHOST_API_KEY
 ARG NEXT_PUBLIC_INFURA_API_KEY
 ARG NEXT_PUBLIC_HASURA_API_URL
-ARG INFURA_API_KEY
-ARG GREENHOUSE_API_KEY
 ARG GREENHOUSE_STATUS_BOARD_ID
 ARG GREENHOUSE_LOGOS_BOARD_ID
-ARG GITHUB_TOKEN
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -75,32 +77,28 @@ ENV NEXT_PUBLIC_GHOST_API_URL=$NEXT_PUBLIC_GHOST_API_URL
 ENV NEXT_PUBLIC_GHOST_API_KEY=$NEXT_PUBLIC_GHOST_API_KEY
 ENV NEXT_PUBLIC_INFURA_API_KEY=$NEXT_PUBLIC_INFURA_API_KEY
 ENV NEXT_PUBLIC_HASURA_API_URL=$NEXT_PUBLIC_HASURA_API_URL
-ENV INFURA_API_KEY=$INFURA_API_KEY
-ENV GREENHOUSE_API_KEY=$GREENHOUSE_API_KEY
 ENV GREENHOUSE_STATUS_BOARD_ID=$GREENHOUSE_STATUS_BOARD_ID
 ENV GREENHOUSE_LOGOS_BOARD_ID=$GREENHOUSE_LOGOS_BOARD_ID
-ENV GITHUB_TOKEN=$GITHUB_TOKEN
 
-# Placeholders for runtime-only secrets so env.server.mjs validation passes
-# during `next lint` (which doesn't set NEXT_PHASE). These never reach the
-# runtime stage — only .next/standalone/ is copied forward, and the orchestrator
-# provides real values via `docker run -e` at runtime.
-ENV POSTGRES_URL=postgres://build:build@build-placeholder/build
-ENV KEYCLOAK_API_URL=https://build-placeholder.invalid
-ENV KEYCLOAK_REALM=build-placeholder
-ENV KEYCLOAK_ISSUER=https://build-placeholder.invalid/realms/build-placeholder
-ENV KEYCLOAK_CLIENT_ID=build-placeholder
-ENV KEYCLOAK_CLIENT_SECRET=build-placeholder
-ENV BAMBOOHR_API_KEY=build-placeholder
-ENV SITE_URL=https://build-placeholder.invalid
-
-# Two steps:
-#   1. turbo builds the workspace deps (@status-im/icons, components, etc.) —
-#      turbo caches this layer and limits env to declared passThroughEnv.
-#   2. pnpm runs `next build` directly so it inherits ALL the ENV vars set
-#      above (including the runtime placeholders), bypassing turbo's env filter.
-RUN pnpm turbo run build --filter=status.app^...
-RUN pnpm --filter status.app build
+# Server-side build secrets via BuildKit mounts (not persisted in layer ENV).
+# Runtime-only placeholders are scoped to this RUN so env.server.mjs validation
+# passes during build; real values are injected at `docker run` time.
+RUN --mount=type=secret,id=infura_api_key \
+    --mount=type=secret,id=greenhouse_api_key \
+    --mount=type=secret,id=github_token \
+    export INFURA_API_KEY="$(cat /run/secrets/infura_api_key)" \
+    GREENHOUSE_API_KEY="$(cat /run/secrets/greenhouse_api_key)" \
+    GITHUB_TOKEN="$(cat /run/secrets/github_token)" \
+    POSTGRES_URL="postgres://build:build@build-placeholder/build" \
+    KEYCLOAK_API_URL="https://build-placeholder.invalid" \
+    KEYCLOAK_REALM="build-placeholder" \
+    KEYCLOAK_ISSUER="https://build-placeholder.invalid/realms/build-placeholder" \
+    KEYCLOAK_CLIENT_ID="build-placeholder" \
+    KEYCLOAK_CLIENT_SECRET="build-placeholder" \
+    BAMBOOHR_API_KEY="build-placeholder" \
+    SITE_URL="https://build-placeholder.invalid" \
+    && pnpm turbo run build --filter=status.app^... \
+    && pnpm --filter status.app build
 
 # ────────────────────────────────────────────────────────────────────────────
 # Stage 4 — runtime: minimal image with `next start` (standalone)
@@ -124,6 +122,9 @@ ENV HOSTNAME=0.0.0.0
 COPY --from=build --chown=nextjs:nodejs /workspace/apps/status.app/.next/standalone ./
 COPY --from=build --chown=nextjs:nodejs /workspace/apps/status.app/.next/static ./apps/status.app/.next/static
 COPY --from=build --chown=nextjs:nodejs /workspace/apps/status.app/public ./apps/status.app/public
+
+# Writable cache dir for ISR revalidation, fetch cache, and image optimization.
+RUN mkdir -p apps/status.app/.next && chown -R nextjs:nodejs apps/status.app/.next
 
 USER nextjs
 
