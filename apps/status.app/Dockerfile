@@ -52,7 +52,6 @@ COPY pnpm-lock.yaml pnpm-workspace.yaml package.json .npmrc tsconfig.base.json t
 COPY patches/ ./patches/
 COPY apps/status.app/package.json ./apps/status.app/
 COPY packages/ ./packages/
-COPY apps/status.app/ ./apps/status.app/
 
 RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
     pnpm install --filter status.app... \
@@ -62,6 +61,9 @@ RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
 # Stage 3 — build: compile Contentlayer + Next.js standalone bundle
 # ────────────────────────────────────────────────────────────────────────────
 FROM deps AS build
+
+# App source after install so dependency layers stay cached on code-only changes.
+COPY apps/status.app/ ./apps/status.app/
 
 # NEXT_PUBLIC_* are inlined into client bundles; required for SSG/ISR.
 ARG NEXT_PUBLIC_GHOST_API_URL

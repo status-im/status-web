@@ -14,6 +14,8 @@ if (typeof window !== 'undefined') {
 // why: https://nextjs.org/docs/app/guides/self-hosting#environment-variables
 const isBuild = process.env.NEXT_PHASE === 'phase-production-build'
 const runtimeRequired = isBuild ? z.string().optional() : z.string()
+const siteUrlRequired =
+  !isBuild && process.env.NODE_ENV === 'production' && !process.env.VERCEL
 
 export const envSchema = z.object({
   NODE_ENV: z
@@ -41,7 +43,7 @@ export const envSchema = z.object({
    * and an attacker controlling the host header could direct OAuth state /
    * server-side fetches to a chosen domain.
    */
-  SITE_URL: z.string().url().optional(),
+  SITE_URL: siteUrlRequired ? z.string().url() : z.string().url().optional(),
 
   // Build-time strict — read during SSG/ISR/`generateMetadata`/sitemap.
   INFURA_API_KEY: z.string(),
