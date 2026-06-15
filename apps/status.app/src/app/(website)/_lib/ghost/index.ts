@@ -245,30 +245,6 @@ export const getTagSlugs = async (): Promise<string[]> => {
   }
 }
 
-export type TagSitemapEntry = {
-  slug: string
-}
-
-export const getTagsForSitemap = async (): Promise<TagSitemapEntry[]> => {
-  try {
-    const tags = await ghost.tags.browse({
-      limit: clientEnv.NEXT_PUBLIC_VERCEL_ENV === 'production' ? 'all' : 50,
-      fields: 'slug',
-      filter: `visibility:public`,
-    })
-
-    return tags
-      .filter(
-        (tag): tag is typeof tag & { slug: string } =>
-          !!tag.slug && !ALL_EXCLUDED_TAGS.includes(tag.slug)
-      )
-      .map(tag => ({ slug: tag.slug }))
-  } catch (error) {
-    console.error('Failed to fetch tags for sitemap from Ghost API:', error)
-    return []
-  }
-}
-
 type LearnParams = { page?: number; limit?: number }
 
 export const getLearnPosts = async (params: LearnParams = {}) => {

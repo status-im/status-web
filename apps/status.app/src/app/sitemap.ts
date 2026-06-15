@@ -2,7 +2,6 @@ import { allHelpDocs, allSpecsDocs } from '~content'
 import {
   getLearnPostsForSitemap,
   getPostsForSitemap,
-  getTagsForSitemap,
 } from '~website/_lib/ghost'
 
 import type { MetadataRoute } from 'next'
@@ -56,9 +55,8 @@ function toDate(value: string | Date | undefined): Date {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const buildDate = new Date()
 
-  const [posts, tags, learnPosts] = await Promise.all([
+  const [posts, learnPosts] = await Promise.all([
     getPostsForSitemap(),
-    getTagsForSitemap(),
     getLearnPostsForSitemap(),
   ])
 
@@ -74,10 +72,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   for (const post of learnPosts) {
     entries.set(toUrl(`/blog/${post.slug}`), toDate(post.updatedAt))
-  }
-
-  for (const tag of tags) {
-    entries.set(toUrl(`/blog/tag/${tag.slug}`), buildDate)
   }
 
   for (const doc of allHelpDocs) {
