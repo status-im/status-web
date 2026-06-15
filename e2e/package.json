@@ -7,6 +7,9 @@
     "test": "playwright test",
     "test:smoke": "playwright test --project=smoke",
     "test:wallet": "playwright test --project=wallet-flows",
+    "test:anvil": "pnpm anvil:up && playwright test --project=anvil; EXIT=$?; pnpm anvil:down; exit $EXIT",
+    "anvil:up": "test -f .env.local && ENV_FILES='--env-file .env --env-file .env.local' || ENV_FILES='--env-file .env'; docker compose $ENV_FILES -f docker-compose.anvil.yml up -d --wait",
+    "anvil:down": "test -f .env.local && ENV_FILES='--env-file .env --env-file .env.local' || ENV_FILES='--env-file .env'; docker compose $ENV_FILES -f docker-compose.anvil.yml down",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
     "test:ui": "playwright test --ui",
@@ -32,6 +35,9 @@
       "eslint --fix",
       "prettier --write"
     ]
+  },
+  "config": {
+    "metamaskVersion": "13.18.1"
   },
   "engines": {
     "node": "22.x"
