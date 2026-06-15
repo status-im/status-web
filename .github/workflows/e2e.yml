@@ -1,27 +1,11 @@
 name: E2E Tests
 
 on:
-  deployment_status:
   push:
     branches: ['main']
-    paths:
-      - 'e2e/**'
-      - 'apps/hub/**'
-      - 'packages/colors/**'
-      - 'packages/icons/**'
-      - 'packages/components/**'
-      - 'packages/wallet/**'
-      - 'packages/status-network/**'
-      - 'packages/sitemap-utils/**'
-      - 'patches/**'
-      - 'package.json'
-      - 'turbo.json'
-  workflow_dispatch:
-    inputs:
-      base_url:
-        description: 'Base URL to test against'
-        required: false
-        default: 'https://hub.status.network'
+  pull_request:
+    types: [opened, synchronize]
+  workflow_call:
 
 env:
   METAMASK_VERSION: '13.18.1'
@@ -31,12 +15,6 @@ jobs:
     name: E2E Tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    if: >
-      (github.event_name == 'deployment_status'
-        && github.event.deployment_status.state == 'success'
-        && contains(github.event.deployment_status.target_url, 'status-network-hub'))
-      || github.event_name == 'push'
-      || github.event_name == 'workflow_dispatch'
 
     steps:
       - name: Determine BASE_URL
