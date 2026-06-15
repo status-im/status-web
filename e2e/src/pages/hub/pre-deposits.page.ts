@@ -30,13 +30,4 @@ export class PreDepositsPage extends BasePage {
   async waitForReady(): Promise<void> {
     await expect(this.heading).toBeVisible({ timeout: HUB_TIMEOUTS.PAGE_READY })
   }
-
-  /** Click deposit on a specific vault by token symbol */
-  async clickDepositForVault(symbol: string): Promise<void> {
-    const depositButton = this.page
-      .locator(`text=${symbol}`)
-      .locator('..')
-      .getByRole('button', { name: /deposit/i })
-    await depositButton.click()
-  }
 }
