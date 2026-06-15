@@ -12,11 +12,15 @@ export class PreDepositsPage extends BasePage {
     .first()
   readonly faqHeading = this.page.getByRole('heading', { name: /faq/i })
 
-  /** All vault name headings on the page */
+  /**
+   * Vault card name headings (e.g. "WETH vault", "SNT Vault").
+   * Anchored to the "<token> vault" shape so FAQ accordion headings that also
+   * contain the word "vault" are not matched.
+   */
   get vaultHeadings() {
     return this.page
       .getByRole('heading', { level: 3 })
-      .filter({ hasText: /vault/i })
+      .filter({ hasText: /^\S+ vaults?$/i })
   }
 
   constructor(page: Page) {
