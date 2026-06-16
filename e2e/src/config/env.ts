@@ -13,17 +13,27 @@ export function loadEnvConfig(): EnvConfig {
   dotenv.config({ path: path.join(rootDir, '.env.local') })
   dotenv.config({ path: path.join(rootDir, '.env') })
 
+  // Read default MetaMask version from package.json (single source of truth)
+  const pkg = JSON.parse(
+    fs.readFileSync(path.join(rootDir, 'package.json'), 'utf-8'),
+  ) as { config: { metamaskVersion: string } }
+
+  // Build Anvil RPC URLs from port env vars (same vars as docker-compose.anvil.yml)
+  const mainnetPort = process.env.MAINNET_FORK_PORT ?? '8547'
+  const lineaPort = process.env.LINEA_FORK_PORT ?? '8546'
+
   const config: EnvConfig = {
     BASE_URL: process.env.BASE_URL ?? 'https://hub.status.network',
     WALLET_SEED_PHRASE: process.env.WALLET_SEED_PHRASE ?? '',
     WALLET_PASSWORD: process.env.WALLET_PASSWORD ?? '',
     METAMASK_EXTENSION_PATH: resolveExtensionPath(rootDir),
-    METAMASK_VERSION: process.env.METAMASK_VERSION ?? '13.18.1',
-    STATUS_SEPOLIA_RPC_URL:
-      process.env.STATUS_SEPOLIA_RPC_URL ??
-      'https://public.sepolia.rpc.status.network',
-    STATUS_SEPOLIA_CHAIN_ID:
-      process.env.STATUS_SEPOLIA_CHAIN_ID ?? '1660990954',
+    METAMASK_VERSION:
+      process.env.METAMASK_VERSION ?? pkg.config.metamaskVersion,
+    ANVIL_MAINNET_RPC:
+      process.env.ANVIL_MAINNET_RPC || `http://localhost:${mainnetPort}`,
+    ANVIL_LINEA_RPC:
+      process.env.ANVIL_LINEA_RPC || `http://localhost:${lineaPort}`,
+    WALLET_ADDRESS: process.env.WALLET_ADDRESS ?? '',
   }
 
   cachedConfig = config

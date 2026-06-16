@@ -54,5 +54,12 @@ export default defineConfig({
         headless: false,
       },
     },
+    {
+      name: 'anvil',
+      grep: /@anvil/,
+      use: {
+        headless: false,
+      },
+    },
   ],
 })
