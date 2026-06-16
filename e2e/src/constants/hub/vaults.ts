@@ -32,11 +32,3 @@ export const TEST_VAULTS = {
     chainId: 1,
   },
 } as const
-
-export const TEST_AMOUNTS = {
-  SMALL_DEPOSIT: '0.001',
-  MEDIUM_DEPOSIT: '0.01',
-  LARGE_DEPOSIT: '0.1',
-  STAKE_AMOUNT: '100',
-  EXCEED_BALANCE: '999999999',
-} as const

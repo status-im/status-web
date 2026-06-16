@@ -12,11 +12,15 @@ export class PreDepositsPage extends BasePage {
     .first()
   readonly faqHeading = this.page.getByRole('heading', { name: /faq/i })
 
-  /** All vault name headings on the page */
+  /**
+   * Vault card name headings (e.g. "WETH vault", "SNT Vault").
+   * Anchored to the "<token> vault" shape so FAQ accordion headings that also
+   * contain the word "vault" are not matched.
+   */
   get vaultHeadings() {
     return this.page
       .getByRole('heading', { level: 3 })
-      .filter({ hasText: /vault/i })
+      .filter({ hasText: /^\S+ vaults?$/i })
   }
 
   constructor(page: Page) {
@@ -29,14 +33,5 @@ export class PreDepositsPage extends BasePage {
 
   async waitForReady(): Promise<void> {
     await expect(this.heading).toBeVisible({ timeout: HUB_TIMEOUTS.PAGE_READY })
-  }
-
-  /** Click deposit on a specific vault by token symbol */
-  async clickDepositForVault(symbol: string): Promise<void> {
-    const depositButton = this.page
-      .locator(`text=${symbol}`)
-      .locator('..')
-      .getByRole('button', { name: /deposit/i })
-    await depositButton.click()
   }
 }
