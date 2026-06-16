@@ -1,8 +1,18 @@
 import { NOTIFICATION_TIMEOUTS } from '@constants/timeouts.js'
+import { test } from '@playwright/test'
 
-import type { BrowserContext, Page } from '@playwright/test'
+import type { BrowserContext, Locator, Page } from '@playwright/test'
+
+/** Interval for progress logging inside waitConfirmable (ms) */
+const WAIT_CONFIRMABLE_LOG_INTERVAL_MS = 5_000
+/** Max iterations to walk past queued "Add network" popups in MetaMask */
+const MAX_ADD_NETWORK_CLEAR_ATTEMPTS = 10
+/** Default wall-clock budget for clearAddNetworkQueue (ms) */
+const CLEAR_ADD_NETWORK_DEADLINE_MS = 60_000
 
 export class NotificationPage {
+  private cachedHomePage: Page | null = null
+
   constructor(
     private readonly context: BrowserContext,
     private readonly extensionId: string,
@@ -22,58 +32,488 @@ export class NotificationPage {
     }
   }
 
-  /**
-   * Get the MetaMask notification page.
-   * Checks for an already-open notification page first,
-   * then manually opens notification.html.
-   *
-   * MetaMask does not auto-open popups in automated (Playwright) contexts,
-   * so we always open notification.html directly.
-   */
-  private async waitForNotificationPage(): Promise<Page> {
-    // Check if already open
-    const existing = this.context.pages().find(p => this.isMetaMaskPopup(p))
+  private isMetaMaskHome(page: Page): boolean {
+    try {
+      const parsed = new URL(page.url())
+      return (
+        parsed.protocol === 'chrome-extension:' &&
+        parsed.host === this.extensionId &&
+        parsed.pathname.includes('home.html')
+      )
+    } catch {
+      return false
+    }
+  }
 
+  // MetaMask v13.18.1 uses different test IDs per confirmation type
+  private confirmButton(page: Page): Locator {
+    return page
+      .getByTestId('page-container-footer-next')
+      .or(page.getByTestId('confirmation-submit-button'))
+      .or(page.getByTestId('confirm-footer-button'))
+      .or(page.getByRole('button', { name: /^confirm$/i }))
+  }
+
+  private cancelButton(page: Page): Locator {
+    return page
+      .getByTestId('confirmation-cancel-button')
+      .or(page.getByTestId('confirm-footer-cancel-button'))
+      .or(page.getByRole('button', { name: /^cancel$/i }))
+  }
+
+  private async isSpendingCapConfirmation(page: Page): Promise<boolean> {
+    return page
+      .getByText(
+        /spending cap|permission to withdraw|allow this site to spend/i,
+      )
+      .isVisible({ timeout: NOTIFICATION_TIMEOUTS.SHORT_SETTLE })
+      .catch(() => false)
+  }
+
+  private async getOrCreateHomePage(): Promise<Page> {
+    if (this.cachedHomePage && !this.cachedHomePage.isClosed()) {
+      return this.cachedHomePage
+    }
+
+    const existing = this.context
+      .pages()
+      .find(p => this.isMetaMaskHome(p) && !p.isClosed())
     if (existing) {
-      await existing.waitForLoadState('domcontentloaded')
+      this.cachedHomePage = existing
       return existing
     }
 
-    // Open notification.html directly
     const page = await this.context.newPage()
-    await page.goto(
-      `chrome-extension://${this.extensionId}/notification.html`,
-      { waitUntil: 'domcontentloaded' },
-    )
+    await page.goto(`chrome-extension://${this.extensionId}/home.html`, {
+      waitUntil: 'load',
+    })
+    this.cachedHomePage = page
     return page
   }
 
-  /** Approve a dApp connection request */
+  /**
+   * Check MetaMask Activity for any "Unapproved" tx.
+   * Used to verify approveTransaction() confirmed the right request,
+   * not a stale one from the queue.
+   */
+  private async hasUnapprovedActivityEntry(): Promise<boolean> {
+    const homePage = await this.getOrCreateHomePage()
+
+    // Activity entries are only visible on the Activity tab, not default Tokens tab
+    const activityTab = homePage
+      .getByRole('tab', { name: /^activity$/i })
+      .or(homePage.getByRole('button', { name: /^activity$/i }))
+      .or(homePage.getByText(/^activity$/i))
+    if (
+      await activityTab
+        .first()
+        .isVisible({ timeout: NOTIFICATION_TIMEOUTS.CONTENT_CHECK })
+        .catch(() => false)
+    ) {
+      await activityTab
+        .first()
+        .click()
+        .catch(() => {})
+      await homePage.waitForTimeout(NOTIFICATION_TIMEOUTS.DOM_SETTLE)
+    }
+
+    return homePage
+      .getByText(/unapproved/i)
+      .first()
+      .isVisible({ timeout: NOTIFICATION_TIMEOUTS.CONTENT_CHECK })
+      .catch(() => false)
+  }
+
+  private async dismissToastOverlays(page: Page): Promise<void> {
+    const toast = page.getByTestId('storage-error-toast-banner-base')
+    if (
+      await toast
+        .isVisible({ timeout: NOTIFICATION_TIMEOUTS.DOM_SETTLE })
+        .catch(() => false)
+    ) {
+      const closeBtn = toast
+        .locator('[aria-label="Close"]')
+        .or(toast.getByRole('button', { name: /close|dismiss/i }))
+        .or(toast.locator('button').first())
+      await closeBtn.click().catch(() => {})
+      await page.waitForTimeout(NOTIFICATION_TIMEOUTS.DOM_SETTLE)
+    }
+  }
+
+  private async closeStaleNotificationPages(): Promise<void> {
+    let closed = false
+    for (const p of this.context.pages()) {
+      if (this.isMetaMaskPopup(p) && !p.isClosed()) {
+        await p.close()
+        closed = true
+      }
+    }
+    // Wait for service worker to release the messaging port
+    if (closed) {
+      await new Promise(resolve =>
+        setTimeout(resolve, NOTIFICATION_TIMEOUTS.SHORT_SETTLE),
+      )
+    }
+  }
+
+  /**
+   * Open notification.html and wait for MetaMask to push content.
+   * We open ONCE and wait patiently — rapid reloads disconnect the MV3
+   * messaging port, which MetaMask may interpret as user rejection.
+   */
+  private async waitForNotificationPage(
+    contentTimeout: number = NOTIFICATION_TIMEOUTS.NOTIFICATION_CONTENT,
+  ): Promise<Page> {
+    for (const p of this.context.pages()) {
+      if (this.isMetaMaskPopup(p) && !p.isClosed()) {
+        const hasContent = await p
+          .locator('button')
+          .first()
+          .isVisible({ timeout: NOTIFICATION_TIMEOUTS.CONTENT_CHECK })
+          .catch(() => false)
+        if (hasContent) return p
+      }
+    }
+
+    const page = await this.context.newPage()
+    await page.goto(
+      `chrome-extension://${this.extensionId}/notification.html`,
+      { waitUntil: 'load' },
+    )
+
+    // Can take 10-60s: gas estimation + Blockaid security checks
+    const hasContent = await page
+      .locator('button')
+      .first()
+      .isVisible({ timeout: contentTimeout })
+      .catch(() => false)
+
+    if (!hasContent) {
+      if (!page.isClosed()) await page.close()
+      await new Promise(resolve =>
+        setTimeout(resolve, NOTIFICATION_TIMEOUTS.PAGE_REOPEN),
+      )
+
+      const freshPage = await this.context.newPage()
+      await freshPage.goto(
+        `chrome-extension://${this.extensionId}/notification.html`,
+        { waitUntil: 'load' },
+      )
+      await freshPage
+        .locator('button')
+        .first()
+        .isVisible({ timeout: contentTimeout })
+        .catch(() => false)
+      return freshPage
+    }
+
+    return page
+  }
+
+  /**
+   * Collect a fingerprint of a popup's current state: URL + presence of a few
+   * well-known UI markers. Used in waitForConfirmablePopupPage to diagnose
+   * stalls where the Confirm button never appears (e.g. MetaMask gas
+   * estimation hangs, "Unable to fetch" error screen, spending-cap popup
+   * still open after approve). All probes are fail-fast so fingerprinting
+   * never extends the polling loop.
+   */
+  private async fingerprintPopup(page: Page): Promise<Record<string, unknown>> {
+    const quick = { timeout: 100 } as const
+    const is = (loc: Locator) => loc.isVisible(quick).catch(() => false)
+    const [
+      confirmVisible,
+      spendingCap,
+      gasError,
+      unableError,
+      insufficient,
+      h1Text,
+    ] = await Promise.all([
+      is(this.confirmButton(page)),
+      is(
+        page.getByText(
+          /spending cap|permission to withdraw|allow this site to spend/i,
+        ),
+      ),
+      is(page.getByText(/gas estimation|estimating gas/i)),
+      is(page.getByText(/unable to fetch|we could not|something went wrong/i)),
+      is(page.getByText(/insufficient (funds|balance)/i)),
+      page
+        .locator('h1, h2, [role="heading"]')
+        .first()
+        .innerText({ timeout: 100 })
+        .catch(() => ''),
+    ])
+    return {
+      url: page.url(),
+      confirmVisible,
+      spendingCap,
+      gasError,
+      unableError,
+      insufficient,
+      h1: (h1Text || '').slice(0, 80),
+    }
+  }
+
+  private async waitForConfirmablePopupPage(timeout: number): Promise<Page> {
+    const t0 = Date.now()
+    const deadline = t0 + timeout
+    let openedFallbackPage = false
+    let iterCount = 0
+    let lastLog = t0
+
+    while (Date.now() < deadline) {
+      iterCount++
+      const popups = this.context
+        .pages()
+        .filter(p => this.isMetaMaskPopup(p) && !p.isClosed())
+
+      for (const p of popups) {
+        const hasConfirm = await this.confirmButton(p)
+          .isVisible({ timeout: NOTIFICATION_TIMEOUTS.DOM_SETTLE })
+          .catch(() => false)
+        if (hasConfirm) return p
+      }
+
+      // Log every 5s with current state + per-popup fingerprints
+      if (Date.now() - lastLog > WAIT_CONFIRMABLE_LOG_INTERVAL_MS) {
+        const prints = await Promise.all(
+          popups.map(p => this.fingerprintPopup(p)),
+        )
+        console.log(
+          `[waitConfirmable +${Date.now() - t0}ms] iters=${iterCount} popups=${popups.length} fallbackOpened=${openedFallbackPage} prints=${JSON.stringify(prints)}`,
+        )
+        lastLog = Date.now()
+      }
+
+      if (!openedFallbackPage) {
+        // Open notification.html so MetaMask can push queued confirmations.
+        const fallback = await this.context.newPage()
+        await fallback
+          .goto(`chrome-extension://${this.extensionId}/notification.html`, {
+            waitUntil: 'load',
+          })
+          .catch(() => {})
+        openedFallbackPage = true
+        console.log(
+          `[waitConfirmable +${Date.now() - t0}ms] opened fallback page`,
+        )
+      }
+
+      await new Promise(resolve =>
+        setTimeout(resolve, NOTIFICATION_TIMEOUTS.POLL_INTERVAL),
+      )
+    }
+
+    // Diagnostic: capture screenshots + HTML of every popup so the failing
+    // confirmation can be analysed post-hoc (MetaMask gas-estimation stalls,
+    // unexpected error screens, etc.).
+    await this.dumpPopupsToArtifacts(
+      'waitConfirmable-timeout',
+      `timeout after ${timeout}ms, iters=${iterCount}`,
+    )
+
+    throw new Error('MetaMask transaction confirmation button did not appear')
+  }
+
+  private async dumpPopupsToArtifacts(
+    label: string,
+    note: string,
+  ): Promise<void> {
+    let info: ReturnType<typeof test.info>
+    try {
+      info = test.info()
+    } catch {
+      // Not inside a test — nothing to attach to.
+      return
+    }
+    const popups = this.context
+      .pages()
+      .filter(p => this.isMetaMaskPopup(p) && !p.isClosed())
+    await info.attach(`${label}-note.txt`, {
+      body: `${note}\nPopups: ${popups.length}`,
+      contentType: 'text/plain',
+    })
+    await Promise.all(
+      popups.map(async (p, idx) => {
+        const safeUrl = p
+          .url()
+          .replace(/[^a-z0-9]+/gi, '_')
+          .slice(0, 60)
+        try {
+          const png = await p.screenshot({ fullPage: false })
+          await info.attach(`${label}-${idx}-${safeUrl}.png`, {
+            body: png,
+            contentType: 'image/png',
+          })
+        } catch {
+          // ignore — popup may have closed
+        }
+        try {
+          const html = await p.content()
+          await info.attach(`${label}-${idx}-${safeUrl}.html`, {
+            body: html,
+            contentType: 'text/html',
+          })
+        } catch {
+          // ignore
+        }
+      }),
+    )
+  }
+
   async approveConnection(): Promise<void> {
-    const page = await this.waitForNotificationPage()
+    const t0 = Date.now()
+    const log = (msg: string) =>
+      console.log(`[approveConnection +${Date.now() - t0}ms] ${msg}`)
+
+    let page = this.context
+      .pages()
+      .find(p => this.isMetaMaskPopup(p) && !p.isClosed())
+
+    if (page) {
+      log('reusing existing popup')
+    } else {
+      page = await this.context.newPage()
+      await page.goto(
+        `chrome-extension://${this.extensionId}/notification.html`,
+        { waitUntil: 'load' },
+      )
+      log('opened notification.html')
+    }
 
     const connectButton = page
       .getByRole('button', { name: /^connect$/i })
       .or(page.getByTestId('page-container-footer-next'))
 
+    log('waiting for Connect button...')
     await connectButton.click({
-      timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM,
+      timeout: NOTIFICATION_TIMEOUTS.NOTIFICATION_CONTENT,
     })
+    log('Connect clicked')
   }
 
   /** Approve a transaction (Confirm button) */
-  async approveTransaction(): Promise<void> {
-    const page = await this.waitForNotificationPage()
+  async approveTransaction(
+    contentTimeout: number = NOTIFICATION_TIMEOUTS.NOTIFICATION_CONTENT,
+  ): Promise<void> {
+    const t0 = Date.now()
+    const log = (msg: string) =>
+      console.log(`[approveTransaction +${Date.now() - t0}ms] ${msg}`)
 
-    const confirmButton = page
-      .getByTestId('page-container-footer-next')
-      .or(page.getByRole('button', { name: /confirm/i }))
-    await confirmButton.click({
-      timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM,
-    })
+    log('start')
+    const deadline = Date.now() + contentTimeout
+    let page: Page | null = null
+
+    while (Date.now() < deadline) {
+      const remaining = Math.max(
+        NOTIFICATION_TIMEOUTS.PAGE_REOPEN,
+        deadline - Date.now(),
+      )
+      page = await this.waitForConfirmablePopupPage(remaining)
+      log('found confirmable page')
+      page = await this.clearAddNetworkQueue(
+        page,
+        MAX_ADD_NETWORK_CLEAR_ATTEMPTS,
+        deadline,
+      )
+
+      // Skip stale spending-cap confirmation from approveTokenSpend() —
+      // otherwise we "confirm" the wrong request and the deposit stays pending
+      if (await this.isSpendingCapConfirmation(page)) {
+        await page.waitForTimeout(NOTIFICATION_TIMEOUTS.SHORT_SETTLE)
+        continue
+      }
+
+      const confirm = this.confirmButton(page)
+      const hasConfirm = await confirm
+        .isVisible({ timeout: NOTIFICATION_TIMEOUTS.CONTENT_CHECK })
+        .catch(() => false)
+
+      if (!hasConfirm) {
+        await page.waitForTimeout(NOTIFICATION_TIMEOUTS.SHORT_SETTLE)
+        continue
+      }
+
+      // Dismiss toast overlays that block clicks, then force-click — MetaMask
+      // may re-render during gas estimation, detaching the DOM element
+      await this.dismissToastOverlays(page)
+      log('clicking Confirm...')
+      try {
+        await confirm.click({
+          timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM,
+          force: true,
+        })
+        log('Confirm clicked')
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : ''
+        log(`Confirm click error: ${msg}`)
+        if (!msg.includes('Timeout') && !msg.includes('detach')) throw err
+
+        // Click may have succeeded despite error — check if button disappeared
+        await page.waitForTimeout(NOTIFICATION_TIMEOUTS.SHORT_SETTLE)
+        const stillVisible = await this.confirmButton(page)
+          .isVisible({ timeout: NOTIFICATION_TIMEOUTS.PAGE_REOPEN })
+          .catch(() => false)
+        if (!stillVisible) {
+          await page.waitForTimeout(NOTIFICATION_TIMEOUTS.PAGE_REOPEN)
+          const confirmedAfterError = !(await this.hasUnapprovedActivityEntry())
+          if (confirmedAfterError) {
+            if (!page.isClosed()) await page.close()
+            return
+          }
+        }
+        continue
+      }
+      if (page.isClosed()) return
+
+      await page.waitForTimeout(NOTIFICATION_TIMEOUTS.POST_CLICK)
+
+      if (page.isClosed()) return
+
+      // MetaMask v13 two-step flow: Next → Confirm
+      const secondConfirm = this.confirmButton(page)
+      if (
+        await secondConfirm
+          .isVisible({ timeout: NOTIFICATION_TIMEOUTS.ELEMENT_VISIBLE })
+          .catch(() => false)
+      ) {
+        try {
+          await secondConfirm.click({
+            timeout: NOTIFICATION_TIMEOUTS.TRANSACTION_CONFIRM,
+            force: true,
+          })
+        } catch (err) {
+          const msg = err instanceof Error ? err.message : ''
+          if (!msg.includes('Timeout') && !msg.includes('detach')) throw err
+        }
+        if (!page.isClosed())
+          await page.waitForTimeout(NOTIFICATION_TIMEOUTS.PAGE_REOPEN)
+      }
+
+      if (page.isClosed()) return
+
+      // Let service worker dispatch the tx before closing
+      await page.waitForTimeout(NOTIFICATION_TIMEOUTS.CONTENT_CHECK)
+      const stillUnapproved = await this.hasUnapprovedActivityEntry()
+      if (stillUnapproved) {
+        if (!page.isClosed()) await page.close()
+        await new Promise(resolve =>
+          setTimeout(resolve, NOTIFICATION_TIMEOUTS.SHORT_SETTLE),
+        )
+        continue
+      }
+
+      if (!page.isClosed()) await page.close()
+      log('done')
+      return
+    }
+
+    log('TIMEOUT — confirm button never appeared')
+    if (page && !page.isClosed()) await page.close().catch(() => {})
+    throw new Error('MetaMask transaction confirmation button did not appear')
   }
 
-  /** Reject a transaction (Cancel button) */
   async rejectTransaction(): Promise<void> {
     const page = await this.waitForNotificationPage()
 
@@ -83,7 +523,6 @@ export class NotificationPage {
     await cancelButton.click()
   }
 
-  /** Approve adding/switching to a new network */
   async approveNetworkSwitch(): Promise<void> {
     const page = await this.waitForNotificationPage()
 
@@ -96,39 +535,168 @@ export class NotificationPage {
   }
 
   /**
-   * Dismiss a pending "Add network" request queued by the hub on page load.
-   * Approves the request so the network is added and MetaMask switches to it.
-   * Safe to call when there are no pending requests (returns early).
+   * Dismiss pending "Add network" requests. Uses "Reject all" when multiple
+   * are queued (only safe before any transaction is pending).
    */
   async dismissPendingAddNetwork(): Promise<void> {
-    // Reuse an existing notification page if MetaMask kept one open
-    // after the connection step (MetaMask reuses it for the next pending request).
-    const page = await this.waitForNotificationPage()
+    const t0 = Date.now()
+    const log = (msg: string) =>
+      console.log(`[dismissAddNetwork +${Date.now() - t0}ms] ${msg}`)
 
-    // MetaMask notification.html is a React SPA — buttons render after JS hydration.
-    // Wait for the hub's wallet_addEthereumChain request to arrive and render.
-    const confirmButton = page.getByRole('button', { name: /^confirm$/i })
-    const hasPending = await confirmButton
+    log('start')
+    const page = await this.waitForNotificationPage(
+      NOTIFICATION_TIMEOUTS.ELEMENT_VISIBLE,
+    )
+    log('notification page ready')
+
+    const rejectAll = page
+      .getByTestId('confirm_nav__reject_all')
+      .or(page.getByText(/reject all/i))
+    if (
+      await rejectAll
+        .isVisible({ timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION })
+        .catch(() => false)
+    ) {
+      log('found rejectAll — clicking')
+      await rejectAll.click()
+      await page.waitForLoadState('load').catch(() => {})
+      if (!page.isClosed()) await page.close()
+      log('done (rejectAll)')
+      return
+    }
+    log('no rejectAll')
+
+    const cancel = this.cancelButton(page)
+    const hasPending = await cancel
       .isVisible({ timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION })
       .catch(() => false)
 
     if (!hasPending) {
+      log('no pending — closing')
       if (!page.isClosed()) await page.close()
+      log('done (no pending)')
       return
     }
 
-    await confirmButton.click()
+    log('found cancel — clicking')
+    await cancel.click()
+    // await confirmButton.click()
 
     // Wait for MetaMask to finish processing, then close the page.
     await page.waitForLoadState('load').catch(() => {})
     if (!page.isClosed()) await page.close()
   }
 
-  /** Approve a token spending allowance */
-  async approveTokenSpend(): Promise<void> {
-    const page = await this.waitForNotificationPage()
+  /**
+   * Skip past any "Add network" popups in MetaMask's confirmation queue.
+   * Uses ">" (next) button to navigate past them without canceling — canceling
+   * triggers DOM re-renders that detach buttons mid-click.
+   */
+  private async clearAddNetworkQueue(
+    page: Page,
+    maxAttempts = MAX_ADD_NETWORK_CLEAR_ATTEMPTS,
+    deadline = Date.now() + CLEAR_ADD_NETWORK_DEADLINE_MS,
+  ): Promise<Page> {
+    const currentPage = page
+    for (let i = 0; i < maxAttempts && Date.now() < deadline; i++) {
+      const anyButton = currentPage.locator('button')
+      const rendered = await anyButton
+        .first()
+        .isVisible({ timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION })
+        .catch(() => false)
 
-    // There may be a "Use default" or custom amount step
+      if (!rendered) return currentPage
+
+      const isAddNetwork = await currentPage
+        .getByText(/suggesting additional network/i)
+        .isVisible({ timeout: NOTIFICATION_TIMEOUTS.CONTENT_CHECK })
+        .catch(() => false)
+
+      if (!isAddNetwork) return currentPage
+
+      const nextBtn = currentPage
+        .getByTestId('confirm-nav__next-confirmation')
+        .or(currentPage.getByTestId('confirm_nav__right_btn'))
+      const hasNext = await nextBtn
+        .isVisible({ timeout: NOTIFICATION_TIMEOUTS.PAGE_REOPEN })
+        .catch(() => false)
+
+      if (hasNext) {
+        await nextBtn.click().catch(() => {})
+        await currentPage.waitForTimeout(NOTIFICATION_TIMEOUTS.SHORT_SETTLE)
+        continue
+      }
+
+      // Last/only Add Network request — cancel it.
+      // Do NOT reload after: MetaMask auto-shows the next queued request,
+      // and a reload disconnects the port causing auto-reject of ALL pending requests.
+      const cancel = this.cancelButton(currentPage)
+      try {
+        await cancel.click({ timeout: NOTIFICATION_TIMEOUTS.ELEMENT_VISIBLE })
+      } catch {
+        await currentPage.waitForTimeout(NOTIFICATION_TIMEOUTS.SHORT_SETTLE)
+        continue
+      }
+      await currentPage.waitForTimeout(NOTIFICATION_TIMEOUTS.CONTENT_CHECK)
+    }
+    return currentPage
+  }
+
+  /**
+   * Approve a token spending allowance.
+   * Uses waitForNotificationPage (which has close+reopen fallback) —
+   * this is safe here because no transaction is pending yet at this point.
+   */
+  async approveTokenSpend(): Promise<void> {
+    const t0 = Date.now()
+    const log = (msg: string) =>
+      console.log(`[approveTokenSpend +${Date.now() - t0}ms] ${msg}`)
+
+    log('start')
+    await this.closeStaleNotificationPages()
+
+    let page = await this.waitForNotificationPage()
+    log('notification page ready')
+    page = await this.clearAddNetworkQueue(page)
+
+    // Wait for spending-cap text before clicking Confirm — the button appears
+    // before approval details are ready, and early clicks are silently ignored
+    const spendingCapText = page.getByText(
+      /spending cap|permission to withdraw/i,
+    )
+    const contentVisible = await spendingCapText
+      .isVisible({ timeout: NOTIFICATION_TIMEOUTS.ELEMENT_VISIBLE })
+      .catch(() => false)
+
+    if (!contentVisible) {
+      if (!page.isClosed()) await page.close()
+      await new Promise(resolve =>
+        setTimeout(resolve, NOTIFICATION_TIMEOUTS.PAGE_REOPEN),
+      )
+
+      page = await this.context.newPage()
+      await page.goto(
+        `chrome-extension://${this.extensionId}/notification.html`,
+        { waitUntil: 'load' },
+      )
+      await page
+        .locator('button')
+        .first()
+        .isVisible({ timeout: NOTIFICATION_TIMEOUTS.NOTIFICATION_CONTENT })
+        .catch(() => false)
+      page = await this.clearAddNetworkQueue(page)
+
+      const freshSpendingCapText = page.getByText(
+        /spending cap|permission to withdraw/i,
+      )
+      await freshSpendingCapText
+        .waitFor({
+          state: 'visible',
+          timeout: NOTIFICATION_TIMEOUTS.NOTIFICATION_CONTENT,
+        })
+        .catch(() => {})
+    }
+
     const useDefaultButton = page.getByRole('button', {
       name: /use default/i,
     })
@@ -140,17 +708,46 @@ export class NotificationPage {
       await useDefaultButton.click()
     }
 
-    const nextButton = page.getByTestId('page-container-footer-next')
-    await nextButton.click()
+    await this.dismissToastOverlays(page)
+    log('clicking Confirm...')
+    await this.confirmButton(page).click({
+      timeout: NOTIFICATION_TIMEOUTS.NOTIFICATION_CONTENT,
+      force: true,
+    })
+    log('Confirm clicked')
+
+    // MetaMask v13 may use 2-step approval: Next → Approve.
+    // On Anvil the approval confirms instantly and the Hub immediately fires
+    // the deposit tx, so a second Confirm may belong to the DEPOSIT, not
+    // a second approval step. Only click if still on the spending-cap page.
+    await page.waitForTimeout(NOTIFICATION_TIMEOUTS.CONTENT_CHECK)
+    const secondConfirm = this.confirmButton(page)
+    if (
+      await secondConfirm
+        .isVisible({ timeout: NOTIFICATION_TIMEOUTS.ELEMENT_VISIBLE })
+        .catch(() => false)
+    ) {
+      if (await this.isSpendingCapConfirmation(page)) {
+        await this.dismissToastOverlays(page)
+        await secondConfirm.click({
+          timeout: NOTIFICATION_TIMEOUTS.NOTIFICATION_CONTENT,
+          force: true,
+        })
+      }
+    }
+
+    // Do NOT close — the Hub fires the deposit tx immediately after approval.
+    // Closing disconnects the messaging port → service worker auto-rejects
+    // any tx arriving during reconnection. approveTransaction() reuses this page.
   }
 
   /** Sign a message (SIWE or EIP-712) */
   async signMessage(): Promise<void> {
     const page = await this.waitForNotificationPage()
 
-    const signButton = page
-      .getByTestId('page-container-footer-next')
-      .or(page.getByRole('button', { name: /sign/i }))
+    const signButton = this.confirmButton(page).or(
+      page.getByRole('button', { name: /sign/i }),
+    )
     await signButton.click()
   }
 }
