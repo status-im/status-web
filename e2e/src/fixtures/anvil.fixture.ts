@@ -1,4 +1,5 @@
 import {
+  deriveWalletAddress,
   loadEnvConfig,
   requireWalletPassword,
   requireWalletSeedPhrase,
@@ -172,13 +173,9 @@ export const test = walletTest.extend<AnvilFixtures>({
       )
     }
 
-    const walletAddress = env.WALLET_ADDRESS
-    if (!walletAddress) {
-      throw new Error(
-        'WALLET_ADDRESS is not set. Set it in .env / .env.local ' +
-          '(the test wallet address matching WALLET_SEED_PHRASE).',
-      )
-    }
+    // The connected MetaMask account is the seed's account 0; derive it so
+    // on-chain funding targets exactly the address the dApp reads.
+    const walletAddress = deriveWalletAddress(requireWalletSeedPhrase())
 
     const helper = new AnvilRpcHelper(
       env.ANVIL_MAINNET_RPC,

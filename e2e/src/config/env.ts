@@ -1,6 +1,7 @@
 import dotenv from 'dotenv'
 import fs from 'node:fs'
 import path from 'node:path'
+import { mnemonicToAccount } from 'viem/accounts'
 
 export type EnvConfig = E2EEnvConfig
 
@@ -23,7 +24,7 @@ export function loadEnvConfig(): EnvConfig {
   const lineaPort = process.env.LINEA_FORK_PORT ?? '8546'
 
   const config: EnvConfig = {
-    BASE_URL: process.env.BASE_URL ?? 'https://hub.status.network',
+    BASE_URL: process.env.BASE_URL ?? 'http://localhost:3003',
     WALLET_SEED_PHRASE: process.env.WALLET_SEED_PHRASE ?? '',
     WALLET_PASSWORD: process.env.WALLET_PASSWORD ?? '',
     METAMASK_EXTENSION_PATH: resolveExtensionPath(rootDir),
@@ -33,11 +34,29 @@ export function loadEnvConfig(): EnvConfig {
       process.env.ANVIL_MAINNET_RPC || `http://localhost:${mainnetPort}`,
     ANVIL_LINEA_RPC:
       process.env.ANVIL_LINEA_RPC || `http://localhost:${lineaPort}`,
-    WALLET_ADDRESS: process.env.WALLET_ADDRESS ?? '',
   }
 
   cachedConfig = config
   return config
+}
+
+/**
+ * Derive the test wallet address from the seed phrase.
+ *
+ * The harness onboards MetaMask by importing WALLET_SEED_PHRASE, so the
+ * connected account is always that seed's account 0 (m/44'/60'/0'/0/0). On-chain
+ * helpers derive the same account here, so funding always targets the account
+ * the dApp reads — there is no separate address to keep in sync.
+ */
+export function deriveWalletAddress(seedPhrase: string): string {
+  try {
+    return mnemonicToAccount(seedPhrase).address
+  } catch (error) {
+    throw new Error(
+      'Could not derive a wallet address from WALLET_SEED_PHRASE: ' +
+        `${error instanceof Error ? error.message : error}`,
+    )
+  }
 }
 
 function requireEnv(name: string): string {
