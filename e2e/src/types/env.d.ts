@@ -7,7 +7,6 @@ interface E2EEnvConfig {
   METAMASK_VERSION: string
   ANVIL_MAINNET_RPC: string
   ANVIL_LINEA_RPC: string
-  WALLET_ADDRESS: string
 }
 
 declare namespace NodeJS {
