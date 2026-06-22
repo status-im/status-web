@@ -20,7 +20,7 @@
     "messari": "Messari Transparency Verified"
   },
   "prefooter": {
-    "title": "Be unstoppable",
+    "title": "Take control of your communications",
     "description": "Use the open-source, private messenger and asset manager."
   },
   "notFound": {
@@ -93,15 +93,15 @@
     "walletBuyTitle": "Add funds in seconds with a card or Apple Pay",
     "walletBuyDescription": "Top up your account through trusted payment partners without leaving the app. No extra signups, no waiting around, no friction.",
     "messengerTitle": "Chat privately\nwith friends",
-    "messengerDescription": "Private messaging built for free speech. Every chat is end-to-end encrypted and your metadata stays hidden, so no one can read or trace your conversations. Messaging runs on Logos Messaging (formerly Waku), with no central server to seize or shut down.",
+    "messengerDescription": "Private messaging built for free speech. Every chat is end-to-end encrypted and your metadata stays hidden, so no one can read or trace your conversations. Messaging runs on Logos Messaging (formerly Waku), with distributed architecture with no single point of failure.",
     "messengerPseudonymTitle": "No identity required",
-    "messengerPseudonymDescription": "Sign up with nothing at all. No phone number, no email, no card, no social account. Your profile is an anonymous identity created on your device the moment you start, and it belongs to you alone.",
+    "messengerPseudonymDescription": "Sign up with nothing at all. No phone number, no email, no card, no social account. Your profile is a pseudonymous identity created on your device the moment you start, and it belongs to you alone.",
     "metadataTitle": "Keep private who your friends are",
     "metadataDescription": "Other apps hide what you say while still logging who you talk to and when. Status hides all of it. Your contacts, your timing and your connections stay invisible to everyone, including the network itself.",
     "communitiesTitle": "Join\nmembers-only\ncommunities",
     "communitiesDescription": "Group chats built for real communities. Create members-only spaces, set your own rules and moderate locally, without a corporation deciding what is allowed. Ownership stays in the hands of the people who show up.",
     "ownYourCryptoTitle": "Own what's yours",
-    "ownYourCryptoDescription": "No one can freeze your account, lock you out or block a transfer. Your assets and your keys live on your device, so access never depends on a company staying online or staying friendly.",
+    "ownYourCryptoDescription": "Your keys, your assets — always in your control. Your assets and your keys live on your device, so access never depends on a company staying online or staying friendly.",
     "multiChainSupportTitle": "All your assets, one view",
     "multiChainSupportDescription": "See everything you hold in a single, always-current list. Balances update in real time across the networks you use, so you never juggle multiple apps just to know where you stand.",
     "nftsTitle": "Your digital collection",
@@ -114,8 +114,8 @@
     "secureDescription": "One set of keys protects your messages and your accounts, and only you hold them. Keys are generated on your device and stay in local memory or on a Keycard, never on a server.",
     "communityDriven": "Community driven",
     "communityDrivenDescription": "Status is built in the open by its contributors and the people who use it. The community helps shape priorities, governance and where the product goes next.",
-    "permissionless": "No gatekeepers",
-    "permissionlessDescription": "There is no central account registry, so no one can suspend, shadow-ban or lock you out. You join with an anonymous identity and reach anyone, anywhere.",
+    "permissionless": "Self-sovereign",
+    "permissionlessDescription": "There is no central account registry, so yYour account is self-sovereign and always accessible. You join with a pseudonymous identity and reach anyone, anywhere.",
     "freeAndAdFree": "Free and ad-free",
     "freeAndAdFreeDescription": "No ads. No paid tier. No imposed limits. Status runs no ad network and no tracking, so the app stays free and your data stays yours.",
     "keycardTitle": "Unified Group\nProject Workspace",
