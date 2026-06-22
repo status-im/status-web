@@ -44,6 +44,16 @@ Runs on **http://127.0.0.1:3005** (hub uses 3003, status.network uses 3002).
 
 Desktop and APK download buttons fetch the latest GitHub release in the browser on click (1h session cache). App Store and Google Play links go directly to the stores.
 
+## Analytics
+
+Client-side analytics mirror [`status.app`](../status.app):
+
+- **Umami** — loaded in [`src/app/layout.tsx`](./src/app/layout.tsx) from `https://umami.bi.status.im/script.js`, scoped to `get.status.app` via `data-domains`.
+- **Vercel Analytics** — `<Analytics />` in the root layout.
+- **Custom events** — download clicks call [`trackEvent`](../status.app/src/app/_utils/track.ts) from shared `status.app` components; events are sent to both Vercel Analytics and `window.umami`.
+
+Unlike `status.app`, there is no server-side Umami tracking here: production builds are static (`output: 'export'`) and desktop/APK downloads resolve in the browser instead of via `/api/download/*`.
+
 ## Static export (self-hosted)
 
 Production builds use `output: 'export'` and write static files to `out/`.
