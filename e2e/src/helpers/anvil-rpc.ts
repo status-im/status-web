@@ -308,17 +308,18 @@ export class AnvilRpcHelper {
    * @param amount - balance in smallest unit
    * @param balanceSlot - storage slot of the _balances mapping (bigint for OZ v5 namespaced slots)
    * @param rpc - RPC endpoint
+   * @param owner - account whose balance to set (defaults to the test wallet)
    */
   private async setErc20BalanceViaStorage(
     token: string,
     amount: bigint,
     balanceSlot: bigint,
     rpc: string,
+    owner: string = this.walletAddress,
   ): Promise<void> {
     // Storage key for mapping(address => uint256) at slot S:
     // keccak256(abi.encode(address, S))
-    const key =
-      '0x' + encodeAddress(this.walletAddress) + encodeUint256(balanceSlot)
+    const key = '0x' + encodeAddress(owner) + encodeUint256(balanceSlot)
     const storagePosition = await this.keccak256(key, rpc)
 
     await this.call(rpc, 'anvil_setStorageAt', [
@@ -398,11 +399,14 @@ export class AnvilRpcHelper {
   /**
    * Generic ERC-20 funding via storage slot manipulation.
    * Auto-discovers the _balances slot on first call per token and caches it.
+   * The _balances slot is the same for every account, so slot discovery always
+   * probes the test wallet; only the final write targets `owner`.
    */
   async fundErc20ViaStorage(
     token: string,
     amount: bigint,
     rpc: string,
+    owner: string = this.walletAddress,
   ): Promise<void> {
     const cacheKey = `${token}:${rpc}`
     if (!this.erc20BalanceSlotCache.has(cacheKey)) {
@@ -414,6 +418,7 @@ export class AnvilRpcHelper {
       amount,
       this.erc20BalanceSlotCache.get(cacheKey)!,
       rpc,
+      owner,
     )
   }
 
@@ -435,6 +440,39 @@ export class AnvilRpcHelper {
   /** Fund USDS (18 decimals) via storage */
   async fundUsds(amount: bigint): Promise<void> {
     await this.fundErc20ViaStorage(CONTRACTS.USDS, amount, this.mainnetRpc)
+  }
+
+  /**
+   * Fund a user's ERC-4626 vault shares directly via storage.
+   *
+   * Pre-deposit vaults are ERC-4626, so the vault contract is itself the share
+   * token and `balanceOf(vault, user)` returns shares. Writing the share
+   * balance is enough to make the Hub show a deposited balance and enable the
+   * withdrawal ("Unlock"/"Claim") CTA — the on-chain `convertToAssets` ratio
+   * already exists on the fork, so the displayed asset amount is non-zero.
+   *
+   * Note: this does NOT bump the vault's totalSupply. It is intended for
+   * read-driven UI flows (modal readiness / validation), not for actually
+   * submitting an on-chain `withdraw`.
+   *
+   * @param vaultAddress - the pre-deposit vault (share token) address
+   * @param shares - share balance to assign, in wei
+   * @param rpc - target fork RPC (defaults to mainnet)
+   * @param owner - account to credit; pass the connected dApp account so the
+   *   Hub reads the seeded balance (defaults to the test wallet)
+   */
+  async fundVaultShares(
+    vaultAddress: string,
+    shares: bigint,
+    rpc?: string,
+    owner?: string,
+  ): Promise<void> {
+    await this.fundErc20ViaStorage(
+      vaultAddress,
+      shares,
+      rpc ?? this.mainnetRpc,
+      owner,
+    )
   }
 
   /**

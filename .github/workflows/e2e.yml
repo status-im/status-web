@@ -14,23 +14,9 @@ jobs:
   e2e:
     name: E2E Tests
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
 
     steps:
-      - name: Determine BASE_URL
-        id: url
-        run: |
-          if [ "${{ github.event_name }}" = "deployment_status" ]; then
-            echo "url=${{ github.event.deployment_status.target_url }}" >> $GITHUB_OUTPUT
-            echo "Testing Vercel preview: ${{ github.event.deployment_status.target_url }}"
-          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "url=${{ inputs.base_url }}" >> $GITHUB_OUTPUT
-            echo "Testing manual URL: ${{ inputs.base_url }}"
-          else
-            echo "url=https://hub.status.network" >> $GITHUB_OUTPUT
-            echo "Testing production"
-          fi
-
       - name: Check out code
         uses: actions/checkout@v4
 
@@ -48,6 +34,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Build the Hub's workspace deps (dist/) so the Next dev server the e2e
+      # webServer starts can resolve them. Cached, so the webServer's own build
+      # step is then a no-op.
+      - name: Build Hub dependencies
+        run: pnpm exec turbo run build --filter=hub^...
+
       - name: Install Playwright browsers
         run: cd e2e && pnpm exec playwright install chromium --with-deps
 
@@ -62,13 +54,22 @@ jobs:
         if: steps.metamask-cache.outputs.cache-hit != 'true'
         run: cd e2e && pnpm setup:metamask
 
+      # Local Anvil forks for the @anvil on-chain tests.
+      - name: Start Anvil forks
+        run: cd e2e && pnpm anvil:up
+
+      # No BASE_URL → Playwright's webServer builds + serves this branch's Hub
+      # on localhost:3003, so all projects exercise local code.
       - name: Run E2E tests
         run: cd e2e && xvfb-run --auto-servernum -- pnpm test
         env:
           WALLET_SEED_PHRASE: ${{ secrets.E2E_WALLET_SEED_PHRASE }}
           WALLET_PASSWORD: ${{ secrets.E2E_WALLET_PASSWORD }}
-          BASE_URL: ${{ steps.url.outputs.url }}
           CI: true
+
+      - name: Stop Anvil forks
+        if: always()
+        run: cd e2e && pnpm anvil:down
 
       - name: Upload test report
         uses: actions/upload-artifact@v4
