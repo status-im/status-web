@@ -10,7 +10,6 @@ import { Link } from '~components/link'
 import { ParallaxCircle } from '~website/_components/parallax-circle'
 
 import { CircleWord } from '../_components/circle-word'
-import { OrgChart } from './_components/org-chart'
 
 import type { ImageAlt, ImageType } from '~components/assets'
 import type { Metadata as NextMetadata } from 'next'
@@ -154,7 +153,7 @@ export default async function TeamPage() {
           ))}
           <ParallaxCircle color="orange" className="bottom-[-320px] right-0" />
         </div>
-        <div className="border-dashed-default relative overflow-hidden border-b bg-white-100">
+        {/* <div className="border-dashed-default relative overflow-hidden border-b bg-white-100">
           <ParallaxCircle
             color="purple"
             className="left-0 top-[-80px] z-10 hidden sm:block"
@@ -171,7 +170,7 @@ export default async function TeamPage() {
           <div className="relative z-20 flex justify-center pb-24 pt-14 2md:pb-40 2md:pt-20">
             <OrgChart />
           </div>
-        </div>
+        </div> */}
 
         <div className="container py-24 lg:py-40">
           <div className="mb-16 lg:mb-20">
