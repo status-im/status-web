@@ -224,9 +224,11 @@ export default async function AppsPage() {
           />
         </div>
 
-        <div className="container mb-40">
-          <ConnectorSection />
-        </div>
+        {!isGetSite && (
+          <div className="container mb-40">
+            <ConnectorSection />
+          </div>
+        )}
       </Body>
     </>
   )
