@@ -1,5 +1,7 @@
 'use client'
 
+import { STATUS_RELEASES_LATEST_URL } from '~/config/routes'
+
 export type DownloadPlatform =
   | 'macos-silicon'
   | 'macos-intel'
@@ -11,8 +13,7 @@ const CACHE_KEY = 'status-app-latest-release'
 const CACHE_MS = 60 * 60 * 1000
 const RELEASES_URL =
   'https://api.github.com/repos/status-im/status-app/releases/latest'
-const FALLBACK_RELEASE_URL =
-  'https://github.com/status-im/status-app/releases/latest'
+const FALLBACK_RELEASE_URL = STATUS_RELEASES_LATEST_URL
 
 type ReleaseAsset = {
   name: string

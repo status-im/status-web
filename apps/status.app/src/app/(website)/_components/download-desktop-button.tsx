@@ -17,6 +17,7 @@ import {
   STATUS_DESKTOP_DOWNLOAD_URL_LINUX,
   STATUS_DESKTOP_DOWNLOAD_URL_MACOS_SILICON,
   STATUS_DESKTOP_DOWNLOAD_URL_WINDOWS,
+  STATUS_RELEASES_LATEST_URL,
 } from '~/config/routes'
 import { isGetSite } from '~/config/site-scope'
 import { trackEvent } from '~app/_utils/track'
@@ -179,7 +180,11 @@ const LinuxDownloadButton = (props: DownloadButtonProps) => {
         <DownloadConnectorDialog>
           <Button
             {...buttonProps}
-            href={isGetSite ? undefined : STATUS_DESKTOP_DOWNLOAD_URL_LINUX}
+            href={
+              isGetSite
+                ? STATUS_RELEASES_LATEST_URL
+                : STATUS_DESKTOP_DOWNLOAD_URL_LINUX
+            }
             icon={<LinuxIcon />}
             aria-label={t('downloadForLinux')}
             onClick={handleClick}
@@ -190,7 +195,11 @@ const LinuxDownloadButton = (props: DownloadButtonProps) => {
         <DownloadConnectorDialog>
           <Button
             {...buttonProps}
-            href={isGetSite ? undefined : STATUS_DESKTOP_DOWNLOAD_URL_LINUX}
+            href={
+              isGetSite
+                ? STATUS_RELEASES_LATEST_URL
+                : STATUS_DESKTOP_DOWNLOAD_URL_LINUX
+            }
             iconBefore={<LinuxIcon />}
             onClick={handleClick}
           >
@@ -227,7 +236,11 @@ const WindowsDownloadButton = (props: DownloadButtonProps) => {
         <DownloadConnectorDialog>
           <Button
             {...buttonProps}
-            href={isGetSite ? undefined : STATUS_DESKTOP_DOWNLOAD_URL_WINDOWS}
+            href={
+              isGetSite
+                ? STATUS_RELEASES_LATEST_URL
+                : STATUS_DESKTOP_DOWNLOAD_URL_WINDOWS
+            }
             icon={<WindowsIcon />}
             aria-label={t('downloadForWindows')}
             onClick={handleClick}
@@ -238,7 +251,11 @@ const WindowsDownloadButton = (props: DownloadButtonProps) => {
         <DownloadConnectorDialog>
           <Button
             {...buttonProps}
-            href={isGetSite ? undefined : STATUS_DESKTOP_DOWNLOAD_URL_WINDOWS}
+            href={
+              isGetSite
+                ? STATUS_RELEASES_LATEST_URL
+                : STATUS_DESKTOP_DOWNLOAD_URL_WINDOWS
+            }
             iconBefore={<WindowsIcon />}
             onClick={handleClick}
           >
@@ -276,7 +293,9 @@ const MacOSDownloadButton = (props: DownloadButtonProps) => {
           <Button
             {...buttonProps}
             href={
-              isGetSite ? undefined : STATUS_DESKTOP_DOWNLOAD_URL_MACOS_SILICON
+              isGetSite
+                ? STATUS_RELEASES_LATEST_URL
+                : STATUS_DESKTOP_DOWNLOAD_URL_MACOS_SILICON
             }
             icon={<AppleIcon />}
             aria-label={t('downloadForMacOS')}
@@ -289,7 +308,9 @@ const MacOSDownloadButton = (props: DownloadButtonProps) => {
           <Button
             {...buttonProps}
             href={
-              isGetSite ? undefined : STATUS_DESKTOP_DOWNLOAD_URL_MACOS_SILICON
+              isGetSite
+                ? STATUS_RELEASES_LATEST_URL
+                : STATUS_DESKTOP_DOWNLOAD_URL_MACOS_SILICON
             }
             iconBefore={<AppleIcon />}
             onClick={handleClick}
@@ -346,7 +367,7 @@ const DesktopDownloadButton = (props: DownloadButtonProps) => {
       <div className="hidden ios:contents android:contents unknown:contents">
         <Button
           {...buttonProps}
-          href={isGetSite ? undefined : desktopAppsHref}
+          href={isGetSite ? STATUS_RELEASES_LATEST_URL : desktopAppsHref}
           iconBefore={
             <DesktopIcon
               className={match(props.variant)
