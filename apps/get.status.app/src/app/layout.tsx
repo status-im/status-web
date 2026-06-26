@@ -19,6 +19,7 @@ const GET_SITE_OG_IMAGE = cloudinaryLoader({
   src: 'get.status.app/Hero_app',
   width: 1200,
 })
+const STATUS_APP_ICON = 'https://status.app/icon.png'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://get.status.app/'),
@@ -26,6 +27,16 @@ export const metadata: Metadata = {
   title: 'Status App: secure peer-to-peer private messenger',
   description:
     'Status App combines an end-to-end encrypted messenger and a secure browser into a private, decentralized ecosystem with no phone number or email required.',
+
+  icons: {
+    icon: [
+      {
+        url: STATUS_APP_ICON,
+        type: 'image/png',
+        sizes: '128x128',
+      },
+    ],
+  },
 
   alternates: {
     canonical: './',
