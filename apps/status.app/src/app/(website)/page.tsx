@@ -177,21 +177,23 @@ export default async function HomePage() {
               </div>
             </div>
 
-            <div className="mb-9 flex max-w-full flex-row items-center gap-3 text-left sm:max-w-[572px] lg:mb-20">
-              <p className="text-13 font-medium text-white-100">
-                {t('migrateBanner')}
-              </p>
-              <Button
-                size="32"
-                variant="darkGrey"
-                href="https://status.app/blog/migrate-from-status-legacy-to-unified-status-mobile-app"
-                target="_blank"
-                rel="noopener noreferrer"
-                iconAfter={<ExternalIcon className="text-white-100" />}
-              >
-                {t('learnMore')}
-              </Button>
-            </div>
+            {!isGetSite && (
+              <div className="mb-9 flex max-w-full flex-row items-center gap-3 text-left sm:max-w-[572px] lg:mb-20">
+                <p className="text-13 font-medium text-white-100">
+                  {t('migrateBanner')}
+                </p>
+                <Button
+                  size="32"
+                  variant="darkGrey"
+                  href="https://status.app/blog/migrate-from-status-legacy-to-unified-status-mobile-app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  iconAfter={<ExternalIcon className="text-white-100" />}
+                >
+                  {t('learnMore')}
+                </Button>
+              </div>
+            )}
 
             {releaseResult && <NewsTag post={releaseResult} />}
           </div>
@@ -258,26 +260,29 @@ export default async function HomePage() {
                 </>
               }
               description={t('walletDescription')}
+              showFeatureTag={!isGetSite}
               secondary={
-                <div className="flex flex-col">
-                  <div className="p-4">
-                    <p className="text-19 font-semibold">
-                      {t('walletBuyTitle')}
-                    </p>
-                    <div className="flex pt-1">
-                      <p className="text-19 font-regular text-neutral-100">
-                        {t('walletBuyDescription')}
+                !isGetSite && (
+                  <div className="flex flex-col">
+                    <div className="p-4">
+                      <p className="text-19 font-semibold">
+                        {t('walletBuyTitle')}
                       </p>
+                      <div className="flex pt-1">
+                        <p className="text-19 font-regular text-neutral-100">
+                          {t('walletBuyDescription')}
+                        </p>
+                      </div>
                     </div>
+                    <Image
+                      id="Non Beta Release/Icons/Payment_Icons:648:96"
+                      alt="Payment method icons including credit card and Apple Pay"
+                      width={216}
+                      height={32}
+                      className="mb-4 ml-4"
+                    />
                   </div>
-                  <Image
-                    id="Non Beta Release/Icons/Payment_Icons:648:96"
-                    alt="Payment method icons including credit card and Apple Pay"
-                    width={216}
-                    height={32}
-                    className="mb-4 ml-4"
-                  />
-                </div>
+                )
               }
               imageId={
                 isGetSite
