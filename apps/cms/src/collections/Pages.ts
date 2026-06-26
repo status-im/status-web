@@ -9,7 +9,7 @@ import { createChangePullRequestHook } from './content-pr-hooks'
 import {
   savePageAsPullRequest,
   type PageDocLike,
-} from '@/services/content-workflow'
+} from '../services/content-workflow'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',

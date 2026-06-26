@@ -2,15 +2,26 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "paths": {
-      "@/*": ["./src/*"],
-      "@payload-config": ["./payload.config.ts"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@payload-config": [
+        "./payload.config.ts"
+      ]
     },
     "plugins": [
       {
         "name": "next"
       }
     ],
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "jsx": "preserve"
   },
   "include": [
     "next-env.d.ts",
@@ -19,5 +30,7 @@
     "**/*.tsx",
     "**/*.mjs"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

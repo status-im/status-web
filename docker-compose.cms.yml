@@ -1,10 +1,17 @@
-# Local development stack for the Status CMS.
+# =============================================================================
+# Local development — Postgres only.
 #
-# Usage:
+# Run the CMS and get.status.app on the host with hot reload:
+#
 #   docker compose -f docker-compose.cms.yml up -d
 #   cp apps/cms/.env.example apps/cms/.env
-#   # set DATABASE_URL=postgresql://postgres:postgres@localhost:5433/status_cms
-#   pnpm --filter cms dev
+#   pnpm install
+#   pnpm --filter cms sync-from-content
+#   pnpm dev:get
+#
+# For a production-like CMS container (migrations, next start, media volume),
+# use docker-compose.prod.yml instead — see apps/cms/README.md.
+# =============================================================================
 
 services:
   postgres:

@@ -9,7 +9,7 @@ import type {
   SaveAsPullRequestResult,
   SaveContentAsPullRequestInput,
   SavePrEditor,
-} from '@/services/content-workflow'
+} from '../services/content-workflow'
 
 export const SKIP_CONTENT_PR_CONTEXT = 'skipContentPr'
 

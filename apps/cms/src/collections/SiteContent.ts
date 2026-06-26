@@ -13,7 +13,7 @@ import {
   type SiteFooterDocLike,
   type SiteNavigationDocLike,
   type SiteSettingsDocLike,
-} from '@/services/content-workflow'
+} from '../services/content-workflow'
 
 const noDeleteAccess: CollectionConfig['access'] = {
   ...authenticatedCollectionAccess,

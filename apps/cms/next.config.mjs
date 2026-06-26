@@ -1,18 +1,28 @@
+import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { withPayload } from '@payloadcms/next/withPayload'
 
-// Resolve the monorepo root so Next.js infers the correct workspace root for
-// both turbopack and output file tracing. Setting only `turbopack.root` while
-// Vercel auto-injects `outputFileTracingRoot` triggers a mismatch warning at
-// build time.
-const workspaceRoot = fileURLToPath(new URL('../..', import.meta.url))
+const cmsRoot = path.dirname(fileURLToPath(import.meta.url))
+const workspaceRoot = path.join(cmsRoot, '../..')
 
 const nextConfig = {
   reactStrictMode: true,
   outputFileTracingRoot: workspaceRoot,
   turbopack: {
     root: workspaceRoot,
+    resolveAlias: {
+      '@payload-config': path.join(cmsRoot, 'payload.config.ts'),
+      '@': path.join(cmsRoot, 'src'),
+    },
+  },
+  webpack: (webpackConfig) => {
+    webpackConfig.resolve.alias = {
+      ...webpackConfig.resolve.alias,
+      '@payload-config': path.join(cmsRoot, 'payload.config.ts'),
+      '@': path.join(cmsRoot, 'src'),
+    }
+    return webpackConfig
   },
 }
 

@@ -13,7 +13,7 @@ import {
 } from '@status-im/content/loaders'
 import type { Footer, Navigation, SiteSettings } from '@status-im/content/schemas'
 
-import config from '@payload-config'
+import config from '../payload.config.ts'
 import { SKIP_CONTENT_PR_CONTEXT } from '../src/collections/content-pr-hooks'
 
 type SyncResult = { created: number; updated: number; skipped: number }

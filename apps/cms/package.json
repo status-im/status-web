@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tsx scripts/dev.ts",
+    "dev": "tsx --env-file=.env scripts/dev.ts",
     "build": "pnpm generate-import-map && next build",
     "start": "next start",
     "lint": "eslint . --max-warnings 0",
@@ -15,7 +15,7 @@
     "migrate": "PAYLOAD_CONFIG_PATH=payload.config.ts payload migrate",
     "migrate:create": "PAYLOAD_CONFIG_PATH=payload.config.ts payload migrate:create",
     "migrate:status": "PAYLOAD_CONFIG_PATH=payload.config.ts payload migrate:status",
-    "sync-from-content": "tsx scripts/sync-from-content.ts"
+    "sync-from-content": "tsx --env-file=.env scripts/sync-from-content.ts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.83.0",
@@ -23,6 +23,7 @@
     "@payloadcms/richtext-lexical": "3.83.0",
     "@payloadcms/ui": "3.83.0",
     "@status-im/content": "workspace:*",
+    "drizzle-kit": "0.31.7",
     "graphql": "^16.13.2",
     "next": "15.5.16",
     "payload": "3.83.0",
