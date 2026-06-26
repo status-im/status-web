@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "language": "en",
+  "closedBar": {
+    "brandLabel": "Status",
+    "menuLabel": "Menu",
+    "closeLabel": "Close menu",
+    "openAriaLabel": "Open navigation menu",
+    "closeAriaLabel": "Close navigation menu"
+  },
+  "sitemap": [
+    { "label": "Apps", "href": "/apps" },
+    { "label": "Terms of Use", "href": "/legal/terms-of-use" },
+    { "label": "Privacy Policy", "href": "/legal/privacy-policy" }
+  ],
+  "topLinks": [
+    { "label": "Desktop", "href": "/apps" },
+    { "label": "Mobile", "href": "/apps" }
+  ],
+  "blog": {
+    "label": "Blog",
+    "seeAllLabel": "See all",
+    "seeAllHref": "https://status.app/blog"
+  }
+}

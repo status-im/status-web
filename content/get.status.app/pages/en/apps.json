@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "language": "en",
+  "route": "/apps",
+  "title": "Apps",
+  "description": "Use Status on the go with the mobile app, or get the full set of features on desktop.",
+  "sections": [
+    {
+      "componentType": "hero",
+      "key": "apps.hero",
+      "headline": "Get Status on every device",
+      "body": "Use Status on the go with the mobile app, or get the full suite on desktop. Everything stays in sync, so your messages and your assets follow you everywhere."
+    }
+  ]
+}

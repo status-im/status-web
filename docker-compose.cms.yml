@@ -1,0 +1,29 @@
+# Local development stack for the Status CMS.
+#
+# Usage:
+#   docker compose -f docker-compose.cms.yml up -d
+#   cp apps/cms/.env.example apps/cms/.env
+#   # set DATABASE_URL=postgresql://postgres:postgres@localhost:5433/status_cms
+#   pnpm --filter cms dev
+
+services:
+  postgres:
+    image: postgres:17-bookworm
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: status_cms
+    ports:
+      - '5433:5432'
+    volumes:
+      - status_cms_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d status_cms']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+volumes:
+  status_cms_pgdata:

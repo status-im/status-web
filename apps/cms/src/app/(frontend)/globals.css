@@ -1,0 +1,13 @@
+html {
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #0b1020;
+  color: #f3f4f6;
+}
+
+a {
+  color: inherit;
+}

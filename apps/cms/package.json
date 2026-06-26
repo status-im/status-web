@@ -1,0 +1,47 @@
+{
+  "name": "cms",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx scripts/dev.ts",
+    "build": "pnpm generate-import-map && next build",
+    "start": "next start",
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "eslint . --fix",
+    "test": "node --import tsx --test \"src/**/*.test.ts\" \"scripts/**/*.test.ts\"",
+    "typecheck": "next typegen && tsc --noEmit",
+    "generate-types": "PAYLOAD_CONFIG_PATH=payload.config.ts payload generate:types",
+    "generate-import-map": "PAYLOAD_CONFIG_PATH=payload.config.ts payload generate:importmap",
+    "migrate": "PAYLOAD_CONFIG_PATH=payload.config.ts payload migrate",
+    "migrate:create": "PAYLOAD_CONFIG_PATH=payload.config.ts payload migrate:create",
+    "migrate:status": "PAYLOAD_CONFIG_PATH=payload.config.ts payload migrate:status",
+    "sync-from-content": "tsx scripts/sync-from-content.ts"
+  },
+  "dependencies": {
+    "@payloadcms/db-postgres": "3.83.0",
+    "@payloadcms/next": "3.83.0",
+    "@payloadcms/richtext-lexical": "3.83.0",
+    "@payloadcms/ui": "3.83.0",
+    "@status-im/content": "workspace:*",
+    "graphql": "^16.13.2",
+    "next": "15.5.16",
+    "payload": "3.83.0",
+    "react": "19.1.2",
+    "react-dom": "19.1.2",
+    "sharp": "^0.34.5"
+  },
+  "devDependencies": {
+    "@next/eslint-plugin-next": "15.5.16",
+    "@status-im/eslint-config": "workspace:*",
+    "@types/node": "^22.5.5",
+    "@types/react": "19.1.2",
+    "@types/react-dom": "19.1.2",
+    "eslint": "^9.14.0",
+    "globals": "^15.12.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.6.2"
+  },
+  "engines": {
+    "node": "22.x"
+  }
+}

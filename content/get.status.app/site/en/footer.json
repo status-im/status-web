@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "language": "en",
+  "newsletter": {
+    "title": "Stay up to date",
+    "emailLabel": "Email",
+    "roleLabel": "Role",
+    "cityLabel": "City",
+    "submitLabel": "Subscribe"
+  },
+  "tagline": "Be unstoppable",
+  "image": {
+    "src": "/images/footer/status-footer.png",
+    "alt": ""
+  },
+  "mainLinks": [
+    { "label": "Apps", "href": "/apps" },
+    { "label": "Terms of Use", "href": "/legal/terms-of-use" },
+    { "label": "Privacy Policy", "href": "/legal/privacy-policy" }
+  ],
+  "socialLinks": [
+    {
+      "label": "X",
+      "href": "https://twitter.com/ethstatus",
+      "external": true
+    },
+    {
+      "label": "Discord",
+      "href": "https://discord.gg/status",
+      "external": true
+    }
+  ],
+  "builtBy": {
+    "label": "Built by",
+    "attribution": "Status Research & Development GmbH"
+  }
+}

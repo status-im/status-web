@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "language": "en",
+  "siteName": "Status App",
+  "siteTitle": "Status App: secure peer-to-peer private messenger",
+  "siteDescription": "Status App combines an end-to-end encrypted messenger and a secure browser into a private, decentralized ecosystem with no phone number or email required.",
+  "canonicalUrl": "https://get.status.app",
+  "keywords": ["status", "messenger", "wallet", "privacy", "decentralized"],
+  "social": {
+    "twitter": "https://twitter.com/ethstatus",
+    "discord": "https://discord.gg/status",
+    "youtube": "https://www.youtube.com/c/statusim",
+    "github": "https://github.com/status-im"
+  }
+}
