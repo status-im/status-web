@@ -4,7 +4,11 @@ export const routing = defineRouting({
   locales: ['en'],
   defaultLocale: 'en',
   localePrefix: 'as-needed',
-  localeDetection: true,
+  // Only `en` is shipped, so Accept-Language detection can't change the
+  // response — disabling it avoids per-request content-negotiation (Vary,
+  // NEXT_LOCALE cookie) that contributes to cloaking false-positives and aligns
+  // with get.status.app. why: https://github.com/status-im/status-web/issues/1236
+  localeDetection: false,
 })
 
 /**
