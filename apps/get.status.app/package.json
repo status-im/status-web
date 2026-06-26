@@ -8,7 +8,7 @@
     "prebuild": "pnpm env:check",
     "build": "next build",
     "build:strip-locale": "bash scripts/strip-default-locale-prefix.sh",
-    "postbuild": "next-sitemap && pnpm build:strip-locale && cp serve.json out/serve.json",
+    "postbuild": "next-sitemap && pnpm build:strip-locale && cp serve.json out/serve.json && cp src/app/icon.png out/icon.png",
     "start": "serve out -l 3005",
     "preview:production": "pnpm build && pnpm start",
     "lint": "next lint --dir=src --ext=.ts --ext=.tsx",
