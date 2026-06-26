@@ -12,6 +12,7 @@ import {
   STATUS_MOBILE_APP_STORE_URL,
   // STATUS_MOBILE_F_DROID_URL,
   STATUS_MOBILE_GOOGLE_PLAY_URL,
+  STATUS_RELEASES_LATEST_URL,
 } from '~/config/routes'
 import { isGetSite } from '~/config/site-scope'
 import { trackEvent } from '~app/_utils/track'
@@ -165,7 +166,11 @@ export const DownloadMobileButton = (props: Props) => {
                 <Button
                   variant="outline"
                   iconBefore={<DownloadIcon />}
-                  href={isGetSite ? undefined : STATUS_MOBILE_APK_URL}
+                  href={
+                    isGetSite
+                      ? STATUS_RELEASES_LATEST_URL
+                      : STATUS_MOBILE_APK_URL
+                  }
                   onClick={(event: React.MouseEvent) => {
                     if (isGetSite) {
                       event.preventDefault()
