@@ -74,7 +74,12 @@ export default function RootLayout({ children }: Props) {
   const locale = routing.defaultLocale
 
   return (
-    <html lang={locale} className={inter.variable} suppressHydrationWarning>
+    <html
+      lang={locale}
+      data-platform="unknown"
+      className={inter.variable}
+      suppressHydrationWarning
+    >
       <head>
         <link rel="preconnect" href="https://res.cloudinary.com" />
       </head>
