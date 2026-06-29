@@ -2,7 +2,7 @@
 title: Status Website - Terms of Use
 ---
 
-This page is intended to inform users of the terms and conditions ("**Website Terms of Use**") applicable to your access and use of the Status website ("**Website**"). For the terms of use regarding Status' software, being a secure messaging tool, a crypto wallet, and a Web 3 browser that are integrated together ("**Status Software**"), please refer to the Status Terms of Use which can be found on Status Software or the relevant page of this Website.
+This page is intended to inform users of the terms and conditions ("**Website Terms of Use**") applicable to your access and use of the Status website ("**Website**"). For the terms of use regarding Status' software, being a secure messaging tool, a community space, and a Web browser that are integrated together ("**Status Software**"), please refer to the Status Terms of Use which can be found on Status Software or the relevant page of this Website.
 
 ## 1. Who we are
 
