@@ -3,6 +3,7 @@
 import { Text } from '@status-im/components'
 import { useTranslations } from 'next-intl'
 
+import { isGetSite } from '~/config/site-scope'
 import { Icon, Image } from '~components/assets'
 
 import type { ImageId } from '~components/assets'
@@ -13,13 +14,17 @@ const HandsSection = () => {
   const footerData = [
     {
       icon: 'Non Beta Release/Icons/03:145:144' as const satisfies ImageId,
-      title: t('multiChainSupportTitle'),
-      description: t('multiChainSupportDescription'),
+      title: t(isGetSite ? 'assetOverviewTitle' : 'multiChainSupportTitle'),
+      description: t(
+        isGetSite ? 'assetOverviewDescription' : 'multiChainSupportDescription'
+      ),
     },
     {
       icon: 'Non Beta Release/Icons/04:145:144' as const satisfies ImageId,
-      title: t('nftsTitle'),
-      description: t('nftsDescription'),
+      title: t(isGetSite ? 'digitalCollectionTitle' : 'nftsTitle'),
+      description: t(
+        isGetSite ? 'digitalCollectionDescription' : 'nftsDescription'
+      ),
     },
   ] as const
 
@@ -29,14 +34,22 @@ const HandsSection = () => {
         <div className="relative grid aspect-[0.44] place-content-center 2md:aspect-[1.715]">
           <div className="absolute -inset-x-6 top-10 scale-[1.7] sm:scale-150 2md:hidden">
             <Image
-              id="Non Beta Release/Animations/Frames/Wallet_01_Mobile_Frame:990:1467"
+              id={
+                isGetSite
+                  ? 'get.status.app/Animation_Privacy_Frame:456:360'
+                  : 'Non Beta Release/Animations/Frames/Wallet_01_Mobile_Frame:990:1467'
+              }
               alt=""
               aria-hidden="true"
             />
           </div>
           <div className="absolute -inset-x-10 top-10 z-0 hidden h-full scale-[1.15] 2md:block">
             <Image
-              id="Non Beta Release/Animations/Frames/Wallet_01_Frame:2256:1178"
+              id={
+                isGetSite
+                  ? 'get.status.app/Animation_Privacy_Frame:456:360'
+                  : 'Non Beta Release/Animations/Frames/Wallet_01_Frame:2256:1178'
+              }
               alt=""
               aria-hidden="true"
             />
@@ -44,10 +57,14 @@ const HandsSection = () => {
 
           <div className="relative z-10 -mt-20 max-w-[582px] text-center sm:-mt-40 2md:mt-0">
             <h2 className="mb-2 text-27 font-bold">
-              {t('ownYourCryptoTitle')}
+              {t(isGetSite ? 'assetControlTitle' : 'ownYourCryptoTitle')}
             </h2>
             <span className="text-27 font-regular">
-              {t('ownYourCryptoDescription')}
+              {t(
+                isGetSite
+                  ? 'assetControlDescription'
+                  : 'ownYourCryptoDescription'
+              )}
             </span>
           </div>
         </div>

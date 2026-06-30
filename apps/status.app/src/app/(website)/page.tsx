@@ -199,30 +199,42 @@ export default async function HomePage() {
           </div>
 
           <div className="relative hidden xl:block">
-            <Image
-              id={
-                isGetSite
-                  ? 'get.status.app/Hero_app:2128:1292'
-                  : 'Homepage/Hero/device-mockups:2128:1292'
-              }
-              alt="Status app showing wallet and messenger on devices"
-              width={2128}
-              height={1292}
-              className="absolute left-0 top-1/2 z-20 ml-[18%] w-[170%] max-w-none translate-y-[-36%]"
-            />
+            {isGetSite ? (
+              <Image
+                id="get.status.app/Hero_app:2128:1292"
+                alt="Status app showing messenger and web browser on devices"
+                width={2128}
+                height={1292}
+                className="absolute left-0 top-1/2 z-20 ml-[18%] w-[170%] max-w-none translate-y-[-36%]"
+              />
+            ) : (
+              <Image
+                id="Homepage/Hero/device-mockups:2128:1292"
+                alt="Status app showing wallet and messenger on devices"
+                width={2128}
+                height={1292}
+                className="absolute left-0 top-1/2 z-20 ml-[18%] w-[170%] max-w-none translate-y-[-36%]"
+              />
+            )}
           </div>
           <div className="relative mb-[-80px] xl:hidden">
-            <Image
-              id={
-                isGetSite
-                  ? 'get.status.app/Hero_app:1267:770'
-                  : 'Homepage/Hero/device-mockups-mobile:1267:770'
-              }
-              alt="Status app showing wallet and messenger on devices"
-              width={1267}
-              height={770}
-              className="relative z-20 w-[130%] max-w-none"
-            />
+            {isGetSite ? (
+              <Image
+                id="get.status.app/Hero_app:1267:770"
+                alt="Status app showing messenger and web browser on devices"
+                width={1267}
+                height={770}
+                className="relative z-20 w-[130%] max-w-none"
+              />
+            ) : (
+              <Image
+                id="Homepage/Hero/device-mockups-mobile:1267:770"
+                alt="Status app showing wallet and messenger on devices"
+                width={1267}
+                height={770}
+                className="relative z-20 w-[130%] max-w-none"
+              />
+            )}
           </div>
         </div>
       </div>
@@ -249,7 +261,7 @@ export default async function HomePage() {
               type="wallet"
               title={
                 <>
-                  {t('walletTitle')
+                  {t(isGetSite ? 'assetTitle' : 'walletTitle')
                     .split('\n')
                     .map((line, i) => (
                       <span key={i}>
@@ -259,7 +271,9 @@ export default async function HomePage() {
                     ))}
                 </>
               }
-              description={t('walletDescription')}
+              description={t(
+                isGetSite ? 'assetDescription' : 'walletDescription'
+              )}
               showFeatureTag={!isGetSite}
               secondary={
                 !isGetSite && (
@@ -286,10 +300,14 @@ export default async function HomePage() {
               }
               imageId={
                 isGetSite
-                  ? 'get.status.app/Desktop_Wallet_function:2880:1800'
+                  ? 'get.status.app/Connector_NOCRYPTO:1102:1012'
                   : 'Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800'
               }
-              imageAlt="Desktop screenshot showing the wallet feature included in the Status app"
+              imageAlt={
+                isGetSite
+                  ? 'Desktop screenshot showing the features included in the Status app'
+                  : 'Desktop screenshot showing the wallet feature included in the Status app'
+              }
             />
           </ColorTheme>
 

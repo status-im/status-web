@@ -1,11 +1,11 @@
 export type ImageType =
   | {
       id: 'get.status.app/Hero_app:2128:1292'
-      alt: 'Status app showing wallet and messenger on devices'
+      alt: 'Status app showing messenger and web browser on devices'
     }
   | {
       id: 'get.status.app/Hero_app:1267:770'
-      alt: 'Status app showing wallet and messenger on devices'
+      alt: 'Status app showing messenger and web browser on devices'
     }
   | {
       id: 'get.status.app/Desktop_Wallet_function:2880:1800'
@@ -18,6 +18,10 @@ export type ImageType =
   | {
       id: 'get.status.app/Connector_NOCRYPTO:1102:1012'
       alt: ''
+    }
+  | {
+      id: 'get.status.app/Connector_NOCRYPTO:1102:1012'
+      alt: 'Desktop screenshot showing the features included in the Status app'
     }
   | {
       id: 'get.status.app/Animation_Privacy_Frame:456:360'

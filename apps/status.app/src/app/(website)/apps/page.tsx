@@ -141,16 +141,19 @@ export default async function AppsPage() {
             showScribble={false}
             screenshots={[
               {
-                label: t('wallet'),
+                label: t(isGetSite ? 'assets' : 'wallet'),
                 images: [
-                  {
-                    id: isGetSite
-                      ? 'get.status.app/Mobile_WalletFunction:750:1624'
-                      : 'Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624',
-                    alt: t(
-                      'mobileWalletScreenshotAlt'
-                    ) as ImageAlt['Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624'],
-                  },
+                  isGetSite
+                    ? {
+                        id: 'get.status.app/Hero_app:1267:770',
+                        alt: 'Status app showing messenger and web browser on devices',
+                      }
+                    : {
+                        id: 'Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624',
+                        alt: t(
+                          'mobileWalletScreenshotAlt'
+                        ) as ImageAlt['Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624'],
+                      },
                   {
                     id: 'Platforms/Screens/Mobile Screens/New_Mobile_Chat:750:1624',
                     alt: t(
@@ -185,17 +188,22 @@ export default async function AppsPage() {
             title={t('statusDesktop')}
             screenshots={[
               {
-                label: t('wallet'),
-                images: [
-                  {
-                    id: isGetSite
-                      ? 'get.status.app/Desktop_Wallet_function:2880:1800'
-                      : 'Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800',
-                    alt: t(
-                      'desktopWalletScreenshotAlt'
-                    ) as ImageAlt['Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800'],
-                  },
-                ],
+                label: t(isGetSite ? 'assets' : 'wallet'),
+                images: isGetSite
+                  ? [
+                      {
+                        id: 'get.status.app/Connector_NOCRYPTO:1102:1012',
+                        alt: 'Desktop screenshot showing the features included in the Status app',
+                      },
+                    ]
+                  : [
+                      {
+                        id: 'Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800',
+                        alt: t(
+                          'desktopWalletScreenshotAlt'
+                        ) as ImageAlt['Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800'],
+                      },
+                    ],
               },
               {
                 label: t('messenger'),

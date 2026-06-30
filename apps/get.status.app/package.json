@@ -11,6 +11,7 @@
     "postbuild": "next-sitemap && pnpm build:strip-locale && cp serve.json out/serve.json && cp src/app/icon.png out/icon.png",
     "start": "serve out -l 3005",
     "preview:production": "pnpm build && pnpm start",
+    "test:page-source": "node scripts/assert-clean-page-source.mjs",
     "lint": "next lint --dir=src --ext=.ts --ext=.tsx",
     "types:check": "tsc --noEmit",
     "env:check": "node -r dotenv/config ./src/config/env.server.mjs dotenv_config_path=./.env && node -r dotenv/config ./src/config/env.client.mjs dotenv_config_path=./.env && :",
