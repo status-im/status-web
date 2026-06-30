@@ -11,6 +11,7 @@ const filesToScan = [
   '../status.app/src/app/(website)/apps/page.tsx',
   '../status.app/src/app/(website)/_components/footer/index.tsx',
   '../status.app/src/app/(website)/_components/hands-section.tsx',
+  '../status.app/src/app/(website)/_components/download-connector.tsx',
   '../status.app/src/app/(website)/_components/download-connector-dialog.tsx',
 ].map(file => resolve(appRoot, file))
 
@@ -20,9 +21,12 @@ const blockedPatterns = [
   /decentralized finance tools/i,
   /Web3 Wallet/i,
   /Status Wallet Connector/i,
+  /Connector_NOCRYPTO/i,
+  /Connector_NoCrypto/i,
+  /Animation_Privacy_Frame/i,
+  /SSign up/i,
+  /id:\s*'get\.status\.app\/Hero_app:1267:770'/i,
   /Desktop_Wallet_function/i,
-  /Wallet_01_Mobile_Frame/i,
-  /Wallet_01_Frame/i,
   /wallet feature/i,
   /twitter:site/i,
   /@ethstatus/i,

@@ -1,6 +1,7 @@
 'use client'
 
 import { Text } from '@status-im/components'
+import NextImage from 'next/image'
 import { useTranslations } from 'next-intl'
 
 import { isGetSite } from '~/config/site-scope'
@@ -33,26 +34,40 @@ const HandsSection = () => {
       <div className="container-lg relative pb-24 pt-40 xl:pb-40 xl:pt-20">
         <div className="relative grid aspect-[0.44] place-content-center 2md:aspect-[1.715]">
           <div className="absolute -inset-x-6 top-10 scale-[1.7] sm:scale-150 2md:hidden">
-            <Image
-              id={
-                isGetSite
-                  ? 'get.status.app/Animation_Privacy_Frame:456:360'
-                  : 'Non Beta Release/Animations/Frames/Wallet_01_Mobile_Frame:990:1467'
-              }
-              alt=""
-              aria-hidden="true"
-            />
+            {isGetSite ? (
+              <NextImage
+                src="/assets/screens/accounts-frame-mobile.jpg"
+                alt=""
+                aria-hidden="true"
+                width={990}
+                height={1467}
+                style={{ userSelect: 'none' }}
+              />
+            ) : (
+              <Image
+                id="Non Beta Release/Animations/Frames/Wallet_01_Mobile_Frame:990:1467"
+                alt=""
+                aria-hidden="true"
+              />
+            )}
           </div>
           <div className="absolute -inset-x-10 top-10 z-0 hidden h-full scale-[1.15] 2md:block">
-            <Image
-              id={
-                isGetSite
-                  ? 'get.status.app/Animation_Privacy_Frame:456:360'
-                  : 'Non Beta Release/Animations/Frames/Wallet_01_Frame:2256:1178'
-              }
-              alt=""
-              aria-hidden="true"
-            />
+            {isGetSite ? (
+              <NextImage
+                src="/assets/screens/accounts-frame-desktop.jpg"
+                alt=""
+                aria-hidden="true"
+                width={2256}
+                height={1178}
+                style={{ userSelect: 'none' }}
+              />
+            ) : (
+              <Image
+                id="Non Beta Release/Animations/Frames/Wallet_01_Frame:2256:1178"
+                alt=""
+                aria-hidden="true"
+              />
+            )}
           </div>
 
           <div className="relative z-10 -mt-20 max-w-[582px] text-center sm:-mt-40 2md:mt-0">

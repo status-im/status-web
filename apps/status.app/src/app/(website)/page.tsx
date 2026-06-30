@@ -300,13 +300,23 @@ export default async function HomePage() {
               }
               imageId={
                 isGetSite
-                  ? 'get.status.app/Connector_NOCRYPTO:1102:1012'
+                  ? undefined
                   : 'Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800'
               }
               imageAlt={
                 isGetSite
                   ? 'Desktop screenshot showing the features included in the Status app'
                   : 'Desktop screenshot showing the wallet feature included in the Status app'
+              }
+              localImage={
+                isGetSite
+                  ? {
+                      src: '/assets/screens/desktop-assets.png',
+                      alt: 'Desktop screenshot showing the features included in the Status app',
+                      width: 1240,
+                      height: 775,
+                    }
+                  : undefined
               }
             />
           </ColorTheme>

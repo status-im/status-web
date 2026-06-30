@@ -1,6 +1,7 @@
 import { Tabs, Tag } from '@status-im/components'
 import { DesktopIcon, MobileIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
+import NextImage from 'next/image'
 import { getTranslations } from 'next-intl/server'
 
 import { isGetSite } from '~/config/site-scope'
@@ -21,6 +22,15 @@ import { ConnectorSection } from './_components/connector-section'
 import type { ImageAlt, ImageType } from '~components/assets'
 import type { FeatureListProps } from '~website/_components/feature-list'
 import type { Metadata as NextMetadata } from 'next'
+
+type LocalScreenshot = {
+  src: string
+  alt: string
+  width: number
+  height: number
+}
+
+type ScreenshotImage = ImageType | LocalScreenshot
 
 export async function generateMetadata(): Promise<NextMetadata> {
   const t = await getTranslations('apps')
@@ -145,8 +155,10 @@ export default async function AppsPage() {
                 images: [
                   isGetSite
                     ? {
-                        id: 'get.status.app/Hero_app:1267:770',
-                        alt: 'Status app showing messenger and web browser on devices',
+                        src: '/assets/screens/mobile-assets.png',
+                        alt: 'Mobile app screenshot showing the asset management feature included in the Status app',
+                        width: 720,
+                        height: 1600,
                       }
                     : {
                         id: 'Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624',
@@ -192,8 +204,10 @@ export default async function AppsPage() {
                 images: isGetSite
                   ? [
                       {
-                        id: 'get.status.app/Connector_NOCRYPTO:1102:1012',
+                        src: '/assets/screens/desktop-assets.png',
                         alt: 'Desktop screenshot showing the features included in the Status app',
+                        width: 1240,
+                        height: 775,
                       },
                     ]
                   : [
@@ -247,7 +261,7 @@ type PlatformSectionProps = {
   title: string
   screenshots: Array<{
     label: string
-    images: ImageType[]
+    images: ScreenshotImage[]
   }>
   featureList?: FeatureListProps['list']
   showScribble?: boolean
@@ -300,9 +314,9 @@ const PlatformSection = (props: PlatformSectionProps) => {
               >
                 <div className="px-5">
                   {images.map(image => (
-                    <ScreenImage
-                      key={image.id}
-                      {...image}
+                    <RenderedScreenshot
+                      key={'id' in image ? image.id : image.src}
+                      image={image}
                       className="min-w-[calc(100%-20px)] overflow-hidden rounded-8 md:rounded-[24px]"
                     />
                   ))}
@@ -318,9 +332,9 @@ const PlatformSection = (props: PlatformSectionProps) => {
                   className="flex gap-4 px-5 2xl:gap-12"
                 >
                   {images.map(image => (
-                    <ScreenImage
-                      key={image.id}
-                      {...image}
+                    <RenderedScreenshot
+                      key={'id' in image ? image.id : image.src}
+                      image={image}
                       className="min-w-[244px] rounded-16 md:rounded-[24px]"
                     />
                   ))}
@@ -366,4 +380,29 @@ const PlatformSection = (props: PlatformSectionProps) => {
       )}
     </div>
   )
+}
+
+const RenderedScreenshot = (props: {
+  image: ScreenshotImage
+  className?: string
+}) => {
+  const { image, className } = props
+
+  if ('src' in image) {
+    return (
+      <NextImage
+        src={image.src}
+        alt={image.alt}
+        width={image.width}
+        height={image.height}
+        className={cx(
+          'overflow-hidden rounded-20 border-4 border-[var(--screen-border,#EAEEF1)] bg-[var(--screen-border,#EAEEF1)] md:rounded-[24px]',
+          className
+        )}
+        style={{ userSelect: 'none' }}
+      />
+    )
+  }
+
+  return <ScreenImage {...image} className={className} />
 }

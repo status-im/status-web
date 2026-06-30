@@ -3,6 +3,7 @@
 import { Button } from '@status-im/components'
 import { ArrowRightIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
+import NextImage from 'next/image'
 import { useTranslations } from 'next-intl'
 
 import { isGetSite } from '~/config/site-scope'
@@ -30,16 +31,22 @@ const DownloadConnectorSection = (props: Props) => {
           afterDownload ? 'xl:min-h-[506px]' : 'xl:h-[474px]'
         )}
       >
-        <Image
-          id={
-            isGetSite
-              ? 'get.status.app/Connector_NOCRYPTO:1102:1012'
-              : 'Platforms/Screens/Extension Screens/Connector_04:1102:1012'
-          }
-          alt=""
-          width={551}
-          height={506}
-        />
+        {isGetSite ? (
+          <NextImage
+            src="/assets/screens/connector-no-co.png"
+            alt=""
+            width={551}
+            height={506}
+            style={{ userSelect: 'none' }}
+          />
+        ) : (
+          <Image
+            id="Platforms/Screens/Extension Screens/Connector_04:1102:1012"
+            alt=""
+            width={551}
+            height={506}
+          />
+        )}
       </div>
       <div className="flex w-full max-w-[450px] flex-col lg:max-w-[542px] lg:justify-between xl:max-w-[592px]">
         <div className="p-4 xl:pl-6 xl:pr-12 2xl:pl-12">{children}</div>
