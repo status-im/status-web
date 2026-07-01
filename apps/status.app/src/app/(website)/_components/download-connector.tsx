@@ -3,11 +3,12 @@
 import { Button } from '@status-im/components'
 import { ArrowRightIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
-import NextImage from 'next/image'
 import { useTranslations } from 'next-intl'
 
 import { isGetSite } from '~/config/site-scope'
 import { Image } from '~components/assets'
+
+import type { ImageId } from '~components/assets'
 
 type Props = {
   children?: React.ReactNode
@@ -32,12 +33,11 @@ const DownloadConnectorSection = (props: Props) => {
         )}
       >
         {isGetSite ? (
-          <NextImage
-            src="/assets/screens/connector-no-co.png"
+          <Image
+            id={'get.status.app/Connector_NOCRYPTO:1678:1092' as ImageId}
             alt=""
             width={551}
             height={506}
-            style={{ userSelect: 'none' }}
           />
         ) : (
           <Image

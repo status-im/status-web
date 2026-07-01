@@ -1,5 +1,4 @@
 import { cx } from 'class-variance-authority'
-import NextImage from 'next/image'
 
 import { ScreenImage } from '~components/assets'
 
@@ -16,12 +15,6 @@ type Props = {
   secondary?: React.ReactNode
   imageId?: ImageId
   imageAlt?: ImageAlt[ImageId] | string
-  localImage?: {
-    src: string
-    alt: string
-    width: number
-    height: number
-  }
 }
 
 const DesktopSection = (props: Props) => {
@@ -32,7 +25,6 @@ const DesktopSection = (props: Props) => {
     secondary,
     imageId,
     imageAlt,
-    localImage,
     type,
   } = props
 
@@ -60,27 +52,13 @@ const DesktopSection = (props: Props) => {
           </div>
         )}
       </div>
-      {localImage ? (
-        <NextImage
-          className={cx(
-            'overflow-hidden rounded-20 border-4 border-[var(--screen-border,#EAEEF1)] bg-[var(--screen-border,#EAEEF1)] md:rounded-[24px]',
-            'max-xl:mb-[-20%] xl:absolute xl:left-[48%] xl:top-20'
-          )}
-          src={localImage.src}
-          alt={localImage.alt}
-          width={localImage.width}
-          height={localImage.height}
-          style={{ userSelect: 'none' }}
-        />
-      ) : (
-        <ScreenImage
-          className="max-xl:mb-[-20%] xl:absolute xl:left-[48%] xl:top-20"
-          width={1240}
-          height={775}
-          id={imageId as ImageId}
-          alt={imageAlt as ImageAlt[ImageId]}
-        />
-      )}
+      <ScreenImage
+        className="max-xl:mb-[-20%] xl:absolute xl:left-[48%] xl:top-20"
+        width={1240}
+        height={775}
+        id={imageId as ImageId}
+        alt={imageAlt as ImageAlt[ImageId]}
+      />
     </div>
   )
 }

@@ -1,7 +1,6 @@
 import { Tabs, Tag } from '@status-im/components'
 import { DesktopIcon, MobileIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
-import NextImage from 'next/image'
 import { getTranslations } from 'next-intl/server'
 
 import { isGetSite } from '~/config/site-scope'
@@ -23,14 +22,7 @@ import type { ImageAlt, ImageType } from '~components/assets'
 import type { FeatureListProps } from '~website/_components/feature-list'
 import type { Metadata as NextMetadata } from 'next'
 
-type LocalScreenshot = {
-  src: string
-  alt: string
-  width: number
-  height: number
-}
-
-type ScreenshotImage = ImageType | LocalScreenshot
+type ScreenshotImage = ImageType
 
 export async function generateMetadata(): Promise<NextMetadata> {
   const t = await getTranslations('apps')
@@ -155,10 +147,8 @@ export default async function AppsPage() {
                 images: [
                   isGetSite
                     ? {
-                        src: '/assets/screens/mobile-assets.png',
-                        alt: 'Mobile app screenshot showing the asset management feature included in the Status app',
-                        width: 720,
-                        height: 1600,
+                        id: 'get.status.app/Mobile_WalletFunction:720:1600',
+                        alt: '',
                       }
                     : {
                         id: 'Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624',
@@ -204,10 +194,8 @@ export default async function AppsPage() {
                 images: isGetSite
                   ? [
                       {
-                        src: '/assets/screens/desktop-assets.png',
-                        alt: 'Desktop screenshot showing the features included in the Status app',
-                        width: 1240,
-                        height: 775,
+                        id: 'get.status.app/Desktop_function:2480:1550',
+                        alt: '',
                       },
                     ]
                   : [
@@ -315,7 +303,7 @@ const PlatformSection = (props: PlatformSectionProps) => {
                 <div className="px-5">
                   {images.map(image => (
                     <RenderedScreenshot
-                      key={'id' in image ? image.id : image.src}
+                      key={image.id}
                       image={image}
                       className="min-w-[calc(100%-20px)] overflow-hidden rounded-8 md:rounded-[24px]"
                     />
@@ -333,7 +321,7 @@ const PlatformSection = (props: PlatformSectionProps) => {
                 >
                   {images.map(image => (
                     <RenderedScreenshot
-                      key={'id' in image ? image.id : image.src}
+                      key={image.id}
                       image={image}
                       className="min-w-[244px] rounded-16 md:rounded-[24px]"
                     />
@@ -387,22 +375,6 @@ const RenderedScreenshot = (props: {
   className?: string
 }) => {
   const { image, className } = props
-
-  if ('src' in image) {
-    return (
-      <NextImage
-        src={image.src}
-        alt={image.alt}
-        width={image.width}
-        height={image.height}
-        className={cx(
-          'overflow-hidden rounded-20 border-4 border-[var(--screen-border,#EAEEF1)] bg-[var(--screen-border,#EAEEF1)] md:rounded-[24px]',
-          className
-        )}
-        style={{ userSelect: 'none' }}
-      />
-    )
-  }
 
   return <ScreenImage {...image} className={className} />
 }

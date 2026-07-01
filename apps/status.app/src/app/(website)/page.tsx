@@ -24,6 +24,7 @@ import { NewsTag } from './_components/news-tag'
 import { ParallaxCircle } from './_components/parallax-circle'
 
 import type { FeatureListProps } from './_components/feature-list'
+import type { ImageId } from '~components/assets'
 
 export const revalidate = 3600 // 1 hour
 
@@ -300,23 +301,13 @@ export default async function HomePage() {
               }
               imageId={
                 isGetSite
-                  ? undefined
+                  ? ('get.status.app/Desktop_function:2480:1550' as ImageId)
                   : 'Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800'
               }
               imageAlt={
                 isGetSite
                   ? 'Desktop screenshot showing the features included in the Status app'
                   : 'Desktop screenshot showing the wallet feature included in the Status app'
-              }
-              localImage={
-                isGetSite
-                  ? {
-                      src: '/assets/screens/desktop-assets.png',
-                      alt: 'Desktop screenshot showing the features included in the Status app',
-                      width: 1240,
-                      height: 775,
-                    }
-                  : undefined
               }
             />
           </ColorTheme>
