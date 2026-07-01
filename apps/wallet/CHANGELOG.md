@@ -1,5 +1,35 @@
 # wallet
 
+## 0.2.0
+
+### Minor Changes
+
+- e88747e: feat(wallet): import hardware wallet via QR (ERC-4527)
+
+### Patch Changes
+
+- af761a6: add browser notifications for wallet transactions
+- ca76e7d: feat(wallet): add password context
+- da1c09d: feat(wallet): implement multi-wallets
+- b3e3155: feat: connect wallet to dApp
+- 4ebe989: Implement NFT transfers
+- d361411: "chore(wallet): change layout & messaging when hide<$1"
+- 2836972: chore(wallet): remove wxt version number
+- 9e8d0fc: feat(wallet): add token value chart
+- 242931b: fix(wallet): use our custom RPC proxy instead of public RPC
+- ab7a9fe: fix(wallet): pending-then-dropped transactions
+- Updated dependencies [ca76e7d]
+- Updated dependencies [3e92c15]
+- Updated dependencies [da1c09d]
+- Updated dependencies [7d880eb]
+- Updated dependencies [710b023]
+- Updated dependencies [b3e3155]
+- Updated dependencies [1a74ebc]
+- Updated dependencies [d361411]
+- Updated dependencies [41096e0]
+- Updated dependencies [ab7a9fe]
+  - @status-im/wallet@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes

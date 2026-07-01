@@ -1,5 +1,41 @@
 # status.app
 
+## 0.1.3
+
+### Patch Changes
+
+- a535360: feat(status.app): implement i18n coverage across website and admin UI
+- 320438c: fix(get.status.app): remove crypto source content
+- dc2abfd: fix(status.app): SEO improvements - native App Router sitemap with dynamic blog/help/specs entries, 301 redirects for legacy help/features/renamed URLs, and proper 404 responses for unknown specs/help slugs
+- 86ed961: Update Status app metadata and universal link configuration for the new iOS and Android app details.
+- 4a48bcd: Remove legacy iOS app associations from the AASA file so Status universal links resolve to the new app.
+- 51c1770: feat(status.app): add /learn page surfacing Status Insights posts from Ghost, with sitemap entry, footer link, and i18n messages
+- 9585bda: fix(blog): allow mobile tables to scroll
+- 3e92c15: chore: upgrade next to version 15.5.16 across all projects
+- 551aeb1: feat(status.app): add /feed.xml route and global RSS discovery link for AI crawlers
+- 6b34f46: fix(status.app): fix /brand 500 after Next 15.5 upgrade and harden error boundary
+
+  After upgrading to Next.js 15.5.16, `/brand` returned 500 with React error #130 (`Element type is invalid: ... got: undefined`). The brand page defined five nested section components as `const` arrow functions in the same module as client imports; Next 15.5's RSC bundler no longer resolves those references correctly in production. Section UI is now a dedicated `'use client'` module (`brand-sections.tsx`) so Next 15.5's RSC bundler does not treat mixed server/client imports as `undefined`. `JSONLDScript` is imported directly from `@status-im/components` (not the re-export shim), and the locale route uses explicit `export { default, generateMetadata }` only.
+
+  The root `error.tsx` was also fixed: it imported `NotFoundContent`, an async Server Component using `getTranslations` from `next-intl/server`, which broke the error boundary itself and masked the real failure. It now uses a client-only fallback with `useTranslations('error')`.
+
+- 2c6eea3: Deleting unnecessary ref url "ref=our.status.im"
+- d624890: self-host
+- 40f0efc: Hide org chart
+- 9c2974b: chore(status.app): remove beta warning on help pages
+- b3e3155: feat: connect wallet to dApp
+- 20985dc: fix(status.app): style Ghost post tables and reduce blockquote size
+- 9f0fd7d: fix(status.app): remove cloaking signals on get.status.app
+- b4f9c24: fix(status.app): move platform detection script to root layout
+- 3e9d155: fix(status.app): remove " — Status" suffix from page meta titles
+- 5ae411f: fix job detail page
+- 43b7a23: update copy for banners
+- d27fc05: fix(status.app): remove "— Status" suffix from blog page titles
+- a407f80: fix(sitemap): exclude blog tag pages from sitemap
+- 685e3d0: Hide removed get.status.app sections
+- 6c9c8ed: chore: update withdrawal promo
+- 8547cad: add `apps/get.status.app`
+
 ## 0.1.2
 
 ### Patch Changes
