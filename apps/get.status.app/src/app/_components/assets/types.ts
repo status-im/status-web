@@ -1,4 +1,5 @@
 export type ImageType =
+  | { id: 'get.status.app/Connector_NOCO:1678:1092'; alt: '' }
   | { id: 'get.status.app/01_Frame:2256:1178'; alt: '' }
   | { id: 'get.status.app/01_Mobile_Frame:990:1467'; alt: '' }
   | { id: 'get.status.app/Desktop_function:2480:1550'; alt: '' }

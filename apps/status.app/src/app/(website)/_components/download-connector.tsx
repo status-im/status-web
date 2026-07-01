@@ -34,7 +34,7 @@ const DownloadConnectorSection = (props: Props) => {
       >
         {isGetSite ? (
           <Image
-            id={'get.status.app/Connector_NOCRYPTO:1678:1092' as ImageId}
+            id={'get.status.app/Connector_NOCO:1678:1092' as ImageId}
             alt=""
             width={551}
             height={506}
