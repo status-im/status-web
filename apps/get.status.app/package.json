@@ -15,7 +15,7 @@
     "lint": "next lint --dir=src --ext=.ts --ext=.tsx",
     "types:check": "tsc --noEmit",
     "env:check": "node -r dotenv/config ./src/config/env.server.mjs dotenv_config_path=./.env && node -r dotenv/config ./src/config/env.client.mjs dotenv_config_path=./.env && :",
-    "sync:cloudinary": "DOTENV_CONFIG_PATH='.env' node -r dotenv/config scripts/generate-cloudinary-type.mjs && prettier -w 'src/app/_components/assets/types.ts'",
+    "sync:cloudinary": "DOTENV_CONFIG_PATH='.env.local' node -r dotenv/config scripts/generate-cloudinary-type.mjs && prettier -w 'src/app/_components/assets/types.ts'",
     "bootstrap:cloudinary": "node scripts/bootstrap-cloudinary-types.mjs && prettier -w 'src/app/_components/assets/types.ts'",
     "clean": "rimraf .next node_modules .turbo out"
   },
