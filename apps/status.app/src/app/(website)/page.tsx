@@ -203,7 +203,7 @@ export default async function HomePage() {
             {isGetSite ? (
               <Image
                 id="get.status.app/Hero_app:2128:1292"
-                alt="Status app showing messenger and web browser on devices"
+                alt=""
                 width={2128}
                 height={1292}
                 className="absolute left-0 top-1/2 z-20 ml-[18%] w-[170%] max-w-none translate-y-[-36%]"
@@ -221,8 +221,8 @@ export default async function HomePage() {
           <div className="relative mb-[-80px] xl:hidden">
             {isGetSite ? (
               <Image
-                id="get.status.app/Hero_app:1267:770"
-                alt="Status app showing messenger and web browser on devices"
+                id="Homepage/Hero/device-mockups-mobile:1267:770"
+                alt="Status app showing wallet and messenger on devices"
                 width={1267}
                 height={770}
                 className="relative z-20 w-[130%] max-w-none"
@@ -482,10 +482,10 @@ export default async function HomePage() {
               {isGetSite ? (
                 <div className="max-w-[390px] overflow-hidden md:max-w-[580px] 2md:mt-12 2md:max-w-[360px] lg:max-w-[440px] xl:max-w-[510px] 2xl:max-w-[720px]">
                   <Image
-                    id="get.status.app/Create_Community_Banner_Left_Frame_cc8nvh:911:720"
+                    id="get.status.app/Create_Community_Banner_Left_Frame_cc8nvh:1017:776"
                     alt=""
-                    width={911}
-                    height={720}
+                    width={1017}
+                    height={776}
                     className="w-full min-w-[390px] md:min-w-[613px] 2md:min-w-[386px] lg:min-w-[470px] xl:min-w-[544px] 2xl:min-w-[792px]"
                   />
                 </div>

@@ -68,6 +68,43 @@ export default async function AppsPage() {
     },
   ]
 
+  const mobileScreenshots = (
+    isGetSite
+      ? [
+          { id: 'get.status.app/Mobile_WalletFunction:720:1600', alt: '' },
+          { id: 'get.status.app/Mobile_Chat_function:720:1600', alt: '' },
+          {
+            id: 'get.status.app/Mobile_Communities_function:720:1600',
+            alt: '',
+          },
+        ]
+      : [
+          {
+            id: 'Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624',
+            alt: t('mobileWalletScreenshotAlt'),
+          },
+          {
+            id: 'Platforms/Screens/Mobile Screens/New_Mobile_Chat:750:1624',
+            alt: t('mobileMessengerScreenshotAlt'),
+          },
+          {
+            id: 'Platforms/Screens/Mobile Screens/New_Mobile_Communities:750:1624',
+            alt: t('mobileCommunityScreenshotAlt'),
+          },
+        ]
+  ) as ScreenshotImage[]
+
+  const desktopWalletScreenshots = (
+    isGetSite
+      ? [{ id: 'get.status.app/Desktop_function:2480:1550', alt: '' }]
+      : [
+          {
+            id: 'Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800',
+            alt: t('desktopWalletScreenshotAlt'),
+          },
+        ]
+  ) as ScreenshotImage[]
+
   return (
     <>
       <JSONLDScript schema={schema} />
@@ -144,31 +181,7 @@ export default async function AppsPage() {
             screenshots={[
               {
                 label: t(isGetSite ? 'assets' : 'wallet'),
-                images: [
-                  isGetSite
-                    ? {
-                        id: 'get.status.app/Mobile_WalletFunction:720:1600',
-                        alt: '',
-                      }
-                    : {
-                        id: 'Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624',
-                        alt: t(
-                          'mobileWalletScreenshotAlt'
-                        ) as ImageAlt['Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624'],
-                      },
-                  {
-                    id: 'Platforms/Screens/Mobile Screens/New_Mobile_Chat:750:1624',
-                    alt: t(
-                      'mobileMessengerScreenshotAlt'
-                    ) as ImageAlt['Platforms/Screens/Mobile Screens/New_Mobile_Chat:750:1624'],
-                  },
-                  {
-                    id: 'Platforms/Screens/Mobile Screens/New_Mobile_Communities:750:1624',
-                    alt: t(
-                      'mobileCommunityScreenshotAlt'
-                    ) as ImageAlt['Platforms/Screens/Mobile Screens/New_Mobile_Communities:750:1624'],
-                  },
-                ],
+                images: mobileScreenshots,
               },
             ]}
             wideScreenshots={false}
@@ -191,21 +204,7 @@ export default async function AppsPage() {
             screenshots={[
               {
                 label: t(isGetSite ? 'assets' : 'wallet'),
-                images: isGetSite
-                  ? [
-                      {
-                        id: 'get.status.app/Desktop_function:2480:1550',
-                        alt: '',
-                      },
-                    ]
-                  : [
-                      {
-                        id: 'Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800',
-                        alt: t(
-                          'desktopWalletScreenshotAlt'
-                        ) as ImageAlt['Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800'],
-                      },
-                    ],
+                images: desktopWalletScreenshots,
               },
               {
                 label: t('messenger'),
