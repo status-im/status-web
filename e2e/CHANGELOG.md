@@ -1,5 +1,15 @@
 # e2e
 
+## 0.1.2
+
+### Patch Changes
+
+- b668599: test(e2e): run the suite against a locally-served Hub
+- d4608dc: test(e2e): add Hub withdrawal (unlock/claim) test suite
+- 1036c93: chore(e2e): remove dead pre-deposit deposit tests
+- b501af3: feat(e2e): add reusable Anvil wallet harness
+- 9d803e8: test: add deposit flow E2E tests (network switch, validation)
+
 ## 0.1.1
 
 ### Patch Changes

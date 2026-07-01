@@ -1,5 +1,20 @@
 # @status-im/wallet
 
+## 0.1.3
+
+### Patch Changes
+
+- ca76e7d: feat(wallet): add password context
+- 3e92c15: chore: upgrade next to version 15.5.16 across all projects
+- da1c09d: feat(wallet): implement multi-wallets
+- 7d880eb: feat(wallet): extract ScannerScreen and AccountSelect components for hardware wallet import
+- 710b023: fix(wallet): revalidate price chart cache on first stale read
+- b3e3155: feat: connect wallet to dApp
+- 1a74ebc: feat(wallet/assets-list): add hide assets < 1 USD filter
+- d361411: "chore(wallet): change layout & messaging when hide<$1"
+- 41096e0: chore: migrate hoodi
+- ab7a9fe: fix(wallet): pending-then-dropped transactions
+
 ## 0.1.2
 
 ### Patch Changes

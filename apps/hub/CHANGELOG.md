@@ -1,5 +1,40 @@
 # hub
 
+## 1.1.1
+
+### Patch Changes
+
+- c5eaf77: feat(hub): reorder vaults, update rewards, fix ko translation
+- 24ac65d: rename APY to APR
+- 3e92c15: chore: upgrade next to version 15.5.16 across all projects
+- 5e21cf6: fix(hub): remove isConnecting from skeleton conditions on /stake page
+- 9f86f31: fix(hub): truncate unstake MAX amount to 6 decimals to prevent precision overflow
+- 7cf9448: fix(hub): format token amount
+- 5271c7e:
+- d095865: feat(hub): add hub airdrop checker page
+- 6ad9338: feat(hub): hub predeposit claiming enabled
+- 2d28692: chore: update hoodi URLs
+- cdc49e9: feat: pow based rpc auth
+- 6e54112: fix(hub): resolve checker ENS via wagmi public client to avoid CSP blocks
+- f262d5d: chore(hub): Open up Linea withdrawals
+- 41096e0: chore: migrate hoodi
+- 42532eb: hub v2
+- 4f1c650: enable gusd withdrawals
+- 3a89b04: feat(hub): add stepper into predeposit withdrawal modals
+- 20f4729: fix(hub): fix bug with hub pre-deposit min/max values
+- Updated dependencies [ca76e7d]
+- Updated dependencies [3e92c15]
+- Updated dependencies [da1c09d]
+- Updated dependencies [7d880eb]
+- Updated dependencies [710b023]
+- Updated dependencies [b3e3155]
+- Updated dependencies [1a74ebc]
+- Updated dependencies [d361411]
+- Updated dependencies [41096e0]
+- Updated dependencies [ab7a9fe]
+  - @status-im/wallet@0.1.3
+  - @status-im/status-network@0.1.3
+
 ## 1.1.0
 
 ### Minor Changes
