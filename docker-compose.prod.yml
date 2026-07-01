@@ -1,0 +1,74 @@
+# =============================================================================
+# Production deployment for apps/cms with a self-hosted Postgres.
+#
+# Usage:
+#   1. cp apps/cms/.env.docker.example .env.docker   # then fill in real values
+#   2. docker compose -f docker-compose.prod.yml --env-file .env.docker up -d --build
+#
+# Local production-like test (CMS in Docker, get.status.app on host):
+#   Use localhost URLs in .env.docker — see apps/cms/.env.docker.example.
+#
+# The container entrypoint applies Payload SQL migrations before starting, then
+# optionally syncs content/get.status.app/** into Postgres (CMS_SYNC_ON_BOOT).
+# =============================================================================
+
+services:
+  postgres:
+    image: postgres:17-bookworm
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    # Not published to the host — only the cms service reaches it over the
+    # internal network. Uncomment to expose for external admin access.
+    # ports:
+    #   - "5432:5432"
+
+  cms:
+    build:
+      context: .
+      dockerfile: apps/cms/Dockerfile
+      args:
+        # Baked into the client bundle at build time — must be the real origins.
+        NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL}
+        NEXT_PUBLIC_WEB_URL: ${NEXT_PUBLIC_WEB_URL}
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET}
+      NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL}
+      NEXT_PUBLIC_WEB_URL: ${NEXT_PUBLIC_WEB_URL}
+      PAYLOAD_DB_SCHEMA: ${PAYLOAD_DB_SCHEMA:-payload}
+      PAYLOAD_DB_PUSH: ${PAYLOAD_DB_PUSH:-false}
+      PAYLOAD_DB_POOL_MAX: ${PAYLOAD_DB_POOL_MAX:-10}
+      CMS_SYNC_ON_BOOT: ${CMS_SYNC_ON_BOOT:-true}
+      CONTENT_LOCAL_WRITE: ${CONTENT_LOCAL_WRITE:-false}
+      GITHUB_OWNER: ${GITHUB_OWNER:-}
+      GITHUB_REPO: ${GITHUB_REPO:-}
+      GITHUB_APP_ID: ${GITHUB_APP_ID:-}
+      GITHUB_APP_PRIVATE_KEY: ${GITHUB_APP_PRIVATE_KEY:-}
+      GITHUB_INSTALLATION_ID: ${GITHUB_INSTALLATION_ID:-}
+      GITHUB_PR_BASE_BRANCH: ${GITHUB_PR_BASE_BRANCH:-develop}
+    ports:
+      - '${CMS_PORT:-3010}:3000'
+    volumes:
+      # Persist uploaded media (Payload writes to get.status.app public assets).
+      - cms_uploads:/app/apps/get.status.app/public/cms/uploads
+
+volumes:
+  pgdata:
+  cms_uploads:

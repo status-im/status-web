@@ -1,0 +1,36 @@
+# =============================================================================
+# Local development — Postgres only.
+#
+# Run the CMS and get.status.app on the host with hot reload:
+#
+#   docker compose -f docker-compose.cms.yml up -d
+#   cp apps/cms/.env.example apps/cms/.env
+#   pnpm install
+#   pnpm --filter cms sync-from-content
+#   pnpm dev:get
+#
+# For a production-like CMS container (migrations, next start, media volume),
+# use docker-compose.prod.yml instead — see apps/cms/README.md.
+# =============================================================================
+
+services:
+  postgres:
+    image: postgres:17-bookworm
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: status_cms
+    ports:
+      - '5433:5432'
+    volumes:
+      - status_cms_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d status_cms']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+volumes:
+  status_cms_pgdata:

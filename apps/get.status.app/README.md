@@ -37,10 +37,16 @@ vercel env pull .env.local
 ## Development
 
 ```bash
+# CMS + site together (recommended when editing content)
+pnpm dev:get
+
+# Site only
 pnpm --filter get.status.app dev
 ```
 
-Runs on **http://127.0.0.1:3005** (hub uses 3003, status.network uses 3002).
+Runs on **http://127.0.0.1:3005** (hub uses 3003, status.network uses 3002, CMS uses 3010).
+
+Content for the homepage hero and apps page is loaded from `content/get.status.app/` (editable via CMS). This does **not** affect `status.app`. See [`apps/cms/README.md`](../cms/README.md) for local dev and production Docker options.
 
 Desktop and APK download buttons fetch the latest GitHub release in the browser on click (1h session cache). App Store and Google Play links go directly to the stores.
 

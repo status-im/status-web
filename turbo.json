@@ -88,6 +88,37 @@
       "dependsOn": ["^build"],
       "outputs": [".next/**", "out/**"]
     },
+    "cms#build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**"],
+      "passThroughEnv": [
+        "DATABASE_URL",
+        "PAYLOAD_SECRET",
+        "NEXT_PUBLIC_SERVER_URL",
+        "NEXT_PUBLIC_WEB_URL",
+        "PAYLOAD_DB_SCHEMA",
+        "PAYLOAD_DB_PUSH",
+        "CONTENT_LOCAL_WRITE"
+      ]
+    },
+    "cms#dev": {
+      "cache": false,
+      "persistent": true,
+      "passThroughEnv": [
+        "DATABASE_URL",
+        "PAYLOAD_SECRET",
+        "NEXT_PUBLIC_SERVER_URL",
+        "NEXT_PUBLIC_WEB_URL",
+        "PAYLOAD_DB_SCHEMA",
+        "PAYLOAD_DB_PUSH",
+        "CONTENT_LOCAL_WRITE",
+        "GITHUB_OWNER",
+        "GITHUB_REPO",
+        "GITHUB_APP_ID",
+        "GITHUB_APP_PRIVATE_KEY",
+        "GITHUB_INSTALLATION_ID"
+      ]
+    },
     "comment_build:content": {
       "cache": true,
       "persistent": true,

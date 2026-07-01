@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "language": "en",
+  "route": "/",
+  "title": "Status App: secure peer-to-peer private messenger",
+  "description": "Status App combines an end-to-end encrypted messenger and a secure browser into a private, decentralized ecosystem with no phone number or email required.",
+  "sections": [
+    {
+      "componentType": "hero",
+      "key": "home.hero",
+      "headline": "Privat, secure\nby design",
+      "body": "Message privately, manage your assets and browse the open web from one app that you alone control. No phone number, no tracking, no company in the middle."
+    },
+    {
+      "componentType": "richText",
+      "key": "home.prefooter",
+      "body": "Be unstoppable. Use the open-source, private messenger and asset manager."
+    }
+  ]
+}

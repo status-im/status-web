@@ -94,6 +94,7 @@ let config = {
     '@status-im/components',
     '@status-im/colors',
     '@status-im/js',
+    '@status-im/content',
   ],
 }
 

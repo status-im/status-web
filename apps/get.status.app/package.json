@@ -29,6 +29,7 @@
     "@react-spring/web": "^9.7.5",
     "@status-im/colors": "workspace:*",
     "@status-im/components": "workspace:*",
+    "@status-im/content": "workspace:*",
     "@status-im/icons": "workspace:*",
     "@status-im/js": "workspace:*",
     "@vercel/analytics": "^1.2.2",
