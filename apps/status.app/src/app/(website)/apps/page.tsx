@@ -22,6 +22,8 @@ import type { ImageAlt, ImageType } from '~components/assets'
 import type { FeatureListProps } from '~website/_components/feature-list'
 import type { Metadata as NextMetadata } from 'next'
 
+type ScreenshotImage = ImageType
+
 export async function generateMetadata(): Promise<NextMetadata> {
   const t = await getTranslations('apps')
 
@@ -65,6 +67,43 @@ export default async function AppsPage() {
       icon: 'Platforms/Icons/Icon Section/03_Full_Suite_of_Apps:145:144',
     },
   ]
+
+  const mobileScreenshots = (
+    isGetSite
+      ? [
+          { id: 'get.status.app/Mobile_WalletFunction:720:1600', alt: '' },
+          { id: 'get.status.app/Mobile_Chat_function:720:1600', alt: '' },
+          {
+            id: 'get.status.app/Mobile_Communities_function:720:1600',
+            alt: '',
+          },
+        ]
+      : [
+          {
+            id: 'Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624',
+            alt: t('mobileWalletScreenshotAlt'),
+          },
+          {
+            id: 'Platforms/Screens/Mobile Screens/New_Mobile_Chat:750:1624',
+            alt: t('mobileMessengerScreenshotAlt'),
+          },
+          {
+            id: 'Platforms/Screens/Mobile Screens/New_Mobile_Communities:750:1624',
+            alt: t('mobileCommunityScreenshotAlt'),
+          },
+        ]
+  ) as ScreenshotImage[]
+
+  const desktopWalletScreenshots = (
+    isGetSite
+      ? [{ id: 'get.status.app/Desktop_function:2480:1550', alt: '' }]
+      : [
+          {
+            id: 'Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800',
+            alt: t('desktopWalletScreenshotAlt'),
+          },
+        ]
+  ) as ScreenshotImage[]
 
   return (
     <>
@@ -141,29 +180,8 @@ export default async function AppsPage() {
             showScribble={false}
             screenshots={[
               {
-                label: t('wallet'),
-                images: [
-                  {
-                    id: isGetSite
-                      ? 'get.status.app/Mobile_WalletFunction:750:1624'
-                      : 'Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624',
-                    alt: t(
-                      'mobileWalletScreenshotAlt'
-                    ) as ImageAlt['Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624'],
-                  },
-                  {
-                    id: 'Platforms/Screens/Mobile Screens/New_Mobile_Chat:750:1624',
-                    alt: t(
-                      'mobileMessengerScreenshotAlt'
-                    ) as ImageAlt['Platforms/Screens/Mobile Screens/New_Mobile_Chat:750:1624'],
-                  },
-                  {
-                    id: 'Platforms/Screens/Mobile Screens/New_Mobile_Communities:750:1624',
-                    alt: t(
-                      'mobileCommunityScreenshotAlt'
-                    ) as ImageAlt['Platforms/Screens/Mobile Screens/New_Mobile_Communities:750:1624'],
-                  },
-                ],
+                label: t(isGetSite ? 'assets' : 'wallet'),
+                images: mobileScreenshots,
               },
             ]}
             wideScreenshots={false}
@@ -185,17 +203,8 @@ export default async function AppsPage() {
             title={t('statusDesktop')}
             screenshots={[
               {
-                label: t('wallet'),
-                images: [
-                  {
-                    id: isGetSite
-                      ? 'get.status.app/Desktop_Wallet_function:2880:1800'
-                      : 'Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800',
-                    alt: t(
-                      'desktopWalletScreenshotAlt'
-                    ) as ImageAlt['Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800'],
-                  },
-                ],
+                label: t(isGetSite ? 'assets' : 'wallet'),
+                images: desktopWalletScreenshots,
               },
               {
                 label: t('messenger'),
@@ -239,7 +248,7 @@ type PlatformSectionProps = {
   title: string
   screenshots: Array<{
     label: string
-    images: ImageType[]
+    images: ScreenshotImage[]
   }>
   featureList?: FeatureListProps['list']
   showScribble?: boolean
@@ -292,9 +301,9 @@ const PlatformSection = (props: PlatformSectionProps) => {
               >
                 <div className="px-5">
                   {images.map(image => (
-                    <ScreenImage
+                    <RenderedScreenshot
                       key={image.id}
-                      {...image}
+                      image={image}
                       className="min-w-[calc(100%-20px)] overflow-hidden rounded-8 md:rounded-[24px]"
                     />
                   ))}
@@ -310,9 +319,9 @@ const PlatformSection = (props: PlatformSectionProps) => {
                   className="flex gap-4 px-5 2xl:gap-12"
                 >
                   {images.map(image => (
-                    <ScreenImage
+                    <RenderedScreenshot
                       key={image.id}
-                      {...image}
+                      image={image}
                       className="min-w-[244px] rounded-16 md:rounded-[24px]"
                     />
                   ))}
@@ -358,4 +367,13 @@ const PlatformSection = (props: PlatformSectionProps) => {
       )}
     </div>
   )
+}
+
+const RenderedScreenshot = (props: {
+  image: ScreenshotImage
+  className?: string
+}) => {
+  const { image, className } = props
+
+  return <ScreenImage {...image} className={className} />
 }

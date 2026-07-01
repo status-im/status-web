@@ -1,0 +1,9 @@
+# Status App: Private Messenger, Assets, Web Browser, Communities and more
+
+> Status App combines end-to-end encrypted messaging, community spaces, asset management, and a secure web browser in one private peer-to-peer app.
+
+## Core Pages
+- [Status App](https://get.status.app/): Chat privately without surveillance. Combine censorship resistant communications with a private web browser in one secure app.
+- [Status App Downloads](https://get.status.app/apps): Use Status on mobile and desktop for private messaging, assets, communities, and browsing.
+- [Privacy Policy](https://get.status.app/legal/privacy-policy): Review how Status handles website privacy and analytics.
+- [Terms of Use](https://get.status.app/legal/terms-of-use): Review the website terms for Status App.

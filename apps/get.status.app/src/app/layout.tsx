@@ -23,9 +23,10 @@ const GET_SITE_OG_IMAGE = cloudinaryLoader({
 export const metadata: Metadata = {
   metadataBase: new URL('https://get.status.app/'),
 
-  title: 'Status App: secure peer-to-peer private messenger',
+  title:
+    'Status App | Private Messenger, Assets, Web Browser, Communities and more',
   description:
-    'Status App combines an end-to-end encrypted messenger and a secure browser into a private, decentralized ecosystem with no phone number or email required.',
+    'Status App combines an end-to-end encrypted messenger and a secure browser into a private, peer-to-peer ecosystem with no phone number or email required.',
 
   alternates: {
     canonical: './',
@@ -34,9 +35,10 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     url: 'https://get.status.app',
-    title: 'Status App: secure peer-to-peer private messenger',
+    title:
+      'Status App | Private Messenger, Assets, Web Browser, Communities and more',
     description:
-      'Status App combines an end-to-end encrypted messenger and a secure browser into a private, decentralized ecosystem with no phone number or email required.',
+      'Status App combines an end-to-end encrypted messenger and a secure browser into a private, peer-to-peer ecosystem with no phone number or email required.',
     siteName: 'Status App',
     images: [
       {

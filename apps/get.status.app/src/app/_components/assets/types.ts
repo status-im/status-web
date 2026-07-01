@@ -1,32 +1,20 @@
 export type ImageType =
+  | { id: 'get.status.app/Connector_NOCO:1678:1092'; alt: '' }
+  | { id: 'get.status.app/01_Frame:2256:1178'; alt: '' }
+  | { id: 'get.status.app/01_Mobile_Frame:990:1467'; alt: '' }
+  | { id: 'get.status.app/Desktop_function:2480:1550'; alt: '' }
+  | { id: 'Non Beta Release/Download/Screen_01:750:1624'; alt: '' }
   | {
-      id: 'get.status.app/Hero_app:2128:1292'
-      alt: 'Status app showing wallet and messenger on devices'
-    }
-  | {
-      id: 'get.status.app/Hero_app:1267:770'
-      alt: 'Status app showing wallet and messenger on devices'
-    }
-  | {
-      id: 'get.status.app/Desktop_Wallet_function:2880:1800'
-      alt: 'Desktop screenshot showing the wallet feature included in the Status app'
-    }
-  | {
-      id: 'get.status.app/Mobile_WalletFunction:750:1624'
-      alt: 'Mobile app screenshot showing the wallet feature included in the Status app'
-    }
-  | {
-      id: 'get.status.app/Connector_NOCRYPTO:1102:1012'
+      id: 'get.status.app/Create_Community_Banner_Left_Frame_cc8nvh:1017:776'
       alt: ''
     }
-  | {
-      id: 'get.status.app/Animation_Privacy_Frame:456:360'
-      alt: ''
-    }
-  | {
-      id: 'get.status.app/Create_Community_Banner_Left_Frame_cc8nvh:911:720'
-      alt: ''
-    }
+  | { id: 'get.status.app/Animation_Privacy_Frame:2267:1729'; alt: '' }
+  | { id: 'get.status.app/Connector_NOCRYPTO:1678:1092'; alt: '' }
+  | { id: 'get.status.app/Mobile_WalletFunction:720:1600'; alt: '' }
+  | { id: 'get.status.app/Mobile_Communities_function:720:1600'; alt: '' }
+  | { id: 'get.status.app/Mobile_Chat_function:720:1600'; alt: '' }
+  | { id: 'get.status.app/Desktop_Wallet_function:2480:1550'; alt: '' }
+  | { id: 'get.status.app/Hero_app:2128:1292'; alt: '' }
   | {
       id: 'Homepage/Hero/device-mockups-mobile:1267:770'
       alt: 'Status app showing wallet and messenger on devices'
@@ -44,15 +32,15 @@ export type ImageType =
       alt: ''
     }
   | {
-      id: 'Platforms/Screens/Mobile Screens/New_Mobile_Communities:750:1624'
+      id: 'Platforms/Screens/Mobile Screens/New_Mobile_Communities:720:1600'
       alt: 'Mobile app screenshot showing the community feature included in the Status app'
     }
   | {
-      id: 'Platforms/Screens/Mobile Screens/New_Mobile_Chat:750:1624'
+      id: 'Platforms/Screens/Mobile Screens/New_Mobile_Chat:720:1600'
       alt: 'Mobile app screenshot showing the messenger feature included in the Status app'
     }
   | {
-      id: 'Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624'
+      id: 'Platforms/Screens/Mobile Screens/New_Mobile_Wallet:720:1600'
       alt: 'Mobile app screenshot showing the wallet feature included in the Status app'
     }
   | {
@@ -141,7 +129,6 @@ export type ImageType =
       alt: 'Mobile app screenshot showing the community feature included in the Status app'
     }
   | { id: 'Non Beta Release/Download/Screen_02:750:1624'; alt: '' }
-  | { id: 'Non Beta Release/Download/Screen_01:750:1624'; alt: '' }
   | {
       id: 'Non Beta Release/Illustrations/Hero_Non_Beta_Release:4399:2703'
       alt: ''
@@ -474,17 +461,12 @@ export type VideoId =
   | '404 Error/Animations/Error_404:1695:960'
   | '404 Error/Animations/Error_404_Mobile:1040:1467'
   | 'Non Beta Release/Animations/Keycard_01:911:720'
-  | 'get.status.app/Animation_Privacy:911:720'
   | 'Non Beta Release/Animations/Messenger_01_Bottom:1512:781'
   | 'Non Beta Release/Animations/Messenger_01_Bottom_HEVC:1512:780'
   | 'Non Beta Release/Animations/Messenger_01_Top:1512:522'
   | 'Non Beta Release/Animations/Messenger_01_Top_HEVC:1512:522'
   | 'Platforms/Animations/Platforms_Hero:717:572'
-  | 'Brand/brand-assets.zip'
-  | 'Brand/logo-assets.zip'
-  | 'Brand/mark-assets.zip'
-  | 'Brand/product-assets.zip'
-  | 'Brand/variant-assets.zip'
+  | 'get.status.app/Animation_Privacy:6276:4788'
 
 export type ZipFileId =
   | 'Brand/brand-assets.zip'

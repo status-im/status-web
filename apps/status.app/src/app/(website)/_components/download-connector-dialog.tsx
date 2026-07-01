@@ -5,6 +5,7 @@ import { ChromeIcon, CloseIcon } from '@status-im/icons/20'
 import { useTranslations } from 'next-intl'
 
 import { STATUS_CONNECTOR_CHROME_URL } from '~/config/routes'
+import { isGetSite } from '~/config/site-scope'
 import { trackEvent } from '~app/_utils/track'
 import { Dialog } from '~components/dialog'
 
@@ -40,9 +41,11 @@ export const DownloadConnectorDialog = (props: Props) => {
           <Dialog.Title className="mb-3 mt-4 text-27 font-700 xl:text-40">
             {t('connectorTitle')}
           </Dialog.Title>
-          <p className="mb-6 text-19 font-400 xl:text-27">
-            {t('connectorDescription')}
-          </p>
+          {!isGetSite && (
+            <p className="mb-6 text-19 font-400 xl:text-27">
+              {t('connectorDescription')}
+            </p>
+          )}
 
           <Button
             variant="primary"
