@@ -71,7 +71,7 @@ export default async function AppsPage() {
   const mobileScreenshots = (
     isGetSite
       ? [
-          { id: 'get.status.app/Mobile_WalletFunction:720:1600', alt: '' },
+          { id: 'get.status.app/Mobile_Assets_function:720:1600', alt: '' },
           { id: 'get.status.app/Mobile_Chat_function:720:1600', alt: '' },
           {
             id: 'get.status.app/Mobile_Communities_function:720:1600',

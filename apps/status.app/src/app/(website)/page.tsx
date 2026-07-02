@@ -222,7 +222,7 @@ export default async function HomePage() {
             {isGetSite ? (
               <Image
                 id="Homepage/Hero/device-mockups-mobile:1267:770"
-                alt="Status app showing wallet and messenger on devices"
+                alt="Status app showing messenger on devices"
                 width={1267}
                 height={770}
                 className="relative z-20 w-[130%] max-w-none"

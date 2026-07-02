@@ -9,7 +9,7 @@ export type ImageType =
       alt: 'Desktop screenshot showing the wallet feature included in the Status app'
     }
   | { id: 'get.status.app/Desktop_Wallet_function:2480:1550'; alt: '' }
-  | { id: 'get.status.app/Mobile_WalletFunction:720:1600'; alt: '' }
+  | { id: 'get.status.app/Mobile_Assets_function:720:1600'; alt: '' }
   | {
       id: 'get.status.app/Mobile_WalletFunction:750:1624'
       alt: 'Mobile app screenshot showing the wallet feature included in the Status app'
@@ -33,7 +33,9 @@ export type ImageType =
     }
   | {
       id: 'Homepage/Hero/device-mockups-mobile:1267:770'
-      alt: 'Status app showing wallet and messenger on devices'
+      alt:
+        | 'Status app showing wallet and messenger on devices'
+        | 'Status app showing messenger on devices'
     }
   | {
       id: 'Homepage/Hero/device-mockups:2128:1292'
