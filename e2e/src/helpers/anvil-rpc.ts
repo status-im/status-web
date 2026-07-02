@@ -190,6 +190,51 @@ export class AnvilRpcHelper {
     await this.call(rpc ?? this.mainnetRpc, 'evm_mine', [])
   }
 
+  /**
+   * Disable auto-mining — submitted txs stay pending until a block is mined
+   * explicitly (mineBlock) or by interval mining. Used by congestion profiles
+   * (high-base-fee / stuck-tx) to hold transactions in the mempool.
+   */
+  async disableAutoMining(rpc?: string): Promise<void> {
+    await this.call(rpc ?? this.mainnetRpc, 'evm_setAutomine', [false])
+  }
+
+  // ---------------------------------------------------------------------------
+  // Congestion controls
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Set the base fee for the NEXT block via anvil_setNextBlockBaseFeePerGas.
+   * The wallet's fee estimator reads eth_feeHistory / eth_maxPriorityFeePerGas
+   * from the fork, so raising this makes the wallet quote higher gas and lets us
+   * exercise the send flow's "gas shifted" handling. Mine a block for it to take
+   * effect on subsequent estimates.
+   */
+  async setNextBlockBaseFee(weiPerGas: bigint, rpc?: string): Promise<void> {
+    await this.call(rpc ?? this.mainnetRpc, 'anvil_setNextBlockBaseFeePerGas', [
+      toHex(weiPerGas),
+    ])
+  }
+
+  /**
+   * Set the block gas limit via evm_setBlockGasLimit. Lowering it below a tx's
+   * gas requirement forces that tx to fail, exercising the "tight gas limit"
+   * congestion profile.
+   */
+  async setBlockGasLimit(gasLimit: bigint, rpc?: string): Promise<void> {
+    await this.call(rpc ?? this.mainnetRpc, 'evm_setBlockGasLimit', [
+      toHex(gasLimit),
+    ])
+  }
+
+  /**
+   * Drop a pending transaction from the mempool via anvil_dropTransaction.
+   * Useful to clean up a deliberately-stuck tx between tests.
+   */
+  async dropTransaction(txHash: string, rpc?: string): Promise<void> {
+    await this.call(rpc ?? this.mainnetRpc, 'anvil_dropTransaction', [txHash])
+  }
+
   // ---------------------------------------------------------------------------
   // Vault state
   // ---------------------------------------------------------------------------
@@ -225,10 +270,39 @@ export class AnvilRpcHelper {
 
   /** Set ETH balance directly via anvil_setBalance */
   async setEthBalance(amount: bigint, rpc?: string): Promise<void> {
+    await this.setEthBalanceFor(this.walletAddress, amount, rpc)
+  }
+
+  /**
+   * Set an arbitrary account's ETH balance via anvil_setBalance. Also makes the
+   * account "locally known" so subsequent state reads (balance, and gas
+   * estimation that credits it) don't hit the non-archive fork upstream — use
+   * this to pre-register a send recipient before estimating gas / sending.
+   */
+  async setEthBalanceFor(
+    address: string,
+    amount: bigint,
+    rpc?: string,
+  ): Promise<void> {
     await this.call(rpc ?? this.mainnetRpc, 'anvil_setBalance', [
-      this.walletAddress,
+      address,
       toHex(amount),
     ])
+  }
+
+  /**
+   * Read the wallet's native ETH balance. Reads a locally-set account (via
+   * setEthBalance), so it does not hit the non-archive fork upstream — use this
+   * to assert a send's effect via the sender's delta rather than the recipient's
+   * (an un-modified recipient triggers an archive request).
+   */
+  async getEthBalance(address?: string, rpc?: string): Promise<bigint> {
+    const result = await this.call<string>(
+      rpc ?? this.mainnetRpc,
+      'eth_getBalance',
+      [address ?? this.walletAddress, 'latest'],
+    )
+    return BigInt(result)
   }
 
   // ---------------------------------------------------------------------------
