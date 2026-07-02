@@ -2,37 +2,6 @@ export type ImageType =
   | { id: 'get.status.app/Mobile_Function:720:1600'; alt: '' }
   | { id: 'get.status.app/Connector_NOCO:1678:1092'; alt: '' }
   | { id: 'get.status.app/01_Frame:2256:1178'; alt: '' }
-  | { id: 'samples/cloudinary-logo-vector:1000:320'; alt: '' }
-  | {
-      id: 'samples/chair:800:600'
-      alt: 'Sample preview image with transparent background'
-    }
-  | { id: 'samples/zoom:484:324'; alt: 'Sample texture' }
-  | { id: 'samples/waves:1024:1024'; alt: 'Sample texture' }
-  | { id: 'samples/canvas:600:388'; alt: 'Sample texture' }
-  | { id: 'samples/coffee:1920:1280'; alt: 'Sample preview image' }
-  | { id: 'main-sample:1248:832'; alt: 'Sample preview image' }
-  | { id: 'samples/paper:1024:1024'; alt: 'Sample texture' }
-  | { id: 'cld-sample:1870:1250'; alt: 'Sample preview image' }
-  | { id: 'samples/outdoor-woman:640:963'; alt: 'Sample preview image' }
-  | { id: 'cld-sample-2:1870:1250'; alt: 'Sample preview image' }
-  | { id: 'cld-sample-4:1870:1250'; alt: 'Sample preview image' }
-  | { id: 'samples/man-on-a-street:1340:1340'; alt: 'Sample preview image' }
-  | { id: 'samples/shoe:1000:1140'; alt: 'Sample preview image' }
-  | { id: 'cld-sample-5:1870:1250'; alt: 'Sample preview image' }
-  | { id: 'samples/ecommerce/shoes:587:507'; alt: '' }
-  | { id: 'samples/radial_02:427:271'; alt: 'Sample texture' }
-  | { id: 'samples/smile:1552:1000'; alt: 'Sample preview image' }
-  | { id: 'samples/two-ladies:1500:1200'; alt: 'Sample preview image' }
-  | {
-      id: 'samples/woman-on-a-football-field:1200:1350'
-      alt: 'Sample preview image'
-    }
-  | { id: 'samples/radial:950:640'; alt: 'Sample texture' }
-  | { id: 'samples/man-portrait:1333:2000'; alt: 'Sample preview image' }
-  | { id: 'cld-sample-3:1870:1250'; alt: 'Sample preview image' }
-  | { id: 'samples/logo:480:314'; alt: '' }
-  | { id: 'samples/upscale-face-1:233:233'; alt: 'Sample preview image' }
   | { id: 'get.status.app/01_Mobile_Frame:990:1467'; alt: '' }
   | { id: 'get.status.app/Desktop_function:2480:1550'; alt: '' }
   | { id: 'Non Beta Release/Download/Screen_01:750:1624'; alt: '' }
@@ -161,7 +130,6 @@ export type ImageType =
       id: 'Help/Documentation Screens/Wallet/1412/1412_Header_light:1900:1120'
       alt: ''
     }
-  | { id: 'sample:864:576'; alt: '' }
   | {
       id: 'Share/Screens/Profile/Sharing_Banner:3841:3572'
       alt: 'Status.app illustration for a shared profile.'
@@ -1261,7 +1229,6 @@ export type VideoId =
   | 'Token/Animations/Token_Hero:721:575'
   | 'Translations/Animations/Translations_Hero:721:575'
   | 'get.status.app/Animation_Privacy:6276:4788'
-  | 'samples/dance-2:3840:2160'
 
 export type ZipFileId =
   | 'Brand/brand-assets.zip'
