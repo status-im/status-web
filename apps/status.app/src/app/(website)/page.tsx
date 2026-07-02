@@ -25,6 +25,11 @@ import { ParallaxCircle } from './_components/parallax-circle'
 
 import type { FeatureListProps } from './_components/feature-list'
 
+export type CmsHeroCopy = {
+  headline: string
+  body?: string
+}
+
 export const revalidate = 3600 // 1 hour
 
 export async function generateMetadata() {
@@ -36,9 +41,16 @@ export async function generateMetadata() {
   })
 }
 
-export default async function HomePage() {
+export default async function HomePage({
+  cmsHero,
+}: {
+  cmsHero?: CmsHeroCopy
+} = {}) {
   const t = await getTranslations('home')
   const td = await getTranslations('download')
+
+  const heroTitle = cmsHero?.headline ?? t('heroTitle')
+  const heroDescription = cmsHero?.body ?? t('heroDescription')
 
   const { posts: allPosts } = isGetSite
     ? { posts: [] }
@@ -138,18 +150,16 @@ export default async function HomePage() {
         <div className="container mx-auto grid grid-cols-1 gap-8 px-5 xl:grid-cols-2 xl:gap-0">
           <div className="relative z-10 mx-auto flex max-w-[636px] flex-col items-center text-center xl:mx-0 xl:min-w-[640px] xl:items-start xl:text-left">
             <h1 className="mb-4 text-48 font-bold text-white-100 lg:mb-10 lg:text-88">
-              {t('heroTitle')
-                .split('\n')
-                .map((line, i) => (
-                  <span key={i}>
-                    {i > 0 && <br />}
-                    {line}
-                  </span>
-                ))}
+              {heroTitle.split('\n').map((line, i) => (
+                <span key={i}>
+                  {i > 0 && <br />}
+                  {line}
+                </span>
+              ))}
             </h1>
 
             <p className="mb-6 max-w-[320px] text-19 font-medium text-white-100 lg:mb-8 lg:max-w-[600px] lg:text-27 lg:font-regular">
-              {t('heroDescription')}
+              {heroDescription}
             </p>
 
             <div className="mb-6 flex max-w-full flex-col items-center gap-4 lg:mb-8 xl:items-start">
@@ -237,7 +247,7 @@ export default async function HomePage() {
         <div className="relative z-20 w-full">
           <ColorTheme
             theme="yellow"
-            className="relative z-20 mb-12 rounded-t-[24px] bg-white-100"
+            className="rounded-t-24 relative z-20 mb-12 bg-white-100"
           >
             <div className="absolute -left-40 bottom-0 z-10">
               <ParallaxCircle />

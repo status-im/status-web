@@ -22,6 +22,11 @@ import type { ImageAlt, ImageType } from '~components/assets'
 import type { FeatureListProps } from '~website/_components/feature-list'
 import type { Metadata as NextMetadata } from 'next'
 
+export type CmsHeroCopy = {
+  headline: string
+  body?: string
+}
+
 export async function generateMetadata(): Promise<NextMetadata> {
   const t = await getTranslations('apps')
 
@@ -34,8 +39,15 @@ export async function generateMetadata(): Promise<NextMetadata> {
   })
 }
 
-export default async function AppsPage() {
+export default async function AppsPage({
+  cmsHero,
+}: {
+  cmsHero?: CmsHeroCopy
+} = {}) {
   const t = await getTranslations('apps')
+
+  const heroTitle = cmsHero?.headline ?? t('title')
+  const heroDescription = cmsHero?.body ?? t('description')
 
   const schema = isGetSite
     ? jsonLD.website({
@@ -84,8 +96,8 @@ export default async function AppsPage() {
                 />
               </>
             }
-            title={t('title')}
-            description={t('description')}
+            title={heroTitle}
+            description={heroDescription}
             action={
               <>
                 <div

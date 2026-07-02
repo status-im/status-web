@@ -1,37 +1,29 @@
+import { isActiveLocale } from '@status-im/content/locales'
+
+import { serverEnv } from '~/config/env.server.mjs'
+
 import AppsPage from '../../../../../../status.app/src/app/(website)/apps/page'
-import { cloudinaryLoader } from '../../../_components/assets/loader'
+import { getCmsHeroCopy } from '../../../../lib/page-copy'
+import { createPageMetadata } from '../../../../lib/page-metadata'
 
-import type { Metadata } from 'next'
+const ROUTE = '/apps'
 
-const GET_SITE_OG_IMAGE = cloudinaryLoader({
-  src: 'get.status.app/Hero_app',
-  width: 1200,
-})
+export const dynamic =
+  serverEnv.NODE_ENV === 'development' ? 'force-dynamic' : 'force-static'
 
-export default AppsPage
+export const generateMetadata = createPageMetadata(ROUTE)
 
-export async function generateMetadata(): Promise<Metadata> {
-  const title = 'Apps'
-  const description =
-    'Use Status on the go with the mobile app, or get the full set of features on desktop. Private messaging and a secure browser, on every device you own.'
-
-  return {
-    title,
-    description,
-    alternates: {
-      canonical: '/apps',
-    },
-    openGraph: {
-      type: 'website',
-      url: 'https://get.status.app/apps',
-      title,
-      description,
-      siteName: 'Status App',
-      images: [
-        {
-          url: GET_SITE_OG_IMAGE,
-        },
-      ],
-    },
+export default async function GetSiteAppsPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
+  if (!isActiveLocale(locale)) {
+    throw new Error(`GetSiteAppsPage received non-active locale "${locale}"`)
   }
+
+  const cmsHero = await getCmsHeroCopy(ROUTE, locale, 'apps', 'apps.hero')
+
+  return <AppsPage cmsHero={cmsHero} />
 }

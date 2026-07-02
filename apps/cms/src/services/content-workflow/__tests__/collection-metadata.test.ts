@@ -11,18 +11,9 @@ describe('content workflow collection metadata', () => {
   it('covers every repo-backed admin collection that uses PR status UI', () => {
     const expected = [
       'pages',
-      'builder-hub-settings',
-      'builder-listing-settings',
-      'builder-resources',
       'site-settings-content',
       'site-navigation-content',
       'site-footer-content',
-      'circles',
-      'circle-events',
-      'circle-initiatives',
-      'circle-resources',
-      'ideas',
-      'rfps',
     ]
 
     for (const collection of expected) {
@@ -39,26 +30,16 @@ describe('content workflow collection metadata', () => {
 
   it('builds slug-derived and fixed target paths for live PR lookup', () => {
     assert.equal(
-      getContentWorkflowTargetPath('pages', { slug: 'about' }),
-      'content/pages/en/about.json'
+      getContentWorkflowTargetPath('pages', { slug: 'apps' }),
+      'content/get.status.app/pages/en/apps.json'
     )
     assert.equal(
-      getContentWorkflowTargetPath('ideas', { slug: 'quadratic-voting' }),
-      'content/builders-hub/ideas/quadratic-voting/index.json'
-    )
-    assert.equal(
-      getContentWorkflowTargetPath('builder-resources', {}),
-      'content/builders-hub/resources/en.json'
+      getContentWorkflowTargetPath('site-settings-content', {}),
+      'content/get.status.app/site/en/settings.json'
     )
     assert.equal(
       getContentWorkflowTargetPath('site-footer-content', {}),
-      'content/site/en/footer.json'
-    )
-    assert.equal(
-      getContentWorkflowTargetPath('builder-listing-settings', {
-        page: 'rfps',
-      }),
-      'content/builders-hub/listings/rfps/en.json'
+      'content/get.status.app/site/en/footer.json'
     )
   })
 })

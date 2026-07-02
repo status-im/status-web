@@ -21,72 +21,28 @@ const fixedPath =
   () =>
     path
 
+const CONTENT_PREFIX = 'content/get.status.app'
+
 const CONTENT_WORKFLOW_COLLECTIONS = {
   pages: {
     contentTypes: ['page'],
     label: 'Page',
-    targetPath: slugPath('content/pages/en', '.json'),
-  },
-  'builder-hub-settings': {
-    contentTypes: ['builder-hub-settings'],
-    label: 'Builders Hub settings',
-    targetPath: fixedPath('content/builders-hub/settings/en.json'),
-  },
-  'builder-listing-settings': {
-    contentTypes: ['builder-listing'],
-    label: 'Builders Hub listing settings',
-    targetPath: ({ page }) =>
-      page ? `content/builders-hub/listings/${page}/en.json` : null,
-  },
-  'builder-resources': {
-    contentTypes: ['builder-resource'],
-    label: 'Builder resource',
-    targetPath: fixedPath('content/builders-hub/resources/en.json'),
+    targetPath: slugPath(`${CONTENT_PREFIX}/pages/en`, '.json'),
   },
   'site-settings-content': {
     contentTypes: ['site-settings'],
     label: 'Site settings',
-    targetPath: fixedPath('content/site/en/settings.json'),
+    targetPath: fixedPath(`${CONTENT_PREFIX}/site/en/settings.json`),
   },
   'site-navigation-content': {
     contentTypes: ['site-navigation'],
     label: 'Site navigation',
-    targetPath: fixedPath('content/site/en/navigation.json'),
+    targetPath: fixedPath(`${CONTENT_PREFIX}/site/en/navigation.json`),
   },
   'site-footer-content': {
     contentTypes: ['site-footer'],
     label: 'Site footer',
-    targetPath: fixedPath('content/site/en/footer.json'),
-  },
-  circles: {
-    contentTypes: ['circle'],
-    label: 'Circle',
-    targetPath: slugPath('content/circles/circles'),
-  },
-  'circle-events': {
-    contentTypes: ['circle-event'],
-    label: 'Circle event',
-    targetPath: slugPath('content/circles/events'),
-  },
-  'circle-initiatives': {
-    contentTypes: ['circle-initiative'],
-    label: 'Circle initiative',
-    targetPath: slugPath('content/circles/initiatives'),
-  },
-  'circle-resources': {
-    contentTypes: ['circle-resource'],
-    label: 'Circle resource',
-    targetPath: fixedPath('content/circles/resources/en.json'),
-  },
-  ideas: {
-    contentTypes: ['idea'],
-    label: 'Idea',
-    targetPath: slugPath('content/builders-hub/ideas'),
-  },
-  rfps: {
-    contentTypes: ['rfp'],
-    label: 'RFP',
-    targetPath: slugPath('content/builders-hub/rfps'),
+    targetPath: fixedPath(`${CONTENT_PREFIX}/site/en/footer.json`),
   },
 } as const satisfies Record<string, ContentWorkflowCollection>
 
