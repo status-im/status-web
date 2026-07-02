@@ -10,16 +10,14 @@ export type ImageType =
     }
   | { id: 'get.status.app/Animation_Privacy_Frame:2267:1729'; alt: '' }
   | { id: 'get.status.app/Connector_NOCRYPTO:1678:1092'; alt: '' }
-  | { id: 'get.status.app/Mobile_Assets_function:720:1600'; alt: '' }
+  | { id: 'get.status.app/Mobile_WalletFunction:720:1600'; alt: '' }
   | { id: 'get.status.app/Mobile_Communities_function:720:1600'; alt: '' }
   | { id: 'get.status.app/Mobile_Chat_function:720:1600'; alt: '' }
   | { id: 'get.status.app/Desktop_Wallet_function:2480:1550'; alt: '' }
   | { id: 'get.status.app/Hero_app:2128:1292'; alt: '' }
   | {
       id: 'Homepage/Hero/device-mockups-mobile:1267:770'
-      alt:
-        | 'Status app showing wallet and messenger on devices'
-        | 'Status app showing messenger on devices'
+      alt: 'Status app showing wallet and messenger on devices'
     }
   | {
       id: 'Homepage/Hero/device-mockups:2128:1292'
