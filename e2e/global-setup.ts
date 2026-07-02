@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 import { loadEnvConfig } from './src/config/env.js'
+import { runsHubProjects } from './src/config/test-servers.js'
 
 async function globalSetup(): Promise<void> {
   console.log('[global-setup] Validating environment...')
@@ -37,10 +38,11 @@ async function globalSetup(): Promise<void> {
     `[global-setup] MetaMask: ${fs.existsSync(env.METAMASK_EXTENSION_PATH) ? 'found' : 'NOT found'}`,
   )
 
-  // For a local dev server, pre-compile the routes the tests hit so the first
+  // For a local Hub dev server, pre-compile the routes the tests hit so the first
   // in-test navigation isn't racing Next's on-demand compile (Playwright's
-  // webServer only waits for the home route).
-  if (/localhost|127\.0\.0\.1/.test(env.BASE_URL)) {
+  // webServer only waits for the home route). Runs that don't include Hub
+  // projects don't start the Hub, so skip it there.
+  if (runsHubProjects() && /localhost|127\.0\.0\.1/.test(env.BASE_URL)) {
     await warmUpRoutes(env.BASE_URL, ['/', '/pre-deposits'])
   }
 }

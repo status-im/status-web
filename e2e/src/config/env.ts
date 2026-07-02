@@ -34,6 +34,10 @@ export function loadEnvConfig(): EnvConfig {
       process.env.ANVIL_MAINNET_RPC || `http://localhost:${mainnetPort}`,
     ANVIL_LINEA_RPC:
       process.env.ANVIL_LINEA_RPC || `http://localhost:${lineaPort}`,
+    // status-api backend the wallet extension talks to (dev target baked into
+    // the wallet build). Wallet-extension tests run apps/api here.
+    WALLET_STATUS_API_URL:
+      process.env.WALLET_STATUS_API_URL ?? 'http://localhost:3030',
   }
 
   cachedConfig = config
