@@ -1,5 +1,13 @@
-import LegalLayout from '../../../../../../status.app/src/app/(website)/legal/layout'
+import { Body } from '~components/body'
 
-export const dynamic = 'force-static'
+type Props = {
+  children: React.ReactNode
+}
 
-export default LegalLayout
+export default function LegalLayout({ children }: Props) {
+  return (
+    <Body className="pb-24 pt-16 xl:pb-40 xl:pt-32">
+      <div className="container max-w-[742px]">{children}</div>
+    </Body>
+  )
+}
