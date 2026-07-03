@@ -25,7 +25,12 @@ export class WalletSendModalPage extends BasePage {
   readonly gasShiftedAlert = this.page.getByText(
     /Gas price changed .* confirm to continue/,
   )
-  readonly successToast = this.page.getByText('Transaction signed and sent')
+  // exact: the toast system's aria-live announcer duplicates the message as
+  // "Notification Transaction signed and sent" — a substring match resolves to
+  // both and trips strict mode.
+  readonly successToast = this.page.getByText('Transaction signed and sent', {
+    exact: true,
+  })
 
   async goto(): Promise<void> {}
   async waitForReady(): Promise<void> {
