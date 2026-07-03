@@ -1,26 +1,30 @@
 export type ImageType =
-  | {
-      id: 'get.status.app/Hero_app:2128:1292'
-      alt: 'Status app showing wallet and messenger on devices'
-    }
-  | {
-      id: 'get.status.app/Hero_app:1267:770'
-      alt: 'Status app showing wallet and messenger on devices'
-    }
+  | { id: 'get.status.app/01_Frame:2256:1178'; alt: '' }
+  | { id: 'get.status.app/01_Mobile_Frame:990:1467'; alt: '' }
+  | { id: 'get.status.app/Desktop_function:2480:1550'; alt: '' }
+  | { id: 'get.status.app/Hero_app:2128:1292'; alt: '' }
+  | { id: 'get.status.app/Hero_app:1267:770'; alt: '' }
   | {
       id: 'get.status.app/Desktop_Wallet_function:2880:1800'
       alt: 'Desktop screenshot showing the wallet feature included in the Status app'
     }
+  | { id: 'get.status.app/Desktop_Wallet_function:2480:1550'; alt: '' }
+  | { id: 'get.status.app/Mobile_WalletFunction:720:1600'; alt: '' }
   | {
       id: 'get.status.app/Mobile_WalletFunction:750:1624'
       alt: 'Mobile app screenshot showing the wallet feature included in the Status app'
     }
+  | { id: 'get.status.app/Connector_NOCRYPTO:1678:1092'; alt: '' }
   | {
       id: 'get.status.app/Connector_NOCRYPTO:1102:1012'
       alt: ''
     }
   | {
       id: 'get.status.app/Animation_Privacy_Frame:456:360'
+      alt: ''
+    }
+  | {
+      id: 'get.status.app/Create_Community_Banner_Left_Frame_cc8nvh:1017:776'
       alt: ''
     }
   | {

@@ -13,7 +13,7 @@ export default AppsPage
 export async function generateMetadata(): Promise<Metadata> {
   const title = 'Apps'
   const description =
-    'Use Status on the go with the mobile app, or get the full set of features on desktop. Private messaging and a secure browser, on every device you own.'
+    'Use Status on the go with the mobile app, or get the full set of features on desktop. Private messaging, assets and a secure browser, on every device you own.'
 
   return {
     title,

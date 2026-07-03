@@ -13,8 +13,8 @@ type Props = {
   description: string
   showFeatureTag?: boolean
   secondary?: React.ReactNode
-  imageId: ImageId
-  imageAlt: ImageAlt[ImageId]
+  imageId?: ImageId
+  imageAlt?: ImageAlt[ImageId] | string
 }
 
 const DesktopSection = (props: Props) => {
@@ -56,8 +56,8 @@ const DesktopSection = (props: Props) => {
         className="max-xl:mb-[-20%] xl:absolute xl:left-[48%] xl:top-20"
         width={1240}
         height={775}
-        id={imageId}
-        alt={imageAlt}
+        id={imageId as ImageId}
+        alt={imageAlt as ImageAlt[ImageId]}
       />
     </div>
   )
