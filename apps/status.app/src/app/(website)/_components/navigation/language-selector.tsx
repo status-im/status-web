@@ -12,9 +12,8 @@ import { usePathname } from '~/i18n/navigation'
 import { routing } from '~/i18n/routing'
 import { Link } from '~components/link'
 
-const LOKALISE_URL = isGetSite
-  ? 'https://app.lokalise.com/public/767880116a141eb3584d66.09104922/'
-  : 'https://app.lokalise.com/public/6480087268cc0f594f8985.65010073/'
+const LOKALISE_URL =
+  'https://app.lokalise.com/public/6480087268cc0f594f8985.65010073/'
 
 type Language = {
   value: (typeof routing.locales)[number]
@@ -175,16 +174,18 @@ const LanguageSelector = () => {
             ))}
           </Select.Viewport>
 
-          <div className="mt-2 border-t border-neutral-10 pt-2">
-            <Link
-              href={LOKALISE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex w-full items-center justify-center gap-1 rounded-8 p-2 text-13 font-medium text-neutral-50 transition-colors hover:bg-neutral-10 hover:text-neutral-100"
-            >
-              {t('helpTranslate')} <ExternalIcon />
-            </Link>
-          </div>
+          {!isGetSite && (
+            <div className="mt-2 border-t border-neutral-10 pt-2">
+              <Link
+                href={LOKALISE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex w-full items-center justify-center gap-1 rounded-8 p-2 text-13 font-medium text-neutral-50 transition-colors hover:bg-neutral-10 hover:text-neutral-100"
+              >
+                {t('helpTranslate')} <ExternalIcon />
+              </Link>
+            </div>
+          )}
         </Select.Content>
       </Select.Portal>
     </Select.Root>
