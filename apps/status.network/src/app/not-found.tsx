@@ -1,4 +1,8 @@
+import { loadMessages } from '~/i18n/messages'
+import { routing } from '~/i18n/routing'
+import { hasLocale } from 'next-intl'
 import { Inter } from 'next/font/google'
+import { headers } from 'next/headers'
 import { ButtonLink } from './_components/button-link'
 import { Metadata } from './_metadata'
 import './globals.css'
@@ -19,26 +23,44 @@ export const metadata = Metadata({
   },
 })
 
-const NOT_FOUND_COPY = {
-  title: "This is not the page you're looking for",
-  takeMeHome: 'Take me home',
-} as const
+function getLocaleFromPath(pathname: string) {
+  const segment = pathname.split('/').filter(Boolean)[0]
+
+  if (segment && hasLocale(routing.locales, segment)) {
+    return segment
+  }
+
+  return routing.defaultLocale
+}
 
 // Fallback for routes outside `[locale]` during static export.
-export default function GlobalNotFound() {
+export default async function GlobalNotFound() {
+  const headersList = await headers()
+  const pathname = headersList.get('x-pathname') ?? ''
+  const locale = getLocaleFromPath(pathname)
+  const messages = await loadMessages(locale)
+  const notFoundMessages = messages['not_found'] as
+    | Record<string, string>
+    | undefined
+
+  const title =
+    notFoundMessages?.['title'] ?? "This is not the page you're looking for"
+  const takeMeHome = notFoundMessages?.['take_me_home'] ?? 'Take me home'
+  const homeHref = locale === routing.defaultLocale ? '/' : `/${locale}`
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body
         className={`${inter.variable} bg-white-100 text-neutral-100 antialiased selection:bg-purple selection:text-white-100`}
         suppressHydrationWarning
       >
         <main className="flex min-h-dvh flex-1 items-center justify-center px-5">
           <div className="flex max-w-[696px] flex-col items-center gap-8">
-            <h1 className="text-center text-40 font-700 lg:text-64">
-              {NOT_FOUND_COPY.title}
+            <h1 className="text-balance text-center text-40 font-700 lg:text-64">
+              {title}
             </h1>
 
-            <ButtonLink href="/">{NOT_FOUND_COPY.takeMeHome}</ButtonLink>
+            <ButtonLink href={homeHref}>{takeMeHome}</ButtonLink>
           </div>
         </main>
       </body>
