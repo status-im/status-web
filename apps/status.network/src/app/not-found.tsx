@@ -1,8 +1,6 @@
 import { loadMessages } from '~/i18n/messages'
 import { routing } from '~/i18n/routing'
-import { hasLocale } from 'next-intl'
 import { Inter } from 'next/font/google'
-import { headers } from 'next/headers'
 import { ButtonLink } from './_components/button-link'
 import { Metadata } from './_metadata'
 import './globals.css'
@@ -14,6 +12,8 @@ const inter = Inter({
   preload: true,
 })
 
+export const dynamic = 'force-static'
+
 export const metadata = Metadata({
   title: '404 — Page Not Found',
   description:
@@ -23,21 +23,9 @@ export const metadata = Metadata({
   },
 })
 
-function getLocaleFromPath(pathname: string) {
-  const segment = pathname.split('/').filter(Boolean)[0]
-
-  if (segment && hasLocale(routing.locales, segment)) {
-    return segment
-  }
-
-  return routing.defaultLocale
-}
-
 // Fallback for routes outside `[locale]` during static export.
 export default async function GlobalNotFound() {
-  const headersList = await headers()
-  const pathname = headersList.get('x-pathname') ?? ''
-  const locale = getLocaleFromPath(pathname)
+  const locale = routing.defaultLocale
   const messages = await loadMessages(locale)
   const notFoundMessages = messages['not_found'] as
     | Record<string, string>
@@ -46,7 +34,6 @@ export default async function GlobalNotFound() {
   const title =
     notFoundMessages?.['title'] ?? "This is not the page you're looking for"
   const takeMeHome = notFoundMessages?.['take_me_home'] ?? 'Take me home'
-  const homeHref = locale === routing.defaultLocale ? '/' : `/${locale}`
 
   return (
     <html lang={locale}>
@@ -60,7 +47,7 @@ export default async function GlobalNotFound() {
               {title}
             </h1>
 
-            <ButtonLink href={homeHref}>{takeMeHome}</ButtonLink>
+            <ButtonLink href="/">{takeMeHome}</ButtonLink>
           </div>
         </main>
       </body>

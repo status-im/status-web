@@ -1,9 +1,7 @@
 import './globals.css'
 
 import { Inter } from 'next/font/google'
-import { headers } from 'next/headers'
 import Link from 'next/link'
-import { hasLocale } from 'next-intl'
 
 import { loadMessages } from '~/i18n/messages'
 import { routing } from '~/i18n/routing'
@@ -26,21 +24,9 @@ export const metadata = Metadata({
   },
 })
 
-function getLocaleFromPath(pathname: string) {
-  const segment = pathname.split('/').filter(Boolean)[0]
-
-  if (segment && hasLocale(routing.locales, segment)) {
-    return segment
-  }
-
-  return routing.defaultLocale
-}
-
 // Fallback for routes outside `[locale]` during static export.
 export default async function GlobalNotFound() {
-  const headersList = await headers()
-  const pathname = headersList.get('x-pathname') ?? ''
-  const locale = getLocaleFromPath(pathname)
+  const locale = routing.defaultLocale
   const messages = await loadMessages(locale)
   const notFoundMessages = messages['not_found'] as
     | Record<string, string>
@@ -49,7 +35,6 @@ export default async function GlobalNotFound() {
   const title =
     notFoundMessages?.['title'] ?? "This is not the page you're looking for"
   const takeMeHome = notFoundMessages?.['take_me_home'] ?? 'Take me home'
-  const homeHref = locale === routing.defaultLocale ? '/' : `/${locale}`
 
   return (
     <html lang={locale} className={inter.variable}>
@@ -63,7 +48,7 @@ export default async function GlobalNotFound() {
             <h1 className="text-center text-40 font-700 lg:text-64">{title}</h1>
 
             <Link
-              href={homeHref}
+              href="/"
               className="inline-flex h-10 items-center gap-1 rounded-12 border border-neutral-30 bg-white-100 px-4 py-[9px] text-15 font-500 text-dark-100 transition-all hover:border-neutral-40 hover:bg-white-80"
             >
               {takeMeHome}
