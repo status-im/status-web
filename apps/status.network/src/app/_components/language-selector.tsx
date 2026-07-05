@@ -4,7 +4,8 @@ import * as Select from '@radix-ui/react-select'
 import { CheckIcon, ChevronDownIcon } from '@status-im/icons/20'
 import { usePathname, useRouter } from '~/i18n/navigation'
 import { cx } from 'cva'
-import { useRouter as useNextRouter, useParams } from 'next/navigation'
+import { useLocale } from 'next-intl'
+import { useRouter as useNextRouter } from 'next/navigation'
 import { routing } from '../../i18n/routing'
 
 const languages = [
@@ -24,8 +25,7 @@ export const LanguageSelector = () => {
   const router = useRouter()
   const nextRouter = useNextRouter()
   const pathname = usePathname()
-  const params = useParams()
-  const currentLocale = (params['locale'] as string) || routing.defaultLocale
+  const currentLocale = useLocale()
 
   const selectedLanguage =
     languages.find(lang => lang.value === currentLocale) || languages[0]

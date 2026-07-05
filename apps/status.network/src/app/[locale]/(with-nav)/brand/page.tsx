@@ -4,7 +4,7 @@ import { Divider } from '~app/_components/divider'
 import { Metadata } from '~app/_metadata'
 import { transformColor } from '~app/_utils/colors'
 import { jsonLD, JSONLDScript } from '~app/_utils/json-ld'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import Image from 'next/image'
 import { ColorSection } from './_components/color-section'
 import { DownloadZipButton } from './_components/download-zip-button'
@@ -31,7 +31,15 @@ const organizationSchema = jsonLD.organization({
   description: 'Get Status Network brand assets.',
 })
 
-export default async function BrandPage() {
+export default async function BrandPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
+
+  setRequestLocale(locale)
+
   const t = await getTranslations()
   const downloadButtonLabel = t('brand.download_button')
 
@@ -63,14 +71,14 @@ export default async function BrandPage() {
               height: 96,
               width: 631,
               className: 'max-w-[315px]',
-              alt: 'Main logo',
+              alt: t('brand.alt_text.main_logo'),
             },
             {
               src: '/brand/main/logo-03.png',
               height: 96,
               width: 631,
               className: 'max-w-[315px]',
-              alt: 'Main logo',
+              alt: t('brand.alt_text.main_logo'),
               gradient: true,
             },
           ]}
@@ -86,14 +94,14 @@ export default async function BrandPage() {
               height: 96,
               width: 318,
               className: 'max-w-[159px]',
-              alt: 'Mark only',
+              alt: t('brand.alt_text.mark_only'),
             },
             {
               src: '/brand/variation/logo-03.png',
               height: 96,
               width: 318,
               className: 'max-w-[159px]',
-              alt: 'Mark only',
+              alt: t('brand.alt_text.mark_only'),
               gradient: true,
             },
           ]}
@@ -109,14 +117,14 @@ export default async function BrandPage() {
               height: 96,
               width: 97,
               className: 'max-w-[48px]',
-              alt: 'Mark only',
+              alt: t('brand.alt_text.mark_only'),
             },
             {
               src: '/brand/mark/logo-03.png',
               height: 96,
               width: 97,
               className: 'max-w-[48px]',
-              alt: 'Mark only',
+              alt: t('brand.alt_text.mark_only'),
               gradient: true,
             },
           ]}
@@ -158,7 +166,7 @@ export default async function BrandPage() {
         <div className="w-full overflow-hidden rounded-20">
           <Image
             src="/brand/artwork.png"
-            alt="Artwork"
+            alt={t('brand.alt_text.artwork')}
             width={1192}
             height={476}
             className="scale-110"

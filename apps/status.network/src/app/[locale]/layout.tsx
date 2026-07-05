@@ -1,14 +1,15 @@
 import { Analytics } from '@vercel/analytics/next'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
-import '../../globals.css'
+import '../globals.css'
+import { loadMessages } from '~/i18n/messages'
 import { routing } from '~/i18n/routing'
 import { cx } from 'cva'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
-import { getMessages, setRequestLocale } from 'next-intl/server'
+import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
-import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, Metadata } from '../../_metadata'
-import { jsonLD, JSONLDScript } from '../../_utils/json-ld'
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, Metadata } from '../_metadata'
+import { jsonLD, JSONLDScript } from '../_utils/json-ld'
 
 const inter = Inter({
   variable: '--font-inter',
@@ -106,7 +107,7 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   setRequestLocale(locale)
 
-  const messages = await getMessages()
+  const messages = await loadMessages(locale)
 
   return (
     <html lang={locale}>
