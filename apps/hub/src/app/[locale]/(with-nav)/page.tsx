@@ -7,17 +7,16 @@ import { ButtonLink } from '@status-im/status-network/components'
 import Image from 'next/image'
 import { useLocale, useTranslations } from 'next-intl'
 
-import { HubLayout } from '~components/hub-layout'
+import { Apps } from '~components/apps'
+import { Hero } from '~components/hero'
 import { PreDepositClaimModal } from '~components/pre-deposit-claim-modal'
 import { PreDepositUnlockModal } from '~components/pre-deposit-unlock-modal'
+import { RewardsSection } from '~components/rewards-section'
 import { VaultCard } from '~components/vault-card'
 import { type Vault, VAULTS } from '~constants/index'
 import { useVaultRefetch } from '~hooks/useVaultRefetch'
 
-import { Apps } from '../_components/apps'
-import { Hero } from '../_components/hero'
-import { RewardsSection } from '../_components/rewards-section'
-import { jsonLD, JSONLDScript } from '../_utils/json-ld'
+import { jsonLD, JSONLDScript } from '../../_utils/json-ld'
 
 type WithdrawAction = { kind: 'unlock' | 'claim'; vault: Vault } | null
 
@@ -66,7 +65,7 @@ export default function HomePage() {
   const docsUrl = `https://docs.status.network${localePrefix}/`
 
   return (
-    <HubLayout>
+    <>
       <JSONLDScript
         schema={[breadcrumbListSchema, softwareApplicationSchema]}
       />
@@ -188,6 +187,6 @@ export default function HomePage() {
           onClaimSuccess={() => refetchVault(withdrawAction.vault)}
         />
       )}
-    </HubLayout>
+    </>
   )
 }

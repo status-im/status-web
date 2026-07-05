@@ -1,11 +1,12 @@
 import '../globals.css'
 
 import { Inter } from 'next/font/google'
-import { redirect } from 'next/navigation'
+import { notFound } from 'next/navigation'
 import Script from 'next/script'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
-import { getMessages, setRequestLocale } from 'next-intl/server'
+import { setRequestLocale } from 'next-intl/server'
 
+import { loadMessages } from '~/i18n/messages'
 import { routing } from '~/i18n/routing'
 
 import { Metadata as MetadataFn } from '../_metadata'
@@ -42,6 +43,8 @@ export function generateStaticParams() {
   return routing.locales.map(locale => ({ locale }))
 }
 
+export const dynamicParams = false
+
 export async function generateMetadata({
   params,
 }: {
@@ -65,16 +68,20 @@ export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params
 
   if (!hasLocale(routing.locales, locale)) {
-    redirect('/404')
+    notFound()
   }
 
   setRequestLocale(locale)
 
-  const messages = await getMessages()
+  const messages = await loadMessages(locale)
 
   return (
     <html lang={locale} className={inter.variable}>
-      <body className="font-inter antialiased" data-customisation="purple">
+      <body
+        className="font-inter antialiased"
+        data-customisation="purple"
+        suppressHydrationWarning
+      >
         <JSONLDScript schema={[organizationSchema, websiteSchema]} />
         <NextIntlClientProvider messages={messages} locale={locale}>
           <Providers>{children}</Providers>

@@ -9,18 +9,17 @@ import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 
 import { formatCurrency } from '~/utils/currency'
+import { InfoTooltip } from '~components/info-tooltip'
+import { PreDepositClaimModal } from '~components/pre-deposit-claim-modal'
+import { getFaqItems, PreDepositFaq } from '~components/pre-deposit-faq'
+import { PreDepositUnlockModal } from '~components/pre-deposit-unlock-modal'
+import { RewardsSection } from '~components/rewards-section'
+import { VaultCard } from '~components/vault-card'
+import { type Vault, VAULTS } from '~constants/address'
+import { useTotalTVL } from '~hooks/useTotalTVL'
+import { useVaultRefetch } from '~hooks/useVaultRefetch'
 
-import { HubLayout } from '../../_components/hub-layout'
-import { InfoTooltip } from '../../_components/info-tooltip'
-import { PreDepositClaimModal } from '../../_components/pre-deposit-claim-modal'
-import { getFaqItems, PreDepositFaq } from '../../_components/pre-deposit-faq'
-import { PreDepositUnlockModal } from '../../_components/pre-deposit-unlock-modal'
-import { RewardsSection } from '../../_components/rewards-section'
-import { VaultCard } from '../../_components/vault-card'
-import { type Vault, VAULTS } from '../../_constants/address'
-import { useTotalTVL } from '../../_hooks/useTotalTVL'
-import { useVaultRefetch } from '../../_hooks/useVaultRefetch'
-import { jsonLD, JSONLDScript } from '../../_utils/json-ld'
+import { jsonLD, JSONLDScript } from '../../../_utils/json-ld'
 
 const breadcrumbListSchema = jsonLD.breadcrumbList([
   {
@@ -61,7 +60,7 @@ export default function PreDepositPage() {
   })
 
   return (
-    <HubLayout>
+    <>
       <JSONLDScript
         schema={[faqSchema, breadcrumbListSchema, softwareApplicationSchema]}
       />
@@ -142,6 +141,6 @@ export default function PreDepositPage() {
           onClaimSuccess={() => refetchVault(withdrawAction.vault)}
         />
       )}
-    </HubLayout>
+    </>
   )
 }
