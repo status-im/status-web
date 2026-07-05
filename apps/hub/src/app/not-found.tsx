@@ -1,16 +1,40 @@
 import './globals.css'
 
 import { Inter } from 'next/font/google'
-import Link from 'next/link'
+import Script from 'next/script'
+import { NextIntlClientProvider } from 'next-intl'
 
 import { loadMessages } from '~/i18n/messages'
+import { Link } from '~/i18n/navigation'
 import { routing } from '~/i18n/routing'
+import { HubLayout } from '~components/hub-layout'
 
 import { Metadata } from './_metadata'
+import { Providers } from './_providers'
+import { jsonLD, JSONLDScript } from './_utils/json-ld'
 
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
+})
+
+const organizationSchema = jsonLD.organization({
+  '@id': 'https://hub.status.network/#organization',
+  name: 'Status Network',
+  url: 'https://hub.status.network',
+  logo: 'https://hub.status.network/og-image.png',
+  description: 'The gasless network with sustainable funding for app builders',
+})
+
+const websiteSchema = jsonLD.website({
+  '@id': 'https://hub.status.network/#website',
+  name: 'Status Network Hub',
+  url: 'https://hub.status.network',
+  description:
+    'Explore Status Network, a gasless Ethereum Layer 2 with a native privacy layer, shared yield, staking, and reputation-based governance.',
+  publisher: {
+    '@id': 'https://hub.status.network/#organization',
+  },
 })
 
 export const dynamic = 'force-static'
@@ -43,18 +67,31 @@ export default async function GlobalNotFound() {
         data-customisation="purple"
         suppressHydrationWarning
       >
-        <main className="flex min-h-dvh flex-1 items-center justify-center bg-neutral-100 px-5">
-          <div className="flex max-w-[696px] flex-col items-center gap-8 rounded-20 bg-white-100 p-8">
-            <h1 className="text-center text-40 font-700 lg:text-64">{title}</h1>
+        <JSONLDScript schema={[organizationSchema, websiteSchema]} />
+        <NextIntlClientProvider messages={messages} locale={locale}>
+          <Providers>
+            <HubLayout showSidebar={false}>
+              <div className="mx-auto flex w-full max-w-[696px] flex-col items-center gap-8 py-10">
+                <h1 className="text-balance text-center text-40 font-700 lg:text-64">
+                  {title}
+                </h1>
 
-            <Link
-              href="/"
-              className="inline-flex h-10 items-center gap-1 rounded-12 border border-neutral-30 bg-white-100 px-4 py-[9px] text-15 font-500 text-dark-100 transition-all hover:border-neutral-40 hover:bg-white-80"
-            >
-              {takeMeHome}
-            </Link>
-          </div>
-        </main>
+                <Link
+                  href="/"
+                  className="inline-flex h-10 items-center gap-1 rounded-12 border border-neutral-30 bg-white-100 px-4 py-[9px] text-15 font-500 text-dark-100 transition-all hover:border-neutral-40 hover:bg-white-80"
+                >
+                  {takeMeHome}
+                </Link>
+              </div>
+            </HubLayout>
+          </Providers>
+        </NextIntlClientProvider>
+        <Script
+          strategy="afterInteractive"
+          src="https://umami.bi.status.im/script.js"
+          data-website-id="5a1d3ceb-20f1-4808-b2c3-3414704740e5"
+          data-domains="hub.status.network"
+        />
       </body>
     </html>
   )

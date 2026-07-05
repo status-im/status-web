@@ -2,9 +2,9 @@
 
 import { useState } from 'react'
 
-import { Divider, Footer } from '@status-im/status-network/components'
-import { useTranslations } from 'next-intl'
+import { Divider } from '@status-im/status-network/components'
 
+import { Footer } from './footer'
 import { Sidebar } from './sidebar'
 import { TopBar } from './top-bar'
 
@@ -14,7 +14,6 @@ interface HubLayoutProps {
 }
 
 export function HubLayout({ children, showSidebar = true }: HubLayoutProps) {
-  const t = useTranslations()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
@@ -61,14 +60,7 @@ export function HubLayout({ children, showSidebar = true }: HubLayoutProps) {
             <div className="absolute right-0 top-0 h-px w-9 bg-gradient-to-r from-[#E7EAEE] to-[transparent]" />
           </div>
           <div className="px-0 lg:px-12">
-            <Footer
-              labels={{
-                termsOfUse: t('footer.terms_of_use'),
-                privacyPolicy: t('footer.privacy_policy'),
-                brandAssets: t('footer.brand_assets'),
-                preDepositDisclaimer: t('footer.pre_deposit_disclaimer'),
-              }}
-            />
+            <Footer />
           </div>
         </section>
       </div>

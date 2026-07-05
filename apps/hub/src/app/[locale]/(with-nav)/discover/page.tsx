@@ -1,4 +1,9 @@
 import { Metadata as MetadataFn } from '~/app/_metadata'
+import { redirect } from '~/i18n/navigation'
+
+type Props = {
+  params: Promise<{ locale: string }>
+}
 
 export async function generateMetadata({
   params,
@@ -16,10 +21,7 @@ export async function generateMetadata({
   })
 }
 
-export default function DiscoverLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  return <>{children}</>
+export default async function DiscoverPage({ params }: Props) {
+  const { locale } = await params
+  redirect({ href: '/', locale })
 }
