@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server'
 
 import { KEYCARD_STORE_URL } from '~/config/routes'
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
+import { buildLandingPageStructuredData } from '~/utils/structured-data'
 import { Metadata } from '~app/_metadata'
 import { Image, Video } from '~components/assets'
 import { Body } from '~components/body'
@@ -39,6 +40,11 @@ export default async function KeycardPage() {
 
   const organizationSchema = jsonLD.organization({
     description: t('description'),
+  })
+  const webpageSchema = buildLandingPageStructuredData({
+    name: t('getKeycard'),
+    description: t('description'),
+    path: '/keycard',
   })
 
   const featureList: FeatureListProps['list'] = [
@@ -117,7 +123,7 @@ export default async function KeycardPage() {
 
   return (
     <>
-      <JSONLDScript schema={organizationSchema} />
+      <JSONLDScript schema={[organizationSchema, webpageSchema]} />
       <ColorTheme theme="army">
         <Body data-customisation="army">
           <div className="relative">

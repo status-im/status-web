@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server'
 
 import { DISCUSS_URL, MESSARI_URL } from '~/config/routes'
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
+import { buildLandingPageStructuredData } from '~/utils/structured-data'
 import { Metadata } from '~app/_metadata'
 import { Body } from '~components/body'
 import { FeatureList } from '~website/_components/feature-list'
@@ -28,10 +29,15 @@ export default async function TokenPage() {
   const organizationSchema = jsonLD.organization({
     description: t('description'),
   })
+  const webpageSchema = buildLandingPageStructuredData({
+    name: t('metaTitle'),
+    description: t('description'),
+    path: '/snt',
+  })
 
   return (
     <>
-      <JSONLDScript schema={organizationSchema} />
+      <JSONLDScript schema={[organizationSchema, webpageSchema]} />
       <Body>
         <div className="relative">
           <div className="relative z-30">

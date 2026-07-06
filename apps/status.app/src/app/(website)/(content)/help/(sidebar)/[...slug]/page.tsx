@@ -7,6 +7,8 @@ import { getTranslations } from 'next-intl/server'
 
 import config from '~/config/help/config.json'
 import { METADATA } from '~/config/help/metadata'
+import { JSONLDScript } from '~/utils/json-ld'
+import { buildHelpDocStructuredData } from '~/utils/structured-data'
 import { Metadata } from '~app/_metadata'
 import { formatDate } from '~app/_utils/format-time'
 import { Icon } from '~components/assets'
@@ -119,9 +121,19 @@ export default async function HelpDetailPage(props: Props) {
   const hasMultipleAuthors = authors.length > 1
   const mainAuthor = authors[0]
   const otherAuthors = authors.slice(1, MAX_VISIBLE_AUTHORS)
+  const structuredData = workInProgress
+    ? []
+    : buildHelpDocStructuredData({
+        title: doc.title,
+        raw: doc.body.raw,
+        lastEdited: doc.lastEdited,
+        author: doc.author,
+        image: doc.image,
+      })
 
   return (
     <>
+      <JSONLDScript schema={structuredData} />
       <Breadcrumbs
         items={breadcrumbs}
         action={<SearchButton type="help" size={32} />}

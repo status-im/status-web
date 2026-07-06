@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server'
 
 import { isGetSite } from '~/config/site-scope'
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
+import { buildLandingPageStructuredData } from '~/utils/structured-data'
 import { Metadata } from '~app/_metadata'
 import { Image, ScreenImage } from '~components/assets'
 import { Body } from '~components/body'
@@ -46,9 +47,16 @@ export default async function AppsPage() {
         description:
           'Private, secure by design. Manager Assets, Message, Browse on your Terms.',
       })
-    : jsonLD.organization({
-        description: t('metaDescription'),
-      })
+    : [
+        jsonLD.organization({
+          description: t('metaDescription'),
+        }),
+        buildLandingPageStructuredData({
+          name: t('metaTitle'),
+          description: t('metaDescription'),
+          path: '/apps',
+        }),
+      ]
 
   const DESKTOP_FEATURE_LIST: FeatureListProps['list'] = [
     {
