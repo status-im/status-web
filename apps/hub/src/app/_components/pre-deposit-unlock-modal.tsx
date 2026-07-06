@@ -121,14 +121,15 @@ const PreDepositUnlockModal = ({
       return
     }
 
-    onOpenChange(false)
-
     unlock(
       {
         vault,
         amountWei: depositedBalance ?? 0n,
         receiver: data.receiver as Address,
-        onTxHash: saveUnlockTxHash,
+        onTxHash: hash => {
+          saveUnlockTxHash(hash)
+          onOpenChange(false)
+        },
         onClearTxHash: clearUnlockTxHash,
       },
       {

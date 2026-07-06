@@ -292,14 +292,45 @@ export class AnvilRpcHelper {
   }
 
   /** Read ERC-20 balanceOf via eth_call (retries transient failures) */
-  async getErc20Balance(token: string, rpc?: string): Promise<bigint> {
-    const data = SELECTORS.BALANCE_OF + encodeAddress(this.walletAddress)
+  async getErc20Balance(
+    token: string,
+    rpc?: string,
+    owner: string = this.walletAddress,
+  ): Promise<bigint> {
+    const data = SELECTORS.BALANCE_OF + encodeAddress(owner)
     const result = await this.callWithRetry<string>(
       rpc ?? this.mainnetRpc,
       'eth_call',
       [{ to: token, data }, 'latest'],
     )
     return BigInt(result)
+  }
+
+  /** Poll until a transaction receipt is available (and not reverted). */
+  async waitForTransactionReceipt(
+    hash: string,
+    rpc?: string,
+    timeoutMs = 30_000,
+  ): Promise<void> {
+    const targetRpc = rpc ?? this.mainnetRpc
+    const deadline = Date.now() + timeoutMs
+
+    while (Date.now() < deadline) {
+      const receipt = await this.call<{
+        status?: string
+      } | null>(targetRpc, 'eth_getTransactionReceipt', [hash])
+
+      if (receipt?.status) {
+        if (receipt.status === '0x0') {
+          throw new Error(`Transaction reverted: ${hash}`)
+        }
+        return
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 500))
+    }
+
+    throw new Error(`Timed out waiting for transaction receipt: ${hash}`)
   }
 
   /**

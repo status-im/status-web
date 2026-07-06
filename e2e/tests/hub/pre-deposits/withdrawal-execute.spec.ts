@@ -1,7 +1,10 @@
 import { TEST_VAULTS } from '@constants/hub/vaults.js'
 import { test } from '@fixtures/anvil.fixture.js'
 import { CONTRACTS } from '@helpers/anvil-rpc.js'
-import { getConnectedAddress } from '@helpers/hub-test-helpers.js'
+import {
+  getConnectedAddress,
+  waitForStoredUnlockTxHash,
+} from '@helpers/hub-test-helpers.js'
 import { UnlockModalComponent } from '@pages/hub/components/unlock-modal.component.js'
 import { PreDepositsPage } from '@pages/hub/pre-deposits.page.js'
 import { expect } from '@playwright/test'
@@ -45,9 +48,10 @@ test.describe('Pre-Deposit withdrawal - on-chain execution', () => {
       async ({ hubPage, metamask, anvilRpc }) => {
         const preDeposits = new PreDepositsPage(hubPage)
         const unlockModal = new UnlockModalComponent(hubPage)
+        let account = ''
 
         await test.step('Seed the connected account with vault shares', async () => {
-          const account = await getConnectedAddress(hubPage)
+          account = await getConnectedAddress(hubPage)
           await anvilRpc.fundVaultShares(
             vault.vaultAddress,
             ONE_TOKEN,
@@ -66,7 +70,11 @@ test.describe('Pre-Deposit withdrawal - on-chain execution', () => {
 
         await test.step('Sanity: shares are funded on the fork', async () => {
           expect(
-            await anvilRpc.getErc20Balance(vault.vaultAddress),
+            await anvilRpc.getErc20Balance(
+              vault.vaultAddress,
+              anvilRpc.mainnetRpc,
+              account,
+            ),
           ).toBeGreaterThan(0n)
         })
 
@@ -82,11 +90,29 @@ test.describe('Pre-Deposit withdrawal - on-chain execution', () => {
           await metamask.approveTransaction()
         })
 
+        await test.step('Unlock transaction is mined on mainnet', async () => {
+          const txHash = await waitForStoredUnlockTxHash(
+            hubPage,
+            vault.id,
+            account,
+          )
+          await anvilRpc.waitForTransactionReceipt(txHash, anvilRpc.mainnetRpc)
+          await anvilRpc.mineBlock()
+        })
+
         await test.step('Deposit is burned on-chain (shares -> 0)', async () => {
           await expect
-            .poll(() => anvilRpc.getErc20Balance(vault.vaultAddress), {
-              timeout: 30_000,
-            })
+            .poll(
+              () =>
+                anvilRpc.getErc20Balance(
+                  vault.vaultAddress,
+                  anvilRpc.mainnetRpc,
+                  account,
+                ),
+              {
+                timeout: 30_000,
+              },
+            )
             .toBe(0n)
         })
 
@@ -107,9 +133,10 @@ test.describe('Pre-Deposit withdrawal - on-chain execution', () => {
       const preDeposits = new PreDepositsPage(hubPage)
       const unlockModal = new UnlockModalComponent(hubPage)
       const lineaRpc = anvilRpc.lineaRpc
+      let account = ''
 
       await test.step('Seed the connected account with LINEA vault shares', async () => {
-        const account = await getConnectedAddress(hubPage)
+        account = await getConnectedAddress(hubPage)
         await anvilRpc.fundVaultShares(
           CONTRACTS.LINEA_VAULT,
           ONE_TOKEN,
@@ -129,6 +156,7 @@ test.describe('Pre-Deposit withdrawal - on-chain execution', () => {
       const receiverBalanceBefore = await anvilRpc.getErc20Balance(
         CONTRACTS.LINEA,
         lineaRpc,
+        account,
       )
 
       await test.step('Open the modal and switch the wallet to Linea', async () => {
@@ -151,10 +179,25 @@ test.describe('Pre-Deposit withdrawal - on-chain execution', () => {
         await metamask.approveTransaction()
       })
 
+      await test.step('Claim transaction is mined on Linea', async () => {
+        const txHash = await waitForStoredUnlockTxHash(
+          hubPage,
+          TEST_VAULTS.LINEA.id,
+          account,
+        )
+        await anvilRpc.waitForTransactionReceipt(txHash, lineaRpc)
+        await anvilRpc.mineBlock(lineaRpc)
+      })
+
       await test.step('Shares are burned on-chain (shares -> 0)', async () => {
         await expect
           .poll(
-            () => anvilRpc.getErc20Balance(CONTRACTS.LINEA_VAULT, lineaRpc),
+            () =>
+              anvilRpc.getErc20Balance(
+                CONTRACTS.LINEA_VAULT,
+                lineaRpc,
+                account,
+              ),
             {
               timeout: 30_000,
             },
@@ -166,6 +209,7 @@ test.describe('Pre-Deposit withdrawal - on-chain execution', () => {
         const receiverBalanceAfter = await anvilRpc.getErc20Balance(
           CONTRACTS.LINEA,
           lineaRpc,
+          account,
         )
         // Delivered amount is convertToAssets(shares); ~1:1 on this vault, so
         // assert the receiver got essentially the full deposit (allow rounding).

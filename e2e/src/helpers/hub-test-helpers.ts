@@ -1,7 +1,11 @@
 import { NOTIFICATION_TIMEOUTS } from '@constants/timeouts.js'
+import { expect, type Page } from '@playwright/test'
 
 import type { MetaMaskPage } from '@pages/metamask/metamask.page.js'
-import type { Page } from '@playwright/test'
+
+function unlockTxStorageKey(vaultId: string, account: string) {
+  return `vault-unlock-tx:${vaultId}:${account.toLowerCase()}`
+}
 
 /**
  * Force-switch MetaMask to a specific chain via the hub page.
@@ -27,6 +31,33 @@ export async function switchMetaMaskToChain(
   }, chainIdHex)
 
   await metamask.switchNetwork()
+}
+
+/**
+ * Wait until the Hub persists the unlock tx hash for a vault + account.
+ */
+export async function waitForStoredUnlockTxHash(
+  page: Page,
+  vaultId: string,
+  account: string,
+  timeout = 30_000,
+): Promise<string> {
+  let txHash: string | null = null
+
+  await expect
+    .poll(
+      async () => {
+        txHash = await page.evaluate(
+          ({ storageKey }) => localStorage.getItem(storageKey),
+          { storageKey: unlockTxStorageKey(vaultId, account) },
+        )
+        return txHash
+      },
+      { timeout },
+    )
+    .not.toBeNull()
+
+  return txHash!
 }
 
 /**
