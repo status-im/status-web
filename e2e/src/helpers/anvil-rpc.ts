@@ -333,6 +333,116 @@ export class AnvilRpcHelper {
     throw new Error(`Timed out waiting for transaction receipt: ${hash}`)
   }
 
+  /** Current pending nonce for an account (`eth_getTransactionCount`, latest). */
+  async getTransactionCount(account: string, rpc?: string): Promise<bigint> {
+    const result = await this.callWithRetry<string>(
+      rpc ?? this.mainnetRpc,
+      'eth_getTransactionCount',
+      [account, 'latest'],
+    )
+    return BigInt(result)
+  }
+
+  /**
+   * Wait for the next transaction from `account` after MetaMask approval.
+   * Pass `startNonce` captured before submitting the form so a fast-mined tx
+   * is not missed.
+   */
+  async waitForAccountTransaction(
+    account: string,
+    rpc?: string,
+    startNonce?: bigint,
+    timeoutMs = 90_000,
+  ): Promise<string> {
+    const targetRpc = rpc ?? this.mainnetRpc
+    const baselineNonce =
+      startNonce ?? (await this.getTransactionCount(account, targetRpc))
+    const deadline = Date.now() + timeoutMs
+
+    while (Date.now() < deadline) {
+      const currentNonce = await this.getTransactionCount(account, targetRpc)
+
+      if (currentNonce > baselineNonce) {
+        const txHash = await this.findTransactionByNonce(
+          account,
+          baselineNonce,
+          targetRpc,
+        )
+        if (txHash) {
+          await this.waitForTransactionReceipt(txHash, targetRpc, 30_000)
+          return txHash
+        }
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 500))
+    }
+
+    throw new Error(
+      `Timed out waiting for transaction from ${account} on ${targetRpc}`,
+    )
+  }
+
+  /**
+   * Poll until a vault share balance reaches zero, mining blocks along the way.
+   * Prefer this over receipt polling for Linea — MetaMask can leave txs pending
+   * until the fork mines, and receipt helpers may race the UI broadcast.
+   */
+  async waitForSharesBurned(
+    vault: string,
+    owner: string,
+    rpc?: string,
+    timeoutMs = 120_000,
+  ): Promise<void> {
+    const targetRpc = rpc ?? this.mainnetRpc
+    const deadline = Date.now() + timeoutMs
+
+    while (Date.now() < deadline) {
+      await this.mineBlock(targetRpc)
+      const balance = await this.getErc20Balance(vault, targetRpc, owner)
+      if (balance === 0n) {
+        return
+      }
+      await new Promise(resolve => setTimeout(resolve, 500))
+    }
+
+    throw new Error(
+      `Timed out waiting for ${vault} shares to burn for ${owner}`,
+    )
+  }
+
+  private async findTransactionByNonce(
+    account: string,
+    nonce: bigint,
+    rpc: string,
+  ): Promise<string | null> {
+    const latestHex = await this.call<string>(rpc, 'eth_blockNumber', [])
+    const latest = Number.parseInt(latestHex, 16)
+    const normalizedAccount = account.toLowerCase()
+
+    for (
+      let blockNumber = latest;
+      blockNumber >= 0 && blockNumber >= latest - 10;
+      blockNumber--
+    ) {
+      const block = await this.call<{
+        transactions?: Array<{ from?: string; nonce?: string; hash?: string }>
+      }>(rpc, 'eth_getBlockByNumber', [`0x${blockNumber.toString(16)}`, true])
+
+      for (const tx of block.transactions ?? []) {
+        if (
+          tx.from?.toLowerCase() === normalizedAccount &&
+          tx.nonce !== undefined &&
+          BigInt(tx.nonce) === nonce &&
+          tx.hash
+        ) {
+          return tx.hash
+        }
+      }
+    }
+
+    return null
+  }
+
   /**
    * Set ERC-20 balance by writing directly to the _balances mapping storage slot.
    * @param token - ERC-20 contract address
@@ -484,7 +594,8 @@ export class AnvilRpcHelper {
    *
    * Note: this does NOT bump the vault's totalSupply. It is intended for
    * read-driven UI flows (modal readiness / validation), not for actually
-   * submitting an on-chain `withdraw`.
+   * submitting an on-chain `withdraw`. On the WETH vault, storage-seeded
+   * balances can make `balanceOf` non-zero while `withdraw` still reverts.
    *
    * @param vaultAddress - the pre-deposit vault (share token) address
    * @param shares - share balance to assign, in wei

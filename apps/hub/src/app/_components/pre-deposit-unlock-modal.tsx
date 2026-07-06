@@ -126,14 +126,12 @@ const PreDepositUnlockModal = ({
         vault,
         amountWei: depositedBalance ?? 0n,
         receiver: data.receiver as Address,
-        onTxHash: hash => {
-          saveUnlockTxHash(hash)
-          onOpenChange(false)
-        },
+        onTxHash: saveUnlockTxHash,
         onClearTxHash: clearUnlockTxHash,
       },
       {
         onSuccess: () => {
+          onOpenChange(false)
           void refetchL1Balance()
           if (vault.l2ClaimVaultAddress) {
             void refetchL2PendingWithdrawal()

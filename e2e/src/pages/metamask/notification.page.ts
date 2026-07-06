@@ -527,7 +527,7 @@ export class NotificationPage {
     const page = await this.waitForNotificationPage()
 
     const approveButton = page.getByRole('button', {
-      name: /^(approve|confirm|switch network)$/i,
+      name: /^(approve|confirm|switch network|switch to linea|add network)$/i,
     })
     await approveButton.click({
       timeout: NOTIFICATION_TIMEOUTS.BUTTON_TRANSITION,
