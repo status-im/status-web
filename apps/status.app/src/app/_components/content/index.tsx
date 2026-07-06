@@ -1,5 +1,13 @@
 // note: primarily uses margin, not padding, to create space between elements
-import { Children, cloneElement, type ComponentProps, type JSX } from 'react'
+import {
+  Children,
+  cloneElement,
+  type ComponentProps,
+  isValidElement,
+  type JSX,
+  type ReactElement,
+  type ReactNode,
+} from 'react'
 
 import { ContextTag, Step, Tabs, Tooltip } from '@status-im/components'
 import { BulletIcon, CheckIcon } from '@status-im/icons/20'
@@ -424,6 +432,31 @@ const SpaceDivider = (props: React.ComponentPropsWithoutRef<'div'>) => {
   )
 }
 
+type ContentElement = ReactElement<{ children?: ReactNode }>
+
+const toElementArray = (children: ReactNode): ContentElement[] =>
+  Children.toArray(children).filter((child): child is ContentElement =>
+    isValidElement<{ children?: ReactNode }>(child)
+  )
+
+const isHtmlElement = (element: ContentElement, tagName: string) =>
+  element.type === tagName
+
+const getTableRows = (element?: ContentElement) => {
+  if (!element) {
+    return []
+  }
+
+  return toElementArray(element.props.children).filter(row =>
+    isHtmlElement(row, 'tr')
+  )
+}
+
+const getTableCells = (row: ContentElement) =>
+  toElementArray(row.props.children).filter(
+    cell => isHtmlElement(cell, 'td') || isHtmlElement(cell, 'th')
+  )
+
 export const blogComponents = {
   ...baseComponents,
   h2: (props: ComponentProps<'h2'>) => {
@@ -437,22 +470,34 @@ export const blogComponents = {
     })
   },
   table: (props: any) => {
-    const [head, body] = props.children
-    const headers = head.props.children.props.children
-    const rows = body.props.children
+    const children = toElementArray(props.children)
+    const head = children.find(child => isHtmlElement(child, 'thead'))
+    const bodies = children.filter(child => isHtmlElement(child, 'tbody'))
+    const directRows = children.filter(child => isHtmlElement(child, 'tr'))
+    const footer = children.find(child => isHtmlElement(child, 'tfoot'))
+    const headerRows = getTableRows(head)
+    const headerCells = headerRows[0] ? getTableCells(headerRows[0]) : []
+    const bodyRows = [
+      ...headerRows.slice(1),
+      ...bodies.flatMap(getTableRows),
+      ...directRows,
+      ...getTableRows(footer),
+    ]
 
     return (
       <Table>
-        <TableHead>
-          {headers.map((header: any, index: any) => (
-            <TableHeader key={index} {...header.props} />
-          ))}
-        </TableHead>
+        {headerCells.length > 0 && (
+          <TableHead>
+            {headerCells.map((header, index) => (
+              <TableHeader key={index}>{header.props.children}</TableHeader>
+            ))}
+          </TableHead>
+        )}
         <TableContent>
-          {rows.map((row: any, index: any) => (
+          {bodyRows.map((row, index) => (
             <TableRow key={index}>
-              {row.props.children.map((cell: any, index: any) => (
-                <TableCell key={index} {...cell.props} />
+              {getTableCells(row).map((cell, index) => (
+                <TableCell key={index}>{cell.props.children}</TableCell>
               ))}
             </TableRow>
           ))}

@@ -2,10 +2,7 @@ import { renderText } from '~app/_utils/render-text'
 
 export function Table(props: {
   hasShadow?: boolean
-  children: [
-    React.ReactElement<typeof TableHead>,
-    React.ReactElement<typeof TableContent>,
-  ]
+  children: React.ReactNode
 }) {
   const { hasShadow = false, children } = props
 
@@ -34,9 +31,7 @@ export function Table(props: {
   )
 }
 
-export function TableHead(props: {
-  children: React.ReactElement<typeof TableCell>[]
-}) {
+export function TableHead(props: { children: React.ReactNode }) {
   const { children } = props
 
   return (
@@ -46,17 +41,13 @@ export function TableHead(props: {
   )
 }
 
-export function TableContent(props: {
-  children: React.ReactElement<typeof TableRow>[]
-}) {
+export function TableContent(props: { children: React.ReactNode }) {
   const { children } = props
 
   return <tbody>{children}</tbody>
 }
 
-export function TableRow(props: {
-  children: React.ReactElement<typeof TableCell>
-}) {
+export function TableRow(props: { children: React.ReactNode }) {
   const { children } = props
 
   return <tr>{children}</tr>
