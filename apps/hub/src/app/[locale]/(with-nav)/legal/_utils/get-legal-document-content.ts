@@ -1,17 +1,14 @@
 import { compileMDX } from 'next-mdx-remote/rsc'
 import fs from 'node:fs/promises'
-import path from 'node:path'
-import process from 'node:process'
 import rehypeSlug from 'rehype-slug'
 import remarkGfm from 'remark-gfm'
 import { z } from 'zod'
 
 import { legalComponents } from '~components/legal-content'
 
+import { getLegalDocumentPath } from './get-legal-document-path'
 import { getLegalLastEdited } from './get-legal-last-edited'
-import { type DocumentName, externalDocumentSet } from './legal-documents'
-
-const statusNetworkRoot = path.join(process.cwd(), '../status.network')
+import { type DocumentName } from './legal-documents'
 
 const frontmatterSchema = z.object({
   title: z.string().optional(),
@@ -33,14 +30,7 @@ function extractTitleFromHeadline(content: string): {
 }
 
 export async function getLegalDocumentContent(documentName: DocumentName) {
-  const isExternal = externalDocumentSet.has(documentName)
-  const filePath = isExternal
-    ? path.join(
-        statusNetworkRoot,
-        'content/legal-external',
-        `${documentName}.md`
-      )
-    : path.join(statusNetworkRoot, 'content/legal', `${documentName}.md`)
+  const filePath = getLegalDocumentPath(documentName)
 
   const fileContent = await fs.readFile(filePath, 'utf8')
   const lastEdited = getLegalLastEdited(documentName)

@@ -4,8 +4,10 @@
   "private": true,
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "predev": "pnpm install",
+    "predev": "node scripts/generate-legal-last-edited.mjs",
     "dev": "next dev --port 3003",
+    "generate:legal-dates": "node scripts/generate-legal-last-edited.mjs",
+    "prebuild": "node scripts/generate-legal-last-edited.mjs",
     "build": "next build",
     "build:export": "next build",
     "build:strip-locale": "bash scripts/strip-default-locale-prefix.sh",
@@ -13,7 +15,7 @@
     "start": "serve out",
     "lint": "eslint src",
     "format": "prettier --write . --ignore-path .gitignore",
-    "check": "tsc --noEmit",
+    "check": "node scripts/generate-legal-last-edited.mjs && tsc --noEmit",
     "clean": "rimraf .next .vercel/output node_modules"
   },
   "dependencies": {
