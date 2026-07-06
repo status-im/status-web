@@ -24,11 +24,11 @@ import { expect } from '@playwright/test'
  *    underlying to the receiver on Linea in a single step, so we assert the
  *    full outcome (shares -> 0 and the receiver credited).
  *
- * The test wallet already holds real vault shares on the fork (inherited from
- * production). Do not overwrite them with `fundVaultShares` — storage-seeded
- * balances (especially WETH) make `withdraw` revert even though `balanceOf`
- * reads non-zero. The WITHDRAWALS state and cooldown are satisfied on the
- * fork, so the transaction mines successfully.
+ * Prefer inherited production shares on the fork. When the test wallet has no
+ * deposit at the fork block (common on CI), `ensureVaultSharesForExecute`
+ * seeds the minimum balance needed — never overwriting an existing WETH
+ * deposit, because a full 1e18 storage seed breaks WETH `withdraw`.
+ * WITHDRAWALS state and cooldown are satisfied on the fork.
  *
  * LINEA runs first: mainnet unlocks can leave MetaMask in a state that makes
  * the Linea network switch flaky when it runs last.
@@ -49,7 +49,7 @@ test.describe('Pre-Deposit withdrawal - on-chain execution', () => {
 
   test(
     'LINEA: same-chain claim burns shares and credits the receiver',
-    { tag: '@anvil', timeout: 240_000 },
+    { tag: '@anvil' },
     async ({ hubPage, metamask, anvilRpc }) => {
       test.setTimeout(300_000)
 
@@ -58,10 +58,10 @@ test.describe('Pre-Deposit withdrawal - on-chain execution', () => {
       const lineaRpc = anvilRpc.lineaRpc
       let account = ''
 
-      await test.step('Connected account has LINEA vault shares on the fork', async () => {
+      await test.step('Ensure the connected account has LINEA vault shares', async () => {
         account = await getConnectedAddress(hubPage)
         expect(
-          await anvilRpc.getErc20Balance(
+          await anvilRpc.ensureVaultSharesForExecute(
             CONTRACTS.LINEA_VAULT,
             lineaRpc,
             account,
@@ -142,10 +142,10 @@ test.describe('Pre-Deposit withdrawal - on-chain execution', () => {
         const unlockModal = new UnlockModalComponent(hubPage)
         let account = ''
 
-        await test.step('Connected account has vault shares on the fork', async () => {
+        await test.step('Ensure the connected account has vault shares', async () => {
           account = await getConnectedAddress(hubPage)
           expect(
-            await anvilRpc.getErc20Balance(
+            await anvilRpc.ensureVaultSharesForExecute(
               vault.vaultAddress,
               anvilRpc.mainnetRpc,
               account,

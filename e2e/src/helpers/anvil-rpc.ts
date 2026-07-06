@@ -618,6 +618,39 @@ export class AnvilRpcHelper {
   }
 
   /**
+   * Ensure vault shares exist for on-chain `withdraw` execute tests.
+   *
+   * Keeps inherited fork balances when present. Seeds via storage only when
+   * `balanceOf` is zero — CI forks may not have production deposits for the
+   * test wallet. WETH uses a smaller seed (~1.1e16): a full 1e18 storage seed
+   * makes `balanceOf` non-zero but `withdraw` still reverts on the fork.
+   */
+  async ensureVaultSharesForExecute(
+    vaultAddress: string,
+    rpc: string,
+    owner: string,
+  ): Promise<bigint> {
+    const existing = await this.getErc20Balance(vaultAddress, rpc, owner)
+    if (existing > 0n) {
+      return existing
+    }
+
+    const isWethVault =
+      vaultAddress.toLowerCase() === CONTRACTS.WETH_VAULT.toLowerCase()
+    const shares = isWethVault ? 11n * 10n ** 15n : 10n ** 18n
+
+    await this.fundVaultShares(vaultAddress, shares, rpc, owner)
+
+    const funded = await this.getErc20Balance(vaultAddress, rpc, owner)
+    if (funded === 0n) {
+      throw new Error(
+        `Failed to seed vault shares for execute test: ${vaultAddress}`,
+      )
+    }
+    return funded
+  }
+
+  /**
    * Reset ERC-20 allowance to 0 for a specific spender.
    * Uses impersonation to call approve(spender, 0) from the wallet.
    * Needed when the fork state has pre-existing allowances that cause the Hub
