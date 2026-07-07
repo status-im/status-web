@@ -1,0 +1,535 @@
+1:"$Sreact.fragment"
+2:I[6978,[],""]
+3:I[5232,[],""]
+4:I[6132,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],""]
+9:I[9019,[],"OutletBoundary"]
+b:I[602,[],"AsyncMetadataOutlet"]
+d:I[9019,[],"ViewportBoundary"]
+f:I[9019,[],"MetadataBoundary"]
+10:"$Sreact.suspense"
+12:I[7098,[],""]
+:HL["/_next/static/media/e4af272ccee01ff0-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/css/24bd7f809405cf73.css","style"]
+0:{"P":null,"b":"jZsj7itHS8RA_8vdfQaak","p":"","c":["","/","blog","status-network-economic-model-yield-funding-pool-and-zero-gas"],"i":false,"f":[[["",{"children":["(site)",{"children":[["locale","/","d"],{"children":["blog",{"children":[["slug","status-network-economic-model-yield-funding-pool-and-zero-gas","d"],{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true]}]}],["",["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-[calc(100dvh-189px)] flex-1 items-center justify-center px-5 lg:min-h-[calc(100dvh-118px)]","children":["$","div",null,{"className":"flex max-w-[696px] flex-col items-center gap-8","children":[["$","h1",null,{"className":"text-center text-40 font-700 lg:text-64","children":"This is not the page you're looking for"}],["$","$L4",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-purple border-[transparent] hover:bg-purple-dark text-white-100 h-10 py-[9px] rounded-12 px-4","href":"/","children":["$undefined","Take me home","$undefined"],"ref":"$undefined"}]]}]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["(site)",["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["locale","/","d"],["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/24bd7f809405cf73.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],"$L5"]}],{"children":["blog",["$","$1","c",{"children":[null,["$","div",null,{"className":"relative flex min-h-screen justify-center overflow-clip px-2 2xl:px-0","children":["$","div",null,{"className":"relative w-full max-w-[1418px] border-x border-neutral-20","children":[["$","div",null,{"className":"absolute -left-2 top-0 z-50 h-full w-2 bg-gradient-to-r from-white-100 to-[transparent] 2xl:-left-12 2xl:w-12"}],["$","div",null,{"className":"absolute -right-2 top-0 z-50 h-full w-2 bg-gradient-to-l from-white-100 to-[transparent] 2xl:-right-12 2xl:w-12"}],"$L6",["$","main",null,{"children":["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]}],["$","div",null,{"className":"relative","children":[["$","div",null,{"className":"absolute left-[-3px] top-[-2px] size-[5px] rounded-full bg-neutral-20"}],["$","div",null,{"className":"relative bottom-0 h-px bg-neutral-20 z-20 left-1/2 w-[calc(100%+16px)] lg:w-[calc(100%+16px)] 2xl:w-[calc(100%+96px)] -translate-x-1/2"}],"$undefined",["$","div",null,{"className":"absolute bottom-[-2px] right-[-3px] size-[5px] rounded-full bg-neutral-20"}]]}],"$L7"]}]}]]}],{"children":[["slug","status-network-economic-model-yield-funding-pool-and-zero-gas","d"],["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":["$L8",null,["$","$L9",null,{"children":["$La",["$","$Lb",null,{"promise":"$@c"}]]}]]}],{},null,false]},null,false]},null,false]},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,[["$","$Ld",null,{"children":"$Le"}],["$","meta",null,{"name":"next-size-adjust","content":""}]],["$","$Lf",null,{"children":["$","div",null,{"hidden":true,"children":["$","$10",null,{"fallback":null,"children":"$L11"}]}]}]]}],false]],"m":"$undefined","G":["$12",[]],"s":false,"S":true}
+13:I[928,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"Image"]
+6:["$","header",null,{"className":"sticky top-0 z-[60] w-full bg-white-90 backdrop-blur supports-[backdrop-filter]:bg-white-80","children":[["$","div",null,{"className":"mx-auto flex h-16 items-center justify-between px-4","children":[["$","$L4",null,{"href":"/","className":"flex items-center space-x-2","children":["$","$L13",null,{"src":"/logo.svg","alt":"Status Network Logo","width":210,"height":32}],"ref":"$undefined"}],["$","div",null,{"className":"flex items-center gap-3","children":[["$","$L4",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-white-100 border-neutral-30 hover:border-neutral-40 hover:bg-white-80 text-dark-100 h-8 py-[5px] rounded-10 px-3 hidden sm:block","href":"/","children":["$undefined","Home","$undefined"],"ref":"$undefined"}],["$","a",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-purple border-[transparent] hover:bg-purple-dark text-white-100 h-8 py-[5px] rounded-10 px-3","target":"_blank","rel":"noopener noreferrer","href":"https://hub.status.network/","children":["$undefined","Get started","$undefined"],"ref":"$undefined"}]]}]]}],["$","div",null,{"className":"relative","children":[["$","div",null,{"className":"absolute left-[-3px] top-[-2px] size-[5px] rounded-full bg-neutral-20"}],["$","div",null,{"className":"relative bottom-0 h-px bg-neutral-20 z-20 left-1/2 w-[calc(100%+16px)] lg:w-[calc(100%+16px)] 2xl:w-[calc(100%+96px)] -translate-x-1/2"}],"$undefined",["$","div",null,{"className":"absolute bottom-[-2px] right-[-3px] size-[5px] rounded-full bg-neutral-20"}]]}]]}]
+7:["$","footer",null,{"className":"relative z-[61]","children":["$","div",null,{"className":"grid gap-4 p-3 lg:grid-cols-[1fr,auto,auto] lg:gap-5 lg:p-4","children":[["$","div",null,{"className":"flex flex-col justify-center gap-2 lg:flex-row lg:justify-start lg:gap-3","children":[["$","span",null,{"className":"text-center text-13 lg:text-left","children":"© Status Research & Development GmbH"}],["$","svg",null,{"width":"2","height":"2","viewBox":"0 0 2 2","fill":"none","xmlns":"http://www.w3.org/2000/svg","className":"hidden text-neutral-50 lg:block","children":["$","circle",null,{"cx":"1","cy":"1","r":"1","fill":"#A1ABBD"}]}]]}],["$","div",null,{"className":"flex flex-col items-center justify-center gap-3 lg:flex-row lg:justify-end","children":[["$","div",null,{"className":"flex items-center justify-center gap-4 md:gap-3 lg:justify-end","children":[["$","$L4",null,{"href":"/legal/terms-of-use","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Terms of Use","ref":"$undefined"}],["$","$L4",null,{"href":"/legal/privacy-policy","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Privacy Policy","ref":"$undefined"}],["$","$L4",null,{"href":"/blog","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Blog","ref":"$undefined"}],"$L14"]}],["$","svg",null,{"width":"2","height":"2","viewBox":"0 0 2 2","fill":"none","xmlns":"http://www.w3.org/2000/svg","className":"2md:hidden text-neutral-50","children":["$","circle",null,{"cx":"1","cy":"1","r":"1","fill":"#A1ABBD"}]}],["$","div",null,{"className":"flex justify-center gap-6 lg:justify-end","children":[["$","a","Status",{"href":"https://status.app","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/status.6be65460.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"Status","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}],["$","a","Twitter",{"href":"https://x.com/StatusL2","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/twitter.6865a7e5.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"Twitter","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}],["$","a","GitHub",{"href":"https://github.com/status-im","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/github.90103528.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"GitHub","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}]]}]]}]]}]}]
+17:I[6105,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","726","static/chunks/726-a688395c743bdde3.js","565","static/chunks/565-e7a70831c2486b41.js","472","static/chunks/app/(site)/%5Blocale%5D/layout-fe09f44bffcc5314.js"],"Analytics"]
+18:I[5718,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","726","static/chunks/726-a688395c743bdde3.js","565","static/chunks/565-e7a70831c2486b41.js","472","static/chunks/app/(site)/%5Blocale%5D/layout-fe09f44bffcc5314.js"],""]
+15:T433,{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Status Network",
+  "url": "https://status.network/",
+  "logo": "https://status.network/logo.svg",
+  "description": "Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack, with network-level spam protection enforced through reputation (Karma) and execution funded by native yield rather than user-paid gas fees.",
+  "sameAs": [
+    "https://x.com/StatusL2",
+    "https://github.com/status-im"
+  ],
+  "@id": "https://status.network/#organization",
+  "knowsAbout": [
+    {
+      "@type": "Thing",
+      "name": "Ethereum Layer 2"
+    },
+    {
+      "@type": "Thing",
+      "name": "Gasless transactions"
+    },
+    {
+      "@type": "Thing",
+      "name": "Composable privacy"
+    },
+    {
+      "@type": "Thing",
+      "name": "Spam protection"
+    },
+    {
+      "@type": "Thing",
+      "name": "Reputation system"
+    },
+    {
+      "@type": "Thing",
+      "name": "Native yield funding"
+    },
+    {
+      "@type": "Thing",
+      "name": "Bots"
+    }
+  ]
+}5:["$","html",null,{"lang":"en","children":["$","body",null,{"className":"__variable_9cc749 bg-white-100 text-neutral-100 antialiased selection:bg-purple selection:text-white-100","suppressHydrationWarning":true,"children":[[["$","script","0",{"id":"json-ld-0","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$15"}}],["$","script","1",{"id":"json-ld-1","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"WebSite\",\n  \"name\": \"Status Network\",\n  \"url\": \"https://status.network/\",\n  \"description\": \"Status Network is a privacy-first, fully gasless Ethereum Layer 2 designed for scalable onchain activity, coordinated through reputation and native yield.\",\n  \"@id\": \"https://status.network/#website\",\n  \"publisher\": {\n    \"@id\": \"https://status.network/#organization\"\n  },\n  \"about\": [\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Ethereum Layer 2\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Gasless transactions\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Composable privacy\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Spam protection\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Reputation system\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Native yield funding\"\n    }\n  ]\n}"}}],["$","script","2",{"id":"json-ld-2","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"SoftwareApplication\",\n  \"name\": \"Status Network\",\n  \"applicationCategory\": \"Blockchain\",\n  \"operatingSystem\": \"Web3\",\n  \"url\": \"https://status.network/\",\n  \"description\": \"Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack. Execution is coordinated through Karma, a non-transferable reputation system, and supported by native yield and network activity.\"\n}"}}]],"$L16",["$","$L17",null,{}],["$","$L18",null,{"strategy":"afterInteractive","src":"https://umami.bi.status.im/script.js","data-website-id":"0746c5dc-8cd3-45a4-9606-6bcf9adf248e","data-domains":"status.network","async":true}]]}]}]
+19:I[6156,["756","static/chunks/756-56d07e8fa5ffdccb.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","878","static/chunks/app/(site)/%5Blocale%5D/blog/layout-c6bf279edadbe978.js"],"default"]
+14:["$","$L19",null,{"ref":"$undefined","href":"/brand","locale":"$undefined","localeCookie":{"name":"NEXT_LOCALE","sameSite":"lax"},"className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Brand assets"}]
+1a:I[2756,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"default"]
+16:["$","$L1a",null,{"formats":"$undefined","locale":"en","messages":{"meta":{"locale":"en","name":"English","direction":"ltr","description":"Complete Status Network website translations"},"common":{"loading":"Loading...","learn_more":"Learn More","get_started":"Get started","read_more":"Read More","read_docs":"Read docs","view_blog":"View blog","new":"NEW","testnet_live":"Testnet v2 is live!","promo_message":"Vaults withdrawals are now enabled","visit_hub":"withdraw now","visit_hub_aria":"withdraw now (opens in new tab)"},"navigation":{"home":"Home","about":"About","features":"Features","network":"Network","partners":"Partners","tokenomics":"Tokenomics","blog":"Blog","brand":"Brand"},"hero":{"title":"The gasless network","subtitle":"with sustainable funding for app builders","description":"Launch and scale your social apps and games with truly free transactions."},"about":{"section_number":"01","section_title":"WHAT IS STATUS NETWORK?","title_1":"The first Ethereum L2 with","title_2":"gas-free","title_3":"transactions at scale","title_4":"funded by native yield + fees.","description":"A free network with sustainable funding for public apps, games and protocols.","build_button":"Build on Status Network","learn_more_button":"Learn more"},"features":{"section_number":"02","section_title":"WHY STATUS NETWORK?","title":"Power to the community","sustainable_funding":{"title":"Sustainable public funding","description":"Status Network takes a radical step beyond short-term incentives. Powered by native yields and fees, its public app funding pool is governed by the community, ensuring a continuous allocation of capital for onchain builders.","step_1":"Users bridge yield-bearing assets to Status Network and increase the yield redirected to the funding pool.","step_2":"Apps and games apply for an allocation from the pool. The community votes on allocations using Karma, a non-transferrable governance token earned by contributing positively to the network:","step_2_staking":"Staking SNT","step_2_bridging":"Bridging yield-bearing tokens","step_2_using":"Using apps","step_2_premium":"Paying premium gas","step_2_donations":"Making direct donations to the funding pool","step_3":"Every funded project onboards new users, driving additional asset deposits and token swaps - generating more yield and fees to be allocated in the funding pool.","button":"Discover Karmic Tokenomics"},"gasless_transactions":{"title":"Gasless transactions","description_1":"On Status Network, anyone can experience free transactions! With the L2 operating costs covered by native yields and fees, no need to bridge gas to use an app.","description_2":"Apps and games developers can offer frictionless onboarding for their users at scale.","button":"Learn how it works"},"performance":{"title":"Built for performance, secured by Ethereum","description":"Leverage Ethereum's security with Linea's cutting-edge zkEVM rollup technology for high-speed transactions. Perfect for gaming, social, iGaming, and high-throughput applications.","button":"Learn more about Linea"},"decentralization":{"title":"Geared for decentralization","description":"Built on the core values of Status and the IFT ecosystem, Status Network is designed to become a truly decentralised L2. The endgame is to provide a censorship-resistant environment where communities can thrive without central points of control.","button":"Learn more"}},"partners":{"section_number":"03","section_title":"ECOSYSTEM AND PARTNERS","title_1":"Empowering bold","title_2":"creators and developers","subtitle":"Building with the best in the game","cats_fishing":{"title":"Cats Fishing","description":"The first open-sourced, proof of play mobile fishing game"},"spla_labs":{"title":"Spla Labs","description":"Builders of TODL & Ponzi Hero games"},"hash_vegas":{"title":"Hash Vegas","description":"Fair and transparent onchain gaming"},"ponzi_hero":{"title":"Ponzi Hero","description":"Earn NFTs, have some fun!"},"linea":{"title":"Linea","description":"Secure zkEVM L2 stack"},"gateway":{"title":"Gateway","description":"Rollup infrastructure and operation"},"din":{"title":"DIN","description":"Decentralised Infrastructure Network"}},"network":{"section_number":"04","section_title":"NETWORK","title":"Leverage the most advanced decentralised stack","description":"Builders get priority support from Institute of Free Technology solutions:","status":{"title":"Status","description":"Ethereum super-app with 4M+ downloads"},"logos":{"title":"Logos","description":"Open tech to restore civil society"},"waku":{"title":"Waku","description":"P2P encrypted messaging protocol"},"codex":{"title":"Codex","description":"Decentralised data storage layer"},"nimbus":{"title":"Nimbus","description":"Ethereum core devs. Powering Eth consensus"},"keycard":{"title":"Keycard","description":"Secure open-source hardware wallet"}},"tokenomics":{"section_number":"05","section_title":"TOKENOMICS","title":"Earn voting power through positive network engagement","description":"The more you contribute to the network, the more influence you gain over funding allocation and the network's roadmap priorities.","karma_note":"This is coordinated by Karma, a non-transferable governance token.","app_developer":{"title":"App developer","step_1":"Ship code","step_2":"Get traction","step_3":"Receive Karma","step_4":"Earn funding"},"liquidity_provider":{"title":"Liquidity provider","description":"Earn Karma for staking SNT and get LP rewards boosted by native yield."},"onchain_user":{"title":"Onchain user","description":"Get rewarded with Karma for bridging to the network and using apps. A higher Karma means more gasless transactions."}},"blog":{"title":"Stay up to date","view_blog_button":"View blog","category":"Updates","author":"Us","on_date":"on","page_title":"Blog.","page_description":"Long form articles, thoughts, and ideas.","share_article_on":"Share article on:","related_articles":"Related articles","breadcrumb_blog":"Blog","no_posts":"No posts available yet.","home":"Home","get_started":"Get started","post_1":{"title":"Status Steps Up as Founding Member of Linea Consortium"},"post_2":{"title":"Status Launches First Gasless Layer 2 on Linea"},"post_3":{"title":"Embracing Community Choices: Status to Develop SNT Staking and Status L2"}},"footer":{"copyright":"© Status Research & Development GmbH","privacy_policy":"Privacy Policy","terms_of_use":"Terms of Use","blog":"Blog","brand":"Brand assets"},"pre_footer":{"title":"Ready to build on the free network?","partner_button":"Partner with us","read_docs_button":"Read docs"},"brand":{"page_title":"Brand","page_description":"Get Status Network brand assets.","main_title":"Brand assets","last_updated":"Last updated: 12 November 2025","download_all":"Download all assets","logo_title":"Logo","logo_description":"Our main logo","logo_variation_title":"Logo variation","logo_variation_description":"For creative printing layouts","mark_only_title":"Mark only","mark_only_description":"Without wordmark","main_colors_title":"Main colors","main_colors_description":"Our main colors palette","artwork_title":"Artwork","artwork_description":"Our main characters","download_button":"Download","alt_text":{"main_logo":"Main logo","mark_only":"Mark only","artwork":"Artwork"}},"not_found":{"title":"This is not the page you're looking for","take_me_home":"Take me home"}},"now":"$undefined","timeZone":"UTC","children":"$L1b"}]
+1b:["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]
+e:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+a:null
+1c:I[610,[],"IconMark"]
+c:{"metadata":[["$","title","0",{"children":"Status Network: Gasless Ethereum L2 Economic Model"}],["$","meta","1",{"name":"description","content":"Discover how Status Network funds gasless transactions with L1 yield, native app fees, and a community-governed Apps Funding Pool powered by Karma.\n"}],["$","link","2",{"rel":"canonical","href":"https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas"}],["$","link","3",{"rel":"alternate","hrefLang":"en","href":"https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas"}],["$","link","4",{"rel":"alternate","hrefLang":"ko","href":"https://status.network/ko/blog/status-network-economic-model-yield-funding-pool-and-zero-gas"}],["$","link","5",{"rel":"alternate","hrefLang":"x-default","href":"https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas"}],["$","meta","6",{"property":"og:title","content":"Status Network Economic Model: Yield, Funding Pool, and Zero Gas"}],["$","meta","7",{"property":"og:description","content":"Discover how Status Network funds gasless transactions with L1 yield, native app fees, and a community-governed Apps Funding Pool powered by Karma.\n"}],["$","meta","8",{"property":"og:url","content":"https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas"}],["$","meta","9",{"property":"og:site_name","content":"Status Network"}],["$","meta","10",{"property":"og:locale","content":"en"}],["$","meta","11",{"property":"og:image","content":"https://our.status.im/content/images/2026/03/05---Blog---Cover.jpg"}],["$","meta","12",{"property":"og:type","content":"article"}],["$","meta","13",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","14",{"name":"twitter:site","content":"@StatusL2"}],["$","meta","15",{"name":"twitter:title","content":"Status Network: Gasless Ethereum L2 Economic Model"}],["$","meta","16",{"name":"twitter:description","content":"Discover how Status Network funds gasless transactions with L1 yield, native app fees, and a community-governed Apps Funding Pool powered by Karma.\n"}],["$","meta","17",{"name":"twitter:image","content":"https://our.status.im/content/images/2026/03/05---Blog---Cover.jpg"}],["$","link","18",{"rel":"icon","href":"/icon2.png?d102c5988532e764","type":"image/png","sizes":"128x128"}],["$","$L1c","19",{}]],"error":null,"digest":"$undefined"}
+11:"$c:metadata"
+1d:T32ed,{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq",
+  "name": "Status Network Economic Model: Revenue Sources, Funding Pool, and Zero Gas",
+  "url": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q1",
+      "name": "What is Status Network?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a1",
+        "text": "Status Network is a fully gasless Ethereum Layer 2 built on reputation, composable privacy, and network-level spam protection. It is designed for humans and bots, and scales Ethereum using Linea's open-source ZK-EVM stack. Transactions are free for active participants because the network funds itself through yield from bridged capital and fees from native apps — not gas charges. See: https://status.network/."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q2",
+      "name": "What is Status Network's economic model?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a2",
+        "text": "Status Network's economic model replaces gas fee revenue with two reinforcing sources: native yield from productive capital on Ethereum Layer 1 (ETH staked via Lido V3 stVault, stablecoins deployed via Generic Protocol into Morpho and Sky), and fees from native Layer 2 apps including a DEX, CDP stablecoin, token launchpad, and privacy layer. All revenue flows into a community-governed Apps Funding Pool allocated by Karma holders. See: https://docs.status.network/tokenomics/economic-model."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q3",
+      "name": "What are Status Network's revenue sources?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a3",
+        "text": "Status Network has four revenue sources: (1) native yield from bridged ETH staked via Lido V3 stVault on Ethereum mainnet, (2) stablecoin yield via GUSD (deployed through Generic Protocol into Morpho and Sky savings strategies), (3) native DEX swap fees from Orvex, and (4) premium gas fees paid by users who exceed their free transaction quota. Future native apps — FIRM (CDP stablecoin), Punk.fun (token launchpad), Bermuda (privacy layer), and lending markets — will add additional fee revenue. See: https://docs.status.network/tokenomics/economic-model."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q4",
+      "name": "How does the Apps Funding Pool work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a4",
+        "text": "The Apps Funding Pool is the shared treasury of Status Network. It accumulates L1 yield from bridged assets and fees from native L2 apps. Karma holders vote on how to allocate it: to liquidity providers, app builders, infrastructure contributors, and network operations. Because Karma is soulbound and cannot be purchased, allocation power stays with active contributors, not token buyers. See: https://docs.status.network/tokenomics/public-funding."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q5",
+      "name": "How are gasless transactions possible?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a5",
+        "text": "Zero gas is possible because the network's operating costs are covered by yield and app fees rather than per-transaction charges. Access control is handled by Rate Limiting Nullifiers (RLN), a zero-knowledge protocol that enforces per-user transaction quotas based on Karma tier — without compromising user privacy. This is not gas abstraction through paymasters. Status Network removes the source of gas metadata leakage entirely. See: https://docs.status.network/general-info/gasless-transactions."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q6",
+      "name": "What is Karma?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a6",
+        "text": "Karma is a soulbound non-transferable reputation token on Status Network. It determines free transaction throughput, governance voting power over the Apps Funding Pool, and access to private gasless accounts. It is earned through staking SNT, providing liquidity, using and building apps, paying sequencer tips, and donating to the funding pool. It cannot be bought or transferred. Karma minting allocations are set at launch and may evolve as the network matures. See: https://docs.status.network/tokenomics/karmic-tokenomics."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q7",
+      "name": "Can I buy Karma?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a7",
+        "text": "No. Karma cannot be purchased on any market. It must be earned through direct contribution to the network: staking SNT, bridging ETH, providing liquidity, building or actively using participating apps, paying sequencer tips, or donating to the funding pool. This ensures governance power reflects participation, not capital, and prevents plutocratic capture of the Apps Funding Pool. See: https://docs.status.network/tokenomics/karmic-tokenomics."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q8",
+      "name": "What is the total Karma supply?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a8",
+        "text": "Karma supply is not capped. Minting occurs continuously as users contribute through defined channels: staking SNT, providing liquidity, using and building apps, paying sequencer tips, and donating to the funding pool. Minting allocations are set at launch and may evolve as the network matures. Because Karma cannot be purchased, supply is driven entirely by genuine ecosystem participation rather than market demand or speculation. See: https://docs.status.network/tokenomics/karmic-tokenomics."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q9",
+      "name": "What happens if a user exceeds their free transaction quota?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a9",
+        "text": "Users who exceed their Karma-based quota are prompted to pay a premium gas fee. This fee is split between Status Network operations and the RLN spam prevention mechanism. Paying the premium removes the user from the Deny List and earns additional Karma, which can unlock higher free transaction limits over time. See: https://docs.status.network/general-info/gasless-transactions."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q10",
+      "name": "What is GUSD?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a10",
+        "text": "GUSD is the stablecoin asset used on Status Network for stablecoin yield. Users deposit USDC, USDT, or USDS on Layer 1. These are deployed into Morpho lending and Sky savings strategies via Generic Protocol. The resulting yield-bearing position bridges to Layer 2 as GUSD. Users interact with a clean stablecoin asset on L2; yield flows separately into the Apps Funding Pool. See: https://docs.status.network/tokenomics/economic-model."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q11",
+      "name": "What are Status Network's L1 yield strategies?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a11",
+        "text": "ETH is staked via Lido V3 stVault on Ethereum mainnet — an architecture co-designed by Status Network with the Linea and Lido teams. No stETH is minted for users; ETH bridges cleanly to L2 and staking yield bridges separately to the funding pool. Stablecoins are deployed via Generic Protocol into Morpho lending and Sky savings strategies, arriving on L2 as GUSD. Yield from both strategies accumulates in the Apps Funding Pool. See: https://docs.status.network/tokenomics/economic-model."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q12",
+      "name": "Can users withdraw their bridged ETH at any time?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a12",
+        "text": "Yes. Users can unbridge their assets back to Ethereum at any time through the Status Network bridge. The process is atomic and permissionless. Bridged ETH can always be withdrawn in full plus any share of accrued yield. See: https://status.network/."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q13",
+      "name": "What happens if L1 yield drops to zero?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a13",
+        "text": "If staking rewards collapse, the network falls back on native app fees and premium gas payments to sustain operations. Karma holders can vote to adjust developer funding levels or premium gas fee rates. The network can also expand into additional yield strategies on Ethereum as they become available. See: https://docs.status.network/tokenomics/economic-model."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q14",
+      "name": "Is Karma inflation a concern?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a14",
+        "text": "Karma is minted through defined contribution channels. Minting parameters are set at launch and may evolve through governance as the network matures. Because Karma cannot be purchased, supply is driven entirely by genuine ecosystem participation rather than market demand or speculation. See: https://docs.status.network/tokenomics/karmic-tokenomics."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q15",
+      "name": "How does Status Network compare to Arbitrum or Optimism?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a15",
+        "text": "Arbitrum and Optimism rely on sequencer gas fees as their primary revenue source. Status Network replaces gas revenue with yield from productive capital and native app fees, making transactions free for active participants. Arbitrum and Optimism are optimised for high-frequency trading; Status Network is designed for social apps, privacy-preserving interactions, and consumer use cases where per-action fees create friction and leak metadata. See: https://status.network/."
+      }
+    }
+  ]
+}8:[[["$","script","0",{"id":"json-ld-0","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Article\",\n  \"headline\": \"Status Network Economic Model: Yield, Funding Pool, and Zero Gas\",\n  \"description\": \"Discover how Status Network funds gasless transactions with L1 yield, native app fees, and a community-governed Apps Funding Pool powered by Karma.\\n\",\n  \"image\": \"https://our.status.im/content/images/2026/03/05---Blog---Cover.jpg\",\n  \"datePublished\": \"2026-03-04T10:09:02.000+00:00\",\n  \"dateModified\": \"2026-03-07T12:32:08.000+00:00\",\n  \"author\": {\n    \"@type\": \"Person\",\n    \"name\": \"Kamila Lipska\"\n  },\n  \"publisher\": {\n    \"@type\": \"Organization\",\n    \"name\": \"Status Network\",\n    \"logo\": {\n      \"@type\": \"ImageObject\",\n      \"url\": \"https://status.network/logo.svg\"\n    }\n  }\n}"}}]],[["$","script","custom-jsonld-0",{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$1d"}}]],"$L1e","$L1f"]
+20:I[2118,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"BlogPostDetailHydrated"]
+21:T6859,<p><a href="https://status.network/">Status Network</a> is a fully gasless Ethereum Layer 2 built on reputation, composable privacy, and network-level spam protection. Designed for both humans and bots, it scales Ethereum using <a href="https://linea.build/">Linea’s</a> open-source ZK-EVM stack. Unlike traditional L2s that depend on gas fees as their primary revenue source, Status Network funds itself through productive capital on Layer 1 and fees from native apps on Layer 2, allowing active users to transact for free.</p><p>The economic model has two reinforcing revenue sources: yield generated by bridged assets put to work on Ethereum mainnet, and fees from native applications including a DEX, CDP stablecoin, token launchpad, and privacy layer. All revenue flows into a community-governed <a href="https://docs.status.network/tokenomics/public-funding">Apps Funding Pool</a> allocated by <a href="https://docs.status.network/tokenomics/karmic-tokenomics">Karma</a> holders, the network’s soulbound reputation token. Zero gas is not a subsidy. It is the end result of replacing fee-based revenue with yield-backed economics.</p><h2 id="why-zero-gas-requires-a-different-economic-model">Why Zero Gas Requires a Different Economic Model</h2><p>A blockchain economic model defines how a network pays for execution, security, and development. Most Layer 2 solutions rely on gas fees charged per transaction. This creates friction for social apps, games, and everyday use cases where per-action costs discourage organic activity and compromise privacy, gas top-ups link accounts, gas prices fingerprint wallets, and funding trails correlate identities across transactions.</p><p>Status Network removes gas fees entirely at the protocol level. Without gas as a revenue source, the network needs an alternative economic model. The answer is productive capital: assets bridged to the network are put to work on Layer 1 to generate yield, and that yield, alongside native app fees, funds everything.</p><p>This is not gas abstraction through paymasters. Paymasters still leak metadata. Status Network removes the source of leakage entirely.</p><h2 id="revenue-sources-how-status-network-funds-itself">Revenue Sources: How Status Network Funds Itself</h2><p>Status Network derives revenue from four sources. Together they replace sequencer fee revenue and create what the network calls “dual upside”: income that grows with both TVL and transaction volume.</p><h3 id="1-native-yield-from-bridged-capital-on-layer-1">1. Native Yield from Bridged Capital on Layer 1</h3><p>When users bridge assets to Status Network, those assets are not held idle. They are deployed into yield-generating strategies on Ethereum mainnet:</p><ul><li><strong>ETH</strong> is deposited into the L1 bridge contract and staked through a <a href="https://lido.fi/">Lido</a> V3 stVault. This architecture was co-designed by Status Network and implemented by the Linea and Lido teams. No stETH is minted for users, ETH bridges cleanly to L2, and staking yield is bridged separately to the funding pool.</li><li><strong>Stablecoins</strong> (USDC, USDT, USDS) are deployed into <a href="https://morpho.org/">Morpho</a> lending and Sky savings strategies via Generic Protocol, arriving on L2 as GUSD. Yield bridges separately to the funding pool.</li></ul><p>Users interact with clean, simple assets on L2 (ETH and GUSD). Behind the scenes, all yield generated on L1 is bridged into the shared funding pool on L2.</p><h3 id="2-native-dex-swap-fees">2. Native DEX Swap Fees</h3><p><a href="https://www.orvex.fi/">Orvex</a>, the native decentralized exchange on Status Network, charges a small fee on trades. A portion flows into the funding pool. Liquidity providers also earn extra incentives from native yield on top of standard LP fees, creating an additional pull for deep liquidity.</p><h3 id="3-premium-gas-fees">3. Premium Gas Fees</h3><p>Users exceeding their free transaction quota, determined by their Karma tier, pay a premium gas fee. This fee is split between Status Network operations and the RLN (Rate Limiting Nullifier) spam prevention mechanism. Paying the premium also earns the user additional Karma, which can unlock higher free transaction limits over time.</p><h3 id="4-future-native-app-fees">4. Future Native App Fees</h3><p>Additional revenue streams are planned from native apps launching on the network:</p><ul><li><strong>FIRM</strong>: a decentralised CDP stablecoin (Liquity V2 fork), mint USF against ETH and core assets</li><li><strong>Punk.fun</strong>: permissionless token launchpad with fair price discovery</li><li><strong>Bermuda</strong>: composable privacy layer enabling private balances, transactions, and DeFi interactions across all native apps</li><li><strong>Lending markets</strong>: borrowing using core assets as collateral</li></ul><p>Each native app contributes a share of generated fees back into the funding pool, expanding the revenue base as the ecosystem grows.</p><h2 id="the-apps-funding-pool-how-revenue-is-allocated">The Apps Funding Pool: How Revenue Is Allocated</h2><p>All revenue, L1 yield and L2 native app fees, flows into the Apps Funding Pool, a shared community-governed treasury. This is the core economic mechanism that replaces developer grants, external fundraising, and token emissions as the primary source of builder capital on Status Network.</p><p>The funding pool is governed by Karma holders. Karma is a soulbound non-transferable reputation token, it cannot be bought or transferred, only earned through contribution. This means allocation power over the network’s yield stays with the people who actually build and use it, not those who simply buy tokens.</p><p>Karma holders vote on:</p><ul><li>Developer grants and app funding</li><li>Liquidity incentives for DEX pairs and curated pools</li><li>Infrastructure bounties</li><li>Network economic and operational parameters</li></ul><p>Initially, funding recipients will be limited to maintain quality control. As the pool grows, more projects will be supported. Developers are funded by network activity, not external investors.</p><h2 id="karma-reputation-as-the-access-primitive">Karma: Reputation as the Access Primitive</h2><p>Karma is the unified reputation primitive of Status Network. It is a soulbound governance token that determines free transaction throughput, spam resistance, governance power over the funding pool, and access to private gasless accounts. It cannot be bought, sold, or transferred. No entity, including the Status team, has any advantage in acquiring it.</p><p>Karma is earned through six mechanisms:</p><ol><li><a href="https://hub.status.network/stake" rel="noreferrer"><strong>Staking SNT</strong></a>, 35% of weekly Karma minting at launch. The longer SNT is staked or locked, the higher the earning rate (up to 4x multiplier over 4 years without lock, or 9x with a 4-year lock).</li><li><strong>Providing liquidity and using apps</strong>, 60% of weekly Karma minting. Both developers and active users earn Karma through transaction volume and app traction.</li><li><strong>Sequencer tips and direct donations</strong>, 5% of weekly Karma minting. Contributing directly to the public funding pool earns Karma.</li></ol><p>Karma minting allocations are set at launch and may evolve as the network matures.</p><p>Karma grants access to:</p><ul><li><strong>Zero gas transaction quotas</strong>: tiered system, anywhere from a few free transactions per day up to hundreds of thousands, scaled by Karma tier</li><li><strong>Governance over the funding pool</strong>: Karma holders vote on yield allocation, liquidity incentives, and network parameters</li><li><strong>Private gasless accounts</strong>: Karma unlocks access to ephemeral stealth accounts and relayers that decouple activity from identity</li><li><strong>Free cover traffic</strong>: Karma holders can generate decoy transactions through the privacy layer at zero cost, amplifying anonymity sets</li><li><strong>Reputation and perks</strong>: high Karma signals power users; apps have strong incentives to attract and reward high-Karma participants</li></ul><p>Governance power is earned, not purchased. This prevents plutocratic capture and keeps decision-making aligned with network contributors.</p><h2 id="spam-protection-how-zero-gas-stays-abuse-free">Spam Protection: How Zero Gas Stays Abuse-Free</h2><p>Zero gas requires a non-financial mechanism for rate limiting. Status Network uses <a href="https://docs.status.network/general-info/gasless-transactions">Rate Limiting Nullifiers</a> (RLN), a zero-knowledge protocol developed by Logos and already deployed in Logos Messaging, Railgun, and The Graph’s indexer coordination.</p><p>How RLN works on Status Network:</p><ul><li>Users generate zero-knowledge proofs of their RLN group membership, which determines their free transaction throughput tier based on Karma.</li><li>Each transaction includes a unique nullifier derived from the user’s secret key. Exceeding the quota within an epoch makes the secret key recoverable, exposing the user.</li><li>Users who exceed limits are added to a temporary Deny List. Paying a premium gas fee removes them and earns additional Karma.</li><li>RLN uses Sparse Merkle Trees (height 20, supporting 1M accounts) and Shamir’s Secret Sharing. Proofs are cryptographic, not account-based, users cannot be deanonymised by transaction patterns.</li></ul><p>The same RLN primitive has been proposed by Buterin and Crapis for private, anonymous API metering including LLM inference and RPC endpoints. This positions Status Network’s spam protection as forward-compatible infrastructure for the intersection of crypto and AI.</p><h2 id="the-economic-flywheel">The Economic Flywheel</h2><p>The economic model is self-reinforcing. More capital and activity feed a larger funding pool, which funds better incentives, which attract more capital and activity:</p><ol><li>Users bridge ETH and stablecoins, earning Karma and increasing TVL.</li><li>Bridged capital generates yield on L1 via Lido staking and stablecoin strategies.</li><li>Native app fees accumulate alongside L1 yield in the funding pool.</li><li>Karma holders vote to allocate the pool to liquidity providers and app builders.</li><li>Funded apps onboard more users, increasing DEX volume and native app fee revenue.</li><li>Higher TVL and volume attract more capital, closing the loop.</li></ol><p>Because Karma is earned through contribution, governance power stays aligned with the people who grow the network. The flywheel is self-reinforcing: more capital and activity feed a bigger pool, which funds better incentives, which attract more capital and activity.</p><h2 id="building-on-status-network-a-developer-example">Building on Status Network: A Developer Example</h2><p>A developer launching a social app on Status Network does not need to:</p><ul><li>Pay gas for user transactions, Karma holders transact for free</li><li>Compete for expensive block space</li><li>Rely on token emissions to subsidise user activity</li><li>Build custom gas management infrastructure for bots or automations</li></ul><p>Instead:</p><ul><li>Active users earn Karma through app interactions</li><li>High app usage increases the developer’s Karma voting weight</li><li>The developer applies for grants from the Apps Funding Pool, funded by L1 yield</li><li>Community Karma voting allocates sustained capital to successful apps</li></ul><p>Developer grants depend on real users and genuine traction. The community funds what it actually uses.</p><h2 id="frequently-asked-questions">Frequently Asked Questions</h2><div class="kg-card kg-toggle-card" data-kg-toggle-state="close">
+            <div class="kg-toggle-heading">
+                <h4 class="kg-toggle-heading-text"><span style="white-space: pre-wrap;">What is Status Network?</span></h4>
+                <button class="kg-toggle-card-icon" aria-label="Expand toggle to read content">
+                    <svg id="Regular" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path class="cls-1" d="M23.25,7.311,12.53,18.03a.749.749,0,0,1-1.06,0L.75,7.311"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="kg-toggle-content"><p><span style="white-space: pre-wrap;">Status Network is a fully gasless Ethereum Layer 2 built on reputation, composable privacy, and network-level spam protection. It is designed for humans and bots, and scales Ethereum using Linea’s open-source ZK-EVM stack. Transactions are free for active participants because the network funds itself through yield from bridged capital and fees from native apps, not gas charges.</span></p></div>
+        </div><div class="kg-card kg-toggle-card" data-kg-toggle-state="close">
+            <div class="kg-toggle-heading">
+                <h4 class="kg-toggle-heading-text"><span style="white-space: pre-wrap;">What is Status Network’s economic model?</span></h4>
+                <button class="kg-toggle-card-icon" aria-label="Expand toggle to read content">
+                    <svg id="Regular" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path class="cls-1" d="M23.25,7.311,12.53,18.03a.749.749,0,0,1-1.06,0L.75,7.311"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="kg-toggle-content"><p><span style="white-space: pre-wrap;">Status Network’s economic model replaces gas fee revenue with two reinforcing sources: native yield from productive capital on Ethereum Layer 1 (ETH staked via Lido, stablecoins deployed via Generic Protocol into Morpho and Sky), and fees from native Layer 2 apps (DEX, CDP stablecoin, launchpad, privacy layer). All revenue flows into a community-governed Apps Funding Pool allocated by Karma holders.</span></p></div>
+        </div><div class="kg-card kg-toggle-card" data-kg-toggle-state="close">
+            <div class="kg-toggle-heading">
+                <h4 class="kg-toggle-heading-text"><span style="white-space: pre-wrap;">What are Status Network’s revenue sources?</span></h4>
+                <button class="kg-toggle-card-icon" aria-label="Expand toggle to read content">
+                    <svg id="Regular" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path class="cls-1" d="M23.25,7.311,12.53,18.03a.749.749,0,0,1-1.06,0L.75,7.311"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="kg-toggle-content"><p><span style="white-space: pre-wrap;">Status Network has four revenue sources: (1) native yield from bridged ETH staked via Lido V3 stVault on Ethereum mainnet, (2) stablecoin yield via GUSD (deployed through Generic Protocol into Morpho and Sky), (3) native DEX swap fees from Orvex, and (4) premium gas fees paid by users who exceed their free transaction quota. Future native apps (FIRM, Punk.fun, Bermuda, lending markets) will add additional fee revenue.</span></p></div>
+        </div><div class="kg-card kg-toggle-card" data-kg-toggle-state="close">
+            <div class="kg-toggle-heading">
+                <h4 class="kg-toggle-heading-text"><span style="white-space: pre-wrap;">How does the Apps Funding Pool work?</span></h4>
+                <button class="kg-toggle-card-icon" aria-label="Expand toggle to read content">
+                    <svg id="Regular" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path class="cls-1" d="M23.25,7.311,12.53,18.03a.749.749,0,0,1-1.06,0L.75,7.311"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="kg-toggle-content"><p><span style="white-space: pre-wrap;">The Apps Funding Pool is the shared treasury of Status Network. It accumulates L1 yield from bridged assets and fees from native L2 apps. Karma holders vote on how to allocate it: to liquidity providers, app builders, infrastructure contributors, and network operations. Because Karma is soulbound and cannot be purchased, allocation power stays with active contributors, not token buyers.</span></p></div>
+        </div><div class="kg-card kg-toggle-card" data-kg-toggle-state="close">
+            <div class="kg-toggle-heading">
+                <h4 class="kg-toggle-heading-text"><span style="white-space: pre-wrap;">How are gasless transactions possible?</span></h4>
+                <button class="kg-toggle-card-icon" aria-label="Expand toggle to read content">
+                    <svg id="Regular" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path class="cls-1" d="M23.25,7.311,12.53,18.03a.749.749,0,0,1-1.06,0L.75,7.311"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="kg-toggle-content"><p><span style="white-space: pre-wrap;">Zero gas is possible because the network’s operating costs are covered by yield and app fees rather than per-transaction charges. Access control is handled by Rate Limiting Nullifiers (RLN), a zero-knowledge protocol that enforces per-user transaction quotas based on Karma tier, without compromising user privacy.</span></p></div>
+        </div><div class="kg-card kg-toggle-card" data-kg-toggle-state="close">
+            <div class="kg-toggle-heading">
+                <h4 class="kg-toggle-heading-text"><span style="white-space: pre-wrap;">What is Karma?</span></h4>
+                <button class="kg-toggle-card-icon" aria-label="Expand toggle to read content">
+                    <svg id="Regular" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path class="cls-1" d="M23.25,7.311,12.53,18.03a.749.749,0,0,1-1.06,0L.75,7.311"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="kg-toggle-content"><p><span style="white-space: pre-wrap;">Karma is a soulbound non-transferable reputation token on Status Network. It determines free transaction throughput, governance voting power over the funding pool, and access to private gasless accounts. It is earned through staking SNT, providing liquidity, using and building apps, paying sequencer tips, and donating to the funding pool. It cannot be bought or transferred.</span></p></div>
+        </div><div class="kg-card kg-toggle-card" data-kg-toggle-state="close">
+            <div class="kg-toggle-heading">
+                <h4 class="kg-toggle-heading-text"><span style="white-space: pre-wrap;">Can I buy Karma?</span></h4>
+                <button class="kg-toggle-card-icon" aria-label="Expand toggle to read content">
+                    <svg id="Regular" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path class="cls-1" d="M23.25,7.311,12.53,18.03a.749.749,0,0,1-1.06,0L.75,7.311"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="kg-toggle-content"><p><span style="white-space: pre-wrap;">No. Karma cannot be purchased on any market. It must be earned through direct contribution to the network. This ensures governance power reflects participation, not capital, and prevents plutocratic capture of the funding pool.</span></p></div>
+        </div><div class="kg-card kg-toggle-card" data-kg-toggle-state="close">
+            <div class="kg-toggle-heading">
+                <h4 class="kg-toggle-heading-text"><span style="white-space: pre-wrap;">What happens if a user exceeds their free transaction quota?</span></h4>
+                <button class="kg-toggle-card-icon" aria-label="Expand toggle to read content">
+                    <svg id="Regular" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path class="cls-1" d="M23.25,7.311,12.53,18.03a.749.749,0,0,1-1.06,0L.75,7.311"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="kg-toggle-content"><p><span style="white-space: pre-wrap;">Users who exceed their Karma-based quota are prompted to pay a premium gas fee. This fee is split between Status Network operations and the RLN spam prevention mechanism. Paying the premium removes the user from the Deny List and earns additional Karma, which can unlock higher free transaction limits.</span></p></div>
+        </div><div class="kg-card kg-toggle-card" data-kg-toggle-state="close">
+            <div class="kg-toggle-heading">
+                <h4 class="kg-toggle-heading-text"><span style="white-space: pre-wrap;">How does Status Network compare to Arbitrum or Optimism?</span></h4>
+                <button class="kg-toggle-card-icon" aria-label="Expand toggle to read content">
+                    <svg id="Regular" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path class="cls-1" d="M23.25,7.311,12.53,18.03a.749.749,0,0,1-1.06,0L.75,7.311"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="kg-toggle-content"><p><span style="white-space: pre-wrap;">Arbitrum and Optimism rely on sequencer gas fees as their primary revenue source. Status Network replaces gas revenue with yield from productive capital and native app fees, making transactions free for active participants. Arbitrum and Optimism are optimised for high-frequency trading; Status Network is designed for social apps, privacy-preserving interactions, and consumer use cases where per-action fees create friction and leak metadata.</span></p></div>
+        </div><div class="kg-card kg-toggle-card" data-kg-toggle-state="close">
+            <div class="kg-toggle-heading">
+                <h4 class="kg-toggle-heading-text"><span style="white-space: pre-wrap;">Can users withdraw their bridged ETH at any time?</span></h4>
+                <button class="kg-toggle-card-icon" aria-label="Expand toggle to read content">
+                    <svg id="Regular" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path class="cls-1" d="M23.25,7.311,12.53,18.03a.749.749,0,0,1-1.06,0L.75,7.311"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="kg-toggle-content"><p><span style="white-space: pre-wrap;">Yes. Users can unbridge assets back to Ethereum at any time through the Status Network bridge. The process is atomic and permissionless. Bridged ETH can always be withdrawn in full plus any share of accrued yield.</span></p></div>
+        </div><div class="kg-card kg-toggle-card" data-kg-toggle-state="close">
+            <div class="kg-toggle-heading">
+                <h4 class="kg-toggle-heading-text"><span style="white-space: pre-wrap;">What happens if L1 yield drops to zero?</span></h4>
+                <button class="kg-toggle-card-icon" aria-label="Expand toggle to read content">
+                    <svg id="Regular" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path class="cls-1" d="M23.25,7.311,12.53,18.03a.749.749,0,0,1-1.06,0L.75,7.311"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="kg-toggle-content"><p><span style="white-space: pre-wrap;">If staking rewards collapse, the network falls back on native app fees and premium gas payments. Karma holders can vote to adjust developer funding levels or premium gas fee rates. The network can also expand into additional yield strategies on Ethereum as they become available.</span></p></div>
+        </div><div class="kg-card kg-toggle-card" data-kg-toggle-state="close">
+            <div class="kg-toggle-heading">
+                <h4 class="kg-toggle-heading-text"><span style="white-space: pre-wrap;">Is Karma inflation a concern?</span></h4>
+                <button class="kg-toggle-card-icon" aria-label="Expand toggle to read content">
+                    <svg id="Regular" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path class="cls-1" d="M23.25,7.311,12.53,18.03a.749.749,0,0,1-1.06,0L.75,7.311"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="kg-toggle-content"><p><span style="white-space: pre-wrap;">Karma is minted through defined contribution channels. Minting parameters are set at launch and adjustable through governance as the network matures. Because Karma cannot be purchased, supply is driven entirely by genuine ecosystem participation rather than market demand or speculation.</span></p></div>
+        </div><div class="kg-card kg-toggle-card" data-kg-toggle-state="close">
+            <div class="kg-toggle-heading">
+                <h4 class="kg-toggle-heading-text"><span style="white-space: pre-wrap;">What are Status Network’s L1 yield strategies?</span></h4>
+                <button class="kg-toggle-card-icon" aria-label="Expand toggle to read content">
+                    <svg id="Regular" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path class="cls-1" d="M23.25,7.311,12.53,18.03a.749.749,0,0,1-1.06,0L.75,7.311"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="kg-toggle-content"><p><span style="white-space: pre-wrap;">ETH is staked via Lido V3 stVault on Ethereum mainnet, an architecture co-designed by Status Network with the Linea and Lido teams. Stablecoins are deployed via Generic Protocol into Morpho lending and Sky savings strategies, arriving on L2 as GUSD. Yield from both strategies bridges separately to the funding pool.</span></p></div>
+        </div><div class="kg-card kg-toggle-card" data-kg-toggle-state="close">
+            <div class="kg-toggle-heading">
+                <h4 class="kg-toggle-heading-text"><span style="white-space: pre-wrap;">What is GUSD?</span></h4>
+                <button class="kg-toggle-card-icon" aria-label="Expand toggle to read content">
+                    <svg id="Regular" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path class="cls-1" d="M23.25,7.311,12.53,18.03a.749.749,0,0,1-1.06,0L.75,7.311"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="kg-toggle-content"><p><span style="white-space: pre-wrap;">GUSD is the stablecoin representation used on Status Network for stablecoin yield. Users deposit USDC, USDT, or USDS on L1. These are deployed into Morpho lending and Sky savings strategies via Generic Protocol. The resulting yield-bearing position bridges to L2 as GUSD. Users interact with a clean stablecoin asset; yield flows separately into the funding pool.</span></p></div>
+        </div>22:T32ed,{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq",
+  "name": "Status Network Economic Model: Revenue Sources, Funding Pool, and Zero Gas",
+  "url": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q1",
+      "name": "What is Status Network?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a1",
+        "text": "Status Network is a fully gasless Ethereum Layer 2 built on reputation, composable privacy, and network-level spam protection. It is designed for humans and bots, and scales Ethereum using Linea's open-source ZK-EVM stack. Transactions are free for active participants because the network funds itself through yield from bridged capital and fees from native apps — not gas charges. See: https://status.network/."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q2",
+      "name": "What is Status Network's economic model?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a2",
+        "text": "Status Network's economic model replaces gas fee revenue with two reinforcing sources: native yield from productive capital on Ethereum Layer 1 (ETH staked via Lido V3 stVault, stablecoins deployed via Generic Protocol into Morpho and Sky), and fees from native Layer 2 apps including a DEX, CDP stablecoin, token launchpad, and privacy layer. All revenue flows into a community-governed Apps Funding Pool allocated by Karma holders. See: https://docs.status.network/tokenomics/economic-model."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q3",
+      "name": "What are Status Network's revenue sources?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a3",
+        "text": "Status Network has four revenue sources: (1) native yield from bridged ETH staked via Lido V3 stVault on Ethereum mainnet, (2) stablecoin yield via GUSD (deployed through Generic Protocol into Morpho and Sky savings strategies), (3) native DEX swap fees from Orvex, and (4) premium gas fees paid by users who exceed their free transaction quota. Future native apps — FIRM (CDP stablecoin), Punk.fun (token launchpad), Bermuda (privacy layer), and lending markets — will add additional fee revenue. See: https://docs.status.network/tokenomics/economic-model."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q4",
+      "name": "How does the Apps Funding Pool work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a4",
+        "text": "The Apps Funding Pool is the shared treasury of Status Network. It accumulates L1 yield from bridged assets and fees from native L2 apps. Karma holders vote on how to allocate it: to liquidity providers, app builders, infrastructure contributors, and network operations. Because Karma is soulbound and cannot be purchased, allocation power stays with active contributors, not token buyers. See: https://docs.status.network/tokenomics/public-funding."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q5",
+      "name": "How are gasless transactions possible?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a5",
+        "text": "Zero gas is possible because the network's operating costs are covered by yield and app fees rather than per-transaction charges. Access control is handled by Rate Limiting Nullifiers (RLN), a zero-knowledge protocol that enforces per-user transaction quotas based on Karma tier — without compromising user privacy. This is not gas abstraction through paymasters. Status Network removes the source of gas metadata leakage entirely. See: https://docs.status.network/general-info/gasless-transactions."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q6",
+      "name": "What is Karma?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a6",
+        "text": "Karma is a soulbound non-transferable reputation token on Status Network. It determines free transaction throughput, governance voting power over the Apps Funding Pool, and access to private gasless accounts. It is earned through staking SNT, providing liquidity, using and building apps, paying sequencer tips, and donating to the funding pool. It cannot be bought or transferred. Karma minting allocations are set at launch and may evolve as the network matures. See: https://docs.status.network/tokenomics/karmic-tokenomics."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q7",
+      "name": "Can I buy Karma?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a7",
+        "text": "No. Karma cannot be purchased on any market. It must be earned through direct contribution to the network: staking SNT, bridging ETH, providing liquidity, building or actively using participating apps, paying sequencer tips, or donating to the funding pool. This ensures governance power reflects participation, not capital, and prevents plutocratic capture of the Apps Funding Pool. See: https://docs.status.network/tokenomics/karmic-tokenomics."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q8",
+      "name": "What is the total Karma supply?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a8",
+        "text": "Karma supply is not capped. Minting occurs continuously as users contribute through defined channels: staking SNT, providing liquidity, using and building apps, paying sequencer tips, and donating to the funding pool. Minting allocations are set at launch and may evolve as the network matures. Because Karma cannot be purchased, supply is driven entirely by genuine ecosystem participation rather than market demand or speculation. See: https://docs.status.network/tokenomics/karmic-tokenomics."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q9",
+      "name": "What happens if a user exceeds their free transaction quota?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a9",
+        "text": "Users who exceed their Karma-based quota are prompted to pay a premium gas fee. This fee is split between Status Network operations and the RLN spam prevention mechanism. Paying the premium removes the user from the Deny List and earns additional Karma, which can unlock higher free transaction limits over time. See: https://docs.status.network/general-info/gasless-transactions."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q10",
+      "name": "What is GUSD?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a10",
+        "text": "GUSD is the stablecoin asset used on Status Network for stablecoin yield. Users deposit USDC, USDT, or USDS on Layer 1. These are deployed into Morpho lending and Sky savings strategies via Generic Protocol. The resulting yield-bearing position bridges to Layer 2 as GUSD. Users interact with a clean stablecoin asset on L2; yield flows separately into the Apps Funding Pool. See: https://docs.status.network/tokenomics/economic-model."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q11",
+      "name": "What are Status Network's L1 yield strategies?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a11",
+        "text": "ETH is staked via Lido V3 stVault on Ethereum mainnet — an architecture co-designed by Status Network with the Linea and Lido teams. No stETH is minted for users; ETH bridges cleanly to L2 and staking yield bridges separately to the funding pool. Stablecoins are deployed via Generic Protocol into Morpho lending and Sky savings strategies, arriving on L2 as GUSD. Yield from both strategies accumulates in the Apps Funding Pool. See: https://docs.status.network/tokenomics/economic-model."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q12",
+      "name": "Can users withdraw their bridged ETH at any time?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a12",
+        "text": "Yes. Users can unbridge their assets back to Ethereum at any time through the Status Network bridge. The process is atomic and permissionless. Bridged ETH can always be withdrawn in full plus any share of accrued yield. See: https://status.network/."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q13",
+      "name": "What happens if L1 yield drops to zero?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a13",
+        "text": "If staking rewards collapse, the network falls back on native app fees and premium gas payments to sustain operations. Karma holders can vote to adjust developer funding levels or premium gas fee rates. The network can also expand into additional yield strategies on Ethereum as they become available. See: https://docs.status.network/tokenomics/economic-model."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q14",
+      "name": "Is Karma inflation a concern?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a14",
+        "text": "Karma is minted through defined contribution channels. Minting parameters are set at launch and may evolve through governance as the network matures. Because Karma cannot be purchased, supply is driven entirely by genuine ecosystem participation rather than market demand or speculation. See: https://docs.status.network/tokenomics/karmic-tokenomics."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-q15",
+      "name": "How does Status Network compare to Arbitrum or Optimism?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas#faq-a15",
+        "text": "Arbitrum and Optimism rely on sequencer gas fees as their primary revenue source. Status Network replaces gas revenue with yield from productive capital and native app fees, making transactions free for active participants. Arbitrum and Optimism are optimised for high-frequency trading; Status Network is designed for social apps, privacy-preserving interactions, and consumer use cases where per-action fees create friction and leak metadata. See: https://status.network/."
+      }
+    }
+  ]
+}1e:["$","$L20",null,{"slug":"status-network-economic-model-yield-funding-pool-and-zero-gas","initialPost":{"slug":"status-network-economic-model-yield-funding-pool-and-zero-gas","title":"Status Network Economic Model: Yield, Funding Pool, and Zero Gas","html":"$21","feature_image":"https://our.status.im/content/images/2026/03/05---Blog---Cover.jpg","feature_image_alt":"Gasless Ethereum L2 with yield-backed funding pool, Karma reputation, and native app fees powering zero-gas transactions","published_at":"2026-03-04T10:09:02.000+00:00","updated_at":"2026-03-07T12:32:08.000+00:00","codeinjection_head":"$22","codeinjection_foot":null,"primary_tag":{"name":"status-network-blog","slug":"status-network-blog"},"primary_author":{"id":"6915ef6ff70ca800016c5a8d","name":"Kamila Lipska","slug":"kamila","profile_image":null,"cover_image":null,"bio":null,"website":null,"location":null,"facebook":null,"twitter":null,"meta_title":null,"meta_description":null,"url":"https://our.status.im/author/kamila/"}},"labels":{"breadcrumbBlog":"Blog","onDate":"on","shareArticleOn":"Share article on:"}}]
+1f:["$","div",null,{"className":"border-t border-neutral-10 bg-neutral-10 px-5 pb-16 pt-10 xl:pb-24","children":["$","div",null,{"className":"mx-auto w-full max-w-[1184px]","children":[["$","h2",null,{"className":"mb-6 text-27 font-600","children":"Related articles"}],["$","div",null,{"className":"grid gap-5 md:grid-cols-2 xl:grid-cols-4","children":["$L23","$L24","$L25","$L26"]}]]}]}]
+23:["$","$L4","69dcde17834292000196a55e",{"href":"/blog/snt-staking-earn-karma","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"SNT Staking: How to Earn Karma on Status Network"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/41---Blog---Cover.jpg","alt":"Staking SNT earns Karma, a non-transferable reputation token that unlocks free transactions and governance voting power."}]}]],"ref":"$undefined"}]
+24:["$","$L4","69dcc688834292000196a542",{"href":"/blog/privacy-l2-stealth-addresses-bermuda","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"Privacy on Ethereum Layer 2: How Bermuda Enables Stealth Addresses"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/40---Blog---Cover.jpg","alt":"Ethereum Layer 2 privacy with stealth addresses, confidential balances, zero knowledge proofs, Bermuda protocol execution."}]}]],"ref":"$undefined"}]
+25:["$","$L4","69dcc2cc834292000196a529",{"href":"/blog/what-is-mev-maximal-extractable-value","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"What Is MEV? Maximal Extractable Value and Its Impact on Users"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/39---Blog---Cover.jpg","alt":"Maximal extractable value MEV blockchain transaction ordering impact on crypto users and DeFi trades."}]}]],"ref":"$undefined"}]
+26:["$","$L4","69d6452a834292000196a509",{"href":"/blog/gas-fees-are-a-privacy-leak-no-pricing-model-can-fix","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"Gas Fees Are a Privacy Leak No Pricing Model Can Fix"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 8, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/38---Blog---Cover.jpg","alt":"How gas funding trail links blockchain account activity to transaction metadata."}]}]],"ref":"$undefined"}]

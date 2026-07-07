@@ -1,0 +1,289 @@
+1:"$Sreact.fragment"
+2:I[6978,[],""]
+3:I[5232,[],""]
+4:I[6132,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],""]
+9:I[9019,[],"OutletBoundary"]
+b:I[602,[],"AsyncMetadataOutlet"]
+d:I[9019,[],"ViewportBoundary"]
+f:I[9019,[],"MetadataBoundary"]
+10:"$Sreact.suspense"
+12:I[7098,[],""]
+:HL["/_next/static/media/e4af272ccee01ff0-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/css/24bd7f809405cf73.css","style"]
+0:{"P":null,"b":"jZsj7itHS8RA_8vdfQaak","p":"","c":["","/","blog","what-is-eip-4844-proto-danksharding-l2-fees"],"i":false,"f":[[["",{"children":["(site)",{"children":[["locale","/","d"],{"children":["blog",{"children":[["slug","what-is-eip-4844-proto-danksharding-l2-fees","d"],{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true]}]}],["",["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-[calc(100dvh-189px)] flex-1 items-center justify-center px-5 lg:min-h-[calc(100dvh-118px)]","children":["$","div",null,{"className":"flex max-w-[696px] flex-col items-center gap-8","children":[["$","h1",null,{"className":"text-center text-40 font-700 lg:text-64","children":"This is not the page you're looking for"}],["$","$L4",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-purple border-[transparent] hover:bg-purple-dark text-white-100 h-10 py-[9px] rounded-12 px-4","href":"/","children":["$undefined","Take me home","$undefined"],"ref":"$undefined"}]]}]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["(site)",["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["locale","/","d"],["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/24bd7f809405cf73.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],"$L5"]}],{"children":["blog",["$","$1","c",{"children":[null,["$","div",null,{"className":"relative flex min-h-screen justify-center overflow-clip px-2 2xl:px-0","children":["$","div",null,{"className":"relative w-full max-w-[1418px] border-x border-neutral-20","children":[["$","div",null,{"className":"absolute -left-2 top-0 z-50 h-full w-2 bg-gradient-to-r from-white-100 to-[transparent] 2xl:-left-12 2xl:w-12"}],["$","div",null,{"className":"absolute -right-2 top-0 z-50 h-full w-2 bg-gradient-to-l from-white-100 to-[transparent] 2xl:-right-12 2xl:w-12"}],"$L6",["$","main",null,{"children":["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]}],["$","div",null,{"className":"relative","children":[["$","div",null,{"className":"absolute left-[-3px] top-[-2px] size-[5px] rounded-full bg-neutral-20"}],["$","div",null,{"className":"relative bottom-0 h-px bg-neutral-20 z-20 left-1/2 w-[calc(100%+16px)] lg:w-[calc(100%+16px)] 2xl:w-[calc(100%+96px)] -translate-x-1/2"}],"$undefined",["$","div",null,{"className":"absolute bottom-[-2px] right-[-3px] size-[5px] rounded-full bg-neutral-20"}]]}],"$L7"]}]}]]}],{"children":[["slug","what-is-eip-4844-proto-danksharding-l2-fees","d"],["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":["$L8",null,["$","$L9",null,{"children":["$La",["$","$Lb",null,{"promise":"$@c"}]]}]]}],{},null,false]},null,false]},null,false]},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,[["$","$Ld",null,{"children":"$Le"}],["$","meta",null,{"name":"next-size-adjust","content":""}]],["$","$Lf",null,{"children":["$","div",null,{"hidden":true,"children":["$","$10",null,{"fallback":null,"children":"$L11"}]}]}]]}],false]],"m":"$undefined","G":["$12",[]],"s":false,"S":true}
+13:I[928,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"Image"]
+6:["$","header",null,{"className":"sticky top-0 z-[60] w-full bg-white-90 backdrop-blur supports-[backdrop-filter]:bg-white-80","children":[["$","div",null,{"className":"mx-auto flex h-16 items-center justify-between px-4","children":[["$","$L4",null,{"href":"/","className":"flex items-center space-x-2","children":["$","$L13",null,{"src":"/logo.svg","alt":"Status Network Logo","width":210,"height":32}],"ref":"$undefined"}],["$","div",null,{"className":"flex items-center gap-3","children":[["$","$L4",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-white-100 border-neutral-30 hover:border-neutral-40 hover:bg-white-80 text-dark-100 h-8 py-[5px] rounded-10 px-3 hidden sm:block","href":"/","children":["$undefined","Home","$undefined"],"ref":"$undefined"}],["$","a",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-purple border-[transparent] hover:bg-purple-dark text-white-100 h-8 py-[5px] rounded-10 px-3","target":"_blank","rel":"noopener noreferrer","href":"https://hub.status.network/","children":["$undefined","Get started","$undefined"],"ref":"$undefined"}]]}]]}],["$","div",null,{"className":"relative","children":[["$","div",null,{"className":"absolute left-[-3px] top-[-2px] size-[5px] rounded-full bg-neutral-20"}],["$","div",null,{"className":"relative bottom-0 h-px bg-neutral-20 z-20 left-1/2 w-[calc(100%+16px)] lg:w-[calc(100%+16px)] 2xl:w-[calc(100%+96px)] -translate-x-1/2"}],"$undefined",["$","div",null,{"className":"absolute bottom-[-2px] right-[-3px] size-[5px] rounded-full bg-neutral-20"}]]}]]}]
+7:["$","footer",null,{"className":"relative z-[61]","children":["$","div",null,{"className":"grid gap-4 p-3 lg:grid-cols-[1fr,auto,auto] lg:gap-5 lg:p-4","children":[["$","div",null,{"className":"flex flex-col justify-center gap-2 lg:flex-row lg:justify-start lg:gap-3","children":[["$","span",null,{"className":"text-center text-13 lg:text-left","children":"© Status Research & Development GmbH"}],["$","svg",null,{"width":"2","height":"2","viewBox":"0 0 2 2","fill":"none","xmlns":"http://www.w3.org/2000/svg","className":"hidden text-neutral-50 lg:block","children":["$","circle",null,{"cx":"1","cy":"1","r":"1","fill":"#A1ABBD"}]}]]}],["$","div",null,{"className":"flex flex-col items-center justify-center gap-3 lg:flex-row lg:justify-end","children":[["$","div",null,{"className":"flex items-center justify-center gap-4 md:gap-3 lg:justify-end","children":[["$","$L4",null,{"href":"/legal/terms-of-use","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Terms of Use","ref":"$undefined"}],["$","$L4",null,{"href":"/legal/privacy-policy","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Privacy Policy","ref":"$undefined"}],["$","$L4",null,{"href":"/blog","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Blog","ref":"$undefined"}],"$L14"]}],["$","svg",null,{"width":"2","height":"2","viewBox":"0 0 2 2","fill":"none","xmlns":"http://www.w3.org/2000/svg","className":"2md:hidden text-neutral-50","children":["$","circle",null,{"cx":"1","cy":"1","r":"1","fill":"#A1ABBD"}]}],["$","div",null,{"className":"flex justify-center gap-6 lg:justify-end","children":[["$","a","Status",{"href":"https://status.app","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/status.6be65460.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"Status","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}],["$","a","Twitter",{"href":"https://x.com/StatusL2","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/twitter.6865a7e5.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"Twitter","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}],["$","a","GitHub",{"href":"https://github.com/status-im","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/github.90103528.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"GitHub","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}]]}]]}]]}]}]
+17:I[6105,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","726","static/chunks/726-a688395c743bdde3.js","565","static/chunks/565-e7a70831c2486b41.js","472","static/chunks/app/(site)/%5Blocale%5D/layout-fe09f44bffcc5314.js"],"Analytics"]
+18:I[5718,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","726","static/chunks/726-a688395c743bdde3.js","565","static/chunks/565-e7a70831c2486b41.js","472","static/chunks/app/(site)/%5Blocale%5D/layout-fe09f44bffcc5314.js"],""]
+15:T433,{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Status Network",
+  "url": "https://status.network/",
+  "logo": "https://status.network/logo.svg",
+  "description": "Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack, with network-level spam protection enforced through reputation (Karma) and execution funded by native yield rather than user-paid gas fees.",
+  "sameAs": [
+    "https://x.com/StatusL2",
+    "https://github.com/status-im"
+  ],
+  "@id": "https://status.network/#organization",
+  "knowsAbout": [
+    {
+      "@type": "Thing",
+      "name": "Ethereum Layer 2"
+    },
+    {
+      "@type": "Thing",
+      "name": "Gasless transactions"
+    },
+    {
+      "@type": "Thing",
+      "name": "Composable privacy"
+    },
+    {
+      "@type": "Thing",
+      "name": "Spam protection"
+    },
+    {
+      "@type": "Thing",
+      "name": "Reputation system"
+    },
+    {
+      "@type": "Thing",
+      "name": "Native yield funding"
+    },
+    {
+      "@type": "Thing",
+      "name": "Bots"
+    }
+  ]
+}5:["$","html",null,{"lang":"en","children":["$","body",null,{"className":"__variable_9cc749 bg-white-100 text-neutral-100 antialiased selection:bg-purple selection:text-white-100","suppressHydrationWarning":true,"children":[[["$","script","0",{"id":"json-ld-0","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$15"}}],["$","script","1",{"id":"json-ld-1","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"WebSite\",\n  \"name\": \"Status Network\",\n  \"url\": \"https://status.network/\",\n  \"description\": \"Status Network is a privacy-first, fully gasless Ethereum Layer 2 designed for scalable onchain activity, coordinated through reputation and native yield.\",\n  \"@id\": \"https://status.network/#website\",\n  \"publisher\": {\n    \"@id\": \"https://status.network/#organization\"\n  },\n  \"about\": [\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Ethereum Layer 2\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Gasless transactions\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Composable privacy\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Spam protection\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Reputation system\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Native yield funding\"\n    }\n  ]\n}"}}],["$","script","2",{"id":"json-ld-2","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"SoftwareApplication\",\n  \"name\": \"Status Network\",\n  \"applicationCategory\": \"Blockchain\",\n  \"operatingSystem\": \"Web3\",\n  \"url\": \"https://status.network/\",\n  \"description\": \"Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack. Execution is coordinated through Karma, a non-transferable reputation system, and supported by native yield and network activity.\"\n}"}}]],"$L16",["$","$L17",null,{}],["$","$L18",null,{"strategy":"afterInteractive","src":"https://umami.bi.status.im/script.js","data-website-id":"0746c5dc-8cd3-45a4-9606-6bcf9adf248e","data-domains":"status.network","async":true}]]}]}]
+19:I[6156,["756","static/chunks/756-56d07e8fa5ffdccb.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","878","static/chunks/app/(site)/%5Blocale%5D/blog/layout-c6bf279edadbe978.js"],"default"]
+14:["$","$L19",null,{"ref":"$undefined","href":"/brand","locale":"$undefined","localeCookie":{"name":"NEXT_LOCALE","sameSite":"lax"},"className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Brand assets"}]
+1a:I[2756,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"default"]
+16:["$","$L1a",null,{"formats":"$undefined","locale":"en","messages":{"meta":{"locale":"en","name":"English","direction":"ltr","description":"Complete Status Network website translations"},"common":{"loading":"Loading...","learn_more":"Learn More","get_started":"Get started","read_more":"Read More","read_docs":"Read docs","view_blog":"View blog","new":"NEW","testnet_live":"Testnet v2 is live!","promo_message":"Vaults withdrawals are now enabled","visit_hub":"withdraw now","visit_hub_aria":"withdraw now (opens in new tab)"},"navigation":{"home":"Home","about":"About","features":"Features","network":"Network","partners":"Partners","tokenomics":"Tokenomics","blog":"Blog","brand":"Brand"},"hero":{"title":"The gasless network","subtitle":"with sustainable funding for app builders","description":"Launch and scale your social apps and games with truly free transactions."},"about":{"section_number":"01","section_title":"WHAT IS STATUS NETWORK?","title_1":"The first Ethereum L2 with","title_2":"gas-free","title_3":"transactions at scale","title_4":"funded by native yield + fees.","description":"A free network with sustainable funding for public apps, games and protocols.","build_button":"Build on Status Network","learn_more_button":"Learn more"},"features":{"section_number":"02","section_title":"WHY STATUS NETWORK?","title":"Power to the community","sustainable_funding":{"title":"Sustainable public funding","description":"Status Network takes a radical step beyond short-term incentives. Powered by native yields and fees, its public app funding pool is governed by the community, ensuring a continuous allocation of capital for onchain builders.","step_1":"Users bridge yield-bearing assets to Status Network and increase the yield redirected to the funding pool.","step_2":"Apps and games apply for an allocation from the pool. The community votes on allocations using Karma, a non-transferrable governance token earned by contributing positively to the network:","step_2_staking":"Staking SNT","step_2_bridging":"Bridging yield-bearing tokens","step_2_using":"Using apps","step_2_premium":"Paying premium gas","step_2_donations":"Making direct donations to the funding pool","step_3":"Every funded project onboards new users, driving additional asset deposits and token swaps - generating more yield and fees to be allocated in the funding pool.","button":"Discover Karmic Tokenomics"},"gasless_transactions":{"title":"Gasless transactions","description_1":"On Status Network, anyone can experience free transactions! With the L2 operating costs covered by native yields and fees, no need to bridge gas to use an app.","description_2":"Apps and games developers can offer frictionless onboarding for their users at scale.","button":"Learn how it works"},"performance":{"title":"Built for performance, secured by Ethereum","description":"Leverage Ethereum's security with Linea's cutting-edge zkEVM rollup technology for high-speed transactions. Perfect for gaming, social, iGaming, and high-throughput applications.","button":"Learn more about Linea"},"decentralization":{"title":"Geared for decentralization","description":"Built on the core values of Status and the IFT ecosystem, Status Network is designed to become a truly decentralised L2. The endgame is to provide a censorship-resistant environment where communities can thrive without central points of control.","button":"Learn more"}},"partners":{"section_number":"03","section_title":"ECOSYSTEM AND PARTNERS","title_1":"Empowering bold","title_2":"creators and developers","subtitle":"Building with the best in the game","cats_fishing":{"title":"Cats Fishing","description":"The first open-sourced, proof of play mobile fishing game"},"spla_labs":{"title":"Spla Labs","description":"Builders of TODL & Ponzi Hero games"},"hash_vegas":{"title":"Hash Vegas","description":"Fair and transparent onchain gaming"},"ponzi_hero":{"title":"Ponzi Hero","description":"Earn NFTs, have some fun!"},"linea":{"title":"Linea","description":"Secure zkEVM L2 stack"},"gateway":{"title":"Gateway","description":"Rollup infrastructure and operation"},"din":{"title":"DIN","description":"Decentralised Infrastructure Network"}},"network":{"section_number":"04","section_title":"NETWORK","title":"Leverage the most advanced decentralised stack","description":"Builders get priority support from Institute of Free Technology solutions:","status":{"title":"Status","description":"Ethereum super-app with 4M+ downloads"},"logos":{"title":"Logos","description":"Open tech to restore civil society"},"waku":{"title":"Waku","description":"P2P encrypted messaging protocol"},"codex":{"title":"Codex","description":"Decentralised data storage layer"},"nimbus":{"title":"Nimbus","description":"Ethereum core devs. Powering Eth consensus"},"keycard":{"title":"Keycard","description":"Secure open-source hardware wallet"}},"tokenomics":{"section_number":"05","section_title":"TOKENOMICS","title":"Earn voting power through positive network engagement","description":"The more you contribute to the network, the more influence you gain over funding allocation and the network's roadmap priorities.","karma_note":"This is coordinated by Karma, a non-transferable governance token.","app_developer":{"title":"App developer","step_1":"Ship code","step_2":"Get traction","step_3":"Receive Karma","step_4":"Earn funding"},"liquidity_provider":{"title":"Liquidity provider","description":"Earn Karma for staking SNT and get LP rewards boosted by native yield."},"onchain_user":{"title":"Onchain user","description":"Get rewarded with Karma for bridging to the network and using apps. A higher Karma means more gasless transactions."}},"blog":{"title":"Stay up to date","view_blog_button":"View blog","category":"Updates","author":"Us","on_date":"on","page_title":"Blog.","page_description":"Long form articles, thoughts, and ideas.","share_article_on":"Share article on:","related_articles":"Related articles","breadcrumb_blog":"Blog","no_posts":"No posts available yet.","home":"Home","get_started":"Get started","post_1":{"title":"Status Steps Up as Founding Member of Linea Consortium"},"post_2":{"title":"Status Launches First Gasless Layer 2 on Linea"},"post_3":{"title":"Embracing Community Choices: Status to Develop SNT Staking and Status L2"}},"footer":{"copyright":"© Status Research & Development GmbH","privacy_policy":"Privacy Policy","terms_of_use":"Terms of Use","blog":"Blog","brand":"Brand assets"},"pre_footer":{"title":"Ready to build on the free network?","partner_button":"Partner with us","read_docs_button":"Read docs"},"brand":{"page_title":"Brand","page_description":"Get Status Network brand assets.","main_title":"Brand assets","last_updated":"Last updated: 12 November 2025","download_all":"Download all assets","logo_title":"Logo","logo_description":"Our main logo","logo_variation_title":"Logo variation","logo_variation_description":"For creative printing layouts","mark_only_title":"Mark only","mark_only_description":"Without wordmark","main_colors_title":"Main colors","main_colors_description":"Our main colors palette","artwork_title":"Artwork","artwork_description":"Our main characters","download_button":"Download","alt_text":{"main_logo":"Main logo","mark_only":"Mark only","artwork":"Artwork"}},"not_found":{"title":"This is not the page you're looking for","take_me_home":"Take me home"}},"now":"$undefined","timeZone":"UTC","children":"$L1b"}]
+1b:["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]
+e:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+a:null
+1c:T157c,{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq",
+  "name": "What Is EIP-4844? Proto-Danksharding and L2 Fees",
+  "url": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-q1",
+      "name": "What is EIP-4844 in simple terms?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-a1",
+        "text": "EIP-4844 is an Ethereum upgrade that introduced blob transactions. Blobs allow Layer 2 rollups to post data to Ethereum temporarily instead of storing all of it permanently on-chain, which significantly reduces data posting costs."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-q2",
+      "name": "What is the difference between proto-danksharding and full danksharding?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-a2",
+        "text": "Proto-danksharding introduced blob transactions and a separate fee market for rollup data. Full danksharding is expected to add data availability sampling and higher blob capacity, which would further expand Ethereum's data throughput for Layer 2 networks."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-q3",
+      "name": "How much did EIP-4844 reduce Layer 2 fees?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-a3",
+        "text": "After EIP-4844, many major rollups saw substantial fee reductions, often in the range of several times lower than before. In many cases, simple Layer 2 transfers became much cheaper because rollups could publish transaction data through blobs instead of relying on more expensive calldata."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-q4",
+      "name": "What are blob transactions on Ethereum?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-a4",
+        "text": "Blob transactions, also known as Type-3 transactions, carry large data chunks that are attached to Ethereum blocks without becoming part of the EVM state. This data is available for a limited retention period and is designed specifically to lower the cost of posting rollup data."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-q5",
+      "name": "What are KZG commitments in EIP-4844?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-a5",
+        "text": "KZG commitments are cryptographic commitments attached to each blob. They allow Ethereum validators to verify that blob data is consistent and valid without processing the full contents directly, and they form part of the foundation for future scaling improvements such as data availability sampling."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-q6",
+      "name": "Does EIP-4844 affect Ethereum Layer 1 gas fees?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-a6",
+        "text": "EIP-4844 introduced a separate fee market for blob data, so its main effect is on the cost of Layer 2 data posting rather than standard Layer 1 transaction gas pricing. Regular Ethereum gas fees still depend on Layer 1 demand and congestion."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-q7",
+      "name": "How does proto-danksharding support gasless Layer 2 networks like Status Network?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-a7",
+        "text": "By lowering the cost of posting rollup data to Ethereum, proto-danksharding makes low-cost and gasless Layer 2 models more practical. Status Network builds on this by combining lower data costs with native yield-based funding and RLN-based spam protection instead of relying only on user-paid gas fees."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-q8",
+      "name": "What comes after EIP-4844 for Ethereum scaling?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-a8",
+        "text": "One of the next major scaling steps is PeerDAS, which introduces data availability sampling. This is expected to let Ethereum increase blob capacity more safely and efficiently, which could further reduce rollup costs and improve Layer 2 throughput."
+      }
+    }
+  ]
+}8:[[["$","script","0",{"id":"json-ld-0","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Article\",\n  \"headline\": \"What Is EIP-4844? Proto-Danksharding and Cheaper Layer 2 Fees\",\n  \"description\": \"EIP-4844 introduced blob transactions that cut Layer 2 fees by up to 10x. Learn how proto-danksharding works and why it matters for gasless L2 networks.\",\n  \"image\": \"https://our.status.im/content/images/2026/03/28---Blog---Cover.jpg\",\n  \"datePublished\": \"2026-03-08T14:07:15.000+00:00\",\n  \"dateModified\": \"2026-03-27T11:02:30.000+00:00\",\n  \"author\": {\n    \"@type\": \"Person\",\n    \"name\": \"Kamila Lipska\"\n  },\n  \"publisher\": {\n    \"@type\": \"Organization\",\n    \"name\": \"Status Network\",\n    \"logo\": {\n      \"@type\": \"ImageObject\",\n      \"url\": \"https://status.network/logo.svg\"\n    }\n  }\n}"}}]],[["$","script","custom-jsonld-0",{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$1c"}}]],"$L1d","$L1e"]
+1f:I[2118,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"BlogPostDetailHydrated"]
+20:T2638,<p><a href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-4844.md" rel="noreferrer"><strong>EIP-4844</strong></a>, activated in Ethereum's March 2024 Dencun upgrade, introduced <strong>blob transactions</strong>: a new data type that lets Layer 2 rollups post data to Ethereum at a fraction of the previous cost. By creating a separate fee market for temporary data blobs, proto-danksharding cut L2 transaction fees by up to 10x and laid the groundwork for full danksharding.</p><h2 id="why-did-layer-2-fees-need-fixing">Why Did Layer 2 Fees Need Fixing?</h2><p>Rollups bundle user transactions off-chain. They then post compressed proof data back to Ethereum.</p><p>Before EIP-4844, rollups stored this data in <strong>calldata</strong>. Calldata lives on-chain forever. Every Ethereum node must download and store it.</p><p>This permanence is expensive. Rollups competed with DeFi trades, NFT mints, and token transfers for the same block space.</p><p>When Ethereum got busy, L2 fees spiked. Users paying $0.10 on a quiet day might pay $2.00 during a surge.</p><p>The core problem: rollup data does not need to be permanent. Validators only need it long enough to verify proofs. Storing it forever wastes resources and inflates costs.</p><h2 id="how-blob-transactions-work">How Blob Transactions Work</h2><p>EIP-4844 solves this with a new transaction type: <strong>Type-3 transactions</strong> carrying data <strong>blobs</strong>.</p><h3 id="what-is-a-blob">What is a blob?</h3><p>A blob is a ~128 KB chunk of binary data. It attaches to a transaction but does not enter the EVM execution layer.</p><p>Blobs are temporary. Ethereum nodes store them for roughly 18 days, then prune them. This is enough time for anyone to verify rollup proofs.</p><h3 id="the-separate-fee-market">The separate fee market</h3><p>Blobs have their own fee market, independent of regular gas. Each Ethereum block targets 3 blobs and allows a maximum of 6.</p><p>Blob fees follow <strong>EIP-1559 style pricing</strong>. When blob demand is low, fees drop near zero. When demand is high, fees rise to manage congestion.</p><p>This separation means a DeFi surge on Layer 1 no longer drags up L2 posting costs.</p><h3 id="kzg-commitments">KZG commitments</h3><p>Each blob includes a <strong>KZG polynomial commitment</strong>. This is a compact cryptographic proof that the blob data is valid.</p><p>KZG commitments let validators confirm blob integrity without reading the full 128 KB. They also prepare Ethereum for <strong>data availability sampling</strong> in future upgrades.</p><h2 id="what-changed-after-dencun">What Changed After Dencun?</h2><p>The results were immediate and dramatic.</p>
+<!--kg-card-begin: html-->
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Before EIP-4844</th>
+<th>After EIP-4844</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L2 data posting method</td>
+<td>Calldata (permanent)</td>
+<td>Blobs (temporary, ~18 days)</td>
+</tr>
+<tr>
+<td>Typical L2 swap fee</td>
+<td>$0.50 to $2.00</td>
+<td>$0.01 to $0.10</td>
+</tr>
+<tr>
+<td>Data cost reduction</td>
+<td>Baseline</td>
+<td>Up to 10x cheaper</td>
+</tr>
+<tr>
+<td>Ethereum block capacity</td>
+<td>No blob space</td>
+<td>3 target / 6 max blobs per block</td>
+</tr>
+</tbody>
+</table>
+<!--kg-card-end: html-->
+<p>Major rollups saw fees drop within hours. Simple transfers on some L2s fell below $0.01.</p><h2 id="proto-danksharding-vs-full-danksharding">Proto-Danksharding vs. Full Danksharding</h2><p>EIP-4844 is called "proto-danksharding" because it is the first phase of a larger plan.</p><h3 id="what-proto-danksharding-delivers">What proto-danksharding delivers</h3><ul><li>Blob transaction format (Type-3)</li><li>Separate blob fee market</li><li>KZG commitment scheme</li><li>Temporary blob storage (~18 days)</li></ul><h3 id="what-full-danksharding-will-add">What full danksharding will add</h3><ul><li><strong>Data availability sampling (DAS)</strong>: Validators verify data without downloading every blob. This enables far more blobs per block.</li><li><strong>Expanded blob count</strong>: The target may grow from 3 to 32 or more blobs per block.</li><li><strong>Peer-to-peer blob distribution</strong>: A dedicated networking layer for blob propagation.</li></ul><p>Full danksharding could reduce L2 costs by another order of magnitude. Proto-danksharding built the transaction format and commitment scheme that make this possible.</p><h2 id="why-proto-danksharding-matters-for-gasless-networks">Why Proto-Danksharding Matters for Gasless Networks</h2><p>Cheaper data posting changes what is economically viable on Layer 2.</p><p>Before EIP-4844, subsidizing user gas fees required large treasuries. The math was hard to sustain. Every transaction carried a real calldata cost that someone had to pay.</p><p>With blobs, the base cost of posting rollup data approaches zero during low-demand periods. This makes alternative fee models practical.</p><p><a href="https://status.network/"><strong>Status Network</strong></a> takes this further. As a gasless Ethereum Layer 2 built on the <a href="https://linea.build/"><strong>Linea</strong></a> zkEVM stack, it removes gas fees entirely for users. Instead of charging per transaction, it funds operations through <a href="https://docs.status.network/tokenomics/economic-model"><strong>native yield</strong></a> from bridged assets and fees from ecosystem apps like <strong>Orvex</strong>.</p><p>Proto-danksharding did not create the gasless model. But it made the economics dramatically more favorable. When blob fees are near zero, the yield from productive capital (ETH staked via <a href="https://lido.fi/"><strong>Lido</strong></a>, stablecoins routed through lending protocols) can cover operational costs more easily.</p><p>Spam protection without gas fees requires a different mechanism. <strong>Status Network</strong> uses <strong>Rate Limiting Nullifiers (RLN)</strong>, a zero-knowledge protocol that replaces gas as the access control layer. <strong>Karma</strong>, a <a href="https://docs.status.network/tokenomics/karmic-tokenomics">soulbound reputation</a> token, determines each user's free transaction quota.</p><h2 id="the-road-ahead-peerdas-and-beyond">The Road Ahead: PeerDAS and Beyond</h2><p>Ethereum's next data availability upgrade is <strong>PeerDAS</strong> (Peer Data Availability Sampling). It will let validators confirm blob availability by sampling small portions instead of downloading entire blobs.</p><p>PeerDAS enables Ethereum to safely increase the blob target per block. More blobs per block means more rollup throughput at lower cost.</p><p>For L2 ecosystems, this creates a compounding effect. Each reduction in data costs expands the design space for new fee models, richer on-chain applications, and social or gaming use cases that require high transaction volumes.</p><h2 id="key-takeaways">Key Takeaways</h2><ul><li><strong>EIP-4844</strong> introduced blob transactions in Ethereum's Dencun upgrade (March 2024).</li><li>Blobs are temporary (~18 days), avoiding permanent calldata storage costs.</li><li>A separate blob fee market decoupled L2 costs from L1 congestion.</li><li>L2 fees dropped up to 10x immediately after activation.</li><li>Proto-danksharding is phase one. Full danksharding with data availability sampling will expand capacity further.</li><li>Lower data costs make alternative models like gasless execution economically viable.</li></ul><h2 id="frequently-asked-questions">Frequently Asked Questions</h2><p><strong>What is EIP-4844 in simple terms?</strong></p><p>EIP-4844 is an Ethereum upgrade that created blob transactions. Blobs let Layer 2 rollups post data to Ethereum temporarily instead of permanently, cutting fees by up to 10x.</p><p><strong>What is the difference between proto-danksharding and full danksharding?</strong></p><p>Proto-danksharding introduced the blob format and a separate fee market. Full danksharding will add data availability sampling, allowing far more blobs per block and further reducing L2 costs.</p><p><strong>How much did EIP-4844 reduce Layer 2 fees?</strong></p><p>Most major rollups saw fee reductions of 5x to 10x. Simple L2 transfers dropped below $0.01 in many cases, down from $0.50 or more.</p><p><strong>What are blob transactions on Ethereum?</strong></p><p>Blob transactions (Type-3) carry ~128 KB data chunks that attach to blocks but do not enter the EVM. Nodes store blobs for roughly 18 days, then prune them.</p><p><strong>What are KZG commitments in EIP-4844?</strong></p><p>KZG commitments are cryptographic proofs attached to each blob. They let validators verify blob data integrity without reading the full contents, enabling future data availability sampling.</p><p><strong>Does EIP-4844 affect Ethereum Layer 1 gas fees?</strong></p><p>No. Blob fees operate in a separate market. L1 transaction gas pricing remains unchanged. The upgrade specifically targets the cost of L2 data posting.</p><p><strong>How does proto-danksharding enable gasless Layer 2 networks like Status Network?</strong></p><p>By reducing data posting costs near zero, proto-danksharding makes it practical to fund L2 operations through <a href="https://docs.status.network/tokenomics/economic-model">native yield</a> and app fees instead of charging users gas. <a href="https://status.network/"><strong>Status Network</strong></a> uses this approach alongside <a href="https://docs.status.network/general-info/gasless-transactions"><strong>RLN</strong></a> spam protection.</p><p><strong>What comes after EIP-4844 for Ethereum scaling?</strong></p><p>The next major step is <strong>PeerDAS</strong>, which introduces data availability sampling. This will allow Ethereum to safely increase blob capacity per block, further lowering rollup costs and expanding L2 throughput.</p>21:T157c,{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq",
+  "name": "What Is EIP-4844? Proto-Danksharding and L2 Fees",
+  "url": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-q1",
+      "name": "What is EIP-4844 in simple terms?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-a1",
+        "text": "EIP-4844 is an Ethereum upgrade that introduced blob transactions. Blobs allow Layer 2 rollups to post data to Ethereum temporarily instead of storing all of it permanently on-chain, which significantly reduces data posting costs."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-q2",
+      "name": "What is the difference between proto-danksharding and full danksharding?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-a2",
+        "text": "Proto-danksharding introduced blob transactions and a separate fee market for rollup data. Full danksharding is expected to add data availability sampling and higher blob capacity, which would further expand Ethereum's data throughput for Layer 2 networks."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-q3",
+      "name": "How much did EIP-4844 reduce Layer 2 fees?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-a3",
+        "text": "After EIP-4844, many major rollups saw substantial fee reductions, often in the range of several times lower than before. In many cases, simple Layer 2 transfers became much cheaper because rollups could publish transaction data through blobs instead of relying on more expensive calldata."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-q4",
+      "name": "What are blob transactions on Ethereum?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-a4",
+        "text": "Blob transactions, also known as Type-3 transactions, carry large data chunks that are attached to Ethereum blocks without becoming part of the EVM state. This data is available for a limited retention period and is designed specifically to lower the cost of posting rollup data."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-q5",
+      "name": "What are KZG commitments in EIP-4844?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-a5",
+        "text": "KZG commitments are cryptographic commitments attached to each blob. They allow Ethereum validators to verify that blob data is consistent and valid without processing the full contents directly, and they form part of the foundation for future scaling improvements such as data availability sampling."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-q6",
+      "name": "Does EIP-4844 affect Ethereum Layer 1 gas fees?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-a6",
+        "text": "EIP-4844 introduced a separate fee market for blob data, so its main effect is on the cost of Layer 2 data posting rather than standard Layer 1 transaction gas pricing. Regular Ethereum gas fees still depend on Layer 1 demand and congestion."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-q7",
+      "name": "How does proto-danksharding support gasless Layer 2 networks like Status Network?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-a7",
+        "text": "By lowering the cost of posting rollup data to Ethereum, proto-danksharding makes low-cost and gasless Layer 2 models more practical. Status Network builds on this by combining lower data costs with native yield-based funding and RLN-based spam protection instead of relying only on user-paid gas fees."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-q8",
+      "name": "What comes after EIP-4844 for Ethereum scaling?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees#faq-a8",
+        "text": "One of the next major scaling steps is PeerDAS, which introduces data availability sampling. This is expected to let Ethereum increase blob capacity more safely and efficiently, which could further reduce rollup costs and improve Layer 2 throughput."
+      }
+    }
+  ]
+}1d:["$","$L1f",null,{"slug":"what-is-eip-4844-proto-danksharding-l2-fees","initialPost":{"slug":"what-is-eip-4844-proto-danksharding-l2-fees","title":"What Is EIP-4844? Proto-Danksharding and Cheaper Layer 2 Fees","html":"$20","feature_image":"https://our.status.im/content/images/2026/03/28---Blog---Cover.jpg","feature_image_alt":"Proto-Danksharding and Cheaper Layer 2 Fees","published_at":"2026-03-08T14:07:15.000+00:00","updated_at":"2026-03-27T11:02:30.000+00:00","codeinjection_head":"$21","codeinjection_foot":null,"primary_tag":{"name":"status-network-blog","slug":"status-network-blog"},"primary_author":{"id":"6915ef6ff70ca800016c5a8d","name":"Kamila Lipska","slug":"kamila","profile_image":null,"cover_image":null,"bio":null,"website":null,"location":null,"facebook":null,"twitter":null,"meta_title":null,"meta_description":null,"url":"https://our.status.im/author/kamila/"}},"labels":{"breadcrumbBlog":"Blog","onDate":"on","shareArticleOn":"Share article on:"}}]
+1e:["$","div",null,{"className":"border-t border-neutral-10 bg-neutral-10 px-5 pb-16 pt-10 xl:pb-24","children":["$","div",null,{"className":"mx-auto w-full max-w-[1184px]","children":[["$","h2",null,{"className":"mb-6 text-27 font-600","children":"Related articles"}],["$","div",null,{"className":"grid gap-5 md:grid-cols-2 xl:grid-cols-4","children":["$L22","$L23","$L24","$L25"]}]]}]}]
+22:["$","$L4","69dcde17834292000196a55e",{"href":"/blog/snt-staking-earn-karma","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"SNT Staking: How to Earn Karma on Status Network"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/41---Blog---Cover.jpg","alt":"Staking SNT earns Karma, a non-transferable reputation token that unlocks free transactions and governance voting power."}]}]],"ref":"$undefined"}]
+23:["$","$L4","69dcc688834292000196a542",{"href":"/blog/privacy-l2-stealth-addresses-bermuda","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"Privacy on Ethereum Layer 2: How Bermuda Enables Stealth Addresses"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/40---Blog---Cover.jpg","alt":"Ethereum Layer 2 privacy with stealth addresses, confidential balances, zero knowledge proofs, Bermuda protocol execution."}]}]],"ref":"$undefined"}]
+24:["$","$L4","69dcc2cc834292000196a529",{"href":"/blog/what-is-mev-maximal-extractable-value","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"What Is MEV? Maximal Extractable Value and Its Impact on Users"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/39---Blog---Cover.jpg","alt":"Maximal extractable value MEV blockchain transaction ordering impact on crypto users and DeFi trades."}]}]],"ref":"$undefined"}]
+25:["$","$L4","69d6452a834292000196a509",{"href":"/blog/gas-fees-are-a-privacy-leak-no-pricing-model-can-fix","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"Gas Fees Are a Privacy Leak No Pricing Model Can Fix"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 8, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/38---Blog---Cover.jpg","alt":"How gas funding trail links blockchain account activity to transaction metadata."}]}]],"ref":"$undefined"}]
+26:I[610,[],"IconMark"]
+c:{"metadata":[["$","title","0",{"children":"What is EIP-4844? Proto-Danksharding explained "}],["$","meta","1",{"name":"description","content":"EIP-4844 introduced blob transactions that cut Layer 2 fees by up to 10x. Learn how proto-danksharding works and why it matters for gasless L2 networks."}],["$","link","2",{"rel":"canonical","href":"https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees"}],["$","link","3",{"rel":"alternate","hrefLang":"en","href":"https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees"}],["$","link","4",{"rel":"alternate","hrefLang":"ko","href":"https://status.network/ko/blog/what-is-eip-4844-proto-danksharding-l2-fees"}],["$","link","5",{"rel":"alternate","hrefLang":"x-default","href":"https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees"}],["$","meta","6",{"property":"og:title","content":"What Is EIP-4844? Proto-Danksharding and Cheaper Layer 2 Fees"}],["$","meta","7",{"property":"og:description","content":"EIP-4844 introduced blob transactions that cut Layer 2 fees by up to 10x. Learn how proto-danksharding works and why it matters for gasless L2 networks."}],["$","meta","8",{"property":"og:url","content":"https://status.network/blog/what-is-eip-4844-proto-danksharding-l2-fees"}],["$","meta","9",{"property":"og:site_name","content":"Status Network"}],["$","meta","10",{"property":"og:locale","content":"en"}],["$","meta","11",{"property":"og:image","content":"https://our.status.im/content/images/2026/03/28---Blog---Cover.jpg"}],["$","meta","12",{"property":"og:type","content":"article"}],["$","meta","13",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","14",{"name":"twitter:site","content":"@StatusL2"}],["$","meta","15",{"name":"twitter:title","content":"What is EIP-4844? Proto-Danksharding explained "}],["$","meta","16",{"name":"twitter:description","content":"EIP-4844 introduced blob transactions that cut Layer 2 fees by up to 10x. Learn how proto-danksharding works and why it matters for gasless L2 networks."}],["$","meta","17",{"name":"twitter:image","content":"https://our.status.im/content/images/2026/03/28---Blog---Cover.jpg"}],["$","link","18",{"rel":"icon","href":"/icon2.png?d102c5988532e764","type":"image/png","sizes":"128x128"}],["$","$L26","19",{}]],"error":null,"digest":"$undefined"}
+11:"$c:metadata"

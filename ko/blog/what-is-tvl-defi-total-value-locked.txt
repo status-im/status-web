@@ -1,0 +1,297 @@
+1:"$Sreact.fragment"
+2:I[6978,[],""]
+3:I[5232,[],""]
+4:I[6132,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],""]
+9:I[9019,[],"OutletBoundary"]
+b:I[602,[],"AsyncMetadataOutlet"]
+d:I[9019,[],"ViewportBoundary"]
+f:I[9019,[],"MetadataBoundary"]
+10:"$Sreact.suspense"
+12:I[7098,[],""]
+:HL["/_next/static/media/e4af272ccee01ff0-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/css/24bd7f809405cf73.css","style"]
+0:{"P":null,"b":"jZsj7itHS8RA_8vdfQaak","p":"","c":["","ko","blog","what-is-tvl-defi-total-value-locked"],"i":false,"f":[[["",{"children":["(site)",{"children":[["locale","ko","d"],{"children":["blog",{"children":[["slug","what-is-tvl-defi-total-value-locked","d"],{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true]}]}],["",["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-[calc(100dvh-189px)] flex-1 items-center justify-center px-5 lg:min-h-[calc(100dvh-118px)]","children":["$","div",null,{"className":"flex max-w-[696px] flex-col items-center gap-8","children":[["$","h1",null,{"className":"text-center text-40 font-700 lg:text-64","children":"This is not the page you're looking for"}],["$","$L4",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-purple border-[transparent] hover:bg-purple-dark text-white-100 h-10 py-[9px] rounded-12 px-4","href":"/","children":["$undefined","Take me home","$undefined"],"ref":"$undefined"}]]}]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["(site)",["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["locale","ko","d"],["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/24bd7f809405cf73.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],"$L5"]}],{"children":["blog",["$","$1","c",{"children":[null,["$","div",null,{"className":"relative flex min-h-screen justify-center overflow-clip px-2 2xl:px-0","children":["$","div",null,{"className":"relative w-full max-w-[1418px] border-x border-neutral-20","children":[["$","div",null,{"className":"absolute -left-2 top-0 z-50 h-full w-2 bg-gradient-to-r from-white-100 to-[transparent] 2xl:-left-12 2xl:w-12"}],["$","div",null,{"className":"absolute -right-2 top-0 z-50 h-full w-2 bg-gradient-to-l from-white-100 to-[transparent] 2xl:-right-12 2xl:w-12"}],"$L6",["$","main",null,{"children":["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]}],["$","div",null,{"className":"relative","children":[["$","div",null,{"className":"absolute left-[-3px] top-[-2px] size-[5px] rounded-full bg-neutral-20"}],["$","div",null,{"className":"relative bottom-0 h-px bg-neutral-20 z-20 left-1/2 w-[calc(100%+16px)] lg:w-[calc(100%+16px)] 2xl:w-[calc(100%+96px)] -translate-x-1/2"}],"$undefined",["$","div",null,{"className":"absolute bottom-[-2px] right-[-3px] size-[5px] rounded-full bg-neutral-20"}]]}],"$L7"]}]}]]}],{"children":[["slug","what-is-tvl-defi-total-value-locked","d"],["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":["$L8",null,["$","$L9",null,{"children":["$La",["$","$Lb",null,{"promise":"$@c"}]]}]]}],{},null,false]},null,false]},null,false]},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,[["$","$Ld",null,{"children":"$Le"}],["$","meta",null,{"name":"next-size-adjust","content":""}]],["$","$Lf",null,{"children":["$","div",null,{"hidden":true,"children":["$","$10",null,{"fallback":null,"children":"$L11"}]}]}]]}],false]],"m":"$undefined","G":["$12",[]],"s":false,"S":true}
+13:I[928,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"Image"]
+6:["$","header",null,{"className":"sticky top-0 z-[60] w-full bg-white-90 backdrop-blur supports-[backdrop-filter]:bg-white-80","children":[["$","div",null,{"className":"mx-auto flex h-16 items-center justify-between px-4","children":[["$","$L4",null,{"href":"/","className":"flex items-center space-x-2","children":["$","$L13",null,{"src":"/logo.svg","alt":"Status Network Logo","width":210,"height":32}],"ref":"$undefined"}],["$","div",null,{"className":"flex items-center gap-3","children":[["$","$L4",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-white-100 border-neutral-30 hover:border-neutral-40 hover:bg-white-80 text-dark-100 h-8 py-[5px] rounded-10 px-3 hidden sm:block","href":"/","children":["$undefined","Home","$undefined"],"ref":"$undefined"}],["$","a",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-purple border-[transparent] hover:bg-purple-dark text-white-100 h-8 py-[5px] rounded-10 px-3","target":"_blank","rel":"noopener noreferrer","href":"https://hub.status.network/","children":["$undefined","Get started","$undefined"],"ref":"$undefined"}]]}]]}],["$","div",null,{"className":"relative","children":[["$","div",null,{"className":"absolute left-[-3px] top-[-2px] size-[5px] rounded-full bg-neutral-20"}],["$","div",null,{"className":"relative bottom-0 h-px bg-neutral-20 z-20 left-1/2 w-[calc(100%+16px)] lg:w-[calc(100%+16px)] 2xl:w-[calc(100%+96px)] -translate-x-1/2"}],"$undefined",["$","div",null,{"className":"absolute bottom-[-2px] right-[-3px] size-[5px] rounded-full bg-neutral-20"}]]}]]}]
+7:["$","footer",null,{"className":"relative z-[61]","children":["$","div",null,{"className":"grid gap-4 p-3 lg:grid-cols-[1fr,auto,auto] lg:gap-5 lg:p-4","children":[["$","div",null,{"className":"flex flex-col justify-center gap-2 lg:flex-row lg:justify-start lg:gap-3","children":[["$","span",null,{"className":"text-center text-13 lg:text-left","children":"© Status Research & Development GmbH"}],["$","svg",null,{"width":"2","height":"2","viewBox":"0 0 2 2","fill":"none","xmlns":"http://www.w3.org/2000/svg","className":"hidden text-neutral-50 lg:block","children":["$","circle",null,{"cx":"1","cy":"1","r":"1","fill":"#A1ABBD"}]}]]}],["$","div",null,{"className":"flex flex-col items-center justify-center gap-3 lg:flex-row lg:justify-end","children":[["$","div",null,{"className":"flex items-center justify-center gap-4 md:gap-3 lg:justify-end","children":[["$","$L4",null,{"href":"/legal/terms-of-use","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Terms of Use","ref":"$undefined"}],["$","$L4",null,{"href":"/legal/privacy-policy","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Privacy Policy","ref":"$undefined"}],["$","$L4",null,{"href":"/blog","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Blog","ref":"$undefined"}],"$L14"]}],["$","svg",null,{"width":"2","height":"2","viewBox":"0 0 2 2","fill":"none","xmlns":"http://www.w3.org/2000/svg","className":"2md:hidden text-neutral-50","children":["$","circle",null,{"cx":"1","cy":"1","r":"1","fill":"#A1ABBD"}]}],["$","div",null,{"className":"flex justify-center gap-6 lg:justify-end","children":[["$","a","Status",{"href":"https://status.app","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/status.6be65460.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"Status","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}],["$","a","Twitter",{"href":"https://x.com/StatusL2","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/twitter.6865a7e5.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"Twitter","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}],["$","a","GitHub",{"href":"https://github.com/status-im","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/github.90103528.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"GitHub","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}]]}]]}]]}]}]
+17:I[6105,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","726","static/chunks/726-a688395c743bdde3.js","565","static/chunks/565-e7a70831c2486b41.js","472","static/chunks/app/(site)/%5Blocale%5D/layout-fe09f44bffcc5314.js"],"Analytics"]
+18:I[5718,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","726","static/chunks/726-a688395c743bdde3.js","565","static/chunks/565-e7a70831c2486b41.js","472","static/chunks/app/(site)/%5Blocale%5D/layout-fe09f44bffcc5314.js"],""]
+15:T433,{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Status Network",
+  "url": "https://status.network/",
+  "logo": "https://status.network/logo.svg",
+  "description": "Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack, with network-level spam protection enforced through reputation (Karma) and execution funded by native yield rather than user-paid gas fees.",
+  "sameAs": [
+    "https://x.com/StatusL2",
+    "https://github.com/status-im"
+  ],
+  "@id": "https://status.network/#organization",
+  "knowsAbout": [
+    {
+      "@type": "Thing",
+      "name": "Ethereum Layer 2"
+    },
+    {
+      "@type": "Thing",
+      "name": "Gasless transactions"
+    },
+    {
+      "@type": "Thing",
+      "name": "Composable privacy"
+    },
+    {
+      "@type": "Thing",
+      "name": "Spam protection"
+    },
+    {
+      "@type": "Thing",
+      "name": "Reputation system"
+    },
+    {
+      "@type": "Thing",
+      "name": "Native yield funding"
+    },
+    {
+      "@type": "Thing",
+      "name": "Bots"
+    }
+  ]
+}5:["$","html",null,{"lang":"ko","children":["$","body",null,{"className":"__variable_9cc749 bg-white-100 text-neutral-100 antialiased selection:bg-purple selection:text-white-100","suppressHydrationWarning":true,"children":[[["$","script","0",{"id":"json-ld-0","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$15"}}],["$","script","1",{"id":"json-ld-1","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"WebSite\",\n  \"name\": \"Status Network\",\n  \"url\": \"https://status.network/\",\n  \"description\": \"Status Network is a privacy-first, fully gasless Ethereum Layer 2 designed for scalable onchain activity, coordinated through reputation and native yield.\",\n  \"@id\": \"https://status.network/#website\",\n  \"publisher\": {\n    \"@id\": \"https://status.network/#organization\"\n  },\n  \"about\": [\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Ethereum Layer 2\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Gasless transactions\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Composable privacy\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Spam protection\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Reputation system\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Native yield funding\"\n    }\n  ]\n}"}}],["$","script","2",{"id":"json-ld-2","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"SoftwareApplication\",\n  \"name\": \"Status Network\",\n  \"applicationCategory\": \"Blockchain\",\n  \"operatingSystem\": \"Web3\",\n  \"url\": \"https://status.network/\",\n  \"description\": \"Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack. Execution is coordinated through Karma, a non-transferable reputation system, and supported by native yield and network activity.\"\n}"}}]],"$L16",["$","$L17",null,{}],["$","$L18",null,{"strategy":"afterInteractive","src":"https://umami.bi.status.im/script.js","data-website-id":"0746c5dc-8cd3-45a4-9606-6bcf9adf248e","data-domains":"status.network","async":true}]]}]}]
+19:I[6156,["756","static/chunks/756-56d07e8fa5ffdccb.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","878","static/chunks/app/(site)/%5Blocale%5D/blog/layout-c6bf279edadbe978.js"],"default"]
+14:["$","$L19",null,{"ref":"$undefined","href":"/brand","locale":"$undefined","localeCookie":{"name":"NEXT_LOCALE","sameSite":"lax"},"className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Brand assets"}]
+1a:I[2756,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"default"]
+16:["$","$L1a",null,{"formats":"$undefined","locale":"ko","messages":{"meta":{"locale":"en","name":"English","direction":"ltr","description":"Complete Status Network website translations"},"common":{"loading":"Loading...","learn_more":"Learn More","get_started":"Get started","read_more":"Read More","read_docs":"Read docs","view_blog":"View blog","new":"NEW","testnet_live":"Testnet v2 is live!","promo_message":"Vaults withdrawals are now enabled","visit_hub":"withdraw now","visit_hub_aria":"withdraw now (opens in new tab)"},"navigation":{"home":"Home","about":"About","features":"Features","network":"Network","partners":"Partners","tokenomics":"Tokenomics","blog":"Blog","brand":"Brand"},"hero":{"title":"The gasless network","subtitle":"with sustainable funding for app builders","description":"Launch and scale your social apps and games with truly free transactions."},"about":{"section_number":"01","section_title":"WHAT IS STATUS NETWORK?","title_1":"The first Ethereum L2 with","title_2":"gas-free","title_3":"transactions at scale","title_4":"funded by native yield + fees.","description":"A free network with sustainable funding for public apps, games and protocols.","build_button":"Build on Status Network","learn_more_button":"Learn more"},"features":{"section_number":"02","section_title":"WHY STATUS NETWORK?","title":"Power to the community","sustainable_funding":{"title":"Sustainable public funding","description":"Status Network takes a radical step beyond short-term incentives. Powered by native yields and fees, its public app funding pool is governed by the community, ensuring a continuous allocation of capital for onchain builders.","step_1":"Users bridge yield-bearing assets to Status Network and increase the yield redirected to the funding pool.","step_2":"Apps and games apply for an allocation from the pool. The community votes on allocations using Karma, a non-transferrable governance token earned by contributing positively to the network:","step_2_staking":"Staking SNT","step_2_bridging":"Bridging yield-bearing tokens","step_2_using":"Using apps","step_2_premium":"Paying premium gas","step_2_donations":"Making direct donations to the funding pool","step_3":"Every funded project onboards new users, driving additional asset deposits and token swaps - generating more yield and fees to be allocated in the funding pool.","button":"Discover Karmic Tokenomics"},"gasless_transactions":{"title":"Gasless transactions","description_1":"On Status Network, anyone can experience free transactions! With the L2 operating costs covered by native yields and fees, no need to bridge gas to use an app.","description_2":"Apps and games developers can offer frictionless onboarding for their users at scale.","button":"Learn how it works"},"performance":{"title":"Built for performance, secured by Ethereum","description":"Leverage Ethereum's security with Linea's cutting-edge zkEVM rollup technology for high-speed transactions. Perfect for gaming, social, iGaming, and high-throughput applications.","button":"Learn more about Linea"},"decentralization":{"title":"Geared for decentralization","description":"Built on the core values of Status and the IFT ecosystem, Status Network is designed to become a truly decentralised L2. The endgame is to provide a censorship-resistant environment where communities can thrive without central points of control.","button":"Learn more"}},"partners":{"section_number":"03","section_title":"ECOSYSTEM AND PARTNERS","title_1":"Empowering bold","title_2":"creators and developers","subtitle":"Building with the best in the game","cats_fishing":{"title":"Cats Fishing","description":"The first open-sourced, proof of play mobile fishing game"},"spla_labs":{"title":"Spla Labs","description":"Builders of TODL & Ponzi Hero games"},"hash_vegas":{"title":"Hash Vegas","description":"Fair and transparent onchain gaming"},"ponzi_hero":{"title":"Ponzi Hero","description":"Earn NFTs, have some fun!"},"linea":{"title":"Linea","description":"Secure zkEVM L2 stack"},"gateway":{"title":"Gateway","description":"Rollup infrastructure and operation"},"din":{"title":"DIN","description":"Decentralised Infrastructure Network"}},"network":{"section_number":"04","section_title":"NETWORK","title":"Leverage the most advanced decentralised stack","description":"Builders get priority support from Institute of Free Technology solutions:","status":{"title":"Status","description":"Ethereum super-app with 4M+ downloads"},"logos":{"title":"Logos","description":"Open tech to restore civil society"},"waku":{"title":"Waku","description":"P2P encrypted messaging protocol"},"codex":{"title":"Codex","description":"Decentralised data storage layer"},"nimbus":{"title":"Nimbus","description":"Ethereum core devs. Powering Eth consensus"},"keycard":{"title":"Keycard","description":"Secure open-source hardware wallet"}},"tokenomics":{"section_number":"05","section_title":"TOKENOMICS","title":"Earn voting power through positive network engagement","description":"The more you contribute to the network, the more influence you gain over funding allocation and the network's roadmap priorities.","karma_note":"This is coordinated by Karma, a non-transferable governance token.","app_developer":{"title":"App developer","step_1":"Ship code","step_2":"Get traction","step_3":"Receive Karma","step_4":"Earn funding"},"liquidity_provider":{"title":"Liquidity provider","description":"Earn Karma for staking SNT and get LP rewards boosted by native yield."},"onchain_user":{"title":"Onchain user","description":"Get rewarded with Karma for bridging to the network and using apps. A higher Karma means more gasless transactions."}},"blog":{"title":"Stay up to date","view_blog_button":"View blog","category":"Updates","author":"Us","on_date":"on","page_title":"Blog.","page_description":"Long form articles, thoughts, and ideas.","share_article_on":"Share article on:","related_articles":"Related articles","breadcrumb_blog":"Blog","no_posts":"No posts available yet.","home":"Home","get_started":"Get started","post_1":{"title":"Status Steps Up as Founding Member of Linea Consortium"},"post_2":{"title":"Status Launches First Gasless Layer 2 on Linea"},"post_3":{"title":"Embracing Community Choices: Status to Develop SNT Staking and Status L2"}},"footer":{"copyright":"© Status Research & Development GmbH","privacy_policy":"Privacy Policy","terms_of_use":"Terms of Use","blog":"Blog","brand":"Brand assets"},"pre_footer":{"title":"Ready to build on the free network?","partner_button":"Partner with us","read_docs_button":"Read docs"},"brand":{"page_title":"Brand","page_description":"Get Status Network brand assets.","main_title":"Brand assets","last_updated":"Last updated: 12 November 2025","download_all":"Download all assets","logo_title":"Logo","logo_description":"Our main logo","logo_variation_title":"Logo variation","logo_variation_description":"For creative printing layouts","mark_only_title":"Mark only","mark_only_description":"Without wordmark","main_colors_title":"Main colors","main_colors_description":"Our main colors palette","artwork_title":"Artwork","artwork_description":"Our main characters","download_button":"Download","alt_text":{"main_logo":"Main logo","mark_only":"Mark only","artwork":"Artwork"}},"not_found":{"title":"This is not the page you're looking for","take_me_home":"Take me home"}},"now":"$undefined","timeZone":"UTC","children":"$L1b"}]
+1b:["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]
+e:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+a:null
+1f:I[610,[],"IconMark"]
+1c:T1339,{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq",
+  "url": "https://status.network/blog/what-is-tvl-defi-total-value-locked",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-q1",
+      "name": "What does total value locked mean in simple terms?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-a1",
+        "text": "TVL is the total dollar value of crypto assets deposited into a DeFi protocol's smart contracts. It shows how much capital users have committed to that protocol at a given time."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-q2",
+      "name": "How is TVL different from market cap?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-a2",
+        "text": "Market capitalization measures a token's price multiplied by its circulating supply. TVL measures the actual assets deposited into a protocol's contracts. A protocol can have high TVL and a low market cap, or the reverse."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-q3",
+      "name": "Can TVL go down even if no one withdraws funds?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-a3",
+        "text": "Yes. TVL is usually measured in US dollars, so it can fall when the prices of deposited tokens decline, even if users do not withdraw any assets."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-q4",
+      "name": "Why is double counting a problem with TVL?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-a4",
+        "text": "Double counting happens when the same underlying capital is counted more than once across multiple protocols. For example, if a deposited asset is wrapped into a receipt token and that token is deposited again elsewhere, both deposits may be counted, overstating the real capital in the system."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-q5",
+      "name": "What is the difference between idle TVL and productive TVL?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-a5",
+        "text": "Idle TVL sits in contracts without generating meaningful returns or utility. Productive TVL is actively used to earn yield, provide liquidity, secure systems, or fund protocol operations. On Status Network, bridged assets are designed to become yield-bearing so the capital remains productive."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-q6",
+      "name": "How does Status Network use TVL to fund gasless transactions?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-a6",
+        "text": "Status Network converts bridged assets such as ETH and stablecoins into yield-bearing forms through staking and lending strategies. The yield generated helps fund an L2 pool that covers transaction costs, allowing users to transact without paying gas fees directly."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-q7",
+      "name": "Is a higher TVL always better?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-a7",
+        "text": "Not always. TVL can be inflated by temporary incentives, mercenary capital, or double counting. Sustainable TVL backed by real protocol usage and productive capital is usually a stronger signal than raw size alone."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-q8",
+      "name": "Where can I check TVL data for DeFi protocols?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-a8",
+        "text": "DefiLlama is one of the most widely used TVL aggregators for DeFi. It tracks protocols across many blockchains using on-chain data and attempts to reduce distortions such as double counting."
+      }
+    }
+  ]
+}8:[[["$","script","0",{"id":"json-ld-0","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Article\",\n  \"headline\": \"What Is Total Value Locked (TVL) in DeFi? How to Use It (and Its Limits)\",\n  \"description\": \"TVL measures assets deposited in DeFi protocols. Learn what TVL tells you, where it misleads, and how yield-generating TVL differs from idle deposits.\",\n  \"image\": \"https://our.status.im/content/images/2026/03/23---Blog---Cover.jpg\",\n  \"datePublished\": \"2026-03-24T15:17:35.000+00:00\",\n  \"dateModified\": \"2026-03-24T15:17:35.000+00:00\",\n  \"author\": {\n    \"@type\": \"Person\",\n    \"name\": \"Kamila Lipska\"\n  },\n  \"publisher\": {\n    \"@type\": \"Organization\",\n    \"name\": \"Status Network\",\n    \"logo\": {\n      \"@type\": \"ImageObject\",\n      \"url\": \"https://status.network/logo.svg\"\n    }\n  }\n}"}}]],[["$","script","custom-jsonld-0",{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$1c"}}]],"$L1d","$L1e"]
+c:{"metadata":[["$","title","0",{"children":"What Is Total Value Locked (TVL) in DeFi? Guide for 2026"}],["$","meta","1",{"name":"description","content":"TVL measures assets deposited in DeFi protocols. Learn what TVL tells you, where it misleads, and how yield-generating TVL differs from idle deposits."}],["$","link","2",{"rel":"canonical","href":"https://status.network/blog/what-is-tvl-defi-total-value-locked"}],["$","link","3",{"rel":"alternate","hrefLang":"en","href":"https://status.network/blog/what-is-tvl-defi-total-value-locked"}],["$","link","4",{"rel":"alternate","hrefLang":"ko","href":"https://status.network/ko/blog/what-is-tvl-defi-total-value-locked"}],["$","link","5",{"rel":"alternate","hrefLang":"x-default","href":"https://status.network/blog/what-is-tvl-defi-total-value-locked"}],["$","meta","6",{"property":"og:title","content":"What Is Total Value Locked (TVL) in DeFi? How to Use It (and Its Limits)"}],["$","meta","7",{"property":"og:description","content":"TVL measures assets deposited in DeFi protocols. Learn what TVL tells you, where it misleads, and how yield-generating TVL differs from idle deposits."}],["$","meta","8",{"property":"og:url","content":"https://status.network/blog/what-is-tvl-defi-total-value-locked"}],["$","meta","9",{"property":"og:site_name","content":"Status Network"}],["$","meta","10",{"property":"og:locale","content":"en"}],["$","meta","11",{"property":"og:image","content":"https://our.status.im/content/images/2026/03/23---Blog---Cover.jpg"}],["$","meta","12",{"property":"og:type","content":"article"}],["$","meta","13",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","14",{"name":"twitter:site","content":"@StatusL2"}],["$","meta","15",{"name":"twitter:title","content":"What Is Total Value Locked (TVL) in DeFi? Guide for 2026"}],["$","meta","16",{"name":"twitter:description","content":"TVL measures assets deposited in DeFi protocols. Learn what TVL tells you, where it misleads, and how yield-generating TVL differs from idle deposits."}],["$","meta","17",{"name":"twitter:image","content":"https://our.status.im/content/images/2026/03/23---Blog---Cover.jpg"}],["$","link","18",{"rel":"icon","href":"/icon2.png?d102c5988532e764","type":"image/png","sizes":"128x128"}],["$","$L1f","19",{}]],"error":null,"digest":"$undefined"}
+11:"$c:metadata"
+20:I[2118,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"BlogPostDetailHydrated"]
+21:T2540,<p><strong>Total Value Locked (TVL)</strong> is the dollar value of all crypto assets deposited into a DeFi protocol's smart contracts. It counts tokens staked, lent, pooled for liquidity, or locked in vaults. This guide explains the key concepts and practical implications for builders and users.</p><p>TVL is the most common size metric in decentralized finance, but it has blind spots: double-counted deposits, price swings, and idle capital can all distort the number.</p><h2 id="why-does-tvl-matter">Why Does TVL Matter?</h2><p>TVL tells you one thing clearly: how much capital users trust a protocol to hold.</p><p>A rising TVL signals growing confidence. More deposits mean more liquidity for traders, more collateral for loans, and more yield for providers.</p><p>Investors use TVL to compare protocols. A DEX with $500M in TVL typically offers better trade execution than one with $5M.</p><p>TVL also helps gauge ecosystem health. An L2 network with high TVL suggests active use and deep markets.</p><p>But TVL is an input metric, not an outcome metric. It shows what went in, not what came out.</p><h2 id="how-is-tvl-calculated">How Is TVL Calculated?</h2><p>The basic formula is simple.</p><p><strong>TVL = Sum of all token balances in a protocol's smart contracts, priced in USD.</strong></p><p>Here is a step-by-step breakdown:</p><ol><li>Identify every smart contract the protocol controls.</li><li>Read the token balances held in each contract.</li><li>Multiply each token balance by its current USD price.</li><li>Add up all the values.</li></ol><p>Data aggregators like <strong>DefiLlama</strong> automate this process. They query on-chain data and apply pricing feeds in real time.</p><h3 id="what-counts-toward-tvl">What Counts Toward TVL?</h3>
+<!--kg-card-begin: html-->
+<table>
+<thead>
+<tr>
+<th>Deposit Type</th>
+<th>Counts as TVL?</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tokens in a lending pool</td>
+<td>Yes</td>
+<td>DAI deposited in Aave</td>
+</tr>
+<tr>
+<td>LP tokens in a DEX</td>
+<td>Yes</td>
+<td>ETH/USDC in Uniswap</td>
+</tr>
+<tr>
+<td>Staked governance tokens</td>
+<td>Yes</td>
+<td>SNT staked in a vault</td>
+</tr>
+<tr>
+<td>Collateral in a CDP</td>
+<td>Yes</td>
+<td>ETH locked to mint a stablecoin</td>
+</tr>
+<tr>
+<td>Tokens in a user's wallet</td>
+<td>No</td>
+<td>ETH sitting in MetaMask</td>
+</tr>
+<tr>
+<td>Unbridged assets on L1</td>
+<td>No</td>
+<td>Assets not yet on the L2</td>
+</tr>
+</tbody>
+</table>
+<!--kg-card-end: html-->
+<h3 id="a-quick-example">A Quick Example</h3><p>A lending protocol holds 10,000 ETH and 5,000,000 DAI. ETH trades at $3,000. DAI is $1.</p><p>TVL = (10,000 x $3,000) + (5,000,000 x $1) = $35,000,000.</p><p>If ETH drops to $2,000, TVL falls to $25,000,000. No one withdrew anything. The price moved.</p><h2 id="where-tvl-misleads-five-limitations">Where TVL Misleads: Five Limitations</h2><h3 id="1-double-counting">1. Double Counting</h3><p>A user deposits ETH into a lending protocol. The protocol issues a receipt token. The user deposits that receipt token into a yield aggregator. Both protocols count the same ETH in their TVL.</p><p>Ecosystem-level TVL often inflates because of this layering.</p><h3 id="2-price-sensitivity">2. Price Sensitivity</h3><p>TVL rises and falls with token prices. A protocol can lose zero deposits but see TVL drop 40% in a bear market. This creates the illusion of capital flight.</p><h3 id="3-idle-vs-productive-capital">3. Idle vs. Productive Capital</h3><p>Not all locked value generates returns. A billion dollars sitting idle in a contract looks impressive. It does nothing for users or the protocol's economy.</p><p>Productive TVL, where deposits earn yield or secure transactions, matters more than raw size.</p><h3 id="4-incentive-driven-deposits">4. Incentive-Driven Deposits</h3><p>"Mercenary capital" chases the highest yield. Protocols offering token rewards can inflate TVL temporarily. When incentives end, capital leaves.</p><p>Sustainable TVL grows from genuine utility, not short-term farming.</p><h3 id="5-cross-chain-confusion">5. Cross-Chain Confusion</h3><p>The same asset bridged across three chains can appear in three separate TVL counts. Aggregators try to adjust for this, but gaps remain.</p><h2 id="tvl-ratio-a-more-useful-metric">TVL Ratio: A More Useful Metric</h2><p>Divide a protocol's market cap by its TVL. This gives the <strong>TVL ratio</strong> (sometimes called the Fully Diluted Value to TVL ratio).</p><ul><li><strong>Ratio below 1</strong>: The market values the protocol at less than its deposits. Potentially undervalued.</li><li><strong>Ratio above 5</strong>: The market assigns a large premium. Growth expectations are high.</li></ul><p>This ratio adds context that raw TVL cannot provide.</p><h2 id="how-yield-generating-tvl-changes-the-equation">How Yield-Generating TVL Changes the Equation</h2><p>Traditional L2 networks hold bridged assets in contracts. Those assets sit idle. They secure nothing and earn nothing.</p><p><strong>Status Network</strong> takes a different approach. When users bridge ETH or DAI, those assets convert to yield-bearing forms through <a href="https://www.theblock.co/post/387769/lido-stvaults-mainnet"><strong>Lido</strong> V3 stVault</a> (ETH to stETH) and lending strategies via <a href="https://morpho.org/stories/sky/"><strong>Morpho</strong> and Sky </a>(stablecoins to sDAI). The generated yield flows into an L2 funding pool.</p><p>This means the TVL on <strong>Status Network</strong> is <a href="https://status.network/blog/the-dawn-of-nano-transaction-economics-beyond-the-friction-of-gas">structurally productive</a>. It funds <a href="https://status.network/blog/what-is-tvl-defi-total-value-locked">gasless transactions</a>, supports the apps funding pool, and sustains the network without relying on user gas fees.</p><p>The 30% native yield commission from bridged assets creates a direct link between TVL growth and network sustainability. Higher TVL generates more yield. More yield funds more builders and infrastructure. This is the core of the <strong>Status Network</strong> economic model.</p><p><a href="https://docs.status.network/build-for-karma"><strong>Karma</strong></a>, the network's soulbound <a href="https://docs.status.network/build-for-karma/guides/reputation-integration">reputation token</a>, reinforces this loop. Users earn <strong>Karma</strong> by bridging yield-bearing assets. Higher <strong>Karma</strong> scores unlock more free transactions and greater governance influence. Capital contribution and reputation grow together.</p><h2 id="how-to-evaluate-tvl-like-a-pro">How to Evaluate TVL Like a Pro</h2><p>Use these questions when analyzing any protocol's TVL:</p><ul><li><strong>Is the TVL organic or incentivized?</strong> Check if farming rewards inflate the number.</li><li><strong>How price-sensitive is it?</strong> A TVL dominated by one volatile token is fragile.</li><li><strong>Is capital productive?</strong> Yield-generating deposits add more value than idle ones.</li><li><strong>What is the double-counting risk?</strong> Look for receipt tokens and layered strategies.</li><li><strong>How stable is retention?</strong> Check 30-day and 90-day TVL trends, not just snapshots.</li></ul><h2 id="frequently-asked-questions">Frequently Asked Questions</h2><p><strong>What does total value locked mean in simple terms?</strong></p><p>TVL is the total dollar amount of crypto deposited into a DeFi protocol's smart contracts. It measures how much capital users have committed to that protocol at any given time.</p><p><strong>How is TVL different from market cap?</strong></p><p>Market cap reflects the price of a token times its supply. TVL reflects actual assets deposited in contracts. A protocol can have a small market cap but large TVL, or vice versa.</p><p><strong>Can TVL go down even if no one withdraws funds?</strong></p><p>Yes. TVL is priced in USD. If token prices drop, TVL decreases even when deposit amounts stay the same. Price volatility is a major driver of TVL changes.</p><p><strong>Why is double counting a problem with TVL?</strong></p><p>When a user deposits a token and receives a receipt token, then deposits that receipt token elsewhere, both protocols count the original value. This inflates the combined TVL beyond the actual capital in the system.</p><p><strong>What is the difference between idle TVL and productive TVL?</strong></p><p>Idle TVL sits in contracts without generating returns. Productive TVL earns yield, provides liquidity, or funds network operations. <strong>Status Network</strong> converts bridged assets into yield-bearing forms, making its TVL structurally productive.</p><p><strong>How does Status Network use TVL to fund gasless transactions?</strong></p><p>Bridged ETH and DAI convert to stETH and sDAI through <strong>Lido</strong> and lending strategies. The yield generated funds an L2 pool that covers transaction costs, removing the need for users to pay gas fees.</p><p><strong>Is a higher TVL always better?</strong></p><p>Not necessarily. TVL inflated by short-term farming incentives or double counting can be misleading. Sustainable, organic TVL driven by genuine protocol utility is a stronger signal than raw size.</p><p><strong>Where can I check TVL data for DeFi protocols?</strong></p><p><a href="https://defillama.com/"><strong>DefiLlama</strong></a> is the most widely used TVL aggregator. It tracks hundreds of protocols across multiple chains with real-time on-chain data and minimal double-counting adjustments.</p>22:T1339,{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq",
+  "url": "https://status.network/blog/what-is-tvl-defi-total-value-locked",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-q1",
+      "name": "What does total value locked mean in simple terms?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-a1",
+        "text": "TVL is the total dollar value of crypto assets deposited into a DeFi protocol's smart contracts. It shows how much capital users have committed to that protocol at a given time."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-q2",
+      "name": "How is TVL different from market cap?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-a2",
+        "text": "Market capitalization measures a token's price multiplied by its circulating supply. TVL measures the actual assets deposited into a protocol's contracts. A protocol can have high TVL and a low market cap, or the reverse."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-q3",
+      "name": "Can TVL go down even if no one withdraws funds?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-a3",
+        "text": "Yes. TVL is usually measured in US dollars, so it can fall when the prices of deposited tokens decline, even if users do not withdraw any assets."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-q4",
+      "name": "Why is double counting a problem with TVL?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-a4",
+        "text": "Double counting happens when the same underlying capital is counted more than once across multiple protocols. For example, if a deposited asset is wrapped into a receipt token and that token is deposited again elsewhere, both deposits may be counted, overstating the real capital in the system."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-q5",
+      "name": "What is the difference between idle TVL and productive TVL?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-a5",
+        "text": "Idle TVL sits in contracts without generating meaningful returns or utility. Productive TVL is actively used to earn yield, provide liquidity, secure systems, or fund protocol operations. On Status Network, bridged assets are designed to become yield-bearing so the capital remains productive."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-q6",
+      "name": "How does Status Network use TVL to fund gasless transactions?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-a6",
+        "text": "Status Network converts bridged assets such as ETH and stablecoins into yield-bearing forms through staking and lending strategies. The yield generated helps fund an L2 pool that covers transaction costs, allowing users to transact without paying gas fees directly."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-q7",
+      "name": "Is a higher TVL always better?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-a7",
+        "text": "Not always. TVL can be inflated by temporary incentives, mercenary capital, or double counting. Sustainable TVL backed by real protocol usage and productive capital is usually a stronger signal than raw size alone."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-q8",
+      "name": "Where can I check TVL data for DeFi protocols?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-tvl-defi-total-value-locked#faq-a8",
+        "text": "DefiLlama is one of the most widely used TVL aggregators for DeFi. It tracks protocols across many blockchains using on-chain data and attempts to reduce distortions such as double counting."
+      }
+    }
+  ]
+}1d:["$","$L20",null,{"slug":"what-is-tvl-defi-total-value-locked","initialPost":{"slug":"what-is-tvl-defi-total-value-locked","title":"What Is Total Value Locked (TVL) in DeFi? How to Use It (and Its Limits)","html":"$21","feature_image":"https://our.status.im/content/images/2026/03/23---Blog---Cover.jpg","feature_image_alt":"Total value locked TVL in decentralized finance DeFi explained with calculation methods and limitations.","published_at":"2026-03-24T15:17:35.000+00:00","updated_at":"2026-03-24T15:17:35.000+00:00","codeinjection_head":"$22","codeinjection_foot":null,"primary_tag":{"name":"status-network-blog","slug":"status-network-blog"},"primary_author":{"id":"6915ef6ff70ca800016c5a8d","name":"Kamila Lipska","slug":"kamila","profile_image":null,"cover_image":null,"bio":null,"website":null,"location":null,"facebook":null,"twitter":null,"meta_title":null,"meta_description":null,"url":"https://our.status.im/author/kamila/"}},"labels":{"breadcrumbBlog":"Blog","onDate":"on","shareArticleOn":"Share article on:"}}]
+1e:["$","div",null,{"className":"border-t border-neutral-10 bg-neutral-10 px-5 pb-16 pt-10 xl:pb-24","children":["$","div",null,{"className":"mx-auto w-full max-w-[1184px]","children":[["$","h2",null,{"className":"mb-6 text-27 font-600","children":"Related articles"}],["$","div",null,{"className":"grid gap-5 md:grid-cols-2 xl:grid-cols-4","children":["$L23","$L24","$L25","$L26"]}]]}]}]
+23:["$","$L4","69dcde17834292000196a55e",{"href":"/blog/snt-staking-earn-karma","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"SNT Staking: How to Earn Karma on Status Network"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/41---Blog---Cover.jpg","alt":"Staking SNT earns Karma, a non-transferable reputation token that unlocks free transactions and governance voting power."}]}]],"ref":"$undefined"}]
+24:["$","$L4","69dcc688834292000196a542",{"href":"/blog/privacy-l2-stealth-addresses-bermuda","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"Privacy on Ethereum Layer 2: How Bermuda Enables Stealth Addresses"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/40---Blog---Cover.jpg","alt":"Ethereum Layer 2 privacy with stealth addresses, confidential balances, zero knowledge proofs, Bermuda protocol execution."}]}]],"ref":"$undefined"}]
+25:["$","$L4","69dcc2cc834292000196a529",{"href":"/blog/what-is-mev-maximal-extractable-value","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"What Is MEV? Maximal Extractable Value and Its Impact on Users"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/39---Blog---Cover.jpg","alt":"Maximal extractable value MEV blockchain transaction ordering impact on crypto users and DeFi trades."}]}]],"ref":"$undefined"}]
+26:["$","$L4","69d6452a834292000196a509",{"href":"/blog/gas-fees-are-a-privacy-leak-no-pricing-model-can-fix","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"Gas Fees Are a Privacy Leak No Pricing Model Can Fix"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 8, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/38---Blog---Cover.jpg","alt":"How gas funding trail links blockchain account activity to transaction metadata."}]}]],"ref":"$undefined"}]

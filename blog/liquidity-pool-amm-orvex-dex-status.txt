@@ -1,0 +1,294 @@
+1:"$Sreact.fragment"
+2:I[6978,[],""]
+3:I[5232,[],""]
+4:I[6132,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],""]
+9:I[9019,[],"OutletBoundary"]
+b:I[602,[],"AsyncMetadataOutlet"]
+d:I[9019,[],"ViewportBoundary"]
+f:I[9019,[],"MetadataBoundary"]
+10:"$Sreact.suspense"
+12:I[7098,[],""]
+:HL["/_next/static/media/e4af272ccee01ff0-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/css/24bd7f809405cf73.css","style"]
+0:{"P":null,"b":"jZsj7itHS8RA_8vdfQaak","p":"","c":["","/","blog","liquidity-pool-amm-orvex-dex-status"],"i":false,"f":[[["",{"children":["(site)",{"children":[["locale","/","d"],{"children":["blog",{"children":[["slug","liquidity-pool-amm-orvex-dex-status","d"],{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true]}]}],["",["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-[calc(100dvh-189px)] flex-1 items-center justify-center px-5 lg:min-h-[calc(100dvh-118px)]","children":["$","div",null,{"className":"flex max-w-[696px] flex-col items-center gap-8","children":[["$","h1",null,{"className":"text-center text-40 font-700 lg:text-64","children":"This is not the page you're looking for"}],["$","$L4",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-purple border-[transparent] hover:bg-purple-dark text-white-100 h-10 py-[9px] rounded-12 px-4","href":"/","children":["$undefined","Take me home","$undefined"],"ref":"$undefined"}]]}]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["(site)",["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["locale","/","d"],["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/24bd7f809405cf73.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],"$L5"]}],{"children":["blog",["$","$1","c",{"children":[null,["$","div",null,{"className":"relative flex min-h-screen justify-center overflow-clip px-2 2xl:px-0","children":["$","div",null,{"className":"relative w-full max-w-[1418px] border-x border-neutral-20","children":[["$","div",null,{"className":"absolute -left-2 top-0 z-50 h-full w-2 bg-gradient-to-r from-white-100 to-[transparent] 2xl:-left-12 2xl:w-12"}],["$","div",null,{"className":"absolute -right-2 top-0 z-50 h-full w-2 bg-gradient-to-l from-white-100 to-[transparent] 2xl:-right-12 2xl:w-12"}],"$L6",["$","main",null,{"children":["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]}],["$","div",null,{"className":"relative","children":[["$","div",null,{"className":"absolute left-[-3px] top-[-2px] size-[5px] rounded-full bg-neutral-20"}],["$","div",null,{"className":"relative bottom-0 h-px bg-neutral-20 z-20 left-1/2 w-[calc(100%+16px)] lg:w-[calc(100%+16px)] 2xl:w-[calc(100%+96px)] -translate-x-1/2"}],"$undefined",["$","div",null,{"className":"absolute bottom-[-2px] right-[-3px] size-[5px] rounded-full bg-neutral-20"}]]}],"$L7"]}]}]]}],{"children":[["slug","liquidity-pool-amm-orvex-dex-status","d"],["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":["$L8",null,["$","$L9",null,{"children":["$La",["$","$Lb",null,{"promise":"$@c"}]]}]]}],{},null,false]},null,false]},null,false]},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,[["$","$Ld",null,{"children":"$Le"}],["$","meta",null,{"name":"next-size-adjust","content":""}]],["$","$Lf",null,{"children":["$","div",null,{"hidden":true,"children":["$","$10",null,{"fallback":null,"children":"$L11"}]}]}]]}],false]],"m":"$undefined","G":["$12",[]],"s":false,"S":true}
+13:I[928,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"Image"]
+6:["$","header",null,{"className":"sticky top-0 z-[60] w-full bg-white-90 backdrop-blur supports-[backdrop-filter]:bg-white-80","children":[["$","div",null,{"className":"mx-auto flex h-16 items-center justify-between px-4","children":[["$","$L4",null,{"href":"/","className":"flex items-center space-x-2","children":["$","$L13",null,{"src":"/logo.svg","alt":"Status Network Logo","width":210,"height":32}],"ref":"$undefined"}],["$","div",null,{"className":"flex items-center gap-3","children":[["$","$L4",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-white-100 border-neutral-30 hover:border-neutral-40 hover:bg-white-80 text-dark-100 h-8 py-[5px] rounded-10 px-3 hidden sm:block","href":"/","children":["$undefined","Home","$undefined"],"ref":"$undefined"}],["$","a",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-purple border-[transparent] hover:bg-purple-dark text-white-100 h-8 py-[5px] rounded-10 px-3","target":"_blank","rel":"noopener noreferrer","href":"https://hub.status.network/","children":["$undefined","Get started","$undefined"],"ref":"$undefined"}]]}]]}],["$","div",null,{"className":"relative","children":[["$","div",null,{"className":"absolute left-[-3px] top-[-2px] size-[5px] rounded-full bg-neutral-20"}],["$","div",null,{"className":"relative bottom-0 h-px bg-neutral-20 z-20 left-1/2 w-[calc(100%+16px)] lg:w-[calc(100%+16px)] 2xl:w-[calc(100%+96px)] -translate-x-1/2"}],"$undefined",["$","div",null,{"className":"absolute bottom-[-2px] right-[-3px] size-[5px] rounded-full bg-neutral-20"}]]}]]}]
+7:["$","footer",null,{"className":"relative z-[61]","children":["$","div",null,{"className":"grid gap-4 p-3 lg:grid-cols-[1fr,auto,auto] lg:gap-5 lg:p-4","children":[["$","div",null,{"className":"flex flex-col justify-center gap-2 lg:flex-row lg:justify-start lg:gap-3","children":[["$","span",null,{"className":"text-center text-13 lg:text-left","children":"© Status Research & Development GmbH"}],["$","svg",null,{"width":"2","height":"2","viewBox":"0 0 2 2","fill":"none","xmlns":"http://www.w3.org/2000/svg","className":"hidden text-neutral-50 lg:block","children":["$","circle",null,{"cx":"1","cy":"1","r":"1","fill":"#A1ABBD"}]}]]}],["$","div",null,{"className":"flex flex-col items-center justify-center gap-3 lg:flex-row lg:justify-end","children":[["$","div",null,{"className":"flex items-center justify-center gap-4 md:gap-3 lg:justify-end","children":[["$","$L4",null,{"href":"/legal/terms-of-use","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Terms of Use","ref":"$undefined"}],["$","$L4",null,{"href":"/legal/privacy-policy","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Privacy Policy","ref":"$undefined"}],["$","$L4",null,{"href":"/blog","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Blog","ref":"$undefined"}],"$L14"]}],["$","svg",null,{"width":"2","height":"2","viewBox":"0 0 2 2","fill":"none","xmlns":"http://www.w3.org/2000/svg","className":"2md:hidden text-neutral-50","children":["$","circle",null,{"cx":"1","cy":"1","r":"1","fill":"#A1ABBD"}]}],["$","div",null,{"className":"flex justify-center gap-6 lg:justify-end","children":[["$","a","Status",{"href":"https://status.app","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/status.6be65460.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"Status","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}],["$","a","Twitter",{"href":"https://x.com/StatusL2","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/twitter.6865a7e5.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"Twitter","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}],["$","a","GitHub",{"href":"https://github.com/status-im","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/github.90103528.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"GitHub","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}]]}]]}]]}]}]
+17:I[6105,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","726","static/chunks/726-a688395c743bdde3.js","565","static/chunks/565-e7a70831c2486b41.js","472","static/chunks/app/(site)/%5Blocale%5D/layout-fe09f44bffcc5314.js"],"Analytics"]
+18:I[5718,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","726","static/chunks/726-a688395c743bdde3.js","565","static/chunks/565-e7a70831c2486b41.js","472","static/chunks/app/(site)/%5Blocale%5D/layout-fe09f44bffcc5314.js"],""]
+15:T433,{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Status Network",
+  "url": "https://status.network/",
+  "logo": "https://status.network/logo.svg",
+  "description": "Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack, with network-level spam protection enforced through reputation (Karma) and execution funded by native yield rather than user-paid gas fees.",
+  "sameAs": [
+    "https://x.com/StatusL2",
+    "https://github.com/status-im"
+  ],
+  "@id": "https://status.network/#organization",
+  "knowsAbout": [
+    {
+      "@type": "Thing",
+      "name": "Ethereum Layer 2"
+    },
+    {
+      "@type": "Thing",
+      "name": "Gasless transactions"
+    },
+    {
+      "@type": "Thing",
+      "name": "Composable privacy"
+    },
+    {
+      "@type": "Thing",
+      "name": "Spam protection"
+    },
+    {
+      "@type": "Thing",
+      "name": "Reputation system"
+    },
+    {
+      "@type": "Thing",
+      "name": "Native yield funding"
+    },
+    {
+      "@type": "Thing",
+      "name": "Bots"
+    }
+  ]
+}5:["$","html",null,{"lang":"en","children":["$","body",null,{"className":"__variable_9cc749 bg-white-100 text-neutral-100 antialiased selection:bg-purple selection:text-white-100","suppressHydrationWarning":true,"children":[[["$","script","0",{"id":"json-ld-0","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$15"}}],["$","script","1",{"id":"json-ld-1","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"WebSite\",\n  \"name\": \"Status Network\",\n  \"url\": \"https://status.network/\",\n  \"description\": \"Status Network is a privacy-first, fully gasless Ethereum Layer 2 designed for scalable onchain activity, coordinated through reputation and native yield.\",\n  \"@id\": \"https://status.network/#website\",\n  \"publisher\": {\n    \"@id\": \"https://status.network/#organization\"\n  },\n  \"about\": [\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Ethereum Layer 2\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Gasless transactions\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Composable privacy\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Spam protection\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Reputation system\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Native yield funding\"\n    }\n  ]\n}"}}],["$","script","2",{"id":"json-ld-2","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"SoftwareApplication\",\n  \"name\": \"Status Network\",\n  \"applicationCategory\": \"Blockchain\",\n  \"operatingSystem\": \"Web3\",\n  \"url\": \"https://status.network/\",\n  \"description\": \"Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack. Execution is coordinated through Karma, a non-transferable reputation system, and supported by native yield and network activity.\"\n}"}}]],"$L16",["$","$L17",null,{}],["$","$L18",null,{"strategy":"afterInteractive","src":"https://umami.bi.status.im/script.js","data-website-id":"0746c5dc-8cd3-45a4-9606-6bcf9adf248e","data-domains":"status.network","async":true}]]}]}]
+19:I[6156,["756","static/chunks/756-56d07e8fa5ffdccb.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","878","static/chunks/app/(site)/%5Blocale%5D/blog/layout-c6bf279edadbe978.js"],"default"]
+14:["$","$L19",null,{"ref":"$undefined","href":"/brand","locale":"$undefined","localeCookie":{"name":"NEXT_LOCALE","sameSite":"lax"},"className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Brand assets"}]
+1a:I[2756,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"default"]
+16:["$","$L1a",null,{"formats":"$undefined","locale":"en","messages":{"meta":{"locale":"en","name":"English","direction":"ltr","description":"Complete Status Network website translations"},"common":{"loading":"Loading...","learn_more":"Learn More","get_started":"Get started","read_more":"Read More","read_docs":"Read docs","view_blog":"View blog","new":"NEW","testnet_live":"Testnet v2 is live!","promo_message":"Vaults withdrawals are now enabled","visit_hub":"withdraw now","visit_hub_aria":"withdraw now (opens in new tab)"},"navigation":{"home":"Home","about":"About","features":"Features","network":"Network","partners":"Partners","tokenomics":"Tokenomics","blog":"Blog","brand":"Brand"},"hero":{"title":"The gasless network","subtitle":"with sustainable funding for app builders","description":"Launch and scale your social apps and games with truly free transactions."},"about":{"section_number":"01","section_title":"WHAT IS STATUS NETWORK?","title_1":"The first Ethereum L2 with","title_2":"gas-free","title_3":"transactions at scale","title_4":"funded by native yield + fees.","description":"A free network with sustainable funding for public apps, games and protocols.","build_button":"Build on Status Network","learn_more_button":"Learn more"},"features":{"section_number":"02","section_title":"WHY STATUS NETWORK?","title":"Power to the community","sustainable_funding":{"title":"Sustainable public funding","description":"Status Network takes a radical step beyond short-term incentives. Powered by native yields and fees, its public app funding pool is governed by the community, ensuring a continuous allocation of capital for onchain builders.","step_1":"Users bridge yield-bearing assets to Status Network and increase the yield redirected to the funding pool.","step_2":"Apps and games apply for an allocation from the pool. The community votes on allocations using Karma, a non-transferrable governance token earned by contributing positively to the network:","step_2_staking":"Staking SNT","step_2_bridging":"Bridging yield-bearing tokens","step_2_using":"Using apps","step_2_premium":"Paying premium gas","step_2_donations":"Making direct donations to the funding pool","step_3":"Every funded project onboards new users, driving additional asset deposits and token swaps - generating more yield and fees to be allocated in the funding pool.","button":"Discover Karmic Tokenomics"},"gasless_transactions":{"title":"Gasless transactions","description_1":"On Status Network, anyone can experience free transactions! With the L2 operating costs covered by native yields and fees, no need to bridge gas to use an app.","description_2":"Apps and games developers can offer frictionless onboarding for their users at scale.","button":"Learn how it works"},"performance":{"title":"Built for performance, secured by Ethereum","description":"Leverage Ethereum's security with Linea's cutting-edge zkEVM rollup technology for high-speed transactions. Perfect for gaming, social, iGaming, and high-throughput applications.","button":"Learn more about Linea"},"decentralization":{"title":"Geared for decentralization","description":"Built on the core values of Status and the IFT ecosystem, Status Network is designed to become a truly decentralised L2. The endgame is to provide a censorship-resistant environment where communities can thrive without central points of control.","button":"Learn more"}},"partners":{"section_number":"03","section_title":"ECOSYSTEM AND PARTNERS","title_1":"Empowering bold","title_2":"creators and developers","subtitle":"Building with the best in the game","cats_fishing":{"title":"Cats Fishing","description":"The first open-sourced, proof of play mobile fishing game"},"spla_labs":{"title":"Spla Labs","description":"Builders of TODL & Ponzi Hero games"},"hash_vegas":{"title":"Hash Vegas","description":"Fair and transparent onchain gaming"},"ponzi_hero":{"title":"Ponzi Hero","description":"Earn NFTs, have some fun!"},"linea":{"title":"Linea","description":"Secure zkEVM L2 stack"},"gateway":{"title":"Gateway","description":"Rollup infrastructure and operation"},"din":{"title":"DIN","description":"Decentralised Infrastructure Network"}},"network":{"section_number":"04","section_title":"NETWORK","title":"Leverage the most advanced decentralised stack","description":"Builders get priority support from Institute of Free Technology solutions:","status":{"title":"Status","description":"Ethereum super-app with 4M+ downloads"},"logos":{"title":"Logos","description":"Open tech to restore civil society"},"waku":{"title":"Waku","description":"P2P encrypted messaging protocol"},"codex":{"title":"Codex","description":"Decentralised data storage layer"},"nimbus":{"title":"Nimbus","description":"Ethereum core devs. Powering Eth consensus"},"keycard":{"title":"Keycard","description":"Secure open-source hardware wallet"}},"tokenomics":{"section_number":"05","section_title":"TOKENOMICS","title":"Earn voting power through positive network engagement","description":"The more you contribute to the network, the more influence you gain over funding allocation and the network's roadmap priorities.","karma_note":"This is coordinated by Karma, a non-transferable governance token.","app_developer":{"title":"App developer","step_1":"Ship code","step_2":"Get traction","step_3":"Receive Karma","step_4":"Earn funding"},"liquidity_provider":{"title":"Liquidity provider","description":"Earn Karma for staking SNT and get LP rewards boosted by native yield."},"onchain_user":{"title":"Onchain user","description":"Get rewarded with Karma for bridging to the network and using apps. A higher Karma means more gasless transactions."}},"blog":{"title":"Stay up to date","view_blog_button":"View blog","category":"Updates","author":"Us","on_date":"on","page_title":"Blog.","page_description":"Long form articles, thoughts, and ideas.","share_article_on":"Share article on:","related_articles":"Related articles","breadcrumb_blog":"Blog","no_posts":"No posts available yet.","home":"Home","get_started":"Get started","post_1":{"title":"Status Steps Up as Founding Member of Linea Consortium"},"post_2":{"title":"Status Launches First Gasless Layer 2 on Linea"},"post_3":{"title":"Embracing Community Choices: Status to Develop SNT Staking and Status L2"}},"footer":{"copyright":"© Status Research & Development GmbH","privacy_policy":"Privacy Policy","terms_of_use":"Terms of Use","blog":"Blog","brand":"Brand assets"},"pre_footer":{"title":"Ready to build on the free network?","partner_button":"Partner with us","read_docs_button":"Read docs"},"brand":{"page_title":"Brand","page_description":"Get Status Network brand assets.","main_title":"Brand assets","last_updated":"Last updated: 12 November 2025","download_all":"Download all assets","logo_title":"Logo","logo_description":"Our main logo","logo_variation_title":"Logo variation","logo_variation_description":"For creative printing layouts","mark_only_title":"Mark only","mark_only_description":"Without wordmark","main_colors_title":"Main colors","main_colors_description":"Our main colors palette","artwork_title":"Artwork","artwork_description":"Our main characters","download_button":"Download","alt_text":{"main_logo":"Main logo","mark_only":"Mark only","artwork":"Artwork"}},"not_found":{"title":"This is not the page you're looking for","take_me_home":"Take me home"}},"now":"$undefined","timeZone":"UTC","children":"$L1b"}]
+1b:["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]
+e:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+a:null
+1f:I[610,[],"IconMark"]
+1c:T15f0,{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq",
+  "name": "Liquidity Pools, AMMs, and Orvex DEX on Status Network",
+  "url": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-q1",
+      "name": "What is a liquidity pool in simple terms?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-a1",
+        "text": "A liquidity pool is a smart contract that holds pairs of tokens used for trading. Liquidity providers deposit tokens into the pool and earn a share of trading fees generated by swaps."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-q2",
+      "name": "How does an automated market maker set prices?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-a2",
+        "text": "An automated market maker uses a mathematical formula to determine prices based on the ratio of tokens in a pool. A common formula is x multiplied by y equals k, which adjusts prices automatically as traders swap tokens."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-q3",
+      "name": "What is impermanent loss for liquidity providers?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-a3",
+        "text": "Impermanent loss occurs when the relative price of tokens in a liquidity pool changes after a provider deposits assets. When liquidity is withdrawn, the value received may be lower than if the tokens had simply been held outside the pool."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-q4",
+      "name": "Why do Layer 2 networks improve liquidity pool performance?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-a4",
+        "text": "Layer 2 networks typically provide faster transaction confirmations and lower fees than mainnet environments. These characteristics enable more frequent arbitrage and trading activity, which can help keep liquidity pool prices aligned with broader markets."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-q5",
+      "name": "How does Orvex DEX offer gasless swaps on Status Network?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-a5",
+        "text": "Status Network funds transaction execution through native yield generated by bridged assets rather than requiring user-paid gas fees. Traders on Orvex pay swap fees to liquidity providers but do not pay gas fees for transaction execution. More details are available at https://status.network/ and https://docs.status.network/tokenomics/economic-model."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-q6",
+      "name": "What extra rewards do Orvex liquidity providers earn beyond swap fees?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-a6",
+        "text": "In addition to swap fees, Orvex liquidity providers may receive incentive rewards funded by native yield. Governance participants holding Karma can vote on which liquidity pools receive additional incentive allocations. Further information is available at https://docs.status.network/tokenomics/economic-model and https://docs.status.network/tokenomics/karmic-tokenomics."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-q7",
+      "name": "Can Karma be purchased to influence Orvex liquidity gauges?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-a7",
+        "text": "No. Karma is a soulbound governance token on Status Network that cannot be purchased or transferred. It is earned through actions such as staking SNT, bridging assets, providing liquidity, or contributing to the ecosystem. More information is available at https://docs.status.network/tokenomics/karmic-tokenomics and https://status.network/."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-q8",
+      "name": "How does SNT staking relate to liquidity pools on Status Network?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-a8",
+        "text": "Staking SNT generates Karma, which provides voting power in governance decisions that allocate liquidity incentives on Orvex. Longer staking periods increase Karma multipliers, giving participants greater influence over incentive distribution. Additional details are available at https://docs.status.network/tokenomics/snt-staking and https://docs.status.network/tokenomics/karmic-tokenomics."
+      }
+    }
+  ]
+}8:[[["$","script","0",{"id":"json-ld-0","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Article\",\n  \"headline\": \"What Is a Liquidity Pool? How Orvex DEX Uses LPs Instead of Order Books\",\n  \"description\": \"Learn how liquidity pools replace order books in DeFi. See how AMMs and Orvex DEX enable gasless swaps on Status Network Layer 2 with native yield for LPs.\",\n  \"image\": \"https://our.status.im/content/images/2026/03/13---Blog---Cover.jpg\",\n  \"datePublished\": \"2026-03-09T11:56:26.000+00:00\",\n  \"dateModified\": \"2026-03-09T11:56:26.000+00:00\",\n  \"author\": {\n    \"@type\": \"Person\",\n    \"name\": \"Kamila Lipska\"\n  },\n  \"publisher\": {\n    \"@type\": \"Organization\",\n    \"name\": \"Status Network\",\n    \"logo\": {\n      \"@type\": \"ImageObject\",\n      \"url\": \"https://status.network/logo.svg\"\n    }\n  }\n}"}}]],[["$","script","custom-jsonld-0",{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$1c"}}]],"$L1d","$L1e"]
+c:{"metadata":[["$","title","0",{"children":"What Is a Liquidity Pool? AMMs on Layer 2 Explained"}],["$","meta","1",{"name":"description","content":"Learn how liquidity pools replace order books in DeFi. See how AMMs and Orvex DEX enable gasless swaps on Status Network Layer 2 with native yield for LPs."}],["$","link","2",{"rel":"canonical","href":"https://status.network/blog/liquidity-pool-amm-orvex-dex-status"}],["$","link","3",{"rel":"alternate","hrefLang":"en","href":"https://status.network/blog/liquidity-pool-amm-orvex-dex-status"}],["$","link","4",{"rel":"alternate","hrefLang":"ko","href":"https://status.network/ko/blog/liquidity-pool-amm-orvex-dex-status"}],["$","link","5",{"rel":"alternate","hrefLang":"x-default","href":"https://status.network/blog/liquidity-pool-amm-orvex-dex-status"}],["$","meta","6",{"property":"og:title","content":"What Is a Liquidity Pool? How Orvex DEX Uses LPs Instead of Order Books"}],["$","meta","7",{"property":"og:description","content":"Learn how liquidity pools replace order books in DeFi. See how AMMs and Orvex DEX enable gasless swaps on Status Network Layer 2 with native yield for LPs."}],["$","meta","8",{"property":"og:url","content":"https://status.network/blog/liquidity-pool-amm-orvex-dex-status"}],["$","meta","9",{"property":"og:site_name","content":"Status Network"}],["$","meta","10",{"property":"og:locale","content":"en"}],["$","meta","11",{"property":"og:image","content":"https://our.status.im/content/images/2026/03/13---Blog---Cover.jpg"}],["$","meta","12",{"property":"og:type","content":"article"}],["$","meta","13",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","14",{"name":"twitter:site","content":"@StatusL2"}],["$","meta","15",{"name":"twitter:title","content":"What Is a Liquidity Pool? AMMs on Layer 2 Explained"}],["$","meta","16",{"name":"twitter:description","content":"Learn how liquidity pools replace order books in DeFi. See how AMMs and Orvex DEX enable gasless swaps on Status Network Layer 2 with native yield for LPs."}],["$","meta","17",{"name":"twitter:image","content":"https://our.status.im/content/images/2026/03/13---Blog---Cover.jpg"}],["$","link","18",{"rel":"icon","href":"/icon2.png?d102c5988532e764","type":"image/png","sizes":"128x128"}],["$","$L1f","19",{}]],"error":null,"digest":"$undefined"}
+11:"$c:metadata"
+20:I[2118,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"BlogPostDetailHydrated"]
+21:T27c5,<p>A <strong>liquidity pool</strong> is a smart contract holding paired tokens that traders swap against instead of matching orders with a counterparty. An <strong>automated market maker</strong> (AMM) prices each trade using a math formula, removing the need for order books. On <a href="https://status.network/"><strong>Status Network</strong></a>, the native DEX <a href="https://status.network/blog/orvex-dex-zero-fee-trading"><strong>Orvex</strong> </a>runs this AMM model with zero gas fees, plus extra yield from productive Layer 1 capital.</p><h2 id="what-is-a-liquidity-pool">What Is a Liquidity Pool?</h2><p>Traditional exchanges use order books. Buyers post bids. Sellers post asks. A trade happens when prices match.</p><p>Liquidity pools skip this entirely.</p><p>A pool is a smart contract holding two tokens. Think ETH and a stablecoin. Anyone can deposit both tokens in equal value. Those depositors are called <strong>liquidity providers</strong> (LPs).</p><p>When a trader wants to swap Token A for Token B, they send Token A into the pool. The pool sends Token B back. No counterparty needed. No waiting for a match.</p><p>The pool charges a small fee on each swap. That fee goes to the LPs as a reward.</p><h2 id="how-does-an-automated-market-maker-work">How Does an Automated Market Maker Work?</h2><p>An <strong>AMM</strong> is the pricing engine behind every liquidity pool. The most common formula is the constant product equation:</p><p><strong>x × y = k</strong></p><p>Here, x is the quantity of Token A. y is the quantity of Token B. k is a constant.</p><p>When someone buys Token A, x decreases. To keep k constant, y must increase. This pushes Token A's price up. The formula self-adjusts with every trade.</p><p>No one sets the price. Supply and demand inside the pool do.</p><h3 id="why-amms-replaced-order-books-in-defi">Why AMMs Replaced Order Books in DeFi</h3><p>Order books need market makers. They need high throughput and low latency. That works on centralized exchanges.</p><p>On a blockchain, posting and canceling orders costs gas. Slow block times create stale quotes. Thin order books lead to bad prices.</p><p>AMMs solve all three problems:</p><ul><li>Pricing is automatic and instant</li><li>No orders to post or cancel</li><li>Any token pair can have a pool from day one</li></ul><p>This is why nearly every decentralized exchange uses the AMM model.</p><h2 id="what-do-liquidity-providers-earn">What Do Liquidity Providers Earn?</h2><p>LPs earn a share of swap fees proportional to their deposit. If you provide 1% of a pool, you earn 1% of all fees that pool collects.</p><p>Some protocols add token incentives on top. These "farming" rewards attract deeper liquidity, which means better prices for traders.</p><h3 id="the-tradeoff-impermanent-loss">The Tradeoff: Impermanent Loss</h3><p>LP returns are not risk-free. When token prices diverge, LPs may end up with less value than if they simply held both tokens.</p><p>This is called <strong>impermanent loss</strong>. It becomes permanent only if you withdraw while prices are still diverged.</p><p>Pools with correlated assets (like two stablecoins) carry lower impermanent loss risk. Pools with volatile pairs carry more.</p><h2 id="how-liquidity-pools-work-on-layer-2">How Liquidity Pools Work on Layer 2</h2><p>Ethereum mainnet (Layer 1) handles roughly 15 transactions per second. Gas fees spike during high demand. Both problems hit DEX traders hard.</p><p><strong>Layer 2</strong> networks process transactions off the main chain and post proofs back to Ethereum. This delivers higher throughput and lower costs.</p><p>For AMMs, Layer 2 means:</p><ul><li>Faster swap confirmations</li><li>Lower (or zero) transaction costs</li><li>More frequent arbitrage, which keeps pool prices accurate</li></ul><p>The result: tighter spreads and better execution for traders. More fee volume for LPs.</p><h2 id="how-orvex-dex-uses-liquidity-pools-on-status-network">How Orvex DEX Uses Liquidity Pools on Status Network</h2><p><strong>Orvex</strong> is the native DEX on <strong>Status Network</strong>, an Ethereum Layer 2 built on the <a href="https://status.app/blog/put-your-linea-tokens-to-work-ahead-of-status-network-launch"><strong>Linea</strong></a> zkEVM stack. It uses the AMM model described above, with key differences tied to the network's gasless architecture.</p><h3 id="zero-gas-fees-for-swaps">Zero Gas Fees for Swaps</h3><p>On most DEXs, every swap costs gas. On Status Network, transactions are gasless. The network funds execution through its <a href="https://status.network/blog/yield-farming-vs-native-yield"><strong>native yield</strong></a><strong> engine</strong>, not through user fees.</p><p>Bridged ETH converts to stETH via Lido. Bridged stablecoins generate yield through lending protocols like Morpho. A 30% share of that yield funds network operations.</p><p>Traders on <strong>Orvex</strong> pay zero gas. Swap fees still apply (those go to LPs), but the execution cost disappears.</p><h3 id="native-yield-on-top-of-swap-fees">Native Yield on Top of Swap Fees</h3><p>LPs on Orvex earn standard swap fees. They also earn a share of extra incentives funded by the network's native yield and fee pool.</p><p>This stacks two revenue streams:</p><ul><li>Swap fees from trading activity</li><li>Native yield incentives allocated by <a href="https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types"><strong>Karma</strong></a> holders</li></ul><h3 id="karma-governed-incentive-gauges">Karma-Governed Incentive Gauges</h3><p><strong>Karma</strong> is a soulbound reputation token <a href="https://docs.status.network/">on Status Network</a>. It cannot be bought, sold, or transferred. Users earn it by staking <strong>SNT</strong>, bridging assets, providing liquidity, or building apps.</p><p>Karma holders vote on which Orvex liquidity pools receive extra incentives. This is the gauge system.</p><p>Pools that attract Karma votes receive more rewards. This directs liquidity to the pairs the community values most.</p><h3 id="how-this-connects-to-the-economic-flywheel">How This Connects to the Economic Flywheel</h3><p>The cycle works like this:</p><ol><li>Users bridge ETH or stablecoins to Status Network</li><li>Those assets generate Layer 1 yield automatically</li><li>Yield and Orvex swap fees flow into the <a href="https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas">funding pool</a></li><li>Karma holders direct incentives to Orvex pools and app builders</li><li>Better incentives attract more LPs and more trading volume</li><li>Higher volume generates more fees, restarting the cycle</li></ol><p>This is the core economic model: capital coordination replaces gas extraction.</p><h2 id="liquidity-pools-vs-order-books-quick-comparison">Liquidity Pools vs. Order Books: Quick Comparison</h2>
+<!--kg-card-begin: html-->
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Order Book</th>
+<th>Liquidity Pool (AMM)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Price discovery</td>
+<td>Bid/ask matching</td>
+<td>Math formula (x × y = k)</td>
+</tr>
+<tr>
+<td>Counterparty</td>
+<td>Another trader</td>
+<td>Smart contract</td>
+</tr>
+<tr>
+<td>Market makers needed</td>
+<td>Yes</td>
+<td>No (anyone can LP)</td>
+</tr>
+<tr>
+<td>Works on-chain</td>
+<td>Poorly (gas costs)</td>
+<td>Natively</td>
+</tr>
+<tr>
+<td>Capital efficiency</td>
+<td>High for pros</td>
+<td>Improving with concentrated liquidity</td>
+</tr>
+</tbody>
+</table>
+<!--kg-card-end: html-->
+<h2 id="key-risks-to-understand">Key Risks to Understand</h2><p>AMMs are powerful, but not risk-free:</p><ul><li><strong>Impermanent loss</strong> can reduce LP returns during price swings</li><li><strong>Smart contract bugs</strong> could put deposited funds at risk</li><li><strong>Low-volume pools</strong> may not generate enough fees to offset IL</li><li><strong>Token incentives</strong> can attract mercenary capital that leaves when rewards dry up</li></ul><p>Always research a pool's volume, fee tier, and asset volatility before providing liquidity.</p><h2 id="frequently-asked-questions">Frequently Asked Questions</h2><p><strong>What is a liquidity pool in simple terms?</strong></p><p>A liquidity pool is a smart contract holding two tokens that traders swap against. Providers deposit tokens and earn fees from every trade.</p><p><strong>How does an automated market maker set prices?</strong></p><p>An AMM uses a math formula, commonly x × y = k, to adjust prices based on the ratio of tokens in the pool. No human or order book is involved.</p><p><strong>What is impermanent loss for liquidity providers?</strong></p><p>Impermanent loss occurs when the price ratio of pooled tokens changes after deposit. LPs may withdraw less value than if they had simply held both tokens.</p><p><strong>Why do Layer 2 networks improve liquidity pool performance?</strong></p><p>Layer 2 networks offer faster confirmations and lower costs. This enables more frequent arbitrage, keeping pool prices accurate and reducing spreads for traders.</p><p><strong>How does Orvex DEX offer gasless swaps on Status Network?</strong></p><p>Status Network funds transaction execution through native yield from bridged assets, not user gas fees. Orvex traders pay swap fees to LPs but zero gas.</p><p><strong>What extra rewards do Orvex liquidity providers earn beyond swap fees?</strong></p><p>Orvex LPs receive native yield incentives on top of standard swap fees. Karma holders vote on which pools receive extra incentive allocations.</p><p><strong>Can Karma be purchased to influence Orvex liquidity gauges?</strong></p><p>No. Karma is a <a href="https://docs.status.network/tokenomics/karmic-tokenomics">soulbound token</a> on Status Network. It is earned through staking SNT, bridging assets, providing liquidity, or building apps. It cannot be bought or transferred.</p><p><strong>How does SNT staking relate to liquidity pools on Status Network?</strong></p><p>Staking SNT earns Karma, which grants voting power over Orvex liquidity incentive gauges. Longer staking periods yield higher Karma multipliers, up to 4x standard or 9x with a four-year lock.</p>22:T15f0,{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq",
+  "name": "Liquidity Pools, AMMs, and Orvex DEX on Status Network",
+  "url": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-q1",
+      "name": "What is a liquidity pool in simple terms?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-a1",
+        "text": "A liquidity pool is a smart contract that holds pairs of tokens used for trading. Liquidity providers deposit tokens into the pool and earn a share of trading fees generated by swaps."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-q2",
+      "name": "How does an automated market maker set prices?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-a2",
+        "text": "An automated market maker uses a mathematical formula to determine prices based on the ratio of tokens in a pool. A common formula is x multiplied by y equals k, which adjusts prices automatically as traders swap tokens."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-q3",
+      "name": "What is impermanent loss for liquidity providers?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-a3",
+        "text": "Impermanent loss occurs when the relative price of tokens in a liquidity pool changes after a provider deposits assets. When liquidity is withdrawn, the value received may be lower than if the tokens had simply been held outside the pool."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-q4",
+      "name": "Why do Layer 2 networks improve liquidity pool performance?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-a4",
+        "text": "Layer 2 networks typically provide faster transaction confirmations and lower fees than mainnet environments. These characteristics enable more frequent arbitrage and trading activity, which can help keep liquidity pool prices aligned with broader markets."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-q5",
+      "name": "How does Orvex DEX offer gasless swaps on Status Network?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-a5",
+        "text": "Status Network funds transaction execution through native yield generated by bridged assets rather than requiring user-paid gas fees. Traders on Orvex pay swap fees to liquidity providers but do not pay gas fees for transaction execution. More details are available at https://status.network/ and https://docs.status.network/tokenomics/economic-model."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-q6",
+      "name": "What extra rewards do Orvex liquidity providers earn beyond swap fees?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-a6",
+        "text": "In addition to swap fees, Orvex liquidity providers may receive incentive rewards funded by native yield. Governance participants holding Karma can vote on which liquidity pools receive additional incentive allocations. Further information is available at https://docs.status.network/tokenomics/economic-model and https://docs.status.network/tokenomics/karmic-tokenomics."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-q7",
+      "name": "Can Karma be purchased to influence Orvex liquidity gauges?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-a7",
+        "text": "No. Karma is a soulbound governance token on Status Network that cannot be purchased or transferred. It is earned through actions such as staking SNT, bridging assets, providing liquidity, or contributing to the ecosystem. More information is available at https://docs.status.network/tokenomics/karmic-tokenomics and https://status.network/."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-q8",
+      "name": "How does SNT staking relate to liquidity pools on Status Network?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/liquidity-pool-amm-orvex-dex-status#faq-a8",
+        "text": "Staking SNT generates Karma, which provides voting power in governance decisions that allocate liquidity incentives on Orvex. Longer staking periods increase Karma multipliers, giving participants greater influence over incentive distribution. Additional details are available at https://docs.status.network/tokenomics/snt-staking and https://docs.status.network/tokenomics/karmic-tokenomics."
+      }
+    }
+  ]
+}1d:["$","$L20",null,{"slug":"liquidity-pool-amm-orvex-dex-status","initialPost":{"slug":"liquidity-pool-amm-orvex-dex-status","title":"What Is a Liquidity Pool? How Orvex DEX Uses LPs Instead of Order Books","html":"$21","feature_image":"https://our.status.im/content/images/2026/03/13---Blog---Cover.jpg","feature_image_alt":"Liquidity pool and automated market maker mechanics on Ethereum Layer 2   decentralized exchanges.","published_at":"2026-03-09T11:56:26.000+00:00","updated_at":"2026-03-09T11:56:26.000+00:00","codeinjection_head":"$22","codeinjection_foot":null,"primary_tag":{"name":"status-network-blog","slug":"status-network-blog"},"primary_author":{"id":"6915ef6ff70ca800016c5a8d","name":"Kamila Lipska","slug":"kamila","profile_image":null,"cover_image":null,"bio":null,"website":null,"location":null,"facebook":null,"twitter":null,"meta_title":null,"meta_description":null,"url":"https://our.status.im/author/kamila/"}},"labels":{"breadcrumbBlog":"Blog","onDate":"on","shareArticleOn":"Share article on:"}}]
+1e:["$","div",null,{"className":"border-t border-neutral-10 bg-neutral-10 px-5 pb-16 pt-10 xl:pb-24","children":["$","div",null,{"className":"mx-auto w-full max-w-[1184px]","children":[["$","h2",null,{"className":"mb-6 text-27 font-600","children":"Related articles"}],["$","div",null,{"className":"grid gap-5 md:grid-cols-2 xl:grid-cols-4","children":["$L23","$L24","$L25","$L26"]}]]}]}]
+23:["$","$L4","69dcde17834292000196a55e",{"href":"/blog/snt-staking-earn-karma","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"SNT Staking: How to Earn Karma on Status Network"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/41---Blog---Cover.jpg","alt":"Staking SNT earns Karma, a non-transferable reputation token that unlocks free transactions and governance voting power."}]}]],"ref":"$undefined"}]
+24:["$","$L4","69dcc688834292000196a542",{"href":"/blog/privacy-l2-stealth-addresses-bermuda","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"Privacy on Ethereum Layer 2: How Bermuda Enables Stealth Addresses"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/40---Blog---Cover.jpg","alt":"Ethereum Layer 2 privacy with stealth addresses, confidential balances, zero knowledge proofs, Bermuda protocol execution."}]}]],"ref":"$undefined"}]
+25:["$","$L4","69dcc2cc834292000196a529",{"href":"/blog/what-is-mev-maximal-extractable-value","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"What Is MEV? Maximal Extractable Value and Its Impact on Users"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/39---Blog---Cover.jpg","alt":"Maximal extractable value MEV blockchain transaction ordering impact on crypto users and DeFi trades."}]}]],"ref":"$undefined"}]
+26:["$","$L4","69d6452a834292000196a509",{"href":"/blog/gas-fees-are-a-privacy-leak-no-pricing-model-can-fix","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"Gas Fees Are a Privacy Leak No Pricing Model Can Fix"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 8, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/38---Blog---Cover.jpg","alt":"How gas funding trail links blockchain account activity to transaction metadata."}]}]],"ref":"$undefined"}]

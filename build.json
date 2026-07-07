@@ -1,0 +1,15 @@
+{
+    "timestamp": "2026-07-07T14:04:54Z",
+    "git": {
+        "commit": "791a9decfcb042b9ea98237ec92d1ef6a8155944",
+        "branch": "origin/issue-1259-noindex-audit",
+        "url": "git@github.com:status-im/status-web.git"
+    },
+    "build": {
+        "id": "4",
+        "number": "4",
+        "name": "website/dev.status.network",
+        "slave": "linux-02",
+        "url": "https://ci.infra.status.im/job/website/job/dev.status.network/4/"
+    }
+}

@@ -1,0 +1,385 @@
+1:"$Sreact.fragment"
+2:I[6978,[],""]
+3:I[5232,[],""]
+4:I[6132,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],""]
+9:I[9019,[],"OutletBoundary"]
+b:I[602,[],"AsyncMetadataOutlet"]
+d:I[9019,[],"ViewportBoundary"]
+f:I[9019,[],"MetadataBoundary"]
+10:"$Sreact.suspense"
+12:I[7098,[],""]
+:HL["/_next/static/media/e4af272ccee01ff0-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/css/24bd7f809405cf73.css","style"]
+0:{"P":null,"b":"jZsj7itHS8RA_8vdfQaak","p":"","c":["","ko","blog","snt-staking-earn-karma"],"i":false,"f":[[["",{"children":["(site)",{"children":[["locale","ko","d"],{"children":["blog",{"children":[["slug","snt-staking-earn-karma","d"],{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true]}]}],["",["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-[calc(100dvh-189px)] flex-1 items-center justify-center px-5 lg:min-h-[calc(100dvh-118px)]","children":["$","div",null,{"className":"flex max-w-[696px] flex-col items-center gap-8","children":[["$","h1",null,{"className":"text-center text-40 font-700 lg:text-64","children":"This is not the page you're looking for"}],["$","$L4",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-purple border-[transparent] hover:bg-purple-dark text-white-100 h-10 py-[9px] rounded-12 px-4","href":"/","children":["$undefined","Take me home","$undefined"],"ref":"$undefined"}]]}]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["(site)",["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["locale","ko","d"],["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/24bd7f809405cf73.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],"$L5"]}],{"children":["blog",["$","$1","c",{"children":[null,["$","div",null,{"className":"relative flex min-h-screen justify-center overflow-clip px-2 2xl:px-0","children":["$","div",null,{"className":"relative w-full max-w-[1418px] border-x border-neutral-20","children":[["$","div",null,{"className":"absolute -left-2 top-0 z-50 h-full w-2 bg-gradient-to-r from-white-100 to-[transparent] 2xl:-left-12 2xl:w-12"}],["$","div",null,{"className":"absolute -right-2 top-0 z-50 h-full w-2 bg-gradient-to-l from-white-100 to-[transparent] 2xl:-right-12 2xl:w-12"}],"$L6",["$","main",null,{"children":["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]}],["$","div",null,{"className":"relative","children":[["$","div",null,{"className":"absolute left-[-3px] top-[-2px] size-[5px] rounded-full bg-neutral-20"}],["$","div",null,{"className":"relative bottom-0 h-px bg-neutral-20 z-20 left-1/2 w-[calc(100%+16px)] lg:w-[calc(100%+16px)] 2xl:w-[calc(100%+96px)] -translate-x-1/2"}],"$undefined",["$","div",null,{"className":"absolute bottom-[-2px] right-[-3px] size-[5px] rounded-full bg-neutral-20"}]]}],"$L7"]}]}]]}],{"children":[["slug","snt-staking-earn-karma","d"],["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":["$L8",null,["$","$L9",null,{"children":["$La",["$","$Lb",null,{"promise":"$@c"}]]}]]}],{},null,false]},null,false]},null,false]},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,[["$","$Ld",null,{"children":"$Le"}],["$","meta",null,{"name":"next-size-adjust","content":""}]],["$","$Lf",null,{"children":["$","div",null,{"hidden":true,"children":["$","$10",null,{"fallback":null,"children":"$L11"}]}]}]]}],false]],"m":"$undefined","G":["$12",[]],"s":false,"S":true}
+13:I[928,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"Image"]
+6:["$","header",null,{"className":"sticky top-0 z-[60] w-full bg-white-90 backdrop-blur supports-[backdrop-filter]:bg-white-80","children":[["$","div",null,{"className":"mx-auto flex h-16 items-center justify-between px-4","children":[["$","$L4",null,{"href":"/","className":"flex items-center space-x-2","children":["$","$L13",null,{"src":"/logo.svg","alt":"Status Network Logo","width":210,"height":32}],"ref":"$undefined"}],["$","div",null,{"className":"flex items-center gap-3","children":[["$","$L4",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-white-100 border-neutral-30 hover:border-neutral-40 hover:bg-white-80 text-dark-100 h-8 py-[5px] rounded-10 px-3 hidden sm:block","href":"/","children":["$undefined","Home","$undefined"],"ref":"$undefined"}],["$","a",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-purple border-[transparent] hover:bg-purple-dark text-white-100 h-8 py-[5px] rounded-10 px-3","target":"_blank","rel":"noopener noreferrer","href":"https://hub.status.network/","children":["$undefined","Get started","$undefined"],"ref":"$undefined"}]]}]]}],["$","div",null,{"className":"relative","children":[["$","div",null,{"className":"absolute left-[-3px] top-[-2px] size-[5px] rounded-full bg-neutral-20"}],["$","div",null,{"className":"relative bottom-0 h-px bg-neutral-20 z-20 left-1/2 w-[calc(100%+16px)] lg:w-[calc(100%+16px)] 2xl:w-[calc(100%+96px)] -translate-x-1/2"}],"$undefined",["$","div",null,{"className":"absolute bottom-[-2px] right-[-3px] size-[5px] rounded-full bg-neutral-20"}]]}]]}]
+7:["$","footer",null,{"className":"relative z-[61]","children":["$","div",null,{"className":"grid gap-4 p-3 lg:grid-cols-[1fr,auto,auto] lg:gap-5 lg:p-4","children":[["$","div",null,{"className":"flex flex-col justify-center gap-2 lg:flex-row lg:justify-start lg:gap-3","children":[["$","span",null,{"className":"text-center text-13 lg:text-left","children":"© Status Research & Development GmbH"}],["$","svg",null,{"width":"2","height":"2","viewBox":"0 0 2 2","fill":"none","xmlns":"http://www.w3.org/2000/svg","className":"hidden text-neutral-50 lg:block","children":["$","circle",null,{"cx":"1","cy":"1","r":"1","fill":"#A1ABBD"}]}]]}],["$","div",null,{"className":"flex flex-col items-center justify-center gap-3 lg:flex-row lg:justify-end","children":[["$","div",null,{"className":"flex items-center justify-center gap-4 md:gap-3 lg:justify-end","children":[["$","$L4",null,{"href":"/legal/terms-of-use","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Terms of Use","ref":"$undefined"}],["$","$L4",null,{"href":"/legal/privacy-policy","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Privacy Policy","ref":"$undefined"}],["$","$L4",null,{"href":"/blog","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Blog","ref":"$undefined"}],"$L14"]}],["$","svg",null,{"width":"2","height":"2","viewBox":"0 0 2 2","fill":"none","xmlns":"http://www.w3.org/2000/svg","className":"2md:hidden text-neutral-50","children":["$","circle",null,{"cx":"1","cy":"1","r":"1","fill":"#A1ABBD"}]}],["$","div",null,{"className":"flex justify-center gap-6 lg:justify-end","children":[["$","a","Status",{"href":"https://status.app","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/status.6be65460.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"Status","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}],["$","a","Twitter",{"href":"https://x.com/StatusL2","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/twitter.6865a7e5.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"Twitter","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}],["$","a","GitHub",{"href":"https://github.com/status-im","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/github.90103528.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"GitHub","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}]]}]]}]]}]}]
+17:I[6105,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","726","static/chunks/726-a688395c743bdde3.js","565","static/chunks/565-e7a70831c2486b41.js","472","static/chunks/app/(site)/%5Blocale%5D/layout-fe09f44bffcc5314.js"],"Analytics"]
+18:I[5718,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","726","static/chunks/726-a688395c743bdde3.js","565","static/chunks/565-e7a70831c2486b41.js","472","static/chunks/app/(site)/%5Blocale%5D/layout-fe09f44bffcc5314.js"],""]
+15:T433,{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Status Network",
+  "url": "https://status.network/",
+  "logo": "https://status.network/logo.svg",
+  "description": "Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack, with network-level spam protection enforced through reputation (Karma) and execution funded by native yield rather than user-paid gas fees.",
+  "sameAs": [
+    "https://x.com/StatusL2",
+    "https://github.com/status-im"
+  ],
+  "@id": "https://status.network/#organization",
+  "knowsAbout": [
+    {
+      "@type": "Thing",
+      "name": "Ethereum Layer 2"
+    },
+    {
+      "@type": "Thing",
+      "name": "Gasless transactions"
+    },
+    {
+      "@type": "Thing",
+      "name": "Composable privacy"
+    },
+    {
+      "@type": "Thing",
+      "name": "Spam protection"
+    },
+    {
+      "@type": "Thing",
+      "name": "Reputation system"
+    },
+    {
+      "@type": "Thing",
+      "name": "Native yield funding"
+    },
+    {
+      "@type": "Thing",
+      "name": "Bots"
+    }
+  ]
+}5:["$","html",null,{"lang":"ko","children":["$","body",null,{"className":"__variable_9cc749 bg-white-100 text-neutral-100 antialiased selection:bg-purple selection:text-white-100","suppressHydrationWarning":true,"children":[[["$","script","0",{"id":"json-ld-0","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$15"}}],["$","script","1",{"id":"json-ld-1","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"WebSite\",\n  \"name\": \"Status Network\",\n  \"url\": \"https://status.network/\",\n  \"description\": \"Status Network is a privacy-first, fully gasless Ethereum Layer 2 designed for scalable onchain activity, coordinated through reputation and native yield.\",\n  \"@id\": \"https://status.network/#website\",\n  \"publisher\": {\n    \"@id\": \"https://status.network/#organization\"\n  },\n  \"about\": [\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Ethereum Layer 2\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Gasless transactions\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Composable privacy\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Spam protection\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Reputation system\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Native yield funding\"\n    }\n  ]\n}"}}],["$","script","2",{"id":"json-ld-2","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"SoftwareApplication\",\n  \"name\": \"Status Network\",\n  \"applicationCategory\": \"Blockchain\",\n  \"operatingSystem\": \"Web3\",\n  \"url\": \"https://status.network/\",\n  \"description\": \"Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack. Execution is coordinated through Karma, a non-transferable reputation system, and supported by native yield and network activity.\"\n}"}}]],"$L16",["$","$L17",null,{}],["$","$L18",null,{"strategy":"afterInteractive","src":"https://umami.bi.status.im/script.js","data-website-id":"0746c5dc-8cd3-45a4-9606-6bcf9adf248e","data-domains":"status.network","async":true}]]}]}]
+19:I[6156,["756","static/chunks/756-56d07e8fa5ffdccb.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","878","static/chunks/app/(site)/%5Blocale%5D/blog/layout-c6bf279edadbe978.js"],"default"]
+14:["$","$L19",null,{"ref":"$undefined","href":"/brand","locale":"$undefined","localeCookie":{"name":"NEXT_LOCALE","sameSite":"lax"},"className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Brand assets"}]
+1a:I[2756,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"default"]
+16:["$","$L1a",null,{"formats":"$undefined","locale":"ko","messages":{"meta":{"locale":"en","name":"English","direction":"ltr","description":"Complete Status Network website translations"},"common":{"loading":"Loading...","learn_more":"Learn More","get_started":"Get started","read_more":"Read More","read_docs":"Read docs","view_blog":"View blog","new":"NEW","testnet_live":"Testnet v2 is live!","promo_message":"Vaults withdrawals are now enabled","visit_hub":"withdraw now","visit_hub_aria":"withdraw now (opens in new tab)"},"navigation":{"home":"Home","about":"About","features":"Features","network":"Network","partners":"Partners","tokenomics":"Tokenomics","blog":"Blog","brand":"Brand"},"hero":{"title":"The gasless network","subtitle":"with sustainable funding for app builders","description":"Launch and scale your social apps and games with truly free transactions."},"about":{"section_number":"01","section_title":"WHAT IS STATUS NETWORK?","title_1":"The first Ethereum L2 with","title_2":"gas-free","title_3":"transactions at scale","title_4":"funded by native yield + fees.","description":"A free network with sustainable funding for public apps, games and protocols.","build_button":"Build on Status Network","learn_more_button":"Learn more"},"features":{"section_number":"02","section_title":"WHY STATUS NETWORK?","title":"Power to the community","sustainable_funding":{"title":"Sustainable public funding","description":"Status Network takes a radical step beyond short-term incentives. Powered by native yields and fees, its public app funding pool is governed by the community, ensuring a continuous allocation of capital for onchain builders.","step_1":"Users bridge yield-bearing assets to Status Network and increase the yield redirected to the funding pool.","step_2":"Apps and games apply for an allocation from the pool. The community votes on allocations using Karma, a non-transferrable governance token earned by contributing positively to the network:","step_2_staking":"Staking SNT","step_2_bridging":"Bridging yield-bearing tokens","step_2_using":"Using apps","step_2_premium":"Paying premium gas","step_2_donations":"Making direct donations to the funding pool","step_3":"Every funded project onboards new users, driving additional asset deposits and token swaps - generating more yield and fees to be allocated in the funding pool.","button":"Discover Karmic Tokenomics"},"gasless_transactions":{"title":"Gasless transactions","description_1":"On Status Network, anyone can experience free transactions! With the L2 operating costs covered by native yields and fees, no need to bridge gas to use an app.","description_2":"Apps and games developers can offer frictionless onboarding for their users at scale.","button":"Learn how it works"},"performance":{"title":"Built for performance, secured by Ethereum","description":"Leverage Ethereum's security with Linea's cutting-edge zkEVM rollup technology for high-speed transactions. Perfect for gaming, social, iGaming, and high-throughput applications.","button":"Learn more about Linea"},"decentralization":{"title":"Geared for decentralization","description":"Built on the core values of Status and the IFT ecosystem, Status Network is designed to become a truly decentralised L2. The endgame is to provide a censorship-resistant environment where communities can thrive without central points of control.","button":"Learn more"}},"partners":{"section_number":"03","section_title":"ECOSYSTEM AND PARTNERS","title_1":"Empowering bold","title_2":"creators and developers","subtitle":"Building with the best in the game","cats_fishing":{"title":"Cats Fishing","description":"The first open-sourced, proof of play mobile fishing game"},"spla_labs":{"title":"Spla Labs","description":"Builders of TODL & Ponzi Hero games"},"hash_vegas":{"title":"Hash Vegas","description":"Fair and transparent onchain gaming"},"ponzi_hero":{"title":"Ponzi Hero","description":"Earn NFTs, have some fun!"},"linea":{"title":"Linea","description":"Secure zkEVM L2 stack"},"gateway":{"title":"Gateway","description":"Rollup infrastructure and operation"},"din":{"title":"DIN","description":"Decentralised Infrastructure Network"}},"network":{"section_number":"04","section_title":"NETWORK","title":"Leverage the most advanced decentralised stack","description":"Builders get priority support from Institute of Free Technology solutions:","status":{"title":"Status","description":"Ethereum super-app with 4M+ downloads"},"logos":{"title":"Logos","description":"Open tech to restore civil society"},"waku":{"title":"Waku","description":"P2P encrypted messaging protocol"},"codex":{"title":"Codex","description":"Decentralised data storage layer"},"nimbus":{"title":"Nimbus","description":"Ethereum core devs. Powering Eth consensus"},"keycard":{"title":"Keycard","description":"Secure open-source hardware wallet"}},"tokenomics":{"section_number":"05","section_title":"TOKENOMICS","title":"Earn voting power through positive network engagement","description":"The more you contribute to the network, the more influence you gain over funding allocation and the network's roadmap priorities.","karma_note":"This is coordinated by Karma, a non-transferable governance token.","app_developer":{"title":"App developer","step_1":"Ship code","step_2":"Get traction","step_3":"Receive Karma","step_4":"Earn funding"},"liquidity_provider":{"title":"Liquidity provider","description":"Earn Karma for staking SNT and get LP rewards boosted by native yield."},"onchain_user":{"title":"Onchain user","description":"Get rewarded with Karma for bridging to the network and using apps. A higher Karma means more gasless transactions."}},"blog":{"title":"Stay up to date","view_blog_button":"View blog","category":"Updates","author":"Us","on_date":"on","page_title":"Blog.","page_description":"Long form articles, thoughts, and ideas.","share_article_on":"Share article on:","related_articles":"Related articles","breadcrumb_blog":"Blog","no_posts":"No posts available yet.","home":"Home","get_started":"Get started","post_1":{"title":"Status Steps Up as Founding Member of Linea Consortium"},"post_2":{"title":"Status Launches First Gasless Layer 2 on Linea"},"post_3":{"title":"Embracing Community Choices: Status to Develop SNT Staking and Status L2"}},"footer":{"copyright":"© Status Research & Development GmbH","privacy_policy":"Privacy Policy","terms_of_use":"Terms of Use","blog":"Blog","brand":"Brand assets"},"pre_footer":{"title":"Ready to build on the free network?","partner_button":"Partner with us","read_docs_button":"Read docs"},"brand":{"page_title":"Brand","page_description":"Get Status Network brand assets.","main_title":"Brand assets","last_updated":"Last updated: 12 November 2025","download_all":"Download all assets","logo_title":"Logo","logo_description":"Our main logo","logo_variation_title":"Logo variation","logo_variation_description":"For creative printing layouts","mark_only_title":"Mark only","mark_only_description":"Without wordmark","main_colors_title":"Main colors","main_colors_description":"Our main colors palette","artwork_title":"Artwork","artwork_description":"Our main characters","download_button":"Download","alt_text":{"main_logo":"Main logo","mark_only":"Mark only","artwork":"Artwork"}},"not_found":{"title":"This is not the page you're looking for","take_me_home":"Take me home"}},"now":"$undefined","timeZone":"UTC","children":"$L1b"}]
+1b:["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]
+e:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+a:null
+1c:I[610,[],"IconMark"]
+c:{"metadata":[["$","title","0",{"children":"SNT Staking: Earn Karma on Status Network's Gasless L2"}],["$","meta","1",{"name":"description","content":"Stake SNT to earn Karma, unlock gasless transactions, and govern native yield on Status Network. Soulbound reputation earned through earn contribution."}],["$","link","2",{"rel":"canonical","href":"https://status.network/blog/snt-staking-earn-karma"}],["$","link","3",{"rel":"alternate","hrefLang":"en","href":"https://status.network/blog/snt-staking-earn-karma"}],["$","link","4",{"rel":"alternate","hrefLang":"ko","href":"https://status.network/ko/blog/snt-staking-earn-karma"}],["$","link","5",{"rel":"alternate","hrefLang":"x-default","href":"https://status.network/blog/snt-staking-earn-karma"}],["$","meta","6",{"property":"og:title","content":"SNT Staking: How to Earn Karma on Status Network"}],["$","meta","7",{"property":"og:description","content":"Stake SNT to earn Karma, unlock gasless transactions, and govern native yield on Status Network. Soulbound reputation earned through earn contribution."}],["$","meta","8",{"property":"og:url","content":"https://status.network/blog/snt-staking-earn-karma"}],["$","meta","9",{"property":"og:site_name","content":"Status Network"}],["$","meta","10",{"property":"og:locale","content":"en"}],["$","meta","11",{"property":"og:image","content":"https://our.status.im/content/images/2026/04/41---Blog---Cover.jpg"}],["$","meta","12",{"property":"og:type","content":"article"}],["$","meta","13",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","14",{"name":"twitter:site","content":"@StatusL2"}],["$","meta","15",{"name":"twitter:title","content":"SNT Staking: Earn Karma on Status Network's Gasless L2"}],["$","meta","16",{"name":"twitter:description","content":"Stake SNT to earn Karma, unlock gasless transactions, and govern native yield on Status Network. Soulbound reputation earned through earn contribution."}],["$","meta","17",{"name":"twitter:image","content":"https://our.status.im/content/images/2026/04/41---Blog---Cover.jpg"}],["$","link","18",{"rel":"icon","href":"/icon2.png?d102c5988532e764","type":"image/png","sizes":"128x128"}],["$","$L1c","19",{}]],"error":null,"digest":"$undefined"}
+11:"$c:metadata"
+1d:T1133,{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://status.network/blog/snt-staking-earn-karma#faq",
+  "url": "https://status.network/blog/snt-staking-earn-karma",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/snt-staking-earn-karma#faq-q1",
+      "name": "Can I unstake SNT at any time?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/snt-staking-earn-karma#faq-a1",
+        "text": "Yes. There is no forced lock-up. However, unstaking resets your multiplier to its base level, which significantly reduces your future Karma accrual rate. If you restake, the multiplier must be rebuilt from the beginning."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/snt-staking-earn-karma#faq-q2",
+      "name": "Does SNT staking require gas fees?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/snt-staking-earn-karma#faq-a2",
+        "text": "The initial staking transaction requires gas on the network where it is executed. After earning sufficient Karma, transactions on Status Network can become gasless within the user's allocated quota."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/snt-staking-earn-karma#faq-q3",
+      "name": "What happens to Karma if I unstake?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/snt-staking-earn-karma#faq-a3",
+        "text": "Unstaking does not remove existing Karma. The accumulated balance remains associated with the address, but the multiplier resets, reducing the rate of future Karma accumulation."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/snt-staking-earn-karma#faq-q4",
+      "name": "Can I transfer Karma to another wallet?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/snt-staking-earn-karma#faq-a4",
+        "text": "No. Karma is a non-transferable token permanently tied to a single address. It cannot be moved, sold, or delegated, ensuring it reflects actual contribution rather than capital ownership."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/snt-staking-earn-karma#faq-q5",
+      "name": "Is there a minimum SNT amount to stake?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/snt-staking-earn-karma#faq-a5",
+        "text": "The minimum staking amount is defined in the staking contract. It is generally expected to be low to encourage broad participation across the network."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/snt-staking-earn-karma#faq-q6",
+      "name": "What is the difference between virtual and actual Karma?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/snt-staking-earn-karma#faq-a6",
+        "text": "Virtual Karma accumulates continuously based on staking position and multiplier but remains in the distributor contract until claimed. Actual Karma is the on-chain token credited to the user's address and used for governance. Total effective Karma is the sum of both."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/snt-staking-earn-karma#faq-q7",
+      "name": "Can I lose Karma without being slashed?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/snt-staking-earn-karma#faq-a7",
+        "text": "No. Routine quota violations only result in temporary restrictions. Karma is only reduced through explicit slashing events triggered by provable abuse of the system."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/snt-staking-earn-karma#faq-q8",
+      "name": "What does the SNT staking allocation look like long-term?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/snt-staking-earn-karma#faq-a8",
+        "text": "The initial allocation is designed to bootstrap participation. Over time, governance may rebalance distribution toward liquidity provision, applications, and operations through community voting."
+      }
+    }
+  ]
+}8:[[["$","script","0",{"id":"json-ld-0","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Article\",\n  \"headline\": \"SNT Staking: How to Earn Karma on Status Network\",\n  \"description\": \"Stake SNT to earn Karma, unlock gasless transactions, and govern native yield on Status Network. Soulbound reputation earned through earn contribution.\",\n  \"image\": \"https://our.status.im/content/images/2026/04/41---Blog---Cover.jpg\",\n  \"datePublished\": \"2026-04-13T12:35:22.000+00:00\",\n  \"dateModified\": \"2026-04-13T12:35:22.000+00:00\",\n  \"author\": {\n    \"@type\": \"Person\",\n    \"name\": \"Kamila Lipska\"\n  },\n  \"publisher\": {\n    \"@type\": \"Organization\",\n    \"name\": \"Status Network\",\n    \"logo\": {\n      \"@type\": \"ImageObject\",\n      \"url\": \"https://status.network/logo.svg\"\n    }\n  }\n}"}}]],[["$","script","custom-jsonld-0",{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$1d"}}]],"$L1e","$L1f"]
+20:I[2118,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"BlogPostDetailHydrated"]
+21:T3df5,<p><a href="https://hub.status.network/stake" rel="noreferrer">Staking SNT</a> is the most capital-efficient way to earn <a href="https://status.network/karma-tokenomics">Karma</a>, the soulbound reputation token that determines your free transaction throughput, governance power over the native yield pool, and your standing in the Status Network ecosystem. Karma cannot be bought, sold, or transferred. It is only earned through contribution.</p><h2 id="what-is-snt-and-why-stake-it">What Is SNT and Why Stake It?</h2><p><strong>SNT</strong> is the native utility token of the Status ecosystem, launched in June 2017. It now anchors <a href="https://status.network/">Status Network</a>, a gasless Ethereum Layer 2 that replaces per-transaction gas fees with a reputation-based execution model.</p><p>When you stake SNT, you earn Karma, a soulbound ERC-20 token permanently tied to your address. Karma is not a speculative asset. It's a reputation score that determines how much of the network you can use for free, and how much weight your governance votes carry.</p><p>SNT staking draws from 35% of the weekly Karma minting at launch: approximately 6,730,000 Karma per week in year one. It also anchors the Rate Limiting Nullifier (RLN) spam protection mechanism, staked SNT is what makes the network's cryptographic rate limiting work.</p><h2 id="how-snt-staking-earns-karma">How SNT Staking Earns Karma</h2><p>Karma is minted in bi-weekly epochs and distributed across three buckets:</p>
+<!--kg-card-begin: html-->
+<table>
+<thead>
+<tr>
+<th>Bucket</th>
+<th>Share</th>
+<th>Weekly Karma (Year 1)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SNT staking</td>
+<td>35%</td>
+<td>~6,730,000</td>
+</tr>
+<tr>
+<td>Liquidity provision &amp; app usage</td>
+<td>60%</td>
+<td>~11,540,000</td>
+</tr>
+<tr>
+<td>Sequencer tips &amp; donations</td>
+<td>5%</td>
+<td>~960,000</td>
+</tr>
+</tbody>
+</table>
+<!--kg-card-end: html-->
+<p>Within the SNT staking bucket, allocation is governed by the <strong>StakeManager's multiplier point system</strong>: the longer you stake without withdrawing, the higher your share of that bucket's Karma distribution. Two stakers with identical SNT deposits will earn different amounts of Karma if one has staked for longer. There is no fixed lock-up, but every withdrawal resets your multiplier.</p><p>This design rewards commitment without enforcing it. You can exit any time. You just lose your accumulated multiplier and start accruing from scratch.</p><h2 id="karma-supply-what-youre-earning-into">Karma Supply: What You're Earning Into</h2><p>Status Network launched with a genesis Karma supply of <strong>1,000,000,000 (1B) Karma</strong>, distributed entirely to pre-deposit participants: SNT stakers (25%), ETH depositors (20%), <a href="https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types">GUSD </a>depositors (20%), LINEA depositors (10%), and native apps &amp; onboarding users (25%).</p><p>After genesis, new Karma mints each epoch on a decreasing schedule:</p>
+<!--kg-card-begin: html-->
+<table>
+<thead>
+<tr>
+<th>Year</th>
+<th>Annual Emission</th>
+<th>Cumulative Supply</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1,000,000,000</td>
+<td>2,000,000,000</td>
+</tr>
+<tr>
+<td>2</td>
+<td>500,000,000</td>
+<td>2,500,000,000</td>
+</tr>
+<tr>
+<td>3</td>
+<td>300,000,000</td>
+<td>2,800,000,000</td>
+</tr>
+<tr>
+<td>4+</td>
+<td>200,000,000 (floor)</td>
+<td>3,000,000,000+</td>
+</tr>
+</tbody>
+</table>
+<!--kg-card-end: html-->
+<p>Unlike Bitcoin's converging-to-zero halving, Karma maintains a <strong>permanent 200M/year floor</strong> from year 4 onward. The network will onboard millions of new users and agents. A reputation system that stops issuing new reputation can't stay open. The floor keeps it permanently accessible to new participants while inflation converges to low single digits as a share of total supply.</p><h2 id="what-you-earn-the-two-karma-types">What You Earn: The Two Karma Types</h2><p>The Karma system uses a <strong>two-tier balance architecture</strong>:</p><ul><li><strong>Actual Karma</strong> - standard ERC-20 tokens that exist onchain. These carry governance voting power via ERC20Votes delegation and count toward throughput tier calculations. Only redeemed actual Karma votes.</li><li><strong>Virtual Karma</strong> - reward balances tracked by reward distributor contracts, accruing continuously based on your staking position, duration, and multiplier. Fully backed 1:1 by actual Karma held in the distributor contract, but not transferred until you explicitly redeem. Your total Karma balance is actual + all virtual rewards across registered distributors.</li></ul><p>This means staking rewards accrue in real time without requiring a token transfer for every accrual event. When you're ready to vote in governance, you redeem your virtual Karma to convert it to actual.</p><h2 id="five-ways-to-earn-karma">Five Ways to Earn Karma</h2><p>SNT staking is the primary path for existing SNT holders, but Karma is earned across five mechanisms:</p><p><strong>1. Stake SNT</strong>: Draws from the 35% staking bucket. Most capital-efficient path for SNT holders. Multiplier points reward longer staking duration, compounding your share of the distribution over time.</p><p><strong>2. Provide liquidity</strong>: Depositing into native DEX pairs on Orvex, minting USF on FIRM, or providing liquidity to core apps draws from the 60% liquidity and apps bucket. Karma earned scales with value and duration.</p><p><strong>3. Complete captcha and zkID verifications</strong>: A one-time captcha grants 1 Karma, unlocking Entry tier access (2 free transactions per day). The entry point for new users with no tokens and no prior relationship with the network. Additional zkID verification or proof of activity on other networks earns more. Draws from the 60% bucket.</p><p><strong>4. Use and build apps</strong>: Active users of native applications, developers deploying contracts, and builders generating onchain activity are all eligible through the 60% bucket.</p><p><strong>5. Tip the network</strong>: Paying sequencer tips or making voluntary donations to the native funding pool earns from the 5% tipping bucket.</p><h2 id="karma-utility-what-it-unlocks">Karma Utility: What It Unlocks</h2><h3 id="gasless-transactions10-throughput-tiers">Gasless Transactions - 10 Throughput Tiers</h3><p>Your total Karma balance maps to a free transaction quota per day:</p>
+<!--kg-card-begin: html-->
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Karma Range</th>
+<th>Free Transactions / Day</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>None</td>
+<td>&lt;1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Entry</td>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Newbie</td>
+<td>1–50</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Basic</td>
+<td>50–500</td>
+<td>16</td>
+</tr>
+<tr>
+<td>Active</td>
+<td>500–5K</td>
+<td>96</td>
+</tr>
+<tr>
+<td>Regular</td>
+<td>5K–20K</td>
+<td>480</td>
+</tr>
+<tr>
+<td>Power</td>
+<td>20K–100K</td>
+<td>960</td>
+</tr>
+<tr>
+<td>Pro</td>
+<td>100K–1M</td>
+<td>10,080</td>
+</tr>
+<tr>
+<td>High-Throughput</td>
+<td>1M–5M</td>
+<td>108,000</td>
+</tr>
+<tr>
+<td>S-Tier</td>
+<td>5M–10M</td>
+<td>240,000</td>
+</tr>
+<tr>
+<td>Legendary</td>
+<td>10M+</td>
+<td>480,000</td>
+</tr>
+</tbody>
+</table>
+<!--kg-card-end: html-->
+<p>Higher tiers are designed for protocol infrastructure, core applications, high-frequency bots, and institutional participants. If you exceed your daily quota, transactions go through at a premium gas fee (currently set at 100 gwei) rather than being blocked, this is the pressure valve for burst demand.</p><h3 id="governance-power-over-native-yield">Governance Power Over Native Yield</h3><p>Karma holders vote on the allocation of the <a href="https://status.network/blog/yield-farming-vs-native-yield">native yield pool</a>, which accumulates from two sources: bridged yield (ETH staked via Lido stVaults, stablecoins deployed via Morpho and Sky savings on L1) and fees from native applications (Orvex, FIRM, Punk.fun, Bermuda, sequencing tips).</p><p>Key governance decisions include: how the funding pool is distributed across <a href="https://status.network/blog/liquidity-pool-amm-orvex-dex-status">liquidity</a> incentives, app builder grants, and operational costs; the ratio between staking/liquidity/operations buckets as the network matures; tier thresholds and transaction quotas; which applications receive native app status; and protocol-level settings including RLN configuration and epoch duration.</p><p>Governance power is proportional to your <strong>redeemed (actual) Karma balance</strong>. Because Karma is soulbound, governance influence must be earned through sustained participation, it cannot be purchased on secondary markets.</p><h3 id="access-to-private-gasless-infrastructure">Access to Private Gasless Infrastructure</h3><p>Karma unlocks access to private gasless ephemeral accounts and relayers. These enable confidential strategies, stealth accounts with no funding fingerprints, and cover traffic generation, decoy transactions that amplify anonymity sets at zero cost within your tier quota. Without gas fees, there are no funding trails linking accounts, no gas price fingerprinting, no timing correlations to exploit.</p><h2 id="spam-protection-and-slashing">Spam Protection and Slashing</h2><p>The throughput tier system has two enforcement layers:</p><p><strong>Soft layer (tier violations):</strong> When you exceed your tier quota, you're placed on a temporary deny list. Gasless access is suspended until the reset interval expires. No Karma is lost. You can still transact by paying premium gas.</p><p><strong>Hard layer (RLN violations):</strong> The Rate Limiting Nullifier sets a global maximum transaction rate. If you exceed it, the RLN construction exposes your secret through Shamir's Secret Sharing, two proofs using the same nullifier within the same epoch are sufficient for any observer to recover the underlying key. This triggers slashing: 100% of your total Karma balance is burned, with 50% minted as a reward to the slasher who detected the violation and 50% permanently burned. Your RLN membership is revoked. Recovery requires re-earning sufficient Karma through legitimate participation.</p><p>The 100% slash is justified by the two-layer design. By the time RLN slashing triggers, two distinct thresholds have already been violated. Accidental over-usage is caught by the soft layer with no penalty. The hard layer has strong evidence of deliberate abuse.</p><p>Because Karma is earned through time and contribution, slashing carries real opportunity cost. You cannot buy back a slashed balance. You re-earn it.</p><h2 id="the-karmic-flywheel">The Karmic Flywheel</h2><p>SNT staking feeds directly into the core economic loop:</p><ol><li>Capital bridges into the network (ETH → staked via Lido stVaults, stablecoins → deployed into Morpho/Sky)</li><li>L1 yield accumulates and bridges into the shared funding pool on L2</li><li>Native apps (Orvex, FIRM, Punk.fun, Bermuda) generate fees into the same pool</li><li>Karma holders vote on how the pool is allocated, liquidity incentives, app builder grants, operations</li><li>Better incentives attract more users and capital</li><li>More TVL generates more yield. More activity generates more fees.</li><li>Back to step 1</li></ol><p>SNT stakers hold governance weight from day one. The 35% SNT staking bucket is a deliberate bootstrap weight: the network needs a strong initial base of staked SNT to power RLN-based spam protection. As TVL deepens and onchain activity grows, governance can vote to rebalance the ratio, shifting more emission toward liquidity and app usage where marginal Karma has higher network growth impact.</p><h2 id="genesis-allocation-early-karma-weight">Genesis Allocation: Early Karma Weight</h2><p>Pre-deposit participants received genesis Karma proportional to deposit size and time in the vault. With approximately 1,400 pre-depositors at launch, average allocation is ~535,000 Karma per depositor, placing the average early participant at the High-Throughput tier (108,000 tx/day). Large depositors reach S-Tier or Legendary. This is the intended reward for committing capital ahead of mainnet.</p><p>After year one, the 2B total cumulative supply is split roughly 50/50 between pre-deposit genesis holders and year-one earners. Within the earner pool: SNT stakers hold 350M, LPs and users hold 600M, operations contributors hold 50M. No single category dominates. The soulbound constraint prevents accumulation through acquisition.</p><h2 id="getting-started-with-snt-staking">Getting Started with SNT Staking</h2><ol><li><strong>Obtain SNT </strong>- Purchase on decentralized exchanges or transfer from existing SNT holdings</li><li><strong>Access Status Network </strong>- Add the network to your wallet via the <a href="https://docs.status.network/">official docs</a></li><li><strong>Stake via the contract </strong>- Approve SNT and call the staking contract (address published on docs at launch)</li><li><strong>Monitor Karma accrual </strong>- Virtual Karma accrues continuously; check your account dashboard</li><li><strong>Redeem before voting </strong>- Convert virtual Karma to actual Karma to unlock governance voting power</li></ol><p>Pre-deposits are live at <a href="https://hub.status.network/pre-deposits">hub.status.network/pre-deposits</a>.</p><h2 id="frequently-asked-questions">Frequently Asked Questions</h2><p><strong>Can I unstake SNT at any time?</strong></p><p>Yes. There is no forced lock-up. However, unstaking resets your multiplier to its base level, meaning your future Karma accrual rate drops significantly. If you restake, you start accumulating multiplier points from scratch.</p><p><strong>Does SNT staking require gas fees?</strong></p><p>The initial staking transaction costs gas on Ethereum or Status Network depending on where you execute. Once you've earned sufficient Karma, subsequent Status Network transactions become gasless up to your tier quota.</p><p><strong>What happens to Karma if I unstake?</strong></p><p>Unstaking does not burn your existing Karma balance. Your accumulated Karma stays with your address. Your multiplier resets, so the future accrual rate drops, but historical Karma, and the governance and throughput access it unlocks, is yours.</p><p><strong>Can I transfer Karma to another wallet?</strong></p><p>No. Karma is soulbound, permanently tied to your address. Transfers, approvals, and allowances are disabled. This ensures Karma represents genuine contribution, not wealth.</p><p><strong>Is there a minimum SNT amount to stake?</strong></p><p>The minimum will be specified in the staking contract documentation. Expect a low minimum to encourage broad participation.</p><p><strong>What is the difference between virtual and actual Karma?</strong></p><p>Virtual Karma accrues continuously in the StakeManager distributor contract based on your staking position and multiplier. It is fully backed 1:1 by actual Karma held in the distributor, but not transferred to your address until you redeem. Actual Karma is the onchain token that carries governance voting power. Your total Karma balance (for throughput tier calculations) is the sum of both.</p><p><strong>Can I lose Karma without being slashed?</strong></p><p>No. Tier violations (exceeding your daily quota) result in temporary deny list entries with no Karma loss. Only RLN global rate limit violations, deliberate, provable abuse, trigger slashing.</p><p><strong>What does the 35% SNT staking bucket look like long-term?</strong></p><p>It's a bootstrap weight. A plausible year-three governance rebalance might shift toward 20% SNT staking / 75% liquidity and apps / 5% operations. The mechanism is a standard Karma governance vote. The community controls how new reputation is distributed as the network matures.</p>22:T1133,{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://status.network/blog/snt-staking-earn-karma#faq",
+  "url": "https://status.network/blog/snt-staking-earn-karma",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/snt-staking-earn-karma#faq-q1",
+      "name": "Can I unstake SNT at any time?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/snt-staking-earn-karma#faq-a1",
+        "text": "Yes. There is no forced lock-up. However, unstaking resets your multiplier to its base level, which significantly reduces your future Karma accrual rate. If you restake, the multiplier must be rebuilt from the beginning."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/snt-staking-earn-karma#faq-q2",
+      "name": "Does SNT staking require gas fees?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/snt-staking-earn-karma#faq-a2",
+        "text": "The initial staking transaction requires gas on the network where it is executed. After earning sufficient Karma, transactions on Status Network can become gasless within the user's allocated quota."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/snt-staking-earn-karma#faq-q3",
+      "name": "What happens to Karma if I unstake?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/snt-staking-earn-karma#faq-a3",
+        "text": "Unstaking does not remove existing Karma. The accumulated balance remains associated with the address, but the multiplier resets, reducing the rate of future Karma accumulation."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/snt-staking-earn-karma#faq-q4",
+      "name": "Can I transfer Karma to another wallet?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/snt-staking-earn-karma#faq-a4",
+        "text": "No. Karma is a non-transferable token permanently tied to a single address. It cannot be moved, sold, or delegated, ensuring it reflects actual contribution rather than capital ownership."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/snt-staking-earn-karma#faq-q5",
+      "name": "Is there a minimum SNT amount to stake?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/snt-staking-earn-karma#faq-a5",
+        "text": "The minimum staking amount is defined in the staking contract. It is generally expected to be low to encourage broad participation across the network."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/snt-staking-earn-karma#faq-q6",
+      "name": "What is the difference between virtual and actual Karma?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/snt-staking-earn-karma#faq-a6",
+        "text": "Virtual Karma accumulates continuously based on staking position and multiplier but remains in the distributor contract until claimed. Actual Karma is the on-chain token credited to the user's address and used for governance. Total effective Karma is the sum of both."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/snt-staking-earn-karma#faq-q7",
+      "name": "Can I lose Karma without being slashed?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/snt-staking-earn-karma#faq-a7",
+        "text": "No. Routine quota violations only result in temporary restrictions. Karma is only reduced through explicit slashing events triggered by provable abuse of the system."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/snt-staking-earn-karma#faq-q8",
+      "name": "What does the SNT staking allocation look like long-term?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/snt-staking-earn-karma#faq-a8",
+        "text": "The initial allocation is designed to bootstrap participation. Over time, governance may rebalance distribution toward liquidity provision, applications, and operations through community voting."
+      }
+    }
+  ]
+}1e:["$","$L20",null,{"slug":"snt-staking-earn-karma","initialPost":{"slug":"snt-staking-earn-karma","title":"SNT Staking: How to Earn Karma on Status Network","html":"$21","feature_image":"https://our.status.im/content/images/2026/04/41---Blog---Cover.jpg","feature_image_alt":"Staking SNT earns Karma, a non-transferable reputation token that unlocks free transactions and governance voting power.","published_at":"2026-04-13T12:35:22.000+00:00","updated_at":"2026-04-13T12:35:22.000+00:00","codeinjection_head":"$22","codeinjection_foot":null,"primary_tag":{"name":"status-network-blog","slug":"status-network-blog"},"primary_author":{"id":"6915ef6ff70ca800016c5a8d","name":"Kamila Lipska","slug":"kamila","profile_image":null,"cover_image":null,"bio":null,"website":null,"location":null,"facebook":null,"twitter":null,"meta_title":null,"meta_description":null,"url":"https://our.status.im/author/kamila/"}},"labels":{"breadcrumbBlog":"Blog","onDate":"on","shareArticleOn":"Share article on:"}}]
+1f:["$","div",null,{"className":"border-t border-neutral-10 bg-neutral-10 px-5 pb-16 pt-10 xl:pb-24","children":["$","div",null,{"className":"mx-auto w-full max-w-[1184px]","children":[["$","h2",null,{"className":"mb-6 text-27 font-600","children":"Related articles"}],["$","div",null,{"className":"grid gap-5 md:grid-cols-2 xl:grid-cols-4","children":["$L23","$L24","$L25","$L26"]}]]}]}]
+23:["$","$L4","69dcc688834292000196a542",{"href":"/blog/privacy-l2-stealth-addresses-bermuda","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"Privacy on Ethereum Layer 2: How Bermuda Enables Stealth Addresses"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/40---Blog---Cover.jpg","alt":"Ethereum Layer 2 privacy with stealth addresses, confidential balances, zero knowledge proofs, Bermuda protocol execution."}]}]],"ref":"$undefined"}]
+24:["$","$L4","69dcc2cc834292000196a529",{"href":"/blog/what-is-mev-maximal-extractable-value","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"What Is MEV? Maximal Extractable Value and Its Impact on Users"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/39---Blog---Cover.jpg","alt":"Maximal extractable value MEV blockchain transaction ordering impact on crypto users and DeFi trades."}]}]],"ref":"$undefined"}]
+25:["$","$L4","69d6452a834292000196a509",{"href":"/blog/gas-fees-are-a-privacy-leak-no-pricing-model-can-fix","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"Gas Fees Are a Privacy Leak No Pricing Model Can Fix"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 8, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/38---Blog---Cover.jpg","alt":"How gas funding trail links blockchain account activity to transaction metadata."}]}]],"ref":"$undefined"}]
+26:["$","$L4","69d2bddf834292000196a4f5",{"href":"/blog/scaling-to-billions-means-users-never-think-about-gas","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"Scaling to Billions Means Users Never Think About Gas"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 5, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/37---Blog---Cover.jpg","alt":"New user onboarding on a gasless Ethereum L2 compared to a gas-based Layer 2 network."}]}]],"ref":"$undefined"}]
