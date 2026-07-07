@@ -36,7 +36,6 @@ Make sure your Mac has the minimum software required to run Status.`,
       headline: 'Download Status for Mac',
       description:
         'The Status desktop app is the best way to experience Status on macOS.',
-      datePublished: '2026-07-06T00:00:00.000Z',
       dateModified: '2026-07-06T00:00:00.000Z',
       author: {
         '@type': 'Person',
@@ -47,6 +46,9 @@ Make sure your Mac has the minimum software required to run Status.`,
         name: 'Status',
       },
     })
+    // `lastEdited` is a modification timestamp, so `datePublished` must be
+    // omitted rather than derived from the modified date.
+    expect(schema[0]).not.toHaveProperty('datePublished')
     expect(schema[1]).toMatchObject({
       '@context': 'https://schema.org',
       '@type': 'FAQPage',
@@ -68,6 +70,26 @@ Make sure your Mac has the minimum software required to run Status.`,
           },
         },
       ],
+    })
+  })
+
+  test('uses the first non-heading paragraph as the Article description when markdown starts with a heading', () => {
+    const schema = buildHelpDocStructuredData({
+      title: 'Getting started with Status',
+      raw: `# Getting started with Status
+
+Status is a secure messenger, crypto wallet, and Web3 browser.
+
+## Next steps
+
+Create your profile to begin.`,
+      lastEdited: '2026-07-06T00:00:00.000Z',
+    })
+
+    expect(schema[0]).toMatchObject({
+      '@type': 'Article',
+      description:
+        'Status is a secure messenger, crypto wallet, and Web3 browser.',
     })
   })
 

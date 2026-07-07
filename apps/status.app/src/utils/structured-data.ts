@@ -40,7 +40,9 @@ export function buildHelpDocStructuredData(
       headline: input.title,
       description: getMarkdownExcerpt(input.raw),
       image: input.image ? toAbsoluteStatusUrl(input.image.src) : undefined,
-      datePublished: dateModified,
+      // `lastEdited` is a modification timestamp, not a publish date. Omit
+      // `datePublished` rather than derive it from the modified date, which
+      // would produce inaccurate Article structured data.
       dateModified,
       author: {
         name: getPrimaryAuthor(input.author),
@@ -154,10 +156,15 @@ function isFAQSectionHeading(heading: string): boolean {
 }
 
 function getMarkdownExcerpt(markdown: string): string | undefined {
+  // Discard heading blocks on the raw markdown first. `cleanMarkdownText`
+  // strips leading `#` markers, so filtering after cleaning would let a
+  // heading (e.g. `# Title`) slip through as the excerpt/Article description.
   const firstParagraph = removeFrontmatter(markdown)
     .split(/\n{2,}/)
+    .map(block => block.trim())
+    .filter(block => block.length > 0 && !block.startsWith('#'))
     .map(cleanMarkdownText)
-    .find(block => block && !block.startsWith('#'))
+    .find(Boolean)
 
   return firstParagraph
 }
