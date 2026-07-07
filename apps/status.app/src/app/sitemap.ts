@@ -4,6 +4,8 @@ import {
   getPostsForSitemap,
 } from '~website/_lib/ghost'
 
+import { isHelpDocWorkInProgress } from './_utils/help-doc'
+
 import type { MetadataRoute } from 'next'
 
 // Cache the sitemap for 1 hour so /sitemap.xml does not hit the Ghost
@@ -75,6 +77,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   for (const doc of allHelpDocs) {
+    // Skip placeholder docs: they carry no content and are marked `noindex`,
+    // so listing them in the sitemap would only surface thin pages to crawlers.
+    if (isHelpDocWorkInProgress(doc)) {
+      continue
+    }
     entries.set(toUrl(doc.url), toDate(doc.lastEdited))
   }
 
