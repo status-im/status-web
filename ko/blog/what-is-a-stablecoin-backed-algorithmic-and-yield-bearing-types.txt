@@ -1,0 +1,381 @@
+1:"$Sreact.fragment"
+2:I[6978,[],""]
+3:I[5232,[],""]
+4:I[6132,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],""]
+9:I[9019,[],"OutletBoundary"]
+b:I[602,[],"AsyncMetadataOutlet"]
+d:I[9019,[],"ViewportBoundary"]
+f:I[9019,[],"MetadataBoundary"]
+10:"$Sreact.suspense"
+12:I[7098,[],""]
+:HL["/_next/static/media/e4af272ccee01ff0-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/css/24bd7f809405cf73.css","style"]
+0:{"P":null,"b":"7gQ4TSxhd0JxmNfKrcxGR","p":"","c":["","ko","blog","what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types"],"i":false,"f":[[["",{"children":["(site)",{"children":[["locale","ko","d"],{"children":["blog",{"children":[["slug","what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types","d"],{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true]}]}],["",["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-[calc(100dvh-189px)] flex-1 items-center justify-center px-5 lg:min-h-[calc(100dvh-118px)]","children":["$","div",null,{"className":"flex max-w-[696px] flex-col items-center gap-8","children":[["$","h1",null,{"className":"text-center text-40 font-700 lg:text-64","children":"This is not the page you're looking for"}],["$","$L4",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-purple border-[transparent] hover:bg-purple-dark text-white-100 h-10 py-[9px] rounded-12 px-4","href":"/","children":["$undefined","Take me home","$undefined"],"ref":"$undefined"}]]}]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["(site)",["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["locale","ko","d"],["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/24bd7f809405cf73.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],"$L5"]}],{"children":["blog",["$","$1","c",{"children":[null,["$","div",null,{"className":"relative flex min-h-screen justify-center overflow-clip px-2 2xl:px-0","children":["$","div",null,{"className":"relative w-full max-w-[1418px] border-x border-neutral-20","children":[["$","div",null,{"className":"absolute -left-2 top-0 z-50 h-full w-2 bg-gradient-to-r from-white-100 to-[transparent] 2xl:-left-12 2xl:w-12"}],["$","div",null,{"className":"absolute -right-2 top-0 z-50 h-full w-2 bg-gradient-to-l from-white-100 to-[transparent] 2xl:-right-12 2xl:w-12"}],"$L6",["$","main",null,{"children":["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]}],["$","div",null,{"className":"relative","children":[["$","div",null,{"className":"absolute left-[-3px] top-[-2px] size-[5px] rounded-full bg-neutral-20"}],["$","div",null,{"className":"relative bottom-0 h-px bg-neutral-20 z-20 left-1/2 w-[calc(100%+16px)] lg:w-[calc(100%+16px)] 2xl:w-[calc(100%+96px)] -translate-x-1/2"}],"$undefined",["$","div",null,{"className":"absolute bottom-[-2px] right-[-3px] size-[5px] rounded-full bg-neutral-20"}]]}],"$L7"]}]}]]}],{"children":[["slug","what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types","d"],["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":["$L8",null,["$","$L9",null,{"children":["$La",["$","$Lb",null,{"promise":"$@c"}]]}]]}],{},null,false]},null,false]},null,false]},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,[["$","$Ld",null,{"children":"$Le"}],["$","meta",null,{"name":"next-size-adjust","content":""}]],["$","$Lf",null,{"children":["$","div",null,{"hidden":true,"children":["$","$10",null,{"fallback":null,"children":"$L11"}]}]}]]}],false]],"m":"$undefined","G":["$12",[]],"s":false,"S":true}
+13:I[928,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"Image"]
+6:["$","header",null,{"className":"sticky top-0 z-[60] w-full bg-white-90 backdrop-blur supports-[backdrop-filter]:bg-white-80","children":[["$","div",null,{"className":"mx-auto flex h-16 items-center justify-between px-4","children":[["$","$L4",null,{"href":"/","className":"flex items-center space-x-2","children":["$","$L13",null,{"src":"/logo.svg","alt":"Status Network Logo","width":210,"height":32}],"ref":"$undefined"}],["$","div",null,{"className":"flex items-center gap-3","children":[["$","$L4",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-white-100 border-neutral-30 hover:border-neutral-40 hover:bg-white-80 text-dark-100 h-8 py-[5px] rounded-10 px-3 hidden sm:block","href":"/","children":["$undefined","Home","$undefined"],"ref":"$undefined"}],["$","a",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-purple border-[transparent] hover:bg-purple-dark text-white-100 h-8 py-[5px] rounded-10 px-3","target":"_blank","rel":"noopener noreferrer","href":"https://hub.status.network/","children":["$undefined","Get started","$undefined"],"ref":"$undefined"}]]}]]}],["$","div",null,{"className":"relative","children":[["$","div",null,{"className":"absolute left-[-3px] top-[-2px] size-[5px] rounded-full bg-neutral-20"}],["$","div",null,{"className":"relative bottom-0 h-px bg-neutral-20 z-20 left-1/2 w-[calc(100%+16px)] lg:w-[calc(100%+16px)] 2xl:w-[calc(100%+96px)] -translate-x-1/2"}],"$undefined",["$","div",null,{"className":"absolute bottom-[-2px] right-[-3px] size-[5px] rounded-full bg-neutral-20"}]]}]]}]
+7:["$","footer",null,{"className":"relative z-[61]","children":["$","div",null,{"className":"grid gap-4 p-3 lg:grid-cols-[1fr,auto,auto] lg:gap-5 lg:p-4","children":[["$","div",null,{"className":"flex flex-col justify-center gap-2 lg:flex-row lg:justify-start lg:gap-3","children":[["$","span",null,{"className":"text-center text-13 lg:text-left","children":"© Status Research & Development GmbH"}],["$","svg",null,{"width":"2","height":"2","viewBox":"0 0 2 2","fill":"none","xmlns":"http://www.w3.org/2000/svg","className":"hidden text-neutral-50 lg:block","children":["$","circle",null,{"cx":"1","cy":"1","r":"1","fill":"#A1ABBD"}]}]]}],["$","div",null,{"className":"flex flex-col items-center justify-center gap-3 lg:flex-row lg:justify-end","children":[["$","div",null,{"className":"flex items-center justify-center gap-4 md:gap-3 lg:justify-end","children":[["$","$L4",null,{"href":"/legal/terms-of-use","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Terms of Use","ref":"$undefined"}],["$","$L4",null,{"href":"/legal/privacy-policy","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Privacy Policy","ref":"$undefined"}],["$","$L4",null,{"href":"/blog","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Blog","ref":"$undefined"}],"$L14"]}],["$","svg",null,{"width":"2","height":"2","viewBox":"0 0 2 2","fill":"none","xmlns":"http://www.w3.org/2000/svg","className":"2md:hidden text-neutral-50","children":["$","circle",null,{"cx":"1","cy":"1","r":"1","fill":"#A1ABBD"}]}],["$","div",null,{"className":"flex justify-center gap-6 lg:justify-end","children":[["$","a","Status",{"href":"https://status.app","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/status.6be65460.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"Status","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}],["$","a","Twitter",{"href":"https://x.com/StatusL2","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/twitter.6865a7e5.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"Twitter","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}],["$","a","GitHub",{"href":"https://github.com/status-im","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/github.90103528.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"GitHub","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}]]}]]}]]}]}]
+17:I[6105,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","726","static/chunks/726-a688395c743bdde3.js","565","static/chunks/565-e7a70831c2486b41.js","472","static/chunks/app/(site)/%5Blocale%5D/layout-fe09f44bffcc5314.js"],"Analytics"]
+18:I[5718,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","726","static/chunks/726-a688395c743bdde3.js","565","static/chunks/565-e7a70831c2486b41.js","472","static/chunks/app/(site)/%5Blocale%5D/layout-fe09f44bffcc5314.js"],""]
+15:T433,{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Status Network",
+  "url": "https://status.network/",
+  "logo": "https://status.network/logo.svg",
+  "description": "Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack, with network-level spam protection enforced through reputation (Karma) and execution funded by native yield rather than user-paid gas fees.",
+  "sameAs": [
+    "https://x.com/StatusL2",
+    "https://github.com/status-im"
+  ],
+  "@id": "https://status.network/#organization",
+  "knowsAbout": [
+    {
+      "@type": "Thing",
+      "name": "Ethereum Layer 2"
+    },
+    {
+      "@type": "Thing",
+      "name": "Gasless transactions"
+    },
+    {
+      "@type": "Thing",
+      "name": "Composable privacy"
+    },
+    {
+      "@type": "Thing",
+      "name": "Spam protection"
+    },
+    {
+      "@type": "Thing",
+      "name": "Reputation system"
+    },
+    {
+      "@type": "Thing",
+      "name": "Native yield funding"
+    },
+    {
+      "@type": "Thing",
+      "name": "Bots"
+    }
+  ]
+}5:["$","html",null,{"lang":"ko","children":["$","body",null,{"className":"__variable_9cc749 bg-white-100 text-neutral-100 antialiased selection:bg-purple selection:text-white-100","suppressHydrationWarning":true,"children":[[["$","script","0",{"id":"json-ld-0","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$15"}}],["$","script","1",{"id":"json-ld-1","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"WebSite\",\n  \"name\": \"Status Network\",\n  \"url\": \"https://status.network/\",\n  \"description\": \"Status Network is a privacy-first, fully gasless Ethereum Layer 2 designed for scalable onchain activity, coordinated through reputation and native yield.\",\n  \"@id\": \"https://status.network/#website\",\n  \"publisher\": {\n    \"@id\": \"https://status.network/#organization\"\n  },\n  \"about\": [\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Ethereum Layer 2\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Gasless transactions\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Composable privacy\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Spam protection\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Reputation system\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Native yield funding\"\n    }\n  ]\n}"}}],["$","script","2",{"id":"json-ld-2","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"SoftwareApplication\",\n  \"name\": \"Status Network\",\n  \"applicationCategory\": \"Blockchain\",\n  \"operatingSystem\": \"Web3\",\n  \"url\": \"https://status.network/\",\n  \"description\": \"Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack. Execution is coordinated through Karma, a non-transferable reputation system, and supported by native yield and network activity.\"\n}"}}]],"$L16",["$","$L17",null,{}],["$","$L18",null,{"strategy":"afterInteractive","src":"https://umami.bi.status.im/script.js","data-website-id":"0746c5dc-8cd3-45a4-9606-6bcf9adf248e","data-domains":"status.network","async":true}]]}]}]
+19:I[6156,["756","static/chunks/756-56d07e8fa5ffdccb.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","878","static/chunks/app/(site)/%5Blocale%5D/blog/layout-c6bf279edadbe978.js"],"default"]
+14:["$","$L19",null,{"ref":"$undefined","href":"/brand","locale":"$undefined","localeCookie":{"name":"NEXT_LOCALE","sameSite":"lax"},"className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Brand assets"}]
+1a:I[2756,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"default"]
+16:["$","$L1a",null,{"formats":"$undefined","locale":"ko","messages":{"meta":{"locale":"en","name":"English","direction":"ltr","description":"Complete Status Network website translations"},"common":{"loading":"Loading...","learn_more":"Learn More","get_started":"Get started","read_more":"Read More","read_docs":"Read docs","view_blog":"View blog","new":"NEW","testnet_live":"Testnet v2 is live!","promo_message":"Vaults withdrawals are now enabled","visit_hub":"withdraw now","visit_hub_aria":"withdraw now (opens in new tab)"},"navigation":{"home":"Home","about":"About","features":"Features","network":"Network","partners":"Partners","tokenomics":"Tokenomics","blog":"Blog","brand":"Brand"},"hero":{"title":"The gasless network","subtitle":"with sustainable funding for app builders","description":"Launch and scale your social apps and games with truly free transactions."},"about":{"section_number":"01","section_title":"WHAT IS STATUS NETWORK?","title_1":"The first Ethereum L2 with","title_2":"gas-free","title_3":"transactions at scale","title_4":"funded by native yield + fees.","description":"A free network with sustainable funding for public apps, games and protocols.","build_button":"Build on Status Network","learn_more_button":"Learn more"},"features":{"section_number":"02","section_title":"WHY STATUS NETWORK?","title":"Power to the community","sustainable_funding":{"title":"Sustainable public funding","description":"Status Network takes a radical step beyond short-term incentives. Powered by native yields and fees, its public app funding pool is governed by the community, ensuring a continuous allocation of capital for onchain builders.","step_1":"Users bridge yield-bearing assets to Status Network and increase the yield redirected to the funding pool.","step_2":"Apps and games apply for an allocation from the pool. The community votes on allocations using Karma, a non-transferrable governance token earned by contributing positively to the network:","step_2_staking":"Staking SNT","step_2_bridging":"Bridging yield-bearing tokens","step_2_using":"Using apps","step_2_premium":"Paying premium gas","step_2_donations":"Making direct donations to the funding pool","step_3":"Every funded project onboards new users, driving additional asset deposits and token swaps - generating more yield and fees to be allocated in the funding pool.","button":"Discover Karmic Tokenomics"},"gasless_transactions":{"title":"Gasless transactions","description_1":"On Status Network, anyone can experience free transactions! With the L2 operating costs covered by native yields and fees, no need to bridge gas to use an app.","description_2":"Apps and games developers can offer frictionless onboarding for their users at scale.","button":"Learn how it works"},"performance":{"title":"Built for performance, secured by Ethereum","description":"Leverage Ethereum's security with Linea's cutting-edge zkEVM rollup technology for high-speed transactions. Perfect for gaming, social, iGaming, and high-throughput applications.","button":"Learn more about Linea"},"decentralization":{"title":"Geared for decentralization","description":"Built on the core values of Status and the IFT ecosystem, Status Network is designed to become a truly decentralised L2. The endgame is to provide a censorship-resistant environment where communities can thrive without central points of control.","button":"Learn more"}},"partners":{"section_number":"03","section_title":"ECOSYSTEM AND PARTNERS","title_1":"Empowering bold","title_2":"creators and developers","subtitle":"Building with the best in the game","cats_fishing":{"title":"Cats Fishing","description":"The first open-sourced, proof of play mobile fishing game"},"spla_labs":{"title":"Spla Labs","description":"Builders of TODL & Ponzi Hero games"},"hash_vegas":{"title":"Hash Vegas","description":"Fair and transparent onchain gaming"},"ponzi_hero":{"title":"Ponzi Hero","description":"Earn NFTs, have some fun!"},"linea":{"title":"Linea","description":"Secure zkEVM L2 stack"},"gateway":{"title":"Gateway","description":"Rollup infrastructure and operation"},"din":{"title":"DIN","description":"Decentralised Infrastructure Network"}},"network":{"section_number":"04","section_title":"NETWORK","title":"Leverage the most advanced decentralised stack","description":"Builders get priority support from Institute of Free Technology solutions:","status":{"title":"Status","description":"Ethereum super-app with 4M+ downloads"},"logos":{"title":"Logos","description":"Open tech to restore civil society"},"waku":{"title":"Waku","description":"P2P encrypted messaging protocol"},"codex":{"title":"Codex","description":"Decentralised data storage layer"},"nimbus":{"title":"Nimbus","description":"Ethereum core devs. Powering Eth consensus"},"keycard":{"title":"Keycard","description":"Secure open-source hardware wallet"}},"tokenomics":{"section_number":"05","section_title":"TOKENOMICS","title":"Earn voting power through positive network engagement","description":"The more you contribute to the network, the more influence you gain over funding allocation and the network's roadmap priorities.","karma_note":"This is coordinated by Karma, a non-transferable governance token.","app_developer":{"title":"App developer","step_1":"Ship code","step_2":"Get traction","step_3":"Receive Karma","step_4":"Earn funding"},"liquidity_provider":{"title":"Liquidity provider","description":"Earn Karma for staking SNT and get LP rewards boosted by native yield."},"onchain_user":{"title":"Onchain user","description":"Get rewarded with Karma for bridging to the network and using apps. A higher Karma means more gasless transactions."}},"blog":{"title":"Stay up to date","view_blog_button":"View blog","category":"Updates","author":"Us","on_date":"on","page_title":"Blog.","page_description":"Long form articles, thoughts, and ideas.","share_article_on":"Share article on:","related_articles":"Related articles","breadcrumb_blog":"Blog","no_posts":"No posts available yet.","home":"Home","get_started":"Get started","post_1":{"title":"Status Steps Up as Founding Member of Linea Consortium"},"post_2":{"title":"Status Launches First Gasless Layer 2 on Linea"},"post_3":{"title":"Embracing Community Choices: Status to Develop SNT Staking and Status L2"}},"footer":{"copyright":"© Status Research & Development GmbH","privacy_policy":"Privacy Policy","terms_of_use":"Terms of Use","blog":"Blog","brand":"Brand assets"},"pre_footer":{"title":"Ready to build on the free network?","partner_button":"Partner with us","read_docs_button":"Read docs"},"brand":{"page_title":"Brand","page_description":"Get Status Network brand assets.","main_title":"Brand assets","last_updated":"Last updated: 12 November 2025","download_all":"Download all assets","logo_title":"Logo","logo_description":"Our main logo","logo_variation_title":"Logo variation","logo_variation_description":"For creative printing layouts","mark_only_title":"Mark only","mark_only_description":"Without wordmark","main_colors_title":"Main colors","main_colors_description":"Our main colors palette","artwork_title":"Artwork","artwork_description":"Our main characters","download_button":"Download","alt_text":{"main_logo":"Main logo","mark_only":"Mark only","artwork":"Artwork"}},"not_found":{"title":"This is not the page you're looking for","take_me_home":"Take me home"}},"now":"$undefined","timeZone":"UTC","children":"$L1b"}]
+1b:["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]
+e:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+a:null
+1c:T1717,{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq",
+  "name": "What Is a Stablecoin? Backed, Algorithmic, and Yield-Bearing Types",
+  "url": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-q1",
+      "name": "What is the difference between a stablecoin and a central bank digital currency?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-a1",
+        "text": "Central bank digital currencies are issued by governments or central banks. Stablecoins are issued by private companies or blockchain protocols. Stablecoins are designed to move on blockchain networks and can support fast global settlement without relying on a traditional bank intermediary."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-q2",
+      "name": "Can a stablecoin lose its peg for good?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-a2",
+        "text": "Yes. A stablecoin can permanently lose its peg if its collateral fails, redemption mechanisms break down, or algorithmic controls stop working. Fiat-backed stablecoins are generally more resilient, while purely algorithmic designs carry higher risk."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-q3",
+      "name": "How does sDAI keep a $1 peg while earning yield?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-a3",
+        "text": "sDAI is designed to track the value of one US dollar while passing protocol-generated yield to holders. Instead of changing the peg target, the value accrues through the holder's balance growth over time as yield is added."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-q4",
+      "name": "Are stablecoins regulated like banks?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-a4",
+        "text": "Stablecoin regulation depends on the country and the structure of the token. Some issuers must comply with money transmission, reserve, governance, or disclosure requirements. In the European Union, MiCA sets a framework for crypto asset issuers, including certain stablecoin models."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-q5",
+      "name": "What happens to stablecoin yield during market downturns?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-a5",
+        "text": "Yield depends on the underlying strategy used by the stablecoin. When lending demand falls or market conditions weaken, yield can decline. During periods of severe stress, some protocols may reduce rates, tighten risk controls, or temporarily pause withdrawals."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-q6",
+      "name": "Can I use a yield-bearing stablecoin like GUSD as collateral in DeFi lending?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-a6",
+        "text": "Some DeFi lending protocols may accept yield-bearing stablecoins as collateral if the asset is integrated and risk-assessed by the platform. Whether a specific token qualifies depends on the protocol's collateral rules, oracle support, and liquidity profile."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-q7",
+      "name": "What is the advantage of GUSD over holding multiple stablecoins on my own?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-a7",
+        "text": "A yield-bearing stablecoin strategy such as GUSD can simplify stablecoin management by automating allocation across multiple yield sources. This reduces the need for manual rebalancing and can spread exposure across more than one protocol or strategy."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-q8",
+      "name": "How does Status Network use stablecoins differently than other L2s?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-a8",
+        "text": "Status Network treats stablecoins as productive capital. Bridged assets can generate yield at the base layer, and that yield supports ecosystem funding through Karma governance. This differs from traditional layer 2 models that primarily rely on transaction fees as a revenue source."
+      }
+    }
+  ]
+}8:[[["$","script","0",{"id":"json-ld-0","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Article\",\n  \"headline\": \"What Is a Stablecoin? Backed, Algorithmic, and Yield-Bearing Types\",\n  \"description\": \"Learn what stablecoins are, how backed, algorithmic, and yield-bearing designs work, and how Status Network uses GUSD and native yield for gasless DeFi.\",\n  \"image\": \"https://our.status.im/content/images/2026/03/07---Blog---Cover.jpg\",\n  \"datePublished\": \"2026-03-07T13:29:45.000+00:00\",\n  \"dateModified\": \"2026-03-07T13:29:45.000+00:00\",\n  \"author\": {\n    \"@type\": \"Person\",\n    \"name\": \"Kamila Lipska\"\n  },\n  \"publisher\": {\n    \"@type\": \"Organization\",\n    \"name\": \"Status Network\",\n    \"logo\": {\n      \"@type\": \"ImageObject\",\n      \"url\": \"https://status.network/logo.svg\"\n    }\n  }\n}"}}]],[["$","script","custom-jsonld-0",{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$1c"}}]],"$L1d","$L1e"]
+1f:I[2118,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"BlogPostDetailHydrated"]
+20:T2fcf,<p>A <strong>stablecoin</strong> is a crypto token pegged to a stable asset, usually the US dollar, to reduce price swings. Stablecoins bridge traditional finance and blockchain. They power payments, savings, and collateral without crypto volatility. Three main types exist: collateral-backed, algorithmic, and yield-bearing. Each uses a different method to hold a $1.00 peg.</p><h2 id="what-is-a-stablecoin">What Is a Stablecoin?</h2><p>Stablecoins solve one core problem: price volatility. Bitcoin and Ethereum prices can swing wildly each day. That makes them poor choices for commerce, lending, or savings.</p><p>A stablecoin aims to hold a $1.00 target price. It does this through reserves or supply controls.</p><p>Stablecoins fill four main roles:</p><ul><li>Payment rails inside blockchain networks</li><li>Collateral for lending protocols</li><li>Settlement layers for decentralized exchanges</li><li>Stores of value in volatile markets</li></ul><p>Without stablecoins, DeFi users would need to convert to fiat constantly. Stablecoins remove that friction.</p><h2 id="backed-collateral-backed-stablecoins">Backed (Collateral-Backed) Stablecoins</h2><p><strong>Backed stablecoins</strong> use collateral to hold their peg. That collateral can be fiat currency, crypto assets, or physical commodities.</p><h3 id="fiat-backed-model">Fiat-Backed Model</h3><p>Issuers hold $1 USD in reserve for every token in circulation. This is the simplest and most common model.</p><p>Examples: <strong>USDC</strong> (Circle), <strong>USDT</strong> (Tether).</p><p>How it works:</p><ol><li>A user deposits $1,000 USD with the issuer.</li><li>The issuer mints 1,000 stablecoin tokens.</li><li>The user can redeem tokens back to fiat at a 1:1 rate.</li></ol>
+<!--kg-card-begin: html-->
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Strengths</td>
+<td>Transparent, stable, clear regulatory path</td>
+</tr>
+<tr>
+<td>Weaknesses</td>
+<td>Custodial risk, centralized, requires banking access</td>
+</tr>
+</tbody>
+</table>
+<!--kg-card-end: html-->
+<h3 id="crypto-collateralized-model">Crypto-Collateralized Model</h3><p>Users lock volatile crypto assets (like ETH or BTC) to mint stablecoins. Over-collateralization protects the peg during price drops.</p><p>Example: <strong>Dai</strong> (Maker Protocol). A user deposits $150 worth of ETH to mint $100 of Dai. If ETH drops too far, the collateral gets liquidated.</p>
+<!--kg-card-begin: html-->
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Strengths</td>
+<td>Decentralized, trustless, transparent on-chain</td>
+</tr>
+<tr>
+<td>Weaknesses</td>
+<td>Capital inefficient (150% collateral), liquidation risk</td>
+</tr>
+</tbody>
+</table>
+<!--kg-card-end: html-->
+<h3 id="commodity-backed-model">Commodity-Backed Model</h3><p>These stablecoins hold physical assets like gold or oil as backing.</p><p>Example: <strong>PAX Gold (PAXG)</strong> is backed 1:1 by London Good Delivery gold bars.</p>
+<!--kg-card-begin: html-->
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Strengths</td>
+<td>Inflation hedge, tangible backing, fiat alternative</td>
+</tr>
+<tr>
+<td>Weaknesses</td>
+<td>Storage costs, auditing complexity, lower adoption</td>
+</tr>
+</tbody>
+</table>
+<!--kg-card-end: html-->
+<h2 id="algorithmic-stablecoins">Algorithmic Stablecoins</h2><p><strong>Algorithmic stablecoins</strong> use supply controls instead of collateral. The protocol mints or burns tokens to match demand.</p><h3 id="pure-algorithmic-model">Pure Algorithmic Model</h3><p>If the price rises above $1, the protocol mints new tokens. If the price drops below $1, it burns tokens or offers incentives to reduce supply.</p><p>Example: Terra's <strong>UST</strong> used this model. It failed in May 2022 when user confidence collapsed rapidly.</p>
+<!--kg-card-begin: html-->
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Strengths</td>
+<td>No collateral needed, capital efficient</td>
+</tr>
+<tr>
+<td>Weaknesses</td>
+<td>Requires ongoing confidence, prone to death spirals</td>
+</tr>
+</tbody>
+</table>
+<!--kg-card-end: html-->
+<h3 id="hybrid-algorithmic-model">Hybrid Algorithmic Model</h3><p>This model mixes partial collateral with algorithmic controls. For example: 20% fiat reserves plus 80% algorithmic supply management.</p><p>Example: <strong>Frax</strong> adjusts its collateral ratio as the system gains user trust over time.</p>
+<!--kg-card-begin: html-->
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Strengths</td>
+<td>Lower capital needs, flexible safety net</td>
+</tr>
+<tr>
+<td>Weaknesses</td>
+<td>Depends on market adoption, slower peg recovery</td>
+</tr>
+</tbody>
+</table>
+<!--kg-card-end: html-->
+<h2 id="yield-bearing-stablecoins">Yield-Bearing Stablecoins</h2><p><strong>Yield-bearing stablecoins</strong> hold a $1 peg while earning returns for their holders. Users gain passive income without managing protocols themselves.</p><p>Issuers deposit collateral into external yield sources like lending markets. The protocol sends earned yield back to holders. The peg stays at $1, but the holder's balance grows over time.</p><h3 id="example-sdai">Example: sDAI</h3><p><strong>sDAI</strong> (Savings DAI) is issued by MakerDAO. It deposits DAI into Sky Protocol. Yield flows back to holders on its own, with no manual action required.</p><h3 id="example-gusd">Example: GUSD</h3><p><a href="https://docs.status.network/tokenomics/pre-deposits"><strong>GUSD</strong></a> is a yield-bearing meta-stablecoin on <a href="https://status.network/"><strong>Status Network</strong></a>. It compounds returns from a range of stablecoin strategies.</p><p>It farms yield from USDC, USDT, USDS, and other stablecoins on behalf of the user. It serves as the network's primary savings tool.</p>
+<!--kg-card-begin: html-->
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Strengths</td>
+<td>Passive yield, peg stability, composable collateral</td>
+</tr>
+<tr>
+<td>Weaknesses</td>
+<td>Smart contract risk, strategy risk, protocol dependency</td>
+</tr>
+</tbody>
+</table>
+<!--kg-card-end: html-->
+<h2 id="regulatory-context-and-market-adoption">Regulatory Context and Market Adoption</h2><p>Stablecoin regulation varies by region. The EU's MiCA framework and US money transmitter laws both shape how stablecoins are designed and issued.</p><p><strong>Fiat-backed stablecoins</strong> like USDC and USDT lead the market by total value. They offer regulatory clarity and in some cases custodial insurance.</p><p><strong>Crypto-collateralized stablecoins</strong> like Dai appeal to DeFi users who prefer decentralized, permissionless systems.</p><p><strong>Yield-bearing stablecoins</strong> attract savers and treasury managers looking for passive returns in DeFi.</p><p>Algorithmic stablecoins remain niche and high-risk after the collapse of Terra's UST.</p><h2 id="stablecoins-on-status-network">Stablecoins on Status Network</h2><p><strong>Status Network</strong> is an Ethereum Layer 2 built for <a href="https://docs.status.network/general-info/gasless-transactions">gasless transactions</a> and capital coordination. Its economic model treats bridged stablecoins as yield-producing collateral.</p><p><strong>GUSD</strong> is built into <strong>Status Network</strong> from the ground up. Users bridge stablecoins to the L2. They then deposit into yield strategies through the <strong>Generic Protocol</strong>.</p><p>That yield funds the <a href="https://docs.status.network/tokenomics/public-funding"><strong>Apps Funding Pool</strong></a>. <a href="https://docs.status.network/tokenomics/karmic-tokenomics"><strong>Karma</strong></a> governance votes decide how the pool distributes capital to builders and projects.</p><h3 id="the-native-yield-engine">The Native Yield Engine</h3><p>The <a href="https://docs.status.network/tokenomics/economic-model"><strong>Native Yield Engine</strong></a> turns deposited stablecoins into productive assets that generate ongoing returns.</p><p><strong>GUSD</strong> is the user-facing product. It earns yield while keeping a $1 peg.</p><p>This reflects the <strong>Status Network</strong> thesis: L2s should run on asset productivity, not on execution fees paid by users.</p><p>Traditional L2s extract revenue from transaction fees. <strong>Status Network</strong> generates revenue from TVL yield and DEX volume instead.</p><p>Users get gasless transactions. Developers get ongoing funding through governance-allocated capital from the yield pool.</p><h2 id="why-stablecoins-matter">Why Stablecoins Matter</h2><p>Stablecoins are the connective tissue of crypto finance:</p><ul><li>Enable decentralized lending and borrowing</li><li>Support cross-chain bridges and atomic swaps</li><li>Allow merchant payments with zero volatility risk</li><li>Provide treasury tools for DAOs and protocols</li><li>Power yield farming and automated investment strategies</li></ul><p>Choosing a stablecoin type depends on what you need:</p><ul><li>Need instant fiat settlement? Use USDC.</li><li>Looking for decentralized borrowing? Use Dai.</li><li>Want to earn yield on your savings? Use sDAI or <strong>GUSD</strong>.</li></ul><p>Yield-bearing stablecoins will likely grow as markets mature. Ecosystems like <strong>Status Network</strong> are built around this idea.</p><p>They structure the L2 so that user collateral generates revenue. That revenue funds public goods and developer incentives directly, with no transaction fees required.</p><h2 id="frequently-asked-questions">Frequently Asked Questions</h2><p><strong>What is the difference between a stablecoin and a central bank digital currency?</strong></p><p>CBDCs are issued by governments. Stablecoins are issued by private entities or protocols on blockchain networks. Stablecoins allow instant global settlement without needing a bank as a go-between.</p><p><strong>Can a stablecoin lose its peg for good?</strong></p><p>Yes. If collateral fails or algorithmic controls break down, the peg can collapse. Fiat-backed stablecoins are the most resistant to this. Pure algorithmic designs carry the highest risk.</p><p><strong>How does sDAI keep a $1 peg while earning yield?</strong></p><p>MakerDAO sends Sky Protocol yield to sDAI holders. The peg stays at $1. The holder's token balance grows as yield builds up over time.</p><p><strong>Are stablecoins regulated like banks?</strong></p><p>Rules vary by country and region. US money transmitter laws apply in some states. EU MiCA requires issuers to meet operational and governance standards. Most fiat-backed stablecoins obtain licenses.</p><p><strong>What happens to stablecoin yield during market downturns?</strong></p><p>Yield depends on the strategy behind the token. If lending rates drop, yield goes down too. In extreme stress, protocols may pause withdrawals or lower rates for a time.</p><p><strong>Can I use a yield-bearing stablecoin like GUSD as collateral in DeFi lending?</strong></p><p>Yes. Yield-bearing stablecoins hold the $1 peg, making them valid collateral. They earn yield while posted, which can lower the effective cost of borrowing.</p><p><strong>What is the advantage of GUSD over holding multiple stablecoins on my own?</strong></p><p><a href="https://hub.status.network/" rel="noreferrer"><strong>GUSD</strong></a> rebalances across diversified yield strategies on its own. It removes manual farming work and spreads risk across multiple protocols instead of one.</p><p><strong>How does Status Network use stablecoins differently than other L2s?</strong></p><p><a href="https://status.network/"><strong>Status Network</strong></a> treats stablecoins as productive capital. Bridged assets generate <a href="https://docs.status.network/tokenomics/economic-model">L1 yield</a>. That yield funds the <a href="https://docs.status.network/tokenomics/public-funding"><strong>Apps Funding Pool</strong></a> through <a href="https://docs.status.network/tokenomics/karmic-tokenomics"><strong>Karma</strong></a> governance. Traditional L2s extract fees from transactions. <strong>Status Network</strong> generates revenue from yield instead.</p>21:T1717,{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq",
+  "name": "What Is a Stablecoin? Backed, Algorithmic, and Yield-Bearing Types",
+  "url": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-q1",
+      "name": "What is the difference between a stablecoin and a central bank digital currency?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-a1",
+        "text": "Central bank digital currencies are issued by governments or central banks. Stablecoins are issued by private companies or blockchain protocols. Stablecoins are designed to move on blockchain networks and can support fast global settlement without relying on a traditional bank intermediary."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-q2",
+      "name": "Can a stablecoin lose its peg for good?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-a2",
+        "text": "Yes. A stablecoin can permanently lose its peg if its collateral fails, redemption mechanisms break down, or algorithmic controls stop working. Fiat-backed stablecoins are generally more resilient, while purely algorithmic designs carry higher risk."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-q3",
+      "name": "How does sDAI keep a $1 peg while earning yield?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-a3",
+        "text": "sDAI is designed to track the value of one US dollar while passing protocol-generated yield to holders. Instead of changing the peg target, the value accrues through the holder's balance growth over time as yield is added."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-q4",
+      "name": "Are stablecoins regulated like banks?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-a4",
+        "text": "Stablecoin regulation depends on the country and the structure of the token. Some issuers must comply with money transmission, reserve, governance, or disclosure requirements. In the European Union, MiCA sets a framework for crypto asset issuers, including certain stablecoin models."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-q5",
+      "name": "What happens to stablecoin yield during market downturns?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-a5",
+        "text": "Yield depends on the underlying strategy used by the stablecoin. When lending demand falls or market conditions weaken, yield can decline. During periods of severe stress, some protocols may reduce rates, tighten risk controls, or temporarily pause withdrawals."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-q6",
+      "name": "Can I use a yield-bearing stablecoin like GUSD as collateral in DeFi lending?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-a6",
+        "text": "Some DeFi lending protocols may accept yield-bearing stablecoins as collateral if the asset is integrated and risk-assessed by the platform. Whether a specific token qualifies depends on the protocol's collateral rules, oracle support, and liquidity profile."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-q7",
+      "name": "What is the advantage of GUSD over holding multiple stablecoins on my own?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-a7",
+        "text": "A yield-bearing stablecoin strategy such as GUSD can simplify stablecoin management by automating allocation across multiple yield sources. This reduces the need for manual rebalancing and can spread exposure across more than one protocol or strategy."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-q8",
+      "name": "How does Status Network use stablecoins differently than other L2s?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types#faq-a8",
+        "text": "Status Network treats stablecoins as productive capital. Bridged assets can generate yield at the base layer, and that yield supports ecosystem funding through Karma governance. This differs from traditional layer 2 models that primarily rely on transaction fees as a revenue source."
+      }
+    }
+  ]
+}1d:["$","$L1f",null,{"slug":"what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types","initialPost":{"slug":"what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types","title":"What Is a Stablecoin? Backed, Algorithmic, and Yield-Bearing Types","html":"$20","feature_image":"https://our.status.im/content/images/2026/03/07---Blog---Cover.jpg","feature_image_alt":"Stablecoin types explained: collateral-backed, algorithmic, and yield-bearing stablecoins on Status Network and beyond","published_at":"2026-03-07T13:29:45.000+00:00","updated_at":"2026-03-07T13:29:45.000+00:00","codeinjection_head":"$21","codeinjection_foot":null,"primary_tag":{"name":"status-network-blog","slug":"status-network-blog"},"primary_author":{"id":"6915ef6ff70ca800016c5a8d","name":"Kamila Lipska","slug":"kamila","profile_image":null,"cover_image":null,"bio":null,"website":null,"location":null,"facebook":null,"twitter":null,"meta_title":null,"meta_description":null,"url":"https://our.status.im/author/kamila/"}},"labels":{"breadcrumbBlog":"Blog","onDate":"on","shareArticleOn":"Share article on:"}}]
+1e:["$","div",null,{"className":"border-t border-neutral-10 bg-neutral-10 px-5 pb-16 pt-10 xl:pb-24","children":["$","div",null,{"className":"mx-auto w-full max-w-[1184px]","children":[["$","h2",null,{"className":"mb-6 text-27 font-600","children":"Related articles"}],["$","div",null,{"className":"grid gap-5 md:grid-cols-2 xl:grid-cols-4","children":["$L22","$L23","$L24","$L25"]}]]}]}]
+22:["$","$L4","69dcde17834292000196a55e",{"href":"/blog/snt-staking-earn-karma","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"SNT Staking: How to Earn Karma on Status Network"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/41---Blog---Cover.jpg","alt":"Staking SNT earns Karma, a non-transferable reputation token that unlocks free transactions and governance voting power."}]}]],"ref":"$undefined"}]
+23:["$","$L4","69dcc688834292000196a542",{"href":"/blog/privacy-l2-stealth-addresses-bermuda","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"Privacy on Ethereum Layer 2: How Bermuda Enables Stealth Addresses"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/40---Blog---Cover.jpg","alt":"Ethereum Layer 2 privacy with stealth addresses, confidential balances, zero knowledge proofs, Bermuda protocol execution."}]}]],"ref":"$undefined"}]
+24:["$","$L4","69dcc2cc834292000196a529",{"href":"/blog/what-is-mev-maximal-extractable-value","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"What Is MEV? Maximal Extractable Value and Its Impact on Users"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/39---Blog---Cover.jpg","alt":"Maximal extractable value MEV blockchain transaction ordering impact on crypto users and DeFi trades."}]}]],"ref":"$undefined"}]
+25:["$","$L4","69d6452a834292000196a509",{"href":"/blog/gas-fees-are-a-privacy-leak-no-pricing-model-can-fix","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"Gas Fees Are a Privacy Leak No Pricing Model Can Fix"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 8, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/38---Blog---Cover.jpg","alt":"How gas funding trail links blockchain account activity to transaction metadata."}]}]],"ref":"$undefined"}]
+26:I[610,[],"IconMark"]
+c:{"metadata":[["$","title","0",{"children":"What Is a Stablecoin? Types, Uses, and GUSD on Status"}],["$","meta","1",{"name":"description","content":"Learn what stablecoins are, how backed, algorithmic, and yield-bearing designs work, and how Status Network uses GUSD and native yield for gasless DeFi."}],["$","link","2",{"rel":"canonical","href":"https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types"}],["$","link","3",{"rel":"alternate","hrefLang":"en","href":"https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types"}],["$","link","4",{"rel":"alternate","hrefLang":"ko","href":"https://status.network/ko/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types"}],["$","link","5",{"rel":"alternate","hrefLang":"x-default","href":"https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types"}],["$","meta","6",{"property":"og:title","content":"What Is a Stablecoin? Backed, Algorithmic, and Yield-Bearing Types"}],["$","meta","7",{"property":"og:description","content":"Learn what stablecoins are, how backed, algorithmic, and yield-bearing designs work, and how Status Network uses GUSD and native yield for gasless DeFi."}],["$","meta","8",{"property":"og:url","content":"https://status.network/blog/what-is-a-stablecoin-backed-algorithmic-and-yield-bearing-types"}],["$","meta","9",{"property":"og:site_name","content":"Status Network"}],["$","meta","10",{"property":"og:locale","content":"en"}],["$","meta","11",{"property":"og:image","content":"https://our.status.im/content/images/2026/03/07---Blog---Cover.jpg"}],["$","meta","12",{"property":"og:type","content":"article"}],["$","meta","13",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","14",{"name":"twitter:site","content":"@StatusL2"}],["$","meta","15",{"name":"twitter:title","content":"What Is a Stablecoin? Types, Uses, and GUSD on Status"}],["$","meta","16",{"name":"twitter:description","content":"Learn what stablecoins are, how backed, algorithmic, and yield-bearing designs work, and how Status Network uses GUSD and native yield for gasless DeFi."}],["$","meta","17",{"name":"twitter:image","content":"https://our.status.im/content/images/2026/03/07---Blog---Cover.jpg"}],["$","link","18",{"rel":"icon","href":"/icon2.png?d102c5988532e764","type":"image/png","sizes":"128x128"}],["$","$L26","19",{}]],"error":null,"digest":"$undefined"}
+11:"$c:metadata"

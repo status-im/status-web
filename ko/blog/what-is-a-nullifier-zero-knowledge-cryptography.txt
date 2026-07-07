@@ -1,0 +1,287 @@
+1:"$Sreact.fragment"
+2:I[6978,[],""]
+3:I[5232,[],""]
+4:I[6132,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],""]
+9:I[9019,[],"OutletBoundary"]
+b:I[602,[],"AsyncMetadataOutlet"]
+d:I[9019,[],"ViewportBoundary"]
+f:I[9019,[],"MetadataBoundary"]
+10:"$Sreact.suspense"
+12:I[7098,[],""]
+:HL["/_next/static/media/e4af272ccee01ff0-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/css/24bd7f809405cf73.css","style"]
+0:{"P":null,"b":"7gQ4TSxhd0JxmNfKrcxGR","p":"","c":["","ko","blog","what-is-a-nullifier-zero-knowledge-cryptography"],"i":false,"f":[[["",{"children":["(site)",{"children":[["locale","ko","d"],{"children":["blog",{"children":[["slug","what-is-a-nullifier-zero-knowledge-cryptography","d"],{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true]}]}],["",["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-[calc(100dvh-189px)] flex-1 items-center justify-center px-5 lg:min-h-[calc(100dvh-118px)]","children":["$","div",null,{"className":"flex max-w-[696px] flex-col items-center gap-8","children":[["$","h1",null,{"className":"text-center text-40 font-700 lg:text-64","children":"This is not the page you're looking for"}],["$","$L4",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-purple border-[transparent] hover:bg-purple-dark text-white-100 h-10 py-[9px] rounded-12 px-4","href":"/","children":["$undefined","Take me home","$undefined"],"ref":"$undefined"}]]}]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["(site)",["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["locale","ko","d"],["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/24bd7f809405cf73.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],"$L5"]}],{"children":["blog",["$","$1","c",{"children":[null,["$","div",null,{"className":"relative flex min-h-screen justify-center overflow-clip px-2 2xl:px-0","children":["$","div",null,{"className":"relative w-full max-w-[1418px] border-x border-neutral-20","children":[["$","div",null,{"className":"absolute -left-2 top-0 z-50 h-full w-2 bg-gradient-to-r from-white-100 to-[transparent] 2xl:-left-12 2xl:w-12"}],["$","div",null,{"className":"absolute -right-2 top-0 z-50 h-full w-2 bg-gradient-to-l from-white-100 to-[transparent] 2xl:-right-12 2xl:w-12"}],"$L6",["$","main",null,{"children":["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]}],["$","div",null,{"className":"relative","children":[["$","div",null,{"className":"absolute left-[-3px] top-[-2px] size-[5px] rounded-full bg-neutral-20"}],["$","div",null,{"className":"relative bottom-0 h-px bg-neutral-20 z-20 left-1/2 w-[calc(100%+16px)] lg:w-[calc(100%+16px)] 2xl:w-[calc(100%+96px)] -translate-x-1/2"}],"$undefined",["$","div",null,{"className":"absolute bottom-[-2px] right-[-3px] size-[5px] rounded-full bg-neutral-20"}]]}],"$L7"]}]}]]}],{"children":[["slug","what-is-a-nullifier-zero-knowledge-cryptography","d"],["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":["$L8",null,["$","$L9",null,{"children":["$La",["$","$Lb",null,{"promise":"$@c"}]]}]]}],{},null,false]},null,false]},null,false]},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,[["$","$Ld",null,{"children":"$Le"}],["$","meta",null,{"name":"next-size-adjust","content":""}]],["$","$Lf",null,{"children":["$","div",null,{"hidden":true,"children":["$","$10",null,{"fallback":null,"children":"$L11"}]}]}]]}],false]],"m":"$undefined","G":["$12",[]],"s":false,"S":true}
+13:I[928,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"Image"]
+6:["$","header",null,{"className":"sticky top-0 z-[60] w-full bg-white-90 backdrop-blur supports-[backdrop-filter]:bg-white-80","children":[["$","div",null,{"className":"mx-auto flex h-16 items-center justify-between px-4","children":[["$","$L4",null,{"href":"/","className":"flex items-center space-x-2","children":["$","$L13",null,{"src":"/logo.svg","alt":"Status Network Logo","width":210,"height":32}],"ref":"$undefined"}],["$","div",null,{"className":"flex items-center gap-3","children":[["$","$L4",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-white-100 border-neutral-30 hover:border-neutral-40 hover:bg-white-80 text-dark-100 h-8 py-[5px] rounded-10 px-3 hidden sm:block","href":"/","children":["$undefined","Home","$undefined"],"ref":"$undefined"}],["$","a",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-purple border-[transparent] hover:bg-purple-dark text-white-100 h-8 py-[5px] rounded-10 px-3","target":"_blank","rel":"noopener noreferrer","href":"https://hub.status.network/","children":["$undefined","Get started","$undefined"],"ref":"$undefined"}]]}]]}],["$","div",null,{"className":"relative","children":[["$","div",null,{"className":"absolute left-[-3px] top-[-2px] size-[5px] rounded-full bg-neutral-20"}],["$","div",null,{"className":"relative bottom-0 h-px bg-neutral-20 z-20 left-1/2 w-[calc(100%+16px)] lg:w-[calc(100%+16px)] 2xl:w-[calc(100%+96px)] -translate-x-1/2"}],"$undefined",["$","div",null,{"className":"absolute bottom-[-2px] right-[-3px] size-[5px] rounded-full bg-neutral-20"}]]}]]}]
+7:["$","footer",null,{"className":"relative z-[61]","children":["$","div",null,{"className":"grid gap-4 p-3 lg:grid-cols-[1fr,auto,auto] lg:gap-5 lg:p-4","children":[["$","div",null,{"className":"flex flex-col justify-center gap-2 lg:flex-row lg:justify-start lg:gap-3","children":[["$","span",null,{"className":"text-center text-13 lg:text-left","children":"© Status Research & Development GmbH"}],["$","svg",null,{"width":"2","height":"2","viewBox":"0 0 2 2","fill":"none","xmlns":"http://www.w3.org/2000/svg","className":"hidden text-neutral-50 lg:block","children":["$","circle",null,{"cx":"1","cy":"1","r":"1","fill":"#A1ABBD"}]}]]}],["$","div",null,{"className":"flex flex-col items-center justify-center gap-3 lg:flex-row lg:justify-end","children":[["$","div",null,{"className":"flex items-center justify-center gap-4 md:gap-3 lg:justify-end","children":[["$","$L4",null,{"href":"/legal/terms-of-use","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Terms of Use","ref":"$undefined"}],["$","$L4",null,{"href":"/legal/privacy-policy","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Privacy Policy","ref":"$undefined"}],["$","$L4",null,{"href":"/blog","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Blog","ref":"$undefined"}],"$L14"]}],["$","svg",null,{"width":"2","height":"2","viewBox":"0 0 2 2","fill":"none","xmlns":"http://www.w3.org/2000/svg","className":"2md:hidden text-neutral-50","children":["$","circle",null,{"cx":"1","cy":"1","r":"1","fill":"#A1ABBD"}]}],["$","div",null,{"className":"flex justify-center gap-6 lg:justify-end","children":[["$","a","Status",{"href":"https://status.app","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/status.6be65460.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"Status","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}],["$","a","Twitter",{"href":"https://x.com/StatusL2","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/twitter.6865a7e5.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"Twitter","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}],["$","a","GitHub",{"href":"https://github.com/status-im","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/github.90103528.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"GitHub","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}]]}]]}]]}]}]
+17:I[6105,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","726","static/chunks/726-a688395c743bdde3.js","565","static/chunks/565-e7a70831c2486b41.js","472","static/chunks/app/(site)/%5Blocale%5D/layout-fe09f44bffcc5314.js"],"Analytics"]
+18:I[5718,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","726","static/chunks/726-a688395c743bdde3.js","565","static/chunks/565-e7a70831c2486b41.js","472","static/chunks/app/(site)/%5Blocale%5D/layout-fe09f44bffcc5314.js"],""]
+15:T433,{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Status Network",
+  "url": "https://status.network/",
+  "logo": "https://status.network/logo.svg",
+  "description": "Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack, with network-level spam protection enforced through reputation (Karma) and execution funded by native yield rather than user-paid gas fees.",
+  "sameAs": [
+    "https://x.com/StatusL2",
+    "https://github.com/status-im"
+  ],
+  "@id": "https://status.network/#organization",
+  "knowsAbout": [
+    {
+      "@type": "Thing",
+      "name": "Ethereum Layer 2"
+    },
+    {
+      "@type": "Thing",
+      "name": "Gasless transactions"
+    },
+    {
+      "@type": "Thing",
+      "name": "Composable privacy"
+    },
+    {
+      "@type": "Thing",
+      "name": "Spam protection"
+    },
+    {
+      "@type": "Thing",
+      "name": "Reputation system"
+    },
+    {
+      "@type": "Thing",
+      "name": "Native yield funding"
+    },
+    {
+      "@type": "Thing",
+      "name": "Bots"
+    }
+  ]
+}5:["$","html",null,{"lang":"ko","children":["$","body",null,{"className":"__variable_9cc749 bg-white-100 text-neutral-100 antialiased selection:bg-purple selection:text-white-100","suppressHydrationWarning":true,"children":[[["$","script","0",{"id":"json-ld-0","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$15"}}],["$","script","1",{"id":"json-ld-1","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"WebSite\",\n  \"name\": \"Status Network\",\n  \"url\": \"https://status.network/\",\n  \"description\": \"Status Network is a privacy-first, fully gasless Ethereum Layer 2 designed for scalable onchain activity, coordinated through reputation and native yield.\",\n  \"@id\": \"https://status.network/#website\",\n  \"publisher\": {\n    \"@id\": \"https://status.network/#organization\"\n  },\n  \"about\": [\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Ethereum Layer 2\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Gasless transactions\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Composable privacy\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Spam protection\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Reputation system\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Native yield funding\"\n    }\n  ]\n}"}}],["$","script","2",{"id":"json-ld-2","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"SoftwareApplication\",\n  \"name\": \"Status Network\",\n  \"applicationCategory\": \"Blockchain\",\n  \"operatingSystem\": \"Web3\",\n  \"url\": \"https://status.network/\",\n  \"description\": \"Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack. Execution is coordinated through Karma, a non-transferable reputation system, and supported by native yield and network activity.\"\n}"}}]],"$L16",["$","$L17",null,{}],["$","$L18",null,{"strategy":"afterInteractive","src":"https://umami.bi.status.im/script.js","data-website-id":"0746c5dc-8cd3-45a4-9606-6bcf9adf248e","data-domains":"status.network","async":true}]]}]}]
+19:I[6156,["756","static/chunks/756-56d07e8fa5ffdccb.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","878","static/chunks/app/(site)/%5Blocale%5D/blog/layout-c6bf279edadbe978.js"],"default"]
+14:["$","$L19",null,{"ref":"$undefined","href":"/brand","locale":"$undefined","localeCookie":{"name":"NEXT_LOCALE","sameSite":"lax"},"className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Brand assets"}]
+1a:I[2756,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"default"]
+16:["$","$L1a",null,{"formats":"$undefined","locale":"ko","messages":{"meta":{"locale":"en","name":"English","direction":"ltr","description":"Complete Status Network website translations"},"common":{"loading":"Loading...","learn_more":"Learn More","get_started":"Get started","read_more":"Read More","read_docs":"Read docs","view_blog":"View blog","new":"NEW","testnet_live":"Testnet v2 is live!","promo_message":"Vaults withdrawals are now enabled","visit_hub":"withdraw now","visit_hub_aria":"withdraw now (opens in new tab)"},"navigation":{"home":"Home","about":"About","features":"Features","network":"Network","partners":"Partners","tokenomics":"Tokenomics","blog":"Blog","brand":"Brand"},"hero":{"title":"The gasless network","subtitle":"with sustainable funding for app builders","description":"Launch and scale your social apps and games with truly free transactions."},"about":{"section_number":"01","section_title":"WHAT IS STATUS NETWORK?","title_1":"The first Ethereum L2 with","title_2":"gas-free","title_3":"transactions at scale","title_4":"funded by native yield + fees.","description":"A free network with sustainable funding for public apps, games and protocols.","build_button":"Build on Status Network","learn_more_button":"Learn more"},"features":{"section_number":"02","section_title":"WHY STATUS NETWORK?","title":"Power to the community","sustainable_funding":{"title":"Sustainable public funding","description":"Status Network takes a radical step beyond short-term incentives. Powered by native yields and fees, its public app funding pool is governed by the community, ensuring a continuous allocation of capital for onchain builders.","step_1":"Users bridge yield-bearing assets to Status Network and increase the yield redirected to the funding pool.","step_2":"Apps and games apply for an allocation from the pool. The community votes on allocations using Karma, a non-transferrable governance token earned by contributing positively to the network:","step_2_staking":"Staking SNT","step_2_bridging":"Bridging yield-bearing tokens","step_2_using":"Using apps","step_2_premium":"Paying premium gas","step_2_donations":"Making direct donations to the funding pool","step_3":"Every funded project onboards new users, driving additional asset deposits and token swaps - generating more yield and fees to be allocated in the funding pool.","button":"Discover Karmic Tokenomics"},"gasless_transactions":{"title":"Gasless transactions","description_1":"On Status Network, anyone can experience free transactions! With the L2 operating costs covered by native yields and fees, no need to bridge gas to use an app.","description_2":"Apps and games developers can offer frictionless onboarding for their users at scale.","button":"Learn how it works"},"performance":{"title":"Built for performance, secured by Ethereum","description":"Leverage Ethereum's security with Linea's cutting-edge zkEVM rollup technology for high-speed transactions. Perfect for gaming, social, iGaming, and high-throughput applications.","button":"Learn more about Linea"},"decentralization":{"title":"Geared for decentralization","description":"Built on the core values of Status and the IFT ecosystem, Status Network is designed to become a truly decentralised L2. The endgame is to provide a censorship-resistant environment where communities can thrive without central points of control.","button":"Learn more"}},"partners":{"section_number":"03","section_title":"ECOSYSTEM AND PARTNERS","title_1":"Empowering bold","title_2":"creators and developers","subtitle":"Building with the best in the game","cats_fishing":{"title":"Cats Fishing","description":"The first open-sourced, proof of play mobile fishing game"},"spla_labs":{"title":"Spla Labs","description":"Builders of TODL & Ponzi Hero games"},"hash_vegas":{"title":"Hash Vegas","description":"Fair and transparent onchain gaming"},"ponzi_hero":{"title":"Ponzi Hero","description":"Earn NFTs, have some fun!"},"linea":{"title":"Linea","description":"Secure zkEVM L2 stack"},"gateway":{"title":"Gateway","description":"Rollup infrastructure and operation"},"din":{"title":"DIN","description":"Decentralised Infrastructure Network"}},"network":{"section_number":"04","section_title":"NETWORK","title":"Leverage the most advanced decentralised stack","description":"Builders get priority support from Institute of Free Technology solutions:","status":{"title":"Status","description":"Ethereum super-app with 4M+ downloads"},"logos":{"title":"Logos","description":"Open tech to restore civil society"},"waku":{"title":"Waku","description":"P2P encrypted messaging protocol"},"codex":{"title":"Codex","description":"Decentralised data storage layer"},"nimbus":{"title":"Nimbus","description":"Ethereum core devs. Powering Eth consensus"},"keycard":{"title":"Keycard","description":"Secure open-source hardware wallet"}},"tokenomics":{"section_number":"05","section_title":"TOKENOMICS","title":"Earn voting power through positive network engagement","description":"The more you contribute to the network, the more influence you gain over funding allocation and the network's roadmap priorities.","karma_note":"This is coordinated by Karma, a non-transferable governance token.","app_developer":{"title":"App developer","step_1":"Ship code","step_2":"Get traction","step_3":"Receive Karma","step_4":"Earn funding"},"liquidity_provider":{"title":"Liquidity provider","description":"Earn Karma for staking SNT and get LP rewards boosted by native yield."},"onchain_user":{"title":"Onchain user","description":"Get rewarded with Karma for bridging to the network and using apps. A higher Karma means more gasless transactions."}},"blog":{"title":"Stay up to date","view_blog_button":"View blog","category":"Updates","author":"Us","on_date":"on","page_title":"Blog.","page_description":"Long form articles, thoughts, and ideas.","share_article_on":"Share article on:","related_articles":"Related articles","breadcrumb_blog":"Blog","no_posts":"No posts available yet.","home":"Home","get_started":"Get started","post_1":{"title":"Status Steps Up as Founding Member of Linea Consortium"},"post_2":{"title":"Status Launches First Gasless Layer 2 on Linea"},"post_3":{"title":"Embracing Community Choices: Status to Develop SNT Staking and Status L2"}},"footer":{"copyright":"© Status Research & Development GmbH","privacy_policy":"Privacy Policy","terms_of_use":"Terms of Use","blog":"Blog","brand":"Brand assets"},"pre_footer":{"title":"Ready to build on the free network?","partner_button":"Partner with us","read_docs_button":"Read docs"},"brand":{"page_title":"Brand","page_description":"Get Status Network brand assets.","main_title":"Brand assets","last_updated":"Last updated: 12 November 2025","download_all":"Download all assets","logo_title":"Logo","logo_description":"Our main logo","logo_variation_title":"Logo variation","logo_variation_description":"For creative printing layouts","mark_only_title":"Mark only","mark_only_description":"Without wordmark","main_colors_title":"Main colors","main_colors_description":"Our main colors palette","artwork_title":"Artwork","artwork_description":"Our main characters","download_button":"Download","alt_text":{"main_logo":"Main logo","mark_only":"Mark only","artwork":"Artwork"}},"not_found":{"title":"This is not the page you're looking for","take_me_home":"Take me home"}},"now":"$undefined","timeZone":"UTC","children":"$L1b"}]
+1b:["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]
+e:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+a:null
+1f:I[610,[],"IconMark"]
+1c:T144b,{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq",
+  "url": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-q1",
+      "name": "What is a nullifier in zero-knowledge cryptography?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-a1",
+        "text": "A nullifier is a hash derived from a user's secret that marks an action as performed. Zero-knowledge systems store used nullifiers and reject duplicates, preventing reuse without revealing user identity."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-q2",
+      "name": "How does a nullifier prevent double-spending?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-a2",
+        "text": "Each secret generates a unique nullifier within a defined scope. The system checks new nullifiers against a stored set, and if a duplicate is found, the transaction is rejected. This ensures a single secret can only be used once."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-q3",
+      "name": "What is the difference between a nullifier and a nonce?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-a3",
+        "text": "A nonce is a sequential counter tied to a public account, while a nullifier is a hash derived from a private secret. Nonces require known identity, whereas nullifiers allow anonymous verification while preventing replay."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-q4",
+      "name": "Can a nullifier be reversed to find the user's identity?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-a4",
+        "text": "No. Nullifiers are derived using one-way hash functions, meaning the original secret or user identity cannot be reconstructed from the nullifier value."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-q5",
+      "name": "What are Rate Limiting Nullifiers (RLN)?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-a5",
+        "text": "Rate Limiting Nullifiers are a zero-knowledge protocol that extends nullifiers to enforce usage limits. RLN uses Shamir Secret Sharing so that exceeding allowed activity reveals enough information to identify and penalize the sender, while honest users remain anonymous."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-q6",
+      "name": "How does Status Network use nullifiers for gasless transactions?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-a6",
+        "text": "Status Network uses RLN-based nullifiers to track transaction usage within defined epochs. Users receive quotas based on Karma, and nullifiers ensure limits are enforced without revealing identity. Exceeding limits results in penalties or restricted access."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-q7",
+      "name": "What is a Sparse Merkle Tree in the context of RLN?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-a7",
+        "text": "In RLN, a Sparse Merkle Tree stores membership commitments in a fixed-size structure. It supports a large number of accounts and allows users to prove inclusion using zero-knowledge proofs without revealing which specific entry belongs to them."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-q8",
+      "name": "Can nullifiers be used for anonymous voting?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-a8",
+        "text": "Yes. In anonymous voting systems, each participant generates a nullifier tied to a specific election. The system rejects duplicate nullifiers to prevent double voting, while zero-knowledge proofs confirm eligibility without revealing voter identity."
+      }
+    }
+  ]
+}8:[[["$","script","0",{"id":"json-ld-0","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Article\",\n  \"headline\": \"What Is a Nullifier in Zero-Knowledge Cryptography? How Double-Spend Is Prevented\",\n  \"description\": \"A nullifier is a unique cryptographic tag that prevents reuse in ZK protocols. Learn how nullifiers stop double-spending and enable rate limiting in RLN.\",\n  \"image\": \"https://our.status.im/content/images/2026/03/29---Blog---Cover.jpg\",\n  \"datePublished\": \"2026-03-27T13:23:58.000+00:00\",\n  \"dateModified\": \"2026-03-27T13:23:58.000+00:00\",\n  \"author\": {\n    \"@type\": \"Person\",\n    \"name\": \"Kamila Lipska\"\n  },\n  \"publisher\": {\n    \"@type\": \"Organization\",\n    \"name\": \"Status Network\",\n    \"logo\": {\n      \"@type\": \"ImageObject\",\n      \"url\": \"https://status.network/logo.svg\"\n    }\n  }\n}"}}]],[["$","script","custom-jsonld-0",{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$1c"}}]],"$L1d","$L1e"]
+c:{"metadata":[["$","title","0",{"children":"What Is a Nullifier in Zero-Knowledge Cryptography?"}],["$","meta","1",{"name":"description","content":"A nullifier is a unique cryptographic tag that prevents reuse in ZK protocols. Learn how nullifiers stop double-spending and enable rate limiting in RLN."}],["$","link","2",{"rel":"canonical","href":"https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography"}],["$","link","3",{"rel":"alternate","hrefLang":"en","href":"https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography"}],["$","link","4",{"rel":"alternate","hrefLang":"ko","href":"https://status.network/ko/blog/what-is-a-nullifier-zero-knowledge-cryptography"}],["$","link","5",{"rel":"alternate","hrefLang":"x-default","href":"https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography"}],["$","meta","6",{"property":"og:title","content":"What Is a Nullifier in Zero-Knowledge Cryptography? How Double-Spend Is Prevented"}],["$","meta","7",{"property":"og:description","content":"A nullifier is a unique cryptographic tag that prevents reuse in ZK protocols. Learn how nullifiers stop double-spending and enable rate limiting in RLN."}],["$","meta","8",{"property":"og:url","content":"https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography"}],["$","meta","9",{"property":"og:site_name","content":"Status Network"}],["$","meta","10",{"property":"og:locale","content":"en"}],["$","meta","11",{"property":"og:image","content":"https://our.status.im/content/images/2026/03/29---Blog---Cover.jpg"}],["$","meta","12",{"property":"og:type","content":"article"}],["$","meta","13",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","14",{"name":"twitter:site","content":"@StatusL2"}],["$","meta","15",{"name":"twitter:title","content":"What Is a Nullifier in Zero-Knowledge Cryptography?"}],["$","meta","16",{"name":"twitter:description","content":"A nullifier is a unique cryptographic tag that prevents reuse in ZK protocols. Learn how nullifiers stop double-spending and enable rate limiting in RLN."}],["$","meta","17",{"name":"twitter:image","content":"https://our.status.im/content/images/2026/03/29---Blog---Cover.jpg"}],["$","link","18",{"rel":"icon","href":"/icon2.png?d102c5988532e764","type":"image/png","sizes":"128x128"}],["$","$L1f","19",{}]],"error":null,"digest":"$undefined"}
+11:"$c:metadata"
+20:I[2118,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"BlogPostDetailHydrated"]
+21:T2a3b,<p>nullifier is a unique tag derived from a secret key. It marks that an action already happened. ZK protocols reject any duplicate nullifier, stopping double-spends without revealing who acted. Each valid action produces exactly one nullifier. This guide explains the key.</p><h2 id="why-double-spending-is-hard-to-solve-in-private-systems">Why Double-Spending Is Hard to Solve in Private Systems</h2><p>Public blockchains solve double-spending with open data. Every node sees every balance. If Alice spends 1 ETH, the full network records it.</p><p>Privacy breaks that model. When balances are hidden, the network cannot tell if Alice spent the same coin twice.</p><p>One fix: reveal the sender. But that kills privacy.</p><p>Nullifiers offer a better path. They prove an action happened once. They never reveal who did it.</p><h2 id="how-a-nullifier-works-step-by-step">How a Nullifier Works Step by Step</h2><p>A nullifier is not random. It is computed from inputs only the user controls. The process follows a strict order.</p><ol><li>The user holds a secret (a private key or commitment).</li><li>The user builds a ZK proof that the secret is valid.</li><li>A nullifier hash is derived from that secret.</li><li>The proof and nullifier are sent together.</li><li>The verifier checks the proof. Then it checks the nullifier against a stored set.</li><li>A new nullifier means success. A known nullifier means rejection.</li></ol><p>The key rule: the same secret always yields the same nullifier. You cannot create a second nullifier from one secret. One secret, one nullifier, one valid action.</p><h2 id="what-makes-nullifiers-deterministic">What Makes Nullifiers Deterministic?</h2><p>Determinism is the core design choice. The nullifier is a hash of fixed inputs. Same inputs always produce the same output. A simple formula looks like this:</p><p><code>$$nullifier = Poseidon(secret, externalNullifier)$$</code></p><p>The <code>$externalNullifier$</code> ties the action to a specific scope, such as an epoch. Alice can act once per scope. She cannot reuse her secret for a second action in that scope. The math blocks it.</p><h2 id="nullifiers-in-private-transactions">Nullifiers in Private Transactions</h2><p><strong>Zcash</strong> pioneered nullifiers for private payments. Each shielded note has a unique commitment. When spent, the owner reveals the nullifier, not the note.</p><p>The blockchain stores every spent nullifier. Nodes check this set before accepting a transaction. A match means the note was already used. The system rejects it.</p><p>The owner proves three things in zero knowledge. The note exists in the commitment tree. The nullifier matches the note. The owner holds the spending key. No amounts or addresses are exposed.</p><h2 id="nullifiers-in-anonymous-voting">Nullifiers in Anonymous Voting</h2><p>Voting protocols face the same puzzle. Each voter should cast one ballot. But voter identity must stay hidden.</p><p>A nullifier scoped to the election ID solves this. Each voter derives one nullifier per election. The tally contract rejects any duplicate.</p><p>The voter proves eligibility with a ZK proof. The ballot counts. The voter stays private.</p><h2 id="nullifiers-beyond-double-spend-rate-limiting">Nullifiers Beyond Double-Spend: Rate Limiting</h2><p>Nullifiers do more than block reuse. They can also enforce rate limits.</p><p><strong>Rate Limiting Nullifiers (RLN)</strong> extend the basic model. Instead of one action per scope, <strong>RLN</strong> allows a set number per epoch. A user might send five messages per time window.</p><p>The design is clever. <strong>RLN</strong> pairs <strong>Shamir Secret Sharing</strong> with ZK proofs. Each action in an epoch reveals one share of the user's secret.</p><p>Stay within the limit, and your secret is safe. Go over, and enough shares are exposed to rebuild your secret key.</p><p>This builds a penalty into the protocol. Spammers lose their keys. Honest users stay anonymous.</p><h3 id="how-rln-uses-sparse-merkle-trees">How RLN Uses Sparse Merkle Trees</h3><p><strong>RLN</strong> tracks members in a <a href="https://status.network/blog/sparse-merkle-tree-smt-rate-limiting"><strong>Sparse Merkle Tree</strong></a> of height 20. This supports up to 1 million accounts. Each member holds a leaf in the tree.</p><p>To act, a member proves their leaf exists. They never reveal which leaf is theirs. The nullifier confirms the action is unique within the epoch.</p><p>A <strong>Deny List</strong> catches rule breakers. Users who exceed their quota lose free access and must pay premium fees to continue transacting.</p><h2 id="how-status-network-uses-rln-for-gasless-transactions">How Status Network Uses RLN for Gasless Transactions</h2><p>Status Network is a gasless Ethereum Layer 2 built on Linea's zkEVM stack. It swaps gas fee markets for a reputation model powered by RLN. Every user with positive <strong>Karma</strong> (a soulbound reputation token) gets a free transaction quota. RLN nullifiers enforce that quota at the protocol level.</p><ol><li>A user earns Karma by staking SNT, bridging assets, adding liquidity, or building apps.</li><li>Their Karma balance sets the free transaction tier.</li><li>Each transaction creates an RLN nullifier scoped to the current epoch.</li><li>The system tracks nullifiers. Quota-compliant transactions cost nothing.</li><li>Transactions exceeding the quota trigger the Deny List, and the user must pay a premium sequencing tip.</li><li>If a user violates the global rate limit, their secret is recovered and they face reputation slashing.</li></ol><h3 id="why-this-matters-for-gasless-l2-design">Why This Matters for Gasless L2 Design</h3><p>Most L2s charge gas to stop spam. <a href="https://status.network/blog/status-network-economic-model-yield-funding-pool-and-zero-gas">Status Network</a> proves another way exists. ZK nullifiers enforce rate limits instead. Native yield from bridged assets funds the network. No gas fees for compliant users. Nullifiers make it work.</p><h2 id="nullifiers-and-on-chain-bot-economics">Nullifiers and On-Chain Bot Economics</h2><p>Nullifiers also shape how bots run on gasless networks. On a standard L2, bots pay gas like everyone else. <a href="https://status.network/blog/how-do-layer-2s-make-money">Gas cost</a> is the natural brake on bot spam.</p><p>On a gasless chain with <strong>RLN</strong>, bots face a different limit: their <strong>Karma</strong> transaction quota. A bot that burns through its free tier lands on the <strong>Deny List</strong>. It must then pay premium gas.</p><p>This filters out low-value spam bots. High-value bots (those catching DEX arbitrage on <strong>Orvex</strong> or running liquidations on <strong>FIRM</strong> CDPs) can justify the premium.</p><p>Bots that spread actions across epochs keep free access. Bots that burst past their limit pay the cost. Nullifier-based rate limits replace gas auctions as the primary bot-cost tool on reputation-based L2s.</p><h2 id="nullifiers-vs-nonces-what-is-the-difference">Nullifiers vs. Nonces: What Is the Difference?</h2><p>Both stop replay attacks. But they fit different trust models.</p>
+<!--kg-card-begin: html-->
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Nonce</th>
+<th>Nullifier</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Derived from</td>
+<td>Account state (counter)</td>
+<td>User secret + scope</td>
+</tr>
+<tr>
+<td>Privacy</td>
+<td>Shows sender account</td>
+<td>Reveals nothing about sender</td>
+</tr>
+<tr>
+<td>Uniqueness</td>
+<td>Per-account, sequential</td>
+<td>Per-secret, per-scope</td>
+</tr>
+<tr>
+<td>Use case</td>
+<td>Public transactions</td>
+<td>Private or anonymous actions</td>
+</tr>
+</tbody>
+</table>
+<!--kg-card-end: html-->
+<p>Nonces work when identity is public. Nullifiers work when identity must stay hidden.</p><h2 id="common-misconceptions-about-nullifiers">Common Misconceptions About Nullifiers</h2><p><strong>"Nullifiers reveal the user."</strong> False. A nullifier is a hash. It cannot be reversed to find the secret or user. Only duplicates are detected.</p><p><strong>"They only stop double-spending."</strong> False. Nullifiers enforce any one-time or rate-limited action: voting, messaging, airdrop claims, or gasless access.</p><p><strong>"Any random value works."</strong> False. Randomness breaks the rule. The same secret must always give the same nullifier. Without that, double-actions slip through.</p><h2 id="frequently-asked-questions">Frequently Asked Questions</h2><p><strong>What is a nullifier in zero-knowledge cryptography?</strong></p><p>A nullifier is a hash derived from a user's secret. It marks that an action was performed. ZK protocols store spent nullifiers and reject duplicates to block reuse without revealing user identity.</p><p><strong>How does a nullifier prevent double-spending?</strong></p><p>Each secret produces one nullifier per scope. The verifier checks new nullifiers against a stored set. If it already exists, the transaction fails. One secret can only spend one note.</p><p><strong>What is the difference between a nullifier and a nonce?</strong></p><p>A nonce is a counter tied to a public account. A nullifier is a hash tied to a private secret. Nonces need known identity. Nullifiers keep the user anonymous while still blocking replays.</p><p><strong>Can a nullifier be reversed to find the user's identity?</strong></p><p>No. A nullifier comes from a one-way hash function. Knowing the output does not reveal the secret or the person who made it.</p><p><strong>What are Rate Limiting Nullifiers (RLN)?</strong></p><p><strong>RLN</strong> is a ZK protocol that extends nullifiers to enforce rate limits. It uses <strong>Shamir Secret Sharing</strong> so that going over quota exposes the sender's secret key. Honest users stay anonymous. Spammers lose access.</p><p><strong>How does Status Network use nullifiers for gasless transactions?</strong></p><p><strong>Status Network</strong> uses <strong>RLN</strong> nullifiers to enforce free transaction quotas. Users with <strong>Karma</strong> get a per-epoch limit. Nullifiers track usage. Those who go over are placed on a <strong>Deny List</strong> and must pay premium gas fees.</p><p><strong>What is a Sparse Merkle Tree in the context of RLN?</strong></p><p><strong>RLN</strong> stores members in a<a href="https://status.network/blog/sparse-merkle-tree-smt-rate-limiting"> <strong>Sparse Merkle Tree</strong></a> of height 20. It supports up to 1 million accounts. Members prove inclusion with a ZK proof without showing which leaf is theirs.</p><p><strong>Can nullifiers be used for anonymous voting?</strong></p><p>Yes. Each voter derives one nullifier scoped to the election ID. The voting contract rejects duplicates. A ZK proof confirms eligibility without exposing which voter cast the ballot.</p>22:T144b,{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq",
+  "url": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-q1",
+      "name": "What is a nullifier in zero-knowledge cryptography?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-a1",
+        "text": "A nullifier is a hash derived from a user's secret that marks an action as performed. Zero-knowledge systems store used nullifiers and reject duplicates, preventing reuse without revealing user identity."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-q2",
+      "name": "How does a nullifier prevent double-spending?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-a2",
+        "text": "Each secret generates a unique nullifier within a defined scope. The system checks new nullifiers against a stored set, and if a duplicate is found, the transaction is rejected. This ensures a single secret can only be used once."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-q3",
+      "name": "What is the difference between a nullifier and a nonce?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-a3",
+        "text": "A nonce is a sequential counter tied to a public account, while a nullifier is a hash derived from a private secret. Nonces require known identity, whereas nullifiers allow anonymous verification while preventing replay."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-q4",
+      "name": "Can a nullifier be reversed to find the user's identity?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-a4",
+        "text": "No. Nullifiers are derived using one-way hash functions, meaning the original secret or user identity cannot be reconstructed from the nullifier value."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-q5",
+      "name": "What are Rate Limiting Nullifiers (RLN)?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-a5",
+        "text": "Rate Limiting Nullifiers are a zero-knowledge protocol that extends nullifiers to enforce usage limits. RLN uses Shamir Secret Sharing so that exceeding allowed activity reveals enough information to identify and penalize the sender, while honest users remain anonymous."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-q6",
+      "name": "How does Status Network use nullifiers for gasless transactions?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-a6",
+        "text": "Status Network uses RLN-based nullifiers to track transaction usage within defined epochs. Users receive quotas based on Karma, and nullifiers ensure limits are enforced without revealing identity. Exceeding limits results in penalties or restricted access."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-q7",
+      "name": "What is a Sparse Merkle Tree in the context of RLN?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-a7",
+        "text": "In RLN, a Sparse Merkle Tree stores membership commitments in a fixed-size structure. It supports a large number of accounts and allows users to prove inclusion using zero-knowledge proofs without revealing which specific entry belongs to them."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-q8",
+      "name": "Can nullifiers be used for anonymous voting?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-nullifier-zero-knowledge-cryptography#faq-a8",
+        "text": "Yes. In anonymous voting systems, each participant generates a nullifier tied to a specific election. The system rejects duplicate nullifiers to prevent double voting, while zero-knowledge proofs confirm eligibility without revealing voter identity."
+      }
+    }
+  ]
+}1d:["$","$L20",null,{"slug":"what-is-a-nullifier-zero-knowledge-cryptography","initialPost":{"slug":"what-is-a-nullifier-zero-knowledge-cryptography","title":"What Is a Nullifier in Zero-Knowledge Cryptography? How Double-Spend Is Prevented","html":"$21","feature_image":"https://our.status.im/content/images/2026/03/29---Blog---Cover.jpg","feature_image_alt":"Zero-knowledge nullifier cryptography preventing double-spend in blockchain and privacy protocols. Visual guide.","published_at":"2026-03-27T13:23:58.000+00:00","updated_at":"2026-03-27T13:23:58.000+00:00","codeinjection_head":"$22","codeinjection_foot":null,"primary_tag":{"name":"status-network-blog","slug":"status-network-blog"},"primary_author":{"id":"6915ef6ff70ca800016c5a8d","name":"Kamila Lipska","slug":"kamila","profile_image":null,"cover_image":null,"bio":null,"website":null,"location":null,"facebook":null,"twitter":null,"meta_title":null,"meta_description":null,"url":"https://our.status.im/author/kamila/"}},"labels":{"breadcrumbBlog":"Blog","onDate":"on","shareArticleOn":"Share article on:"}}]
+1e:["$","div",null,{"className":"border-t border-neutral-10 bg-neutral-10 px-5 pb-16 pt-10 xl:pb-24","children":["$","div",null,{"className":"mx-auto w-full max-w-[1184px]","children":[["$","h2",null,{"className":"mb-6 text-27 font-600","children":"Related articles"}],["$","div",null,{"className":"grid gap-5 md:grid-cols-2 xl:grid-cols-4","children":["$L23","$L24","$L25","$L26"]}]]}]}]
+23:["$","$L4","69dcde17834292000196a55e",{"href":"/blog/snt-staking-earn-karma","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"SNT Staking: How to Earn Karma on Status Network"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/41---Blog---Cover.jpg","alt":"Staking SNT earns Karma, a non-transferable reputation token that unlocks free transactions and governance voting power."}]}]],"ref":"$undefined"}]
+24:["$","$L4","69dcc688834292000196a542",{"href":"/blog/privacy-l2-stealth-addresses-bermuda","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"Privacy on Ethereum Layer 2: How Bermuda Enables Stealth Addresses"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/40---Blog---Cover.jpg","alt":"Ethereum Layer 2 privacy with stealth addresses, confidential balances, zero knowledge proofs, Bermuda protocol execution."}]}]],"ref":"$undefined"}]
+25:["$","$L4","69dcc2cc834292000196a529",{"href":"/blog/what-is-mev-maximal-extractable-value","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"What Is MEV? Maximal Extractable Value and Its Impact on Users"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/39---Blog---Cover.jpg","alt":"Maximal extractable value MEV blockchain transaction ordering impact on crypto users and DeFi trades."}]}]],"ref":"$undefined"}]
+26:["$","$L4","69d6452a834292000196a509",{"href":"/blog/gas-fees-are-a-privacy-leak-no-pricing-model-can-fix","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"Gas Fees Are a Privacy Leak No Pricing Model Can Fix"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 8, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/38---Blog---Cover.jpg","alt":"How gas funding trail links blockchain account activity to transaction metadata."}]}]],"ref":"$undefined"}]

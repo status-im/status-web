@@ -1,0 +1,309 @@
+1:"$Sreact.fragment"
+2:I[6978,[],""]
+3:I[5232,[],""]
+4:I[6132,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],""]
+9:I[9019,[],"OutletBoundary"]
+b:I[602,[],"AsyncMetadataOutlet"]
+d:I[9019,[],"ViewportBoundary"]
+f:I[9019,[],"MetadataBoundary"]
+10:"$Sreact.suspense"
+12:I[7098,[],""]
+:HL["/_next/static/media/e4af272ccee01ff0-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/css/24bd7f809405cf73.css","style"]
+0:{"P":null,"b":"7gQ4TSxhd0JxmNfKrcxGR","p":"","c":["","ko","blog","what-is-on-chain-governance"],"i":false,"f":[[["",{"children":["(site)",{"children":[["locale","ko","d"],{"children":["blog",{"children":[["slug","what-is-on-chain-governance","d"],{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true]}]}],["",["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-[calc(100dvh-189px)] flex-1 items-center justify-center px-5 lg:min-h-[calc(100dvh-118px)]","children":["$","div",null,{"className":"flex max-w-[696px] flex-col items-center gap-8","children":[["$","h1",null,{"className":"text-center text-40 font-700 lg:text-64","children":"This is not the page you're looking for"}],["$","$L4",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-purple border-[transparent] hover:bg-purple-dark text-white-100 h-10 py-[9px] rounded-12 px-4","href":"/","children":["$undefined","Take me home","$undefined"],"ref":"$undefined"}]]}]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["(site)",["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["locale","ko","d"],["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/24bd7f809405cf73.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],"$L5"]}],{"children":["blog",["$","$1","c",{"children":[null,["$","div",null,{"className":"relative flex min-h-screen justify-center overflow-clip px-2 2xl:px-0","children":["$","div",null,{"className":"relative w-full max-w-[1418px] border-x border-neutral-20","children":[["$","div",null,{"className":"absolute -left-2 top-0 z-50 h-full w-2 bg-gradient-to-r from-white-100 to-[transparent] 2xl:-left-12 2xl:w-12"}],["$","div",null,{"className":"absolute -right-2 top-0 z-50 h-full w-2 bg-gradient-to-l from-white-100 to-[transparent] 2xl:-right-12 2xl:w-12"}],"$L6",["$","main",null,{"children":["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]}],["$","div",null,{"className":"relative","children":[["$","div",null,{"className":"absolute left-[-3px] top-[-2px] size-[5px] rounded-full bg-neutral-20"}],["$","div",null,{"className":"relative bottom-0 h-px bg-neutral-20 z-20 left-1/2 w-[calc(100%+16px)] lg:w-[calc(100%+16px)] 2xl:w-[calc(100%+96px)] -translate-x-1/2"}],"$undefined",["$","div",null,{"className":"absolute bottom-[-2px] right-[-3px] size-[5px] rounded-full bg-neutral-20"}]]}],"$L7"]}]}]]}],{"children":[["slug","what-is-on-chain-governance","d"],["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":["$L8",null,["$","$L9",null,{"children":["$La",["$","$Lb",null,{"promise":"$@c"}]]}]]}],{},null,false]},null,false]},null,false]},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,[["$","$Ld",null,{"children":"$Le"}],["$","meta",null,{"name":"next-size-adjust","content":""}]],["$","$Lf",null,{"children":["$","div",null,{"hidden":true,"children":["$","$10",null,{"fallback":null,"children":"$L11"}]}]}]]}],false]],"m":"$undefined","G":["$12",[]],"s":false,"S":true}
+13:I[928,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"Image"]
+6:["$","header",null,{"className":"sticky top-0 z-[60] w-full bg-white-90 backdrop-blur supports-[backdrop-filter]:bg-white-80","children":[["$","div",null,{"className":"mx-auto flex h-16 items-center justify-between px-4","children":[["$","$L4",null,{"href":"/","className":"flex items-center space-x-2","children":["$","$L13",null,{"src":"/logo.svg","alt":"Status Network Logo","width":210,"height":32}],"ref":"$undefined"}],["$","div",null,{"className":"flex items-center gap-3","children":[["$","$L4",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-white-100 border-neutral-30 hover:border-neutral-40 hover:bg-white-80 text-dark-100 h-8 py-[5px] rounded-10 px-3 hidden sm:block","href":"/","children":["$undefined","Home","$undefined"],"ref":"$undefined"}],["$","a",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-purple border-[transparent] hover:bg-purple-dark text-white-100 h-8 py-[5px] rounded-10 px-3","target":"_blank","rel":"noopener noreferrer","href":"https://hub.status.network/","children":["$undefined","Get started","$undefined"],"ref":"$undefined"}]]}]]}],["$","div",null,{"className":"relative","children":[["$","div",null,{"className":"absolute left-[-3px] top-[-2px] size-[5px] rounded-full bg-neutral-20"}],["$","div",null,{"className":"relative bottom-0 h-px bg-neutral-20 z-20 left-1/2 w-[calc(100%+16px)] lg:w-[calc(100%+16px)] 2xl:w-[calc(100%+96px)] -translate-x-1/2"}],"$undefined",["$","div",null,{"className":"absolute bottom-[-2px] right-[-3px] size-[5px] rounded-full bg-neutral-20"}]]}]]}]
+7:["$","footer",null,{"className":"relative z-[61]","children":["$","div",null,{"className":"grid gap-4 p-3 lg:grid-cols-[1fr,auto,auto] lg:gap-5 lg:p-4","children":[["$","div",null,{"className":"flex flex-col justify-center gap-2 lg:flex-row lg:justify-start lg:gap-3","children":[["$","span",null,{"className":"text-center text-13 lg:text-left","children":"© Status Research & Development GmbH"}],["$","svg",null,{"width":"2","height":"2","viewBox":"0 0 2 2","fill":"none","xmlns":"http://www.w3.org/2000/svg","className":"hidden text-neutral-50 lg:block","children":["$","circle",null,{"cx":"1","cy":"1","r":"1","fill":"#A1ABBD"}]}]]}],["$","div",null,{"className":"flex flex-col items-center justify-center gap-3 lg:flex-row lg:justify-end","children":[["$","div",null,{"className":"flex items-center justify-center gap-4 md:gap-3 lg:justify-end","children":[["$","$L4",null,{"href":"/legal/terms-of-use","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Terms of Use","ref":"$undefined"}],["$","$L4",null,{"href":"/legal/privacy-policy","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Privacy Policy","ref":"$undefined"}],["$","$L4",null,{"href":"/blog","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Blog","ref":"$undefined"}],"$L14"]}],["$","svg",null,{"width":"2","height":"2","viewBox":"0 0 2 2","fill":"none","xmlns":"http://www.w3.org/2000/svg","className":"2md:hidden text-neutral-50","children":["$","circle",null,{"cx":"1","cy":"1","r":"1","fill":"#A1ABBD"}]}],["$","div",null,{"className":"flex justify-center gap-6 lg:justify-end","children":[["$","a","Status",{"href":"https://status.app","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/status.6be65460.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"Status","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}],["$","a","Twitter",{"href":"https://x.com/StatusL2","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/twitter.6865a7e5.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"Twitter","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}],["$","a","GitHub",{"href":"https://github.com/status-im","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/github.90103528.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"GitHub","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}]]}]]}]]}]}]
+17:I[6105,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","726","static/chunks/726-a688395c743bdde3.js","565","static/chunks/565-e7a70831c2486b41.js","472","static/chunks/app/(site)/%5Blocale%5D/layout-fe09f44bffcc5314.js"],"Analytics"]
+18:I[5718,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","726","static/chunks/726-a688395c743bdde3.js","565","static/chunks/565-e7a70831c2486b41.js","472","static/chunks/app/(site)/%5Blocale%5D/layout-fe09f44bffcc5314.js"],""]
+15:T433,{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Status Network",
+  "url": "https://status.network/",
+  "logo": "https://status.network/logo.svg",
+  "description": "Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack, with network-level spam protection enforced through reputation (Karma) and execution funded by native yield rather than user-paid gas fees.",
+  "sameAs": [
+    "https://x.com/StatusL2",
+    "https://github.com/status-im"
+  ],
+  "@id": "https://status.network/#organization",
+  "knowsAbout": [
+    {
+      "@type": "Thing",
+      "name": "Ethereum Layer 2"
+    },
+    {
+      "@type": "Thing",
+      "name": "Gasless transactions"
+    },
+    {
+      "@type": "Thing",
+      "name": "Composable privacy"
+    },
+    {
+      "@type": "Thing",
+      "name": "Spam protection"
+    },
+    {
+      "@type": "Thing",
+      "name": "Reputation system"
+    },
+    {
+      "@type": "Thing",
+      "name": "Native yield funding"
+    },
+    {
+      "@type": "Thing",
+      "name": "Bots"
+    }
+  ]
+}5:["$","html",null,{"lang":"ko","children":["$","body",null,{"className":"__variable_9cc749 bg-white-100 text-neutral-100 antialiased selection:bg-purple selection:text-white-100","suppressHydrationWarning":true,"children":[[["$","script","0",{"id":"json-ld-0","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$15"}}],["$","script","1",{"id":"json-ld-1","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"WebSite\",\n  \"name\": \"Status Network\",\n  \"url\": \"https://status.network/\",\n  \"description\": \"Status Network is a privacy-first, fully gasless Ethereum Layer 2 designed for scalable onchain activity, coordinated through reputation and native yield.\",\n  \"@id\": \"https://status.network/#website\",\n  \"publisher\": {\n    \"@id\": \"https://status.network/#organization\"\n  },\n  \"about\": [\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Ethereum Layer 2\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Gasless transactions\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Composable privacy\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Spam protection\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Reputation system\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Native yield funding\"\n    }\n  ]\n}"}}],["$","script","2",{"id":"json-ld-2","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"SoftwareApplication\",\n  \"name\": \"Status Network\",\n  \"applicationCategory\": \"Blockchain\",\n  \"operatingSystem\": \"Web3\",\n  \"url\": \"https://status.network/\",\n  \"description\": \"Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack. Execution is coordinated through Karma, a non-transferable reputation system, and supported by native yield and network activity.\"\n}"}}]],"$L16",["$","$L17",null,{}],["$","$L18",null,{"strategy":"afterInteractive","src":"https://umami.bi.status.im/script.js","data-website-id":"0746c5dc-8cd3-45a4-9606-6bcf9adf248e","data-domains":"status.network","async":true}]]}]}]
+19:I[6156,["756","static/chunks/756-56d07e8fa5ffdccb.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","878","static/chunks/app/(site)/%5Blocale%5D/blog/layout-c6bf279edadbe978.js"],"default"]
+14:["$","$L19",null,{"ref":"$undefined","href":"/brand","locale":"$undefined","localeCookie":{"name":"NEXT_LOCALE","sameSite":"lax"},"className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Brand assets"}]
+1a:I[2756,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"default"]
+16:["$","$L1a",null,{"formats":"$undefined","locale":"ko","messages":{"meta":{"locale":"en","name":"English","direction":"ltr","description":"Complete Status Network website translations"},"common":{"loading":"Loading...","learn_more":"Learn More","get_started":"Get started","read_more":"Read More","read_docs":"Read docs","view_blog":"View blog","new":"NEW","testnet_live":"Testnet v2 is live!","promo_message":"Vaults withdrawals are now enabled","visit_hub":"withdraw now","visit_hub_aria":"withdraw now (opens in new tab)"},"navigation":{"home":"Home","about":"About","features":"Features","network":"Network","partners":"Partners","tokenomics":"Tokenomics","blog":"Blog","brand":"Brand"},"hero":{"title":"The gasless network","subtitle":"with sustainable funding for app builders","description":"Launch and scale your social apps and games with truly free transactions."},"about":{"section_number":"01","section_title":"WHAT IS STATUS NETWORK?","title_1":"The first Ethereum L2 with","title_2":"gas-free","title_3":"transactions at scale","title_4":"funded by native yield + fees.","description":"A free network with sustainable funding for public apps, games and protocols.","build_button":"Build on Status Network","learn_more_button":"Learn more"},"features":{"section_number":"02","section_title":"WHY STATUS NETWORK?","title":"Power to the community","sustainable_funding":{"title":"Sustainable public funding","description":"Status Network takes a radical step beyond short-term incentives. Powered by native yields and fees, its public app funding pool is governed by the community, ensuring a continuous allocation of capital for onchain builders.","step_1":"Users bridge yield-bearing assets to Status Network and increase the yield redirected to the funding pool.","step_2":"Apps and games apply for an allocation from the pool. The community votes on allocations using Karma, a non-transferrable governance token earned by contributing positively to the network:","step_2_staking":"Staking SNT","step_2_bridging":"Bridging yield-bearing tokens","step_2_using":"Using apps","step_2_premium":"Paying premium gas","step_2_donations":"Making direct donations to the funding pool","step_3":"Every funded project onboards new users, driving additional asset deposits and token swaps - generating more yield and fees to be allocated in the funding pool.","button":"Discover Karmic Tokenomics"},"gasless_transactions":{"title":"Gasless transactions","description_1":"On Status Network, anyone can experience free transactions! With the L2 operating costs covered by native yields and fees, no need to bridge gas to use an app.","description_2":"Apps and games developers can offer frictionless onboarding for their users at scale.","button":"Learn how it works"},"performance":{"title":"Built for performance, secured by Ethereum","description":"Leverage Ethereum's security with Linea's cutting-edge zkEVM rollup technology for high-speed transactions. Perfect for gaming, social, iGaming, and high-throughput applications.","button":"Learn more about Linea"},"decentralization":{"title":"Geared for decentralization","description":"Built on the core values of Status and the IFT ecosystem, Status Network is designed to become a truly decentralised L2. The endgame is to provide a censorship-resistant environment where communities can thrive without central points of control.","button":"Learn more"}},"partners":{"section_number":"03","section_title":"ECOSYSTEM AND PARTNERS","title_1":"Empowering bold","title_2":"creators and developers","subtitle":"Building with the best in the game","cats_fishing":{"title":"Cats Fishing","description":"The first open-sourced, proof of play mobile fishing game"},"spla_labs":{"title":"Spla Labs","description":"Builders of TODL & Ponzi Hero games"},"hash_vegas":{"title":"Hash Vegas","description":"Fair and transparent onchain gaming"},"ponzi_hero":{"title":"Ponzi Hero","description":"Earn NFTs, have some fun!"},"linea":{"title":"Linea","description":"Secure zkEVM L2 stack"},"gateway":{"title":"Gateway","description":"Rollup infrastructure and operation"},"din":{"title":"DIN","description":"Decentralised Infrastructure Network"}},"network":{"section_number":"04","section_title":"NETWORK","title":"Leverage the most advanced decentralised stack","description":"Builders get priority support from Institute of Free Technology solutions:","status":{"title":"Status","description":"Ethereum super-app with 4M+ downloads"},"logos":{"title":"Logos","description":"Open tech to restore civil society"},"waku":{"title":"Waku","description":"P2P encrypted messaging protocol"},"codex":{"title":"Codex","description":"Decentralised data storage layer"},"nimbus":{"title":"Nimbus","description":"Ethereum core devs. Powering Eth consensus"},"keycard":{"title":"Keycard","description":"Secure open-source hardware wallet"}},"tokenomics":{"section_number":"05","section_title":"TOKENOMICS","title":"Earn voting power through positive network engagement","description":"The more you contribute to the network, the more influence you gain over funding allocation and the network's roadmap priorities.","karma_note":"This is coordinated by Karma, a non-transferable governance token.","app_developer":{"title":"App developer","step_1":"Ship code","step_2":"Get traction","step_3":"Receive Karma","step_4":"Earn funding"},"liquidity_provider":{"title":"Liquidity provider","description":"Earn Karma for staking SNT and get LP rewards boosted by native yield."},"onchain_user":{"title":"Onchain user","description":"Get rewarded with Karma for bridging to the network and using apps. A higher Karma means more gasless transactions."}},"blog":{"title":"Stay up to date","view_blog_button":"View blog","category":"Updates","author":"Us","on_date":"on","page_title":"Blog.","page_description":"Long form articles, thoughts, and ideas.","share_article_on":"Share article on:","related_articles":"Related articles","breadcrumb_blog":"Blog","no_posts":"No posts available yet.","home":"Home","get_started":"Get started","post_1":{"title":"Status Steps Up as Founding Member of Linea Consortium"},"post_2":{"title":"Status Launches First Gasless Layer 2 on Linea"},"post_3":{"title":"Embracing Community Choices: Status to Develop SNT Staking and Status L2"}},"footer":{"copyright":"© Status Research & Development GmbH","privacy_policy":"Privacy Policy","terms_of_use":"Terms of Use","blog":"Blog","brand":"Brand assets"},"pre_footer":{"title":"Ready to build on the free network?","partner_button":"Partner with us","read_docs_button":"Read docs"},"brand":{"page_title":"Brand","page_description":"Get Status Network brand assets.","main_title":"Brand assets","last_updated":"Last updated: 12 November 2025","download_all":"Download all assets","logo_title":"Logo","logo_description":"Our main logo","logo_variation_title":"Logo variation","logo_variation_description":"For creative printing layouts","mark_only_title":"Mark only","mark_only_description":"Without wordmark","main_colors_title":"Main colors","main_colors_description":"Our main colors palette","artwork_title":"Artwork","artwork_description":"Our main characters","download_button":"Download","alt_text":{"main_logo":"Main logo","mark_only":"Mark only","artwork":"Artwork"}},"not_found":{"title":"This is not the page you're looking for","take_me_home":"Take me home"}},"now":"$undefined","timeZone":"UTC","children":"$L1b"}]
+1b:["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]
+e:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+a:null
+1c:T15fd,{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://status.network/blog/what-is-on-chain-governance#faq",
+  "name": "What Is On-Chain Governance?",
+  "url": "https://status.network/blog/what-is-on-chain-governance",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-on-chain-governance#faq-q1",
+      "name": "How does on-chain governance differ from off-chain governance?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-on-chain-governance#faq-a1",
+        "text": "On-chain governance records proposals and votes directly on the blockchain, where smart contracts automatically execute the outcomes. Off-chain governance typically relies on forums, discussion platforms, or polling tools, and decisions must later be implemented by a team or coordinating entity."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-on-chain-governance#faq-q2",
+      "name": "Can whales control reputation-based voting on Status Network?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-on-chain-governance#faq-a2",
+        "text": "Status Network uses a reputation system called Karma that cannot be transferred or purchased directly. Participants earn Karma through activities such as staking assets or contributing to the ecosystem. Because reputation accumulates through participation rather than simple token ownership, governance influence grows over time rather than being instantly acquired."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-on-chain-governance#faq-q3",
+      "name": "What is vote delegation in on-chain governance?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-on-chain-governance#faq-a3",
+        "text": "Vote delegation allows a token holder to assign voting power to another address while keeping ownership of their tokens. Delegation lets community members participate in governance indirectly by trusting a delegate to vote on proposals on their behalf."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-on-chain-governance#faq-q4",
+      "name": "How does Karma differ from governance tokens such as AAVE or COMP?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-on-chain-governance#faq-a4",
+        "text": "Karma is a non-transferable reputation score earned through participation in the Status Network ecosystem. Governance tokens such as AAVE or COMP are transferable and can be bought or sold on open markets. A reputation-based model aims to align governance influence with contributions rather than market purchasing power."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-on-chain-governance#faq-q5",
+      "name": "Why use reputation-based governance instead of token voting?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-on-chain-governance#faq-a5",
+        "text": "Reputation-based governance is designed to align decision-making power with long-term participation and contribution to the network. By tying influence to reputation rather than purely to token ownership, the model aims to reduce the risk of governance capture through large capital holdings."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-on-chain-governance#faq-q6",
+      "name": "How does Status Network prevent bots from gaming Karma?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-on-chain-governance#faq-a6",
+        "text": "Status Network uses Rate Limiting Nullifiers (RLN) to cap how many transactions an account can submit within a given time period. RLN uses zero-knowledge proofs to enforce limits while preserving privacy. Additional economic rules and varied participation requirements help reduce the effectiveness of automated reputation farming."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-on-chain-governance#faq-q7",
+      "name": "Can reputation-based governance systems still face sybil attacks?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-on-chain-governance#faq-a7",
+        "text": "Reputation systems can still face sybil attempts, but each additional identity must independently perform network actions to build reputation. Activities such as staking assets, providing liquidity, or contributing to applications create economic and operational costs that make large-scale sybil strategies more difficult."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-on-chain-governance#faq-q8",
+      "name": "How is initial reputation distributed when a network launches?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-on-chain-governance#faq-a8",
+        "text": "Early reputation on Status Network can be earned through participation in pre-launch initiatives such as pre-deposit campaigns. Participants bridge yield-bearing assets or stake SNT before the network launch, allowing the governance system to start with reputation earned through participation rather than token purchases."
+      }
+    }
+  ]
+}8:[[["$","script","0",{"id":"json-ld-0","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Article\",\n  \"headline\": \"What Is On-Chain Governance? Token Voting vs Earned Reputation\",\n  \"description\": \"On-chain governance allows token holders or reputation holders to vote directly on blockchain protocol decisions without intermediaries. Voters cast ballots to.\",\n  \"image\": \"https://our.status.im/content/images/2026/03/10---Blog---Cover.jpg\",\n  \"datePublished\": \"2026-03-08T14:25:25.000+00:00\",\n  \"dateModified\": \"2026-03-08T14:25:25.000+00:00\",\n  \"author\": {\n    \"@type\": \"Person\",\n    \"name\": \"Kamila Lipska\"\n  },\n  \"publisher\": {\n    \"@type\": \"Organization\",\n    \"name\": \"Status Network\",\n    \"logo\": {\n      \"@type\": \"ImageObject\",\n      \"url\": \"https://status.network/logo.svg\"\n    }\n  }\n}"}}]],[["$","script","custom-jsonld-0",{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$1c"}}]],"$L1d","$L1e"]
+1f:I[2118,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"BlogPostDetailHydrated"]
+20:T2c98,<p>On-chain governance lets participants vote on protocol decisions without intermediaries. Results live on-chain. Smart contracts run them right away. Two models lead today: token voting, where asset ownership sets power, and reputation voting, where earned soulbound credentials set power. <a href="https://status.network/"><strong>Status Network</strong></a> uses the second model through its <a href="https://hub.status.network/karma" rel="noreferrer"><strong>Karma</strong></a> system.</p><h2 id="what-is-on-chain-governance">What Is On-Chain Governance?</h2><p>On-chain governance is a decision system. Participants vote using cryptographic proof stored on a blockchain.</p><p>No single executive calls the shots. Power flows to token holders, liquidity providers, or reputation earners.</p><p>A typical flow begins with a proposal. Others debate it off-chain. Voting opens on-chain for a set window.</p><p>Smart contracts run the approved result on their own. No central authority needed.</p><p><a href="https://ethereum.org/"><strong>Ethereum</strong></a> DAOs, <a href="https://aave.com/"><strong>Aave</strong></a>, and <a href="https://makerdao.com/"><strong>MakerDAO</strong></a> all use this model. Votes stay permanent and open to audit.</p><h2 id="how-does-token-voting-work">How Does Token Voting Work?</h2><p>Token voting ties power to asset ownership. One token equals one vote. Bigger holders hold more sway.</p><p><strong>Pros:</strong></p><ul><li>Simple to build</li><li>Liquid and easy to move</li><li>Works with staking contracts and delegation</li></ul><p><strong>Cons:</strong></p><ul><li>Plutocratic: wealth turns into voting weight</li><li>Whales can buy tokens just to steer results</li><li>Short-term traders can flip key votes</li><li>Vote-buying stays hard to spot</li></ul><p><strong>Compound</strong>, <strong>Uniswap</strong>, and <strong>Aave</strong> all use token voting.</p><p>A holder of 1 million COMP tokens has 10,000x more power than someone with 100 tokens.</p><p>This opens the door to governance capture. Coordinated actors buy enough tokens to push decisions toward their own gain.</p><h2 id="how-does-reputation-based-governance-work">How Does Reputation-Based Governance Work?</h2><p>Reputation systems swap transferable tokens for credentials that cannot move between wallets. These are soulbound tokens (SBTs) like Karma by Status Network.</p><p>SBTs reflect real contributions. They cannot be bought, sold, or traded.</p><p>Voting power comes from actions: staking, adding liquidity, building apps, or using the network.</p><p><strong>Pros:</strong></p><ul><li>Resists plutocracy: wealth alone does not buy votes</li><li>Resists sybil attacks: earning reputation takes repeated genuine work</li><li>Lines up rewards with long-term health</li><li>Blocks vote-buying by design</li></ul><p><strong>Cons:</strong></p><ul><li>Harder to design fairly</li><li>Cold-start challenge: building early reputation takes time</li><li>Gaming risk: some may try to exploit earning rules</li><li>Slower path to full voting power</li></ul><h2 id="how-does-status-networks-karma-system-work">How Does Status Network's Karma System Work?</h2><p><strong>Status Network</strong> runs reputation governance through <strong>Karma</strong>, a soulbound token that cannot move between wallets.</p><p><strong>Karma</strong> is earned. Never bought. Never sent to others.</p><p>Users earn <strong>Karma</strong> by:</p><ul><li><a href="https://hub.status.network/stake">Staking <strong>SNT</strong></a> (up to 9x boost for a 4-year lock)</li><li>Bridging yield-bearing assets like ETH or DAI</li><li>Adding liquidity on <a href="https://www.orvex.fi/"><strong>Orvex</strong></a>, the native DEX</li><li>Building or using apps on the network</li><li>Paying premium gas fees after passing a free quota</li><li>Donating to the public <a href="https://docs.status.network/tokenomics/public-funding">funding pool</a></li></ul><p>Standard transactions run on <a href="https://docs.status.network/tokenomics/economic-model">native yield</a>. No gas top-ups needed.</p><p>New users can onboard privately with no funding trail.</p><p><strong>Karma</strong> holders vote on three areas:</p><ol><li><strong>Apps Funding Pool</strong>: Sending yield and DEX fees to developers.</li><li><strong>Liquidity Rewards</strong>: Setting gauge weights for DEX pools on <strong>Orvex</strong>.</li><li><strong>Network Settings</strong>: Choosing splits between native yield, DEX fees, and premium gas fees.</li></ol><p><strong>Karma</strong> is soulbound. Whale hoarding is blocked by design.</p><p>A founder with $100 million cannot buy governance control. They must contribute and wait.</p><h2 id="bot-economics-and-governance-gaming">Bot Economics and Governance Gaming</h2><p>Reputation systems face a real threat: automated gaming.</p><p>Liquidation bots, arbitrage bots, and rebalancing bots can push high transaction volume. If app-usage metrics feed <strong>Karma</strong> directly, bots could build reputation without genuine work.</p><p><strong>Status Network</strong> counters this with earning source variety. No single path rules. Staking, bridging, building, and donating all count. Gaming one path does not yield outsized reputation.</p><p><a href="https://docs.status.network/general-info/gasless-transactions"><strong>Rate Limiting Nullifiers (RLN)</strong></a> add another guard.</p><p><strong>RLN</strong> uses Sparse Merkle Trees (height 20, holding 1 million accounts). It pairs Shamir's Secret Sharing with zero-knowledge proofs to cap each account's throughput.</p><p>Accounts that pass their quota land on a Deny List. They pay premium gas until the quota resets.</p><p>Bots that spam get throttled and pay more. Real users stay gasless.</p><h2 id="token-voting-vs-reputation-voting-direct-comparison">Token Voting vs Reputation Voting: Direct Comparison</h2>
+<!--kg-card-begin: html-->
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Token Voting</th>
+<th>Reputation Voting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Transferable</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Plutocracy Risk</td>
+<td>High</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Vote-Buying Resistance</td>
+<td>Weak</td>
+<td>Strong</td>
+</tr>
+<tr>
+<td>Sybil Resistance</td>
+<td>Needs costly tokens</td>
+<td>Built through earning</td>
+</tr>
+<tr>
+<td>Build Complexity</td>
+<td>Low</td>
+<td>Medium to high</td>
+</tr>
+<tr>
+<td>Long-Term Alignment</td>
+<td>Medium</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Governance Capture Risk</td>
+<td>High</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Entry Barrier</td>
+<td>Capital</td>
+<td>Contribution</td>
+</tr>
+</tbody>
+</table>
+<!--kg-card-end: html-->
+<p>Token voting favors capital holders. Reputation voting favors contributors.</p><p>Hybrid models exist. <strong>Curve</strong> uses vote-escrow (veToken) to time-lock tokens. Voting power drops if tokens stay unlocked. This creates a reputation-like mechanic without full soulbound design.</p><h2 id="why-reputation-governance-matters-for-decentralization">Why Reputation Governance Matters for Decentralization</h2><p>Wealth piling up breaks token voting. If 10 whales control 51% of tokens, governance is centralized in practice.</p><p>Reputation systems flip this. Longer contribution means more power. New entrants cannot buy control on day one.</p><p>Sybil attacks grow costly. Each account must perform genuine actions on its own. Running thousands of fake accounts turns irrational at scale.</p><p>The key design challenge: if staking rewards rule the earning model, wealthy users still win by staking more. Multiple earning paths fix this. Developers, LPs, users, and stakers all earn through different routes.</p><h2 id="how-to-evaluate-any-governance-system">How to Evaluate Any Governance System</h2><p>When reviewing a governance model, ask these questions:</p><ol><li>Is voting power transferable? If yes, wealth piling up is likely.</li><li>Can capital alone build up votes? High-capital control signals plutocracy risk.</li><li>What are the earning paths? Many paths cut single-vector capture.</li><li>What does a sybil attack cost? Higher cost means stronger defense.</li><li>Has governance capture happened before? Check past votes for whale coordination.</li></ol><p>Token voting is simpler to build. Reputation voting lasts longer. <strong>Status Network</strong> is showing that reputation-first governance can scale without leaning on wealth.</p><h2 id="frequently-asked-questions">Frequently Asked Questions</h2><p><strong>How does on-chain governance differ from off-chain governance?</strong></p><p>On-chain governance records votes directly on the blockchain. They are permanent and run by smart contracts. Off-chain governance uses forums or Snapshot polls but needs a central party to carry out decisions.</p><p><strong>Can whales control reputation-based voting on Status Network?</strong></p><p>A whale cannot buy <a href="https://docs.status.network/tokenomics/karmic-tokenomics"><strong>Karma</strong></a> or get it from another user. They can stake large amounts of <strong>SNT</strong> or bridge large assets to earn <strong>Karma</strong> over time. The earning rate stays steady, making governance capture far harder than in token-voting systems.</p><p><strong>What is vote delegation in on-chain governance?</strong></p><p>Vote delegation lets a token holder assign voting power to another address without moving ownership. If you lack time or knowledge to vote, you delegate to a trusted community member. They vote for you but cannot touch your tokens.</p><p><strong>How does Karma differ from governance tokens like AAVE or COMP?</strong></p><p><a href="https://hub.status.network/karma" rel="noreferrer"><strong>Karma</strong></a> cannot be moved and is earned through contributions. <strong>AAVE</strong> and <strong>COMP</strong> can be moved and bought on open markets. This stops <strong>Karma</strong> from piling up among wealthy buyers who never helped the network.</p><p><strong>Why pick reputation voting if it is harder to build?</strong></p><p>Reputation voting resists governance capture. It lines up rewards with long-term network health. Wealthy actors cannot control outcomes through capital alone.</p><p><strong>How does Status Network stop bots from gaming Karma?</strong></p><p><a href="https://docs.status.network/general-info/gasless-transactions"><strong>RLN</strong></a> caps each account's throughput using zero-knowledge proofs and a Deny List. Accounts passing quotas pay premium gas. Earning source variety also limits gaming: no single action type rules <a href="https://docs.status.network/tokenomics/karmic-tokenomics"><strong>Karma</strong></a> growth.</p><p><strong>Can a reputation-based system still face sybil attacks?</strong></p><p>Yes, but at much higher cost. Each sybil account must perform genuine network actions on its own: stake assets, add liquidity, build apps. Running thousands of accounts at scale turns irrational.</p><p><strong>How is early Karma given out for a new network?</strong></p><p>Early contributors earn <a href="https://docs.status.network/tokenomics/karmic-tokenomics"><strong>Karma</strong></a> through a <a href="https://hub.status.network/pre-deposits" rel="noreferrer">pre-deposit</a> campaign. They bridge yield-bearing assets and stake <strong>SNT</strong> before mainnet launch. This seeds reputation based on genuine participation, not token purchases.</p>21:T15fd,{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://status.network/blog/what-is-on-chain-governance#faq",
+  "name": "What Is On-Chain Governance?",
+  "url": "https://status.network/blog/what-is-on-chain-governance",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-on-chain-governance#faq-q1",
+      "name": "How does on-chain governance differ from off-chain governance?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-on-chain-governance#faq-a1",
+        "text": "On-chain governance records proposals and votes directly on the blockchain, where smart contracts automatically execute the outcomes. Off-chain governance typically relies on forums, discussion platforms, or polling tools, and decisions must later be implemented by a team or coordinating entity."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-on-chain-governance#faq-q2",
+      "name": "Can whales control reputation-based voting on Status Network?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-on-chain-governance#faq-a2",
+        "text": "Status Network uses a reputation system called Karma that cannot be transferred or purchased directly. Participants earn Karma through activities such as staking assets or contributing to the ecosystem. Because reputation accumulates through participation rather than simple token ownership, governance influence grows over time rather than being instantly acquired."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-on-chain-governance#faq-q3",
+      "name": "What is vote delegation in on-chain governance?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-on-chain-governance#faq-a3",
+        "text": "Vote delegation allows a token holder to assign voting power to another address while keeping ownership of their tokens. Delegation lets community members participate in governance indirectly by trusting a delegate to vote on proposals on their behalf."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-on-chain-governance#faq-q4",
+      "name": "How does Karma differ from governance tokens such as AAVE or COMP?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-on-chain-governance#faq-a4",
+        "text": "Karma is a non-transferable reputation score earned through participation in the Status Network ecosystem. Governance tokens such as AAVE or COMP are transferable and can be bought or sold on open markets. A reputation-based model aims to align governance influence with contributions rather than market purchasing power."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-on-chain-governance#faq-q5",
+      "name": "Why use reputation-based governance instead of token voting?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-on-chain-governance#faq-a5",
+        "text": "Reputation-based governance is designed to align decision-making power with long-term participation and contribution to the network. By tying influence to reputation rather than purely to token ownership, the model aims to reduce the risk of governance capture through large capital holdings."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-on-chain-governance#faq-q6",
+      "name": "How does Status Network prevent bots from gaming Karma?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-on-chain-governance#faq-a6",
+        "text": "Status Network uses Rate Limiting Nullifiers (RLN) to cap how many transactions an account can submit within a given time period. RLN uses zero-knowledge proofs to enforce limits while preserving privacy. Additional economic rules and varied participation requirements help reduce the effectiveness of automated reputation farming."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-on-chain-governance#faq-q7",
+      "name": "Can reputation-based governance systems still face sybil attacks?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-on-chain-governance#faq-a7",
+        "text": "Reputation systems can still face sybil attempts, but each additional identity must independently perform network actions to build reputation. Activities such as staking assets, providing liquidity, or contributing to applications create economic and operational costs that make large-scale sybil strategies more difficult."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-on-chain-governance#faq-q8",
+      "name": "How is initial reputation distributed when a network launches?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-on-chain-governance#faq-a8",
+        "text": "Early reputation on Status Network can be earned through participation in pre-launch initiatives such as pre-deposit campaigns. Participants bridge yield-bearing assets or stake SNT before the network launch, allowing the governance system to start with reputation earned through participation rather than token purchases."
+      }
+    }
+  ]
+}1d:["$","$L1f",null,{"slug":"what-is-on-chain-governance","initialPost":{"slug":"what-is-on-chain-governance","title":"What Is On-Chain Governance? Token Voting vs Earned Reputation","html":"$20","feature_image":"https://our.status.im/content/images/2026/03/10---Blog---Cover.jpg","feature_image_alt":"Token Voting vs Earned Reputation   for blockchain developers and DeFi users.","published_at":"2026-03-08T14:25:25.000+00:00","updated_at":"2026-03-08T14:25:25.000+00:00","codeinjection_head":"$21","codeinjection_foot":null,"primary_tag":{"name":"status-network-blog","slug":"status-network-blog"},"primary_author":{"id":"6915ef6ff70ca800016c5a8d","name":"Kamila Lipska","slug":"kamila","profile_image":null,"cover_image":null,"bio":null,"website":null,"location":null,"facebook":null,"twitter":null,"meta_title":null,"meta_description":null,"url":"https://our.status.im/author/kamila/"}},"labels":{"breadcrumbBlog":"Blog","onDate":"on","shareArticleOn":"Share article on:"}}]
+1e:["$","div",null,{"className":"border-t border-neutral-10 bg-neutral-10 px-5 pb-16 pt-10 xl:pb-24","children":["$","div",null,{"className":"mx-auto w-full max-w-[1184px]","children":[["$","h2",null,{"className":"mb-6 text-27 font-600","children":"Related articles"}],["$","div",null,{"className":"grid gap-5 md:grid-cols-2 xl:grid-cols-4","children":["$L22","$L23","$L24","$L25"]}]]}]}]
+22:["$","$L4","69dcde17834292000196a55e",{"href":"/blog/snt-staking-earn-karma","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"SNT Staking: How to Earn Karma on Status Network"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/41---Blog---Cover.jpg","alt":"Staking SNT earns Karma, a non-transferable reputation token that unlocks free transactions and governance voting power."}]}]],"ref":"$undefined"}]
+23:["$","$L4","69dcc688834292000196a542",{"href":"/blog/privacy-l2-stealth-addresses-bermuda","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"Privacy on Ethereum Layer 2: How Bermuda Enables Stealth Addresses"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/40---Blog---Cover.jpg","alt":"Ethereum Layer 2 privacy with stealth addresses, confidential balances, zero knowledge proofs, Bermuda protocol execution."}]}]],"ref":"$undefined"}]
+24:["$","$L4","69dcc2cc834292000196a529",{"href":"/blog/what-is-mev-maximal-extractable-value","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"What Is MEV? Maximal Extractable Value and Its Impact on Users"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/39---Blog---Cover.jpg","alt":"Maximal extractable value MEV blockchain transaction ordering impact on crypto users and DeFi trades."}]}]],"ref":"$undefined"}]
+25:["$","$L4","69d6452a834292000196a509",{"href":"/blog/gas-fees-are-a-privacy-leak-no-pricing-model-can-fix","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"Gas Fees Are a Privacy Leak No Pricing Model Can Fix"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 8, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/38---Blog---Cover.jpg","alt":"How gas funding trail links blockchain account activity to transaction metadata."}]}]],"ref":"$undefined"}]
+26:I[610,[],"IconMark"]
+c:{"metadata":[["$","title","0",{"children":"What Is On-Chain Governance? Token Voting vs Earned"}],["$","meta","1",{"name":"description","content":"On-chain governance allows token holders or reputation holders to vote directly on blockchain protocol decisions without intermediaries. Voters cast ballots to."}],["$","link","2",{"rel":"canonical","href":"https://status.network/blog/what-is-on-chain-governance"}],["$","link","3",{"rel":"alternate","hrefLang":"en","href":"https://status.network/blog/what-is-on-chain-governance"}],["$","link","4",{"rel":"alternate","hrefLang":"ko","href":"https://status.network/ko/blog/what-is-on-chain-governance"}],["$","link","5",{"rel":"alternate","hrefLang":"x-default","href":"https://status.network/blog/what-is-on-chain-governance"}],["$","meta","6",{"property":"og:title","content":"What Is On-Chain Governance? Token Voting vs Earned Reputation"}],["$","meta","7",{"property":"og:description","content":"On-chain governance allows token holders or reputation holders to vote directly on blockchain protocol decisions without intermediaries. Voters cast ballots to."}],["$","meta","8",{"property":"og:url","content":"https://status.network/blog/what-is-on-chain-governance"}],["$","meta","9",{"property":"og:site_name","content":"Status Network"}],["$","meta","10",{"property":"og:locale","content":"en"}],["$","meta","11",{"property":"og:image","content":"https://our.status.im/content/images/2026/03/10---Blog---Cover.jpg"}],["$","meta","12",{"property":"og:type","content":"article"}],["$","meta","13",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","14",{"name":"twitter:site","content":"@StatusL2"}],["$","meta","15",{"name":"twitter:title","content":"What Is On-Chain Governance? Token Voting vs Earned"}],["$","meta","16",{"name":"twitter:description","content":"On-chain governance allows token holders or reputation holders to vote directly on blockchain protocol decisions without intermediaries. Voters cast ballots to."}],["$","meta","17",{"name":"twitter:image","content":"https://our.status.im/content/images/2026/03/10---Blog---Cover.jpg"}],["$","link","18",{"rel":"icon","href":"/icon2.png?d102c5988532e764","type":"image/png","sizes":"128x128"}],["$","$L26","19",{}]],"error":null,"digest":"$undefined"}
+11:"$c:metadata"

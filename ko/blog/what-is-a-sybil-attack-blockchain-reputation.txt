@@ -1,0 +1,297 @@
+1:"$Sreact.fragment"
+2:I[6978,[],""]
+3:I[5232,[],""]
+4:I[6132,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],""]
+9:I[9019,[],"OutletBoundary"]
+b:I[602,[],"AsyncMetadataOutlet"]
+d:I[9019,[],"ViewportBoundary"]
+f:I[9019,[],"MetadataBoundary"]
+10:"$Sreact.suspense"
+12:I[7098,[],""]
+:HL["/_next/static/media/e4af272ccee01ff0-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/css/24bd7f809405cf73.css","style"]
+0:{"P":null,"b":"7gQ4TSxhd0JxmNfKrcxGR","p":"","c":["","ko","blog","what-is-a-sybil-attack-blockchain-reputation"],"i":false,"f":[[["",{"children":["(site)",{"children":[["locale","ko","d"],{"children":["blog",{"children":[["slug","what-is-a-sybil-attack-blockchain-reputation","d"],{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true]}]}],["",["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-[calc(100dvh-189px)] flex-1 items-center justify-center px-5 lg:min-h-[calc(100dvh-118px)]","children":["$","div",null,{"className":"flex max-w-[696px] flex-col items-center gap-8","children":[["$","h1",null,{"className":"text-center text-40 font-700 lg:text-64","children":"This is not the page you're looking for"}],["$","$L4",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-purple border-[transparent] hover:bg-purple-dark text-white-100 h-10 py-[9px] rounded-12 px-4","href":"/","children":["$undefined","Take me home","$undefined"],"ref":"$undefined"}]]}]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["(site)",["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["locale","ko","d"],["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/24bd7f809405cf73.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],"$L5"]}],{"children":["blog",["$","$1","c",{"children":[null,["$","div",null,{"className":"relative flex min-h-screen justify-center overflow-clip px-2 2xl:px-0","children":["$","div",null,{"className":"relative w-full max-w-[1418px] border-x border-neutral-20","children":[["$","div",null,{"className":"absolute -left-2 top-0 z-50 h-full w-2 bg-gradient-to-r from-white-100 to-[transparent] 2xl:-left-12 2xl:w-12"}],["$","div",null,{"className":"absolute -right-2 top-0 z-50 h-full w-2 bg-gradient-to-l from-white-100 to-[transparent] 2xl:-right-12 2xl:w-12"}],"$L6",["$","main",null,{"children":["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]}],["$","div",null,{"className":"relative","children":[["$","div",null,{"className":"absolute left-[-3px] top-[-2px] size-[5px] rounded-full bg-neutral-20"}],["$","div",null,{"className":"relative bottom-0 h-px bg-neutral-20 z-20 left-1/2 w-[calc(100%+16px)] lg:w-[calc(100%+16px)] 2xl:w-[calc(100%+96px)] -translate-x-1/2"}],"$undefined",["$","div",null,{"className":"absolute bottom-[-2px] right-[-3px] size-[5px] rounded-full bg-neutral-20"}]]}],"$L7"]}]}]]}],{"children":[["slug","what-is-a-sybil-attack-blockchain-reputation","d"],["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":["$L8",null,["$","$L9",null,{"children":["$La",["$","$Lb",null,{"promise":"$@c"}]]}]]}],{},null,false]},null,false]},null,false]},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,[["$","$Ld",null,{"children":"$Le"}],["$","meta",null,{"name":"next-size-adjust","content":""}]],["$","$Lf",null,{"children":["$","div",null,{"hidden":true,"children":["$","$10",null,{"fallback":null,"children":"$L11"}]}]}]]}],false]],"m":"$undefined","G":["$12",[]],"s":false,"S":true}
+13:I[928,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"Image"]
+6:["$","header",null,{"className":"sticky top-0 z-[60] w-full bg-white-90 backdrop-blur supports-[backdrop-filter]:bg-white-80","children":[["$","div",null,{"className":"mx-auto flex h-16 items-center justify-between px-4","children":[["$","$L4",null,{"href":"/","className":"flex items-center space-x-2","children":["$","$L13",null,{"src":"/logo.svg","alt":"Status Network Logo","width":210,"height":32}],"ref":"$undefined"}],["$","div",null,{"className":"flex items-center gap-3","children":[["$","$L4",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-white-100 border-neutral-30 hover:border-neutral-40 hover:bg-white-80 text-dark-100 h-8 py-[5px] rounded-10 px-3 hidden sm:block","href":"/","children":["$undefined","Home","$undefined"],"ref":"$undefined"}],["$","a",null,{"className":"inline-flex font-500 cursor-pointer gap-1 select-none text-15 items-center  border transition-all w-fit disabled:opacity-[0.3] disabled:cursor-default bg-purple border-[transparent] hover:bg-purple-dark text-white-100 h-8 py-[5px] rounded-10 px-3","target":"_blank","rel":"noopener noreferrer","href":"https://hub.status.network/","children":["$undefined","Get started","$undefined"],"ref":"$undefined"}]]}]]}],["$","div",null,{"className":"relative","children":[["$","div",null,{"className":"absolute left-[-3px] top-[-2px] size-[5px] rounded-full bg-neutral-20"}],["$","div",null,{"className":"relative bottom-0 h-px bg-neutral-20 z-20 left-1/2 w-[calc(100%+16px)] lg:w-[calc(100%+16px)] 2xl:w-[calc(100%+96px)] -translate-x-1/2"}],"$undefined",["$","div",null,{"className":"absolute bottom-[-2px] right-[-3px] size-[5px] rounded-full bg-neutral-20"}]]}]]}]
+7:["$","footer",null,{"className":"relative z-[61]","children":["$","div",null,{"className":"grid gap-4 p-3 lg:grid-cols-[1fr,auto,auto] lg:gap-5 lg:p-4","children":[["$","div",null,{"className":"flex flex-col justify-center gap-2 lg:flex-row lg:justify-start lg:gap-3","children":[["$","span",null,{"className":"text-center text-13 lg:text-left","children":"© Status Research & Development GmbH"}],["$","svg",null,{"width":"2","height":"2","viewBox":"0 0 2 2","fill":"none","xmlns":"http://www.w3.org/2000/svg","className":"hidden text-neutral-50 lg:block","children":["$","circle",null,{"cx":"1","cy":"1","r":"1","fill":"#A1ABBD"}]}]]}],["$","div",null,{"className":"flex flex-col items-center justify-center gap-3 lg:flex-row lg:justify-end","children":[["$","div",null,{"className":"flex items-center justify-center gap-4 md:gap-3 lg:justify-end","children":[["$","$L4",null,{"href":"/legal/terms-of-use","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Terms of Use","ref":"$undefined"}],["$","$L4",null,{"href":"/legal/privacy-policy","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Privacy Policy","ref":"$undefined"}],["$","$L4",null,{"href":"/blog","className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Blog","ref":"$undefined"}],"$L14"]}],["$","svg",null,{"width":"2","height":"2","viewBox":"0 0 2 2","fill":"none","xmlns":"http://www.w3.org/2000/svg","className":"2md:hidden text-neutral-50","children":["$","circle",null,{"cx":"1","cy":"1","r":"1","fill":"#A1ABBD"}]}],["$","div",null,{"className":"flex justify-center gap-6 lg:justify-end","children":[["$","a","Status",{"href":"https://status.app","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/status.6be65460.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"Status","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}],["$","a","Twitter",{"href":"https://x.com/StatusL2","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/twitter.6865a7e5.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"Twitter","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}],["$","a","GitHub",{"href":"https://github.com/status-im","className":"transition-opacity hover:opacity-[60%]","children":["$","$L13",null,{"src":{"src":"/_next/static/media/github.90103528.svg","height":20,"width":20,"blurWidth":0,"blurHeight":0},"alt":"GitHub","width":20,"height":20}],"target":"_blank","rel":"noopener noreferrer","ref":"$undefined"}]]}]]}]]}]}]
+17:I[6105,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","726","static/chunks/726-a688395c743bdde3.js","565","static/chunks/565-e7a70831c2486b41.js","472","static/chunks/app/(site)/%5Blocale%5D/layout-fe09f44bffcc5314.js"],"Analytics"]
+18:I[5718,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","726","static/chunks/726-a688395c743bdde3.js","565","static/chunks/565-e7a70831c2486b41.js","472","static/chunks/app/(site)/%5Blocale%5D/layout-fe09f44bffcc5314.js"],""]
+15:T433,{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Status Network",
+  "url": "https://status.network/",
+  "logo": "https://status.network/logo.svg",
+  "description": "Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack, with network-level spam protection enforced through reputation (Karma) and execution funded by native yield rather than user-paid gas fees.",
+  "sameAs": [
+    "https://x.com/StatusL2",
+    "https://github.com/status-im"
+  ],
+  "@id": "https://status.network/#organization",
+  "knowsAbout": [
+    {
+      "@type": "Thing",
+      "name": "Ethereum Layer 2"
+    },
+    {
+      "@type": "Thing",
+      "name": "Gasless transactions"
+    },
+    {
+      "@type": "Thing",
+      "name": "Composable privacy"
+    },
+    {
+      "@type": "Thing",
+      "name": "Spam protection"
+    },
+    {
+      "@type": "Thing",
+      "name": "Reputation system"
+    },
+    {
+      "@type": "Thing",
+      "name": "Native yield funding"
+    },
+    {
+      "@type": "Thing",
+      "name": "Bots"
+    }
+  ]
+}5:["$","html",null,{"lang":"ko","children":["$","body",null,{"className":"__variable_9cc749 bg-white-100 text-neutral-100 antialiased selection:bg-purple selection:text-white-100","suppressHydrationWarning":true,"children":[[["$","script","0",{"id":"json-ld-0","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$15"}}],["$","script","1",{"id":"json-ld-1","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"WebSite\",\n  \"name\": \"Status Network\",\n  \"url\": \"https://status.network/\",\n  \"description\": \"Status Network is a privacy-first, fully gasless Ethereum Layer 2 designed for scalable onchain activity, coordinated through reputation and native yield.\",\n  \"@id\": \"https://status.network/#website\",\n  \"publisher\": {\n    \"@id\": \"https://status.network/#organization\"\n  },\n  \"about\": [\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Ethereum Layer 2\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Gasless transactions\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Composable privacy\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Spam protection\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Reputation system\"\n    },\n    {\n      \"@type\": \"Thing\",\n      \"name\": \"Native yield funding\"\n    }\n  ]\n}"}}],["$","script","2",{"id":"json-ld-2","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"SoftwareApplication\",\n  \"name\": \"Status Network\",\n  \"applicationCategory\": \"Blockchain\",\n  \"operatingSystem\": \"Web3\",\n  \"url\": \"https://status.network/\",\n  \"description\": \"Status Network is a privacy-first, fully gasless Ethereum Layer 2 built on the Linea zkEVM stack. Execution is coordinated through Karma, a non-transferable reputation system, and supported by native yield and network activity.\"\n}"}}]],"$L16",["$","$L17",null,{}],["$","$L18",null,{"strategy":"afterInteractive","src":"https://umami.bi.status.im/script.js","data-website-id":"0746c5dc-8cd3-45a4-9606-6bcf9adf248e","data-domains":"status.network","async":true}]]}]}]
+19:I[6156,["756","static/chunks/756-56d07e8fa5ffdccb.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","878","static/chunks/app/(site)/%5Blocale%5D/blog/layout-c6bf279edadbe978.js"],"default"]
+14:["$","$L19",null,{"ref":"$undefined","href":"/brand","locale":"$undefined","localeCookie":{"name":"NEXT_LOCALE","sameSite":"lax"},"className":"text-13 text-neutral-50 transition-colors hover:text-neutral-100","children":"Brand assets"}]
+1a:I[2756,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"default"]
+16:["$","$L1a",null,{"formats":"$undefined","locale":"ko","messages":{"meta":{"locale":"en","name":"English","direction":"ltr","description":"Complete Status Network website translations"},"common":{"loading":"Loading...","learn_more":"Learn More","get_started":"Get started","read_more":"Read More","read_docs":"Read docs","view_blog":"View blog","new":"NEW","testnet_live":"Testnet v2 is live!","promo_message":"Vaults withdrawals are now enabled","visit_hub":"withdraw now","visit_hub_aria":"withdraw now (opens in new tab)"},"navigation":{"home":"Home","about":"About","features":"Features","network":"Network","partners":"Partners","tokenomics":"Tokenomics","blog":"Blog","brand":"Brand"},"hero":{"title":"The gasless network","subtitle":"with sustainable funding for app builders","description":"Launch and scale your social apps and games with truly free transactions."},"about":{"section_number":"01","section_title":"WHAT IS STATUS NETWORK?","title_1":"The first Ethereum L2 with","title_2":"gas-free","title_3":"transactions at scale","title_4":"funded by native yield + fees.","description":"A free network with sustainable funding for public apps, games and protocols.","build_button":"Build on Status Network","learn_more_button":"Learn more"},"features":{"section_number":"02","section_title":"WHY STATUS NETWORK?","title":"Power to the community","sustainable_funding":{"title":"Sustainable public funding","description":"Status Network takes a radical step beyond short-term incentives. Powered by native yields and fees, its public app funding pool is governed by the community, ensuring a continuous allocation of capital for onchain builders.","step_1":"Users bridge yield-bearing assets to Status Network and increase the yield redirected to the funding pool.","step_2":"Apps and games apply for an allocation from the pool. The community votes on allocations using Karma, a non-transferrable governance token earned by contributing positively to the network:","step_2_staking":"Staking SNT","step_2_bridging":"Bridging yield-bearing tokens","step_2_using":"Using apps","step_2_premium":"Paying premium gas","step_2_donations":"Making direct donations to the funding pool","step_3":"Every funded project onboards new users, driving additional asset deposits and token swaps - generating more yield and fees to be allocated in the funding pool.","button":"Discover Karmic Tokenomics"},"gasless_transactions":{"title":"Gasless transactions","description_1":"On Status Network, anyone can experience free transactions! With the L2 operating costs covered by native yields and fees, no need to bridge gas to use an app.","description_2":"Apps and games developers can offer frictionless onboarding for their users at scale.","button":"Learn how it works"},"performance":{"title":"Built for performance, secured by Ethereum","description":"Leverage Ethereum's security with Linea's cutting-edge zkEVM rollup technology for high-speed transactions. Perfect for gaming, social, iGaming, and high-throughput applications.","button":"Learn more about Linea"},"decentralization":{"title":"Geared for decentralization","description":"Built on the core values of Status and the IFT ecosystem, Status Network is designed to become a truly decentralised L2. The endgame is to provide a censorship-resistant environment where communities can thrive without central points of control.","button":"Learn more"}},"partners":{"section_number":"03","section_title":"ECOSYSTEM AND PARTNERS","title_1":"Empowering bold","title_2":"creators and developers","subtitle":"Building with the best in the game","cats_fishing":{"title":"Cats Fishing","description":"The first open-sourced, proof of play mobile fishing game"},"spla_labs":{"title":"Spla Labs","description":"Builders of TODL & Ponzi Hero games"},"hash_vegas":{"title":"Hash Vegas","description":"Fair and transparent onchain gaming"},"ponzi_hero":{"title":"Ponzi Hero","description":"Earn NFTs, have some fun!"},"linea":{"title":"Linea","description":"Secure zkEVM L2 stack"},"gateway":{"title":"Gateway","description":"Rollup infrastructure and operation"},"din":{"title":"DIN","description":"Decentralised Infrastructure Network"}},"network":{"section_number":"04","section_title":"NETWORK","title":"Leverage the most advanced decentralised stack","description":"Builders get priority support from Institute of Free Technology solutions:","status":{"title":"Status","description":"Ethereum super-app with 4M+ downloads"},"logos":{"title":"Logos","description":"Open tech to restore civil society"},"waku":{"title":"Waku","description":"P2P encrypted messaging protocol"},"codex":{"title":"Codex","description":"Decentralised data storage layer"},"nimbus":{"title":"Nimbus","description":"Ethereum core devs. Powering Eth consensus"},"keycard":{"title":"Keycard","description":"Secure open-source hardware wallet"}},"tokenomics":{"section_number":"05","section_title":"TOKENOMICS","title":"Earn voting power through positive network engagement","description":"The more you contribute to the network, the more influence you gain over funding allocation and the network's roadmap priorities.","karma_note":"This is coordinated by Karma, a non-transferable governance token.","app_developer":{"title":"App developer","step_1":"Ship code","step_2":"Get traction","step_3":"Receive Karma","step_4":"Earn funding"},"liquidity_provider":{"title":"Liquidity provider","description":"Earn Karma for staking SNT and get LP rewards boosted by native yield."},"onchain_user":{"title":"Onchain user","description":"Get rewarded with Karma for bridging to the network and using apps. A higher Karma means more gasless transactions."}},"blog":{"title":"Stay up to date","view_blog_button":"View blog","category":"Updates","author":"Us","on_date":"on","page_title":"Blog.","page_description":"Long form articles, thoughts, and ideas.","share_article_on":"Share article on:","related_articles":"Related articles","breadcrumb_blog":"Blog","no_posts":"No posts available yet.","home":"Home","get_started":"Get started","post_1":{"title":"Status Steps Up as Founding Member of Linea Consortium"},"post_2":{"title":"Status Launches First Gasless Layer 2 on Linea"},"post_3":{"title":"Embracing Community Choices: Status to Develop SNT Staking and Status L2"}},"footer":{"copyright":"© Status Research & Development GmbH","privacy_policy":"Privacy Policy","terms_of_use":"Terms of Use","blog":"Blog","brand":"Brand assets"},"pre_footer":{"title":"Ready to build on the free network?","partner_button":"Partner with us","read_docs_button":"Read docs"},"brand":{"page_title":"Brand","page_description":"Get Status Network brand assets.","main_title":"Brand assets","last_updated":"Last updated: 12 November 2025","download_all":"Download all assets","logo_title":"Logo","logo_description":"Our main logo","logo_variation_title":"Logo variation","logo_variation_description":"For creative printing layouts","mark_only_title":"Mark only","mark_only_description":"Without wordmark","main_colors_title":"Main colors","main_colors_description":"Our main colors palette","artwork_title":"Artwork","artwork_description":"Our main characters","download_button":"Download","alt_text":{"main_logo":"Main logo","mark_only":"Mark only","artwork":"Artwork"}},"not_found":{"title":"This is not the page you're looking for","take_me_home":"Take me home"}},"now":"$undefined","timeZone":"UTC","children":"$L1b"}]
+1b:["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]
+e:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+a:null
+1c:T13ec,{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq",
+  "url": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-q1",
+      "name": "What is a Sybil attack in simple terms?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-a1",
+        "text": "A Sybil attack occurs when a single actor creates many fake identities to gain unfair influence over a system, such as votes, rewards, or network access that should be distributed across real participants."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-q2",
+      "name": "Why are Sybil attacks named Sybil?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-a2",
+        "text": "The term comes from a 2002 Microsoft Research paper by John Douceur, inspired by a book about a woman with multiple personality disorder, representing one entity appearing as many identities."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-q3",
+      "name": "How do Sybil attacks affect DAO governance?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-a3",
+        "text": "An attacker can create multiple wallets, accumulate governance tokens, and vote as a coordinated group. This allows one entity to gain disproportionate influence over decisions that are intended to reflect decentralized community input."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-q4",
+      "name": "Can proof of stake prevent Sybil attacks?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-a4",
+        "text": "Proof of stake increases the cost of launching a Sybil attack by requiring capital to participate. However, it does not eliminate the risk entirely, as attackers with sufficient resources can still create multiple validator identities."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-q5",
+      "name": "What is a soulbound token and how does it stop Sybil attacks?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-a5",
+        "text": "A soulbound token is a non-transferable credential tied to a single wallet. Because it cannot be sold or moved, it prevents attackers from consolidating or transferring reputation across multiple identities."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-q6",
+      "name": "How does Status Network prevent Sybil attacks without gas fees?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-a6",
+        "text": "Status Network uses a reputation-based system where transaction capacity depends on earned Karma. Since Karma is non-transferable and built over time through participation, it limits the effectiveness of large numbers of newly created accounts."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-q7",
+      "name": "What are Rate Limiting Nullifiers (RLN)?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-a7",
+        "text": "Rate Limiting Nullifiers are a zero-knowledge protocol that enforces per-identity transaction limits using cryptographic techniques. If a user exceeds allowed limits, the system can trigger penalties that reduce or remove their reputation, helping protect the network from abuse."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-q8",
+      "name": "Is it possible to fully prevent Sybil attacks on a blockchain?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-a8",
+        "text": "No system can completely eliminate Sybil attacks. Effective defenses combine economic costs, reputation systems, and cryptographic mechanisms to make attacks impractical while balancing privacy and usability."
+      }
+    }
+  ]
+}8:[[["$","script","0",{"id":"json-ld-0","type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Article\",\n  \"headline\": \"What Is a Sybil Attack? How Blockchain Systems Prevent Fake Identities\",\n  \"description\": \"A Sybil attack floods a network with fake identities to gain unfair influence. Learn how reputation systems and ZK proofs defend blockchains against  spam.\",\n  \"image\": \"https://our.status.im/content/images/2026/04/33---Blog---Cover.jpg\",\n  \"datePublished\": \"2026-04-02T11:45:20.000+00:00\",\n  \"dateModified\": \"2026-05-05T20:26:07.000+00:00\",\n  \"author\": {\n    \"@type\": \"Person\",\n    \"name\": \"Kamila Lipska\"\n  },\n  \"publisher\": {\n    \"@type\": \"Organization\",\n    \"name\": \"Status Network\",\n    \"logo\": {\n      \"@type\": \"ImageObject\",\n      \"url\": \"https://status.network/logo.svg\"\n    }\n  }\n}"}}]],[["$","script","custom-jsonld-0",{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$1c"}}]],"$L1d","$L1e"]
+1f:I[2118,["756","static/chunks/756-56d07e8fa5ffdccb.js","985","static/chunks/985-d397895b440bd40c.js","928","static/chunks/928-259e7cbdae8c7641.js","751","static/chunks/751-8a3b114910bff4dc.js","186","static/chunks/186-71711fc881c04581.js","565","static/chunks/565-e7a70831c2486b41.js","91","static/chunks/app/(site)/%5Blocale%5D/blog/%5Bslug%5D/page-8f8e87b8fa65e69a.js"],"BlogPostDetailHydrated"]
+20:T2c80,<p>A Sybil attack happens when one actor creates many fake identities to gain outsized control over a network. In blockchain systems, this can corrupt governance votes, drain airdrop pools, and manipulate peer-to-peer consensus. Defenses include proof of work, staking requirements, reputation scoring with <a href="https://status.network/blog/what-is-a-soulbound-token-non-transferable-reputation-explained/">soulbound tokens</a>, and <a href="https://status.network/blog/zero-knowledge-proof-zk-privacy-status">zero-knowledge proofs</a> that verify uniqueness without exposing personal data.</p><h2 id="why-the-name-sybil">Why the Name "Sybil"?</h2><p>The term comes from a 2002 research paper by John Douceur at Microsoft Research. He named it after the subject of a 1973 book about a woman with multiple distinct personalities. The analogy fits: one real entity pretending to be many.</p><p>In open networks, creating accounts is cheap. No passport check. No phone verification. One person can spin up thousands of wallets in minutes. Each wallet looks unique on chain. The network cannot tell they share an owner.</p><h2 id="how-a-sybil-attack-works">How a Sybil Attack Works</h2><p>The attacker follows a simple playbook.</p><p><strong>Step 1: Create identities.</strong> Generate hundreds or thousands of wallets. Automation makes this trivial.</p><p><strong>Step 2: Distribute activity.</strong> Move small amounts between wallets. Interact with protocols. Build a thin history.</p><p><strong>Step 3: Exploit the system.</strong> Use the fake majority to vote on governance proposals, claim airdrops, manipulate price feeds, or overwhelm consensus.</p><p>The core problem is identity. Blockchains are pseudonymous by design. That openness is a feature for privacy. It is a vulnerability for governance.</p><h2 id="real-world-sybil-attack-targets">Real-World Sybil Attack Targets</h2><p><strong>Airdrops</strong> are a prime target. Projects reward early users with tokens. Sybil farmers create thousands of wallets, simulate organic activity, and claim rewards meant for real participants.</p><p><strong>DAO governance</strong> is another vector. One-token-one-vote systems assume broad distribution. A Sybil attacker accumulates cheap governance tokens across many wallets. Then votes as a bloc.</p><p><strong>Peer-to-peer networks</strong> face Sybil risks too. An attacker can surround honest nodes with fake ones. This isolates victims and controls what data they see. This is called an eclipse attack.</p><h2 id="how-blockchain-systems-defend-against-sybil-attacks">How Blockchain Systems Defend Against Sybil Attacks</h2><p>No single defense works perfectly. Most systems layer multiple strategies.</p><h3 id="proof-of-work">Proof of Work</h3><p>Bitcoin's original defense. Creating blocks requires real computational cost. Running many fake nodes gains nothing without matching hash power. The cost of attack scales linearly with the number of identities.</p><h3 id="proof-of-stake">Proof of Stake</h3><p>Validators lock capital as collateral. Misbehavior triggers slashing. Creating fake validator identities requires proportional capital. The economic cost makes Sybil attacks expensive.</p><h3 id="reputation-and-soulbound-tokens">Reputation and Soulbound Tokens</h3><p>Reputation systems tie identity to history. <strong>Soulbound tokens</strong> (SBTs) are non-transferable credentials. They cannot be bought, sold, or moved between wallets. They record what an account has done, not what it holds.</p><p>This approach shifts the question from "how much money do you have?" to "what have you contributed?" A new wallet has zero reputation. It must earn standing over time through real participation.</p><p><strong>Status Network</strong> uses this model through its <a href="https://docs.status.network/overview/tokenomics/karmic-tokenomics"><strong>Karma</strong> system.</a> <strong>Karma</strong> is a soulbound governance token earned through staking <strong>SNT</strong>, bridging assets, providing liquidity, building applications, and other contributions. It cannot be transferred or purchased. A user's Karma balance determines their access to different network throughput levels, unlocking higher gasless transaction quotas and proportional governance weight as their reputation grows.</p><p>Because <strong>Karma</strong> is soulbound, a Sybil attacker gains nothing from creating extra wallets. While every user can access a basic entry-level quota, reaching the highest levels of network influence requires sustained contribution or a significant commitment to the ecosystem. This ensures that the most active and invested members have the greatest say in the network's future. The cost of faking reputation across thousands of wallets is prohibitive.</p><h3 id="zero-knowledge-proofs">Zero-Knowledge Proofs</h3><p>Zero-knowledge proofs (ZKPs) let a user prove something without revealing the underlying data. For Sybil resistance, a user can prove "I am a unique human in this set" without disclosing which human.</p><p><a href="https://status.network/blog/rate-limiting-nullifiers-rln-explained"><strong>Rate Limiting Nullifiers</strong> </a>(RLN) use this approach. <strong>RLN</strong> combines Sparse <a href="https://status.network/blog/sparse-merkle-tree-smt-rate-limiting">Merkle Trees</a>, Shamir's Secret Sharing, and ZKPs to enforce per-identity rate limits. Each registered identity gets a quota. The network distinguishes between accidental over-usage and malicious attacks. Minor exceeding of a daily quota may simply require a temporary fallback to standard fees, while a large-scale attempt to disrupt the network can lead to a total loss of an identity’s reputation and accumulated Karma.</p><p><strong>Status Network</strong> uses <strong>RLN</strong> as its primary spam prevention layer. Instead of charging gas fees to deter spam, the network assigns free transaction quotas per identity. The ZK circuit ensures each identity can only claim one quota. This replaces the gas fee market with cryptographic enforcement.</p><h3 id="graph-analysis">Graph Analysis</h3><p>Some protocols analyze on-chain transaction graphs. Wallets that fund each other in circular patterns, transact at identical times, or interact with the same contracts in the same order get flagged. Gitcoin Passport and similar tools use this technique for airdrop protection.</p><h3 id="social-verification">Social Verification</h3><p>Web-of-trust systems require existing members to vouch for new ones. Proof of Humanity and BrightID ask users to verify each other through video calls or social graphs. This works but introduces friction and privacy tradeoffs.</p><h2 id="cost-based-vs-identity-based-defenses">Cost-Based vs. Identity-Based Defenses</h2>
+<!--kg-card-begin: html-->
+<table>
+<thead>
+<tr>
+<th>Defense Type</th>
+<th>Mechanism</th>
+<th>Tradeoff</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Proof of Work</td>
+<td>Computational cost</td>
+<td>High energy use</td>
+</tr>
+<tr>
+<td>Proof of Stake</td>
+<td>Capital lockup</td>
+<td>Plutocratic bias</td>
+</tr>
+<tr>
+<td>Gas fees</td>
+<td>Per-transaction cost</td>
+<td>Excludes low-value users</td>
+</tr>
+<tr>
+<td>Soulbound tokens</td>
+<td>Earned reputation</td>
+<td>Slow identity building</td>
+</tr>
+<tr>
+<td>ZK rate limiting</td>
+<td>Cryptographic quotas</td>
+<td>Complex implementation</td>
+</tr>
+<tr>
+<td>Social verification</td>
+<td>Human vouching</td>
+<td>Privacy and friction</td>
+</tr>
+</tbody>
+</table>
+<!--kg-card-end: html-->
+<p>Cost-based defenses (PoW, PoS, gas fees) make attacks expensive. Identity-based defenses (SBTs, ZKPs, social verification) make attacks structurally impossible or impractical.</p><p>The strongest systems combine both. <strong>Status Network</strong> layers <strong>Karma</strong> (reputation) with <strong>RLN</strong> (ZK-based rate limiting) to address Sybil resistance without relying on gas fees. Users who need more than their allotted free throughput can opt to pay for additional priority. This creates a flexible system where power users can still transact during busy times, while their activity simultaneously helps them build the reputation needed for higher free limits in the future.</p><h2 id="why-sybil-resistance-matters-for-the-future-of-web3">Why Sybil Resistance Matters for the Future of Web3</h2><p>DAOs, public funding pools, and quadratic voting all assume one-person-one-voice or proportional representation. Without Sybil resistance, these systems collapse into plutocracy or manipulation.</p><p>As blockchains move toward social applications, gaming, and governance, identity integrity becomes foundational. The question is not whether to solve Sybil attacks. The question is which tradeoffs a community is willing to accept.</p><h2 id="frequently-asked-questions">Frequently Asked Questions</h2><p><strong>What is a Sybil attack in simple terms?</strong></p><p>A Sybil attack is when one person creates many fake accounts to cheat a system. The attacker uses these fake identities to gain votes, rewards, or influence that should belong to many real people.</p><p><strong>Why are Sybil attacks named "Sybil"?</strong></p><p>The name comes from a 2002 Microsoft Research paper by John Douceur. He referenced a book about a woman diagnosed with multiple personality disorder, using it as a metaphor for one entity pretending to be many.</p><p><strong>How do Sybil attacks affect DAO governance?</strong></p><p>An attacker creates many wallets, accumulates governance tokens, and votes as a coordinated bloc. This gives one person disproportionate control over proposals meant to reflect broad community consensus.</p><p><strong>Can proof of stake prevent Sybil attacks?</strong></p><p>Proof of stake raises the cost of Sybil attacks by requiring capital lockup per validator. It does not eliminate Sybil risk entirely, since an attacker with sufficient capital can still run multiple validators.</p><p><strong>What is a soulbound token and how does it stop Sybil attacks?</strong></p><p>A soulbound token (SBT) is a non-transferable credential bound to a single wallet. Because SBTs cannot be bought or moved, a Sybil attacker cannot transfer reputation from one wallet to another.</p><p><strong>How does Status Network prevent Sybil attacks without gas fees?</strong></p><p>Status Network uses a tiered reputation system where your Karma balance sets your daily transaction limit. Because higher limits are tied to your history of contribution and cannot be transferred, an attacker cannot effectively use a 'spam army' of new accounts to gain significant network control.</p><p><strong>What are Rate Limiting Nullifiers (RLN)?</strong></p><p><strong>RLN</strong> is a zero-knowledge protocol using Sparse Merkle Trees, Shamir's Secret Sharing, and ZKPs. It enforces a cryptographic quota for every identity on the network. If an identity attempts to bypass these limits to spam the system, the protocol automatically triggers a penalty that removes that identity’s standing, protecting the network’s health for everyone else.</p><p><strong>Is it possible to fully prevent Sybil attacks on a blockchain?</strong></p><p>No system eliminates Sybil risk entirely. Every defense involves tradeoffs between cost, privacy, and friction. The most resilient systems layer multiple approaches: economic cost, earned reputation, and cryptographic verification.</p>21:T13ec,{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq",
+  "url": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-q1",
+      "name": "What is a Sybil attack in simple terms?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-a1",
+        "text": "A Sybil attack occurs when a single actor creates many fake identities to gain unfair influence over a system, such as votes, rewards, or network access that should be distributed across real participants."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-q2",
+      "name": "Why are Sybil attacks named Sybil?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-a2",
+        "text": "The term comes from a 2002 Microsoft Research paper by John Douceur, inspired by a book about a woman with multiple personality disorder, representing one entity appearing as many identities."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-q3",
+      "name": "How do Sybil attacks affect DAO governance?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-a3",
+        "text": "An attacker can create multiple wallets, accumulate governance tokens, and vote as a coordinated group. This allows one entity to gain disproportionate influence over decisions that are intended to reflect decentralized community input."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-q4",
+      "name": "Can proof of stake prevent Sybil attacks?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-a4",
+        "text": "Proof of stake increases the cost of launching a Sybil attack by requiring capital to participate. However, it does not eliminate the risk entirely, as attackers with sufficient resources can still create multiple validator identities."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-q5",
+      "name": "What is a soulbound token and how does it stop Sybil attacks?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-a5",
+        "text": "A soulbound token is a non-transferable credential tied to a single wallet. Because it cannot be sold or moved, it prevents attackers from consolidating or transferring reputation across multiple identities."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-q6",
+      "name": "How does Status Network prevent Sybil attacks without gas fees?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-a6",
+        "text": "Status Network uses a reputation-based system where transaction capacity depends on earned Karma. Since Karma is non-transferable and built over time through participation, it limits the effectiveness of large numbers of newly created accounts."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-q7",
+      "name": "What are Rate Limiting Nullifiers (RLN)?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-a7",
+        "text": "Rate Limiting Nullifiers are a zero-knowledge protocol that enforces per-identity transaction limits using cryptographic techniques. If a user exceeds allowed limits, the system can trigger penalties that reduce or remove their reputation, helping protect the network from abuse."
+      }
+    },
+    {
+      "@type": "Question",
+      "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-q8",
+      "name": "Is it possible to fully prevent Sybil attacks on a blockchain?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "@id": "https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation#faq-a8",
+        "text": "No system can completely eliminate Sybil attacks. Effective defenses combine economic costs, reputation systems, and cryptographic mechanisms to make attacks impractical while balancing privacy and usability."
+      }
+    }
+  ]
+}1d:["$","$L1f",null,{"slug":"what-is-a-sybil-attack-blockchain-reputation","initialPost":{"slug":"what-is-a-sybil-attack-blockchain-reputation","title":"What Is a Sybil Attack? How Blockchain Systems Prevent Fake Identities","html":"$20","feature_image":"https://our.status.im/content/images/2026/04/33---Blog---Cover.jpg","feature_image_alt":"Sybil attack prevention in blockchain networks using reputation systems and zero-knowledge proofs. ","published_at":"2026-04-02T11:45:20.000+00:00","updated_at":"2026-05-05T20:26:07.000+00:00","codeinjection_head":"$21","codeinjection_foot":null,"primary_tag":{"name":"status-network-blog","slug":"status-network-blog"},"primary_author":{"id":"6915ef6ff70ca800016c5a8d","name":"Kamila Lipska","slug":"kamila","profile_image":null,"cover_image":null,"bio":null,"website":null,"location":null,"facebook":null,"twitter":null,"meta_title":null,"meta_description":null,"url":"https://our.status.im/author/kamila/"}},"labels":{"breadcrumbBlog":"Blog","onDate":"on","shareArticleOn":"Share article on:"}}]
+1e:["$","div",null,{"className":"border-t border-neutral-10 bg-neutral-10 px-5 pb-16 pt-10 xl:pb-24","children":["$","div",null,{"className":"mx-auto w-full max-w-[1184px]","children":[["$","h2",null,{"className":"mb-6 text-27 font-600","children":"Related articles"}],["$","div",null,{"className":"grid gap-5 md:grid-cols-2 xl:grid-cols-4","children":["$L22","$L23","$L24","$L25"]}]]}]}]
+22:["$","$L4","69dcde17834292000196a55e",{"href":"/blog/snt-staking-earn-karma","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"SNT Staking: How to Earn Karma on Status Network"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/41---Blog---Cover.jpg","alt":"Staking SNT earns Karma, a non-transferable reputation token that unlocks free transactions and governance voting power."}]}]],"ref":"$undefined"}]
+23:["$","$L4","69dcc688834292000196a542",{"href":"/blog/privacy-l2-stealth-addresses-bermuda","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"Privacy on Ethereum Layer 2: How Bermuda Enables Stealth Addresses"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/40---Blog---Cover.jpg","alt":"Ethereum Layer 2 privacy with stealth addresses, confidential balances, zero knowledge proofs, Bermuda protocol execution."}]}]],"ref":"$undefined"}]
+24:["$","$L4","69dcc2cc834292000196a529",{"href":"/blog/what-is-mev-maximal-extractable-value","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"What Is MEV? Maximal Extractable Value and Its Impact on Users"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 13, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/39---Blog---Cover.jpg","alt":"Maximal extractable value MEV blockchain transaction ordering impact on crypto users and DeFi trades."}]}]],"ref":"$undefined"}]
+25:["$","$L4","69d6452a834292000196a509",{"href":"/blog/gas-fees-are-a-privacy-leak-no-pricing-model-can-fix","className":"flex flex-col rounded-20 border border-neutral-10 bg-white-100 shadow-1 transition-all hover:scale-[101%] hover:shadow-3","children":[["$","div",null,{"className":"flex grow flex-col gap-2 p-4","children":[["$","div",null,{"children":["$","span",null,{"className":"inline-flex rounded-20 border border-neutral-20 px-2 py-[3px] text-13 font-500","children":"status-network-blog"}]}],["$","p",null,{"className":"text-19 font-600","children":"Gas Fees Are a Privacy Leak No Pricing Model Can Fix"}],["$","div",null,{"className":"mt-auto flex items-center gap-1","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","$L13",null,{"src":"/blog/avatar.webp","alt":"Kamila Lipska","width":20,"height":20,"className":"rounded-full"}],["$","span",null,{"className":"text-15 font-600","children":"Kamila Lipska"}]]}],["$","p",null,{"className":"text-15 text-neutral-50","children":["on"," ","Apr 8, 2026"]}]]}]]}],["$","div",null,{"className":"w-full px-2 pb-2","children":["$","img",null,{"className":"aspect-[334/188] size-full rounded-16 object-cover","src":"https://our.status.im/content/images/2026/04/38---Blog---Cover.jpg","alt":"How gas funding trail links blockchain account activity to transaction metadata."}]}]],"ref":"$undefined"}]
+26:I[610,[],"IconMark"]
+c:{"metadata":[["$","title","0",{"children":"What Is a Sybil Attack? Blockchain Defenses Explained"}],["$","meta","1",{"name":"description","content":"A Sybil attack floods a network with fake identities to gain unfair influence. Learn how reputation systems and ZK proofs defend blockchains against  spam."}],["$","link","2",{"rel":"canonical","href":"https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation"}],["$","link","3",{"rel":"alternate","hrefLang":"en","href":"https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation"}],["$","link","4",{"rel":"alternate","hrefLang":"ko","href":"https://status.network/ko/blog/what-is-a-sybil-attack-blockchain-reputation"}],["$","link","5",{"rel":"alternate","hrefLang":"x-default","href":"https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation"}],["$","meta","6",{"property":"og:title","content":"What Is a Sybil Attack? How Blockchain Systems Prevent Fake Identities"}],["$","meta","7",{"property":"og:description","content":"A Sybil attack floods a network with fake identities to gain unfair influence. Learn how reputation systems and ZK proofs defend blockchains against  spam."}],["$","meta","8",{"property":"og:url","content":"https://status.network/blog/what-is-a-sybil-attack-blockchain-reputation"}],["$","meta","9",{"property":"og:site_name","content":"Status Network"}],["$","meta","10",{"property":"og:locale","content":"en"}],["$","meta","11",{"property":"og:image","content":"https://our.status.im/content/images/2026/04/33---Blog---Cover.jpg"}],["$","meta","12",{"property":"og:type","content":"article"}],["$","meta","13",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","14",{"name":"twitter:site","content":"@StatusL2"}],["$","meta","15",{"name":"twitter:title","content":"What Is a Sybil Attack? Blockchain Defenses Explained"}],["$","meta","16",{"name":"twitter:description","content":"A Sybil attack floods a network with fake identities to gain unfair influence. Learn how reputation systems and ZK proofs defend blockchains against  spam."}],["$","meta","17",{"name":"twitter:image","content":"https://our.status.im/content/images/2026/04/33---Blog---Cover.jpg"}],["$","link","18",{"rel":"icon","href":"/icon2.png?d102c5988532e764","type":"image/png","sizes":"128x128"}],["$","$L26","19",{}]],"error":null,"digest":"$undefined"}
+11:"$c:metadata"
