@@ -486,9 +486,16 @@ const renderTable = (children: ReactNode) => {
       <TableContent>
         {bodyRows.map((row, index) => (
           <TableRow key={index}>
-            {getTableCells(row).map((cell, index) => (
-              <TableCell key={index}>{cell.props.children}</TableCell>
-            ))}
+            {getTableCells(row).map((cell, index) =>
+              // A <th> in a body row is a row header (common in tables with
+              // no <thead>); rendering it as a <td> would drop that
+              // semantic and its header styling.
+              isHtmlElement(cell, 'th') ? (
+                <TableHeader key={index}>{cell.props.children}</TableHeader>
+              ) : (
+                <TableCell key={index}>{cell.props.children}</TableCell>
+              )
+            )}
           </TableRow>
         ))}
       </TableContent>
