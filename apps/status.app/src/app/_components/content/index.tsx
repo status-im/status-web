@@ -457,6 +457,45 @@ const getTableCells = (row: ContentElement) =>
     cell => isHtmlElement(cell, 'td') || isHtmlElement(cell, 'th')
   )
 
+// Handles tables missing a <thead> (older Ghost tables) or otherwise not
+// shaped as exactly [thead, tbody], instead of assuming that fixed shape.
+const renderTable = (children: ReactNode) => {
+  const elements = toElementArray(children)
+  const head = elements.find(child => isHtmlElement(child, 'thead'))
+  const bodies = elements.filter(child => isHtmlElement(child, 'tbody'))
+  const directRows = elements.filter(child => isHtmlElement(child, 'tr'))
+  const footer = elements.find(child => isHtmlElement(child, 'tfoot'))
+  const headerRows = getTableRows(head)
+  const headerCells = headerRows[0] ? getTableCells(headerRows[0]) : []
+  const bodyRows = [
+    ...headerRows.slice(1),
+    ...bodies.flatMap(getTableRows),
+    ...directRows,
+    ...getTableRows(footer),
+  ]
+
+  return (
+    <Table>
+      {headerCells.length > 0 && (
+        <TableHead>
+          {headerCells.map((header, index) => (
+            <TableHeader key={index}>{header.props.children}</TableHeader>
+          ))}
+        </TableHead>
+      )}
+      <TableContent>
+        {bodyRows.map((row, index) => (
+          <TableRow key={index}>
+            {getTableCells(row).map((cell, index) => (
+              <TableCell key={index}>{cell.props.children}</TableCell>
+            ))}
+          </TableRow>
+        ))}
+      </TableContent>
+    </Table>
+  )
+}
+
 export const blogComponents = {
   ...baseComponents,
   h2: (props: ComponentProps<'h2'>) => {
@@ -469,42 +508,7 @@ export const blogComponents = {
       border: 'border-l-2 border-neutral-40 pl-4',
     })
   },
-  table: (props: any) => {
-    const children = toElementArray(props.children)
-    const head = children.find(child => isHtmlElement(child, 'thead'))
-    const bodies = children.filter(child => isHtmlElement(child, 'tbody'))
-    const directRows = children.filter(child => isHtmlElement(child, 'tr'))
-    const footer = children.find(child => isHtmlElement(child, 'tfoot'))
-    const headerRows = getTableRows(head)
-    const headerCells = headerRows[0] ? getTableCells(headerRows[0]) : []
-    const bodyRows = [
-      ...headerRows.slice(1),
-      ...bodies.flatMap(getTableRows),
-      ...directRows,
-      ...getTableRows(footer),
-    ]
-
-    return (
-      <Table>
-        {headerCells.length > 0 && (
-          <TableHead>
-            {headerCells.map((header, index) => (
-              <TableHeader key={index}>{header.props.children}</TableHeader>
-            ))}
-          </TableHead>
-        )}
-        <TableContent>
-          {bodyRows.map((row, index) => (
-            <TableRow key={index}>
-              {getTableCells(row).map((cell, index) => (
-                <TableCell key={index}>{cell.props.children}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableContent>
-      </Table>
-    )
-  },
+  table: (props: any) => renderTable(props.children),
 }
 
 export const jobsComponents = {
@@ -588,37 +592,7 @@ export const specsComponents = {
   li: (props: Parameters<typeof baseComponents.li>[0]) => {
     return baseComponents.li({ ...props, size: 15 })
   },
-  table: (props: any) => {
-    const [head, body] = props.children
-    // const headers = head.props.children[0].props.children
-    const headers = head.props.children.props.children
-    const rows = body.props.children
-
-    return (
-      <Table>
-        <TableHead>
-          {headers.map((header: any, index: any) => (
-            // <TableHeader key={index}>{header.props.children[0]}</TableHeader>
-            <TableHeader key={index} {...header.props} />
-          ))}
-        </TableHead>
-
-        <TableContent>
-          {rows.map((row: any, index: any) => (
-            <TableRow key={index}>
-              {row.props.children.map((cell: any, index: any) => (
-                // <TableCell key={index}>{cell.props.children[0]}</TableCell>
-                <TableCell key={index} {...cell.props} />
-                // <TableCell key={index} {...cell.props}>
-                //   {/* {renderText(cell.props.children)} */}
-                // </TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableContent>
-      </Table>
-    )
-  },
+  table: (props: any) => renderTable(props.children),
   Image: (props: { alt: string; src: string; id?: ImageId }) => {
     if (props.id) {
       return (
