@@ -466,7 +466,7 @@ export default async function HomePage() {
         <div className="flex flex-col items-center">
           <div
             className={cx([
-              'container pb-5',
+              'container w-full min-w-0 pb-5',
               'relative flex flex-col-reverse 2md:flex-row',
               '2md:grid-cols-2 2md:items-center',
               isGetSite
@@ -478,15 +478,15 @@ export default async function HomePage() {
 
             <div className="absolute inset-x-1/2 top-0 z-10 h-px w-screen -translate-x-1/2 border-t border-dashed border-neutral-30" />
             <div className="absolute inset-x-1/2 bottom-0 z-10 h-px w-screen -translate-x-1/2 border-b border-dashed border-neutral-30" />
-            <div className="flex">
+            <div className="flex w-full min-w-0">
               {isGetSite ? (
-                <div className="max-w-[390px] overflow-hidden md:max-w-[580px] 2md:mt-12 2md:max-w-[360px] lg:max-w-[440px] xl:max-w-[510px] 2xl:max-w-[720px]">
+                <div className="w-full min-w-0 max-w-full overflow-hidden md:max-w-[580px] 2md:mt-12 2md:max-w-[360px] lg:max-w-[440px] xl:max-w-[510px] 2xl:max-w-[720px]">
                   <Image
                     id="get.status.app/Create_Community_Banner_Left_Frame_cc8nvh:1017:776"
                     alt=""
                     width={1017}
                     height={776}
-                    className="w-full min-w-[390px] md:min-w-[613px] 2md:min-w-[386px] lg:min-w-[470px] xl:min-w-[544px] 2xl:min-w-[792px]"
+                    className="w-full min-w-0 md:min-w-[613px] 2md:min-w-[386px] lg:min-w-[470px] xl:min-w-[544px] 2xl:min-w-[792px]"
                   />
                 </div>
               ) : (
@@ -502,26 +502,21 @@ export default async function HomePage() {
 
             <div
               className={cx(
-                'relative z-20 flex flex-1 flex-col items-start gap-8 px-5 py-12 sm:pt-24 2md:pt-10 lg:p-0',
+                'relative z-20 flex w-full min-w-0 flex-1 flex-col items-start gap-8 px-5 py-12 sm:pt-24 2md:pt-10 lg:p-0',
                 isGetSite && '2md:-ml-4 lg:-ml-6 xl:-ml-8 2xl:-ml-10'
               )}
             >
               <div
                 className={cx(
-                  'flex max-w-none flex-1 flex-col gap-4 lg:gap-5',
+                  'flex w-full min-w-0 max-w-full flex-1 flex-col gap-4 lg:gap-5',
                   isGetSite ? '2xl:max-w-[520px]' : '2xl:max-w-[462px]'
                 )}
               >
-                <div className="flex flex-col">
+                <div className="flex w-full min-w-0 flex-col">
                   {isGetSite ? (
-                    <>
-                      <h2 className="relative inline-block whitespace-nowrap text-40 font-bold lg:text-64">
-                        {t('keycardTitle').split('\n')[0]}
-                      </h2>
-                      <h2 className="relative inline-block whitespace-nowrap text-40 font-bold lg:text-64">
-                        {t('keycardTitle').split('\n').slice(1).join(' ')}
-                      </h2>
-                    </>
+                    <h2 className="relative max-w-full text-40 font-bold lg:text-64">
+                      {t('keycardTitle')}
+                    </h2>
                   ) : (
                     <>
                       <h2 className="relative inline-block whitespace-nowrap text-40 font-bold lg:text-64">
