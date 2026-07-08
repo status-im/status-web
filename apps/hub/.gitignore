@@ -44,3 +44,6 @@ next-env.d.ts
 
 # sitemap
 public/sitemap.xml
+
+# generated at build time
+src/generated/legal-last-edited.json
