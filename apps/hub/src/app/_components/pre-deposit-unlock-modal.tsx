@@ -121,8 +121,6 @@ const PreDepositUnlockModal = ({
       return
     }
 
-    onOpenChange(false)
-
     unlock(
       {
         vault,
@@ -133,6 +131,7 @@ const PreDepositUnlockModal = ({
       },
       {
         onSuccess: () => {
+          onOpenChange(false)
           void refetchL1Balance()
           if (vault.l2ClaimVaultAddress) {
             void refetchL2PendingWithdrawal()

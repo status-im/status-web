@@ -45,7 +45,7 @@ export const HeroSection = (props: Props) => {
   return (
     <div
       className={cx(
-        'container relative flex flex-col items-stretch pt-16 xl:pb-20 xl:pt-40',
+        'container relative flex w-full min-w-0 flex-col items-stretch pt-16 xl:pb-20 xl:pt-40',
         reverse ? 'xl:flex-row-reverse' : 'xl:flex-row',
         className
       )}
@@ -53,17 +53,19 @@ export const HeroSection = (props: Props) => {
       {circle}
       <div
         className={cx([
-          'relative z-10 max-w-[582px] shrink-0 pb-12 xl:pb-0',
+          'relative z-10 w-full max-w-full shrink-0 pb-12 xl:max-w-[582px] xl:pb-0',
           innerClassName,
         ])}
       >
         <div className="mb-4 flex gap-2">
           {typeof tag === 'string' ? <Tag size="32" label={tag} /> : tag}
         </div>
-        <div className="grid place-items-start gap-6">
-          <h1 className="text-48 font-bold xl:text-88">{title}</h1>
+        <div className="grid w-full min-w-0 place-items-start gap-6">
+          <h1 className="max-w-full text-48 font-bold xl:text-88">{title}</h1>
           {description && (
-            <h2 className="text-27 font-regular xl:pr-16">{description}</h2>
+            <h2 className="max-w-full text-27 font-regular xl:pr-16">
+              {description}
+            </h2>
           )}
           {action}
         </div>
@@ -72,7 +74,7 @@ export const HeroSection = (props: Props) => {
       {video && (
         <div
           className={cx(
-            'relative z-0 flex-1 2xl:-mt-16',
+            'relative z-0 min-w-0 flex-1 2xl:-mt-16',
             reverse ? '2xl:-ml-30' : '2xl:-mr-30',
             videoClassName
           )}
@@ -83,7 +85,7 @@ export const HeroSection = (props: Props) => {
       {image && (
         <div
           className={cx(
-            'relative z-0 flex-1 2xl:-mt-16',
+            'relative z-0 min-w-0 flex-1 2xl:-mt-16',
             reverse ? '2xl:-ml-30' : '2xl:-mr-30',
             imageClassName
           )}
