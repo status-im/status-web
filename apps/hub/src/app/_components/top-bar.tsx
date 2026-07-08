@@ -10,7 +10,7 @@ import { ConnectButton } from './connect-button'
 import { LanguageSelector } from './language-selector'
 
 interface TopBarProps {
-  onMenuToggle: () => void
+  onMenuToggle?: () => void
 }
 
 export function TopBar({ onMenuToggle }: TopBarProps) {
@@ -24,25 +24,27 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
       <div className="flex w-full items-center justify-between px-3 lg:pr-5">
         {/* Left side - Menu button and branding */}
         <div className="flex items-center gap-2">
-          <button
-            onClick={onMenuToggle}
-            className="rounded p-1 text-white-80 hover:bg-white-10 lg:mr-3 lg:hidden"
-            aria-label={t('navigation.toggle_menu')}
-          >
-            <svg
-              className="size-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          {onMenuToggle && (
+            <button
+              onClick={onMenuToggle}
+              className="rounded p-1 text-white-80 hover:bg-white-10 lg:mr-3 lg:hidden"
+              aria-label={t('navigation.toggle_menu')}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
+              <svg
+                className="size-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+          )}
 
           <div className="hidden items-center md:flex">
             {/* Status Network Logo */}
