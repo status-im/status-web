@@ -19,6 +19,7 @@
     "start:standalone": "node .next/standalone/apps/status.app/server.js",
     "start:docker": "bash -c 'set -a && . .env.local && set +a && docker run --rm -p 3001:3001 -e SITE_URL -e NEXT_PUBLIC_GHOST_API_URL -e NEXT_PUBLIC_GHOST_API_KEY -e NEXT_PUBLIC_INFURA_API_KEY -e NEXT_PUBLIC_HASURA_API_URL -e INFURA_API_KEY -e GREENHOUSE_API_KEY -e GREENHOUSE_STATUS_BOARD_ID -e GREENHOUSE_LOGOS_BOARD_ID -e GITHUB_TOKEN -e POSTGRES_URL -e KEYCLOAK_API_URL -e KEYCLOAK_REALM -e KEYCLOAK_ISSUER -e KEYCLOAK_CLIENT_ID -e KEYCLOAK_CLIENT_SECRET -e BAMBOOHR_API_KEY -e UMAMI_WEBSITE_ID -e UMAMI_API_URL status-web/status.app:dev'",
     "preview:docker": "pnpm build:docker && pnpm start:docker",
+    "test": "vitest",
     "prelint": "contentlayer2 build",
     "lint": "pnpm lint:remark && pnpm lint:next",
     "lint:next": "next lint --dir=src --ext=.ts --ext=.tsx",
