@@ -24,7 +24,9 @@ export default async function WebsiteLayout(props: Props) {
         <div className="flex min-h-0 flex-1 flex-col">
           <ParallaxProvider>
             <div className="grid min-h-0 flex-1 grid-rows-[1fr_auto_auto] overflow-x-clip xl:px-1 xl:pb-1">
-              <div className="relative flex min-h-0 flex-col">{children}</div>
+              <div className="relative flex min-h-0 min-w-0 flex-col">
+                {children}
+              </div>
               <Prefooter />
               <Footer />
             </div>

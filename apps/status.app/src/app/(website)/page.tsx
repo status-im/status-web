@@ -136,9 +136,9 @@ export default async function HomePage() {
         data-theme="dark"
         className="relative w-full overflow-x-clip bg-neutral-100 pb-8 pt-16 lg:pb-16 lg:pt-24"
       >
-        <div className="container mx-auto grid grid-cols-1 gap-8 px-5 xl:grid-cols-2 xl:gap-0">
-          <div className="relative z-10 mx-auto flex max-w-[636px] flex-col items-center text-center xl:mx-0 xl:min-w-[640px] xl:items-start xl:text-left">
-            <h1 className="mb-4 text-48 font-bold text-white-100 lg:mb-10 lg:text-88">
+        <div className="container mx-auto grid w-full min-w-0 grid-cols-1 gap-8 px-5 xl:grid-cols-2 xl:gap-0">
+          <div className="relative z-10 mx-auto flex w-full max-w-[636px] flex-col items-center text-center xl:mx-0 xl:min-w-[640px] xl:max-w-[636px] xl:items-start xl:text-left">
+            <h1 className="mb-4 max-w-full text-48 font-bold text-white-100 lg:mb-10 lg:text-88">
               {t('heroTitle')
                 .split('\n')
                 .map((line, i) => (
