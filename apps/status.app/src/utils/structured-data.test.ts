@@ -121,6 +121,71 @@ Yes. Status Wallet is self-custodial.`,
     ])
   })
 
+  test('does not treat a `#`-prefixed comment inside a fenced code block as a heading', () => {
+    expect(
+      extractFAQItemsFromMarkdown(
+        `## Common questions
+
+### How do I install the CLI?
+
+Run the setup script below:
+
+\`\`\`bash
+# Install dependencies first
+npm install
+# Then run setup
+npm run setup
+\`\`\`
+
+That's it, you're all set.
+
+### What if setup fails?
+
+Check the logs for errors.`
+      )
+    ).toEqual([
+      {
+        question: 'How do I install the CLI?',
+        answer: expect.stringContaining('npm install'),
+      },
+      {
+        question: 'What if setup fails?',
+        answer: 'Check the logs for errors.',
+      },
+    ])
+  })
+
+  test('recognizes "FAQs" (plural) and "Frequently Asked Questions" as FAQ sections', () => {
+    expect(
+      extractFAQItemsFromMarkdown(
+        `## Frequently Asked Questions
+
+### Is Status free to use?
+
+Yes, Status is free.`
+      )
+    ).toEqual([
+      {
+        question: 'Is Status free to use?',
+        answer: 'Yes, Status is free.',
+      },
+    ])
+
+    expect(
+      extractFAQItemsFromMarkdown(
+        `### Is Status Wallet self-custodial?
+
+Yes. Status Wallet is self-custodial.`,
+        { title: 'Status Wallet FAQs' }
+      )
+    ).toEqual([
+      {
+        question: 'Is Status Wallet self-custodial?',
+        answer: 'Yes. Status Wallet is self-custodial.',
+      },
+    ])
+  })
+
   test('builds WebPage schema for key landing pages', () => {
     expect(
       buildLandingPageStructuredData({

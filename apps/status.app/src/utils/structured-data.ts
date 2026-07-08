@@ -91,14 +91,25 @@ export function extractFAQItemsFromMarkdown(
   options: { title?: string } = {}
 ): FAQItem[] {
   const lines = removeFrontmatter(markdown).split('\n')
-  const isDedicatedFAQArticle = /\bfaq\b/i.test(options.title ?? '')
+  const isDedicatedFAQArticle = isFAQSectionHeading(options.title ?? '')
   const faqItems: FAQItem[] = []
   let isInFAQSection = isDedicatedFAQArticle
+  let isInCodeFence = false
   let currentQuestion: string | null = null
   let currentAnswerLines: string[] = []
 
   for (const line of lines) {
-    const heading = line.match(/^(#{1,6})\s+(.+?)\s*#*$/)
+    if (/^\s*```/.test(line)) {
+      isInCodeFence = !isInCodeFence
+      if (currentQuestion) {
+        currentAnswerLines.push(line)
+      }
+      continue
+    }
+
+    // A `#`-prefixed line inside a fenced code block (e.g. a shell/YAML
+    // comment) is code content, not a markdown heading.
+    const heading = isInCodeFence ? null : line.match(/^(#{1,6})\s+(.+?)\s*#*$/)
 
     if (!heading) {
       if (currentQuestion) {
@@ -152,7 +163,11 @@ export function extractFAQItemsFromMarkdown(
 }
 
 function isFAQSectionHeading(heading: string): boolean {
-  return /\bfaq\b/i.test(heading) || /^common questions$/i.test(heading)
+  return (
+    /\bfaqs?\b/i.test(heading) ||
+    /\bfrequently asked questions\b/i.test(heading) ||
+    /^common questions$/i.test(heading)
+  )
 }
 
 function getMarkdownExcerpt(markdown: string): string | undefined {
