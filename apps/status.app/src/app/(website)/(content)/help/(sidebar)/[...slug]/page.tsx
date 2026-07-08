@@ -8,7 +8,10 @@ import { getTranslations } from 'next-intl/server'
 import config from '~/config/help/config.json'
 import { METADATA } from '~/config/help/metadata'
 import { JSONLDScript } from '~/utils/json-ld'
-import { buildHelpDocStructuredData } from '~/utils/structured-data'
+import {
+  buildHelpDocStructuredData,
+  parseAuthors,
+} from '~/utils/structured-data'
 import { Metadata } from '~app/_metadata'
 import { formatDate } from '~app/_utils/format-time'
 import { Icon } from '~components/assets'
@@ -113,10 +116,7 @@ export default async function HelpDetailPage(props: Props) {
 
   const workInProgress = doc.body.raw === ''
 
-  const authors = (doc.author ?? '')
-    .split(',')
-    .map(author => author.trim())
-    .filter(Boolean)
+  const authors = parseAuthors(doc.author)
 
   const hasMultipleAuthors = authors.length > 1
   const mainAuthor = authors[0]

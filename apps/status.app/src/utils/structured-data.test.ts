@@ -4,6 +4,7 @@ import {
   buildHelpDocStructuredData,
   buildLandingPageStructuredData,
   extractFAQItemsFromMarkdown,
+  parseAuthors,
 } from './structured-data'
 
 describe('status.app structured data', () => {
@@ -184,6 +185,26 @@ Yes. Status Wallet is self-custodial.`,
         answer: 'Yes. Status Wallet is self-custodial.',
       },
     ])
+  })
+
+  test('parseAuthors trims and filters comma-separated author names', () => {
+    expect(parseAuthors('jorge-campo, earakel')).toEqual([
+      'jorge-campo',
+      'earakel',
+    ])
+    expect(parseAuthors(undefined)).toEqual([])
+  })
+
+  test('uses the first of multiple comma-separated authors as the Article author', () => {
+    const schema = buildHelpDocStructuredData({
+      title: 'Status Wallet FAQ',
+      raw: 'Manage your assets securely.',
+      author: 'earakel, jorge-campo',
+    })
+
+    expect(schema[0]).toMatchObject({
+      author: { '@type': 'Person', name: 'earakel' },
+    })
   })
 
   test('builds WebPage schema for key landing pages', () => {

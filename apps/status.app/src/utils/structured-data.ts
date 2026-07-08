@@ -123,6 +123,13 @@ export function extractFAQItemsFromMarkdown(
 
     if (level <= 2) {
       flushFAQItem()
+      // For a dedicated FAQ article (title matches the FAQ regex), every H2
+      // is treated as FAQ content, including ones that aren't themselves
+      // FAQ-labeled (e.g. category groupings like "## About Status Wallet").
+      // This assumes the whole article is FAQ content, which holds for the
+      // current help-docs corpus but would misclassify H3s under an
+      // unrelated trailing H2 (e.g. "## Related articles") in a doc that
+      // otherwise qualifies as a dedicated FAQ article.
       isInFAQSection = isDedicatedFAQArticle || isFAQSectionHeading(headingText)
       continue
     }
@@ -184,13 +191,15 @@ function getMarkdownExcerpt(markdown: string): string | undefined {
   return firstParagraph
 }
 
+export function parseAuthors(author: string | undefined): string[] {
+  return (author ?? '')
+    .split(',')
+    .map(item => item.trim())
+    .filter(Boolean)
+}
+
 function getPrimaryAuthor(author: string | undefined): string {
-  return (
-    author
-      ?.split(',')
-      .map(item => item.trim())
-      .filter(Boolean)[0] ?? 'Status'
-  )
+  return parseAuthors(author)[0] ?? 'Status'
 }
 
 function normalizeDate(date: string | Date): string {
