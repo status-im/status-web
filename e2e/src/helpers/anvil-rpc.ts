@@ -292,14 +292,155 @@ export class AnvilRpcHelper {
   }
 
   /** Read ERC-20 balanceOf via eth_call (retries transient failures) */
-  async getErc20Balance(token: string, rpc?: string): Promise<bigint> {
-    const data = SELECTORS.BALANCE_OF + encodeAddress(this.walletAddress)
+  async getErc20Balance(
+    token: string,
+    rpc?: string,
+    owner: string = this.walletAddress,
+  ): Promise<bigint> {
+    const data = SELECTORS.BALANCE_OF + encodeAddress(owner)
     const result = await this.callWithRetry<string>(
       rpc ?? this.mainnetRpc,
       'eth_call',
       [{ to: token, data }, 'latest'],
     )
     return BigInt(result)
+  }
+
+  /** Poll until a transaction receipt is available (and not reverted). */
+  async waitForTransactionReceipt(
+    hash: string,
+    rpc?: string,
+    timeoutMs = 30_000,
+  ): Promise<void> {
+    const targetRpc = rpc ?? this.mainnetRpc
+    const deadline = Date.now() + timeoutMs
+
+    while (Date.now() < deadline) {
+      const receipt = await this.call<{
+        status?: string
+      } | null>(targetRpc, 'eth_getTransactionReceipt', [hash])
+
+      if (receipt?.status) {
+        if (receipt.status === '0x0') {
+          throw new Error(`Transaction reverted: ${hash}`)
+        }
+        return
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 500))
+    }
+
+    throw new Error(`Timed out waiting for transaction receipt: ${hash}`)
+  }
+
+  /** Current pending nonce for an account (`eth_getTransactionCount`, latest). */
+  async getTransactionCount(account: string, rpc?: string): Promise<bigint> {
+    const result = await this.callWithRetry<string>(
+      rpc ?? this.mainnetRpc,
+      'eth_getTransactionCount',
+      [account, 'latest'],
+    )
+    return BigInt(result)
+  }
+
+  /**
+   * Wait for the next transaction from `account` after MetaMask approval.
+   * Pass `startNonce` captured before submitting the form so a fast-mined tx
+   * is not missed.
+   */
+  async waitForAccountTransaction(
+    account: string,
+    rpc?: string,
+    startNonce?: bigint,
+    timeoutMs = 90_000,
+  ): Promise<string> {
+    const targetRpc = rpc ?? this.mainnetRpc
+    const baselineNonce =
+      startNonce ?? (await this.getTransactionCount(account, targetRpc))
+    const deadline = Date.now() + timeoutMs
+
+    while (Date.now() < deadline) {
+      const currentNonce = await this.getTransactionCount(account, targetRpc)
+
+      if (currentNonce > baselineNonce) {
+        const txHash = await this.findTransactionByNonce(
+          account,
+          baselineNonce,
+          targetRpc,
+        )
+        if (txHash) {
+          await this.waitForTransactionReceipt(txHash, targetRpc, 30_000)
+          return txHash
+        }
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 500))
+    }
+
+    throw new Error(
+      `Timed out waiting for transaction from ${account} on ${targetRpc}`,
+    )
+  }
+
+  /**
+   * Poll until a vault share balance reaches zero, mining blocks along the way.
+   * Prefer this over receipt polling for Linea — MetaMask can leave txs pending
+   * until the fork mines, and receipt helpers may race the UI broadcast.
+   */
+  async waitForSharesBurned(
+    vault: string,
+    owner: string,
+    rpc?: string,
+    timeoutMs = 120_000,
+  ): Promise<void> {
+    const targetRpc = rpc ?? this.mainnetRpc
+    const deadline = Date.now() + timeoutMs
+
+    while (Date.now() < deadline) {
+      await this.mineBlock(targetRpc)
+      const balance = await this.getErc20Balance(vault, targetRpc, owner)
+      if (balance === 0n) {
+        return
+      }
+      await new Promise(resolve => setTimeout(resolve, 500))
+    }
+
+    throw new Error(
+      `Timed out waiting for ${vault} shares to burn for ${owner}`,
+    )
+  }
+
+  private async findTransactionByNonce(
+    account: string,
+    nonce: bigint,
+    rpc: string,
+  ): Promise<string | null> {
+    const latestHex = await this.call<string>(rpc, 'eth_blockNumber', [])
+    const latest = Number.parseInt(latestHex, 16)
+    const normalizedAccount = account.toLowerCase()
+
+    for (
+      let blockNumber = latest;
+      blockNumber >= 0 && blockNumber >= latest - 10;
+      blockNumber--
+    ) {
+      const block = await this.call<{
+        transactions?: Array<{ from?: string; nonce?: string; hash?: string }>
+      }>(rpc, 'eth_getBlockByNumber', [`0x${blockNumber.toString(16)}`, true])
+
+      for (const tx of block.transactions ?? []) {
+        if (
+          tx.from?.toLowerCase() === normalizedAccount &&
+          tx.nonce !== undefined &&
+          BigInt(tx.nonce) === nonce &&
+          tx.hash
+        ) {
+          return tx.hash
+        }
+      }
+    }
+
+    return null
   }
 
   /**
@@ -453,7 +594,8 @@ export class AnvilRpcHelper {
    *
    * Note: this does NOT bump the vault's totalSupply. It is intended for
    * read-driven UI flows (modal readiness / validation), not for actually
-   * submitting an on-chain `withdraw`.
+   * submitting an on-chain `withdraw`. On the WETH vault, storage-seeded
+   * balances can make `balanceOf` non-zero while `withdraw` still reverts.
    *
    * @param vaultAddress - the pre-deposit vault (share token) address
    * @param shares - share balance to assign, in wei
@@ -473,6 +615,39 @@ export class AnvilRpcHelper {
       rpc ?? this.mainnetRpc,
       owner,
     )
+  }
+
+  /**
+   * Ensure vault shares exist for on-chain `withdraw` execute tests.
+   *
+   * Keeps inherited fork balances when present. Seeds via storage only when
+   * `balanceOf` is zero — CI forks may not have production deposits for the
+   * test wallet. WETH uses a smaller seed (~1.1e16): a full 1e18 storage seed
+   * makes `balanceOf` non-zero but `withdraw` still reverts on the fork.
+   */
+  async ensureVaultSharesForExecute(
+    vaultAddress: string,
+    rpc: string,
+    owner: string,
+  ): Promise<bigint> {
+    const existing = await this.getErc20Balance(vaultAddress, rpc, owner)
+    if (existing > 0n) {
+      return existing
+    }
+
+    const isWethVault =
+      vaultAddress.toLowerCase() === CONTRACTS.WETH_VAULT.toLowerCase()
+    const shares = isWethVault ? 11n * 10n ** 15n : 10n ** 18n
+
+    await this.fundVaultShares(vaultAddress, shares, rpc, owner)
+
+    const funded = await this.getErc20Balance(vaultAddress, rpc, owner)
+    if (funded === 0n) {
+      throw new Error(
+        `Failed to seed vault shares for execute test: ${vaultAddress}`,
+      )
+    }
+    return funded
   }
 
   /**

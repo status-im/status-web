@@ -1,7 +1,12 @@
 import { NOTIFICATION_TIMEOUTS } from '@constants/timeouts.js'
+import { expect, type Page } from '@playwright/test'
 
 import type { MetaMaskPage } from '@pages/metamask/metamask.page.js'
-import type { Page } from '@playwright/test'
+
+/** Hex chain id for `wallet_switchEthereumChain` / `eth_chainId` polling. */
+export function chainIdHex(chainId: number): string {
+  return `0x${chainId.toString(16)}`
+}
 
 /**
  * Force-switch MetaMask to a specific chain via the hub page.
@@ -52,6 +57,33 @@ export async function getConnectedAddress(page: Page): Promise<string> {
     )
   }
   return address
+}
+
+/**
+ * Poll until the dApp provider reports the expected chain.
+ * Use after a network switch before submitting a chain-specific transaction.
+ */
+export async function waitForWalletChain(
+  page: Page,
+  chainId: number,
+  timeoutMs = 20_000,
+): Promise<void> {
+  const expected = chainIdHex(chainId)
+  await expect
+    .poll(
+      () =>
+        page.evaluate(async () => {
+          const eth = (
+            window as {
+              ethereum?: { request: (a: unknown) => Promise<string> }
+            }
+          ).ethereum
+          if (!eth) return null
+          return eth.request({ method: 'eth_chainId' })
+        }),
+      { timeout: timeoutMs },
+    )
+    .toBe(expected)
 }
 
 /**

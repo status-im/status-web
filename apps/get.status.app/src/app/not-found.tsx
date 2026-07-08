@@ -1,32 +1,23 @@
-import Link from 'next/link'
+import { NotFoundContent } from '~website/_components/not-found-content'
+
+import messages from '../../messages/en.json'
+import WebsiteLayout from '../website/layout'
 
 import type { Metadata } from 'next'
 
 export const dynamic = 'force-static'
 
 export const metadata: Metadata = {
-  title: '404 — Page Not Found',
-  description:
-    'The page you were looking for could not be found. Return to the Status homepage.',
+  title: messages.metadata.notFoundTitle,
+  description: messages.metadata.notFoundDescription,
   robots: { index: false },
 }
 
-const NOT_FOUND_COPY = {
-  title: "Oh no! It looks like you're lost",
-  description: "The page you were looking for doesn't exist",
-  goHome: 'Go to homepage',
-} as const
-
+// Fallback for routes outside `[locale]` during static export.
 export default function NotFound() {
   return (
-    <main className="flex min-h-dvh flex-1 flex-col items-center justify-center gap-8 px-5 text-center">
-      <div className="flex max-w-lg flex-col items-center gap-2">
-        <h1 className="text-19 font-semibold">{NOT_FOUND_COPY.title}</h1>
-        <p className="text-15">{NOT_FOUND_COPY.description}</p>
-      </div>
-      <Link className="underline" href="/">
-        {NOT_FOUND_COPY.goHome}
-      </Link>
-    </main>
+    <WebsiteLayout>
+      <NotFoundContent />
+    </WebsiteLayout>
   )
 }
