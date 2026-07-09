@@ -11,9 +11,14 @@ import { TopBar } from './top-bar'
 interface HubLayoutProps {
   children: React.ReactNode
   showSidebar?: boolean
+  centerContent?: boolean
 }
 
-export function HubLayout({ children, showSidebar = true }: HubLayoutProps) {
+export function HubLayout({
+  children,
+  showSidebar = true,
+  centerContent = false,
+}: HubLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
@@ -40,7 +45,13 @@ export function HubLayout({ children, showSidebar = true }: HubLayoutProps) {
             <main className="min-w-0 flex-1 lg:overflow-auto">{children}</main>
           </div>
         ) : (
-          <main className="flex min-h-0 w-full items-center justify-center px-5">
+          <main
+            className={
+              centerContent
+                ? 'flex min-h-0 w-full flex-1 items-center justify-center px-5'
+                : 'min-h-0 w-full flex-1 overflow-auto'
+            }
+          >
             {children}
           </main>
         )}

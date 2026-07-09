@@ -35,12 +35,12 @@ export function Footer() {
             >
               {t('footer.privacy_policy')}
             </Link>
-            <a
+            <Link
               href={BRAND.href}
               className="text-13 text-neutral-50 transition-colors hover:text-neutral-100"
             >
               {t('footer.brand_assets')}
-            </a>
+            </Link>
             <Link
               href={LEGAL.preDepositDisclaimer.href}
               className="text-13 text-neutral-50 transition-colors hover:text-neutral-100"
