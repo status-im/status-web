@@ -33,7 +33,10 @@ const LogoSection = (
             className="relative flex items-center justify-center overflow-hidden rounded-20 border border-neutral-80/5 bg-white-100 px-5 py-12 shadow-1 lg:py-8"
           >
             <Image
-              className={cx('relative z-10 w-full', imageProps.className)}
+              className={cx(
+                'relative z-10 h-auto w-full object-contain',
+                imageProps.className
+              )}
               width={imageProps.width}
               height={imageProps.height}
               alt={imageProps.alt}
