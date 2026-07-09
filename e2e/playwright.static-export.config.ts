@@ -73,7 +73,7 @@ export default defineConfig({
     command: 'bash scripts/serve-static-exports.sh',
     url: `http://127.0.0.1:${getSitePort}`,
     timeout: 900_000,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: process.env.REUSE_STATIC_EXPORT_SERVERS === 'true',
     stdout: 'pipe',
     stderr: 'pipe',
   },

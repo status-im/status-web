@@ -123,6 +123,7 @@ find "$OUT_DIR" -type f -name "*.html" \
   ! -name "index.html" \
   ! -name "404.html" \
   ! -path "$OUT_DIR/_next/*" \
+  ! -path "$OUT_DIR/??/*" \
   -print0 | while IFS= read -r -d '' html_file; do
     rel_path="${html_file#$OUT_DIR/}"
     page_name="${rel_path%.html}"
