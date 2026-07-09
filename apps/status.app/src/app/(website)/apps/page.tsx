@@ -71,7 +71,7 @@ export default async function AppsPage() {
   const mobileScreenshots = (
     isGetSite
       ? [
-          { id: 'get.status.app/Mobile_WalletFunction:720:1600', alt: '' },
+          { id: 'get.status.app/Mobile_Function:720:1600', alt: '' },
           { id: 'get.status.app/Mobile_Chat_function:720:1600', alt: '' },
           {
             id: 'get.status.app/Mobile_Communities_function:720:1600',
@@ -165,7 +165,7 @@ export default async function AppsPage() {
         </div>
 
         {/* MOBILE */}
-        <div className="relative z-20 mb-24 bg-white-100 2xl:mb-40">
+        <div className="relative z-20 mb-24 w-full min-w-0 bg-white-100 2xl:mb-40">
           <ParallaxCircle
             color="turquoise"
             className="top-[184px] hidden xl:left-[70px] xl:block"
@@ -189,7 +189,7 @@ export default async function AppsPage() {
         </div>
 
         {/* DESKTOP */}
-        <div className="relative z-20 mb-24 bg-white-100 2xl:mb-30">
+        <div className="relative z-20 mb-24 w-full min-w-0 bg-white-100 2xl:mb-30">
           <ParallaxCircle
             color="sky"
             className="bottom-[-40px] hidden xl:right-[-88px] xl:block"
@@ -267,8 +267,8 @@ const PlatformSection = (props: PlatformSectionProps) => {
   } = props
 
   return (
-    <div className="border-dashed-default relative border-t pt-24 2xl:pt-40">
-      <div className="container mb-12 2xl:mb-20">
+    <div className="border-dashed-default relative w-full min-w-0 border-t pt-24 2xl:pt-40">
+      <div className="container mb-12 w-full min-w-0 2xl:mb-20">
         <div className="mb-4 flex items-start gap-2">
           <LatestVersionTag platform={platform} />
         </div>
@@ -289,7 +289,7 @@ const PlatformSection = (props: PlatformSectionProps) => {
       <Tabs.Root defaultValue={`${platform}-0`} variant="grey" size="32">
         <CenteredDiv
           className={cx([
-            'mx-auto flex w-full snap-x snap-mandatory overflow-x-auto overflow-y-hidden scrollbar-none xl:overflow-visible',
+            'mx-auto flex w-full min-w-0 max-w-full snap-x snap-mandatory overflow-x-auto overflow-y-hidden scrollbar-none xl:overflow-visible',
             wideScreenshots ? 'max-w-[1464px]' : 'max-w-[1294px]',
           ])}
         >

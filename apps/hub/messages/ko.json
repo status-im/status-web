@@ -1508,6 +1508,86 @@
       "notes": "errors::lock_simulation_failed"
     }
   },
+  "brand": {
+    "page_title": {
+      "translation": "브랜드",
+      "notes": "brand::page_title"
+    },
+    "page_description": {
+      "translation": "스테이터스 네트워크 브랜드 자산을 받아보세요.",
+      "notes": "brand::page_description"
+    },
+    "main_title": {
+      "translation": "브랜드 자산",
+      "notes": "brand::main_title"
+    },
+    "last_updated": {
+      "translation": "마지막 업데이트: 2025년 11월 12일",
+      "notes": "brand::last_updated"
+    },
+    "download_all": {
+      "translation": "모든 자산 다운받기",
+      "notes": "brand::download_all"
+    },
+    "logo_title": {
+      "translation": "로고",
+      "notes": "brand::logo_title"
+    },
+    "logo_description": {
+      "translation": "메인 로고",
+      "notes": "brand::logo_description"
+    },
+    "logo_variation_title": {
+      "translation": "로고 변형",
+      "notes": "brand::logo_variation_title"
+    },
+    "logo_variation_description": {
+      "translation": "다양한 인쇄 레이아웃을 위한 버전",
+      "notes": "brand::logo_variation_description"
+    },
+    "mark_only_title": {
+      "translation": "마크만",
+      "notes": "brand::mark_only_title"
+    },
+    "mark_only_description": {
+      "translation": "워드마크 없음",
+      "notes": "brand::mark_only_description"
+    },
+    "main_colors_title": {
+      "translation": "메인 컬러",
+      "notes": "brand::main_colors_title"
+    },
+    "main_colors_description": {
+      "translation": "메인 컬러 팔레트",
+      "notes": "brand::main_colors_description"
+    },
+    "artwork_title": {
+      "translation": "아트워크",
+      "notes": "brand::artwork_title"
+    },
+    "artwork_description": {
+      "translation": "메인 캐릭터들",
+      "notes": "brand::artwork_description"
+    },
+    "download_button": {
+      "translation": "다운로드",
+      "notes": "brand::download_button"
+    },
+    "alt_text": {
+      "main_logo": {
+        "translation": "메인 로고",
+        "notes": "brand::alt_text::main_logo"
+      },
+      "mark_only": {
+        "translation": "마크만",
+        "notes": "brand::alt_text::mark_only"
+      },
+      "artwork": {
+        "translation": "아트워크",
+        "notes": "brand::alt_text::artwork"
+      }
+    }
+  },
   "not_found": {
     "title": {
       "translation": "찾고 계신 페이지가 아닙니다",

@@ -27,6 +27,7 @@ const blockedPatterns = [
   /SSign up/i,
   /id:\s*'get\.status\.app\/Hero_app:1267:770'/i,
   /Desktop_Wallet_function/i,
+  /Mobile_WalletFunction/i,
   /wallet feature/i,
   /twitter:site/i,
   /@ethstatus/i,

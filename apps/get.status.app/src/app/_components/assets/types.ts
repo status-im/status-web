@@ -1,4 +1,5 @@
 export type ImageType =
+  | { id: 'get.status.app/Mobile_Function:720:1600'; alt: '' }
   | { id: 'get.status.app/Connector_NOCO:1678:1092'; alt: '' }
   | { id: 'get.status.app/01_Frame:2256:1178'; alt: '' }
   | { id: 'get.status.app/01_Mobile_Frame:990:1467'; alt: '' }
@@ -17,7 +18,7 @@ export type ImageType =
   | { id: 'get.status.app/Hero_app:2128:1292'; alt: '' }
   | {
       id: 'Homepage/Hero/device-mockups-mobile:1267:770'
-      alt: 'Status app showing wallet and messenger on devices'
+      alt: 'Status app showing messenger on devices'
     }
   | {
       id: 'Homepage/Hero/device-mockups:2128:1292'
