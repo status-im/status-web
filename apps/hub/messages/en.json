@@ -1508,6 +1508,86 @@
       "notes": "errors::lock_simulation_failed"
     }
   },
+  "brand": {
+    "page_title": {
+      "translation": "Brand",
+      "notes": "brand::page_title"
+    },
+    "page_description": {
+      "translation": "Get Status Network brand assets.",
+      "notes": "brand::page_description"
+    },
+    "main_title": {
+      "translation": "Brand assets",
+      "notes": "brand::main_title"
+    },
+    "last_updated": {
+      "translation": "Last updated: 12 November 2025",
+      "notes": "brand::last_updated"
+    },
+    "download_all": {
+      "translation": "Download all assets",
+      "notes": "brand::download_all"
+    },
+    "logo_title": {
+      "translation": "Logo",
+      "notes": "brand::logo_title"
+    },
+    "logo_description": {
+      "translation": "Our main logo",
+      "notes": "brand::logo_description"
+    },
+    "logo_variation_title": {
+      "translation": "Logo variation",
+      "notes": "brand::logo_variation_title"
+    },
+    "logo_variation_description": {
+      "translation": "For creative printing layouts",
+      "notes": "brand::logo_variation_description"
+    },
+    "mark_only_title": {
+      "translation": "Mark only",
+      "notes": "brand::mark_only_title"
+    },
+    "mark_only_description": {
+      "translation": "Without wordmark",
+      "notes": "brand::mark_only_description"
+    },
+    "main_colors_title": {
+      "translation": "Main colors",
+      "notes": "brand::main_colors_title"
+    },
+    "main_colors_description": {
+      "translation": "Our main colors palette",
+      "notes": "brand::main_colors_description"
+    },
+    "artwork_title": {
+      "translation": "Artwork",
+      "notes": "brand::artwork_title"
+    },
+    "artwork_description": {
+      "translation": "Our main characters",
+      "notes": "brand::artwork_description"
+    },
+    "download_button": {
+      "translation": "Download",
+      "notes": "brand::download_button"
+    },
+    "alt_text": {
+      "main_logo": {
+        "translation": "Main logo",
+        "notes": "brand::alt_text::main_logo"
+      },
+      "mark_only": {
+        "translation": "Mark only",
+        "notes": "brand::alt_text::mark_only"
+      },
+      "artwork": {
+        "translation": "Artwork",
+        "notes": "brand::alt_text::artwork"
+      }
+    }
+  },
   "not_found": {
     "title": {
       "translation": "This is not the page you're looking for",
