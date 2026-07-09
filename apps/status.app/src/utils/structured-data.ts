@@ -3,7 +3,7 @@ import { jsonLD } from './json-ld'
 import type { FAQPageSchema, JSONLDSchema } from '@status-im/components'
 
 const STATUS_SITE_URL = 'https://status.app'
-const STATUS_LOGO_URL = `${STATUS_SITE_URL}/logo.svg`
+const STATUS_LOGO_URL = `${STATUS_SITE_URL}/icon.png`
 
 export type FAQItem = {
   question: string
