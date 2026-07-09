@@ -24,14 +24,12 @@ import { expect } from '@playwright/test'
  *    underlying to the receiver on Linea in a single step, so we assert the
  *    full outcome (shares -> 0 and the receiver credited).
  *
- * Prefer inherited production shares on the fork. When the test wallet has no
- * deposit at the fork block (common on CI), `ensureVaultSharesForExecute`
- * seeds the minimum balance needed — never overwriting an existing WETH
- * deposit, because a full 1e18 storage seed breaks WETH `withdraw`.
- * WITHDRAWALS state and cooldown are satisfied on the fork.
- *
- * LINEA runs first: mainnet unlocks can leave MetaMask in a state that makes
- * the Linea network switch flaky when it runs last.
+ * Shares are seeded via storage, which also bumps the vault's totalSupply and
+ * stored totalAssets so the accounting stays consistent — the live vaults have
+ * drained below 1 token of supply, and `withdraw` reverts (InvalidState) if
+ * the amount exceeds what the vault's accounting can burn. The WITHDRAWALS
+ * state and cooldown are inherited from production, so the transaction mines
+ * successfully (verified against the forks).
  *
  * These submit real transactions, so they need freshly-started forks: each test
  * gets a clean MetaMask (nonce 0) and the fixture reverts the fork to base, so

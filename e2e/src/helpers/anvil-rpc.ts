@@ -43,6 +43,10 @@ const SELECTORS = {
   APPROVE: '0x095ea7b3',
   // MiniMeToken.generateTokens(address,uint256)
   GENERATE_TOKENS: '0x827f32c0',
+  // ERC20.totalSupply()
+  TOTAL_SUPPLY: '0x18160ddd',
+  // ERC4626.totalAssets()
+  TOTAL_ASSETS: '0x01e1d114',
 } as const
 
 /** Encode an address as 32-byte ABI parameter (left-padded with zeros) */
@@ -91,6 +95,10 @@ export interface FundingPreset {
 // Safe with workers: 1. Eliminates 240 RPC calls on fallback revert paths.
 const globalSlotCache = new Map<string, bigint>()
 let globalLineaSlot: bigint | null = null
+
+// Vault accounting slots (totalSupply / stored totalAssets) per token:rpc:getter.
+// `null` = getter has no single backing slot (fully derived) — nothing to bump.
+const globalVaultAccountingSlotCache = new Map<string, bigint | null>()
 
 export class AnvilRpcHelper {
   private rpcIdCounter = 0
@@ -662,14 +670,14 @@ export class AnvilRpcHelper {
    *
    * Pre-deposit vaults are ERC-4626, so the vault contract is itself the share
    * token and `balanceOf(vault, user)` returns shares. Writing the share
-   * balance is enough to make the Hub show a deposited balance and enable the
-   * withdrawal ("Unlock"/"Claim") CTA — the on-chain `convertToAssets` ratio
-   * already exists on the fork, so the displayed asset amount is non-zero.
+   * balance makes the Hub show a deposited balance and enable the withdrawal
+   * ("Unlock"/"Claim") CTA.
    *
-   * Note: this does NOT bump the vault's totalSupply. It is intended for
-   * read-driven UI flows (modal readiness / validation), not for actually
-   * submitting an on-chain `withdraw`. On the WETH vault, storage-seeded
-   * balances can make `balanceOf` non-zero while `withdraw` still reverts.
+   * The vault's totalSupply and stored totalAssets are bumped by the same
+   * amount to keep its accounting consistent: `withdraw` burns the shares from
+   * totalSupply and refuses amounts beyond totalAssets (InvalidState), and the
+   * live vaults have drained below 1 token of supply as real depositors exit —
+   * seeding a bare balance would make the on-chain `withdraw` revert.
    *
    * @param vaultAddress - the pre-deposit vault (share token) address
    * @param shares - share balance to assign, in wei
@@ -683,12 +691,125 @@ export class AnvilRpcHelper {
     rpc?: string,
     owner?: string,
   ): Promise<void> {
-    await this.fundErc20ViaStorage(
+    const targetRpc = rpc ?? this.mainnetRpc
+    const previousShares = await this.getErc20Balance(
       vaultAddress,
-      shares,
-      rpc ?? this.mainnetRpc,
-      owner,
+      targetRpc,
+      owner ?? this.walletAddress,
     )
+
+    await this.fundErc20ViaStorage(vaultAddress, shares, targetRpc, owner)
+
+    const delta = shares - previousShares
+    if (delta > 0n) {
+      await this.bumpVaultAccounting(vaultAddress, delta, targetRpc)
+    }
+  }
+
+  /**
+   * Add `delta` to the vault's totalSupply and stored totalAssets so shares
+   * seeded via storage remain burnable/withdrawable on-chain. totalAssets may
+   * be fully derived (no backing slot) on some vaults — then there is nothing
+   * to bump and it is skipped; totalSupply must always resolve for an ERC-20.
+   */
+  private async bumpVaultAccounting(
+    vaultAddress: string,
+    delta: bigint,
+    rpc: string,
+  ): Promise<void> {
+    const getters = [
+      { name: 'totalSupply', selector: SELECTORS.TOTAL_SUPPLY, required: true },
+      {
+        name: 'totalAssets',
+        selector: SELECTORS.TOTAL_ASSETS,
+        required: false,
+      },
+    ] as const
+
+    for (const getter of getters) {
+      const cacheKey = `${vaultAddress}:${rpc}:${getter.selector}`
+      if (!globalVaultAccountingSlotCache.has(cacheKey)) {
+        globalVaultAccountingSlotCache.set(
+          cacheKey,
+          await this.findUintGetterSlot(vaultAddress, getter.selector, rpc),
+        )
+      }
+
+      const slot = globalVaultAccountingSlotCache.get(cacheKey)!
+      if (slot === null) {
+        if (getter.required) {
+          throw new Error(
+            `Could not find the ${getter.name} storage slot for vault ${vaultAddress}`,
+          )
+        }
+        continue
+      }
+
+      const slotHex = '0x' + encodeUint256(slot)
+      const raw = await this.call<string>(rpc, 'eth_getStorageAt', [
+        vaultAddress,
+        slotHex,
+        'latest',
+      ])
+      await this.call(rpc, 'anvil_setStorageAt', [
+        vaultAddress,
+        slotHex,
+        '0x' + encodeUint256(BigInt(raw) + delta),
+      ])
+    }
+  }
+
+  /**
+   * Find the storage slot backing a parameterless uint256 getter (totalSupply /
+   * totalAssets) by value-matching raw slots 0..12 and confirming each match
+   * with a write probe. The probe matters: the pre-deposit vaults keep
+   * totalSupply and stored totalAssets equal, so a value match alone is
+   * ambiguous. Returns null when no slot backs the getter (derived value).
+   * Non-destructive: uses snapshot/revert.
+   */
+  private async findUintGetterSlot(
+    token: string,
+    getterSelector: string,
+    rpc: string,
+  ): Promise<bigint | null> {
+    const readGetter = async (): Promise<bigint> => {
+      const result = await this.callWithRetry<string>(rpc, 'eth_call', [
+        { to: token, data: getterSelector },
+        'latest',
+      ])
+      return BigInt(result)
+    }
+
+    const currentValue = await readGetter()
+    const probeValue = currentValue + 1n
+    const snapshotId = await this.snapshot(rpc)
+
+    try {
+      for (let slot = 0n; slot <= 12n; slot++) {
+        const slotHex = '0x' + encodeUint256(slot)
+        const raw = await this.call<string>(rpc, 'eth_getStorageAt', [
+          token,
+          slotHex,
+          'latest',
+        ])
+        if (BigInt(raw) !== currentValue) continue
+
+        await this.call(rpc, 'anvil_setStorageAt', [
+          token,
+          slotHex,
+          '0x' + encodeUint256(probeValue),
+        ])
+        if ((await readGetter()) === probeValue) {
+          return slot
+        }
+        // Equal-valued sibling slot (e.g. totalSupply vs totalAssets) — restore
+        // and keep probing.
+        await this.call(rpc, 'anvil_setStorageAt', [token, slotHex, raw])
+      }
+      return null
+    } finally {
+      await this.revert(snapshotId, rpc)
+    }
   }
 
   /**
