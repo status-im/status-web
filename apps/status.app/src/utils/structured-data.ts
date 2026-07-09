@@ -220,6 +220,7 @@ function removeFrontmatter(markdown: string): string {
 
 function cleanMarkdownText(markdown: string): string {
   return markdown
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
     .replace(/!\[[^\]]*]\([^)]*\)/g, '')
     .replace(/\[([^\]]+)]\([^)]*\)/g, '$1')
     .replace(/<\/?[^>]+>/g, ' ')
