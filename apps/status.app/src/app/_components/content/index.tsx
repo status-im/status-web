@@ -1,13 +1,5 @@
 // note: primarily uses margin, not padding, to create space between elements
-import {
-  Children,
-  cloneElement,
-  type ComponentProps,
-  isValidElement,
-  type JSX,
-  type ReactElement,
-  type ReactNode,
-} from 'react'
+import { Children, cloneElement, type ComponentProps, type JSX } from 'react'
 
 import { ContextTag, Step, Tabs, Tooltip } from '@status-im/components'
 import { BulletIcon, CheckIcon } from '@status-im/icons/20'
@@ -24,6 +16,7 @@ import { Admonition } from './admonition'
 import { CodeBlock } from './code-block'
 import * as desktopIcons from './icons/desktop'
 import {
+  renderContentTable,
   Table,
   TableCell,
   TableContent,
@@ -416,6 +409,7 @@ const baseComponents = {
       />
     )
   },
+  table: (props: ComponentProps<'table'>) => renderContentTable(props.children),
 }
 
 const SpaceDivider = (props: React.ComponentPropsWithoutRef<'div'>) => {
@@ -432,77 +426,6 @@ const SpaceDivider = (props: React.ComponentPropsWithoutRef<'div'>) => {
   )
 }
 
-type ContentElement = ReactElement<{ children?: ReactNode }>
-
-const toElementArray = (children: ReactNode): ContentElement[] =>
-  Children.toArray(children).filter((child): child is ContentElement =>
-    isValidElement<{ children?: ReactNode }>(child)
-  )
-
-const isHtmlElement = (element: ContentElement, tagName: string) =>
-  element.type === tagName
-
-const getTableRows = (element?: ContentElement) => {
-  if (!element) {
-    return []
-  }
-
-  return toElementArray(element.props.children).filter(row =>
-    isHtmlElement(row, 'tr')
-  )
-}
-
-const getTableCells = (row: ContentElement) =>
-  toElementArray(row.props.children).filter(
-    cell => isHtmlElement(cell, 'td') || isHtmlElement(cell, 'th')
-  )
-
-// Handles tables missing a <thead> (older Ghost tables) or otherwise not
-// shaped as exactly [thead, tbody], instead of assuming that fixed shape.
-const renderTable = (children: ReactNode) => {
-  const elements = toElementArray(children)
-  const head = elements.find(child => isHtmlElement(child, 'thead'))
-  const bodies = elements.filter(child => isHtmlElement(child, 'tbody'))
-  const directRows = elements.filter(child => isHtmlElement(child, 'tr'))
-  const footer = elements.find(child => isHtmlElement(child, 'tfoot'))
-  const headerRows = getTableRows(head)
-  const headerCells = headerRows[0] ? getTableCells(headerRows[0]) : []
-  const bodyRows = [
-    ...headerRows.slice(1),
-    ...bodies.flatMap(getTableRows),
-    ...directRows,
-    ...getTableRows(footer),
-  ]
-
-  return (
-    <Table>
-      {headerCells.length > 0 && (
-        <TableHead>
-          {headerCells.map((header, index) => (
-            <TableHeader key={index}>{header.props.children}</TableHeader>
-          ))}
-        </TableHead>
-      )}
-      <TableContent>
-        {bodyRows.map((row, index) => (
-          <TableRow key={index}>
-            {getTableCells(row).map((cell, index) =>
-              // A <th> in a body row is a row header (common in tables with
-              // no <thead>); rendering it as a <td> would drop that
-              // semantic and its header styling.
-              isHtmlElement(cell, 'th') ? (
-                <TableHeader key={index}>{cell.props.children}</TableHeader>
-              ) : (
-                <TableCell key={index}>{cell.props.children}</TableCell>
-              )
-            )}
-          </TableRow>
-        ))}
-      </TableContent>
-    </Table>
-  )
-}
-
 export const blogComponents = {
   ...baseComponents,
   h2: (props: ComponentProps<'h2'>) => {
@@ -515,7 +438,6 @@ export const blogComponents = {
       border: 'border-l-2 border-neutral-40 pl-4',
     })
   },
-  table: (props: any) => renderTable(props.children),
 }
 
 export const jobsComponents = {
@@ -599,7 +521,6 @@ export const specsComponents = {
   li: (props: Parameters<typeof baseComponents.li>[0]) => {
     return baseComponents.li({ ...props, size: 15 })
   },
-  table: (props: any) => renderTable(props.children),
   Image: (props: { alt: string; src: string; id?: ImageId }) => {
     if (props.id) {
       return (
