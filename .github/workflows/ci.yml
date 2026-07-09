@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: ['main']
+    branches: ['develop']
   pull_request:
     types: [opened, synchronize]
   workflow_call:
@@ -36,7 +36,7 @@ jobs:
 
       - name: Changeset
         # https://github.com/changesets/changesets/issues/1048
-        run: pnpm dlx @changesets/cli status --since origin/main
+        run: pnpm dlx @changesets/cli status --since origin/develop
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
