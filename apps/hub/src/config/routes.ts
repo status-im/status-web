@@ -11,5 +11,5 @@ export const LEGAL = {
 } as const
 
 export const BRAND = {
-  href: 'https://status.network/brand',
+  href: '/brand',
 } as const

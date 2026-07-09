@@ -101,26 +101,63 @@ if [[ -f "$OUT_DIR/${LOCALE}.txt" ]]; then
 fi
 
 # 5. Create clean URL aliases for default-locale static pages.
+#
+# Next static export emits flat files like legal/terms-of-use.html when
+# trailingSlash is disabled. Some static hosts resolve nested paths, but simple
+# file servers do not. Keep the flat files and also create nested index.html so
+# /legal/terms-of-use works consistently in previews and static deployments.
 echo "🔗 Creating clean URL aliases..."
-find "$OUT_DIR" -maxdepth 1 -type f -name "*.html" \
+find "$OUT_DIR" -type f -name "*.html" \
   ! -name "index.html" \
   ! -name "404.html" \
+  ! -path "$OUT_DIR/_next/*" \
+  ! -path "$OUT_DIR/??/*" \
   -print0 | while IFS= read -r -d '' html_file; do
-    page_name="$(basename "$html_file" .html)"
+    rel_path="${html_file#$OUT_DIR/}"
+    page_name="${rel_path%.html}"
     page_dir="$OUT_DIR/$page_name"
 
-    if [[ -e "$page_dir" ]]; then
+    if [[ -f "$page_dir/index.html" ]]; then
       continue
     fi
 
     mkdir -p "$page_dir"
     cp "$html_file" "$page_dir/index.html"
 
-    txt_file="$OUT_DIR/$page_name.txt"
+    txt_file="${html_file%.html}.txt"
     if [[ -f "$txt_file" ]]; then
       cp "$txt_file" "$page_dir/index.txt"
     fi
   done
+
+# 5b. Create clean URL aliases for non-default locale trees (e.g. /ko/legal/...).
+echo "🔗 Creating locale-prefixed URL aliases..."
+for locale_dir in "$OUT_DIR"/??; do
+  [[ -d "$locale_dir" ]] || continue
+  locale_name="$(basename "$locale_dir")"
+  [[ "$locale_name" == "$LOCALE" ]] && continue
+
+  find "$locale_dir" -type f -name "*.html" \
+    ! -name "index.html" \
+    ! -name "404.html" \
+    -print0 | while IFS= read -r -d '' html_file; do
+      rel_path="${html_file#$OUT_DIR/}"
+      page_name="${rel_path%.html}"
+      page_dir="$OUT_DIR/$page_name"
+
+      if [[ -f "$page_dir/index.html" ]]; then
+        continue
+      fi
+
+      mkdir -p "$page_dir"
+      cp "$html_file" "$page_dir/index.html"
+
+      txt_file="${html_file%.html}.txt"
+      if [[ -f "$txt_file" ]]; then
+        cp "$txt_file" "$page_dir/index.txt"
+      fi
+    done
+done
 
 # 6. Remove the /en directory
 echo "🗑️  Removing /${LOCALE}/..."
