@@ -19,9 +19,14 @@ for path in \
   "apps/get.status.app/out/legal/privacy-policy/index.html" \
   "apps/hub/out/legal/terms-of-use/index.html" \
   "apps/hub/out/legal/privacy-policy/index.html" \
+  "apps/hub/out/brand/index.html" \
   "apps/hub/out/legal/status-network-pre-deposit-withdrawal-disclaimer/index.html" \
   "apps/status.network/out/legal/terms-of-use/index.html" \
-  "apps/status.network/out/legal/privacy-policy/index.html"
+  "apps/status.network/out/legal/privacy-policy/index.html" \
+  "apps/hub/out/ko/legal/privacy-policy/index.html" \
+  "apps/hub/out/ko/brand/index.html" \
+  "apps/status.network/out/ko/legal/privacy-policy/index.html" \
+  "apps/status.network/out/ko/brand/index.html"
 do
   if [[ ! -f "$path" ]]; then
     echo "❌ Missing static export alias: $path"

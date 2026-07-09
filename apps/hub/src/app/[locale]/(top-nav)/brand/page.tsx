@@ -1,0 +1,178 @@
+import { customisation, neutral, white } from '@status-im/colors'
+import { DownloadIcon } from '@status-im/icons/20'
+import Image from 'next/image'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
+
+import { Metadata } from '../../../_metadata'
+import { transformColor } from '../../../_utils/colors'
+import { jsonLD, JSONLDScript } from '../../../_utils/json-ld'
+import { ColorSection } from './_components/color-section'
+import { DownloadZipButton } from './_components/download-zip-button'
+import { LogoSection } from './_components/logo-section'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
+
+  return Metadata({
+    title: 'Brand',
+    description: 'Get Status Network brand assets.',
+    pathname: '/brand',
+    locale,
+  })
+}
+
+const organizationSchema = jsonLD.organization({
+  name: 'Status Network',
+  url: 'https://hub.status.network',
+  description: 'Get Status Network brand assets.',
+})
+
+export default async function BrandPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
+
+  setRequestLocale(locale)
+
+  const t = await getTranslations()
+  const downloadButtonLabel = t('brand.download_button')
+
+  return (
+    <>
+      <JSONLDScript schema={organizationSchema} />
+      <div className="flex flex-col gap-3 px-4 pb-10 pt-24 lg:p-[120px]">
+        <h1 className="text-40 font-700 lg:text-64">{t('brand.main_title')}</h1>
+        <p className="mb-5 text-19 font-400 text-neutral-50">
+          {t('brand.last_updated')}
+        </p>
+        <DownloadZipButton
+          iconBefore={<DownloadIcon />}
+          fileName="brand-assets.zip"
+        >
+          {t('brand.download_all')}
+        </DownloadZipButton>
+      </div>
+
+      <div className="relative px-4 pb-10 lg:px-[120px] lg:pb-[77px] lg:pt-10">
+        <LogoSection
+          downloadButtonLabel={downloadButtonLabel}
+          title={t('brand.logo_title')}
+          description={t('brand.logo_description')}
+          fileName="logo.zip"
+          logos={[
+            {
+              src: '/brand/main/logo-01.png',
+              height: 96,
+              width: 631,
+              className: 'max-w-[315px]',
+              alt: t('brand.alt_text.main_logo'),
+            },
+            {
+              src: '/brand/main/logo-03.png',
+              height: 96,
+              width: 631,
+              className: 'max-w-[315px]',
+              alt: t('brand.alt_text.main_logo'),
+              gradient: true,
+            },
+          ]}
+        />
+        <LogoSection
+          downloadButtonLabel={downloadButtonLabel}
+          title={t('brand.logo_variation_title')}
+          description={t('brand.logo_variation_description')}
+          fileName="logo-variation.zip"
+          logos={[
+            {
+              src: '/brand/variation/logo-01.png',
+              height: 96,
+              width: 318,
+              className: 'max-w-[159px]',
+              alt: t('brand.alt_text.mark_only'),
+            },
+            {
+              src: '/brand/variation/logo-03.png',
+              height: 96,
+              width: 318,
+              className: 'max-w-[159px]',
+              alt: t('brand.alt_text.mark_only'),
+              gradient: true,
+            },
+          ]}
+        />
+        <LogoSection
+          downloadButtonLabel={downloadButtonLabel}
+          title={t('brand.mark_only_title')}
+          description={t('brand.mark_only_description')}
+          fileName="mark.zip"
+          logos={[
+            {
+              src: '/brand/mark/logo-01.png',
+              height: 96,
+              width: 97,
+              className: 'max-w-[48px]',
+              alt: t('brand.alt_text.mark_only'),
+            },
+            {
+              src: '/brand/mark/logo-03.png',
+              height: 96,
+              width: 97,
+              className: 'max-w-[48px]',
+              alt: t('brand.alt_text.mark_only'),
+              gradient: true,
+            },
+          ]}
+        />
+      </div>
+      <div className="mx-4 h-px bg-neutral-20 lg:mx-[120px]" />
+
+      <div className="relative bg-[#1B273D05] px-4 py-10 lg:px-[120px] lg:py-[118px]">
+        <ColorSection
+          downloadButtonLabel={downloadButtonLabel}
+          title={t('brand.main_colors_title')}
+          description={t('brand.main_colors_description')}
+          colors={[
+            transformColor('Purple', customisation.purple['50']),
+            transformColor('Dark', neutral['100']),
+            transformColor('White', white['100'], true),
+          ]}
+        />
+      </div>
+      <div className="mx-4 h-px bg-neutral-20 lg:mx-[120px]" />
+
+      <div className="relative px-4 py-20 lg:px-[120px] lg:pt-10">
+        <div className="flex flex-col gap-5 pb-12 md:flex-row md:items-center md:justify-between md:gap-0 md:pb-10">
+          <div className="grid gap-1">
+            <h2 className="text-27 font-600">{t('brand.artwork_title')}</h2>
+            <p className="text-27">{t('brand.artwork_description')}</p>
+          </div>
+
+          <DownloadZipButton
+            variant="white"
+            iconBefore={<DownloadIcon className="text-neutral-50" />}
+            fileName="artwork.zip"
+            className="w-full justify-center lg:w-fit lg:justify-start"
+          >
+            {t('brand.download_button')}
+          </DownloadZipButton>
+        </div>
+
+        <div className="w-full overflow-hidden rounded-20">
+          <Image
+            src="/brand/artwork.png"
+            alt={t('brand.alt_text.artwork')}
+            width={1192}
+            height={476}
+            className="scale-110"
+          />
+        </div>
+      </div>
+    </>
+  )
+}

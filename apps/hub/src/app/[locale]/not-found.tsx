@@ -22,7 +22,7 @@ export default async function NotFound() {
   const t = await getTranslations('not_found')
 
   return (
-    <HubLayout showSidebar={false}>
+    <HubLayout showSidebar={false} centerContent>
       <div className="mx-auto flex w-full max-w-[696px] flex-col items-center gap-8 py-10">
         <h1 className="text-balance text-center text-40 font-700 lg:text-64">
           {t('title')}

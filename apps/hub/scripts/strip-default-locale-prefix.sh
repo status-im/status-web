@@ -142,6 +142,35 @@ find "$OUT_DIR" -type f -name "*.html" \
     fi
   done
 
+# 5b. Create clean URL aliases for non-default locale trees (e.g. /ko/legal/...).
+echo "🔗 Creating locale-prefixed URL aliases..."
+for locale_dir in "$OUT_DIR"/??; do
+  [[ -d "$locale_dir" ]] || continue
+  locale_name="$(basename "$locale_dir")"
+  [[ "$locale_name" == "$LOCALE" ]] && continue
+
+  find "$locale_dir" -type f -name "*.html" \
+    ! -name "index.html" \
+    ! -name "404.html" \
+    -print0 | while IFS= read -r -d '' html_file; do
+      rel_path="${html_file#$OUT_DIR/}"
+      page_name="${rel_path%.html}"
+      page_dir="$OUT_DIR/$page_name"
+
+      if [[ -f "$page_dir/index.html" ]]; then
+        continue
+      fi
+
+      mkdir -p "$page_dir"
+      cp "$html_file" "$page_dir/index.html"
+
+      txt_file="${html_file%.html}.txt"
+      if [[ -f "$txt_file" ]]; then
+        cp "$txt_file" "$page_dir/index.txt"
+      fi
+    done
+done
+
 # 6. Remove the /en directory
 echo "🗑️  Removing /${LOCALE}/..."
 # Extra safety: ensure OUT_DIR is not empty or whitespace-only before removing
