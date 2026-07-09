@@ -1,5 +1,11 @@
 # @status-im/status-network
 
+## 0.1.3
+
+### Patch Changes
+
+- 3e92c15: chore: upgrade next to version 15.5.16 across all projects
+
 ## 0.1.2
 
 ### Patch Changes
