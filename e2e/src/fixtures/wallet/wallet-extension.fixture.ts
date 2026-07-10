@@ -21,7 +21,7 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 
-import { createLifiMock } from './lifi-mock.js'
+import { createLifiMock, type LifiMock } from './lifi-mock.js'
 import {
   installWalletDataSeam,
   type WalletDataSeamController,
@@ -53,11 +53,14 @@ let baseSnapshot: string | null = null
 // Seam controller per context, so the `dataSeam` fixture can expose the same
 // controller installed once by `walletContext` (avoids double-registering routes).
 const seamControllers = new WeakMap<BrowserContext, WalletDataSeamController>()
+const lifiMocks = new WeakMap<BrowserContext, LifiMock>()
 
 export interface WalletFixtures {
   anvilRpc: AnvilRpcHelper
   walletContext: BrowserContext
   dataSeam: WalletDataSeamController
+  /** li.quest mock installed on the context — mutate to shape swap quotes. */
+  lifiMock: LifiMock
   /** Onboarded extension page sitting on /portfolio/assets. */
   walletPage: Page
   portfolio: WalletPortfolioPage
@@ -131,13 +134,15 @@ export const test = base.extend<WalletFixtures>({
 
     // Install the data seam once, before any page loads, so the extension's
     // first portfolio/token reads are served from it.
+    const lifi = createLifiMock()
     const controller = await installWalletDataSeam(context, {
       ethBalance: WALLET_FUND_ETH,
       nativeTokenBody,
-      lifi: createLifiMock(),
+      lifi,
       logUnmocked: false,
     })
     seamControllers.set(context, controller)
+    lifiMocks.set(context, lifi)
 
     await use(context)
 
@@ -151,6 +156,12 @@ export const test = base.extend<WalletFixtures>({
     const controller = seamControllers.get(walletContext)
     if (!controller) throw new Error('data seam was not installed on context')
     await use(controller)
+  },
+
+  lifiMock: async ({ walletContext }, use) => {
+    const lifi = lifiMocks.get(walletContext)
+    if (!lifi) throw new Error('lifi mock was not installed on context')
+    await use(lifi)
   },
 
   // --- Onboarded page on the portfolio ---------------------------------------

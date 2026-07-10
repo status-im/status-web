@@ -166,9 +166,18 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
 
       await ensureUnlocked()
 
-      let maxFeePerGas = tx.maxFeePerGas?.toString(16)
-      let maxPriorityFeePerGas = tx.maxPriorityFeePerGas?.toString(16)
-      let gasLimit = tx.gas?.toString(16)
+      const toHex = (value: bigint) => `0x${value.toString(16)}`
+
+      // Fee policy: transactions created by the wallet itself carry no fee
+      // fields and are priced entirely by the internal estimator. External
+      // callers (e.g. the LiFi widget for swaps) are trusted for every field
+      // they provide — only genuinely missing pieces are filled in.
+      let maxFeePerGas = tx.maxFeePerGas ? toHex(tx.maxFeePerGas) : undefined
+      let maxPriorityFeePerGas =
+        tx.maxPriorityFeePerGas !== undefined
+          ? toHex(tx.maxPriorityFeePerGas)
+          : undefined
+      let gasLimit = tx.gas ? toHex(tx.gas) : undefined
 
       if (!maxFeePerGas || !maxPriorityFeePerGas || !gasLimit) {
         const fees = await fetchGasFees({
@@ -177,9 +186,30 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
           value: tx.value.toString(16),
           data: tx.data,
         })
+
+        if (!maxFeePerGas && tx.maxPriorityFeePerGas !== undefined) {
+          // LiFi quotes carry a quote-time maxPriorityFeePerGas but the SDK
+          // strips maxFeePerGas, leaving the ceiling to the wallet. Building
+          // it from our own estimate alone can undercut the quoted priority
+          // (invalid EIP-1559 tx, rejected at broadcast), so honor the quoted
+          // priority and add the estimator's base-fee headroom on top
+          // (its maxFeePerGas = 2*baseFee + own priority).
+          const baseFeeHeadroom =
+            BigInt(fees.txParams.maxFeePerGas) -
+            BigInt(fees.txParams.maxPriorityFeePerGas)
+          maxFeePerGas = toHex(baseFeeHeadroom + tx.maxPriorityFeePerGas)
+        }
+
         maxFeePerGas ??= fees.txParams.maxFeePerGas
         maxPriorityFeePerGas ??= fees.txParams.maxPriorityFeePerGas
         gasLimit ??= fees.txParams.gasLimit
+      }
+
+      // EIP-1559 invariant: a tip above the fee ceiling is rejected by nodes.
+      // Only reachable when the caller pinned maxFeePerGas but left the
+      // priority fee to the (potentially higher) internal estimate.
+      if (BigInt(maxPriorityFeePerGas) > BigInt(maxFeePerGas)) {
+        maxPriorityFeePerGas = maxFeePerGas
       }
 
       if (tx.data) {

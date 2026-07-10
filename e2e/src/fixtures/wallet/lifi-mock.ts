@@ -11,10 +11,15 @@ import { CONTRACTS } from '@helpers/anvil-rpc.js'
  * background-SW -> broadcast path, and the output token lands 1:1 on-chain
  * (assertable via balanceOf). Only the quote/route/status plumbing is faked.
  *
- * Notes on fee realism: the transactionRequest deliberately carries only a
- * gasLimit — no maxFeePerGas — so the wallet's signer falls back to its own
+ * Notes on fee realism: by default the transactionRequest carries only a
+ * gasLimit — no fee fields — so the wallet's signer falls back to its own
  * fee estimation (nodes.getFeeRate -> fork eth_feeHistory). Congestion set on
  * Anvil is therefore still reflected in what the swap actually pays.
+ *
+ * Real li.quest, however, DOES include a quote-time `maxPriorityFeePerGas` in
+ * its transactionRequest, and @lifi/sdk forwards it to the wallet (while
+ * stripping gasPrice/maxFeePerGas). Use `setQuotedPriorityFee()` to reproduce
+ * that production shape and exercise the wallet's mixed-fee handling.
  */
 
 const NATIVE_ETH = '0x0000000000000000000000000000000000000000'
@@ -159,6 +164,12 @@ export interface LifiMock {
     method: string,
     postData: string | null,
   ) => LifiMockResponse
+  /**
+   * Include a quote-time `maxPriorityFeePerGas` (wei) in subsequent
+   * stepTransaction responses, like real li.quest does. Pass null to go back to
+   * the default fee-less transactionRequest.
+   */
+  setQuotedPriorityFee: (wei: bigint | null) => void
 }
 
 const isWeth = (address: unknown): boolean =>
@@ -170,6 +181,8 @@ export function createLifiMock(): LifiMock {
   // status poll only carries the txHash, not the amounts).
   let lastFromAmount = '0'
   let lastFromAddress = NATIVE_ETH
+  // Quote-time priority fee for the stepTransaction response (null = omit).
+  let quotedPriorityFeeWei: bigint | null = null
 
   const handle = (
     rawUrl: string,
@@ -252,6 +265,9 @@ export function createLifiMock(): LifiMock {
             data: WETH_DEPOSIT_CALLDATA,
             value: '0x' + BigInt(fromAmount).toString(16),
             gasLimit: '0xea60', // 60k — deposit() uses ~28k
+            ...(quotedPriorityFeeWei !== null && {
+              maxPriorityFeePerGas: '0x' + quotedPriorityFeeWei.toString(16),
+            }),
           },
         },
       }
@@ -298,5 +314,9 @@ export function createLifiMock(): LifiMock {
     return { status: 404, body: { message: `not mocked: ${path}` } }
   }
 
-  return { handle }
+  const setQuotedPriorityFee = (wei: bigint | null) => {
+    quotedPriorityFeeWei = wei
+  }
+
+  return { handle, setQuotedPriorityFee }
 }
