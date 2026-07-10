@@ -24,11 +24,18 @@ pipeline {
   parameters {
     choice(
       name: 'APP_NAME',
-      description: 'Name of app from apps folder.',
+      description: 'Name of the static app from apps folder.',
       choices: choiceFromJobName(params.APP_NAME, [
         'hub',
         'status.network',
         'get.status.app',
+      ]),
+    )
+    choice(
+      name: 'DOCKER_APP_NAME',
+      description: 'Name of the docker app from apps folder.',
+      choices: choiceFromJobName(params.DOCKER_APP_NAME, [
+        'status.app',
       ]),
     )
     string(
@@ -151,16 +158,16 @@ def choiceFromJobName(String previousChoice, List defaultChoices) {
   return defaultChoices
 }
 
-def isMainBranch() { GIT_BRANCH ==~ /.*main/ }
+def isMasterBranch() { GIT_BRANCH ==~ /.*master/ }
 
 def deployBranch() {
   switch (params.APP_NAME) {
     case 'hub':
-      return isMainBranch() ? 'deploy-hub-main' : 'deploy-hub-develop'
+      return isMasterBranch() ? 'deploy-hub-main' : 'deploy-hub-develop'
     case 'status.network':
-      return isMainBranch() ? 'deploy-status-network-main' : 'deploy-status-network-develop'
+      return isMasterBranch() ? 'deploy-status-network-main' : 'deploy-status-network-develop'
     case 'get.status.app':
-      return isMainBranch() ? 'deploy-get-status-app-main' : 'deploy-get-status-app-develop'
+      return isMasterBranch() ? 'deploy-get-status-app-main' : 'deploy-get-status-app-develop'
     default:
       error("Unknown app: ${params.APP_NAME}.")
   }
@@ -169,11 +176,11 @@ def deployBranch() {
 def deployDomain() {
   switch (params.APP_NAME) {
     case 'hub':
-      return isMainBranch() ? 'hub.status.network' : 'dev.hub.status.network'
+      return isMasterBranch() ? 'hub.status.network' : 'dev.hub.status.network'
     case 'status.network':
-      return isMainBranch() ? 'status.network' : 'dev.status.network'
+      return isMasterBranch() ? 'status.network' : 'dev.status.network'
     case 'get.status.app':
-      return isMainBranch() ? 'get.status.app' : 'dev.get.status.app'
+      return isMasterBranch() ? 'get.status.app' : 'dev.get.status.app'
     default:
       error("Unknown app: ${params.APP_NAME}.")
   }
