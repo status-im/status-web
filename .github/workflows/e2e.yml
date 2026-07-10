@@ -87,3 +87,90 @@ jobs:
           path: |
             e2e/test-results/artifacts/
           retention-days: 7
+
+  e2e-wallet:
+    name: E2E Tests (Wallet extension)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    # The wallet-send flow needs the local status-api backend (apps/api), but no
+    # real API keys: chain calls go through the rpc-router to the Anvil fork, and
+    # the enhanced/CoinGecko-backed endpoints are mocked by the data seam. Dummy
+    # values just satisfy apps/api's env validation. ETH_RPC_PROXY_URL is set by
+    # the Playwright webServer (-> rpc-router). For lower flakiness, point the fork
+    # at an archive RPC by adding an E2E_MAINNET_FORK_URL secret (see below).
+    env:
+      ALCHEMY_API_KEYS: test
+      INFURA_API_KEY: test
+      COINGECKO_API_KEY: test
+      ETH_RPC_PROXY_AUTH_USERNAME: test
+      ETH_RPC_PROXY_AUTH_PASSWORD: test
+      MARKET_PROXY_URL: http://localhost:9999
+      MARKET_PROXY_AUTH_USERNAME: test
+      MARKET_PROXY_AUTH_PASSWORD: test
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: cd e2e && pnpm exec playwright install chromium --with-deps
+
+      # Build the wallet's workspace deps (dist/), then the extension itself in
+      # dev mode so WXT_STATUS_API_URL points at the local apps/api (:3030).
+      - name: Build wallet dependencies
+        run: pnpm exec turbo run build --filter=wallet^...
+
+      - name: Build wallet extension
+        run: cd e2e && pnpm setup:wallet
+
+      # Local mainnet + Linea Anvil forks. To reduce archive-related flakiness,
+      # set MAINNET_FORK_URL to an archive RPC via the E2E_MAINNET_FORK_URL secret.
+      - name: Start Anvil forks
+        run: cd e2e && pnpm anvil:up
+        env:
+          MAINNET_FORK_URL: ${{ secrets.E2E_MAINNET_FORK_URL || 'https://ethereum-rpc.publicnode.com' }}
+
+      # Playwright's webServer starts apps/api (:3030) + rpc-router (:8548) for the
+      # wallet projects (no Hub, no MetaMask). Headed extension tests need xvfb.
+      - name: Run wallet E2E tests
+        run: cd e2e && xvfb-run --auto-servernum -- pnpm exec playwright test --project=wallet-send --project=wallet-swap
+        env:
+          RUN_WALLET_E2E: '1'
+          WALLET_SEED_PHRASE: ${{ secrets.E2E_WALLET_SEED_PHRASE }}
+          CI: true
+
+      - name: Stop Anvil forks
+        if: always()
+        run: cd e2e && pnpm anvil:down
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-wallet-report
+          path: e2e/test-results/
+          retention-days: 14
+
+      - name: Upload test artifacts
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: e2e-wallet-artifacts
+          path: |
+            e2e/test-results/artifacts/
+          retention-days: 7
