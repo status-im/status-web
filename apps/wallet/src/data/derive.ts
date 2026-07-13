@@ -19,6 +19,51 @@ export function deriveNextAccountIndex(
   return Math.max(...indices) + 1
 }
 
+export function deriveAccountsAtPaths(
+  walletCore: WalletCore,
+  mnemonic: string,
+  coin: InstanceType<WalletCore['CoinType']>,
+  derivation: InstanceType<WalletCore['Derivation']>,
+  paths: string[],
+): WalletAccount[] {
+  const hd = walletCore.HDWallet.createWithMnemonic(mnemonic, '')
+  try {
+    return paths.map(path => {
+      const privateKey = hd.getKey(coin, path)
+      try {
+        const address = walletCore.CoinTypeExt.deriveAddress(coin, privateKey)
+        return {
+          address,
+          coin: coin.value,
+          derivationPath: path,
+          derivation: derivation.value,
+        }
+      } finally {
+        privateKey.delete()
+      }
+    })
+  } finally {
+    hd.delete()
+  }
+}
+
+export function deriveAccounts(
+  walletCore: WalletCore,
+  mnemonic: string,
+  coin: InstanceType<WalletCore['CoinType']>,
+  derivation: InstanceType<WalletCore['Derivation']>,
+  indices: number[],
+): WalletAccount[] {
+  const basePath = walletCore.CoinTypeExt.derivationPathWithDerivation(
+    coin,
+    derivation,
+  )
+  const paths = indices.map(index =>
+    index === 0 ? basePath : basePath.replace(/\/[^/]+$/, `/${index}`),
+  )
+  return deriveAccountsAtPaths(walletCore, mnemonic, coin, derivation, paths)
+}
+
 export function deriveAccount(
   walletCore: WalletCore,
   mnemonic: string,
@@ -26,29 +71,7 @@ export function deriveAccount(
   derivation: InstanceType<WalletCore['Derivation']>,
   index: number = 0,
 ): WalletAccount {
-  const hd = walletCore.HDWallet.createWithMnemonic(mnemonic, '')
-  try {
-    const basePath = walletCore.CoinTypeExt.derivationPathWithDerivation(
-      coin,
-      derivation,
-    )
-    const path =
-      index === 0 ? basePath : basePath.replace(/\/[^/]+$/, `/${index}`)
-    const privateKey = hd.getKey(coin, path)
-    try {
-      const address = walletCore.CoinTypeExt.deriveAddress(coin, privateKey)
-      return {
-        address,
-        coin: coin.value,
-        derivationPath: path,
-        derivation: derivation.value,
-      }
-    } finally {
-      privateKey.delete()
-    }
-  } finally {
-    hd.delete()
-  }
+  return deriveAccounts(walletCore, mnemonic, coin, derivation, [index])[0]
 }
 
 export function derivePrivateKey(
