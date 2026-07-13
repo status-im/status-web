@@ -321,6 +321,19 @@ const apiRouter = router({
           return wallet.accounts
         }),
 
+      // Persists which account is currently selected for a wallet.
+      select: procedure
+        .input(
+          z.object({
+            walletId: z.string(),
+            address: z.string(),
+          }),
+        )
+        .mutation(async ({ input }) => {
+          await walletMetadata.setSelectedAccount(input.walletId, input.address)
+          return { address: input.address }
+        }),
+
       ethereum: router({
         add: procedure
           .input(
