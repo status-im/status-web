@@ -129,7 +129,7 @@ export function SelectAccountsStep({
       )}
 
       {rows.length > 0 && (
-        <div className="mb-4 flex flex-col gap-2">
+        <div className="mb-4 flex max-h-[336px] flex-col gap-2 overflow-y-auto pr-1">
           {rows.map(row => (
             <div
               key={row.derivationPath}
