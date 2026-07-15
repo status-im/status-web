@@ -10,6 +10,7 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import { storage } from '@wxt-dev/storage'
 
+import { useSelectAccount } from '../hooks/use-select-account'
 import { useSynchronizedRefetch } from '../hooks/use-synchronized-refetch'
 import { apiClient } from './api-client'
 
@@ -28,6 +29,7 @@ type WalletContext = {
   isLoading: boolean
   hasWallets: boolean
   setCurrentWallet: (id: Wallet['id']) => void
+  setCurrentAccount: (address: WalletAccount['address']) => void
 }
 
 const WalletContext = createContext<WalletContext | undefined>(undefined)
@@ -69,8 +71,10 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
 
   const currentAccount = useMemo(() => {
     if (!currentWallet) return null
-    // TODO: Use currently selected account when multi-account support is implemented. See ^^^
-    return currentWallet.accounts[0] ?? null
+    const selectedAccount = currentWallet.accounts.find(
+      account => account.address === currentWallet.selectedAccountAddress,
+    )
+    return selectedAccount ?? currentWallet.accounts[0] ?? null
   }, [currentWallet])
 
   useEffect(() => {
@@ -128,6 +132,17 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     setSelectedWalletId(id)
   }, [])
 
+  const { selectAccount } = useSelectAccount()
+
+  const setCurrentAccount = useCallback(
+    (address: string) => {
+      if (!currentWallet) return
+      if (currentWallet.selectedAccountAddress === address) return
+      selectAccount({ walletId: currentWallet.id, address })
+    },
+    [currentWallet, selectAccount],
+  )
+
   // Auto-refresh
   useSynchronizedRefetch(currentAccount?.address ?? '')
 
@@ -138,6 +153,7 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     isLoading,
     hasWallets,
     setCurrentWallet,
+    setCurrentAccount,
   }
 
   return (

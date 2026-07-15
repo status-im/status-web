@@ -7,8 +7,9 @@ import { BasePage } from '../base.page.js'
  *
  * Flow (see apps/wallet/src/components/onboarding + routes/onboarding):
  *   landing ("Import wallet") -> recovery phrase (aria-label "Recovery phrase")
- *   -> "Continue" -> create password ("Password" / "Confirm password")
- *   -> "Import Wallet" -> lands on /portfolio/assets.
+ *   -> "Continue" -> accounts to import (activity scan; Continue re-enables
+ *   when it settles) -> "Continue" -> create password ("Password" /
+ *   "Confirm password") -> "Import Wallet" -> lands on /portfolio/assets.
  *
  * Selectors are text/role/aria-based — the wallet has few data-testids.
  */
@@ -18,6 +19,7 @@ export class WalletOnboardingPage extends BasePage {
   })
   readonly recoveryPhraseInput = this.page.getByLabel('Recovery phrase')
   readonly continueButton = this.page.getByRole('button', { name: 'Continue' })
+  readonly accountsToImportTitle = this.page.getByText('Accounts to import')
   readonly passwordInput = this.page.getByLabel('Password', { exact: true })
   readonly confirmPasswordInput = this.page.getByLabel('Confirm password')
   readonly importButton = this.page.getByRole('button', {
@@ -43,6 +45,12 @@ export class WalletOnboardingPage extends BasePage {
     await expect(this.recoveryPhraseInput).toBeVisible()
     await this.recoveryPhraseInput.fill(seedPhrase)
     await expect(this.continueButton).toBeEnabled()
+    await this.continueButton.click()
+
+    // Account-discovery step: wait for the activity scan to settle (Continue
+    // re-enables), then continue with the discovered accounts.
+    await expect(this.accountsToImportTitle).toBeVisible()
+    await expect(this.continueButton).toBeEnabled({ timeout: 60_000 })
     await this.continueButton.click()
 
     await expect(this.passwordInput).toBeVisible()

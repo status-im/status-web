@@ -8,13 +8,16 @@ import {
 } from '@status-im/wallet/components'
 
 import { Link } from '@/components/link'
+import { useDiscoverAccounts } from '@/hooks/use-discover-accounts'
 import { useImportWallet } from '@/hooks/use-import-wallet'
 import { useWalletFlowSuccess } from '@/hooks/use-wallet-flow-success'
 import { usePassword } from '@/providers/password-context'
 
 import { BackButton } from './back-button'
 import { CreatePasswordStep } from './create-password-step'
+import { SelectAccountsStep } from './select-accounts-step'
 
+import type { AccountPreview } from './select-accounts-step'
 import type { SubmitHandler } from 'react-hook-form'
 
 type Props = {
@@ -26,7 +29,8 @@ type Props = {
 
 type ImportFlowStep =
   | { step: 'enter-mnemonic'; mnemonic: string }
-  | { step: 'create-password'; mnemonic: string }
+  | { step: 'select-accounts'; mnemonic: string }
+  | { step: 'create-password'; mnemonic: string; derivationPaths: string[] }
 
 export function ImportWalletFlow({
   backHref,
@@ -35,6 +39,16 @@ export function ImportWalletFlow({
   hardwareWalletHref,
 }: Props) {
   const { importWalletAsync } = useImportWallet()
+  // Discovery lives in the flow and is triggered from the mnemonic submit
+  // handler. Do not move it into a mount effect of the select-accounts step:
+  // calling mutate() during the initial effect detaches the mutation observer
+  // under StrictMode's remount and the result never reaches the UI.
+  const {
+    discoverAccounts,
+    data: discoveredAccounts,
+    isPending: isDiscovering,
+    isError: discoveryFailed,
+  } = useDiscoverAccounts()
   const { requestPassword } = usePassword()
   const onSuccess = useWalletFlowSuccess(successHref)
   const [isLoading, setIsLoading] = useState(false)
@@ -42,17 +56,39 @@ export function ImportWalletFlow({
     step: 'enter-mnemonic',
     mnemonic: '',
   })
+  // Lifted so custom paths survive navigating back from the password step
+  const [customAccounts, setCustomAccounts] = useState<AccountPreview[]>([])
 
-  const completeImport = async (mnemonic: string, password?: string) => {
-    const wallet = await importWalletAsync({ mnemonic, password })
+  const completeImport = async (
+    mnemonic: string,
+    derivationPaths: string[],
+    password?: string,
+  ) => {
+    const wallet = await importWalletAsync({
+      mnemonic,
+      password,
+      derivationPaths,
+    })
     await onSuccess(wallet, `Imported ${wallet.name}`)
   }
 
   const handleMnemonicSubmit: SubmitHandler<
     ImportRecoveryPhraseFormValues
   > = async data => {
+    setCustomAccounts([])
+    discoverAccounts({ mnemonic: data.mnemonic })
+    setFlowStep({ step: 'select-accounts', mnemonic: data.mnemonic })
+  }
+
+  const handleAccountsSubmit = async (derivationPaths: string[]) => {
+    if (flowStep.step !== 'select-accounts') return
+
     if (requiresPasswordCreation) {
-      setFlowStep({ step: 'create-password', mnemonic: data.mnemonic })
+      setFlowStep({
+        step: 'create-password',
+        mnemonic: flowStep.mnemonic,
+        derivationPaths,
+      })
       return
     }
 
@@ -64,7 +100,7 @@ export function ImportWalletFlow({
         requireFreshPassword: true,
       })
       if (!isUnlocked) return
-      await completeImport(data.mnemonic)
+      await completeImport(flowStep.mnemonic, derivationPaths)
     } catch (error) {
       console.error(error)
     } finally {
@@ -75,9 +111,15 @@ export function ImportWalletFlow({
   const handlePasswordSubmit: SubmitHandler<
     CreatePasswordFormValues
   > = async data => {
+    if (flowStep.step !== 'create-password') return
+
     setIsLoading(true)
     try {
-      await completeImport(flowStep.mnemonic, data.password)
+      await completeImport(
+        flowStep.mnemonic,
+        flowStep.derivationPaths,
+        data.password,
+      )
     } catch (error) {
       console.error(error)
     } finally {
@@ -90,13 +132,34 @@ export function ImportWalletFlow({
       <CreatePasswordStep
         onBack={() =>
           setFlowStep({
-            step: 'enter-mnemonic',
+            step: 'select-accounts',
             mnemonic: flowStep.mnemonic,
           })
         }
         onSubmit={handlePasswordSubmit}
         isLoading={isLoading}
         confirmButtonLabel="Import Wallet"
+      />
+    )
+  }
+
+  if (flowStep.step === 'select-accounts') {
+    return (
+      <SelectAccountsStep
+        mnemonic={flowStep.mnemonic}
+        discoveredAccounts={discoveredAccounts}
+        isDiscovering={isDiscovering}
+        discoveryFailed={discoveryFailed}
+        customAccounts={customAccounts}
+        onCustomAccountsChange={setCustomAccounts}
+        onBack={() =>
+          setFlowStep({
+            step: 'enter-mnemonic',
+            mnemonic: flowStep.mnemonic,
+          })
+        }
+        onContinue={handleAccountsSubmit}
+        isLoading={isLoading}
       />
     )
   }

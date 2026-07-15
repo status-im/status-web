@@ -8,6 +8,7 @@ import {
   notifyTransactionConfirmed,
   notifyTransactionFailed,
 } from './notifications'
+import { getRpcProxyUrl } from './rpc-proxy'
 import { PENDING_TXS_KEY, TX_NOTIFIED_KEY } from './storage-keys'
 
 type PendingTx = {
@@ -21,23 +22,22 @@ async function fetchReceipt(
   txHash: string,
 ): Promise<{ status: string } | null> {
   try {
-    const url = `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/rpc.proxy`
-    const res = await fetch(url, {
+    // note: rpc.proxy expects a plain JSON-RPC body with chainId as a query
+    // param; tRPC-formatted POST bodies are rejected by the API route handler
+    const res = await fetch(getRpcProxyUrl(1), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        json: {
-          method: 'eth_getTransactionReceipt',
-          params: [txHash],
-          id: 1,
-          chainId: 1,
-        },
+        jsonrpc: '2.0',
+        method: 'eth_getTransactionReceipt',
+        params: [txHash],
+        id: 1,
       }),
     })
     const body = (await res.json()) as {
-      result: { data: { json: { result: { status: string } | null } } }
+      result?: { status: string } | null
     }
-    return body.result.data.json.result
+    return body.result ?? null
   } catch {
     return null
   }

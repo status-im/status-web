@@ -11,13 +11,16 @@ export const useImportWallet = () => {
     mutationFn: async ({
       mnemonic,
       password,
+      derivationPaths,
     }: {
       mnemonic: string
       password?: string
+      derivationPaths?: string[]
     }) => {
       return api.wallet.import.mutate({
         mnemonic,
         password,
+        derivationPaths,
       })
     },
     onSuccess: () => {
