@@ -234,7 +234,20 @@
     "breadcrumb": "Blog",
     "shareOnTwitter": "Share on Twitter",
     "shareOnFacebook": "Share on Facebook",
-    "shareOnLinkedIn": "Share on LinkedIn"
+    "shareOnLinkedIn": "Share on LinkedIn",
+    "searchLabel": "Search blog posts",
+    "searchPlaceholder": "Search articles",
+    "clearSearch": "Clear search",
+    "categoryFilterLabel": "Filter posts by category",
+    "resultCount": "{count, plural, one {# result} other {# results}}",
+    "clearFilters": "Clear filters",
+    "searchLoading": "Searching articles…",
+    "searchUnavailableTitle": "Search is unavailable",
+    "searchUnavailableDescription": "Please try again in a moment.",
+    "noResultsTitle": "No posts found",
+    "noResultsDescription": "Try another search or clear the selected category.",
+    "emptyTitle": "No posts yet",
+    "emptyDescription": "Check back soon for new articles."
   },
   "jobs": {
     "metaTitle": "Jobs",
