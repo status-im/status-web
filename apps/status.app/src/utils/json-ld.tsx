@@ -1,4 +1,5 @@
 import {
+  createAppJSONLD,
   createJSONLD,
   JSONLDScript as BaseJSONLDScript,
 } from '@status-im/components'
@@ -8,6 +9,7 @@ import type {
   BreadcrumbListSchema,
   JSONLDSchema,
   OrganizationSchema,
+  WebPageSchema,
   WebSiteSchema,
 } from '@status-im/components'
 
@@ -27,12 +29,14 @@ const baseJsonLD = createJSONLD({
   defaultSiteUrl: 'https://status.app',
   defaultSocialLinks: STATUS_SOCIAL_LINKS,
 })
+const appJsonLD = createAppJSONLD()
 
 /**
  * JSON-LD schema generators with app-specific defaults
  */
 export const jsonLD = {
   ...baseJsonLD,
+  webpage: appJsonLD.webpage,
   organization: (config?: {
     description?: string
     logo?: string
@@ -65,6 +69,7 @@ export type {
   BreadcrumbListSchema,
   JSONLDSchema,
   OrganizationSchema,
+  WebPageSchema,
   WebSiteSchema,
 }
 

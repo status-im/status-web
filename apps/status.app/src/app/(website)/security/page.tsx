@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server'
 
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
+import { buildLandingPageStructuredData } from '~/utils/structured-data'
 import { Metadata } from '~app/_metadata'
 import { formatDate } from '~app/_utils/format-date'
 import { Body } from '~components/body'
@@ -26,10 +27,15 @@ export default async function SecurityPage() {
   const organizationSchema = jsonLD.organization({
     description: t('metaDescription'),
   })
+  const webpageSchema = buildLandingPageStructuredData({
+    name: t('metaTitle'),
+    description: t('metaDescription'),
+    path: '/security',
+  })
 
   return (
     <>
-      <JSONLDScript schema={organizationSchema} />
+      <JSONLDScript schema={[organizationSchema, webpageSchema]} />
       <Body className="pb-24 pt-16 xl:pb-40 xl:pt-32">
         <div className="container max-w-[742px]">
           <div className="mb-12">

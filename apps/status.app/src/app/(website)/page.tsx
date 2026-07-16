@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server'
 
 import { isGetSite } from '~/config/site-scope'
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
+import { buildLandingPageStructuredData } from '~/utils/structured-data'
 import { Metadata } from '~app/_metadata'
 import { Image, Video } from '~components/assets'
 import { Body } from '~components/body'
@@ -125,6 +126,11 @@ export default async function HomePage() {
         }),
         jsonLD.website({
           description: statusWebsiteDescription,
+        }),
+        buildLandingPageStructuredData({
+          name: 'Status',
+          description: statusWebsiteDescription,
+          path: '/',
         }),
       ]
 
