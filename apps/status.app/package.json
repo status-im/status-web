@@ -9,10 +9,12 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "predev": "pnpm install",
+    "predev:next": "pnpm generate:blog-search",
     "dev:next": "next dev --turbopack --port 3001",
     "dev:content": "contentlayer2 dev",
     "watch:content": "node --watch-path=./content --watch-preserve-output ./scripts/trigger-content-compilation.cjs",
-    "build": "pnpm lint && next build",
+    "build": "pnpm lint && pnpm generate:blog-search && next build",
+    "generate:blog-search": "tsx scripts/generate-blog-search-index.ts",
     "build:content": "contentlayer2 build && :",
     "build:docker": "bash -c 'set -a && . .env.local && set +a && cd ../.. && docker build -f apps/status.app/Dockerfile --secret id=infura_api_key,env=INFURA_API_KEY --secret id=greenhouse_api_key,env=GREENHOUSE_API_KEY --secret id=github_token,env=GITHUB_TOKEN --build-arg NEXT_PUBLIC_GHOST_API_URL=\"$NEXT_PUBLIC_GHOST_API_URL\" --build-arg NEXT_PUBLIC_GHOST_API_KEY=\"$NEXT_PUBLIC_GHOST_API_KEY\" --build-arg NEXT_PUBLIC_INFURA_API_KEY=\"$NEXT_PUBLIC_INFURA_API_KEY\" --build-arg NEXT_PUBLIC_HASURA_API_URL=\"$NEXT_PUBLIC_HASURA_API_URL\" --build-arg GREENHOUSE_STATUS_BOARD_ID=\"$GREENHOUSE_STATUS_BOARD_ID\" --build-arg GREENHOUSE_LOGOS_BOARD_ID=\"$GREENHOUSE_LOGOS_BOARD_ID\" -t status-web/status.app:dev .'",
     "start": "next start",
