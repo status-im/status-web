@@ -115,6 +115,23 @@ export const getPosts = async (params: Params = {}) => {
   }
 }
 
+export const getPostsForSearch = async () => {
+  try {
+    const response = await ghost.posts.browse({
+      include: ['tags', 'authors'],
+      formats: ['plaintext'],
+      order: 'published_at DESC',
+      limit: 'all',
+      filter: `visibility:public+${EXCLUDED_TAGS_FILTER}`,
+    })
+
+    return [...response]
+  } catch (error) {
+    console.error('Failed to fetch posts for blog search:', error)
+    return []
+  }
+}
+
 const RELEASE_TITLE_PATTERN = /\bv\d+\.\d+/
 
 export function findLatestReleasePost(posts: PostOrPage[]): PostOrPage | null {
