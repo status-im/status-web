@@ -167,7 +167,7 @@ def deployBranch() {
     case 'status.network':
       return isMasterBranch() ? 'deploy-status-network-main' : 'deploy-status-network-develop'
     case 'get.status.app':
-      return isMasterBranch() ? 'deploy-get-status-app-main' : 'deploy-get-status-app-develop'
+      return isMasterBranch() ? 'deploy-get-status-app-master' : 'deploy-get-status-app-develop'
     default:
       error("Unknown app: ${params.APP_NAME}.")
   }
@@ -176,11 +176,11 @@ def deployBranch() {
 def deployDomain() {
   switch (params.APP_NAME) {
     case 'hub':
-      return isMasterBranch() ? 'hub.status.network' : 'dev.hub.status.network'
+      return isMasterBranch() ? 'hub.status.network' : 'dev-hub.status.network'
     case 'status.network':
       return isMasterBranch() ? 'status.network' : 'dev.status.network'
     case 'get.status.app':
-      return isMasterBranch() ? 'get.status.app' : 'dev.get.status.app'
+      return isMasterBranch() ? 'get.status.app' : 'dev-get.status.app'
     default:
       error("Unknown app: ${params.APP_NAME}.")
   }

@@ -14,6 +14,7 @@ import {
 } from '~/utils/structured-data'
 import { Metadata } from '~app/_metadata'
 import { formatDate } from '~app/_utils/format-time'
+import { isHelpDocWorkInProgress } from '~app/_utils/help-doc'
 import { Icon } from '~components/assets'
 import { Breadcrumbs } from '~components/breadcrumbs'
 import { Admonition } from '~components/content/admonition'
@@ -66,6 +67,14 @@ export async function generateMetadata({ params }: Props) {
     alternates: {
       canonical,
     },
+    // Keep placeholder docs out of the index; they only render a
+    // "work in progress" notice and would otherwise be crawled as thin pages.
+    ...(isHelpDocWorkInProgress(doc) && {
+      robots: {
+        index: false,
+        follow: true,
+      },
+    }),
   })
 }
 
@@ -114,7 +123,7 @@ export default async function HelpDetailPage(props: Props) {
   const isIndex = doc['_raw'].sourceFileName.includes('index.md')
   const { content } = await getLegalDocumentContent(doc['_raw'].sourceFilePath)
 
-  const workInProgress = doc.body.raw === ''
+  const workInProgress = isHelpDocWorkInProgress(doc)
 
   const authors = parseAuthors(doc.author)
 

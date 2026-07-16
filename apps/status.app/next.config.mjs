@@ -277,6 +277,16 @@ let config = {
         destination: '/specs/status-payloads',
         statusCode: 301,
       },
+      {
+        source: '/specs/account-address',
+        destination: '/specs/status-account-address',
+        statusCode: 301,
+      },
+      {
+        source: '/specs/status-community-history-archives',
+        destination: '/specs/status-community-history-service',
+        statusCode: 301,
+      },
     ]
   },
 }

@@ -1,9 +1,4 @@
-import {
-  Avatar,
-  Button,
-  DropdownMenu,
-  /*Tooltip*/
-} from '@status-im/components'
+import { Avatar, Button, DropdownMenu, Tooltip } from '@status-im/components'
 import {
   AddIcon,
   ChevronDownIcon,
@@ -11,7 +6,7 @@ import {
   KeycardIcon,
   WalletIcon,
 } from '@status-im/icons/20'
-// import { shortenAddress } from '@status-im/wallet/components'
+import { shortenAddress } from '@status-im/wallet/components'
 import { useNavigate } from '@tanstack/react-router'
 
 import { useWallet } from '@/providers/wallet-context'
@@ -25,16 +20,29 @@ type Props = {
 const DEFAULT_ACCOUNT_EMOJI = '🍑'
 const DEFAULT_ACCOUNT_NAME = 'Account 1'
 
+// SLIP-44 coin type for Ethereum. The account switcher only surfaces EVM
+// accounts because the current account drives the (EVM-only) portfolio views.
+const ETHEREUM_COIN_TYPE = 60
+
 export function WalletSelector(props: Props) {
   const { className } = props
   const navigate = useNavigate()
-  const { wallets, currentWallet /*, currentAccount*/, setCurrentWallet } =
-    useWallet()
+  const {
+    wallets,
+    currentWallet,
+    currentAccount,
+    setCurrentWallet,
+    setCurrentAccount,
+  } = useWallet()
   const isWatchOnly = currentWallet?.type === 'hardware-qr'
 
   if (!currentWallet) {
     return null
   }
+
+  const selectableAccounts = currentWallet.accounts.filter(
+    account => account.coin === ETHEREUM_COIN_TYPE,
+  )
 
   return (
     <div
@@ -46,7 +54,7 @@ export function WalletSelector(props: Props) {
         <Avatar
           type="account"
           size="24"
-          // TODO: Use currently selected account name instead when multi-account support is implemented.
+          // TODO: Use currently selected account name instead when named accounts are supported.
           name={currentWallet.name ?? DEFAULT_ACCOUNT_NAME}
           emoji={DEFAULT_ACCOUNT_EMOJI}
           bgOpacity="20"
@@ -56,15 +64,13 @@ export function WalletSelector(props: Props) {
             {currentWallet.name}
           </div>
           {isWatchOnly && <WatchOnlyTag />}
-          {/* TODO: Uncomment to display current account's name
-          when multi-account support is implemented */}
-          {/* {currentAccount?.address ? (
-            <Tooltip content={DEFAULT_ACCOUNT_NAME} side="top">
+          {currentAccount?.address ? (
+            <Tooltip content={currentAccount.address} side="top">
               <div className="text-13 font-medium text-neutral-50">
                 {shortenAddress(currentAccount.address)}
               </div>
             </Tooltip>
-          ) : null} */}
+          ) : null}
         </div>
       </div>
 
@@ -87,6 +93,23 @@ export function WalletSelector(props: Props) {
               onClick={() => setCurrentWallet(wallet.id)}
             />
           ))}
+
+          {selectableAccounts.length > 0 && (
+            <>
+              <DropdownMenu.Separator />
+              <DropdownMenu.Label>Accounts</DropdownMenu.Label>
+              {selectableAccounts.map(account => (
+                <DropdownMenu.Item
+                  key={account.address}
+                  icon={<WalletIcon />}
+                  label={shortenAddress(account.address)}
+                  selected={account.address === currentAccount?.address}
+                  onClick={() => setCurrentAccount(account.address)}
+                />
+              ))}
+            </>
+          )}
+
           <DropdownMenu.Separator />
           <DropdownMenu.Item
             icon={<AddIcon />}

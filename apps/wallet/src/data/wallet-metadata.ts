@@ -142,6 +142,19 @@ export async function addAccount(
   await save(wallet)
 }
 
+export async function setSelectedAccount(
+  walletId: string,
+  address: string,
+): Promise<void> {
+  const wallet = await get(walletId)
+  if (!wallet) throw new Error(`Wallet ${walletId} not found`)
+  if (!wallet.accounts.some(a => a.address === address)) {
+    throw new Error(`Account ${address} not found in wallet ${walletId}`)
+  }
+  wallet.selectedAccountAddress = address
+  await save(wallet)
+}
+
 export async function remove(walletId: string): Promise<void> {
   const store = await getStore()
   delete store[walletId]
