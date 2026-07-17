@@ -221,7 +221,11 @@ export function AddAccountFlow({ backHref, successHref }: Props) {
       )}
 
       <div className="mt-auto">
-        <Button onClick={handleCreate} disabled={!canCreate}>
+        <Button
+          onClick={handleCreate}
+          disabled={!canCreate}
+          style={{ width: '100%' }}
+        >
           {isCreating ? 'Creating…' : 'Create account'}
         </Button>
       </div>
