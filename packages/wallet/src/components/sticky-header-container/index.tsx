@@ -9,8 +9,9 @@ const backgroundStyles = cva(
   {
     variants: {
       collapsed: {
-        false: 'max-h-[48px] min-h-[48px] border-transparent bg-transparent',
-        true: 'max-h-[64px] min-h-[64px] border-neutral-20 bg-blur-white/70 backdrop-blur-[20px]',
+        false:
+          'pointer-events-none max-h-[48px] min-h-[48px] border-transparent bg-transparent',
+        true: 'pointer-events-auto max-h-[64px] min-h-[64px] border-neutral-20 bg-blur-white/70 backdrop-blur-[20px]',
       },
       size: {
         default: '',
