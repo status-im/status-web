@@ -1,6 +1,6 @@
 import { createTRPCProxyClient } from '@trpc/client'
 import { initTRPC } from '@trpc/server'
-import superjson from 'superjson'
+import superjson, { serialize } from 'superjson'
 import { createChromeHandler } from 'trpc-chrome/adapter'
 import { getAddress, isAddress } from 'viem'
 import {
@@ -86,6 +86,12 @@ const t = initTRPC.context<Context>().create({
   transformer: superjson,
   isServer: false,
   allowOutsideOfServer: true,
+  // trpc-chrome's handler posts this shape verbatim while its link runs it
+  // through the transformer's deserialize; serialize here so error messages
+  // survive the chrome transport instead of collapsing to "Unknown error"
+  errorFormatter({ shape }) {
+    return serialize(shape) as unknown as typeof shape
+  },
 })
 
 const { createCallerFactory, router } = t
