@@ -24,6 +24,8 @@ export async function createTRPCContext(opts: { headers: Headers }) {
 
 type ApiContext = Awaited<ReturnType<typeof createTRPCContext>>
 
+type RPCCategory = 'permanent' | 'short' | 'minimal'
+
 /**
  * 2. INITIALIZATION
  *
@@ -81,10 +83,7 @@ const marketRateLimitMiddleware = createRateLimitMiddleware(trpc, {
  * - short: Semi-static data (balances, calls)
  * - minimal: Highly dynamic data (gas prices, fees, nonces)
  */
-const RPC_METHOD_CATEGORY_MAP: Record<
-  string,
-  'permanent' | 'short' | 'minimal'
-> = {
+const RPC_METHOD_CATEGORY_MAP: Record<string, RPCCategory> = {
   // Permanent: Immutable data (60 RPM)
   eth_getBlockByNumber: 'permanent',
   eth_getTransactionReceipt: 'permanent',
@@ -129,6 +128,26 @@ const RPC_CATEGORY_LIMITS: Record<string, number> = {
   minimal: 15,
 }
 
+function getRpcMethod(rawInput: unknown): string | undefined {
+  if (!rawInput || typeof rawInput !== 'object') return undefined
+
+  const input = rawInput as {
+    method?: unknown
+    json?: { method?: unknown }
+  }
+  const method = input.method ?? input.json?.method
+
+  return typeof method === 'string' ? method : undefined
+}
+
+export function getRpcCategory(
+  path: string | undefined,
+  rawInput?: unknown,
+): RPCCategory {
+  const method = path === 'rpc.proxy' ? getRpcMethod(rawInput) : undefined
+  return RPC_METHOD_CATEGORY_MAP[method ?? path ?? ''] ?? 'short'
+}
+
 /**
  * Rate limiting for ETH RPC Proxy (Alchemy)
  *
@@ -139,11 +158,11 @@ const RPC_CATEGORY_LIMITS: Record<string, number> = {
 const ethRPCRateLimitMiddleware = createRateLimitMiddleware(trpc, {
   windowMs: 60 * 1000, // 1 minute
   maxRequests: opts => {
-    const category = RPC_METHOD_CATEGORY_MAP[opts.path] ?? 'short'
+    const category = getRpcCategory(opts.path, opts.rawInput)
     return RPC_CATEGORY_LIMITS[category]
   },
   keyPrefix: 'eth-rpc',
-  getCategory: opts => RPC_METHOD_CATEGORY_MAP[opts.path] ?? 'short',
+  getCategory: opts => getRpcCategory(opts.path, opts.rawInput),
   message: 'RPC request rate limit exceeded. Please try again in a minute.',
 })
 
@@ -152,17 +171,13 @@ const ethRPCRateLimitMiddleware = createRateLimitMiddleware(trpc, {
  *
  * RATIONALE:
  * - Protects the API from excessive requests to any domain
- * - Keys by host header to limit per domain (regardless of IP address)
- * - Fixed window: 60 seconds, 3000 requests per host
+ * - Keys by client IP so one caller cannot consume every user's allowance.
+ * - Fixed window: 60 seconds, 3000 requests per client
  */
-const globalHostRateLimitMiddleware = createRateLimitMiddleware(trpc, {
+const globalClientRateLimitMiddleware = createRateLimitMiddleware(trpc, {
   windowMs: 60 * 1000, // 1 minute
-  maxRequests: 3000, // 3000 requests per minute per host
-  keyPrefix: 'global-host',
-  getKey: opts => {
-    const host = opts.ctx.headers.get('host') || 'unknown'
-    return host
-  },
+  maxRequests: 3000, // 3000 requests per minute per client
+  keyPrefix: 'global-client',
   message:
     'Too many requests to this API domain. Please try again in a minute.',
 })
@@ -187,9 +202,9 @@ const errorMiddleware = trpc.middleware(async opts => {
   return result
 })
 
-// Unauthenticated procedure (Standard) with global host-based rate limiting
+// Unauthenticated procedure (Standard) with global client-based rate limiting
 export const publicProcedure = trpc.procedure
-  .use(globalHostRateLimitMiddleware)
+  .use(globalClientRateLimitMiddleware)
   .use(errorMiddleware)
 
 // Procedure for Market data endpoints
@@ -197,3 +212,8 @@ export const marketProcedure = publicProcedure.use(marketRateLimitMiddleware)
 
 // Procedure for Node/RPC endpoints
 export const ethRPCProcedure = publicProcedure.use(ethRPCRateLimitMiddleware)
+
+// Procedures that call both upstreams must consume both independent budgets.
+export const ethRPCAndMarketProcedure = ethRPCProcedure.use(
+  marketRateLimitMiddleware,
+)
