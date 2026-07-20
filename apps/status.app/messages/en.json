@@ -240,6 +240,7 @@
     "clearSearch": "Clear search",
     "categoryFilterLabel": "Filter posts by category",
     "resultCount": "{count, plural, one {# result} other {# results}}",
+    "loadMore": "Load more",
     "clearFilters": "Clear filters",
     "searchLoading": "Searching articles…",
     "searchUnavailableTitle": "Search is unavailable",

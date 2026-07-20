@@ -8,16 +8,32 @@ import { PostTag } from './post-tag'
 
 import type { PostOrPage } from '@tryghost/content-api'
 
+export type PostCardPost = Pick<
+  PostOrPage,
+  | 'id'
+  | 'slug'
+  | 'title'
+  | 'custom_excerpt'
+  | 'excerpt'
+  | 'feature_image'
+  | 'feature_image_alt'
+  | 'published_at'
+  | 'primary_tag'
+  | 'primary_author'
+>
+
 type PostCardProps = {
-  post: PostOrPage
+  post: PostCardPost
   showTag?: boolean
   showAuthor?: boolean
+  showExcerpt?: boolean
 }
 
 export const PostCard = (props: PostCardProps) => {
-  const { post, showTag = true, showAuthor = true } = props
+  const { post, showTag = true, showAuthor = true, showExcerpt = false } = props
   const author = post.primary_author!
   const tag = post.primary_tag
+  const excerpt = post.custom_excerpt ?? post.excerpt
 
   return (
     <Link
@@ -36,6 +52,10 @@ export const PostCard = (props: PostCardProps) => {
             {post.title}
           </Text>
         </div>
+
+        {showExcerpt && excerpt && (
+          <p className="line-clamp-2 text-15 text-neutral-50">{excerpt}</p>
+        )}
 
         {showAuthor ? (
           <div className="mt-auto flex h-5 gap-1">
@@ -58,6 +78,8 @@ export const PostCard = (props: PostCardProps) => {
           className="aspect-[334/188] size-full rounded-16 object-cover"
           src={post.feature_image!}
           alt={post.feature_image_alt!}
+          loading="lazy"
+          decoding="async"
         />
       </div>
     </Link>
