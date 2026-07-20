@@ -13,11 +13,28 @@ export type BlogSearchDocument = {
 
 export type BlogSearchRecord = Pick<BlogSearchDocument, 'id' | 'categorySlugs'>
 
+export type BlogSearchPost = Pick<
+  PostOrPage,
+  | 'id'
+  | 'slug'
+  | 'title'
+  | 'custom_excerpt'
+  | 'excerpt'
+  | 'feature_image'
+  | 'feature_image_alt'
+  | 'published_at'
+  | 'primary_tag'
+  | 'primary_author'
+>
+
 export type BlogSearchPayload = {
-  posts: PostOrPage[]
+  posts: BlogSearchPost[]
   records: BlogSearchRecord[]
   searchIndex: object
 }
+
+export const BLOG_SEARCH_QUERY_MAX_LENGTH = 200
+export const BLOG_SEARCH_RESULTS_PER_PAGE = 24
 
 const SEARCH_OPTIONS = {
   fields: ['title', 'excerpt', 'body', 'categories'],
@@ -91,10 +108,12 @@ export function createBlogSearchPayload(posts: PostOrPage[]) {
     return document ? [document] : []
   })
 
-  const postsWithoutBodies: PostOrPage[] = posts.map(post => ({
+  const postsWithoutBodies: BlogSearchPost[] = posts.map(post => ({
     id: post.id,
     slug: post.slug,
     title: post.title,
+    custom_excerpt: post.custom_excerpt,
+    excerpt: post.excerpt,
     feature_image: post.feature_image,
     feature_image_alt: post.feature_image_alt,
     published_at: post.published_at,
