@@ -7,12 +7,16 @@ import { Metadata } from '~app/_metadata'
 import { Body } from '~components/body'
 import { getPosts } from '~website/_lib/ghost'
 
+import { isBlogCategory } from './_categories'
 import { BlogSearch } from './_components/blog-search'
-import { isBlogCategory } from './_tags'
-import { getBlogSearchResultIds, loadBlogSearchIndex } from './_utils/search'
-import { readBlogSearchPayload } from './_utils/search.server'
+import {
+  BLOG_SEARCH_QUERY_MAX_LENGTH,
+  BLOG_SEARCH_RESULTS_PER_PAGE,
+  getBlogSearchResultIds,
+} from './_utils/search'
+import { readBlogSearchData } from './_utils/search.server'
 
-import type { PostOrPage } from '@tryghost/content-api'
+import type { BlogSearchPost } from './_utils/search'
 import type { Metadata as NextMetadata } from 'next'
 
 export const revalidate = 3600 // 1 hour
@@ -42,25 +46,32 @@ export default async function BlogPage({ searchParams }: Props) {
     getPosts(),
     searchParams,
   ])
-  const query = typeof params.q === 'string' ? params.q.slice(0, 200) : ''
+  const query =
+    typeof params.q === 'string'
+      ? params.q.slice(0, BLOG_SEARCH_QUERY_MAX_LENGTH)
+      : ''
   const categoryParam =
     typeof params.category === 'string' ? params.category : ''
   const category = isBlogCategory(categoryParam) ? categoryParam : undefined
   const isFiltering = query.trim().length > 0 || Boolean(category)
-  let initialResultPosts: PostOrPage[] = []
+  let initialResultPosts: BlogSearchPost[] = []
+  let initialResultCount = 0
 
   if (isFiltering) {
-    const payload = await readBlogSearchPayload()
-    const postsById = new Map(payload.posts.map(post => [post.id, post]))
-    initialResultPosts = getBlogSearchResultIds(
-      loadBlogSearchIndex(payload.searchIndex),
+    const { index, postsById, payload } = await readBlogSearchData()
+    const resultIds = getBlogSearchResultIds(
+      index,
       payload.records,
       query,
       category
-    ).flatMap(id => {
-      const post = postsById.get(id)
-      return post ? [post] : []
-    })
+    )
+    initialResultCount = resultIds.length
+    initialResultPosts = resultIds
+      .slice(0, BLOG_SEARCH_RESULTS_PER_PAGE)
+      .flatMap(id => {
+        const post = postsById.get(id)
+        return post ? [post] : []
+      })
   }
 
   const websiteSchema = jsonLD.website({
@@ -90,6 +101,7 @@ export default async function BlogPage({ searchParams }: Props) {
               initialPosts={initialPosts}
               meta={meta}
               initialResultPosts={initialResultPosts}
+              initialResultCount={initialResultCount}
               initialQuery={query}
               initialCategory={category}
             />

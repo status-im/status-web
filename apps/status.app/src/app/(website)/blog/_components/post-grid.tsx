@@ -4,16 +4,18 @@ import { useEffect, useRef, useState } from 'react'
 
 import { PostCard, PostCardSkeleton } from './post-card'
 
-import type { PostOrPage } from '@tryghost/content-api'
+import type { PostCardPost } from './post-card'
 
 export function PostGrid({
   posts,
   isLoading,
   hasNextPage,
+  showExcerpt,
 }: {
-  posts: PostOrPage[]
+  posts: PostCardPost[]
   isLoading: boolean
   hasNextPage?: boolean
+  showExcerpt?: boolean
 }) {
   const gridRef = useRef<HTMLDivElement | null>(null)
   const [columnCount, setColumnCount] = useState(1)
@@ -61,7 +63,7 @@ export function PostGrid({
       className="grid auto-rows-[1fr] grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-5"
     >
       {visiblePosts.map(post => (
-        <PostCard key={post.id} post={post} />
+        <PostCard key={post.id} post={post} showExcerpt={showExcerpt} />
       ))}
       {isLoading && (
         <>
