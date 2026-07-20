@@ -46,6 +46,7 @@ export function BlogSearch(props: Props) {
     'idle' | 'loading' | 'ready' | 'error'
   >('idle')
   const searchRequest = useRef<Promise<void> | null>(null)
+  const selectedCategoryRef = useRef<HTMLButtonElement>(null)
 
   const loadSearchPayload = useCallback(() => {
     if (searchPayload || searchRequest.current) return searchRequest.current
@@ -102,6 +103,14 @@ export function BlogSearch(props: Props) {
   useEffect(() => setQuery(initialQuery), [initialQuery])
   useEffect(() => setCategory(initialCategory), [initialCategory])
   useEffect(() => {
+    if (!category) return
+
+    selectedCategoryRef.current?.scrollIntoView({
+      block: 'nearest',
+      inline: 'center',
+    })
+  }, [category])
+  useEffect(() => {
     if (isFiltering) void loadSearchPayload()
   }, [isFiltering, loadSearchPayload])
 
@@ -149,7 +158,7 @@ export function BlogSearch(props: Props) {
           }}
           placeholder={t('searchPlaceholder')}
           aria-label={t('searchLabel')}
-          className="h-14 w-full rounded-16 border border-neutral-30 bg-white-100 px-12 text-19 text-neutral-100 outline-none transition-colors placeholder:text-neutral-40 hover:border-neutral-40 focus:border-neutral-50 focus-visible:ring-2 focus-visible:ring-customisation-50 focus-visible:ring-offset-2"
+          className="h-14 w-full rounded-16 border border-neutral-30 bg-white-100 px-12 text-19 text-neutral-100 outline-none transition-colors placeholder:text-neutral-40 hover:border-neutral-40 focus:border-neutral-50 focus-visible:ring-2 focus-visible:ring-customisation-50 focus-visible:ring-offset-2 [&::-webkit-search-cancel-button]:hidden"
         />
         {query && (
           <button
@@ -174,6 +183,7 @@ export function BlogSearch(props: Props) {
             <button
               type="button"
               key={slug}
+              ref={isSelected ? selectedCategoryRef : undefined}
               aria-pressed={isSelected}
               onClick={() => {
                 setCategory(isSelected ? undefined : slug)
