@@ -17,7 +17,12 @@ import {
   fetchTokenPriceHistory,
   fetchTokensPrice,
 } from '../../services/coingecko/index'
-import { ethRPCProcedure, router } from '../lib/trpc'
+import {
+  ethRPCAndMarketProcedure,
+  ethRPCProcedure,
+  marketProcedure,
+  router,
+} from '../lib/trpc'
 
 import type {
   CoinGeckoCoinDetailResponse,
@@ -195,7 +200,7 @@ async function fetchTokenData(
 }
 
 export const assetsRouter = router({
-  all: ethRPCProcedure
+  all: ethRPCAndMarketProcedure
     .input(
       z.object({
         address: z.string(),
@@ -216,7 +221,7 @@ export const assetsRouter = router({
 
       return await cachedAll(inputHash)
     }),
-  nativeToken: ethRPCProcedure
+  nativeToken: ethRPCAndMarketProcedure
     .input(
       z.object({
         address: z.string(),
@@ -240,7 +245,7 @@ export const assetsRouter = router({
 
       return await cachedNativeToken(inputHash)
     }),
-  token: ethRPCProcedure
+  token: ethRPCAndMarketProcedure
     .input(
       z.object({
         address: z.string(),
@@ -264,7 +269,7 @@ export const assetsRouter = router({
 
       return await cachedToken(inputHash)
     }),
-  nativeTokenPriceChart: ethRPCProcedure
+  nativeTokenPriceChart: marketProcedure
     .input(
       z.object({
         symbol: z.string(),
@@ -276,7 +281,7 @@ export const assetsRouter = router({
 
       return await cachedNativeTokenPriceChart(inputHash)
     }),
-  tokenPriceChart: ethRPCProcedure
+  tokenPriceChart: marketProcedure
     .input(
       z.object({
         symbol: z.string(),
@@ -315,7 +320,7 @@ export const assetsRouter = router({
 
       return await cachedTokenBalanceChart(inputHash)
     }),
-  nativeTokenValueChart: ethRPCProcedure
+  nativeTokenValueChart: ethRPCAndMarketProcedure
     .input(
       z.object({
         address: z.string(),
@@ -329,7 +334,7 @@ export const assetsRouter = router({
 
       return await cachedNativeTokenValueChart(inputHash)
     }),
-  tokenValueChart: ethRPCProcedure
+  tokenValueChart: ethRPCAndMarketProcedure
     .input(
       z.object({
         address: z.string(),

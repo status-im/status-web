@@ -117,7 +117,9 @@ async function _fetchWithAuth<T>(
       }
     }
 
-    throw new Error(`Failed to fetch: ${response.status} ${errorMessage}`)
+    throw new Error(`Failed to fetch: ${response.status} ${errorMessage}`, {
+      cause: response.status,
+    })
   }
 
   const body: T = await response.json()
