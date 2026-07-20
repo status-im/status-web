@@ -13,6 +13,7 @@ export interface RateLimitMiddlewareOptions<TNextResult = Promise<unknown>> {
   ctx: RateLimitContext
   next: () => TNextResult
   path?: string
+  rawInput?: unknown
 }
 
 export interface RateLimitOptions<TOpts extends RateLimitMiddlewareOptions> {
@@ -29,6 +30,15 @@ const requestCounts = new Map<string, { count: number; resetTime: number }>()
 let lastPruneAt = 0
 
 const PRUNE_INTERVAL_MS = 60 * 1000
+
+export function getClientIp(headers: RateLimitContext['headers']): string {
+  return (
+    headers.get('x-vercel-forwarded-for')?.split(',')[0]?.trim() ||
+    headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+    headers.get('x-real-ip')?.trim() ||
+    'unknown'
+  )
+}
 
 export const clearRateLimitCache = () => {
   requestCounts.clear()
@@ -67,8 +77,7 @@ export const createRateLimitMiddleware = <
     if (getKey) {
       key = `${keyPrefix}:${getKey(opts)}`
     } else {
-      const ip =
-        ctx.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+      const ip = getClientIp(ctx.headers)
       const category = getCategory ? getCategory(opts) : undefined
       key = `${keyPrefix}:${category ? category + ':' : ''}${ip}`
     }

@@ -1,5 +1,3 @@
-// todo: rate limiting
-
 // @see https://trpc.io/docs/server/adapters/nextjs#route-handlers for nextjs app router implementation
 // @see https://github.com/trpc/trpc/blob/8cef54eaf95d8abc8484fe1d454b6620eeb57f2f/www/versioned_docs/version-10.x/further/rpc.md for http rpc spec
 // @see https://stackoverflow.com/questions/78800979/trpc-giving-error-when-trying-to-test-with-postman for calling via postman
@@ -81,9 +79,14 @@ async function handler(request: NextRequest) {
           cacheControl = 'private, no-store'
         }
 
+        const isRateLimited = opts.errors?.some(
+          error => error.code === 'TOO_MANY_REQUESTS'
+        )
+
         return {
           headers: {
             'cache-control': cacheControl,
+            ...(isRateLimited && { 'Retry-After': '60' }),
             ...getCorsHeaders(),
           },
         }
@@ -159,12 +162,22 @@ function getCorsHeaders(): Record<string, string> {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Expose-Headers': 'Retry-After',
   }
 }
 
 /**
  * Processes a single JSON-RPC call through the tRPC rpc.proxy mutation.
  */
+class JsonRpcHttpError extends Error {
+  constructor(
+    message: string,
+    readonly status: number
+  ) {
+    super(message)
+  }
+}
+
 async function processSingleJsonRpc(
   request: NextRequest,
   jsonRpcCall: { method: string; params?: unknown[]; id?: string | number },
@@ -180,18 +193,27 @@ async function processSingleJsonRpc(
       const headers = new Headers(await nextHeaders())
       return { headers }
     },
-    responseMeta: () => ({
-      headers: {
-        'cache-control': 'private, no-store',
-        ...getCorsHeaders(),
-      },
-    }),
+    responseMeta: opts => {
+      const isRateLimited = opts.errors?.some(
+        error => error.code === 'TOO_MANY_REQUESTS'
+      )
+      return {
+        headers: {
+          'cache-control': 'private, no-store',
+          ...(isRateLimited && { 'Retry-After': '60' }),
+          ...getCorsHeaders(),
+        },
+      }
+    },
   })
 
   if (!response.ok) {
-    throw new Error(
+    const body = await response.json().catch(() => null)
+    const message =
+      body?.error?.json?.message ||
+      body?.error?.message ||
       `tRPC handler error: ${response.status} ${response.statusText}`
-    )
+    throw new JsonRpcHttpError(message, response.status)
   }
 
   const trpcResponse = await response.json()
@@ -218,11 +240,13 @@ async function handleJsonRpcProxy(request: NextRequest): Promise<Response> {
         try {
           return await processSingleJsonRpc(request, call, chainId)
         } catch (error) {
+          const isRateLimited =
+            error instanceof JsonRpcHttpError && error.status === 429
           return {
             jsonrpc: '2.0' as const,
             id: call.id ?? null,
             error: {
-              code: -32603,
+              code: isRateLimited ? -32005 : -32603,
               message:
                 error instanceof Error
                   ? error.message
@@ -233,7 +257,19 @@ async function handleJsonRpcProxy(request: NextRequest): Promise<Response> {
       })
     )
 
-    return Response.json(results, { headers: corsHeaders })
+    const hasRateLimitedCall = results.some(result => {
+      if (!result || typeof result !== 'object' || !('error' in result)) {
+        return false
+      }
+      return (result.error as { code?: number })?.code === -32005
+    })
+
+    return Response.json(results, {
+      headers: {
+        ...corsHeaders,
+        ...(hasRateLimitedCall && { 'Retry-After': '60' }),
+      },
+    })
   }
 
   try {
@@ -245,19 +281,24 @@ async function handleJsonRpcProxy(request: NextRequest): Promise<Response> {
 
     return Response.json(result, { headers: corsHeaders })
   } catch (error) {
+    const status = error instanceof JsonRpcHttpError ? error.status : 500
+    const isRateLimited = status === 429
     return Response.json(
       {
         jsonrpc: '2.0',
         id: jsonRpcBody?.id ?? null,
         error: {
-          code: -32603,
+          code: isRateLimited ? -32005 : -32603,
           message:
             error instanceof Error ? error.message : 'Internal server error',
         },
       },
       {
-        status: 500,
-        headers: corsHeaders,
+        status,
+        headers: {
+          ...corsHeaders,
+          ...(isRateLimited && { 'Retry-After': '60' }),
+        },
       }
     )
   }
