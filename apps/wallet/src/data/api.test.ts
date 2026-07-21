@@ -323,3 +323,173 @@ test('should require a password when importing the first hardware wallet', async
     }),
   ).rejects.toThrow()
 }, 7000)
+
+test('should add the next sequential account to a wallet', async () => {
+  await createAPI()
+  const apiClient = createAPIClient()
+
+  const importedWallet = await apiClient.wallet.import.mutate({
+    mnemonic: 'test test test test test test test test test test test junk',
+    password: 'password',
+    derivationPaths: ["m/44'/60'/0'/0/0"],
+  })
+
+  const account = await apiClient.wallet.account.ethereum.add.mutate({
+    walletId: importedWallet.id,
+  })
+
+  expect(account).toMatchObject({
+    address: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
+    derivationPath: "m/44'/60'/0'/0/1",
+  })
+
+  const wallets = await apiClient.wallet.all.query()
+  const wallet = wallets.find(w => w.id === importedWallet.id)
+  expect(wallet?.accounts).toHaveLength(2)
+  expect(wallet?.selectedAccountAddress).toBe(account.address)
+}, 15000)
+
+test('should add an account at a custom derivation path', async () => {
+  await createAPI()
+  const apiClient = createAPIClient()
+
+  const importedWallet = await apiClient.wallet.import.mutate({
+    mnemonic: 'test test test test test test test test test test test junk',
+    password: 'password',
+    derivationPaths: ["m/44'/60'/0'/0/0"],
+  })
+
+  const custom = await apiClient.wallet.account.ethereum.add.mutate({
+    walletId: importedWallet.id,
+    derivationPath: "m/44'/60'/0'/0/5",
+  })
+  expect(custom.address).toBe('0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc')
+
+  // The next sequential account continues after the highest imported index
+  const next = await apiClient.wallet.account.ethereum.add.mutate({
+    walletId: importedWallet.id,
+  })
+  expect(next.derivationPath).toBe("m/44'/60'/0'/0/6")
+}, 15000)
+
+test('should reject adding an already imported account', async () => {
+  await createAPI()
+  const apiClient = createAPIClient()
+
+  const importedWallet = await apiClient.wallet.import.mutate({
+    mnemonic: 'test test test test test test test test test test test junk',
+    password: 'password',
+    derivationPaths: ["m/44'/60'/0'/0/0"],
+  })
+
+  await expect(
+    apiClient.wallet.account.ethereum.add.mutate({
+      walletId: importedWallet.id,
+      derivationPath: "m/44'/60'/0'/0/0",
+    }),
+  ).rejects.toThrow(/ACCOUNT_ALREADY_EXISTS/)
+
+  await expect(
+    apiClient.wallet.account.ethereum.add.mutate({
+      walletId: importedWallet.id,
+      derivationPath: 'not-a-path',
+    }),
+  ).rejects.toThrow()
+
+  const accounts = await apiClient.wallet.account.all.query({
+    walletId: importedWallet.id,
+  })
+  expect(accounts).toHaveLength(1)
+}, 15000)
+
+test('should reject adding an account to a non-mnemonic wallet', async () => {
+  await createAPI()
+  const apiClient = createAPIClient()
+
+  const importedWallet = await apiClient.wallet.importHardware.mutate({
+    name: 'Keystone Wallet',
+    vendor: 'Keystone',
+    password: 'hardware-password',
+    address: '0x1234567890abcdef1234567890abcdef12345678',
+    derivationPath: "m/44'/60'/0'/0/7",
+    publicKey: 'xpub661MyMwAqRbcF7FakePublicKey',
+  })
+
+  await expect(
+    apiClient.wallet.account.ethereum.add.mutate({
+      walletId: importedWallet.id,
+    }),
+  ).rejects.toThrow(/WALLET_CANNOT_DERIVE/)
+}, 7000)
+
+test('should reject adding an account when the session is locked', async () => {
+  await createAPI()
+  const apiClient = createAPIClient()
+
+  const importedWallet = await apiClient.wallet.import.mutate({
+    mnemonic: 'test test test test test test test test test test test junk',
+    password: 'password',
+    derivationPaths: ["m/44'/60'/0'/0/0"],
+  })
+
+  await apiClient.session.lock.mutate()
+
+  await expect(
+    apiClient.wallet.account.ethereum.add.mutate({
+      walletId: importedWallet.id,
+    }),
+  ).rejects.toThrow()
+}, 15000)
+
+test('should preview an account of an existing wallet', async () => {
+  const activeAddress = '0x70997970C51812dc3A010C7d01b50e0d17dc79C8'
+
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async (_url: unknown, init?: RequestInit) => {
+      const body = JSON.parse(init?.body as string)
+      const isActive =
+        body.method === 'eth_getTransactionCount' &&
+        body.params[0] === activeAddress
+      return new Response(
+        JSON.stringify({
+          jsonrpc: '2.0',
+          id: body.id,
+          result: isActive ? '0x1' : '0x0',
+        }),
+      )
+    }),
+  )
+
+  await createAPI()
+  const apiClient = createAPIClient()
+
+  const importedWallet = await apiClient.wallet.import.mutate({
+    mnemonic: 'test test test test test test test test test test test junk',
+    password: 'password',
+    derivationPaths: ["m/44'/60'/0'/0/0"],
+  })
+
+  // Without a path, previews the next sequential account
+  const next = await apiClient.wallet.account.ethereum.preview.mutate({
+    walletId: importedWallet.id,
+  })
+  expect(next).toMatchObject({
+    address: activeAddress,
+    derivationPath: "m/44'/60'/0'/0/1",
+    active: true,
+    alreadyImported: false,
+  })
+
+  const imported = await apiClient.wallet.account.ethereum.preview.mutate({
+    walletId: importedWallet.id,
+    derivationPath: "m/44'/60'/0'/0/0",
+  })
+  expect(imported.alreadyImported).toBe(true)
+
+  // Preview does not persist anything
+  const accounts = await apiClient.wallet.account.all.query({
+    walletId: importedWallet.id,
+  })
+  expect(accounts).toHaveLength(1)
+}, 15000)

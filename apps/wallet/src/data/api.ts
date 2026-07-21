@@ -1,6 +1,6 @@
 import { createTRPCProxyClient } from '@trpc/client'
-import { initTRPC } from '@trpc/server'
-import superjson from 'superjson'
+import { initTRPC, TRPCError } from '@trpc/server'
+import superjson, { serialize } from 'superjson'
 import { createChromeHandler } from 'trpc-chrome/adapter'
 import { getAddress, isAddress } from 'viem'
 import {
@@ -17,6 +17,7 @@ import {
   deriveAccountsAtPaths,
   deriveNextAccountIndex,
   derivePrivateKey,
+  nextDerivationPath,
   privateKeyFromData,
 } from './derive'
 import * as ethereum from './ethereum/ethereum'
@@ -61,6 +62,38 @@ const hardwareWalletImportSchema = z.object({
   sourceFingerprint: z.number().int().nonnegative().max(0xffffffff).optional(),
 })
 
+// Loads a wallet that can derive new accounts (mnemonic only) and resolves
+// the derivation path to use: the provided one, or the next sequential
+// Ethereum path after the wallet's existing accounts.
+async function resolveEthereumDerivation(
+  walletCore: Context['walletCore'],
+  walletId: string,
+  derivationPath: string | undefined,
+): Promise<{ wallet: WalletMeta; derivationPath: string }> {
+  const wallet = await walletMetadata.get(walletId)
+  if (!wallet) throw new Error('Wallet not found')
+  // TRPCError so the message survives the chrome transport; trpc-chrome
+  // replaces other error types with a generic "Internal server error"
+  if (wallet.type !== 'mnemonic') {
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message:
+        'WALLET_CANNOT_DERIVE: only mnemonic wallets support deriving new accounts',
+    })
+  }
+  return {
+    wallet,
+    derivationPath:
+      derivationPath ??
+      nextDerivationPath(
+        walletCore,
+        wallet.accounts,
+        walletCore.CoinType.ethereum,
+        walletCore.Derivation.default,
+      ),
+  }
+}
+
 async function getSigningKey(
   ctx: Context,
   walletId: string,
@@ -86,6 +119,12 @@ const t = initTRPC.context<Context>().create({
   transformer: superjson,
   isServer: false,
   allowOutsideOfServer: true,
+  // trpc-chrome's handler posts this shape verbatim while its link runs it
+  // through the transformer's deserialize; serialize here so error messages
+  // survive the chrome transport instead of collapsing to "Unknown error"
+  errorFormatter({ shape }) {
+    return serialize(shape) as unknown as typeof shape
+  },
 })
 
 const { createCallerFactory, router } = t
@@ -339,27 +378,82 @@ const apiRouter = router({
           .input(
             z.object({
               walletId: z.string(),
-              name: z.string(),
+              name: z.string().optional(),
+              derivationPath: derivationPathSchema.optional(),
             }),
           )
           .mutation(async ({ input, ctx }) => {
             const { walletCore } = ctx
-            const wallet = await walletMetadata.get(input.walletId)
-            if (!wallet) throw new Error('Wallet not found')
-            const mnemonic = await ctx.session.getMnemonic(input.walletId)
-            const index = deriveNextAccountIndex(
-              wallet.accounts,
-              walletCore.CoinType.ethereum.value,
+            const { wallet, derivationPath } = await resolveEthereumDerivation(
+              walletCore,
+              input.walletId,
+              input.derivationPath,
             )
-            const account = deriveAccount(
+            if (wallet.accounts.some(a => a.derivationPath === derivationPath))
+              throw new TRPCError({
+                code: 'CONFLICT',
+                message:
+                  'ACCOUNT_ALREADY_EXISTS: derivation path already imported',
+              })
+            const mnemonic = await ctx.session.getMnemonic(input.walletId)
+            const [account] = deriveAccountsAtPaths(
               walletCore,
               mnemonic,
               walletCore.CoinType.ethereum,
               walletCore.Derivation.default,
-              index,
+              [derivationPath],
             )
+            if (wallet.accounts.some(a => a.address === account.address))
+              throw new TRPCError({
+                code: 'CONFLICT',
+                message: 'ACCOUNT_ALREADY_EXISTS: address already imported',
+              })
             await walletMetadata.addAccount(input.walletId, account)
-            return { id: account.address }
+            await walletMetadata.setSelectedAccount(
+              input.walletId,
+              account.address,
+            )
+            return account
+          }),
+
+        // Derives the account of an existing wallet at a derivation path (or
+        // the next sequential path) and reports whether it has on-chain
+        // activity and is already imported. Does not persist anything. Unlike
+        // wallet.previewAccount, the mnemonic never leaves the background.
+        preview: procedure
+          .input(
+            z.object({
+              walletId: z.string(),
+              derivationPath: derivationPathSchema.optional(),
+            }),
+          )
+          .mutation(async ({ input, ctx }) => {
+            const { walletCore } = ctx
+            const { wallet, derivationPath } = await resolveEthereumDerivation(
+              walletCore,
+              input.walletId,
+              input.derivationPath,
+            )
+            const mnemonic = await ctx.session.getMnemonic(input.walletId)
+            const [account] = deriveAccountsAtPaths(
+              walletCore,
+              mnemonic,
+              walletCore.CoinType.ethereum,
+              walletCore.Derivation.default,
+              [derivationPath],
+            )
+            let active = false
+            try {
+              active = await hasActivity(account.address)
+            } catch {
+              // Activity check is informational only; ignore RPC failures
+            }
+            const alreadyImported = wallet.accounts.some(
+              a =>
+                a.derivationPath === account.derivationPath ||
+                a.address === account.address,
+            )
+            return { ...account, active, alreadyImported }
           }),
 
         // note: our first tx https://holesky.etherscan.io/tx/0xdc2aa244933260c50e665aa816767dce6b76d5d498e6358392d5f79bfc9626d5

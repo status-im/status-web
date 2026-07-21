@@ -107,6 +107,15 @@ export function WalletSelector(props: Props) {
                   onClick={() => setCurrentAccount(account.address)}
                 />
               ))}
+              {currentWallet.type === 'mnemonic' && (
+                <DropdownMenu.Item
+                  icon={<AddIcon />}
+                  label="Create account"
+                  onClick={() => {
+                    navigate({ to: '/wallet-flow/add-account' })
+                  }}
+                />
+              )}
             </>
           )}
 
