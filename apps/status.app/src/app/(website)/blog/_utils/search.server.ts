@@ -5,25 +5,26 @@ import path from 'node:path'
 import { cwd } from 'node:process'
 
 import { getBlogSearchResultIds, loadBlogSearchIndex } from './search'
-import {
-  BLOG_SEARCH_INDEX_DIRECTORY,
-  BLOG_SEARCH_INDEX_FILENAME,
-} from './search-index-path'
 
 import type { BlogSearchPayload } from './search'
 import type { BlogSearchResults } from './search-config'
 
-// Written by `scripts/generate-blog-search-index.ts` before `next build`. The
-// two candidate paths cover the differing working directories of the Vercel and
-// standalone/Docker runtimes.
+/**
+ * Written by `scripts/generate-blog-search-index.ts` before `next build`. The
+ * two candidates cover the differing working directories of the Vercel and
+ * standalone/Docker runtimes.
+ *
+ * These paths MUST stay inline string literals. @vercel/nft resolves
+ * `path.join(cwd(), '<literal>')` to a single file; move the segments into
+ * imported constants and it can no longer resolve the expression, falls back to
+ * globbing the working directory, and drags the ~1GB `.next/cache` into the
+ * function until it blows past Vercel's 250mb limit.
+ *
+ * Keep in sync with the output path in scripts/generate-blog-search-index.ts.
+ */
 const SEARCH_INDEX_PATHS = [
-  path.join(cwd(), BLOG_SEARCH_INDEX_DIRECTORY, BLOG_SEARCH_INDEX_FILENAME),
-  path.join(
-    cwd(),
-    'apps/status.app',
-    BLOG_SEARCH_INDEX_DIRECTORY,
-    BLOG_SEARCH_INDEX_FILENAME
-  ),
+  path.join(cwd(), 'public/blog-search-index.json'),
+  path.join(cwd(), 'apps/status.app/public/blog-search-index.json'),
 ]
 
 let searchPayloadPromise: Promise<BlogSearchPayload> | undefined
