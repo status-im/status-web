@@ -176,7 +176,9 @@ export async function page({
       activities.push(...results)
     } catch (err) {
       console.error(`[alchemy] Error fetching transfers for ${network}:`, err)
-      throw new Error(`Failed to fetch transfers for ${network}`)
+      throw new Error(`Failed to fetch transfers for ${network}`, {
+        cause: err,
+      })
     }
   }
 
