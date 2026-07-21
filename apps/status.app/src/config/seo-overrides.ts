@@ -52,7 +52,7 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
   '/learn': {
     title: 'Learn: Guides to Privacy, Security & Open Technology',
     description:
-      'In-depth technical content on privacy, cryptography, secure messaging, distributed networks, and the systems powering open communication technologies.',  // ← COMMA NEEDED HERE
+      'In-depth technical content on privacy, cryptography, secure messaging, distributed networks, and the systems powering open communication technologies.',
   },
   '/apps': {
     title: 'Download the Status Desktop App and Mobile App Suite',
