@@ -1,5 +1,7 @@
 import { TRPCError } from '@trpc/server'
 
+import { RateLimitError } from '../../../utils/error-cause'
+
 /**
  * Rate limiting configuration
  */
@@ -117,6 +119,10 @@ export const createRateLimitMiddleware = <
       throw new TRPCError({
         code: 'TOO_MANY_REQUESTS',
         message,
+        cause: new RateLimitError(
+          message,
+          Math.max(1, Math.ceil((record.resetTime - now) / 1000)),
+        ),
       })
     }
 

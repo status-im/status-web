@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { getRetryAfterSeconds } from '../../../utils/error-cause'
 import {
   clearRateLimitCache,
   createRateLimitMiddleware,
@@ -55,9 +56,13 @@ describe('rate limiter', () => {
 
     await expect(request(middleware, '192.0.2.1')).resolves.toBe('ok')
     await expect(request(middleware, '192.0.2.1')).resolves.toBe('ok')
-    await expect(request(middleware, '192.0.2.1')).rejects.toMatchObject({
+    const rejectedRequest = request(middleware, '192.0.2.1')
+    await expect(rejectedRequest).rejects.toMatchObject({
       code: 'TOO_MANY_REQUESTS',
     })
+    await expect(rejectedRequest).rejects.toSatisfy(
+      error => getRetryAfterSeconds(error) === 60,
+    )
   })
 
   it('keeps independent counters per client IP', async () => {

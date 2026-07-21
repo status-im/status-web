@@ -10,6 +10,11 @@ import retry from 'async-retry'
 import { serverEnv } from '../../../config/env.server.mjs'
 import erc20TokenList from '../../../constants/erc20.json'
 import { setRevalidationBucket } from '../../../utils'
+import {
+  hasErrorCause,
+  parseRetryAfterSeconds,
+  RateLimitError,
+} from '../../../utils/error-cause'
 import { DEFAULT_TOKEN_IDS } from '../../api/routers/assets'
 import { markApiKeyAsRateLimited } from '../api-key-rotation'
 
@@ -117,9 +122,14 @@ async function _fetchWithAuth<T>(
       }
     }
 
-    throw new Error(`Failed to fetch: ${response.status} ${errorMessage}`, {
-      cause: response.status,
-    })
+    const message = `Failed to fetch: ${response.status} ${errorMessage}`
+    if (response.status === 429) {
+      throw new RateLimitError(
+        message,
+        parseRetryAfterSeconds(response.headers.get('retry-after')),
+      )
+    }
+    throw new Error(message, { cause: response.status })
   }
 
   const body: T = await response.json()
@@ -134,13 +144,20 @@ async function _fetchWithAuth<T>(
     const error = body.error as { message?: string }
     console.error(error.message || 'Unknown error')
 
-    if (error.message?.toLowerCase().includes('rate limit')) {
+    const isRateLimited = error.message?.toLowerCase().includes('rate limit')
+    if (isRateLimited) {
       const apiKey = url.searchParams.get('api_key')
       if (apiKey) {
         markApiKeyAsRateLimited(apiKey)
       }
     }
 
+    if (isRateLimited) {
+      throw new RateLimitError(
+        'Failed to fetch.',
+        parseRetryAfterSeconds(response.headers.get('retry-after')),
+      )
+    }
     throw new Error('Failed to fetch.')
   }
 
@@ -293,7 +310,8 @@ async function _getCoinIdFromAddress(symbol: string): Promise<string | null> {
     }
 
     return coin.id
-  } catch {
+  } catch (error) {
+    if (hasErrorCause(error, 429)) throw error
     return null
   }
 }
@@ -436,6 +454,7 @@ export async function fetchTokensPrice(
     return data
   } catch (error: unknown) {
     console.error('Failed to fetch prices:', error)
+    if (hasErrorCause(error, 429)) throw error
     return {}
   }
 }
@@ -472,6 +491,7 @@ export async function fetchTokenMarkets(
     return marketsData[0] || null
   } catch (error: unknown) {
     console.error(`Failed to fetch markets data for ${symbol}:`, error)
+    if (hasErrorCause(error, 429)) throw error
     return null
   }
 }
@@ -518,6 +538,7 @@ export async function fetchTokensPriceForDate(
         }
       }
     } catch (err) {
+      if (hasErrorCause(err, 429)) throw err
       console.warn(`No price data for ${symbol}:`, String(err))
     }
   }
