@@ -41,9 +41,7 @@ yarn-error.log*
 # Excludes sitemap.xml and robots.txt files
 public/sitemap.xml
 public/robots.txt
-
-# generated blog search index (see scripts/generate-blog-search-index.ts)
-.blog-search/
+public/blog-search-index.json
 
 # local scripts
 .scripts

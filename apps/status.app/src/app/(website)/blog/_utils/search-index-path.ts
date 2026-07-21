@@ -5,9 +5,12 @@
  * it. Kept out of `./search.server` because that imports `server-only`, which
  * throws when pulled into a plain Node build script.
  *
- * Deliberately outside `public/`: the index is only read on the server, and at
- * ~3MB it has no business being a downloadable static asset. It is kept in the
- * deployment bundle by `outputFileTracingIncludes` in next.config.mjs.
+ * It lives under `public/` so the deployment bundles it as a static asset that
+ * the server can still read from disk. Moving it elsewhere requires an
+ * `outputFileTracingIncludes` entry, which is a trap: a `./dir/**\/*` glob there
+ * also drags `.next/cache/webpack/*.pack` into the function and blows past
+ * Vercel's 250mb function limit. Nothing fetches this file from the browser --
+ * blog search goes through /api/blog/search.
  */
-export const BLOG_SEARCH_INDEX_DIRECTORY = '.blog-search'
-export const BLOG_SEARCH_INDEX_FILENAME = 'index.json'
+export const BLOG_SEARCH_INDEX_DIRECTORY = 'public'
+export const BLOG_SEARCH_INDEX_FILENAME = 'blog-search-index.json'
