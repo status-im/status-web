@@ -59,10 +59,34 @@
         "INFURA_API_KEY"
       ]
     },
+    "status.app#build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", ".contentlayer/**"],
+      "passThroughEnv": [
+        "NEXT_PUBLIC_GHOST_API_URL",
+        "NEXT_PUBLIC_GHOST_API_KEY",
+        "NEXT_PUBLIC_INFURA_API_KEY",
+        "NEXT_PUBLIC_HASURA_API_URL",
+        "INFURA_API_KEY",
+        "GREENHOUSE_API_KEY",
+        "GREENHOUSE_STATUS_BOARD_ID",
+        "GREENHOUSE_LOGOS_BOARD_ID",
+        "GITHUB_TOKEN"
+      ]
+    },
     "status.network#build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**"],
-      "passThroughEnv": ["GHOST_API_URL", "GHOST_API_KEY"]
+      "outputs": [".next/**", "out/**"],
+      "passThroughEnv": [
+        "GHOST_API_URL",
+        "GHOST_API_KEY",
+        "NEXT_PUBLIC_GHOST_API_URL",
+        "NEXT_PUBLIC_GHOST_API_KEY"
+      ]
+    },
+    "get.status.app#build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "out/**"]
     },
     "comment_build:content": {
       "cache": true,

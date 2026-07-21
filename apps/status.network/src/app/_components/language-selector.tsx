@@ -4,7 +4,8 @@ import * as Select from '@radix-ui/react-select'
 import { CheckIcon, ChevronDownIcon } from '@status-im/icons/20'
 import { usePathname, useRouter } from '~/i18n/navigation'
 import { cx } from 'cva'
-import { useParams } from 'next/navigation'
+import { useLocale } from 'next-intl'
+import { useRouter as useNextRouter } from 'next/navigation'
 import { routing } from '../../i18n/routing'
 
 const languages = [
@@ -22,16 +23,20 @@ const languages = [
 
 export const LanguageSelector = () => {
   const router = useRouter()
+  const nextRouter = useNextRouter()
   const pathname = usePathname()
-  const params = useParams()
-  const currentLocale = (params['locale'] as string) || routing.defaultLocale
+  const currentLocale = useLocale()
 
   const selectedLanguage =
     languages.find(lang => lang.value === currentLocale) || languages[0]
 
   const handleValueChange = (newLocale: string) => {
-    // Use next-intl's router with locale option for proper locale switching
-    router.replace(pathname, { locale: newLocale as 'en' | 'ko' })
+    if (newLocale === routing.defaultLocale) {
+      // Static export strips /en — navigate to the unprefixed path
+      nextRouter.replace(pathname)
+    } else {
+      router.replace(pathname, { locale: newLocale as 'en' | 'ko' })
+    }
   }
 
   return (

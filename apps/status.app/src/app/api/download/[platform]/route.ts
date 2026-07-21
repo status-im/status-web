@@ -1,12 +1,12 @@
-import { Octokit } from '@octokit/rest'
-import { track } from '@vercel/analytics/server'
 import { NextResponse } from 'next/server'
 import { match } from 'ts-pattern'
 import { z } from 'zod'
 
-export const dynamic = 'force-dynamic'
+import { getLatestRelease } from '~server/services/github'
+import { track } from '~server/services/umami'
 
-const octokit = new Octokit()
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
 
 const querySchema = z.object({
   platform: z.enum([
@@ -19,7 +19,7 @@ const querySchema = z.object({
 })
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ platform: string }> }
 ) {
   const result = querySchema.safeParse({
@@ -33,54 +33,54 @@ export async function GET(
   const { platform } = result.data
 
   if (platform === 'android') {
-    const release = await octokit.repos.getLatestRelease({
-      owner: 'status-im',
-      repo: 'status-app',
-    })
+    const release = await getLatestRelease({ repo: 'status-app' })
 
-    await track('Download', {
-      platform: 'android',
-      version: release.data.tag_name,
-      store: 'direct',
-    })
+    await track(
+      'Download',
+      {
+        platform: 'android',
+        version: release.tag_name,
+        store: 'direct',
+      },
+      request
+    )
 
-    const { browser_download_url: downloadUrl } = release.data.assets.find(
-      asset => asset.name.endsWith('arm64.apk')
+    const { browser_download_url: downloadUrl } = release.assets.find(asset =>
+      asset.name.endsWith('arm64.apk')
     )!
 
     return NextResponse.redirect(downloadUrl)
   }
 
   try {
-    const release = await octokit.repos.getLatestRelease({
-      owner: 'status-im',
-      repo: 'status-app',
-    })
+    const release = await getLatestRelease({ repo: 'status-app' })
 
     // @see https://github.com/status-im/status-app/releases
     const { browser_download_url: downloadUrl } = match(platform)
       .with(
         'macos-silicon',
-        () =>
-          release.data.assets.find(asset => asset.name.endsWith('aarch64.dmg'))!
+        () => release.assets.find(asset => asset.name.endsWith('aarch64.dmg'))!
       )
       .with(
         'macos-intel',
-        () =>
-          release.data.assets.find(asset => asset.name.endsWith('x86_64.dmg'))!
+        () => release.assets.find(asset => asset.name.endsWith('x86_64.dmg'))!
       )
       .with(
         'windows',
-        () => release.data.assets.find(asset => asset.name.endsWith('.exe'))!
+        () => release.assets.find(asset => asset.name.endsWith('.exe'))!
       )
       .with(
         'linux',
         () =>
-          release.data.assets.find(asset =>
-            asset.name.endsWith('x86_64.tar.gz')
-          )!
+          release.assets.find(asset => asset.name.endsWith('x86_64.tar.gz'))!
       )
       .exhaustive()
+
+    await track(
+      'Download',
+      { platform, version: release.tag_name, store: 'direct' },
+      request
+    )
 
     const response = NextResponse.redirect(downloadUrl)
 

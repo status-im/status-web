@@ -3,9 +3,9 @@ import { ExternalIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
 import { getTranslations } from 'next-intl/server'
 
-import { KEYCARD_STORE_URL } from '~/config/routes'
 import { isGetSite } from '~/config/site-scope'
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
+import { buildLandingPageStructuredData } from '~/utils/structured-data'
 import { Metadata } from '~app/_metadata'
 import { Image, Video } from '~components/assets'
 import { Body } from '~components/body'
@@ -25,6 +25,7 @@ import { NewsTag } from './_components/news-tag'
 import { ParallaxCircle } from './_components/parallax-circle'
 
 import type { FeatureListProps } from './_components/feature-list'
+import type { ImageId } from '~components/assets'
 
 export const revalidate = 3600 // 1 hour
 
@@ -109,27 +110,41 @@ export default async function HomePage() {
         },
       ]
 
-  const organizationSchema = jsonLD.organization({
-    description:
-      'Private, secure by design. Transact, Message, Browse on your Terms.',
-  })
+  const statusWebsiteDescription =
+    'Private, secure by design. Transact, Message, Browse on your Terms.'
 
-  const websiteSchema = jsonLD.website({
-    description:
-      'Private, secure by design. Transact, Message, Browse on your Terms.',
-  })
+  const schema = isGetSite
+    ? jsonLD.website({
+        name: 'Status App',
+        url: 'https://get.status.app',
+        description:
+          'Private, secure by design. Manager Assets, Message, Browse on your Terms.',
+      })
+    : [
+        jsonLD.organization({
+          description: statusWebsiteDescription,
+        }),
+        jsonLD.website({
+          description: statusWebsiteDescription,
+        }),
+        buildLandingPageStructuredData({
+          name: 'Status',
+          description: statusWebsiteDescription,
+          path: '/',
+        }),
+      ]
 
   return (
     <>
-      <JSONLDScript schema={[organizationSchema, websiteSchema]} />
+      <JSONLDScript schema={schema} />
       {/* HERO */}
       <div
         data-theme="dark"
         className="relative w-full overflow-x-clip bg-neutral-100 pb-8 pt-16 lg:pb-16 lg:pt-24"
       >
-        <div className="container mx-auto grid grid-cols-1 gap-8 px-5 xl:grid-cols-2 xl:gap-0">
-          <div className="relative z-10 mx-auto flex max-w-[636px] flex-col items-center text-center xl:mx-0 xl:min-w-[640px] xl:items-start xl:text-left">
-            <h1 className="mb-4 text-48 font-bold text-white-100 lg:mb-10 lg:text-88">
+        <div className="container mx-auto grid w-full min-w-0 grid-cols-1 gap-8 px-5 xl:grid-cols-2 xl:gap-0">
+          <div className="relative z-10 mx-auto flex w-full max-w-[636px] flex-col items-center text-center xl:mx-0 xl:min-w-[640px] xl:max-w-[636px] xl:items-start xl:text-left">
+            <h1 className="mb-4 max-w-full text-48 font-bold text-white-100 lg:mb-10 lg:text-88">
               {t('heroTitle')
                 .split('\n')
                 .map((line, i) => (
@@ -169,42 +184,64 @@ export default async function HomePage() {
               </div>
             </div>
 
-            <div className="mb-9 flex max-w-full flex-row items-center gap-3 text-left sm:max-w-[572px] lg:mb-20">
-              <p className="text-13 font-medium text-white-100">
-                {t('migrateBanner')}
-              </p>
-              <Button
-                size="32"
-                variant="darkGrey"
-                href="https://status.app/blog/migrate-from-status-legacy-to-unified-status-mobile-app"
-                target="_blank"
-                rel="noopener noreferrer"
-                iconAfter={<ExternalIcon className="text-white-100" />}
-              >
-                {t('learnMore')}
-              </Button>
-            </div>
+            {!isGetSite && (
+              <div className="mb-9 flex max-w-full flex-row items-center gap-3 text-left sm:max-w-[572px] lg:mb-20">
+                <p className="text-13 font-medium text-white-100">
+                  {t('migrateBanner')}
+                </p>
+                <Button
+                  size="32"
+                  variant="darkGrey"
+                  href="https://status.app/blog/migrate-from-status-legacy-to-unified-status-mobile-app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  iconAfter={<ExternalIcon className="text-white-100" />}
+                >
+                  {t('learnMore')}
+                </Button>
+              </div>
+            )}
 
             {releaseResult && <NewsTag post={releaseResult} />}
           </div>
 
           <div className="relative hidden xl:block">
-            <Image
-              id="Homepage/Hero/device-mockups:2128:1292"
-              alt="Status app showing wallet and messenger on devices"
-              width={2128}
-              height={1292}
-              className="absolute left-0 top-1/2 z-20 ml-[18%] w-[170%] max-w-none translate-y-[-36%]"
-            />
+            {isGetSite ? (
+              <Image
+                id="get.status.app/Hero_app:2128:1292"
+                alt=""
+                width={2128}
+                height={1292}
+                className="absolute left-0 top-1/2 z-20 ml-[18%] w-[170%] max-w-none translate-y-[-36%]"
+              />
+            ) : (
+              <Image
+                id="Homepage/Hero/device-mockups:2128:1292"
+                alt="Status app showing wallet and messenger on devices"
+                width={2128}
+                height={1292}
+                className="absolute left-0 top-1/2 z-20 ml-[18%] w-[170%] max-w-none translate-y-[-36%]"
+              />
+            )}
           </div>
           <div className="relative mb-[-80px] xl:hidden">
-            <Image
-              id="Homepage/Hero/device-mockups-mobile:1267:770"
-              alt="Status app showing wallet and messenger on devices"
-              width={1267}
-              height={770}
-              className="relative z-20 w-[130%] max-w-none"
-            />
+            {isGetSite ? (
+              <Image
+                id="Homepage/Hero/device-mockups-mobile:1267:770"
+                alt="Status app showing messenger on devices"
+                width={1267}
+                height={770}
+                className="relative z-20 w-[130%] max-w-none"
+              />
+            ) : (
+              <Image
+                id="Homepage/Hero/device-mockups-mobile:1267:770"
+                alt="Status app showing messenger on devices"
+                width={1267}
+                height={770}
+                className="relative z-20 w-[130%] max-w-none"
+              />
+            )}
           </div>
         </div>
       </div>
@@ -231,7 +268,7 @@ export default async function HomePage() {
               type="wallet"
               title={
                 <>
-                  {t('walletTitle')
+                  {t(isGetSite ? 'assetTitle' : 'walletTitle')
                     .split('\n')
                     .map((line, i) => (
                       <span key={i}>
@@ -241,30 +278,43 @@ export default async function HomePage() {
                     ))}
                 </>
               }
-              description={t('walletDescription')}
+              description={t(
+                isGetSite ? 'assetDescription' : 'walletDescription'
+              )}
+              showFeatureTag={!isGetSite}
               secondary={
-                <div className="flex flex-col">
-                  <div className="p-4">
-                    <p className="text-19 font-semibold">
-                      {t('walletBuyTitle')}
-                    </p>
-                    <div className="flex pt-1">
-                      <p className="text-19 font-regular text-neutral-100">
-                        {t('walletBuyDescription')}
+                !isGetSite && (
+                  <div className="flex flex-col">
+                    <div className="p-4">
+                      <p className="text-19 font-semibold">
+                        {t('walletBuyTitle')}
                       </p>
+                      <div className="flex pt-1">
+                        <p className="text-19 font-regular text-neutral-100">
+                          {t('walletBuyDescription')}
+                        </p>
+                      </div>
                     </div>
+                    <Image
+                      id="Non Beta Release/Icons/Payment_Icons:648:96"
+                      alt="Payment method icons including credit card and Apple Pay"
+                      width={216}
+                      height={32}
+                      className="mb-4 ml-4"
+                    />
                   </div>
-                  <Image
-                    id="Non Beta Release/Icons/Payment_Icons:648:96"
-                    alt="Payment method icons including credit card and Apple Pay"
-                    width={216}
-                    height={32}
-                    className="mb-4 ml-4"
-                  />
-                </div>
+                )
               }
-              imageId="Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800"
-              imageAlt="Desktop screenshot showing the wallet feature included in the Status app"
+              imageId={
+                isGetSite
+                  ? ('get.status.app/Desktop_function:2480:1550' as ImageId)
+                  : 'Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800'
+              }
+              imageAlt={
+                isGetSite
+                  ? 'Desktop screenshot showing the features included in the Status app'
+                  : 'Desktop screenshot showing the wallet feature included in the Status app'
+              }
             />
           </ColorTheme>
 
@@ -422,51 +472,85 @@ export default async function HomePage() {
         <div className="flex flex-col items-center">
           <div
             className={cx([
-              'container pb-5',
+              'container w-full min-w-0 pb-5',
               'relative flex flex-col-reverse 2md:flex-row',
-              '2md:grid-cols-2 2md:items-center 2md:gap-14 lg:gap-12 xl:gap-[102px] 2xl:gap-[140px]',
+              '2md:grid-cols-2 2md:items-center',
+              isGetSite
+                ? 'gap-0'
+                : '2md:gap-14 lg:gap-12 xl:gap-[102px] 2xl:gap-[140px]',
             ])}
           >
-            <div className="absolute inset-x-1/2 top-0 z-20 h-20 w-screen -translate-x-1/2 bg-gradient-to-b from-white-100 to-transparent" />
             {/* Dividers */}
 
             <div className="absolute inset-x-1/2 top-0 z-10 h-px w-screen -translate-x-1/2 border-t border-dashed border-neutral-30" />
             <div className="absolute inset-x-1/2 bottom-0 z-10 h-px w-screen -translate-x-1/2 border-b border-dashed border-neutral-30" />
-            <div className="flex-1">
-              <div className="-ml-30 sm:-ml-24 lg:-ml-52 xl:-ml-44 2xl:-ml-60">
-                <Video
-                  id="Non Beta Release/Animations/Keycard_01:911:720"
-                  posterId="Non Beta Release/Animations/Frames/Keycard_01_Frame:456:360"
-                  className="w-full min-w-[390px] md:min-w-[613px] 2md:min-w-[386px] lg:min-w-[470px] xl:min-w-[544px] 2xl:min-w-[792px]"
-                />
-              </div>
+            <div className="flex w-full min-w-0">
+              {isGetSite ? (
+                <div className="w-full min-w-0 max-w-full overflow-hidden md:max-w-[580px] 2md:mt-12 2md:max-w-[360px] lg:max-w-[440px] xl:max-w-[510px] 2xl:max-w-[720px]">
+                  <Image
+                    id="get.status.app/Create_Community_Banner_Left_Frame_cc8nvh:1017:776"
+                    alt=""
+                    width={1017}
+                    height={776}
+                    className="w-full min-w-0 md:min-w-[613px] 2md:min-w-[386px] lg:min-w-[470px] xl:min-w-[544px] 2xl:min-w-[792px]"
+                  />
+                </div>
+              ) : (
+                <div className="-ml-30 sm:-ml-24 lg:-ml-52 xl:-ml-44 2xl:-ml-60">
+                  <Video
+                    id="Non Beta Release/Animations/Keycard_01:911:720"
+                    posterId="Non Beta Release/Animations/Frames/Keycard_01_Frame:456:360"
+                    className="w-full min-w-[390px] md:min-w-[613px] 2md:min-w-[386px] lg:min-w-[470px] xl:min-w-[544px] 2xl:min-w-[792px]"
+                  />
+                </div>
+              )}
             </div>
 
-            <div className="relative z-20 flex flex-1 flex-col items-start gap-8 px-5 py-12 sm:pt-24 2md:pt-10 lg:p-0">
-              <div className="flex max-w-none flex-1 flex-col gap-4 lg:gap-5 2xl:max-w-[462px]">
-                <div className="flex flex-col">
-                  <h2 className="relative inline-block whitespace-nowrap text-40 font-bold lg:text-64">
-                    {t('keycardTitle').split('\n')[0]}
-                  </h2>
-                  <h2 className="relative inline-block whitespace-nowrap text-40 font-bold lg:text-64">
-                    {t('keycardTitle').split('\n').slice(1).join(' ')}
-                    <span className="inline-block w-3 pt-1 align-top lg:w-4 lg:pt-[9px]">
-                      <CopyrightSymbol />
-                    </span>
-                  </h2>
+            <div
+              className={cx(
+                'relative z-20 flex w-full min-w-0 flex-1 flex-col items-start gap-8 px-5 py-12 sm:pt-24 2md:pt-10 lg:p-0',
+                isGetSite && '2md:-ml-4 lg:-ml-6 xl:-ml-8 2xl:-ml-10'
+              )}
+            >
+              <div
+                className={cx(
+                  'flex w-full min-w-0 max-w-full flex-1 flex-col gap-4 lg:gap-5',
+                  isGetSite ? '2xl:max-w-[520px]' : '2xl:max-w-[462px]'
+                )}
+              >
+                <div className="flex w-full min-w-0 flex-col">
+                  {isGetSite ? (
+                    <h2 className="relative max-w-full text-40 font-bold lg:text-64">
+                      {t('keycardTitle')}
+                    </h2>
+                  ) : (
+                    <>
+                      <h2 className="relative inline-block whitespace-nowrap text-40 font-bold lg:text-64">
+                        {t('keycardTitle').split('\n')[0]}
+                      </h2>
+                      <h2 className="relative inline-block whitespace-nowrap text-40 font-bold lg:text-64">
+                        {t('keycardTitle').split('\n').slice(1).join(' ')}
+                        <span className="inline-block w-3 pt-1 align-top lg:w-4 lg:pt-[9px]">
+                          <CopyrightSymbol />
+                        </span>
+                      </h2>
+                    </>
+                  )}
                 </div>
 
                 <Text size={19}>{t('keycardDescription')}</Text>
               </div>
-              <Button
-                variant="outline"
-                href={isGetSite ? KEYCARD_STORE_URL : '/keycard'}
-                {...(isGetSite
-                  ? { target: '_blank', rel: 'noopener noreferrer' }
-                  : {})}
-              >
-                {t('keycardLink')}
-              </Button>
+              {isGetSite ? (
+                <DownloadDesktopButton
+                  variant="outline"
+                  size="40"
+                  show="single"
+                />
+              ) : (
+                <Button variant="outline" href="/keycard">
+                  {t('keycardLink')}
+                </Button>
+              )}
             </div>
 
             <ParallaxCircle

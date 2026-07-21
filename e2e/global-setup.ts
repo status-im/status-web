@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 import { loadEnvConfig } from './src/config/env.js'
+import { runsHubProjects } from './src/config/test-servers.js'
 
 async function globalSetup(): Promise<void> {
   console.log('[global-setup] Validating environment...')
@@ -36,6 +37,30 @@ async function globalSetup(): Promise<void> {
   console.log(
     `[global-setup] MetaMask: ${fs.existsSync(env.METAMASK_EXTENSION_PATH) ? 'found' : 'NOT found'}`,
   )
+
+  // For a local Hub dev server, pre-compile the routes the tests hit so the first
+  // in-test navigation isn't racing Next's on-demand compile (Playwright's
+  // webServer only waits for the home route). Runs that don't include Hub
+  // projects don't start the Hub, so skip it there.
+  if (runsHubProjects() && /localhost|127\.0\.0\.1/.test(env.BASE_URL)) {
+    await warmUpRoutes(env.BASE_URL, ['/', '/pre-deposits'])
+  }
+}
+
+/** Hit routes once to trigger dev-server compilation; failures are non-fatal. */
+async function warmUpRoutes(baseUrl: string, routes: string[]): Promise<void> {
+  for (const route of routes) {
+    const url = new URL(route, baseUrl).toString()
+    try {
+      await fetch(url, { redirect: 'follow' })
+      console.log(`[global-setup] Warmed up ${route}`)
+    } catch (error) {
+      console.warn(
+        `[global-setup] Warm-up failed for ${route}: ` +
+          `${error instanceof Error ? error.message : error}`,
+      )
+    }
+  }
 }
 
 export default globalSetup

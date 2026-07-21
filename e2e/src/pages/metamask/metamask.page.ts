@@ -1,6 +1,5 @@
 import { EXTENSION_TIMEOUTS } from '@constants/timeouts.js'
 
-import { MetaMaskHomePage } from './home.page.js'
 import { NotificationPage } from './notification.page.js'
 import { OnboardingPage } from './onboarding.page.js'
 
@@ -9,7 +8,6 @@ import type { BrowserContext, Page } from '@playwright/test'
 export class MetaMaskPage {
   readonly onboarding: OnboardingPage
   readonly notification: NotificationPage
-  readonly home: MetaMaskHomePage
 
   private readonly extensionPrefix: string
 
@@ -20,7 +18,6 @@ export class MetaMaskPage {
     this.extensionPrefix = `chrome-extension://${extensionId}`
     this.onboarding = new OnboardingPage(context, extensionId)
     this.notification = new NotificationPage(context, extensionId)
-    this.home = new MetaMaskHomePage(context, extensionId)
   }
 
   /** Find the MetaMask extension page in the current context */
@@ -57,8 +54,8 @@ export class MetaMaskPage {
   }
 
   /** Approve a transaction in the MetaMask notification popup */
-  async approveTransaction(): Promise<void> {
-    await this.notification.approveTransaction()
+  async approveTransaction(contentTimeout?: number): Promise<void> {
+    await this.notification.approveTransaction(contentTimeout)
   }
 
   /** Reject a transaction in the MetaMask notification popup */

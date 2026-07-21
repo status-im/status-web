@@ -28,3 +28,30 @@ export const createCloudinaryUrl = (id: ImageId) => {
   const [publicId, width] = id.split(':')
   return cloudinaryLoader({ src: publicId, width: parseInt(width) })
 }
+
+const GET_SITE_CLOUDINARY_PREFIX = 'get.status.app/'
+
+export const isGetSiteCloudinaryAsset = (publicId: string) =>
+  publicId.startsWith(GET_SITE_CLOUDINARY_PREFIX)
+
+export const createCloudinaryVideoUrl = (publicId: string) => {
+  if (isGetSiteCloudinaryAsset(publicId)) {
+    return encodeURI(
+      `https://res.cloudinary.com/dhgck7ebz/video/upload/${publicId}`
+    )
+  }
+
+  return encodeURI(
+    `https://res.cloudinary.com/dhgck7ebz/video/upload/f_auto:video,q_auto/v1/${publicId}`
+  )
+}
+
+export const createCloudinaryVideoMovUrl = (publicId: string) => {
+  if (isGetSiteCloudinaryAsset(publicId)) {
+    return createCloudinaryVideoUrl(publicId)
+  }
+
+  return encodeURI(
+    `https://res.cloudinary.com/dhgck7ebz/video/upload/v1/${publicId}_HEVC.mov`
+  )
+}

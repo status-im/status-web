@@ -1,7 +1,7 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import './src/config/env.server.mjs'
+import { serverEnv } from './src/config/env.server.mjs'
 import './src/config/env.client.mjs'
 
 import createNextIntlPlugin from 'next-intl/plugin'
@@ -18,14 +18,15 @@ const turbopackAliases = {
   '~/config/env.server.mjs': './src/config/env.server.mjs',
   '~/config/env.client.mjs': './src/config/env.client.mjs',
   '~website/_lib/ghost': './src/stubs/ghost.ts',
+  '~components/assets$': './src/app/_components/assets',
   '~components/assets': './src/app/_components/assets',
-  '~': '../status.app/src',
   '~components': '../status.app/src/app/_components',
   '~hooks': '../status.app/src/app/_hooks',
   '~website': '../status.app/src/app/(website)',
   '~server': '../status.app/src/server',
   '~app': '../status.app/src/app',
   '~public': '../status.app/public',
+  '~': '../status.app/src',
 }
 
 // Webpack (production build) accepts absolute paths.
@@ -35,18 +36,20 @@ const webpackAliases = {
   '~/config/env.server.mjs': path.join(__dirname, 'src/config/env.server.mjs'),
   '~/config/env.client.mjs': path.join(__dirname, 'src/config/env.client.mjs'),
   '~website/_lib/ghost': path.join(__dirname, 'src/stubs/ghost.ts'),
+  '~components/assets$': path.join(__dirname, 'src/app/_components/assets'),
   '~components/assets': path.join(__dirname, 'src/app/_components/assets'),
-  '~': path.join(statusAppRoot, 'src'),
   '~components': path.join(statusAppRoot, 'src/app/_components'),
   '~hooks': path.join(statusAppRoot, 'src/app/_hooks'),
   '~website': path.join(statusAppRoot, 'src/app/(website)'),
   '~server': path.join(statusAppRoot, 'src/server'),
   '~app': path.join(statusAppRoot, 'src/app'),
   '~public': path.join(statusAppRoot, 'public'),
+  '~': path.join(statusAppRoot, 'src'),
 }
 
 /** @type {import('next').NextConfig} */
 let config = {
+  ...(serverEnv.NODE_ENV === 'production' && { output: 'export' }),
   reactStrictMode: true,
   pageExtensions: ['ts', 'tsx'],
   typescript: {
@@ -56,6 +59,7 @@ let config = {
     ignoreDuringBuilds: true,
   },
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',

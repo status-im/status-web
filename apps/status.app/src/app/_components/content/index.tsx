@@ -16,6 +16,7 @@ import { Admonition } from './admonition'
 import { CodeBlock } from './code-block'
 import * as desktopIcons from './icons/desktop'
 import {
+  renderContentTable,
   Table,
   TableCell,
   TableContent,
@@ -196,8 +197,15 @@ const baseComponents = {
       </h6>
     )
   },
-  blockquote: (props: ComponentProps<'blockquote'> & { size?: 19 | 27 }) => {
-    const { children, size = 27, ...rest } = props
+  blockquote: (
+    props: ComponentProps<'blockquote'> & { size?: 19 | 27; border?: string }
+  ) => {
+    const {
+      children,
+      size = 27,
+      border = 'border-l border-dashed border-neutral-30 pl-6',
+      ...rest
+    } = props
 
     const blockquoteChildren = Children.toArray(children).filter(
       child => child !== '\n'
@@ -206,10 +214,7 @@ const baseComponents = {
     return (
       <blockquote
         {...rest}
-        className={cx(
-          blockquoteParagraphTextSize[size],
-          'mt-5 border-l border-dashed border-neutral-30 !pt-0 pl-6'
-        )}
+        className={cx(blockquoteParagraphTextSize[size], border, 'mt-5 !pt-0')}
       >
         {/* {children} */}
         {/* {renderText({ children, size: paragraphTextSize[size] }))} */}
@@ -404,6 +409,7 @@ const baseComponents = {
       />
     )
   },
+  table: (props: ComponentProps<'table'>) => renderContentTable(props.children),
 }
 
 const SpaceDivider = (props: React.ComponentPropsWithoutRef<'div'>) => {
@@ -424,6 +430,13 @@ export const blogComponents = {
   ...baseComponents,
   h2: (props: ComponentProps<'h2'>) => {
     return baseComponents.h2({ ...props, mb: 'mb-4', mt: 'mt-6' })
+  },
+  blockquote: (props: ComponentProps<'blockquote'>) => {
+    return baseComponents.blockquote({
+      ...props,
+      size: 19,
+      border: 'border-l-2 border-neutral-40 pl-4',
+    })
   },
 }
 
@@ -507,37 +520,6 @@ export const specsComponents = {
   },
   li: (props: Parameters<typeof baseComponents.li>[0]) => {
     return baseComponents.li({ ...props, size: 15 })
-  },
-  table: (props: any) => {
-    const [head, body] = props.children
-    // const headers = head.props.children[0].props.children
-    const headers = head.props.children.props.children
-    const rows = body.props.children
-
-    return (
-      <Table>
-        <TableHead>
-          {headers.map((header: any, index: any) => (
-            // <TableHeader key={index}>{header.props.children[0]}</TableHeader>
-            <TableHeader key={index} {...header.props} />
-          ))}
-        </TableHead>
-
-        <TableContent>
-          {rows.map((row: any, index: any) => (
-            <TableRow key={index}>
-              {row.props.children.map((cell: any, index: any) => (
-                // <TableCell key={index}>{cell.props.children[0]}</TableCell>
-                <TableCell key={index} {...cell.props} />
-                // <TableCell key={index} {...cell.props}>
-                //   {/* {renderText(cell.props.children)} */}
-                // </TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableContent>
-      </Table>
-    )
   },
   Image: (props: { alt: string; src: string; id?: ImageId }) => {
     if (props.id) {

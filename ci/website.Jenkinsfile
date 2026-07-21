@@ -1,0 +1,202 @@
+#!/usr/bin/env groovy
+library 'status-jenkins-lib@v1.9.40'
+
+pipeline {
+  agent {
+    docker {
+      label 'linuxcontainer'
+      image 'harbor.status.im/infra/ci-build-containers:linux-base-1.0.0'
+      args '--volume=/nix:/nix ' +
+           '--volume=/etc/nix:/etc/nix '
+    }
+  }
+
+  options {
+    disableConcurrentBuilds()
+    disableRestartFromStage()
+    /* manage how many builds we keep */
+    buildDiscarder(logRotator(
+      numToKeepStr: '20',
+      daysToKeepStr: '30',
+    ))
+  }
+
+  parameters {
+    choice(
+      name: 'APP_NAME',
+      description: 'Name of the static app from apps folder.',
+      choices: choiceFromJobName(params.APP_NAME, [
+        'hub',
+        'status.network',
+        'get.status.app',
+      ]),
+    )
+    choice(
+      name: 'DOCKER_APP_NAME',
+      description: 'Name of the docker app from apps folder.',
+      choices: choiceFromJobName(params.DOCKER_APP_NAME, [
+        'status.app',
+      ]),
+    )
+    string(
+      name: 'NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID',
+      description: 'WalletConnect project ID for Web3 connectivity (hub).',
+      defaultValue: params.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ?: ''
+    )
+    string(
+      name: 'NEXT_PUBLIC_STATUS_NETWORK_API_URL',
+      description: 'Status Network API URL (hub).',
+      defaultValue: params.NEXT_PUBLIC_STATUS_NETWORK_API_URL ?: 'https://api-dev.status.network/api/v1'
+    )
+    string(
+      name: 'NEXT_PUBLIC_STATUS_API_URL',
+      description: 'Status API URL (hub).',
+      defaultValue: params.NEXT_PUBLIC_STATUS_API_URL ?: 'https://api-dev.status.network'
+    )
+    string(
+      name: 'NEXT_PUBLIC_RPC_PROXY_URL',
+      description: 'RPC proxy URL (hub).',
+      defaultValue: params.NEXT_PUBLIC_RPC_PROXY_URL ?: 'https://snt.eth-rpc.status.im/'
+    )
+    string(
+      name: 'NEXT_PUBLIC_USE_PUZZLE_AUTH',
+      description: 'Enable puzzle auth (hub).',
+      defaultValue: params.NEXT_PUBLIC_USE_PUZZLE_AUTH ?: 'true'
+    )
+    string(
+      name: 'GHOST_API_URL',
+      description: 'Ghost Content API URL (status.network).',
+      defaultValue: params.GHOST_API_URL ?: 'https://our.status.im'
+    )
+  }
+
+  environment {
+    GIT_COMMITTER_NAME = 'status-im-auto'
+    GIT_COMMITTER_EMAIL = 'auto@status.im'
+  }
+
+  stages {
+    stage('Install') {
+      steps {
+        script {
+          if (params.APP_NAME == 'status.network') {
+            sh 'git submodule update --init --recursive apps/status.network/content/legal-external'
+          }
+        }
+        dir("${env.WORKSPACE}/apps/${params.APP_NAME}") {
+          script {
+            nix.develop(
+              'pnpm install --frozen-lockfile --aggregate-output',
+              pure: false,
+            )
+          }
+        }
+      }
+    }
+
+    stage('Build') {
+      steps {
+        script {
+          nix.develop(
+            "pnpm turbo run build --filter=${params.APP_NAME}...",
+            pure: false,
+          )
+        }
+        dir("${env.WORKSPACE}/apps/${params.APP_NAME}") {
+          script {
+            switch (params.APP_NAME) {
+              case 'status.network':
+                buildStatusNetworkApp()
+                break
+              default:
+                nix.develop('pnpm build', pure: false)
+            }
+            jenkins.genBuildMetaJSON('out/build.json')
+          }
+        }
+      }
+    }
+
+    stage('Publish') {
+      steps {
+        sshagent(credentials: ['status-im-auto-ssh']) {
+          script {
+            nix.develop("""
+              ghp-import \
+                -b ${deployBranch()} \
+                -c ${deployDomain()} \
+                -p apps/${params.APP_NAME}/out
+              """,
+              pure: false,
+            )
+          }
+        }
+      }
+    }
+  }
+
+  post {
+    cleanup { cleanWs() }
+  }
+}
+
+List<String> moveToStart(List<String> original, String input) {
+  original.split {it.equals(input)}.flatten()
+}
+
+/* If job name contains one of choices make that the default(first). */
+def choiceFromJobName(String previousChoice, List defaultChoices) {
+  if (previousChoice != null) {
+    return moveToStart(defaultChoices, previousChoice)
+  }
+  def tokens = env.JOB_NAME.split('/')
+  for (choice in defaultChoices) {
+    if (tokens.contains(choice)) {
+      return moveToStart(defaultChoices, choice)
+    }
+  }
+  return defaultChoices
+}
+
+def isMasterBranch() { GIT_BRANCH ==~ /.*master/ }
+
+def deployBranch() {
+  switch (params.APP_NAME) {
+    case 'hub':
+      return isMasterBranch() ? 'deploy-hub-main' : 'deploy-hub-develop'
+    case 'status.network':
+      return isMasterBranch() ? 'deploy-status-network-main' : 'deploy-status-network-develop'
+    case 'get.status.app':
+      return isMasterBranch() ? 'deploy-get-status-app-master' : 'deploy-get-status-app-develop'
+    default:
+      error("Unknown app: ${params.APP_NAME}.")
+  }
+}
+
+def deployDomain() {
+  switch (params.APP_NAME) {
+    case 'hub':
+      return isMasterBranch() ? 'hub.status.network' : 'dev-hub.status.network'
+    case 'status.network':
+      return isMasterBranch() ? 'status.network' : 'dev.status.network'
+    case 'get.status.app':
+      return isMasterBranch() ? 'get.status.app' : 'dev-get.status.app'
+    default:
+      error("Unknown app: ${params.APP_NAME}.")
+  }
+}
+
+/* Secret text credential ID in Jenkins (Manage Credentials). */
+def buildStatusNetworkApp() {
+  withCredentials([
+    string(credentialsId: 'status-network-ghost-api-key', variable: 'GHOST_API_KEY'),
+  ]) {
+    withEnv([
+      "GHOST_API_URL=${params.GHOST_API_URL}",
+      "NEXT_PUBLIC_GHOST_API_URL=${params.GHOST_API_URL}",
+      "NEXT_PUBLIC_GHOST_API_KEY=${env.GHOST_API_KEY}",
+    ]) {
+      nix.develop('pnpm build', pure: false)
+    }
+  }
+}

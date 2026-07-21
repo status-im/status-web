@@ -10,6 +10,14 @@ export const KEYCARD_STORE_URL = 'https://keycard.tech?buyKeycard=true'
 
 export const STATUS_DESKTOP_REPO_ISSUES_URL =
   'https://github.com/status-im/status-app/issues/new?assignees=&labels=bug&projects=&template=bug.md'
+
+// Static, user-agent-independent download destination used as the crawlable
+// `href` for the get-site download buttons (which otherwise resolve the exact
+// asset URL client-side via the GitHub releases API). Keeping a real href here
+// means no-JS clients and crawlers always have a valid destination instead of a
+// link-less CTA. why: https://github.com/status-im/status-web/issues/1236
+export const STATUS_RELEASES_LATEST_URL =
+  'https://github.com/status-im/status-app/releases/latest'
 export const STATUS_DESKTOP_DOWNLOAD_URL_MACOS_SILICON =
   '/api/download/macos-silicon'
 export const STATUS_DESKTOP_DOWNLOAD_URL_MACOS_INTEL =
@@ -20,7 +28,7 @@ export const STATUS_DESKTOP_DOWNLOAD_URL_LINUX = '/api/download/linux'
 export const STATUS_MOBILE_APP_STORE_URL =
   'https://apps.apple.com/us/app/status-privacy-super-app/id6754166924'
 export const STATUS_MOBILE_GOOGLE_PLAY_URL =
-  'https://play.google.com/store/apps/details?id=app.status.mobile&ref=our.status.im'
+  'https://play.google.com/store/apps/details?id=app.status.mobile'
 export const STATUS_MOBILE_F_DROID_URL =
   'https://f-droid.org/packages/im.status.ethereum'
 export const STATUS_MOBILE_APK_URL = '/api/download/android'

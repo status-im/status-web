@@ -59,7 +59,17 @@ export default async function RootLayout({ children }: Props) {
   const [locale, messages] = await Promise.all([getLocale(), getMessages()])
 
   return (
-    <html lang={locale} className={inter.variable} suppressHydrationWarning>
+    // note: `data-platform="unknown"` is the SSR default so the download CTAs
+    // render visibly in the static HTML (the `unknown:*` Tailwind variants).
+    // The inline `platformScript` below refines it per platform before paint.
+    // Without a default, crawlers/no-JS clients see every CTA `hidden`, which
+    // reads as cloaking. why: https://github.com/status-im/status-web/issues/1236
+    <html
+      lang={locale}
+      data-platform="unknown"
+      className={inter.variable}
+      suppressHydrationWarning
+    >
       <head>
         <link rel="preconnect" href="https://res.cloudinary.com" />
         <link

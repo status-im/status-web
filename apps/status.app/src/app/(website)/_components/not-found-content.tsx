@@ -7,7 +7,7 @@ import { Body } from '~components/body'
 export async function NotFoundContent() {
   const t = await getTranslations('notFound')
   return (
-    <Body className="flex flex-1 flex-col items-center justify-center gap-8 text-center max-sm:rounded-b-0">
+    <Body className="flex h-full min-h-0 flex-1 flex-col items-center justify-center gap-8 text-center max-sm:rounded-b-0">
       <div className="z-10 flex flex-col items-center">
         <div className="mb-3 flex flex-col gap-2 py-3">
           <h2 className="text-19 font-semibold 2md:text-27">{t('title')}</h2>

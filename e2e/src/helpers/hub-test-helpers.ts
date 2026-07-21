@@ -1,7 +1,12 @@
 import { NOTIFICATION_TIMEOUTS } from '@constants/timeouts.js'
+import { expect, type Page } from '@playwright/test'
 
 import type { MetaMaskPage } from '@pages/metamask/metamask.page.js'
-import type { Page } from '@playwright/test'
+
+/** Hex chain id for `wallet_switchEthereumChain` / `eth_chainId` polling. */
+export function chainIdHex(chainId: number): string {
+  return `0x${chainId.toString(16)}`
+}
 
 /**
  * Force-switch MetaMask to a specific chain via the hub page.
@@ -27,6 +32,58 @@ export async function switchMetaMaskToChain(
   }, chainIdHex)
 
   await metamask.switchNetwork()
+}
+
+/**
+ * Read the account currently connected to the dApp via the injected provider.
+ *
+ * Use this when seeding on-chain state the Hub reads back: the Hub reads
+ * `balanceOf(connectedAccount)`, so funding must target the connected MetaMask
+ * account (the seed's account 0).
+ */
+export async function getConnectedAddress(page: Page): Promise<string> {
+  const address = await page.evaluate(async () => {
+    const eth = (
+      window as { ethereum?: { request: (a: unknown) => Promise<string[]> } }
+    ).ethereum
+    if (!eth) return undefined
+    const accounts = await eth.request({ method: 'eth_accounts' })
+    return accounts?.[0]
+  })
+
+  if (!address) {
+    throw new Error(
+      'No connected account found on the dApp page — is MetaMask connected?',
+    )
+  }
+  return address
+}
+
+/**
+ * Poll until the dApp provider reports the expected chain.
+ * Use after a network switch before submitting a chain-specific transaction.
+ */
+export async function waitForWalletChain(
+  page: Page,
+  chainId: number,
+  timeoutMs = 20_000,
+): Promise<void> {
+  const expected = chainIdHex(chainId)
+  await expect
+    .poll(
+      () =>
+        page.evaluate(async () => {
+          const eth = (
+            window as {
+              ethereum?: { request: (a: unknown) => Promise<string> }
+            }
+          ).ethereum
+          if (!eth) return null
+          return eth.request({ method: 'eth_chainId' })
+        }),
+      { timeout: timeoutMs },
+    )
+    .toBe(expected)
 }
 
 /**

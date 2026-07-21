@@ -20,9 +20,7 @@ export function handleError(error) {
     failedVariables.join(', ')
   )
   console.info(
-    'ℹ️ Pull environment variables from Vercel (or provide your own): vercel env pull .env.local'
+    'ℹ️ Copy .env.example to .env.local and fill in the values you need.'
   )
-  console.info(
-    'ℹ️ If exited while committing, add the variables to the example .env'
-  )
+  console.info('ℹ️ Or pull from Vercel: vercel env pull .env.local')
 }

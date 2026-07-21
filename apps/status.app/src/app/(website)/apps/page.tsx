@@ -3,7 +3,9 @@ import { DesktopIcon, MobileIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
 import { getTranslations } from 'next-intl/server'
 
+import { isGetSite } from '~/config/site-scope'
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
+import { buildLandingPageStructuredData } from '~/utils/structured-data'
 import { Metadata } from '~app/_metadata'
 import { Image, ScreenImage } from '~components/assets'
 import { Body } from '~components/body'
@@ -21,6 +23,8 @@ import type { ImageAlt, ImageType } from '~components/assets'
 import type { FeatureListProps } from '~website/_components/feature-list'
 import type { Metadata as NextMetadata } from 'next'
 
+type ScreenshotImage = ImageType
+
 export async function generateMetadata(): Promise<NextMetadata> {
   const t = await getTranslations('apps')
 
@@ -36,9 +40,23 @@ export async function generateMetadata(): Promise<NextMetadata> {
 export default async function AppsPage() {
   const t = await getTranslations('apps')
 
-  const organizationSchema = jsonLD.organization({
-    description: t('metaDescription'),
-  })
+  const schema = isGetSite
+    ? jsonLD.website({
+        name: 'Status App',
+        url: 'https://get.status.app',
+        description:
+          'Private, secure by design. Manager Assets, Message, Browse on your Terms.',
+      })
+    : [
+        jsonLD.organization({
+          description: t('metaDescription'),
+        }),
+        buildLandingPageStructuredData({
+          name: t('metaTitle'),
+          description: t('metaDescription'),
+          path: '/apps',
+        }),
+      ]
 
   const DESKTOP_FEATURE_LIST: FeatureListProps['list'] = [
     {
@@ -58,9 +76,46 @@ export default async function AppsPage() {
     },
   ]
 
+  const mobileScreenshots = (
+    isGetSite
+      ? [
+          { id: 'get.status.app/Mobile_Function:720:1600', alt: '' },
+          { id: 'get.status.app/Mobile_Chat_function:720:1600', alt: '' },
+          {
+            id: 'get.status.app/Mobile_Communities_function:720:1600',
+            alt: '',
+          },
+        ]
+      : [
+          {
+            id: 'Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624',
+            alt: t('mobileWalletScreenshotAlt'),
+          },
+          {
+            id: 'Platforms/Screens/Mobile Screens/New_Mobile_Chat:750:1624',
+            alt: t('mobileMessengerScreenshotAlt'),
+          },
+          {
+            id: 'Platforms/Screens/Mobile Screens/New_Mobile_Communities:750:1624',
+            alt: t('mobileCommunityScreenshotAlt'),
+          },
+        ]
+  ) as ScreenshotImage[]
+
+  const desktopWalletScreenshots = (
+    isGetSite
+      ? [{ id: 'get.status.app/Desktop_function:2480:1550', alt: '' }]
+      : [
+          {
+            id: 'Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800',
+            alt: t('desktopWalletScreenshotAlt'),
+          },
+        ]
+  ) as ScreenshotImage[]
+
   return (
     <>
-      <JSONLDScript schema={organizationSchema} />
+      <JSONLDScript schema={schema} />
       <Body>
         <div className="relative">
           <HeroSection
@@ -118,7 +173,7 @@ export default async function AppsPage() {
         </div>
 
         {/* MOBILE */}
-        <div className="relative z-20 mb-24 bg-white-100 2xl:mb-40">
+        <div className="relative z-20 mb-24 w-full min-w-0 bg-white-100 2xl:mb-40">
           <ParallaxCircle
             color="turquoise"
             className="top-[184px] hidden xl:left-[70px] xl:block"
@@ -133,27 +188,8 @@ export default async function AppsPage() {
             showScribble={false}
             screenshots={[
               {
-                label: t('wallet'),
-                images: [
-                  {
-                    id: 'Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624',
-                    alt: t(
-                      'mobileWalletScreenshotAlt'
-                    ) as ImageAlt['Platforms/Screens/Mobile Screens/New_Mobile_Wallet:750:1624'],
-                  },
-                  {
-                    id: 'Platforms/Screens/Mobile Screens/New_Mobile_Chat:750:1624',
-                    alt: t(
-                      'mobileMessengerScreenshotAlt'
-                    ) as ImageAlt['Platforms/Screens/Mobile Screens/New_Mobile_Chat:750:1624'],
-                  },
-                  {
-                    id: 'Platforms/Screens/Mobile Screens/New_Mobile_Communities:750:1624',
-                    alt: t(
-                      'mobileCommunityScreenshotAlt'
-                    ) as ImageAlt['Platforms/Screens/Mobile Screens/New_Mobile_Communities:750:1624'],
-                  },
-                ],
+                label: t(isGetSite ? 'assets' : 'wallet'),
+                images: mobileScreenshots,
               },
             ]}
             wideScreenshots={false}
@@ -161,7 +197,7 @@ export default async function AppsPage() {
         </div>
 
         {/* DESKTOP */}
-        <div className="relative z-20 mb-24 bg-white-100 2xl:mb-30">
+        <div className="relative z-20 mb-24 w-full min-w-0 bg-white-100 2xl:mb-30">
           <ParallaxCircle
             color="sky"
             className="bottom-[-40px] hidden xl:right-[-88px] xl:block"
@@ -175,15 +211,8 @@ export default async function AppsPage() {
             title={t('statusDesktop')}
             screenshots={[
               {
-                label: t('wallet'),
-                images: [
-                  {
-                    id: 'Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800',
-                    alt: t(
-                      'desktopWalletScreenshotAlt'
-                    ) as ImageAlt['Platforms/Screens/Desktop Screens/Wallet/Wallet:2880:1800'],
-                  },
-                ],
+                label: t(isGetSite ? 'assets' : 'wallet'),
+                images: desktopWalletScreenshots,
               },
               {
                 label: t('messenger'),
@@ -212,9 +241,11 @@ export default async function AppsPage() {
           />
         </div>
 
-        <div className="container mb-40">
-          <ConnectorSection />
-        </div>
+        {!isGetSite && (
+          <div className="container mb-40">
+            <ConnectorSection />
+          </div>
+        )}
       </Body>
     </>
   )
@@ -225,7 +256,7 @@ type PlatformSectionProps = {
   title: string
   screenshots: Array<{
     label: string
-    images: ImageType[]
+    images: ScreenshotImage[]
   }>
   featureList?: FeatureListProps['list']
   showScribble?: boolean
@@ -244,8 +275,8 @@ const PlatformSection = (props: PlatformSectionProps) => {
   } = props
 
   return (
-    <div className="border-dashed-default relative border-t pt-24 2xl:pt-40">
-      <div className="container mb-12 2xl:mb-20">
+    <div className="border-dashed-default relative w-full min-w-0 border-t pt-24 2xl:pt-40">
+      <div className="container mb-12 w-full min-w-0 2xl:mb-20">
         <div className="mb-4 flex items-start gap-2">
           <LatestVersionTag platform={platform} />
         </div>
@@ -266,7 +297,7 @@ const PlatformSection = (props: PlatformSectionProps) => {
       <Tabs.Root defaultValue={`${platform}-0`} variant="grey" size="32">
         <CenteredDiv
           className={cx([
-            'mx-auto flex w-full snap-x snap-mandatory overflow-x-auto overflow-y-hidden scrollbar-none xl:overflow-visible',
+            'mx-auto flex w-full min-w-0 max-w-full snap-x snap-mandatory overflow-x-auto overflow-y-hidden scrollbar-none xl:overflow-visible',
             wideScreenshots ? 'max-w-[1464px]' : 'max-w-[1294px]',
           ])}
         >
@@ -278,9 +309,9 @@ const PlatformSection = (props: PlatformSectionProps) => {
               >
                 <div className="px-5">
                   {images.map(image => (
-                    <ScreenImage
+                    <RenderedScreenshot
                       key={image.id}
-                      {...image}
+                      image={image}
                       className="min-w-[calc(100%-20px)] overflow-hidden rounded-8 md:rounded-[24px]"
                     />
                   ))}
@@ -296,9 +327,9 @@ const PlatformSection = (props: PlatformSectionProps) => {
                   className="flex gap-4 px-5 2xl:gap-12"
                 >
                   {images.map(image => (
-                    <ScreenImage
+                    <RenderedScreenshot
                       key={image.id}
-                      {...image}
+                      image={image}
                       className="min-w-[244px] rounded-16 md:rounded-[24px]"
                     />
                   ))}
@@ -344,4 +375,13 @@ const PlatformSection = (props: PlatformSectionProps) => {
       )}
     </div>
   )
+}
+
+const RenderedScreenshot = (props: {
+  image: ScreenshotImage
+  className?: string
+}) => {
+  const { image, className } = props
+
+  return <ScreenImage {...image} className={className} />
 }

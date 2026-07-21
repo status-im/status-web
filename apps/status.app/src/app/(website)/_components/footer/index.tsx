@@ -59,16 +59,26 @@ export const Footer = async () => {
                 {tn(SECURITY.nameKey)}
               </Link>
             )}
+            {!isGetSite && (
+              <Link
+                href="/learn"
+                className="text-13 text-neutral-40 transition-colors hover:text-neutral-50"
+              >
+                {tn('learn')}
+              </Link>
+            )}
           </div>
         </div>
 
-        <Link
-          href={MESSARI_URL}
-          className="flex items-center gap-3 text-neutral-50 transition-colors hover:text-neutral-30"
-        >
-          <MessariLogo />
-          <span className="text-13">{t('messari')}</span>
-        </Link>
+        {!isGetSite && (
+          <Link
+            href={MESSARI_URL}
+            className="flex items-center gap-3 text-neutral-50 transition-colors hover:text-neutral-30"
+          >
+            <MessariLogo />
+            <span className="text-13">{t('messari')}</span>
+          </Link>
+        )}
 
         {!isGetSite && (
           <div className="flex gap-6 lg:gap-3">

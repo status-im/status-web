@@ -22,11 +22,10 @@ import type { DefaultValues, FieldValues, SubmitHandler } from 'react-hook-form'
 
 type Props = {
   job: Job
-  children: React.ReactElement
 }
 
 export const ApplicationFormDialog = (props: Props) => {
-  const { children, job } = props
+  const { job } = props
   const { questions } = job
   const t = useTranslations('jobs')
 
@@ -65,7 +64,7 @@ export const ApplicationFormDialog = (props: Props) => {
 
   return (
     <Dialog onOpenChange={setOpenDialog} open={openDialog}>
-      {children}
+      <Button size="32">{t('applyNow')}</Button>
       <Dialog.Content title={t('applyForJob')}>
         <ApplicationForm questions={questions} onSubmit={onSubmit} />
       </Dialog.Content>

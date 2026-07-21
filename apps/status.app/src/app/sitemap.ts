@@ -1,5 +1,10 @@
 import { allHelpDocs, allSpecsDocs } from '~content'
-import { getPostsForSitemap, getTagsForSitemap } from '~website/_lib/ghost'
+import {
+  getLearnPostsForSitemap,
+  getPostsForSitemap,
+} from '~website/_lib/ghost'
+
+import { isHelpDocWorkInProgress } from './_utils/help-doc'
 
 import type { MetadataRoute } from 'next'
 
@@ -24,6 +29,7 @@ const STATIC_PATHS = [
   '/brand',
   '/translations',
   '/insights/epics',
+  '/learn',
   '/specs',
   '/help',
   '/help/getting-started',
@@ -51,9 +57,9 @@ function toDate(value: string | Date | undefined): Date {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const buildDate = new Date()
 
-  const [posts, tags] = await Promise.all([
+  const [posts, learnPosts] = await Promise.all([
     getPostsForSitemap(),
-    getTagsForSitemap(),
+    getLearnPostsForSitemap(),
   ])
 
   const entries = new Map<string, Date>()
@@ -66,11 +72,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entries.set(toUrl(`/blog/${post.slug}`), toDate(post.updatedAt))
   }
 
-  for (const tag of tags) {
-    entries.set(toUrl(`/blog/tag/${tag.slug}`), buildDate)
+  for (const post of learnPosts) {
+    entries.set(toUrl(`/blog/${post.slug}`), toDate(post.updatedAt))
   }
 
   for (const doc of allHelpDocs) {
+    // Skip placeholder docs: they carry no content and are marked `noindex`,
+    // so listing them in the sitemap would only surface thin pages to crawlers.
+    if (isHelpDocWorkInProgress(doc)) {
+      continue
+    }
     entries.set(toUrl(doc.url), toDate(doc.lastEdited))
   }
 

@@ -2,6 +2,7 @@ import { Text } from '@status-im/components'
 import { getTranslations } from 'next-intl/server'
 
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
+import { buildLandingPageStructuredData } from '~/utils/structured-data'
 import { Metadata } from '~app/_metadata'
 import { Body } from '~components/body'
 import { Link } from '~components/link'
@@ -38,10 +39,15 @@ export default async function BlogPage() {
     url: 'https://status.app/blog',
     description: t('description'),
   })
+  const webpageSchema = buildLandingPageStructuredData({
+    name: t('title'),
+    description: t('description'),
+    path: '/blog',
+  })
 
   return (
     <>
-      <JSONLDScript schema={websiteSchema} />
+      <JSONLDScript schema={[websiteSchema, webpageSchema]} />
       <Body>
         <div className="px-5">
           <div className="mx-auto max-w-[1184px] pb-24 pt-12 xl:pb-32 xl:pt-20">

@@ -5,29 +5,46 @@ import { Analytics } from '@vercel/analytics/next'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
 import { NextIntlClientProvider } from 'next-intl'
-import { getLocale, getMessages } from 'next-intl/server'
 
 import { PlatformDetector } from '~app/_components/platform-detector'
-import { Metadata } from '~app/_metadata'
 import { Providers } from '~app/_providers'
 
-export const metadata = Metadata({
+import messages from '../../messages/en.json'
+import { routing } from '../i18n/routing'
+import { cloudinaryLoader } from './_components/assets/loader'
+
+import type { Metadata } from 'next'
+
+const GET_SITE_OG_IMAGE = cloudinaryLoader({
+  src: 'get.status.app/Hero_app',
+  width: 1200,
+})
+
+export const metadata: Metadata = {
   metadataBase: new URL('https://get.status.app/'),
 
-  title: {
-    template: '%s',
-    default: 'Status — Make the jump to web3',
-  },
+  title:
+    'Status App | Private Messenger, Assets, Web Browser, Communities and more',
   description:
-    'The open-source, decentralised wallet and messenger. Own your crypto and chat privately.',
+    'Status App combines an end-to-end encrypted messenger and a secure browser into a private, peer-to-peer ecosystem with no phone number or email required.',
 
   alternates: {
     canonical: './',
   },
 
-  twitter: {
-    card: 'summary_large_image',
-    site: '@ethstatus',
+  openGraph: {
+    type: 'website',
+    url: 'https://get.status.app',
+    title:
+      'Status App | Private Messenger, Assets, Web Browser, Communities and more',
+    description:
+      'Status App combines an end-to-end encrypted messenger and a secure browser into a private, peer-to-peer ecosystem with no phone number or email required.',
+    siteName: 'Status App',
+    images: [
+      {
+        url: GET_SITE_OG_IMAGE,
+      },
+    ],
   },
 
   appLinks: {
@@ -42,7 +59,7 @@ export const metadata = Metadata({
       url: 'https://get.status.app',
     },
   },
-})
+}
 
 const inter = Inter({
   variable: '--font-sans',
@@ -55,21 +72,18 @@ type Props = {
   children: React.ReactNode
 }
 
-export default async function RootLayout({ children }: Props) {
-  const [locale, messages] = await Promise.all([getLocale(), getMessages()])
+export default function RootLayout({ children }: Props) {
+  const locale = routing.defaultLocale
 
   return (
     <html
       lang={locale}
+      data-platform="unknown"
       className={inter.variable}
       suppressHydrationWarning
     >
       <head>
         <link rel="preconnect" href="https://res.cloudinary.com" />
-        <meta
-          property="article:publisher"
-          content="https://www.facebook.com/ethstatus"
-        />
       </head>
       <body data-customisation="blue" suppressHydrationWarning>
         <script
@@ -89,7 +103,7 @@ export default async function RootLayout({ children }: Props) {
         <Script
           strategy="afterInteractive"
           src="https://umami.bi.status.im/script.js"
-          data-website-id="785550f6-3fea-4df0-aebe-2d5a999e6d49"
+          data-website-id="8916f2ff-52fc-47e9-a70f-62a50d67ce6a"
           data-domains="get.status.app"
           data-exclude-hash="true"
         />

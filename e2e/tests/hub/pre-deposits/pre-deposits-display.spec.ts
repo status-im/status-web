@@ -28,7 +28,7 @@ test.describe('Pre-Deposits page', () => {
         const expectedNames = Object.values(TEST_VAULTS).map(v => v.name)
         for (const name of expectedNames) {
           await expect(
-            page.getByRole('heading', { name, level: 3 }),
+            page.getByRole('heading', { name, level: 3, exact: true }),
           ).toBeVisible()
         }
       })

@@ -1,4 +1,9 @@
 import 'server-only'
+import {
+  DEFAULT_GHOST_URL,
+  DISALLOWED_TAGS_FILTER,
+  NETWORK_BLOG_TAG,
+} from './ghost-constants'
 
 type GhostAuthor = {
   id: string
@@ -56,18 +61,12 @@ type GhostTagsResponse = {
   meta: { pagination: Pagination }
 }
 
-const DEFAULT_GHOST_URL = 'https://our.status.im'
 const GHOST_URL = (process.env.GHOST_API_URL ?? DEFAULT_GHOST_URL).replace(
   /\/+$/,
   '',
 )
 const GHOST_API_KEY = process.env.GHOST_API_KEY
 const REVALIDATE_SECONDS = 3600
-const DISALLOWED_TAGS = ['desktop-news', 'mobile-news']
-const DISALLOWED_TAGS_FILTER = DISALLOWED_TAGS.map(tag => `tag:-${tag}`).join(
-  '+',
-)
-const NETWORK_BLOG_TAG = 'status-network-blog'
 
 const EMPTY_PAGINATION: Pagination = {
   page: 1,
@@ -116,13 +115,18 @@ export async function getPostBySlug(slug: string): Promise<GhostPost | null> {
 }
 
 export async function getPostSlugs(): Promise<string[]> {
-  const response = await fetchPosts({
-    fields: 'slug',
-    limit: 'all',
-    filter: `tag:${NETWORK_BLOG_TAG}+visibility:public+${DISALLOWED_TAGS_FILTER}`,
-  })
+  try {
+    const response = await fetchPosts({
+      fields: 'slug',
+      limit: 'all',
+      filter: `tag:${NETWORK_BLOG_TAG}+visibility:public+${DISALLOWED_TAGS_FILTER}`,
+    })
 
-  return response.posts.map(post => post.slug)
+    return response.posts.map(post => post.slug)
+  } catch (error) {
+    console.error('Failed to fetch post slugs from Ghost API:', error)
+    return []
+  }
 }
 
 export async function getLatestPostsByTag(

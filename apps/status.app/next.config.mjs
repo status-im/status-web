@@ -1,6 +1,9 @@
 // For "Build dependencies behind this expression are ignored and might cause incorrect cache invalidation." warning
 // @see https://github.com/contentlayerdev/contentlayer/issues/129#issuecomment-1080416633
 
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
 import './src/config/env.server.mjs'
 import './src/config/env.client.mjs'
 
@@ -10,11 +13,23 @@ import createNextIntlPlugin from 'next-intl/plugin'
 // eslint-disable-next-line import/no-unresolved
 import withVercelToolbar from '@vercel/toolbar/plugins/next'
 
+import { serverEnv } from './src/config/env.server.mjs'
+
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 /** @type {import('next').NextConfig} */
 let config = {
-  // output: 'export',
+  // Self-hosting: emit a standalone server bundle (Dockerfile copies .next/standalone/).
+  // why: https://nextjs.org/docs/app/api-reference/config/next-config-js/output#automatically-copying-traced-files
+  ...(serverEnv.NODE_ENV === 'production' && { output: 'standalone' }),
+  // Trace the whole pnpm workspace so transitive workspace deps end up in standalone.
+  outputFileTracingRoot: path.join(__dirname, '../../'),
+  // Contentlayer generates files outside the default trace scope; pull them in explicitly.
+  outputFileTracingIncludes: {
+    '/**/*': ['./.contentlayer/generated/**/*'],
+  },
   reactStrictMode: true,
   pageExtensions: ['ts', 'tsx', 'md', 'mdx'],
 
@@ -260,6 +275,16 @@ let config = {
       {
         source: '/specs/status-payload',
         destination: '/specs/status-payloads',
+        statusCode: 301,
+      },
+      {
+        source: '/specs/account-address',
+        destination: '/specs/status-account-address',
+        statusCode: 301,
+      },
+      {
+        source: '/specs/status-community-history-archives',
+        destination: '/specs/status-community-history-service',
         statusCode: 301,
       },
     ]
