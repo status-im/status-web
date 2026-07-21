@@ -1,13 +1,14 @@
 import { loadEnvConfig } from '@next/env'
-import { mkdir, writeFile } from 'node:fs/promises'
+import { writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { cwd } from 'node:process'
 
 import { createBlogSearchPayload } from '../src/app/(website)/blog/_utils/search'
-import {
-  BLOG_SEARCH_INDEX_DIRECTORY,
-  BLOG_SEARCH_INDEX_FILENAME,
-} from '../src/app/(website)/blog/_utils/search-index-path'
+
+// Duplicated as an inline literal rather than shared with search.server.ts on
+// purpose: that module needs a statically analysable path for @vercel/nft.
+// See the comment on SEARCH_INDEX_PATHS there before changing this.
+const OUTPUT_PATH = 'public/blog-search-index.json'
 
 async function main() {
   loadEnvConfig(cwd())
@@ -22,11 +23,8 @@ async function main() {
   }
 
   const payload = createBlogSearchPayload(posts)
-  const outputDirectory = path.join(cwd(), BLOG_SEARCH_INDEX_DIRECTORY)
-  const outputPath = path.join(outputDirectory, BLOG_SEARCH_INDEX_FILENAME)
 
-  await mkdir(outputDirectory, { recursive: true })
-  await writeFile(outputPath, JSON.stringify(payload))
+  await writeFile(path.join(cwd(), OUTPUT_PATH), JSON.stringify(payload))
 
   console.log(`Generated blog search index for ${posts.length} posts`)
 }
