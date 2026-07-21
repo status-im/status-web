@@ -29,12 +29,6 @@ let config = {
   // Contentlayer generates files outside the default trace scope; pull them in explicitly.
   outputFileTracingIncludes: {
     '/**/*': ['./.contentlayer/generated/**/*'],
-    // The blog search index is read with a runtime path Next cannot trace
-    // statically. Scoped to the routes that actually read it so the ~3MB file
-    // does not land in every function bundle.
-    '/blog': ['./.blog-search/**/*'],
-    '/[locale]/blog': ['./.blog-search/**/*'],
-    '/api/blog/search': ['./.blog-search/**/*'],
   },
   reactStrictMode: true,
   pageExtensions: ['ts', 'tsx', 'md', 'mdx'],
