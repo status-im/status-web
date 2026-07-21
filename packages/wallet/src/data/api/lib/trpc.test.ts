@@ -15,7 +15,10 @@ describe('getRpcCategory', () => {
     ).toBe('permanent')
     expect(
       getRpcCategory('rpc.proxy', { json: { method: 'eth_blockNumber' } }),
-    ).toBe('minimal')
+    ).toBe('short')
+    expect(getRpcCategory('rpc.proxy', { method: 'eth_estimateGas' })).toBe(
+      'short',
+    )
   })
 
   it('uses the short category for unknown methods', () => {

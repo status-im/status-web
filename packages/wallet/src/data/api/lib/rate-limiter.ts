@@ -25,6 +25,8 @@ export interface RateLimitOptions<TOpts extends RateLimitMiddlewareOptions> {
   getKey?: (opts: TOpts) => string
 }
 
+// Best-effort request throttling for each warm application instance. The
+// upstream Status proxies remain the authority for aggregate provider quotas.
 const requestCounts = new Map<string, { count: number; resetTime: number }>()
 
 let lastPruneAt = 0
