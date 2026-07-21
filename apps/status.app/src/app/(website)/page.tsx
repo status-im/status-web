@@ -484,7 +484,7 @@ export default async function HomePage() {
 
             <div className="absolute inset-x-1/2 top-0 z-10 h-px w-screen -translate-x-1/2 border-t border-dashed border-neutral-30" />
             <div className="absolute inset-x-1/2 bottom-0 z-10 h-px w-screen -translate-x-1/2 border-b border-dashed border-neutral-30" />
-            <div className="flex w-full min-w-0">
+            <div className="flex min-w-0">
               {isGetSite ? (
                 <div className="w-full min-w-0 max-w-full overflow-hidden md:max-w-[580px] 2md:mt-12 2md:max-w-[360px] lg:max-w-[440px] xl:max-w-[510px] 2xl:max-w-[720px]">
                   <Image
