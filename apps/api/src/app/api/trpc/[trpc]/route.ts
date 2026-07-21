@@ -3,7 +3,12 @@
 // @see https://stackoverflow.com/questions/78800979/trpc-giving-error-when-trying-to-test-with-postman for calling via postman
 // @see https://github.com/trpc/trpc/issues/752 for use of superjson
 
-import { type ApiRouter, apiRouter } from '@status-im/wallet/data'
+import {
+  type ApiRouter,
+  apiRouter,
+  getRetryAfterSeconds,
+  parseRetryAfterSeconds,
+} from '@status-im/wallet/data'
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
 import { headers as nextHeaders } from 'next/headers'
 
@@ -79,14 +84,25 @@ async function handler(request: NextRequest) {
           cacheControl = 'private, no-store'
         }
 
-        const isRateLimited = opts.errors?.some(
+        const errors = opts.errors ?? []
+        const isRateLimited = errors.some(
           error => error.code === 'TOO_MANY_REQUESTS'
         )
+        const retryAfterValues = errors.flatMap(error => {
+          const value = getRetryAfterSeconds(error)
+          return value === undefined ? [] : [value]
+        })
+        const retryAfter = isRateLimited
+          ? Math.max(
+              1,
+              ...(retryAfterValues.length ? retryAfterValues : [60])
+            ).toString()
+          : undefined
 
         return {
           headers: {
             'cache-control': cacheControl,
-            ...(isRateLimited && { 'Retry-After': '60' }),
+            ...(retryAfter && { 'Retry-After': retryAfter }),
             ...getCorsHeaders(),
           },
         }
@@ -172,7 +188,8 @@ function getCorsHeaders(): Record<string, string> {
 class JsonRpcHttpError extends Error {
   constructor(
     message: string,
-    readonly status: number
+    readonly status: number,
+    readonly retryAfterSeconds?: number
   ) {
     super(message)
   }
@@ -194,13 +211,24 @@ async function processSingleJsonRpc(
       return { headers }
     },
     responseMeta: opts => {
-      const isRateLimited = opts.errors?.some(
+      const errors = opts.errors ?? []
+      const isRateLimited = errors.some(
         error => error.code === 'TOO_MANY_REQUESTS'
       )
+      const retryAfterValues = errors.flatMap(error => {
+        const value = getRetryAfterSeconds(error)
+        return value === undefined ? [] : [value]
+      })
+      const retryAfter = isRateLimited
+        ? Math.max(
+            1,
+            ...(retryAfterValues.length ? retryAfterValues : [60])
+          ).toString()
+        : undefined
       return {
         headers: {
           'cache-control': 'private, no-store',
-          ...(isRateLimited && { 'Retry-After': '60' }),
+          ...(retryAfter && { 'Retry-After': retryAfter }),
           ...getCorsHeaders(),
         },
       }
@@ -213,7 +241,10 @@ async function processSingleJsonRpc(
       body?.error?.json?.message ||
       body?.error?.message ||
       `tRPC handler error: ${response.status} ${response.statusText}`
-    throw new JsonRpcHttpError(message, response.status)
+    const retryAfter = parseRetryAfterSeconds(
+      response.headers.get('retry-after')
+    )
+    throw new JsonRpcHttpError(message, response.status, retryAfter)
   }
 
   const trpcResponse = await response.json()
@@ -235,39 +266,57 @@ async function handleJsonRpcProxy(request: NextRequest): Promise<Response> {
   }
 
   if (Array.isArray(jsonRpcBody)) {
-    const results = await Promise.all(
+    const outcomes = await Promise.all(
       jsonRpcBody.map(async call => {
         try {
-          return await processSingleJsonRpc(request, call, chainId)
+          return {
+            payload: await processSingleJsonRpc(request, call, chainId),
+          }
         } catch (error) {
           const isRateLimited =
             error instanceof JsonRpcHttpError && error.status === 429
           return {
-            jsonrpc: '2.0' as const,
-            id: call.id ?? null,
-            error: {
-              code: isRateLimited ? -32005 : -32603,
-              message:
-                error instanceof Error
-                  ? error.message
-                  : 'Internal server error',
+            payload: {
+              jsonrpc: '2.0' as const,
+              id: call.id ?? null,
+              error: {
+                code: isRateLimited ? -32005 : -32603,
+                message:
+                  error instanceof Error
+                    ? error.message
+                    : 'Internal server error',
+              },
             },
+            retryAfterSeconds:
+              error instanceof JsonRpcHttpError
+                ? error.retryAfterSeconds
+                : undefined,
           }
         }
       })
     )
 
+    const results = outcomes.map(outcome => outcome.payload)
     const hasRateLimitedCall = results.some(result => {
       if (!result || typeof result !== 'object' || !('error' in result)) {
         return false
       }
       return (result.error as { code?: number })?.code === -32005
     })
+    const retryAfterValues = outcomes.flatMap(outcome =>
+      outcome.retryAfterSeconds === undefined ? [] : [outcome.retryAfterSeconds]
+    )
+    const retryAfter = hasRateLimitedCall
+      ? Math.max(
+          1,
+          ...(retryAfterValues.length ? retryAfterValues : [60])
+        ).toString()
+      : undefined
 
     return Response.json(results, {
       headers: {
         ...corsHeaders,
-        ...(hasRateLimitedCall && { 'Retry-After': '60' }),
+        ...(retryAfter && { 'Retry-After': retryAfter }),
       },
     })
   }
@@ -283,6 +332,8 @@ async function handleJsonRpcProxy(request: NextRequest): Promise<Response> {
   } catch (error) {
     const status = error instanceof JsonRpcHttpError ? error.status : 500
     const isRateLimited = status === 429
+    const retryAfter =
+      error instanceof JsonRpcHttpError ? error.retryAfterSeconds : undefined
     return Response.json(
       {
         jsonrpc: '2.0',
@@ -297,7 +348,9 @@ async function handleJsonRpcProxy(request: NextRequest): Promise<Response> {
         status,
         headers: {
           ...corsHeaders,
-          ...(isRateLimited && { 'Retry-After': '60' }),
+          ...(isRateLimited && {
+            'Retry-After': String(Math.max(1, retryAfter ?? 60)),
+          }),
         },
       }
     )

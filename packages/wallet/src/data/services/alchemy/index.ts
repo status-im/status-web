@@ -12,7 +12,11 @@ import { formatEther } from 'ethers'
 
 import { serverEnv } from '../../../config/env.server.mjs'
 import { buildCanonicalTimestamps } from '../../../utils'
-import { hasErrorCause } from '../../../utils/error-cause'
+import {
+  hasErrorCause,
+  parseRetryAfterSeconds,
+  RateLimitError,
+} from '../../../utils/error-cause'
 import {
   getRandomApiKey,
   markApiKeyAsRateLimited,
@@ -1201,7 +1205,12 @@ async function _fetch<T extends ResponseBody>(
       }
     }
 
-    // todo: https://trpc.io/docs/v10/server/error-handling#throwing-errors for passing original error as `cause`
+    if (response.status === 429) {
+      throw new RateLimitError(
+        'Failed to fetch.',
+        parseRetryAfterSeconds(response.headers.get('retry-after')),
+      )
+    }
     throw new Error('Failed to fetch.', { cause: response.status })
   }
 
@@ -1224,6 +1233,15 @@ async function _fetch<T extends ResponseBody>(
       }
     }
 
+    if (
+      error.code === 429 ||
+      error.message?.toLowerCase().includes('rate limit')
+    ) {
+      throw new RateLimitError(
+        error.message || 'RPC request rate limited.',
+        parseRetryAfterSeconds(response.headers.get('retry-after')),
+      )
+    }
     throw new Error(error.message || 'RPC request failed.', {
       cause: error.code,
     })
