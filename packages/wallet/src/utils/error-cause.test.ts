@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { hasErrorCause } from './error-cause'
+import {
+  getRetryAfterSeconds,
+  hasErrorCause,
+  parseRetryAfterSeconds,
+  RateLimitError,
+} from './error-cause'
 
 describe('hasErrorCause', () => {
   it('finds a direct cause', () => {
@@ -22,5 +27,27 @@ describe('hasErrorCause', () => {
     Object.defineProperty(error, 'cause', { value: error })
 
     expect(hasErrorCause(error, 429)).toBe(false)
+  })
+})
+
+describe('rate-limit metadata', () => {
+  it('finds retry metadata through wrapper errors', () => {
+    const providerError = new RateLimitError('limited', 17)
+    const wrapper = new Error('request failed', { cause: providerError })
+
+    expect(getRetryAfterSeconds(wrapper)).toBe(17)
+  })
+
+  it('parses delta seconds and HTTP dates', () => {
+    const now = Date.parse('2026-01-01T00:00:00Z')
+
+    expect(parseRetryAfterSeconds('12', now)).toBe(12)
+    expect(parseRetryAfterSeconds('Thu, 01 Jan 2026 00:00:09 GMT', now)).toBe(9)
+  })
+
+  it('rejects invalid retry-after values', () => {
+    expect(parseRetryAfterSeconds(null)).toBeUndefined()
+    expect(parseRetryAfterSeconds('-1')).toBeUndefined()
+    expect(parseRetryAfterSeconds('not-a-date')).toBeUndefined()
   })
 })

@@ -25,8 +25,6 @@ export async function createTRPCContext(opts: { headers: Headers }) {
 
 type ApiContext = Awaited<ReturnType<typeof createTRPCContext>>
 
-type RPCCategory = 'permanent' | 'short' | 'minimal'
-
 /**
  * 2. INITIALIZATION
  *
@@ -63,115 +61,6 @@ export const { createCallerFactory } = trpc
  * @see https://trpc.io/docs/router
  */
 export const router = trpc.router
-
-/**
- * Request throttling for Market-backed routes
- *
- * RATIONALE:
- * - Uses the Market Proxy's CoinGecko limit as a conservative per-client
- *   request budget.
- * - This counts API procedures, not internal upstream fan-out. The Market
- *   Proxy remains responsible for its aggregate provider quota.
- * - Reference: https://github.com/status-im/market-proxy/blob/master/market-fetcher/config.yaml#L14-L19
- */
-const marketRateLimitMiddleware = createRateLimitMiddleware(trpc, {
-  windowMs: 60 * 1000, // 1 minute
-  maxRequests: 30, // 30 requests per minute
-  keyPrefix: 'market',
-  message: 'Market data rate limit exceeded. Please try again in a minute.',
-})
-
-/**
- * RPC method categorization based on eth-rpc-proxy specs:
- * - permanent: Immutable data (blocks, receipts)
- * - short: Semi-static data (balances, calls)
- * - minimal: Highly dynamic data (gas prices, fees, nonces)
- */
-const RPC_METHOD_CATEGORY_MAP: Record<string, RPCCategory> = {
-  // Permanent: Immutable data (60 RPM)
-  eth_getBlockByNumber: 'permanent',
-  eth_getTransactionReceipt: 'permanent',
-  alchemy_getAssetTransfers: 'permanent',
-  'assets.nativeTokenBalanceChart': 'permanent',
-  'assets.tokenBalanceChart': 'permanent',
-  'activities.page': 'permanent',
-  'activities.activities': 'permanent',
-  'collectibles.page': 'permanent',
-  'collectibles.collectible': 'permanent',
-
-  // Short: Semi-static data (40 RPM). Keep raw JSON-RPC methods aligned with
-  // eth-rpc-proxy/go-proxy-cache/cache_rules.yaml.
-  eth_getBalance: 'short',
-  eth_estimateGas: 'short',
-  eth_maxPriorityFeePerGas: 'short',
-  eth_blockNumber: 'short',
-  'nodes.getNonce': 'short',
-  eth_getTransactionCount: 'short',
-  eth_feeHistory: 'short',
-  alchemy_getTokenBalances: 'short',
-  'assets.all': 'short',
-  'assets.nativeToken': 'short',
-  'assets.token': 'short',
-  'assets.nativeTokenPriceChart': 'short',
-  'assets.tokenPriceChart': 'short',
-
-  // Minimal: Highly dynamic data (15 RPM)
-  'nodes.getFeeRate': 'minimal',
-  'nodes.broadcastTransaction': 'minimal',
-  eth_sendRawTransaction: 'minimal',
-}
-
-/**
- * Category-specific limits (RPM)
- * - permanent: Highly cacheable, higher limit allowed as hits likely won't reach provider.
- * - short: Standard semi-static data.
- * - minimal: Highly dynamic data, more restrictive to protect provider capacity.
- */
-const RPC_CATEGORY_LIMITS: Record<string, number> = {
-  permanent: 60,
-  short: 40, // default was 30
-  minimal: 15,
-}
-
-function getRpcMethod(rawInput: unknown): string | undefined {
-  if (!rawInput || typeof rawInput !== 'object') return undefined
-
-  const input = rawInput as {
-    method?: unknown
-    json?: { method?: unknown }
-  }
-  const method = input.method ?? input.json?.method
-
-  return typeof method === 'string' ? method : undefined
-}
-
-export function getRpcCategory(
-  path: string | undefined,
-  rawInput?: unknown,
-): RPCCategory {
-  const method = path === 'rpc.proxy' ? getRpcMethod(rawInput) : undefined
-  return RPC_METHOD_CATEGORY_MAP[method ?? path ?? ''] ?? 'short'
-}
-
-/**
- * Request throttling for ETH RPC-backed routes
- *
- * RATIONALE:
- * - Applies conservative per-client request budgets split by cache category.
- * - This counts API procedures, not internal upstream fan-out. The ETH RPC
- *   Proxy remains responsible for its aggregate provider quota.
- * - Reference: https://github.com/status-im/eth-rpc-proxy/blob/master/nginx-proxy/cache.md#yaml-configuration-system
- */
-const ethRPCRateLimitMiddleware = createRateLimitMiddleware(trpc, {
-  windowMs: 60 * 1000, // 1 minute
-  maxRequests: opts => {
-    const category = getRpcCategory(opts.path, opts.rawInput)
-    return RPC_CATEGORY_LIMITS[category]
-  },
-  keyPrefix: 'eth-rpc',
-  getCategory: opts => getRpcCategory(opts.path, opts.rawInput),
-  message: 'RPC request rate limit exceeded. Please try again in a minute.',
-})
 
 /**
  * Global rate limiting for all API requests
@@ -214,13 +103,8 @@ export const publicProcedure = trpc.procedure
   .use(globalClientRateLimitMiddleware)
   .use(errorMiddleware)
 
-// Procedure for Market data endpoints
-export const marketProcedure = publicProcedure.use(marketRateLimitMiddleware)
-
-// Procedure for Node/RPC endpoints
-export const ethRPCProcedure = publicProcedure.use(ethRPCRateLimitMiddleware)
-
-// Procedures that call both upstreams must consume both independent budgets.
-export const ethRPCAndMarketProcedure = ethRPCProcedure.use(
-  marketRateLimitMiddleware,
-)
+// Status proxies enforce their own aggregate provider quotas. These semantic
+// aliases intentionally use only the API-wide per-client abuse guard.
+export const marketProcedure = publicProcedure
+export const ethRPCProcedure = publicProcedure
+export const ethRPCAndMarketProcedure = publicProcedure

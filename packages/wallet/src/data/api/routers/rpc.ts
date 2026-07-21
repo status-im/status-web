@@ -1,6 +1,10 @@
 import { z } from 'zod'
 
 import { serverEnv } from '../../../config/env.server.mjs'
+import {
+  parseRetryAfterSeconds,
+  RateLimitError,
+} from '../../../utils/error-cause'
 import { ethRPCProcedure, router } from '../lib/trpc'
 
 const PROXY_BASE_URL = serverEnv.ETH_RPC_PROXY_URL
@@ -85,9 +89,14 @@ async function _fetchWithAuth<T>(url: URL, body: unknown): Promise<T> {
       // Ignore errors when reading error body
     }
 
-    throw new Error(`Failed to fetch: ${response.status} ${errorMessage}`, {
-      cause: response.status,
-    })
+    const message = `Failed to fetch: ${response.status} ${errorMessage}`
+    if (response.status === 429) {
+      throw new RateLimitError(
+        message,
+        parseRetryAfterSeconds(response.headers.get('retry-after')),
+      )
+    }
+    throw new Error(message, { cause: response.status })
   }
 
   return response.json() as Promise<T>
