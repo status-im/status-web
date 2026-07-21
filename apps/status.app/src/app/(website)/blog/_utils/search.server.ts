@@ -4,13 +4,26 @@ import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import { cwd } from 'node:process'
 
-import { loadBlogSearchIndex } from './search'
+import { getBlogSearchResultIds, loadBlogSearchIndex } from './search'
+import {
+  BLOG_SEARCH_INDEX_DIRECTORY,
+  BLOG_SEARCH_INDEX_FILENAME,
+} from './search-index-path'
 
 import type { BlogSearchPayload } from './search'
+import type { BlogSearchResults } from './search-config'
 
+// Written by `scripts/generate-blog-search-index.ts` before `next build`. The
+// two candidate paths cover the differing working directories of the Vercel and
+// standalone/Docker runtimes.
 const SEARCH_INDEX_PATHS = [
-  path.join(cwd(), 'public/blog-search-index.json'),
-  path.join(cwd(), 'apps/status.app/public/blog-search-index.json'),
+  path.join(cwd(), BLOG_SEARCH_INDEX_DIRECTORY, BLOG_SEARCH_INDEX_FILENAME),
+  path.join(
+    cwd(),
+    'apps/status.app',
+    BLOG_SEARCH_INDEX_DIRECTORY,
+    BLOG_SEARCH_INDEX_FILENAME
+  ),
 ]
 
 let searchPayloadPromise: Promise<BlogSearchPayload> | undefined
@@ -28,7 +41,9 @@ async function loadBlogSearchPayload(): Promise<BlogSearchPayload> {
     }
   }
 
-  throw new Error('Blog search index was not generated')
+  throw new Error(
+    `Blog search index was not found. Looked in: ${SEARCH_INDEX_PATHS.join(', ')}`
+  )
 }
 
 export function readBlogSearchPayload(): Promise<BlogSearchPayload> {
@@ -49,6 +64,40 @@ async function loadBlogSearchData() {
 let searchDataPromise: ReturnType<typeof loadBlogSearchData> | undefined
 
 export function readBlogSearchData() {
+  // Memoized per server instance: parsing the payload and rebuilding the
+  // MiniSearch index costs ~100ms, individual queries cost ~1ms.
   searchDataPromise ??= loadBlogSearchData()
   return searchDataPromise
+}
+
+type SearchBlogPostsParams = {
+  query: string
+  category?: string
+  limit: number
+}
+
+/**
+ * Single search entry point shared by the `/blog` server render and the
+ * `/api/blog/search` route handler, so both stay in step.
+ */
+export async function searchBlogPosts({
+  query,
+  category,
+  limit,
+}: SearchBlogPostsParams): Promise<BlogSearchResults> {
+  const { index, postsById, payload } = await readBlogSearchData()
+  const resultIds = getBlogSearchResultIds(
+    index,
+    payload.records,
+    query,
+    category
+  )
+
+  return {
+    posts: resultIds.slice(0, limit).flatMap(id => {
+      const post = postsById.get(id)
+      return post ? [post] : []
+    }),
+    total: resultIds.length,
+  }
 }
