@@ -473,11 +473,9 @@ export default async function HomePage() {
           <div
             className={cx([
               'container w-full min-w-0 pb-5',
-              'relative flex flex-col-reverse 2md:flex-row',
-              '2md:grid-cols-2 2md:items-center',
-              isGetSite
-                ? 'gap-0'
-                : '2md:gap-14 lg:gap-12 xl:gap-[102px] 2xl:gap-[140px]',
+              'relative flex flex-col-reverse min-[1221px]:flex-row',
+              'min-[1221px]:grid-cols-2 min-[1221px]:items-center',
+              isGetSite ? 'gap-0' : 'min-[1221px]:gap-[102px] 2xl:gap-[140px]',
             ])}
           >
             {/* Dividers */}
@@ -486,21 +484,21 @@ export default async function HomePage() {
             <div className="absolute inset-x-1/2 bottom-0 z-10 h-px w-screen -translate-x-1/2 border-b border-dashed border-neutral-30" />
             <div className="flex min-w-0">
               {isGetSite ? (
-                <div className="w-full min-w-0 max-w-full overflow-hidden md:max-w-[580px] 2md:mt-12 2md:max-w-[360px] lg:max-w-[440px] xl:max-w-[510px] 2xl:max-w-[720px]">
+                <div className="w-full min-w-0 max-w-full overflow-hidden md:max-w-[580px] min-[1221px]:mt-12 min-[1221px]:max-w-[510px] 2xl:max-w-[720px]">
                   <Image
                     id="get.status.app/Create_Community_Banner_Left_Frame_cc8nvh:1017:776"
                     alt=""
                     width={1017}
                     height={776}
-                    className="w-full min-w-0 md:min-w-[613px] 2md:min-w-[386px] lg:min-w-[470px] xl:min-w-[544px] 2xl:min-w-[792px]"
+                    className="w-full min-w-0 md:min-w-[613px] min-[1221px]:min-w-[544px] 2xl:min-w-[792px]"
                   />
                 </div>
               ) : (
-                <div className="-ml-30 sm:-ml-24 lg:-ml-52 xl:-ml-44 2xl:-ml-60">
+                <div className="-ml-30 sm:-ml-24 min-[1221px]:-ml-44 2xl:-ml-60">
                   <Video
                     id="Non Beta Release/Animations/Keycard_01:911:720"
                     posterId="Non Beta Release/Animations/Frames/Keycard_01_Frame:456:360"
-                    className="w-full min-w-[390px] md:min-w-[613px] 2md:min-w-[386px] lg:min-w-[470px] xl:min-w-[544px] 2xl:min-w-[792px]"
+                    className="w-full min-w-[390px] md:min-w-[613px] min-[1221px]:min-w-[544px] 2xl:min-w-[792px]"
                   />
                 </div>
               )}
@@ -508,29 +506,29 @@ export default async function HomePage() {
 
             <div
               className={cx(
-                'relative z-20 flex w-full min-w-0 flex-1 flex-col items-start gap-8 px-5 py-12 sm:pt-24 2md:pt-10 lg:p-0',
-                isGetSite && '2md:-ml-4 lg:-ml-6 xl:-ml-8 2xl:-ml-10'
+                'relative z-20 flex w-full min-w-0 flex-1 flex-col items-start gap-8 px-5 py-12 sm:pt-24 min-[1221px]:p-0',
+                isGetSite && 'min-[1221px]:-ml-8 2xl:-ml-10'
               )}
             >
               <div
                 className={cx(
-                  'flex w-full min-w-0 max-w-full flex-1 flex-col gap-4 lg:gap-5',
+                  'flex w-full min-w-0 max-w-full flex-1 flex-col gap-4 min-[1221px]:gap-5',
                   isGetSite ? '2xl:max-w-[520px]' : '2xl:max-w-[462px]'
                 )}
               >
                 <div className="flex w-full min-w-0 flex-col">
                   {isGetSite ? (
-                    <h2 className="relative max-w-full text-40 font-bold lg:text-64">
+                    <h2 className="relative max-w-full text-40 font-bold min-[1221px]:text-64">
                       {t('keycardTitle')}
                     </h2>
                   ) : (
                     <>
-                      <h2 className="relative inline-block whitespace-nowrap text-40 font-bold lg:text-64">
+                      <h2 className="relative max-w-full text-40 font-bold min-[1221px]:text-64">
                         {t('keycardTitle').split('\n')[0]}
                       </h2>
-                      <h2 className="relative inline-block whitespace-nowrap text-40 font-bold lg:text-64">
+                      <h2 className="relative max-w-full text-40 font-bold min-[1221px]:text-64">
                         {t('keycardTitle').split('\n').slice(1).join(' ')}
-                        <span className="inline-block w-3 pt-1 align-top lg:w-4 lg:pt-[9px]">
+                        <span className="inline-block w-3 pt-1 align-top min-[1221px]:w-4 min-[1221px]:pt-[9px]">
                           <CopyrightSymbol />
                         </span>
                       </h2>
@@ -555,7 +553,7 @@ export default async function HomePage() {
 
             <ParallaxCircle
               color="army"
-              className="bottom-[-395px] left-1/2 -translate-x-1/2 lg:left-auto lg:right-[120px] lg:translate-x-0"
+              className="bottom-[-395px] left-1/2 -translate-x-1/2 min-[1221px]:left-auto min-[1221px]:right-[120px] min-[1221px]:translate-x-0"
             />
           </div>
         </div>
