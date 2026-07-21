@@ -9,14 +9,13 @@ import { getPosts } from '~website/_lib/ghost'
 
 import { isBlogCategory } from './_categories'
 import { BlogSearch } from './_components/blog-search'
+import { searchBlogPosts } from './_utils/search.server'
 import {
   BLOG_SEARCH_QUERY_MAX_LENGTH,
   BLOG_SEARCH_RESULTS_PER_PAGE,
-  getBlogSearchResultIds,
-} from './_utils/search'
-import { readBlogSearchData } from './_utils/search.server'
+} from './_utils/search-config'
 
-import type { BlogSearchPost } from './_utils/search'
+import type { BlogSearchResults } from './_utils/search-config'
 import type { Metadata as NextMetadata } from 'next'
 
 export const revalidate = 3600 // 1 hour
@@ -54,24 +53,21 @@ export default async function BlogPage({ searchParams }: Props) {
     typeof params.category === 'string' ? params.category : ''
   const category = isBlogCategory(categoryParam) ? categoryParam : undefined
   const isFiltering = query.trim().length > 0 || Boolean(category)
-  let initialResultPosts: BlogSearchPost[] = []
-  let initialResultCount = 0
+  let initialResults: BlogSearchResults | null = null
 
   if (isFiltering) {
-    const { index, postsById, payload } = await readBlogSearchData()
-    const resultIds = getBlogSearchResultIds(
-      index,
-      payload.records,
-      query,
-      category
-    )
-    initialResultCount = resultIds.length
-    initialResultPosts = resultIds
-      .slice(0, BLOG_SEARCH_RESULTS_PER_PAGE)
-      .flatMap(id => {
-        const post = postsById.get(id)
-        return post ? [post] : []
+    try {
+      initialResults = await searchBlogPosts({
+        query,
+        category,
+        limit: BLOG_SEARCH_RESULTS_PER_PAGE,
       })
+    } catch (error) {
+      // A missing or unreadable index must not take the whole page down. The
+      // client falls back to requesting /api/blog/search and surfaces its own
+      // "search unavailable" state if that fails too.
+      console.error('Failed to render initial blog search results:', error)
+    }
   }
 
   const websiteSchema = jsonLD.website({
@@ -100,8 +96,7 @@ export default async function BlogPage({ searchParams }: Props) {
             <BlogSearch
               initialPosts={initialPosts}
               meta={meta}
-              initialResultPosts={initialResultPosts}
-              initialResultCount={initialResultCount}
+              initialResults={initialResults}
               initialQuery={query}
               initialCategory={category}
             />

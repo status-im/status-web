@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { Button, Text } from '@status-im/components'
 import { ClearIcon, SearchIcon } from '@status-im/icons/20'
@@ -13,36 +13,36 @@ import { TAGS } from '../_tags'
 import {
   BLOG_SEARCH_QUERY_MAX_LENGTH,
   BLOG_SEARCH_RESULTS_PER_PAGE,
-  getBlogSearchResultIds,
-  loadBlogSearchIndex,
-} from '../_utils/search'
+} from '../_utils/search-config'
 import { HighlightedPostCard } from './highlighted-post-card'
 import { InfinitePostGrid } from './infinite-post-grid'
 import { PostGrid } from './post-grid'
 
-import type { BlogSearchPayload, BlogSearchPost } from '../_utils/search'
+import type { BlogSearchResults } from '../_utils/search-config'
 import type { PostOrPage, PostsOrPages } from '@tryghost/content-api'
 
 type Props = {
   initialPosts: PostOrPage[]
   meta: PostsOrPages['meta']
-  initialResultPosts: BlogSearchPost[]
-  initialResultCount: number
+  /** Server-rendered results for the incoming URL, or null if none were produced. */
+  initialResults: BlogSearchResults | null
   initialQuery: string
   initialCategory?: string
 }
 
 const URL_UPDATE_DELAY = 250
+const SEARCH_DEBOUNCE_DELAY = 200
+
+/** Identifies a search request so repeat and in-flight requests can be compared. */
+const toRequestKey = (
+  query: string,
+  category: string | undefined,
+  limit: number
+) => `${query}|${category ?? ''}|${limit}`
 
 export function BlogSearch(props: Props) {
-  const {
-    initialPosts,
-    meta,
-    initialResultPosts,
-    initialResultCount,
-    initialQuery,
-    initialCategory,
-  } = props
+  const { initialPosts, meta, initialResults, initialQuery, initialCategory } =
+    props
   const t = useTranslations('blog')
   const pathname = usePathname()
   const [query, setQuery] = useState(initialQuery)
@@ -50,74 +50,32 @@ export function BlogSearch(props: Props) {
   const [visibleResultCount, setVisibleResultCount] = useState(
     BLOG_SEARCH_RESULTS_PER_PAGE
   )
-  const [searchPayload, setSearchPayload] = useState<BlogSearchPayload>()
+  const [results, setResults] = useState(initialResults)
   const [searchStatus, setSearchStatus] = useState<
     'idle' | 'loading' | 'ready' | 'error'
-  >('idle')
-  const searchRequest = useRef<Promise<void> | null>(null)
+  >(initialResults ? 'ready' : 'idle')
   const selectedCategoryRef = useRef<HTMLButtonElement>(null)
 
-  const loadSearchPayload = useCallback(() => {
-    if (searchPayload || searchRequest.current) return searchRequest.current
-
-    setSearchStatus('loading')
-    searchRequest.current = fetch('/blog-search-index.json')
-      .then(response => {
-        if (!response.ok) throw new Error('Failed to load blog search index')
-        return response.json() as Promise<BlogSearchPayload>
-      })
-      .then(payload => {
-        setSearchPayload(payload)
-        setSearchStatus('ready')
-      })
-      .catch(() => {
-        setSearchStatus('error')
-        searchRequest.current = null
-      })
-
-    return searchRequest.current
-  }, [searchPayload])
-
-  const searchModel = useMemo(() => {
-    if (!searchPayload) return null
-
-    return {
-      index: loadBlogSearchIndex(searchPayload.searchIndex),
-      postsById: new Map(searchPayload.posts.map(post => [post.id, post])),
-      records: searchPayload.records,
-    }
-  }, [searchPayload])
-
-  const liveResultPosts = useMemo(() => {
-    if (!searchModel) return null
-
-    return getBlogSearchResultIds(
-      searchModel.index,
-      searchModel.records,
-      query,
-      category
-    ).flatMap(id => {
-      const post = searchModel.postsById.get(id)
-      return post ? [post] : []
-    })
-  }, [category, query, searchModel])
-
   const normalizedQuery = query.trim()
+  const [debouncedQuery, setDebouncedQuery] = useState(normalizedQuery)
+
   const isFiltering = normalizedQuery.length > 0 || Boolean(category)
-  const isInitialFilter = query === initialQuery && category === initialCategory
-  const resultPosts =
-    liveResultPosts ?? (isInitialFilter ? initialResultPosts : [])
-  const resultCount =
-    liveResultPosts?.length ?? (isInitialFilter ? initialResultCount : 0)
-  const visibleResultPosts = resultPosts.slice(0, visibleResultCount)
-  const canLoadMore = visibleResultCount < resultPosts.length
+  const isDebouncing = debouncedQuery !== normalizedQuery
+  const requestKey = toRequestKey(debouncedQuery, category, visibleResultCount)
+  const initialRequestKey = initialResults
+    ? toRequestKey(
+        initialQuery.trim(),
+        initialCategory,
+        BLOG_SEARCH_RESULTS_PER_PAGE
+      )
+    : null
+
+  const resultPosts = results?.posts ?? []
+  const resultCount = results?.total ?? 0
+  const canLoadMore = resultPosts.length < resultCount
   const isSearchLoading =
-    isFiltering &&
-    !liveResultPosts &&
-    !isInitialFilter &&
-    searchStatus !== 'error'
-  const hasSearchError =
-    isFiltering && searchStatus === 'error' && !isInitialFilter
+    isFiltering && (isDebouncing || searchStatus === 'loading')
+  const hasSearchError = isFiltering && searchStatus === 'error'
   const highlightedPost = initialPosts[0]
 
   useEffect(() => setQuery(initialQuery), [initialQuery])
@@ -134,9 +92,63 @@ export function BlogSearch(props: Props) {
       inline: 'center',
     })
   }, [category])
+
   useEffect(() => {
-    if (isFiltering) void loadSearchPayload()
-  }, [isFiltering, loadSearchPayload])
+    const timeout = window.setTimeout(
+      () => setDebouncedQuery(normalizedQuery),
+      SEARCH_DEBOUNCE_DELAY
+    )
+
+    return () => window.clearTimeout(timeout)
+  }, [normalizedQuery])
+
+  useEffect(() => {
+    if (!debouncedQuery && !category) return
+
+    // The server already rendered exactly this request; reuse it rather than
+    // asking for the same thing again on mount (or on returning to it).
+    if (requestKey === initialRequestKey) {
+      setResults(initialResults)
+      setSearchStatus('ready')
+      return
+    }
+
+    const controller = new AbortController()
+    setSearchStatus('loading')
+
+    const params = new URLSearchParams({ limit: String(visibleResultCount) })
+    if (debouncedQuery) params.set('q', debouncedQuery)
+    if (category) params.set('category', category)
+
+    fetch(`/api/blog/search?${params}`, { signal: controller.signal })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Blog search responded with ${response.status}`)
+        }
+
+        return response.json() as Promise<BlogSearchResults>
+      })
+      .then(data => {
+        setResults(data)
+        setSearchStatus('ready')
+      })
+      .catch((error: unknown) => {
+        // Superseded by a newer keystroke, not a failure.
+        if (controller.signal.aborted) return
+
+        console.error('Failed to search blog posts:', error)
+        setSearchStatus('error')
+      })
+
+    return () => controller.abort()
+  }, [
+    category,
+    debouncedQuery,
+    initialRequestKey,
+    initialResults,
+    requestKey,
+    visibleResultCount,
+  ])
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {
@@ -169,11 +181,7 @@ export function BlogSearch(props: Props) {
           type="search"
           value={query}
           maxLength={BLOG_SEARCH_QUERY_MAX_LENGTH}
-          onFocus={() => void loadSearchPayload()}
-          onChange={event => {
-            setQuery(event.target.value)
-            void loadSearchPayload()
-          }}
+          onChange={event => setQuery(event.target.value)}
           placeholder={t('searchPlaceholder')}
           aria-label={t('searchLabel')}
           className="h-14 w-full rounded-16 border border-neutral-30 bg-white-100 px-12 text-19 text-neutral-100 outline-none transition-colors placeholder:text-neutral-40 hover:border-neutral-40 focus:border-neutral-50 focus-visible:ring-2 focus-visible:ring-customisation-50 focus-visible:ring-offset-2 [&::-webkit-search-cancel-button]:hidden"
@@ -205,10 +213,7 @@ export function BlogSearch(props: Props) {
                 key={slug}
                 ref={isSelected ? selectedCategoryRef : undefined}
                 aria-pressed={isSelected}
-                onClick={() => {
-                  setCategory(isSelected ? undefined : slug)
-                  void loadSearchPayload()
-                }}
+                onClick={() => setCategory(isSelected ? undefined : slug)}
                 className={`flex h-[32px] shrink-0 select-none items-center gap-2 rounded-10 border border-solid pl-2 pr-3 text-neutral-100 shadow-1 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-customisation-50 focus-visible:ring-offset-2 ${
                   isSelected
                     ? 'border-neutral-100 bg-neutral-100 text-white-100'
@@ -249,9 +254,7 @@ export function BlogSearch(props: Props) {
             </Button>
           </div>
 
-          {isSearchLoading ? (
-            <PostGrid posts={[]} isLoading />
-          ) : hasSearchError ? (
+          {hasSearchError ? (
             <div
               role="alert"
               className="flex min-h-[320px] flex-col items-center justify-center text-center"
@@ -264,13 +267,11 @@ export function BlogSearch(props: Props) {
                 {t('searchUnavailableDescription')}
               </Text>
             </div>
-          ) : visibleResultPosts.length > 0 ? (
+          ) : resultPosts.length > 0 ? (
+            // Kept on screen while a follow-up request is in flight, so typing
+            // does not flash the grid back to skeletons on every keystroke.
             <>
-              <PostGrid
-                posts={visibleResultPosts}
-                isLoading={false}
-                showExcerpt
-              />
+              <PostGrid posts={resultPosts} isLoading={false} showExcerpt />
               {canLoadMore && (
                 <div className="mt-8 flex justify-center">
                   <Button
@@ -287,6 +288,8 @@ export function BlogSearch(props: Props) {
                 </div>
               )}
             </>
+          ) : isSearchLoading ? (
+            <PostGrid posts={[]} isLoading />
           ) : (
             <div className="flex min-h-[320px] flex-col items-center justify-center text-center">
               <Image
