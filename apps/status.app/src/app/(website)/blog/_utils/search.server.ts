@@ -29,6 +29,28 @@ const SEARCH_INDEX_PATHS = [
 
 let searchPayloadPromise: Promise<BlogSearchPayload> | undefined
 
+/**
+ * Memoizes `load()`, but drops the memo again when the promise rejects.
+ * Without this a single transient failure (fs hiccup, etc.) would be cached for
+ * the lifetime of the server instance and every later search would keep failing
+ * even though a retry could succeed.
+ */
+function memoizeUntilFailure<T>(
+  load: () => Promise<T>,
+  getCached: () => Promise<T> | undefined,
+  setCached: (value: Promise<T> | undefined) => void
+): Promise<T> {
+  const cached = getCached()
+  if (cached) return cached
+
+  const next = load().catch((error: unknown) => {
+    setCached(undefined)
+    throw error
+  })
+  setCached(next)
+  return next
+}
+
 async function loadBlogSearchPayload(): Promise<BlogSearchPayload> {
   for (const indexPath of SEARCH_INDEX_PATHS) {
     try {
@@ -48,8 +70,13 @@ async function loadBlogSearchPayload(): Promise<BlogSearchPayload> {
 }
 
 export function readBlogSearchPayload(): Promise<BlogSearchPayload> {
-  searchPayloadPromise ??= loadBlogSearchPayload()
-  return searchPayloadPromise
+  return memoizeUntilFailure(
+    loadBlogSearchPayload,
+    () => searchPayloadPromise,
+    value => {
+      searchPayloadPromise = value
+    }
+  )
 }
 
 async function loadBlogSearchData() {
@@ -67,8 +94,13 @@ let searchDataPromise: ReturnType<typeof loadBlogSearchData> | undefined
 export function readBlogSearchData() {
   // Memoized per server instance: parsing the payload and rebuilding the
   // MiniSearch index costs ~100ms, individual queries cost ~1ms.
-  searchDataPromise ??= loadBlogSearchData()
-  return searchDataPromise
+  return memoizeUntilFailure(
+    loadBlogSearchData,
+    () => searchDataPromise,
+    value => {
+      searchDataPromise = value
+    }
+  )
 }
 
 type SearchBlogPostsParams = {

@@ -11,6 +11,7 @@ import { usePathname } from '~/i18n/navigation'
 
 import { TAGS } from '../_tags'
 import {
+  BLOG_SEARCH_MAX_RESULTS,
   BLOG_SEARCH_QUERY_MAX_LENGTH,
   BLOG_SEARCH_RESULTS_PER_PAGE,
 } from '../_utils/search-config'
@@ -72,7 +73,11 @@ export function BlogSearch(props: Props) {
 
   const resultPosts = results?.posts ?? []
   const resultCount = results?.total ?? 0
-  const canLoadMore = resultPosts.length < resultCount
+  // The API clamps `limit` to BLOG_SEARCH_MAX_RESULTS, so past that point
+  // another request cannot return more posts; comparing against the raw total
+  // would leave a "Load more" button that never makes progress.
+  const canLoadMore =
+    resultPosts.length < Math.min(resultCount, BLOG_SEARCH_MAX_RESULTS)
   const isSearchLoading =
     isFiltering && (isDebouncing || searchStatus === 'loading')
   const hasSearchError = isFiltering && searchStatus === 'error'
