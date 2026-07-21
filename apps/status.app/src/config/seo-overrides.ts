@@ -49,6 +49,11 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
     description:
       'Read deep dives into cryptography and human rights. Stay current with software releases and technical notes for your secure non-custodial crypto wallet.',
   },
+  '/learn': {
+    title: 'Learn: Guides to Privacy, Security & Open Technology',
+    description:
+      'In-depth technical content on privacy, cryptography, secure messaging, distributed networks, and the systems powering open communication technologies.',
+  },
   '/apps': {
     title: 'Download the Status Desktop App and Mobile App Suite',
     description:
