@@ -19,6 +19,26 @@ export function deriveNextAccountIndex(
   return Math.max(...indices) + 1
 }
 
+export function pathAtIndex(basePath: string, index: number): string {
+  return index === 0 ? basePath : basePath.replace(/\/[^/]+$/, `/${index}`)
+}
+
+export function nextDerivationPath(
+  walletCore: WalletCore,
+  existingAccounts: WalletAccount[],
+  coin: InstanceType<WalletCore['CoinType']>,
+  derivation: InstanceType<WalletCore['Derivation']>,
+): string {
+  const basePath = walletCore.CoinTypeExt.derivationPathWithDerivation(
+    coin,
+    derivation,
+  )
+  return pathAtIndex(
+    basePath,
+    deriveNextAccountIndex(existingAccounts, coin.value),
+  )
+}
+
 export function deriveAccountsAtPaths(
   walletCore: WalletCore,
   mnemonic: string,
@@ -58,9 +78,7 @@ export function deriveAccounts(
     coin,
     derivation,
   )
-  const paths = indices.map(index =>
-    index === 0 ? basePath : basePath.replace(/\/[^/]+$/, `/${index}`),
-  )
+  const paths = indices.map(index => pathAtIndex(basePath, index))
   return deriveAccountsAtPaths(walletCore, mnemonic, coin, derivation, paths)
 }
 
