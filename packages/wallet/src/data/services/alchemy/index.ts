@@ -12,6 +12,7 @@ import { formatEther } from 'ethers'
 
 import { serverEnv } from '../../../config/env.server.mjs'
 import { buildCanonicalTimestamps } from '../../../utils'
+import { hasErrorCause } from '../../../utils/error-cause'
 import {
   getRandomApiKey,
   markApiKeyAsRateLimited,
@@ -839,6 +840,10 @@ export async function getAssetTransfers(
     }
   } catch (error) {
     console.error('getAssetTransfers error:', error)
+
+    // Do not turn rate limiting into a successful empty activity response.
+    if (hasErrorCause(error, 429)) throw error
+
     return {
       transfers: [],
       pageKey: undefined,
@@ -1250,7 +1255,7 @@ async function _retry<T extends ResponseBody>(
         return result
       } catch (error) {
         // `Your app has exceeded its compute units per second capacity.` https://docs.alchemy.com/reference/error-reference#http-status-codes
-        if (error instanceof Error && error.cause === 429) {
+        if (hasErrorCause(error, 429)) {
           throw error
         }
 

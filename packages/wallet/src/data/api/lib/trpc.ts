@@ -2,6 +2,7 @@ import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
 import { ZodError } from 'zod'
 
+import { hasErrorCause } from '../../../utils/error-cause'
 import { createRateLimitMiddleware } from './rate-limiter'
 
 /**
@@ -64,10 +65,13 @@ export const { createCallerFactory } = trpc
 export const router = trpc.router
 
 /**
- * Rate limiting for Market Proxy
+ * Request throttling for Market-backed routes
  *
  * RATIONALE:
- * - Aligned with the Market Proxy's CoinGecko API rate limit (30 RPM for Demo/NoKey).
+ * - Uses the Market Proxy's CoinGecko limit as a conservative per-client
+ *   request budget.
+ * - This counts API procedures, not internal upstream fan-out. The Market
+ *   Proxy remains responsible for its aggregate provider quota.
  * - Reference: https://github.com/status-im/market-proxy/blob/master/market-fetcher/config.yaml#L14-L19
  */
 const marketRateLimitMiddleware = createRateLimitMiddleware(trpc, {
@@ -95,8 +99,12 @@ const RPC_METHOD_CATEGORY_MAP: Record<string, RPCCategory> = {
   'collectibles.page': 'permanent',
   'collectibles.collectible': 'permanent',
 
-  // Short: Semi-static data (40 RPM)
+  // Short: Semi-static data (40 RPM). Keep raw JSON-RPC methods aligned with
+  // eth-rpc-proxy/go-proxy-cache/cache_rules.yaml.
   eth_getBalance: 'short',
+  eth_estimateGas: 'short',
+  eth_maxPriorityFeePerGas: 'short',
+  eth_blockNumber: 'short',
   'nodes.getNonce': 'short',
   eth_getTransactionCount: 'short',
   eth_feeHistory: 'short',
@@ -108,9 +116,6 @@ const RPC_METHOD_CATEGORY_MAP: Record<string, RPCCategory> = {
   'assets.tokenPriceChart': 'short',
 
   // Minimal: Highly dynamic data (15 RPM)
-  eth_estimateGas: 'minimal',
-  eth_maxPriorityFeePerGas: 'minimal',
-  eth_blockNumber: 'minimal',
   'nodes.getFeeRate': 'minimal',
   'nodes.broadcastTransaction': 'minimal',
   eth_sendRawTransaction: 'minimal',
@@ -149,10 +154,12 @@ export function getRpcCategory(
 }
 
 /**
- * Rate limiting for ETH RPC Proxy (Alchemy)
+ * Request throttling for ETH RPC-backed routes
  *
  * RATIONALE:
- * - Aligned with the Alchemy Tier (30 RPM total for free bucket, but split by category).
+ * - Applies conservative per-client request budgets split by cache category.
+ * - This counts API procedures, not internal upstream fan-out. The ETH RPC
+ *   Proxy remains responsible for its aggregate provider quota.
  * - Reference: https://github.com/status-im/eth-rpc-proxy/blob/master/nginx-proxy/cache.md#yaml-configuration-system
  */
 const ethRPCRateLimitMiddleware = createRateLimitMiddleware(trpc, {
@@ -187,7 +194,7 @@ const errorMiddleware = trpc.middleware(async opts => {
 
   if (!result.ok && result.error) {
     const error = result.error
-    if (error.cause instanceof Error && error.cause.cause === 429) {
+    if (hasErrorCause(error, 429)) {
       throw new TRPCError({
         code: 'TOO_MANY_REQUESTS',
         message:
