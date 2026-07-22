@@ -110,10 +110,7 @@ async function handler(request: NextRequest) {
       // unstable_onChunk: undefined,
     })
 
-    const status = response.status
-    const result = await response.json()
-
-    return Response.json(result, { status })
+    return response
   } catch (error) {
     const status = 500
     // @see https://github.com/trpc/trpc/discussions/3640#discussioncomment-5511435 for returning explicit trpc error in superjson construct as result and preventing possible timeouts due to additional parsing
