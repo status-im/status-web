@@ -5,6 +5,7 @@ import { z } from 'zod'
 import erc20TokenList from '../../../constants/erc20.json'
 import nativeTokenList from '../../../constants/native.json'
 import { buildCanonicalTimestamps, toChecksumAddress } from '../../../utils'
+import { hasErrorCause } from '../../../utils/error-cause'
 import {
   fetchTokenBalanceHistory,
   getERC20TokensBalance,
@@ -482,6 +483,7 @@ async function all({
           `[assets.all] Failed to fetch ERC20 token balances for ${network}:`,
           error,
         )
+        if (hasErrorCause(error, 429)) throw error
       }
     }
 
