@@ -3,7 +3,10 @@ import superjson from 'superjson'
 import { ZodError } from 'zod'
 
 import { hasErrorCause } from '../../../utils/error-cause'
-import { createRateLimitMiddleware } from './rate-limiter'
+import {
+  createRateLimitMiddleware,
+  createTokenBucketRateLimitMiddleware,
+} from './rate-limiter'
 
 /**
  * 1. CONTEXT
@@ -78,11 +81,30 @@ const globalClientRateLimitMiddleware = createRateLimitMiddleware(trpc, {
     'Too many requests to this API domain. Please try again in a minute.',
 })
 
+/**
+ * Portfolio refresh throttling for expensive aggregate endpoints.
+ *
+ * Allows a burst of 20 requests, then refills 20 tokens every 10 seconds
+ * (120 requests/minute sustained) for each client IP.
+ */
+const portfolioRefreshRateLimitMiddleware =
+  createTokenBucketRateLimitMiddleware(trpc, {
+    capacity: 20,
+    refillTokens: 20,
+    refillIntervalMs: 10 * 1000,
+    keyPrefix: 'portfolio-refresh',
+    message:
+      'Too many portfolio refreshes. Please wait a moment and try again.',
+  })
+
 const errorMiddleware = trpc.middleware(async opts => {
   const result = await opts.next()
 
   if (!result.ok && result.error) {
     const error = result.error
+    if (error.code === 'TOO_MANY_REQUESTS') {
+      throw error
+    }
     if (hasErrorCause(error, 429)) {
       throw new TRPCError({
         code: 'TOO_MANY_REQUESTS',
@@ -101,6 +123,11 @@ const errorMiddleware = trpc.middleware(async opts => {
 // Unauthenticated procedure (Standard) with global client-based rate limiting
 export const publicProcedure = trpc.procedure
   .use(globalClientRateLimitMiddleware)
+  .use(errorMiddleware)
+
+export const portfolioRefreshProcedure = trpc.procedure
+  .use(globalClientRateLimitMiddleware)
+  .use(portfolioRefreshRateLimitMiddleware)
   .use(errorMiddleware)
 
 // Status proxies enforce their own aggregate provider quotas. These semantic

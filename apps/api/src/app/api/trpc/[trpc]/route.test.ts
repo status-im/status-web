@@ -1,3 +1,4 @@
+import { getRetryAfterSeconds } from '@status-im/wallet/data'
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -22,6 +23,7 @@ vi.mock('next/headers', () => ({
 describe('tRPC route response metadata', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    vi.mocked(getRetryAfterSeconds).mockReturnValue(undefined)
   })
 
   it('preserves status, body, and responseMeta headers', async () => {
@@ -52,5 +54,25 @@ describe('tRPC route response metadata', () => {
     await expect(response.json()).resolves.toEqual({
       error: { message: 'Rate limited' },
     })
+  })
+
+  it('adds Retry-After from the original middleware error', async () => {
+    vi.mocked(getRetryAfterSeconds).mockReturnValue(1)
+    vi.mocked(fetchRequestHandler).mockImplementation(async options => {
+      options.onError?.({ error: new Error('Rate limited') } as never)
+      return Response.json(
+        { error: { message: 'Rate limited' } },
+        { status: 429 }
+      )
+    })
+
+    const request = new Request(
+      'http://localhost/api/trpc/activities.page?input={}',
+      { method: 'GET' }
+    ) as NextRequest
+    const response = await POST(request)
+
+    expect(response.status).toBe(429)
+    expect(response.headers.get('retry-after')).toBe('1')
   })
 })

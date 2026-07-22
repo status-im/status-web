@@ -22,6 +22,7 @@ import {
   ethRPCAndMarketProcedure,
   ethRPCProcedure,
   marketProcedure,
+  portfolioRefreshProcedure,
   router,
 } from '../lib/trpc'
 
@@ -201,7 +202,7 @@ async function fetchTokenData(
 }
 
 export const assetsRouter = router({
-  all: ethRPCAndMarketProcedure
+  all: portfolioRefreshProcedure
     .input(
       z.object({
         address: z.string(),
@@ -222,7 +223,7 @@ export const assetsRouter = router({
 
       return await cachedAll(inputHash)
     }),
-  nativeToken: ethRPCAndMarketProcedure
+  nativeToken: portfolioRefreshProcedure
     .input(
       z.object({
         address: z.string(),
@@ -246,7 +247,7 @@ export const assetsRouter = router({
 
       return await cachedNativeToken(inputHash)
     }),
-  token: ethRPCAndMarketProcedure
+  token: portfolioRefreshProcedure
     .input(
       z.object({
         address: z.string(),
