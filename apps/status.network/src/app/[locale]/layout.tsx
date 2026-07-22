@@ -129,7 +129,7 @@ export default async function LocaleLayout({ children, params }: Props) {
         <NextIntlClientProvider messages={messages} locale={locale}>
           {children}
         </NextIntlClientProvider>
-        <Analytics />
+        <Analytics mode="development" debug={false} />
         <Script
           strategy="afterInteractive"
           src="https://umami.bi.status.im/script.js"
