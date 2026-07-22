@@ -36,6 +36,8 @@ type ButtonProps = React.ComponentProps<typeof DropdownButton>
 type Props = Pick<ButtonProps, 'variant' | 'size'> & {
   show?: 'single' | 'all'
   source?: 'sharing'
+  // Render icon-only triggers (no text labels).
+  iconOnly?: boolean
 }
 
 const getDesktopEquivalent = (platform: string | null) => {
@@ -154,10 +156,11 @@ type DownloadButtonProps = Pick<
   'children' | 'variant' | 'size'
 > & {
   source: string | null
+  iconOnly?: boolean
 }
 
 const LinuxDownloadButton = (props: DownloadButtonProps) => {
-  const { source, ...buttonProps } = props
+  const { source, iconOnly, ...buttonProps } = props
   const latestReleaseTags = useLatestReleaseTags()
   const t = useTranslations('download')
 
@@ -174,6 +177,25 @@ const LinuxDownloadButton = (props: DownloadButtonProps) => {
       source,
     })
   }
+
+  if (iconOnly) {
+    return (
+      <DownloadConnectorDialog>
+        <Button
+          {...buttonProps}
+          href={
+            isGetSite
+              ? STATUS_RELEASES_LATEST_URL
+              : STATUS_DESKTOP_DOWNLOAD_URL_LINUX
+          }
+          icon={<LinuxIcon />}
+          aria-label={t('downloadForLinux')}
+          onClick={handleClick}
+        />
+      </DownloadConnectorDialog>
+    )
+  }
+
   return (
     <>
       <div className="hidden macos:contents windows:contents ios:contents android:contents">
@@ -212,7 +234,7 @@ const LinuxDownloadButton = (props: DownloadButtonProps) => {
 }
 
 const WindowsDownloadButton = (props: DownloadButtonProps) => {
-  const { source, ...buttonProps } = props
+  const { source, iconOnly, ...buttonProps } = props
   const latestReleaseTags = useLatestReleaseTags()
   const t = useTranslations('download')
 
@@ -228,6 +250,24 @@ const WindowsDownloadButton = (props: DownloadButtonProps) => {
       version: latestReleaseTags.desktop ?? 'unknown',
       source,
     })
+  }
+
+  if (iconOnly) {
+    return (
+      <DownloadConnectorDialog>
+        <Button
+          {...buttonProps}
+          href={
+            isGetSite
+              ? STATUS_RELEASES_LATEST_URL
+              : STATUS_DESKTOP_DOWNLOAD_URL_WINDOWS
+          }
+          icon={<WindowsIcon />}
+          aria-label={t('downloadForWindows')}
+          onClick={handleClick}
+        />
+      </DownloadConnectorDialog>
+    )
   }
 
   return (
@@ -268,7 +308,7 @@ const WindowsDownloadButton = (props: DownloadButtonProps) => {
 }
 
 const MacOSDownloadButton = (props: DownloadButtonProps) => {
-  const { source, ...buttonProps } = props
+  const { source, iconOnly, ...buttonProps } = props
   const latestReleaseTags = useLatestReleaseTags()
   const t = useTranslations('download')
 
@@ -284,6 +324,24 @@ const MacOSDownloadButton = (props: DownloadButtonProps) => {
       store: 'direct',
       source,
     })
+  }
+
+  if (iconOnly) {
+    return (
+      <DownloadConnectorDialog>
+        <Button
+          {...buttonProps}
+          href={
+            isGetSite
+              ? STATUS_RELEASES_LATEST_URL
+              : STATUS_DESKTOP_DOWNLOAD_URL_MACOS_SILICON
+          }
+          icon={<AppleIcon />}
+          aria-label={t('downloadForMacOS')}
+          onClick={handleClick}
+        />
+      </DownloadConnectorDialog>
+    )
   }
 
   return (
