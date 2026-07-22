@@ -180,7 +180,7 @@ export function BlogSearch(props: Props) {
 
   return (
     <>
-      <div className="relative mb-4 max-w-[720px]">
+      <div className="relative mb-4">
         <SearchIcon className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-neutral-50" />
         <input
           type="search"
