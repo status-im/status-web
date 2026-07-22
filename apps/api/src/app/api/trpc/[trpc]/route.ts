@@ -36,6 +36,7 @@ async function handler(request: NextRequest) {
   }
 
   try {
+    let retryAfterFromError: number | undefined
     const response = await fetchRequestHandler({
       // return await fetchRequestHandler({
       endpoint: '/api/trpc',
@@ -46,6 +47,9 @@ async function handler(request: NextRequest) {
         const headers = new Headers(await nextHeaders())
 
         return { headers }
+      },
+      onError: opts => {
+        retryAfterFromError = getRetryAfterSeconds(opts.error)
       },
       /**
        * @see https://trpc.io/docs/v10/server/error-handling#handling-errors
@@ -109,6 +113,13 @@ async function handler(request: NextRequest) {
       },
       // unstable_onChunk: undefined,
     })
+
+    if (response.status === 429 && !response.headers.has('Retry-After')) {
+      response.headers.set(
+        'Retry-After',
+        String(Math.max(1, retryAfterFromError ?? 60))
+      )
+    }
 
     return response
   } catch (error) {
