@@ -128,7 +128,7 @@ const ImportRecoveryPhraseForm = ({
 
       <div className="mt-auto flex flex-col gap-6">
         {showError && (
-          <p className="flex items-center gap-1 text-danger-50">
+          <p role="alert" className="flex items-center gap-1 text-danger-50">
             <AlertIcon />
             <span className="text-13">
               Invalid phrase. Check word count and spelling.

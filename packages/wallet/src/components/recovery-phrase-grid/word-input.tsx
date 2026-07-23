@@ -9,6 +9,8 @@ type Props = {
   index: number
   value: string
   invalid: boolean
+  shouldAutoFocus?: boolean
+  isLast?: boolean
   onValueChange: (value: string) => void
   onPasteWords: (words: string[]) => void
   onFocusPrevious: () => void
@@ -20,6 +22,8 @@ const WordInput = forwardRef<HTMLInputElement, Props>((props, ref) => {
     index,
     value,
     invalid,
+    shouldAutoFocus = false,
+    isLast = false,
     onValueChange,
     onPasteWords,
     onFocusPrevious,
@@ -31,6 +35,11 @@ const WordInput = forwardRef<HTMLInputElement, Props>((props, ref) => {
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    // On the last input, Enter falls through to the native form submit.
+    if (event.key === 'Enter' && isLast) {
+      return
+    }
+
     if (event.key === ' ' || event.key === 'Enter') {
       event.preventDefault()
       if (value !== '') {
@@ -76,6 +85,8 @@ const WordInput = forwardRef<HTMLInputElement, Props>((props, ref) => {
         value={value}
         aria-label={`Word ${index + 1}`}
         aria-invalid={invalid || undefined}
+        // eslint-disable-next-line jsx-a11y/no-autofocus -- matches the design; the grid is the sole content of the step
+        autoFocus={shouldAutoFocus}
         autoComplete="off"
         autoCapitalize="off"
         autoCorrect="off"
