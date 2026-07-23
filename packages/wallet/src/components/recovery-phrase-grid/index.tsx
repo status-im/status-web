@@ -60,6 +60,8 @@ function RecoveryPhraseGrid(props: Props) {
           index={index}
           value={word}
           invalid={word !== '' && !englishWords.has(word)}
+          shouldAutoFocus={index === 0}
+          isLast={index === words.length - 1}
           onValueChange={value => handleWordChange(index, value)}
           onPasteWords={pastedWords => handlePasteWords(index, pastedWords)}
           onFocusPrevious={() => focusInput(index - 1)}
