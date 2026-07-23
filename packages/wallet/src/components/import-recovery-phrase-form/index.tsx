@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from 'react'
 
 import { validateMnemonic } from '@scure/bip39'
