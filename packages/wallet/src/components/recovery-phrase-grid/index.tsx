@@ -1,3 +1,5 @@
+'use client'
+
 import { useRef } from 'react'
 
 import { wordlist as english } from '@scure/bip39/wordlists/english'
