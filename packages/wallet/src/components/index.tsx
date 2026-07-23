@@ -56,7 +56,7 @@ export { PercentageChange } from './percentage-change'
 export { PinExtension } from './pin-extension'
 export { ReceiveCryptoDrawer } from './receive-crypto-drawer'
 export { RecoveryPhraseDialog } from './recovery-phrase-dialog'
-export { RecoveryPhraseTextarea } from './recovery-phrase-textarea'
+export { RecoveryPhraseGrid } from './recovery-phrase-grid'
 export {
   type HardwareWalletAccount,
   ScannerScreen,
