@@ -15,6 +15,28 @@ import { DownloadMobileButton } from '../download-mobile-button'
 import { LanguageSelector } from './language-selector'
 import { useDesktopMenu } from './use-desktop-menu'
 
+// Download CTAs for the top navbar.
+const NavDownloadCtas = () => {
+  return (
+    <>
+      <div className="contents [@media(min-width:1320px)]:hidden">
+        <DownloadDesktopButton
+          size="32"
+          variant="darkGrey"
+          show="all"
+          iconOnly
+        />
+        <DownloadMobileButton size="32" variant="outline" iconOnly />
+      </div>
+      <div className="hidden [@media(min-width:1320px)]:contents">
+        <DownloadDesktopButton size="32" variant="darkGrey" show="all" />
+        <DownloadMobileButton size="32" variant="outline" />
+      </div>
+      <LanguageSelector />
+    </>
+  )
+}
+
 const NavDesktop = () => {
   const t = useTranslations('nav')
   const {
@@ -92,9 +114,7 @@ const NavDesktop = () => {
               'macos:flex windows:flex linux:flex unknown:flex'
             )}
           >
-            <DownloadDesktopButton size="32" variant="darkGrey" show="all" />
-            <DownloadMobileButton size="32" variant="outline" />
-            <LanguageSelector />
+            <NavDownloadCtas />
           </div>
 
           <div
@@ -104,9 +124,7 @@ const NavDesktop = () => {
               'ios:flex android:flex'
             )}
           >
-            <DownloadDesktopButton size="32" variant="darkGrey" show="all" />
-            <DownloadMobileButton size="32" variant="outline" />
-            <LanguageSelector />
+            <NavDownloadCtas />
           </div>
         </div>
         <NavigationMenu.Viewport

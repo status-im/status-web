@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-import { animated, useScroll } from '@react-spring/web'
 import { cx } from 'class-variance-authority'
 
 import { usePathname } from '~/i18n/navigation'
@@ -31,8 +30,14 @@ const FloatingMenu = () => {
   // Close menu on outside click
   const ref = useOutsideClick(() => setOpen(false))
 
-  useScroll({
-    onChange: ({ value: { scrollY } }) => {
+  // note: a plain window scroll listener rather than `@react-spring/web`'s
+  // `useScroll`. The spring-based hook relies on react-spring's rAF frameloop,
+  // which doesn't fire reliably under Turbopack dev, so the overlay never
+  // appeared locally (it worked in the webpack production build). This reads
+  // `window.scrollY` directly and is build/runtime independent.
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY
       const isMenuOpen = openRef.current
       const isScrollingUp = scrollY < scrollYRef.current
       const detectionPoint = scrollY > DETECTION_POINT
@@ -58,11 +63,11 @@ const FloatingMenu = () => {
         }
       }
       scrollYRef.current = scrollY
-    },
-    default: {
-      immediate: true,
-    },
-  })
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const pathname = usePathname()!
   useEffect(() => {
@@ -79,7 +84,7 @@ const FloatingMenu = () => {
 
   return (
     <>
-      <animated.div
+      <div
         ref={ref}
         style={styles}
         className={cx([
@@ -91,8 +96,8 @@ const FloatingMenu = () => {
         ])}
       >
         <FloatingMobile open={open} setOpen={setOpen} />
-      </animated.div>
-      <animated.div
+      </div>
+      <div
         style={styles}
         className={cx([
           'fixed left-1/2 top-5 z-20 w-max min-w-[746px] -translate-x-1/2 overflow-hidden',
@@ -101,7 +106,7 @@ const FloatingMenu = () => {
         ])}
       >
         <FloatingDesktop visible={visible} />
-      </animated.div>
+      </div>
     </>
   )
 }

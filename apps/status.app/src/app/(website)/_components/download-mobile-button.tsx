@@ -28,6 +28,8 @@ import { startLatestDownload } from '~website/_lib/download-latest'
 
 type Props = Pick<React.ComponentProps<typeof Button>, 'variant' | 'size'> & {
   children?: React.ReactElement<React.ComponentProps<typeof Button>>
+  // Render an icon-only trigger (no text label).
+  iconOnly?: boolean
 }
 
 export const DownloadMobileButton = (props: Props) => {
@@ -35,7 +37,7 @@ export const DownloadMobileButton = (props: Props) => {
   const latestReleaseTags = useLatestReleaseTags()
   const t = useTranslations('download')
 
-  const { children } = props
+  const { children, iconOnly, variant, size } = props
 
   const renderLabel = () => {
     return (
@@ -52,21 +54,43 @@ export const DownloadMobileButton = (props: Props) => {
 
   return (
     <Dialog>
-      {children ?? (
-        <Button
-          {...props}
-          iconBefore={
-            <MobileIcon
-              className={match(props.variant)
-                .with('outline', () => 'text-neutral-100 dark:text-neutral-40')
-                .with('grey', () => 'text-neutral-80 dark:text-neutral-50')
-                .otherwise(() => undefined)}
-            />
-          }
-        >
-          {renderLabel()}
-        </Button>
-      )}
+      {children ??
+        (iconOnly ? (
+          <Button
+            variant={variant}
+            size={size}
+            aria-label={t('downloadForMobile')}
+            icon={
+              <MobileIcon
+                className={match(variant)
+                  .with(
+                    'outline',
+                    () => 'text-neutral-100 dark:text-neutral-40'
+                  )
+                  .with('grey', () => 'text-neutral-80 dark:text-neutral-50')
+                  .otherwise(() => undefined)}
+              />
+            }
+          />
+        ) : (
+          <Button
+            variant={variant}
+            size={size}
+            iconBefore={
+              <MobileIcon
+                className={match(variant)
+                  .with(
+                    'outline',
+                    () => 'text-neutral-100 dark:text-neutral-40'
+                  )
+                  .with('grey', () => 'text-neutral-80 dark:text-neutral-50')
+                  .otherwise(() => undefined)}
+              />
+            }
+          >
+            {renderLabel()}
+          </Button>
+        ))}
 
       <Dialog.Content className="md:!max-w-[1190px]">
         <div className="absolute right-3 top-3 z-10">

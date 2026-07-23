@@ -17,6 +17,31 @@ type Props = {
   visible: boolean
 }
 
+// Download CTAs for the floating (scroll-up) navbar. Mirrors the top navbar:
+// collapse to icon-only below 1320px so the row can't overflow the viewport,
+// full labels return above it.
+const FloatingDownloadCtas = (props: { show?: 'single' | 'all' }) => {
+  const { show } = props
+  return (
+    <>
+      <div className="contents [@media(min-width:1320px)]:hidden">
+        <DownloadDesktopButton
+          size="32"
+          variant="primary"
+          show={show}
+          iconOnly
+        />
+        <DownloadMobileButton size="32" variant="outline" iconOnly />
+      </div>
+      <div className="hidden [@media(min-width:1320px)]:contents">
+        <DownloadDesktopButton size="32" variant="primary" show={show} />
+        <DownloadMobileButton size="32" variant="outline" />
+      </div>
+      <LanguageSelector />
+    </>
+  )
+}
+
 const FloatingDesktop = (props: Props) => {
   const { visible } = props
   const t = useTranslations('nav')
@@ -99,9 +124,7 @@ const FloatingDesktop = (props: Props) => {
             'ios:flex android:flex'
           )}
         >
-          <DownloadDesktopButton size="32" variant="primary" />
-          <DownloadMobileButton size="32" variant="outline" />
-          <LanguageSelector />
+          <FloatingDownloadCtas />
         </div>
         <div
           className={cx(
@@ -109,9 +132,7 @@ const FloatingDesktop = (props: Props) => {
             'macos:flex windows:flex linux:flex unknown:flex'
           )}
         >
-          <DownloadDesktopButton size="32" variant="primary" show="all" />
-          <DownloadMobileButton size="32" variant="outline" />
-          <LanguageSelector />
+          <FloatingDownloadCtas show="all" />
         </div>
       </div>
       <NavigationMenu.Viewport
