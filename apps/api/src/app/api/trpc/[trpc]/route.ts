@@ -1,11 +1,14 @@
-// todo: rate limiting
-
 // @see https://trpc.io/docs/server/adapters/nextjs#route-handlers for nextjs app router implementation
 // @see https://github.com/trpc/trpc/blob/8cef54eaf95d8abc8484fe1d454b6620eeb57f2f/www/versioned_docs/version-10.x/further/rpc.md for http rpc spec
 // @see https://stackoverflow.com/questions/78800979/trpc-giving-error-when-trying-to-test-with-postman for calling via postman
 // @see https://github.com/trpc/trpc/issues/752 for use of superjson
 
-import { type ApiRouter, apiRouter } from '@status-im/wallet/data'
+import {
+  type ApiRouter,
+  apiRouter,
+  getRetryAfterSeconds,
+  parseRetryAfterSeconds,
+} from '@status-im/wallet/data'
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
 import { headers as nextHeaders } from 'next/headers'
 
@@ -33,6 +36,7 @@ async function handler(request: NextRequest) {
   }
 
   try {
+    let retryAfterFromError: number | undefined
     const response = await fetchRequestHandler({
       // return await fetchRequestHandler({
       endpoint: '/api/trpc',
@@ -43,6 +47,9 @@ async function handler(request: NextRequest) {
         const headers = new Headers(await nextHeaders())
 
         return { headers }
+      },
+      onError: opts => {
+        retryAfterFromError = getRetryAfterSeconds(opts.error)
       },
       /**
        * @see https://trpc.io/docs/v10/server/error-handling#handling-errors
@@ -81,9 +88,25 @@ async function handler(request: NextRequest) {
           cacheControl = 'private, no-store'
         }
 
+        const errors = opts.errors ?? []
+        const isRateLimited = errors.some(
+          error => error.code === 'TOO_MANY_REQUESTS'
+        )
+        const retryAfterValues = errors.flatMap(error => {
+          const value = getRetryAfterSeconds(error)
+          return value === undefined ? [] : [value]
+        })
+        const retryAfter = isRateLimited
+          ? Math.max(
+              1,
+              ...(retryAfterValues.length ? retryAfterValues : [60])
+            ).toString()
+          : undefined
+
         return {
           headers: {
             'cache-control': cacheControl,
+            ...(retryAfter && { 'Retry-After': retryAfter }),
             ...getCorsHeaders(),
           },
         }
@@ -91,10 +114,14 @@ async function handler(request: NextRequest) {
       // unstable_onChunk: undefined,
     })
 
-    const status = response.status
-    const result = await response.json()
+    if (response.status === 429 && !response.headers.has('Retry-After')) {
+      response.headers.set(
+        'Retry-After',
+        String(Math.max(1, retryAfterFromError ?? 60))
+      )
+    }
 
-    return Response.json(result, { status })
+    return response
   } catch (error) {
     const status = 500
     // @see https://github.com/trpc/trpc/discussions/3640#discussioncomment-5511435 for returning explicit trpc error in superjson construct as result and preventing possible timeouts due to additional parsing
@@ -159,12 +186,23 @@ function getCorsHeaders(): Record<string, string> {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Expose-Headers': 'Retry-After',
   }
 }
 
 /**
  * Processes a single JSON-RPC call through the tRPC rpc.proxy mutation.
  */
+class JsonRpcHttpError extends Error {
+  constructor(
+    message: string,
+    readonly status: number,
+    readonly retryAfterSeconds?: number
+  ) {
+    super(message)
+  }
+}
+
 async function processSingleJsonRpc(
   request: NextRequest,
   jsonRpcCall: { method: string; params?: unknown[]; id?: string | number },
@@ -180,18 +218,41 @@ async function processSingleJsonRpc(
       const headers = new Headers(await nextHeaders())
       return { headers }
     },
-    responseMeta: () => ({
-      headers: {
-        'cache-control': 'private, no-store',
-        ...getCorsHeaders(),
-      },
-    }),
+    responseMeta: opts => {
+      const errors = opts.errors ?? []
+      const isRateLimited = errors.some(
+        error => error.code === 'TOO_MANY_REQUESTS'
+      )
+      const retryAfterValues = errors.flatMap(error => {
+        const value = getRetryAfterSeconds(error)
+        return value === undefined ? [] : [value]
+      })
+      const retryAfter = isRateLimited
+        ? Math.max(
+            1,
+            ...(retryAfterValues.length ? retryAfterValues : [60])
+          ).toString()
+        : undefined
+      return {
+        headers: {
+          'cache-control': 'private, no-store',
+          ...(retryAfter && { 'Retry-After': retryAfter }),
+          ...getCorsHeaders(),
+        },
+      }
+    },
   })
 
   if (!response.ok) {
-    throw new Error(
+    const body = await response.json().catch(() => null)
+    const message =
+      body?.error?.json?.message ||
+      body?.error?.message ||
       `tRPC handler error: ${response.status} ${response.statusText}`
+    const retryAfter = parseRetryAfterSeconds(
+      response.headers.get('retry-after')
     )
+    throw new JsonRpcHttpError(message, response.status, retryAfter)
   }
 
   const trpcResponse = await response.json()
@@ -213,27 +274,59 @@ async function handleJsonRpcProxy(request: NextRequest): Promise<Response> {
   }
 
   if (Array.isArray(jsonRpcBody)) {
-    const results = await Promise.all(
+    const outcomes = await Promise.all(
       jsonRpcBody.map(async call => {
         try {
-          return await processSingleJsonRpc(request, call, chainId)
-        } catch (error) {
           return {
-            jsonrpc: '2.0' as const,
-            id: call.id ?? null,
-            error: {
-              code: -32603,
-              message:
-                error instanceof Error
-                  ? error.message
-                  : 'Internal server error',
+            payload: await processSingleJsonRpc(request, call, chainId),
+          }
+        } catch (error) {
+          const isRateLimited =
+            error instanceof JsonRpcHttpError && error.status === 429
+          return {
+            payload: {
+              jsonrpc: '2.0' as const,
+              id: call.id ?? null,
+              error: {
+                code: isRateLimited ? -32005 : -32603,
+                message:
+                  error instanceof Error
+                    ? error.message
+                    : 'Internal server error',
+              },
             },
+            retryAfterSeconds:
+              error instanceof JsonRpcHttpError
+                ? error.retryAfterSeconds
+                : undefined,
           }
         }
       })
     )
 
-    return Response.json(results, { headers: corsHeaders })
+    const results = outcomes.map(outcome => outcome.payload)
+    const hasRateLimitedCall = results.some(result => {
+      if (!result || typeof result !== 'object' || !('error' in result)) {
+        return false
+      }
+      return (result.error as { code?: number })?.code === -32005
+    })
+    const retryAfterValues = outcomes.flatMap(outcome =>
+      outcome.retryAfterSeconds === undefined ? [] : [outcome.retryAfterSeconds]
+    )
+    const retryAfter = hasRateLimitedCall
+      ? Math.max(
+          1,
+          ...(retryAfterValues.length ? retryAfterValues : [60])
+        ).toString()
+      : undefined
+
+    return Response.json(results, {
+      headers: {
+        ...corsHeaders,
+        ...(retryAfter && { 'Retry-After': retryAfter }),
+      },
+    })
   }
 
   try {
@@ -245,19 +338,28 @@ async function handleJsonRpcProxy(request: NextRequest): Promise<Response> {
 
     return Response.json(result, { headers: corsHeaders })
   } catch (error) {
+    const status = error instanceof JsonRpcHttpError ? error.status : 500
+    const isRateLimited = status === 429
+    const retryAfter =
+      error instanceof JsonRpcHttpError ? error.retryAfterSeconds : undefined
     return Response.json(
       {
         jsonrpc: '2.0',
         id: jsonRpcBody?.id ?? null,
         error: {
-          code: -32603,
+          code: isRateLimited ? -32005 : -32603,
           message:
             error instanceof Error ? error.message : 'Internal server error',
         },
       },
       {
-        status: 500,
-        headers: corsHeaders,
+        status,
+        headers: {
+          ...corsHeaders,
+          ...(isRateLimited && {
+            'Retry-After': String(Math.max(1, retryAfter ?? 60)),
+          }),
+        },
       }
     )
   }

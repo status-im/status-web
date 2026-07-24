@@ -7,7 +7,7 @@ import erc20TokenList from '../../../constants/erc20.json'
 import { groupBy } from '../../../utils/group-by'
 import { getAssetTransfers, getTransactionStatus } from '../../services/alchemy'
 import { fetchTokensPriceForDate } from '../../services/coingecko/index'
-import { ethRPCProcedure, router } from '../lib/trpc'
+import { portfolioRefreshProcedure, router } from '../lib/trpc'
 
 import type { AssetTransfer } from '../../services/alchemy/types'
 import type { NetworkType } from '../types'
@@ -93,7 +93,7 @@ async function runWithConcurrency<T>(
 }
 
 export const activitiesRouter = router({
-  page: ethRPCProcedure
+  page: portfolioRefreshProcedure
     .input(
       z.object({
         address: z.string(),
@@ -107,7 +107,7 @@ export const activitiesRouter = router({
       return await cachedPage(key)
     }),
 
-  activities: ethRPCProcedure
+  activities: portfolioRefreshProcedure
     .input(
       z.object({
         address: z.string(),
@@ -176,7 +176,9 @@ export async function page({
       activities.push(...results)
     } catch (err) {
       console.error(`[alchemy] Error fetching transfers for ${network}:`, err)
-      throw new Error(`Failed to fetch transfers for ${network}`)
+      throw new Error(`Failed to fetch transfers for ${network}`, {
+        cause: err,
+      })
     }
   }
 

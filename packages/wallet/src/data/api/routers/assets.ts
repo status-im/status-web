@@ -5,6 +5,7 @@ import { z } from 'zod'
 import erc20TokenList from '../../../constants/erc20.json'
 import nativeTokenList from '../../../constants/native.json'
 import { buildCanonicalTimestamps, toChecksumAddress } from '../../../utils'
+import { hasErrorCause } from '../../../utils/error-cause'
 import {
   fetchTokenBalanceHistory,
   getERC20TokensBalance,
@@ -17,7 +18,13 @@ import {
   fetchTokenPriceHistory,
   fetchTokensPrice,
 } from '../../services/coingecko/index'
-import { ethRPCProcedure, router } from '../lib/trpc'
+import {
+  ethRPCAndMarketProcedure,
+  ethRPCProcedure,
+  marketProcedure,
+  portfolioRefreshProcedure,
+  router,
+} from '../lib/trpc'
 
 import type {
   CoinGeckoCoinDetailResponse,
@@ -195,7 +202,7 @@ async function fetchTokenData(
 }
 
 export const assetsRouter = router({
-  all: ethRPCProcedure
+  all: portfolioRefreshProcedure
     .input(
       z.object({
         address: z.string(),
@@ -216,7 +223,7 @@ export const assetsRouter = router({
 
       return await cachedAll(inputHash)
     }),
-  nativeToken: ethRPCProcedure
+  nativeToken: portfolioRefreshProcedure
     .input(
       z.object({
         address: z.string(),
@@ -240,7 +247,7 @@ export const assetsRouter = router({
 
       return await cachedNativeToken(inputHash)
     }),
-  token: ethRPCProcedure
+  token: portfolioRefreshProcedure
     .input(
       z.object({
         address: z.string(),
@@ -264,7 +271,7 @@ export const assetsRouter = router({
 
       return await cachedToken(inputHash)
     }),
-  nativeTokenPriceChart: ethRPCProcedure
+  nativeTokenPriceChart: marketProcedure
     .input(
       z.object({
         symbol: z.string(),
@@ -276,7 +283,7 @@ export const assetsRouter = router({
 
       return await cachedNativeTokenPriceChart(inputHash)
     }),
-  tokenPriceChart: ethRPCProcedure
+  tokenPriceChart: marketProcedure
     .input(
       z.object({
         symbol: z.string(),
@@ -315,7 +322,7 @@ export const assetsRouter = router({
 
       return await cachedTokenBalanceChart(inputHash)
     }),
-  nativeTokenValueChart: ethRPCProcedure
+  nativeTokenValueChart: ethRPCAndMarketProcedure
     .input(
       z.object({
         address: z.string(),
@@ -329,7 +336,7 @@ export const assetsRouter = router({
 
       return await cachedNativeTokenValueChart(inputHash)
     }),
-  tokenValueChart: ethRPCProcedure
+  tokenValueChart: ethRPCAndMarketProcedure
     .input(
       z.object({
         address: z.string(),
@@ -477,6 +484,7 @@ async function all({
           `[assets.all] Failed to fetch ERC20 token balances for ${network}:`,
           error,
         )
+        if (hasErrorCause(error, 429)) throw error
       }
     }
 

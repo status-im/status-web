@@ -19,7 +19,11 @@ import {
   COINGECKO_REVALIDATION_TIMES,
   fetchTokensPrice,
 } from '../../services/coingecko/index'
-import { ethRPCProcedure, router } from '../lib/trpc'
+import {
+  ethRPCAndMarketProcedure,
+  portfolioRefreshProcedure,
+  router,
+} from '../lib/trpc'
 
 import type {
   NFTMetadataResponseBody,
@@ -60,7 +64,7 @@ export type Collectible = {
 }
 
 export const collectiblesRouter = router({
-  page: ethRPCProcedure
+  page: portfolioRefreshProcedure
     .input(
       z.object({
         address: z.string(),
@@ -81,7 +85,7 @@ export const collectiblesRouter = router({
       const inputHash = JSON.stringify(input)
       return await cachedPage(inputHash)
     }),
-  collectible: ethRPCProcedure
+  collectible: ethRPCAndMarketProcedure
     .input(
       z.object({
         contract: z.string(),

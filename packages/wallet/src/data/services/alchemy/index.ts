@@ -13,6 +13,11 @@ import { formatEther } from 'ethers'
 import { serverEnv } from '../../../config/env.server.mjs'
 import { buildCanonicalTimestamps } from '../../../utils'
 import {
+  hasErrorCause,
+  parseRetryAfterSeconds,
+  RateLimitError,
+} from '../../../utils/error-cause'
+import {
   getRandomApiKey,
   markApiKeyAsRateLimited,
   markApiKeyAsSuccessful,
@@ -839,6 +844,10 @@ export async function getAssetTransfers(
     }
   } catch (error) {
     console.error('getAssetTransfers error:', error)
+
+    // Do not turn rate limiting into a successful empty activity response.
+    if (hasErrorCause(error, 429)) throw error
+
     return {
       transfers: [],
       pageKey: undefined,
@@ -1196,7 +1205,12 @@ async function _fetch<T extends ResponseBody>(
       }
     }
 
-    // todo: https://trpc.io/docs/v10/server/error-handling#throwing-errors for passing original error as `cause`
+    if (response.status === 429) {
+      throw new RateLimitError(
+        'Failed to fetch.',
+        parseRetryAfterSeconds(response.headers.get('retry-after')),
+      )
+    }
     throw new Error('Failed to fetch.', { cause: response.status })
   }
 
@@ -1219,6 +1233,15 @@ async function _fetch<T extends ResponseBody>(
       }
     }
 
+    if (
+      error.code === 429 ||
+      error.message?.toLowerCase().includes('rate limit')
+    ) {
+      throw new RateLimitError(
+        error.message || 'RPC request rate limited.',
+        parseRetryAfterSeconds(response.headers.get('retry-after')),
+      )
+    }
     throw new Error(error.message || 'RPC request failed.', {
       cause: error.code,
     })
@@ -1250,7 +1273,7 @@ async function _retry<T extends ResponseBody>(
         return result
       } catch (error) {
         // `Your app has exceeded its compute units per second capacity.` https://docs.alchemy.com/reference/error-reference#http-status-codes
-        if (error instanceof Error && error.cause === 429) {
+        if (hasErrorCause(error, 429)) {
           throw error
         }
 
