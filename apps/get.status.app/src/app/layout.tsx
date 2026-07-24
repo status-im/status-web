@@ -99,7 +99,7 @@ export default function RootLayout({ children }: Props) {
           </NextIntlClientProvider>
         </div>
         <ToastContainer />
-        <Analytics debug={false} />
+        <Analytics mode="development" debug={false} />
         <Script
           strategy="afterInteractive"
           src="https://umami.bi.status.im/script.js"

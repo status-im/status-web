@@ -64,7 +64,7 @@ export default async function PortfolioLayout(props: Props) {
             </WagmiProvider>
           </StatusProvider>
         </div>
-        <Analytics debug={false} />
+        <Analytics mode="development" debug={false} />
         {/* <VercelToolbar /> */}
       </body>
     </html>
