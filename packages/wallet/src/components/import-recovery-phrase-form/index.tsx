@@ -136,7 +136,11 @@ const ImportRecoveryPhraseForm = ({
           </p>
         )}
 
-        <Button variant="primary" type="submit" disabled={!isChecksumValid}>
+        <Button
+          variant="primary"
+          type="submit"
+          disabled={!isChecksumValid || loading}
+        >
           {loading ? (
             <LoadingIcon className="animate-spin text-white-100" />
           ) : (

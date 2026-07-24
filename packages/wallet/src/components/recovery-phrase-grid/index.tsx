@@ -19,8 +19,12 @@ function RecoveryPhraseGrid(props: Props) {
 
   const inputRefs = useRef<Array<HTMLInputElement | null>>([])
 
-  const focusInput = (index: number) => {
-    const clampedIndex = Math.max(0, Math.min(index, words.length - 1))
+  // `total` defaults to the current length, but callers that change the word
+  // count (a full-phrase paste) must pass the new length: this runs inside
+  // requestAnimationFrame where the captured `words` is still the pre-update
+  // array, so clamping against `words.length` would target the wrong cell.
+  const focusInput = (index: number, total: number = words.length) => {
+    const clampedIndex = Math.max(0, Math.min(index, total - 1))
     inputRefs.current[clampedIndex]?.focus()
   }
 
@@ -33,7 +37,9 @@ function RecoveryPhraseGrid(props: Props) {
     // the word count to match.
     if (isValidWordCount(pastedWords.length)) {
       onWordsChange(pastedWords)
-      requestAnimationFrame(() => focusInput(pastedWords.length - 1))
+      requestAnimationFrame(() =>
+        focusInput(pastedWords.length - 1, pastedWords.length),
+      )
       return
     }
 
