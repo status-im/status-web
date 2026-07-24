@@ -20,6 +20,7 @@
     "test:report": "playwright show-report test-results/html-report",
     "setup:metamask": "tsx download-metamask-extension.ts",
     "setup:wallet": "WXT_STATUS_API_URL=${WALLET_STATUS_API_URL:-http://localhost:3030} pnpm --filter wallet exec wxt build -b chrome --mode development",
+    "test:wallet-onboarding": "pnpm setup:wallet && RUN_WALLET_ONBOARDING=1 playwright test --project=wallet-onboarding",
     "test:wallet-send": "pnpm setup:wallet && pnpm anvil:up && RUN_WALLET_E2E=1 playwright test --project=wallet-send; EXIT=$?; pnpm anvil:down; exit $EXIT",
     "test:wallet-swap": "pnpm setup:wallet && pnpm anvil:up && RUN_WALLET_E2E=1 playwright test --project=wallet-swap; EXIT=$?; pnpm anvil:down; exit $EXIT",
     "lint": "eslint src tests",
