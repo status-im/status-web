@@ -31,6 +31,15 @@ export function runsWalletProjects(): boolean {
   return !!process.env.RUN_WALLET_E2E
 }
 
+/**
+ * Whether the wallet-onboarding project is defined. It needs a built extension
+ * but NO backend (Anvil/status-api), so it has its own gate and, unlike
+ * {@link runsWalletProjects}, does not trigger the wallet web servers.
+ */
+export function runsWalletOnboardingProject(): boolean {
+  return !!process.env.RUN_WALLET_ONBOARDING
+}
+
 /** Whether any Hub-backed project runs (default when no explicit selection). */
 export function runsHubProjects(): boolean {
   const projects = selectedProjects()
