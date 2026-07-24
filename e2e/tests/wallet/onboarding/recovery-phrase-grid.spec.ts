@@ -77,6 +77,9 @@ test.describe('Wallet onboarding — recovery phrase grid', () => {
       await expect(onboarding.wordInputs()).toHaveCount(24)
       await expect(onboarding.wordCountDropdown()).toHaveText('24 words')
       await expect(onboarding.wordInput(24)).toHaveValue('title')
+      // Focus must land on the real last cell (24), not the pre-paste last (12):
+      // the grid grew from 12, so focus is clamped against the new length.
+      await expect(onboarding.wordInput(24)).toBeFocused()
       await expect(onboarding.fetchAccountsButton).toBeEnabled()
     },
   )
