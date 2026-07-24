@@ -6,11 +6,12 @@ type Props = {
 
 export function OnboardingFlowLayout({ children }: Props) {
   return (
-    // h-screen + overflow-y-auto makes this the scroll container; the inner
+    // h-full (fills the shell's calc(100vh-60px) content area, not the whole
+    // viewport) + overflow-y-auto makes this the scroll container; the inner
     // min-h-full wrapper centers the card when it fits and grows (so the card
     // stays fully reachable) when its content is taller than the viewport —
     // e.g. a 24-word recovery phrase on a short window.
-    <div className="relative h-screen overflow-y-auto bg-neutral-5">
+    <div className="relative h-full overflow-y-auto bg-neutral-5">
       <BlurredCircle
         color="purple"
         className="absolute left-1/4 top-1/4 z-0 translate-y-[-100px]"
