@@ -32,6 +32,9 @@ let config = {
   },
   reactStrictMode: true,
   pageExtensions: ['ts', 'tsx', 'md', 'mdx'],
+  // Keep SEO metadata in <head>; Search Console ignores streamed canonicals.
+  // why: https://nextjs.org/docs/app/api-reference/config/next-config-js/htmlLimitedBots
+  htmlLimitedBots: /.*/,
 
   // runs on the root level
   typescript: {
