@@ -4,6 +4,7 @@ import path from 'node:path'
 
 import {
   runsHubProjects,
+  runsWalletOnboardingProject,
   runsWalletProjects,
 } from './src/config/test-servers.js'
 
@@ -168,6 +169,20 @@ export default defineConfig({
         headless: false,
       },
     },
+    // Recovery-phrase grid UI. Opt-in (needs a built extension) but backend-free
+    // — no Anvil/status-api — so it does NOT flip needsWalletServers. Gated by
+    // RUN_WALLET_ONBOARDING via the test:wallet-onboarding script.
+    ...(runsWalletOnboardingProject()
+      ? [
+          {
+            name: 'wallet-onboarding',
+            grep: /@wallet-onboarding/,
+            use: {
+              headless: false,
+            },
+          },
+        ]
+      : []),
     // Wallet-extension projects are opt-in (need apps/api + a built extension the
     // shared CI can't provide). Defined only when explicitly selected via
     // --project or RUN_WALLET_E2E, so a plain `pnpm test` stays the core suite.

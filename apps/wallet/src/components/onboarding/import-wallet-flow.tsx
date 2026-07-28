@@ -207,7 +207,7 @@ function ImportMnemonicStep({
         Import via recovery phrase
       </Text>
       <Text size={15} color="$neutral-50" className="mb-4">
-        Type or paste your 12, 15, 18, 21 or 24 words Ethereum recovery phrase
+        Type or paste your recovery phrase
       </Text>
 
       <ImportRecoveryPhraseForm
