@@ -178,6 +178,11 @@ let config = {
         statusCode: 301,
       },
       {
+        source: '/wallet/delete-your-status-wallet-or-wallet-account',
+        destination: '/help/wallet/delete-your-status-wallet-accounts',
+        statusCode: 301,
+      },
+      {
         source: '/wallet/:slug+',
         destination: '/help/wallet/:slug+',
         statusCode: 301,
@@ -203,6 +208,11 @@ let config = {
         statusCode: 301,
       },
       {
+        source: '/keycard/if-you-can-t-unlock-your-keycard',
+        destination: '/help/keycard/if-you-can-t-unblock-your-keycard',
+        statusCode: 301,
+      },
+      {
         source: '/keycard/:slug+',
         destination: '/help/keycard/:slug+',
         statusCode: 301,
@@ -210,6 +220,11 @@ let config = {
       {
         source: '/communities',
         destination: '/help/communities',
+        statusCode: 301,
+      },
+      {
+        source: '/communities/set-up-channel-permissions',
+        destination: '/help/communities/set-up-your-channel-permissions',
         statusCode: 301,
       },
       {
