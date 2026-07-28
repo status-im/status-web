@@ -168,18 +168,6 @@ let config = {
         permanent: false,
       },
       {
-        source: '/jobs',
-        has: [
-          {
-            type: 'query',
-            key: 'gh_jid',
-            value: '(?<paramName>.*)',
-          },
-        ],
-        permanent: false,
-        destination: '/jobs/:paramName',
-      },
-      {
         source: '/feature-upvote',
         destination: 'https://discuss.status.app/c/features/51',
         permanent: false,

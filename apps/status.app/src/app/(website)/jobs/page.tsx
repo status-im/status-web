@@ -2,6 +2,7 @@ import { Button, Tag, Text } from '@status-im/components'
 import { ExternalIcon } from '@status-im/icons/16'
 import { ArrowDownIcon, ArrowRightIcon } from '@status-im/icons/20'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { match } from 'ts-pattern'
 
@@ -12,7 +13,11 @@ import { Image } from '~components/assets'
 import { Body } from '~components/body'
 import { FeatureList } from '~website/_components/feature-list'
 import { ParallaxCircle } from '~website/_components/parallax-circle'
-import { getLogosJobs, getStatusJobs } from '~website/_lib/greenhouse'
+import {
+  getLogosJobs,
+  getStatusJob,
+  getStatusJobs,
+} from '~website/_lib/greenhouse'
 
 import type { ImageId } from '~components/assets'
 import type { FeatureListProps } from '~website/_components/feature-list'
@@ -32,7 +37,26 @@ export async function generateMetadata(): Promise<NextMetadata> {
   })
 }
 
-export default async function JobsPage() {
+type Props = {
+  searchParams: Promise<{
+    gh_jid?: string | string[]
+  }>
+}
+
+export default async function JobsPage({ searchParams }: Props) {
+  const rawJobId = (await searchParams).gh_jid
+  const jobId = Array.isArray(rawJobId) ? rawJobId[0] : rawJobId
+
+  if (jobId) {
+    if (!/^\d+$/.test(jobId)) {
+      redirect('/jobs')
+    }
+
+    const job = await getStatusJob(jobId)
+
+    redirect(job?.content ? `/jobs/${jobId}` : '/jobs')
+  }
+
   const t = await getTranslations('jobs')
 
   const [statusJobs, logosJobs] = await Promise.all([
