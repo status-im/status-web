@@ -61,7 +61,11 @@
     },
     "status.app#build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", ".contentlayer/**"],
+      "outputs": [
+        ".next/**",
+        ".contentlayer/**",
+        "public/blog-search-index.json"
+      ],
       "passThroughEnv": [
         "NEXT_PUBLIC_GHOST_API_URL",
         "NEXT_PUBLIC_GHOST_API_KEY",
