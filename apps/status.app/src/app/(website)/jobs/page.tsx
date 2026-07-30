@@ -47,7 +47,7 @@ export default async function JobsPage({ searchParams }: Props) {
   const rawJobId = (await searchParams).gh_jid
   const jobId = Array.isArray(rawJobId) ? rawJobId[0] : rawJobId
 
-  if (jobId) {
+  if (jobId !== undefined) {
     if (!/^\d+$/.test(jobId)) {
       redirect('/jobs')
     }
