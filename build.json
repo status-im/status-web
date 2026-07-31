@@ -1,15 +1,15 @@
 {
-    "timestamp": "2026-07-31T09:35:11Z",
+    "timestamp": "2026-07-31T09:38:00Z",
     "git": {
         "commit": "fa3b4841512854298c40ff6497539f3cd87e6fc9",
         "branch": "origin/master",
         "url": "git@github.com:status-im/status-web.git"
     },
     "build": {
-        "id": "580",
-        "number": "580",
+        "id": "581",
+        "number": "581",
         "name": "website/get.status.app",
         "slave": "linux-02",
-        "url": "https://ci.infra.status.im/job/website/job/get.status.app/580/"
+        "url": "https://ci.infra.status.im/job/website/job/get.status.app/581/"
     }
 }
