@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { renderFeedContent } from './feed-content'
+import { escapeUpstreamValues, renderFeedContent } from './feed-content'
 
 const BUTTON_CARD =
   '<div class="kg-card kg-button-card kg-align-center">' +
@@ -158,5 +158,43 @@ describe('renderFeedContent', () => {
     it('returns empty content for empty input', () => {
       expect(renderFeedContent('')).toEqual({ html: '', link: null })
     })
+  })
+})
+
+describe('escapeUpstreamValues', () => {
+  it('escapes Ghost values but leaves generated fields untouched', () => {
+    const channel = {
+      title: 'Tom & Jerry',
+      item: [
+        {
+          title: 'v2.34.4 & What&#x2019;s Next',
+          description: '<ul><li>Item</li></ul>',
+          'media:content': { '@_url': 'https://cdn.test/a.png?w=1&h=2' },
+        },
+      ],
+    }
+
+    escapeUpstreamValues(channel, new Set(['description']))
+
+    expect(channel.title).toBe('Tom &amp; Jerry')
+    expect(channel.item[0].title).toBe('v2.34.4 &amp; What&#x2019;s Next')
+    expect(channel.item[0].description).toBe('<ul><li>Item</li></ul>')
+    expect(channel.item[0]['media:content']['@_url']).toBe(
+      'https://cdn.test/a.png?w=1&amp;h=2'
+    )
+  })
+
+  it('escapes quotes in attribute values only', () => {
+    const channel = {
+      title: 'The "best" release',
+      'media:content': { '@_url': 'https://cdn.test/a".png' },
+    }
+
+    escapeUpstreamValues(channel, new Set())
+
+    expect(channel.title).toBe('The "best" release')
+    expect(channel['media:content']['@_url']).toBe(
+      'https://cdn.test/a&quot;.png'
+    )
   })
 })

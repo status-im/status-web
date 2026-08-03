@@ -391,6 +391,43 @@ function renderList(block: Extract<Block, { type: 'list' }>): string {
   return `<${tag}>${items}</${tag}>`
 }
 
+/**
+ * Escapes every string Ghost supplies, in place, skipping the keys whose values
+ * are generated here. The news feeds lose Ghost's CDATA wrappers on parse and
+ * are rebuilt with entity processing off, so an unescaped `&` in a title would
+ * otherwise be re-served as invalid XML.
+ */
+export function escapeUpstreamValues(
+  value: unknown,
+  skipKeys: ReadonlySet<string>
+): unknown {
+  if (typeof value === 'string') {
+    return escapeFeedText(value)
+  }
+
+  if (Array.isArray(value)) {
+    return value.map(entry => escapeUpstreamValues(entry, skipKeys))
+  }
+
+  if (value && typeof value === 'object') {
+    for (const [key, child] of Object.entries(value)) {
+      if (skipKeys.has(key)) {
+        continue
+      }
+
+      const escaped = escapeUpstreamValues(child, skipKeys)
+
+      // Attribute values are re-serialised inside double quotes.
+      ;(value as Record<string, unknown>)[key] =
+        key.startsWith('@_') && typeof escaped === 'string'
+          ? escaped.replaceAll('"', '&quot;')
+          : escaped
+    }
+  }
+
+  return value
+}
+
 export function renderFeedContent(html: string): FeedContent {
   if (!html) {
     return { html: '', link: null }

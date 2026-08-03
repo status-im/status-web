@@ -1,7 +1,8 @@
 import { XMLBuilder, XMLParser } from 'fast-xml-parser'
 
 import { clientEnv } from '~/config/env.client.mjs'
-import { processItem } from '~app/_utils/process-item'
+import { escapeUpstreamValues } from '~app/_utils/feed-content'
+import { GENERATED_ITEM_FIELDS, processItem } from '~app/_utils/process-item'
 import { baseUrl } from '~website/_lib/base-url'
 
 import type { X2jOptions } from 'fast-xml-parser'
@@ -64,6 +65,10 @@ export async function handleRssFeed(type: FeedType) {
         xml.rss.channel.item.forEach((item: any) => processItem(item))
       } else {
         processItem(xml.rss.channel.item)
+      }
+
+      if (type !== 'main') {
+        escapeUpstreamValues(xml.rss.channel, GENERATED_ITEM_FIELDS)
       }
     }
 
