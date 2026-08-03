@@ -5,24 +5,28 @@ import { escapeUpstreamValues } from '~app/_utils/feed-content'
 import { GENERATED_ITEM_FIELDS, processItem } from '~app/_utils/process-item'
 import { baseUrl } from '~website/_lib/base-url'
 
+import type { FeedFormat } from '~app/_utils/feed-content'
 import type { X2jOptions } from 'fast-xml-parser'
 
 const FEED = {
   'desktop-news': {
+    format: 'html',
     path: '/tag/desktop-news/rss/',
   },
   'mobile-news': {
+    format: 'text',
     path: '/tag/mobile-news/rss/',
   },
   main: {
+    format: 'html',
     path: '/rss/',
   },
-} as const
+} as const satisfies Record<string, { format: FeedFormat; path: string }>
 
 type FeedType = keyof typeof FEED
 
 export async function handleRssFeed(type: FeedType) {
-  const { path } = FEED[type]
+  const { format, path } = FEED[type]
 
   try {
     const response = await fetch(
@@ -62,9 +66,9 @@ export async function handleRssFeed(type: FeedType) {
           )
         })
       } else if (Array.isArray(xml.rss.channel.item)) {
-        xml.rss.channel.item.forEach((item: any) => processItem(item))
+        xml.rss.channel.item.forEach((item: any) => processItem(item, format))
       } else {
-        processItem(xml.rss.channel.item)
+        processItem(xml.rss.channel.item, format)
       }
 
       if (type !== 'main') {

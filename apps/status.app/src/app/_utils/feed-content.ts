@@ -11,6 +11,7 @@
  */
 
 const PARAGRAPH_BREAK = '<br /><br />'
+const PLAIN_PARAGRAPH_BREAK = '\n\n'
 
 const VOID_TAGS = new Set([
   'area',
@@ -92,9 +93,16 @@ type Block =
   | { type: 'text'; text: string }
   | { type: 'list'; ordered: boolean; items: Block[][] }
 
+/**
+ * `html` targets the desktop client's rich text view; `text` targets the mobile
+ * client, which renders the description as plain text and would show markup
+ * literally.
+ */
+export type FeedFormat = 'html' | 'text'
+
 export type FeedLink = { href: string; label: string }
 
-export type FeedContent = { html: string; link: FeedLink | null }
+export type FeedContent = { body: string; link: FeedLink | null }
 
 function tokenize(html: string): Token[] {
   const tokens: Token[] = []
@@ -348,13 +356,24 @@ export function escapeFeedText(text: string): string {
     .replace(/>/g, '&gt;')
 }
 
-function renderBlocks(blocks: Block[]): string {
+function renderBlocks(blocks: Block[], format: FeedFormat): string {
+  if (format === 'text') {
+    return blocks
+      .map(block =>
+        block.type === 'list'
+          ? renderList(block, format)
+          : escapeFeedText(block.text)
+      )
+      .filter(Boolean)
+      .join(PLAIN_PARAGRAPH_BREAK)
+  }
+
   let html = ''
 
   blocks.forEach((block, index) => {
     const rendered =
       block.type === 'list'
-        ? renderList(block)
+        ? renderList(block, format)
         : escapeFeedText(block.text).replaceAll('\n', '<br />')
 
     if (!rendered) {
@@ -375,9 +394,33 @@ function renderBlocks(blocks: Block[]): string {
   return html
 }
 
-function renderList(block: Extract<Block, { type: 'list' }>): string {
+function renderList(
+  block: Extract<Block, { type: 'list' }>,
+  format: FeedFormat
+): string {
+  if (format === 'text') {
+    return block.items
+      .map(item =>
+        item
+          .map(child =>
+            child.type === 'list'
+              ? renderList(child, format)
+              : escapeFeedText(child.text)
+          )
+          .filter(Boolean)
+          .join('\n')
+      )
+      .filter(Boolean)
+      .map((item, index) => {
+        const marker = block.ordered ? `${index + 1}. ` : '• '
+        // Continuation lines and nested items hang under the marker.
+        return marker + item.replaceAll('\n', '\n  ')
+      })
+      .join('\n')
+  }
+
   const items = block.items
-    .map(item => renderBlocks(item))
+    .map(item => renderBlocks(item, format))
     .filter(Boolean)
     .map(item => `<li>${item}</li>`)
     .join('')
@@ -428,9 +471,12 @@ export function escapeUpstreamValues(
   return value
 }
 
-export function renderFeedContent(html: string): FeedContent {
+export function renderFeedContent(
+  html: string,
+  format: FeedFormat
+): FeedContent {
   if (!html) {
-    return { html: '', link: null }
+    return { body: '', link: null }
   }
 
   const tokens = tokenize(html)
@@ -444,7 +490,7 @@ export function renderFeedContent(html: string): FeedContent {
   )
 
   return {
-    html: renderBlocks(blocks),
+    body: renderBlocks(blocks, format),
     link: link ? { href: link.href, label: link.label } : null,
   }
 }

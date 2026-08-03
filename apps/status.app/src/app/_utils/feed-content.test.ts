@@ -9,123 +9,143 @@ const BUTTON_CARD =
 
 describe('renderFeedContent', () => {
   it('renders a bullet list the clients can display', () => {
-    const { html } = renderFeedContent(
-      '<p>Fixes:</p><ul><li>High CPU usage</li><li>Endless loading</li></ul>'
+    const { body } = renderFeedContent(
+      '<p>Fixes:</p><ul><li>High CPU usage</li><li>Endless loading</li></ul>',
+      'html'
     )
 
-    expect(html).toBe(
+    expect(body).toBe(
       'Fixes:<ul><li>High CPU usage</li><li>Endless loading</li></ul>'
     )
   })
 
   it('renders numbered lists as an ordered list', () => {
-    const { html } = renderFeedContent('<ol><li>First</li><li>Second</li></ol>')
+    const { body } = renderFeedContent(
+      '<ol><li>First</li><li>Second</li></ol>',
+      'html'
+    )
 
-    expect(html).toBe('<ol><li>First</li><li>Second</li></ol>')
+    expect(body).toBe('<ol><li>First</li><li>Second</li></ol>')
   })
 
   it('nests sublists inside their parent item', () => {
-    const { html } = renderFeedContent(
-      '<ul><li>Wallet<ul><li>Swap</li><li>Send</li></ul></li><li>Chat</li></ul>'
+    const { body } = renderFeedContent(
+      '<ul><li>Wallet<ul><li>Swap</li><li>Send</li></ul></li><li>Chat</li></ul>',
+      'html'
     )
 
-    expect(html).toBe(
+    expect(body).toBe(
       '<ul><li>Wallet<ul><li>Swap</li><li>Send</li></ul></li><li>Chat</li></ul>'
     )
   })
 
   it('separates paragraphs with a blank line but not lists', () => {
-    const { html } = renderFeedContent(
-      '<p>One</p><ul><li>Item</li></ul><p>Two</p><p>Three</p>'
+    const { body } = renderFeedContent(
+      '<p>One</p><ul><li>Item</li></ul><p>Two</p><p>Three</p>',
+      'html'
     )
 
-    expect(html).toBe('One<ul><li>Item</li></ul>Two<br /><br />Three')
+    expect(body).toBe('One<ul><li>Item</li></ul>Two<br /><br />Three')
   })
 
   it('keeps a line break inside a paragraph as a single break', () => {
-    const { html } = renderFeedContent('<p>1 Install<br>2 Follow the guide</p>')
+    const { body } = renderFeedContent(
+      '<p>1 Install<br>2 Follow the guide</p>',
+      'html'
+    )
 
-    expect(html).toBe('1 Install<br />2 Follow the guide')
+    expect(body).toBe('1 Install<br />2 Follow the guide')
   })
 
   it('drops empty list items', () => {
-    const { html } = renderFeedContent(
-      '<ul><li>Kept</li><li></li><li> </li></ul>'
+    const { body } = renderFeedContent(
+      '<ul><li>Kept</li><li></li><li> </li></ul>',
+      'html'
     )
 
-    expect(html).toBe('<ul><li>Kept</li></ul>')
+    expect(body).toBe('<ul><li>Kept</li></ul>')
   })
 
   it('drops images, captions markup and script content', () => {
-    const { html } = renderFeedContent(
-      '<img src="hero.png" alt="Hero"><script>alert("x")</script><p>Body</p>'
+    const { body } = renderFeedContent(
+      '<img src="hero.png" alt="Hero"><script>alert("x")</script><p>Body</p>',
+      'html'
     )
 
-    expect(html).toBe('Body')
+    expect(body).toBe('Body')
   })
 
   it('collapses whitespace introduced by the source markup', () => {
-    const { html } = renderFeedContent(
-      '<p>\n  Spread   over\n  lines\n</p>\n<p>Next</p>'
+    const { body } = renderFeedContent(
+      '<p>\n  Spread   over\n  lines\n</p>\n<p>Next</p>',
+      'html'
     )
 
-    expect(html).toBe('Spread over lines<br /><br />Next')
+    expect(body).toBe('Spread over lines<br /><br />Next')
   })
 
   describe('call to action', () => {
     it('extracts a Ghost button card and keeps its label out of the body', () => {
-      const { html, link } = renderFeedContent(`<p>Body</p>${BUTTON_CARD}`)
+      const { body, link } = renderFeedContent(
+        `<p>Body</p>${BUTTON_CARD}`,
+        'html'
+      )
 
       expect(link).toEqual({
         href: 'https://status.app/',
         label: 'Update your Status',
       })
-      expect(html).toBe('Body')
+      expect(body).toBe('Body')
     })
 
     it('falls back to a plain trailing link', () => {
-      const { html, link } = renderFeedContent(
-        '<p>Body</p><p><a href="https://status.app/blog/x">Read more</a></p>'
+      const { body, link } = renderFeedContent(
+        '<p>Body</p><p><a href="https://status.app/blog/x">Read more</a></p>',
+        'html'
       )
 
       expect(link).toEqual({
         href: 'https://status.app/blog/x',
         label: 'Read more',
       })
-      expect(html).toBe('Body')
+      expect(body).toBe('Body')
     })
 
     it('never lets a link inside a list become the call to action', () => {
-      const { html, link } = renderFeedContent(
+      const { body, link } = renderFeedContent(
         '<ul><li>Fixed <a href="https://github.com/status-im/status-go/issues/1">issue 1</a></li></ul>' +
-          BUTTON_CARD
+          BUTTON_CARD,
+        'html'
       )
 
       expect(link?.href).toBe('https://status.app/')
-      expect(html).toBe('<ul><li>Fixed issue 1</li></ul>')
+      expect(body).toBe('<ul><li>Fixed issue 1</li></ul>')
     })
 
     it('leaves list links in the body when there is no other link', () => {
-      const { html, link } = renderFeedContent(
-        '<p>Body</p><ul><li>See <a href="https://status.app/x">the notes</a></li></ul>'
+      const { body, link } = renderFeedContent(
+        '<p>Body</p><ul><li>See <a href="https://status.app/x">the notes</a></li></ul>',
+        'html'
       )
 
       expect(link).toBeNull()
-      expect(html).toBe('Body<ul><li>See the notes</li></ul>')
+      expect(body).toBe('Body<ul><li>See the notes</li></ul>')
     })
 
     it('keeps surrounding text when the call to action is inline', () => {
-      const { html, link } = renderFeedContent(
-        '<p>Check <a href="https://status.app/x">the notes</a> for details</p>'
+      const { body, link } = renderFeedContent(
+        '<p>Check <a href="https://status.app/x">the notes</a> for details</p>',
+        'html'
       )
 
       expect(link?.label).toBe('the notes')
-      expect(html).toBe('Check for details')
+      expect(body).toBe('Check for details')
     })
 
     it('prefers the button card over an earlier plain link', () => {
       const { link } = renderFeedContent(
-        '<p><a href="https://status.app/first">First</a></p>' + BUTTON_CARD
+        '<p><a href="https://status.app/first">First</a></p>' + BUTTON_CARD,
+        'html'
       )
 
       expect(link?.href).toBe('https://status.app/')
@@ -134,29 +154,101 @@ describe('renderFeedContent', () => {
 
   describe('escaping', () => {
     it('escapes characters that would break the feed', () => {
-      const { html } = renderFeedContent(
-        '<p>Use &lt;code&gt; &amp; read the R&amp;D notes</p>'
+      const { body } = renderFeedContent(
+        '<p>Use &lt;code&gt; &amp; read the R&amp;D notes</p>',
+        'html'
       )
 
-      expect(html).toBe('Use &lt;code&gt; &amp; read the R&amp;D notes')
+      expect(body).toBe('Use &lt;code&gt; &amp; read the R&amp;D notes')
     })
 
     it('escapes a bare ampersand without touching existing entities', () => {
-      const { html } = renderFeedContent(
-        '<p>Tom &amp; Jerry &#x2019; &#39; &nbsp; Q&A</p>'
+      const { body } = renderFeedContent(
+        '<p>Tom &amp; Jerry &#x2019; &#39; &nbsp; Q&A</p>',
+        'html'
       )
 
-      expect(html).toBe('Tom &amp; Jerry &#x2019; &#39; &nbsp; Q&amp;A')
+      expect(body).toBe('Tom &amp; Jerry &#x2019; &#39; &nbsp; Q&amp;A')
     })
 
     it('escapes stray angle brackets from unbalanced markup', () => {
-      const { html } = renderFeedContent('<p>5 > 3 and 2 < 4</p>')
+      const { body } = renderFeedContent('<p>5 > 3 and 2 < 4</p>', 'html')
 
-      expect(html).toBe('5 &gt; 3 and 2 &lt; 4')
+      expect(body).toBe('5 &gt; 3 and 2 &lt; 4')
     })
 
     it('returns empty content for empty input', () => {
-      expect(renderFeedContent('')).toEqual({ html: '', link: null })
+      expect(renderFeedContent('', 'html')).toEqual({ body: '', link: null })
+    })
+  })
+
+  describe("the mobile client's plain text format", () => {
+    it('renders lists as text bullets, never as markup', () => {
+      const { body } = renderFeedContent(
+        '<p>Fixes:</p><ul><li>High CPU usage</li><li>Endless loading</li></ul>',
+        'text'
+      )
+
+      expect(body).toBe('Fixes:\n\n• High CPU usage\n• Endless loading')
+      expect(body).not.toContain('<')
+    })
+
+    it('numbers ordered lists', () => {
+      const { body } = renderFeedContent(
+        '<ol><li>Install</li><li>Follow the guide</li></ol>',
+        'text'
+      )
+
+      expect(body).toBe('1. Install\n2. Follow the guide')
+    })
+
+    it('hangs nested items under their parent', () => {
+      const { body } = renderFeedContent(
+        '<ul><li>Wallet<ul><li>Swap</li><li>Send</li></ul></li><li>Chat</li></ul>',
+        'text'
+      )
+
+      expect(body).toBe('• Wallet\n  • Swap\n  • Send\n• Chat')
+    })
+
+    it('numbers from one after empty items are dropped', () => {
+      const { body } = renderFeedContent(
+        '<ol><li></li><li>First</li><li>Second</li></ol>',
+        'text'
+      )
+
+      expect(body).toBe('1. First\n2. Second')
+    })
+
+    it('keeps paragraphs separated by a blank line', () => {
+      const { body } = renderFeedContent('<p>One</p><p>Two</p>', 'text')
+
+      expect(body).toBe('One\n\nTwo')
+    })
+
+    it('renders a line break inside a paragraph as a newline', () => {
+      const { body } = renderFeedContent(
+        '<p>1 Install<br>2 Follow the guide</p>',
+        'text'
+      )
+
+      expect(body).toBe('1 Install\n2 Follow the guide')
+    })
+
+    it('still escapes characters that would break the feed', () => {
+      const { body } = renderFeedContent('<p>Tom &amp; Jerry, Q&A</p>', 'text')
+
+      expect(body).toBe('Tom &amp; Jerry, Q&amp;A')
+    })
+
+    it('extracts the call to action the same way', () => {
+      const { body, link } = renderFeedContent(
+        `<p>Body</p>${BUTTON_CARD}`,
+        'text'
+      )
+
+      expect(link?.href).toBe('https://status.app/')
+      expect(body).toBe('Body')
     })
   })
 })

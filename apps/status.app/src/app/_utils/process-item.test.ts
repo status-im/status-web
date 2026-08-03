@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest'
 
 import { processItem } from './process-item'
 
+import type { FeedFormat } from './feed-content'
+
 /**
  * Markup taken verbatim from https://our.status.im/tag/desktop-news/rss/ so the
  * shapes Ghost actually produces stay covered.
@@ -33,9 +35,9 @@ type FeedItem = {
   newsLinkLabel?: string
 }
 
-function process(html: string): FeedItem {
+function process(html: string, format: FeedFormat = 'html'): FeedItem {
   const item: FeedItem = { 'content:encoded': html, description: html }
-  processItem(item)
+  processItem(item, format)
   return item
 }
 
@@ -102,9 +104,30 @@ describe('processItem', () => {
     expect(item.newsLink).toBe('https://status.app/')
   })
 
+  it('renders the mobile feed as plain text', () => {
+    const item = process(
+      '<p>This release fixes:</p>' +
+        '<ul><li>High CPU usage on Linux</li><li>Endless message loading</li></ul>',
+      'text'
+    )
+
+    expect(item.description).toBe(
+      'This release fixes:\n\n• High CPU usage on Linux\n• Endless message loading'
+    )
+  })
+
+  it('keeps the mobile feed free of markup for the manually numbered post', () => {
+    const item = process(GHOST.manuallyNumbered, 'text')
+
+    expect(item.description).toBe(
+      'If you&apos;re migrating using a local backup:\n\n' +
+        '1&#xFE0F; Install v2.36.2\n2&#xFE0F; Follow the official migration guide'
+    )
+  })
+
   it('tolerates items without content', () => {
     const item: FeedItem = {}
-    processItem(item)
+    processItem(item, 'html')
 
     expect(item.description).toBe('')
     expect(item['content:encoded']).toBe('')
