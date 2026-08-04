@@ -9,6 +9,11 @@ export const routing = defineRouting({
   // NEXT_LOCALE cookie) that contributes to cloaking false-positives and aligns
   // with get.status.app. why: https://github.com/status-im/status-web/issues/1236
   localeDetection: false,
+  // The cookie can't influence anything while `en` is the only locale and
+  // detection is off, and a `Set-Cookie` on an HTML response makes CDNs treat
+  // it as per-user and skip the cache — which would waste the prerendering the
+  // `setRequestLocale` calls buy us.
+  localeCookie: false,
 })
 
 /**

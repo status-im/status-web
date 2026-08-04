@@ -14,6 +14,7 @@ import {
 } from '~/utils/structured-data'
 import { Metadata } from '~app/_metadata'
 import { formatDate } from '~app/_utils/format-time'
+import { getGithubAvatarUrl } from '~app/_utils/github-avatar'
 import { isHelpDocWorkInProgress } from '~app/_utils/help-doc'
 import { Icon } from '~components/assets'
 import { Breadcrumbs } from '~components/breadcrumbs'
@@ -83,6 +84,8 @@ type Props = {
 }
 
 const MAX_VISIBLE_AUTHORS = 4
+/** Matches the `size="20"` token the author avatars render at. */
+const AVATAR_SIZE = 20
 
 export default async function HelpDetailPage(props: Props) {
   const { params } = props
@@ -162,7 +165,7 @@ export default async function HelpDetailPage(props: Props) {
                     type="user"
                     size="20"
                     name={mainAuthor || ''}
-                    src={`https://github.com/${mainAuthor}.png`}
+                    src={getGithubAvatarUrl(mainAuthor, AVATAR_SIZE)}
                   />
                   <Text size={15} weight="semibold">
                     {mainAuthor}
@@ -193,7 +196,7 @@ export default async function HelpDetailPage(props: Props) {
                               type="user"
                               size="20"
                               name={author}
-                              src={`https://github.com/${author}.png`}
+                              src={getGithubAvatarUrl(author, AVATAR_SIZE)}
                             />
                           </div>
                         </Link>
@@ -299,7 +302,10 @@ export default async function HelpDetailPage(props: Props) {
                           type="user"
                           size="20"
                           name={doc.lastEditedAuthor.githubUsername}
-                          src={`https://github.com/${doc.lastEditedAuthor.githubUsername}.png`}
+                          src={getGithubAvatarUrl(
+                            doc.lastEditedAuthor.githubUsername,
+                            AVATAR_SIZE
+                          )}
                         />
                         <Text size={15} weight="semibold">
                           {doc.lastEditedAuthor.githubUsername}

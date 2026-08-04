@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { hasLocale } from 'next-intl'
+import { setRequestLocale } from 'next-intl/server'
 
 import { routing } from '~/i18n/routing'
 
@@ -20,6 +21,10 @@ export default async function LocaleLayout({ children, params }: Props) {
   if (!hasLocale(routing.locales, locale)) {
     notFound()
   }
+
+  // Keeps next-intl on the route param instead of `headers()` so this subtree
+  // can be prerendered. why: https://next-intl.dev/docs/getting-started/app-router
+  setRequestLocale(locale)
 
   return children
 }

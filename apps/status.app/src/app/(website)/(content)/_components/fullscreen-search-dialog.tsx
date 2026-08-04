@@ -37,7 +37,7 @@ export const FullscreenSearchDialog = (props: Props) => {
 
   const tc = useTranslations('common')
   const t = useTranslations('help')
-  const { query, results } = useSearchEngine(type)
+  const { query, results } = useSearchEngine(type, { enabled: open })
   const [value, setValue] = useState('')
 
   useEffect(() => {
