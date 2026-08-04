@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import MiniSearch from 'minisearch'
 
@@ -49,58 +49,108 @@ type SearchDoc = {
 
 const SEARCH_RESULTS_LIMIT = 50
 
-export const useSearchEngine = (
-  type: SearchType,
-  limit = SEARCH_RESULTS_LIMIT
-) => {
-  const [engine] = useState<Promise<MiniSearch<SearchDoc>>>(async () => {
-    const miniSearch = new MiniSearch<SearchDoc>({
-      fields: ['title', 'heading', 'text'], // fields to index for full-text search
-      storeFields: ['title', 'heading', 'text', 'path'], // fields to return with search results
-      searchOptions: {
-        boost: { title: 2 },
-        fuzzy: 0.2,
-        prefix: true,
-      },
-    })
+/**
+ * Deadline for the idle callback that warms the index, so the build still
+ * happens promptly on browsers that stay busy after the dialog opens.
+ */
+const ENGINE_WARMUP_TIMEOUT_MS = 500
 
-    if (typeof window === 'undefined') {
-      return miniSearch
-    }
+const loadDocIndex = async (type: SearchType): Promise<DocIndex[]> => {
+  switch (type) {
+    case 'help':
+      return (await import('../../../../../.contentlayer/en.json'))
+        .default as unknown as DocIndex[]
+    case 'specs':
+      return (await import('../../../../../.contentlayer/specs.en.json'))
+        .default as unknown as DocIndex[]
+  }
+}
 
-    let docIndex: DocIndex[]
-    switch (type) {
-      case 'help':
-        docIndex = (await import('../../../../../.contentlayer/en.json'))
-          .default as unknown as DocIndex[]
-        break
-      case 'specs':
-        docIndex = (await import('../../../../../.contentlayer/specs.en.json'))
-          .default as unknown as DocIndex[]
-        break
-    }
+const createSearchEngine = async (
+  type: SearchType
+): Promise<MiniSearch<SearchDoc>> => {
+  const miniSearch = new MiniSearch<SearchDoc>({
+    fields: ['title', 'heading', 'text'], // fields to index for full-text search
+    storeFields: ['title', 'heading', 'text', 'path'], // fields to return with search results
+    searchOptions: {
+      boost: { title: 2 },
+      fuzzy: 0.2,
+      prefix: true,
+    },
+  })
 
-    const docs: SearchDoc[] = []
-    let id = 0
+  if (typeof window === 'undefined') {
+    return miniSearch
+  }
 
-    for (const item of docIndex!) {
-      for (const [heading, texts] of Object.entries(item.content)) {
-        for (const text of texts) {
-          docs.push({
-            id: id++,
-            title: item.title,
-            path: item.path,
-            heading,
-            text,
-          })
-        }
+  const docIndex = await loadDocIndex(type)
+
+  const docs: SearchDoc[] = []
+  let id = 0
+
+  for (const item of docIndex) {
+    for (const [heading, texts] of Object.entries(item.content)) {
+      for (const text of texts) {
+        docs.push({
+          id: id++,
+          title: item.title,
+          path: item.path,
+          heading,
+          text,
+        })
       }
     }
+  }
 
-    miniSearch.addAll(docs)
+  miniSearch.addAll(docs)
 
-    return miniSearch
+  return miniSearch
+}
+
+const whenIdle = (callback: () => void): (() => void) => {
+  if (typeof window.requestIdleCallback !== 'function') {
+    const timeoutId = window.setTimeout(callback, 0)
+    return () => window.clearTimeout(timeoutId)
+  }
+
+  const handle = window.requestIdleCallback(callback, {
+    timeout: ENGINE_WARMUP_TIMEOUT_MS,
   })
+  return () => window.cancelIdleCallback(handle)
+}
+
+type Options = {
+  /**
+   * Whether the index may be built. The doc index is ~540KB and indexing it
+   * blocks the main thread for hundreds of milliseconds on mobile, so callers
+   * enable it only once the user reaches for search — never on page load.
+   */
+  enabled?: boolean
+  limit?: number
+}
+
+export const useSearchEngine = (type: SearchType, options: Options = {}) => {
+  const { enabled = true, limit = SEARCH_RESULTS_LIMIT } = options
+
+  const engineRef = useRef<Promise<MiniSearch<SearchDoc>> | null>(null)
+
+  const loadEngine = useCallback((): Promise<MiniSearch<SearchDoc>> => {
+    engineRef.current ??= createSearchEngine(type)
+
+    return engineRef.current
+  }, [type])
+
+  // Warm the index once search is reachable, but off the interaction that
+  // opened it, so building it never delays the dialog's first paint.
+  useEffect(() => {
+    if (!enabled) {
+      return
+    }
+
+    return whenIdle(() => {
+      void loadEngine()
+    })
+  }, [enabled, loadEngine])
 
   const [results, setResults] = useState<Result[]>([])
 
@@ -113,7 +163,7 @@ export const useSearchEngine = (
         return
       }
 
-      const searchResults = (await engine)
+      const searchResults = (await loadEngine())
         .search(normalizedTerm)
         .slice(0, limit) as SearchResult[]
 
@@ -220,7 +270,7 @@ export const useSearchEngine = (
 
       setResults(results)
     },
-    [engine, limit]
+    [loadEngine, limit]
   )
 
   return { results, query } as const

@@ -5,7 +5,9 @@ import { Analytics } from '@vercel/analytics/next'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
 import { NextIntlClientProvider } from 'next-intl'
-import { getLocale, getMessages } from 'next-intl/server'
+import { getLocale, getMessages, setRequestLocale } from 'next-intl/server'
+
+import { routing } from '~/i18n/routing'
 
 import { PlatformDetector } from './_components/platform-detector'
 import { Metadata } from './_metadata'
@@ -56,6 +58,13 @@ type Props = {
 }
 
 export default async function RootLayout({ children }: Props) {
+  // This layout sits above the `[locale]` segment, so it has no locale param to
+  // hand next-intl. Without a pinned locale next-intl falls back to `headers()`,
+  // which opts every route out of static rendering: nothing is prerendered and
+  // each response is served `no-store`, so the CDN can't cache any HTML.
+  // Safe while `en` is the only locale and detection is off, see `~/i18n/routing`.
+  setRequestLocale(routing.defaultLocale)
+
   const [locale, messages] = await Promise.all([getLocale(), getMessages()])
 
   return (
@@ -72,6 +81,9 @@ export default async function RootLayout({ children }: Props) {
     >
       <head>
         <link rel="preconnect" href="https://res.cloudinary.com" />
+        {/* The analytics script is already preloaded by `next/script`, but the
+            connection to its origin is only opened once the preload resolves. */}
+        <link rel="preconnect" href="https://umami.bi.status.im" />
         <link
           rel="alternate"
           type="application/atom+xml"
