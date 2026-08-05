@@ -32,8 +32,8 @@ const GHOST = {
 type FeedItem = {
   'content:encoded'?: string
   description?: string
-  newsLink?: string
-  newsLinkLabel?: string
+  'status:newsLink'?: string
+  'status:newsLinkLabel'?: string
 }
 
 function process(html: string, format: FeedFormat = 'html'): FeedItem {
@@ -46,8 +46,8 @@ describe('processItem', () => {
   it('lifts a Ghost button card into the feed link elements', () => {
     const item = process(GHOST.buttonCard)
 
-    expect(item.newsLink).toBe('https://status.app/')
-    expect(item.newsLinkLabel).toBe('Update your Status')
+    expect(item['status:newsLink']).toBe('https://status.app/')
+    expect(item['status:newsLinkLabel']).toBe('Update your Status')
     expect(item.description).toBe(
       'Fixes for high CPU and data usage overheating mobile devices.'
     )
@@ -61,16 +61,16 @@ describe('processItem', () => {
         '1\uFE0F Install v2.36.2&lt;br /&gt;2\uFE0F Follow the official migration guide'
     )
     // The label is padded upstream; it must still be stripped from the body.
-    expect(item.newsLinkLabel).toBe('Migrate your Status')
+    expect(item['status:newsLinkLabel']).toBe('Migrate your Status')
   })
 
   it('uses a trailing "Read more" link when there is no button card', () => {
     const item = process(GHOST.trailingReadMore)
 
-    expect(item.newsLink).toBe(
+    expect(item['status:newsLink']).toBe(
       'https://github.com/status-im/status-app/releases/tag/2.36.1'
     )
-    expect(item.newsLinkLabel).toBe('Read more')
+    expect(item['status:newsLinkLabel']).toBe('Read more')
     expect(item.description).toBe('Fixed a crash on the Home page.')
   })
 
@@ -78,8 +78,8 @@ describe('processItem', () => {
     const item = process(GHOST.leadingImage)
 
     expect(item['content:encoded']).toBe('Also moved to a new GIF provider.')
-    expect(item.newsLink).toBeUndefined()
-    expect(item.newsLinkLabel).toBeUndefined()
+    expect(item['status:newsLink']).toBeUndefined()
+    expect(item['status:newsLinkLabel']).toBeUndefined()
   })
 
   it('escapes an ampersand in the link target', () => {
@@ -87,8 +87,8 @@ describe('processItem', () => {
       '<p>Body</p><p><a href="https://status.app/x?a=1&amp;b=2">Read &amp; more</a></p>'
     )
 
-    expect(item.newsLink).toBe('https://status.app/x?a=1&amp;b=2')
-    expect(item.newsLinkLabel).toBe('Read &amp; more')
+    expect(item['status:newsLink']).toBe('https://status.app/x?a=1&amp;b=2')
+    expect(item['status:newsLinkLabel']).toBe('Read &amp; more')
   })
 
   it('renders a bullet list end to end', () => {
@@ -103,7 +103,7 @@ describe('processItem', () => {
         '&lt;ul&gt;&lt;li&gt;High CPU usage on Linux&lt;/li&gt;' +
         '&lt;li&gt;Endless message loading&lt;/li&gt;&lt;/ul&gt;'
     )
-    expect(item.newsLink).toBe('https://status.app/')
+    expect(item['status:newsLink']).toBe('https://status.app/')
   })
 
   it('hands the desktop client back its markup once decoded', () => {

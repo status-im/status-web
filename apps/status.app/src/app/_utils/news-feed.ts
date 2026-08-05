@@ -1,7 +1,12 @@
 import { XMLBuilder, XMLParser } from 'fast-xml-parser'
 
 import { escapeUpstreamChannel } from './feed-content'
-import { GENERATED_ITEM_FIELDS, processItem } from './process-item'
+import {
+  GENERATED_ITEM_FIELDS,
+  NEWS_NAMESPACE_PREFIX,
+  NEWS_NAMESPACE_URI,
+  processItem,
+} from './process-item'
 
 import type { FeedFormat } from './feed-content'
 import type { X2jOptions } from 'fast-xml-parser'
@@ -21,6 +26,10 @@ export function buildNewsFeed(body: string, format: FeedFormat): string {
 
   const xml = parser.parse(body)
   const channel = xml.rss?.channel
+
+  if (xml.rss) {
+    xml.rss[`@_xmlns:${NEWS_NAMESPACE_PREFIX}`] = NEWS_NAMESPACE_URI
+  }
 
   if (channel) {
     if (Array.isArray(channel.item)) {

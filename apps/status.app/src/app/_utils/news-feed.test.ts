@@ -70,8 +70,14 @@ describe('buildNewsFeed', () => {
   it('keeps a semicolon-less entity name out of the link target', () => {
     const item = parseItem(buildNewsFeed(GHOST_FEED, 'text'))
 
-    expect(item.newsLink).toBe('https://status.app/x?a=1&copy=1')
-    expect(item.newsLinkLabel).toBe('Read more')
+    expect(item['status:newsLink']).toBe('https://status.app/x?a=1&copy=1')
+    expect(item['status:newsLinkLabel']).toBe('Read more')
+  })
+
+  it('declares the namespace the call-to-action elements live in', () => {
+    const feed = buildNewsFeed(GHOST_FEED, 'text')
+
+    expect(feed).toContain('xmlns:status="https://status.app/ns/rss/1.0"')
   })
 
   it('emits the desktop feed as markup and the mobile feed as text', () => {
