@@ -1,4 +1,8 @@
-import { escapeFeedText, renderFeedContent } from './feed-content'
+import {
+  escapeFeedText,
+  renderFeedContent,
+  serializeFeedBody,
+} from './feed-content'
 
 import type { FeedFormat } from './feed-content'
 
@@ -17,6 +21,6 @@ export function processItem(item: any, format: FeedFormat) {
 
   item.newsLink = link ? escapeFeedText(link.href) : undefined
   item.newsLinkLabel = link ? escapeFeedText(link.label) : undefined
-  item['content:encoded'] = content.body
-  item.description = description.body
+  item['content:encoded'] = serializeFeedBody(content.body, format)
+  item.description = serializeFeedBody(description.body, format)
 }

@@ -1,3 +1,4 @@
+import { decodeXML } from 'entities'
 import { describe, expect, it } from 'vitest'
 
 import { processItem } from './process-item'
@@ -56,8 +57,8 @@ describe('processItem', () => {
     const item = process(GHOST.manuallyNumbered)
 
     expect(item.description).toBe(
-      "If you're migrating using a local backup:<br /><br />" +
-        '1\uFE0F Install v2.36.2<br />2\uFE0F Follow the official migration guide'
+      "If you're migrating using a local backup:&lt;br /&gt;&lt;br /&gt;" +
+        '1\uFE0F Install v2.36.2&lt;br /&gt;2\uFE0F Follow the official migration guide'
     )
     // The label is padded upstream; it must still be stripped from the body.
     expect(item.newsLinkLabel).toBe('Migrate your Status')
@@ -99,9 +100,22 @@ describe('processItem', () => {
 
     expect(item.description).toBe(
       'This release fixes:' +
-        '<ul><li>High CPU usage on Linux</li><li>Endless message loading</li></ul>'
+        '&lt;ul&gt;&lt;li&gt;High CPU usage on Linux&lt;/li&gt;' +
+        '&lt;li&gt;Endless message loading&lt;/li&gt;&lt;/ul&gt;'
     )
     expect(item.newsLink).toBe('https://status.app/')
+  })
+
+  it('hands the desktop client back its markup once decoded', () => {
+    const item = process(
+      '<p>Ada &amp; Co released:</p><ul><li>High CPU usage</li></ul>'
+    )
+
+    // status-go decodes the element with gofeed before the client sees it, so
+    // what arrives is the markup, with the body text still escaped for HTML.
+    expect(decodeXML(item.description ?? '')).toBe(
+      'Ada &amp; Co released:<ul><li>High CPU usage</li></ul>'
+    )
   })
 
   it('renders the mobile feed as plain text', () => {

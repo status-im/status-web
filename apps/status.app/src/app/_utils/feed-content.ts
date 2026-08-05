@@ -2,12 +2,11 @@
  * Converts Ghost post HTML into the small HTML subset the Status desktop and
  * mobile clients render for news notifications.
  *
- * status-go parses `<description>` with gofeed, which decodes the element via
- * `xml:",innerxml"` and hands the raw markup to the client, so anything emitted
- * here has to stay well-formed XML. That is guaranteed by construction: text
- * nodes are escaped and the only tags in the output are the ones this module
- * writes itself. A parsing mistake can misplace text but cannot produce a feed
- * that fails to parse, which would take news down for every installed client.
+ * status-go parses `<description>` with gofeed and hands the decoded element to
+ * the client, so the markup this module writes is what the client renders. It
+ * stays well-formed by construction: text nodes are escaped and the only tags
+ * in the output are the ones written here. A parsing mistake can misplace text
+ * but cannot leave a tag unbalanced in front of the client's renderer.
  */
 
 import { decodeHTMLStrict } from 'entities'
@@ -359,11 +358,26 @@ const FORBIDDEN_XML_CHARS =
  * into `©=1`.
  */
 export function escapeFeedText(text: string): string {
-  return decodeHTMLStrict(text)
-    .replace(FORBIDDEN_XML_CHARS, '')
+  return escapeXml(decodeHTMLStrict(text).replace(FORBIDDEN_XML_CHARS, ''))
+}
+
+/** Escapes without decoding, so it can be applied on top of `escapeFeedText`. */
+function escapeXml(text: string): string {
+  return text
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
     .replaceAll('>', '&gt;')
+}
+
+/**
+ * RSS 2.0 defines `description` as character data, so the desktop feed's markup
+ * is escaped on its way into the XML tree rather than served as child elements.
+ * status-go decodes the element with gofeed before handing it to the client,
+ * which therefore receives the same markup as it did before. The mobile feed
+ * carries no markup and is already character data.
+ */
+export function serializeFeedBody(body: string, format: FeedFormat): string {
+  return format === 'html' ? escapeXml(body) : body
 }
 
 function renderBlocks(blocks: Block[], format: FeedFormat): string {
