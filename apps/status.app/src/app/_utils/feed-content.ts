@@ -458,18 +458,48 @@ export function escapeUpstreamValues(
         continue
       }
 
-      const escaped = escapeUpstreamValues(child, skipKeys)
-
-      // Attribute values are re-serialised inside double quotes.
-      ;(value as Record<string, unknown>)[key] =
-        key.startsWith('@_') && typeof escaped === 'string'
-          ? escaped.replaceAll('"', '&quot;')
-          : escaped
+      escapeChild(value as Record<string, unknown>, key, child, skipKeys)
     }
   }
 
   return value
 }
+
+function escapeChild(
+  container: Record<string, unknown>,
+  key: string,
+  child: unknown,
+  skipKeys: ReadonlySet<string>
+): void {
+  const escaped = escapeUpstreamValues(child, skipKeys)
+
+  // Attribute values are re-serialised inside double quotes.
+  container[key] =
+    key.startsWith('@_') && typeof escaped === 'string'
+      ? escaped.replaceAll('"', '&quot;')
+      : escaped
+}
+
+/**
+ * Applies the generated fields only inside `<item>`. `description` names both
+ * an item and a channel element, so skipping it channel-wide would re-serve
+ * Ghost's publication description with its `&` unescaped.
+ */
+export function escapeUpstreamChannel(
+  channel: Record<string, unknown>,
+  generatedItemFields: ReadonlySet<string>
+): void {
+  for (const [key, child] of Object.entries(channel)) {
+    escapeChild(
+      channel,
+      key,
+      child,
+      key === 'item' ? generatedItemFields : NO_SKIPPED_KEYS
+    )
+  }
+}
+
+const NO_SKIPPED_KEYS: ReadonlySet<string> = new Set()
 
 export function renderFeedContent(
   html: string,

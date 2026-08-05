@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
-import { escapeUpstreamValues, renderFeedContent } from './feed-content'
+import {
+  escapeUpstreamChannel,
+  escapeUpstreamValues,
+  renderFeedContent,
+} from './feed-content'
 
 const BUTTON_CARD =
   '<div class="kg-card kg-button-card kg-align-center">' +
@@ -288,5 +292,19 @@ describe('escapeUpstreamValues', () => {
     expect(channel['media:content']['@_url']).toBe(
       'https://cdn.test/a&quot;.png'
     )
+  })
+})
+
+describe('escapeUpstreamChannel', () => {
+  it('escapes the channel description that items are skipped for', () => {
+    const channel = {
+      description: 'Research & Development',
+      item: [{ description: '<ul><li>Item</li></ul>' }],
+    }
+
+    escapeUpstreamChannel(channel, new Set(['description']))
+
+    expect(channel.description).toBe('Research &amp; Development')
+    expect(channel.item[0].description).toBe('<ul><li>Item</li></ul>')
   })
 })

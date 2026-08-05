@@ -1,6 +1,6 @@
 import { XMLBuilder, XMLParser } from 'fast-xml-parser'
 
-import { escapeUpstreamValues } from './feed-content'
+import { escapeUpstreamChannel } from './feed-content'
 import { GENERATED_ITEM_FIELDS, processItem } from './process-item'
 
 import type { FeedFormat } from './feed-content'
@@ -29,7 +29,7 @@ export function buildNewsFeed(body: string, format: FeedFormat): string {
       processItem(channel.item, format)
     }
 
-    escapeUpstreamValues(channel, GENERATED_ITEM_FIELDS)
+    escapeUpstreamChannel(channel, GENERATED_ITEM_FIELDS)
   }
 
   const builder = new XMLBuilder({
