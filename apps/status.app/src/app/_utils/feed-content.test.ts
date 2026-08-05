@@ -166,13 +166,22 @@ describe('renderFeedContent', () => {
       expect(body).toBe('Use &lt;code&gt; &amp; read the R&amp;D notes')
     })
 
-    it('escapes a bare ampersand without touching existing entities', () => {
+    it('resolves the entities Ghost emits, including ones XML lacks', () => {
       const { body } = renderFeedContent(
-        '<p>Tom &amp; Jerry &#x2019; &#39; &nbsp; Q&A</p>',
+        '<p>Tom &amp; Jerry &#x2019; &#39; &nbsp;&copy; Q&A</p>',
         'html'
       )
 
-      expect(body).toBe('Tom &amp; Jerry &#x2019; &#39; &nbsp; Q&amp;A')
+      expect(body).toBe("Tom &amp; Jerry \u2019 ' \u00A0\u00A9 Q&amp;A")
+    })
+
+    it('leaves a semicolon-less entity name alone', () => {
+      const { body } = renderFeedContent(
+        '<p>https://status.app/x?a=1&copy=1</p>',
+        'html'
+      )
+
+      expect(body).toBe('https://status.app/x?a=1&amp;copy=1')
     })
 
     it('escapes stray angle brackets from unbalanced markup', () => {
@@ -273,7 +282,7 @@ describe('escapeUpstreamValues', () => {
     escapeUpstreamValues(channel, new Set(['description']))
 
     expect(channel.title).toBe('Tom &amp; Jerry')
-    expect(channel.item[0].title).toBe('v2.34.4 &amp; What&#x2019;s Next')
+    expect(channel.item[0].title).toBe('v2.34.4 &amp; What’s Next')
     expect(channel.item[0].description).toBe('<ul><li>Item</li></ul>')
     expect(channel.item[0]['media:content']['@_url']).toBe(
       'https://cdn.test/a.png?w=1&amp;h=2'

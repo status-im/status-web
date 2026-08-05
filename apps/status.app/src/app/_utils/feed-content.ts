@@ -10,6 +10,8 @@
  * that fails to parse, which would take news down for every installed client.
  */
 
+import { decodeHTMLStrict } from 'entities'
+
 const PARAGRAPH_BREAK = '<br /><br />'
 const PLAIN_PARAGRAPH_BREAK = '\n\n'
 
@@ -343,17 +345,25 @@ function parseList(
 const LI_STOP_OPEN: ReadonlySet<string> = new Set(['li'])
 const LI_STOP_CLOSE: ReadonlySet<string> = new Set(['li', 'ol', 'ul'])
 
+/** XML 1.0 forbids these outright, including as numeric references. */
+const FORBIDDEN_XML_CHARS =
+  /[^\t\n\r\x20-\uD7FF\uE000-\uFFFD\u{10000}-\u{10FFFF}]/gu
+
 /**
- * Escapes text for embedding in XML while leaving existing HTML entities
- * intact. Ghost emits entities such as `&quot;` and `&#x2019;`, and gofeed
- * decodes them once on the client, so re-escaping the ampersand would surface
- * the entity literally in the notification.
+ * Resolves Ghost's HTML entities to their characters and escapes the result for
+ * XML. Passing the entities through would emit names such as `&nbsp;` that XML
+ * leaves undefined, which costs the whole feed rather than one character.
+ *
+ * Decoding is strict so that a trailing semicolon is required: the legacy HTML
+ * rules resolve `&copy` on its own, turning the `&copy=1` of a query string
+ * into `©=1`.
  */
 export function escapeFeedText(text: string): string {
-  return text
-    .replace(/&(?!(?:[a-zA-Z][a-zA-Z0-9]*|#\d+|#[xX][0-9a-fA-F]+);)/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
+  return decodeHTMLStrict(text)
+    .replace(FORBIDDEN_XML_CHARS, '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
 }
 
 function renderBlocks(blocks: Block[], format: FeedFormat): string {

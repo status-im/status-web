@@ -56,8 +56,8 @@ describe('processItem', () => {
     const item = process(GHOST.manuallyNumbered)
 
     expect(item.description).toBe(
-      'If you&apos;re migrating using a local backup:<br /><br />' +
-        '1&#xFE0F; Install v2.36.2<br />2&#xFE0F; Follow the official migration guide'
+      "If you're migrating using a local backup:<br /><br />" +
+        '1\uFE0F Install v2.36.2<br />2\uFE0F Follow the official migration guide'
     )
     // The label is padded upstream; it must still be stripped from the body.
     expect(item.newsLinkLabel).toBe('Migrate your Status')
@@ -120,8 +120,8 @@ describe('processItem', () => {
     const item = process(GHOST.manuallyNumbered, 'text')
 
     expect(item.description).toBe(
-      'If you&apos;re migrating using a local backup:\n\n' +
-        '1&#xFE0F; Install v2.36.2\n2&#xFE0F; Follow the official migration guide'
+      "If you're migrating using a local backup:\n\n" +
+        '1\uFE0F Install v2.36.2\n2\uFE0F Follow the official migration guide'
     )
   })
 
