@@ -123,7 +123,10 @@ describe('renderFeedContent', () => {
       )
 
       expect(link?.href).toBe('https://status.app/')
-      expect(body).toBe('<ul><li>Fixed issue 1</li></ul>')
+      expect(body).toBe(
+        '<ul><li>Fixed <a href="https://github.com/status-im/status-go/issues/1">' +
+          'issue 1</a></li></ul>'
+      )
     })
 
     it('leaves list links in the body when there is no other link', () => {
@@ -133,7 +136,9 @@ describe('renderFeedContent', () => {
       )
 
       expect(link).toBeNull()
-      expect(body).toBe('Body<ul><li>See the notes</li></ul>')
+      expect(body).toBe(
+        'Body<ul><li>See <a href="https://status.app/x">the notes</a></li></ul>'
+      )
     })
 
     it('keeps surrounding text when the call to action is inline', () => {
@@ -153,6 +158,63 @@ describe('renderFeedContent', () => {
       )
 
       expect(link?.href).toBe('https://status.app/')
+    })
+  })
+
+  describe('body links', () => {
+    it('keeps an anchor that sits inside a sentence', () => {
+      const { body } = renderFeedContent(
+        '<p>See the <a href="https://wikipedia.org/">test link</a> for details</p>' +
+          BUTTON_CARD,
+        'html'
+      )
+
+      expect(body).toBe(
+        'See the <a href="https://wikipedia.org/">test link</a> for details'
+      )
+    })
+
+    it('keeps an anchor that is a whole list item', () => {
+      const { body } = renderFeedContent(
+        '<ul><li><a href="https://wikipedia.org/wiki/RSS">RSS on Wikipedia</a></li></ul>' +
+          BUTTON_CARD,
+        'html'
+      )
+
+      expect(body).toBe(
+        '<ul><li><a href="https://wikipedia.org/wiki/RSS">RSS on Wikipedia</a></li></ul>'
+      )
+    })
+
+    it('escapes the href, quotes included', () => {
+      const { body } = renderFeedContent(
+        '<p>Go <a href=\'https://status.app/?a=1&amp;b="2"\'>there</a> now</p>' +
+          BUTTON_CARD,
+        'html'
+      )
+
+      expect(body).toBe(
+        'Go <a href="https://status.app/?a=1&amp;b=&quot;2&quot;">there</a> now'
+      )
+    })
+
+    it('drops the anchor of a link that carries no target', () => {
+      const { body } = renderFeedContent(
+        '<p>An <a name="anchor">anchor</a> only</p>' + BUTTON_CARD,
+        'html'
+      )
+
+      expect(body).toBe('An anchor only')
+    })
+
+    it('keeps only the label for the mobile client', () => {
+      const { body } = renderFeedContent(
+        '<p>See the <a href="https://wikipedia.org/">test link</a> for details</p>' +
+          BUTTON_CARD,
+        'text'
+      )
+
+      expect(body).toBe('See the test link for details')
     })
   })
 
