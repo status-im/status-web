@@ -90,8 +90,12 @@ type Token =
   | { kind: 'open'; name: string; attributes: string }
   | { kind: 'close'; name: string }
 
+type Inline =
+  | { kind: 'text'; value: string }
+  | { kind: 'link'; href: string; label: string }
+
 type Block =
-  | { type: 'text'; text: string }
+  | { type: 'text'; inlines: Inline[] }
   | { type: 'list'; ordered: boolean; items: Block[][] }
 
 /**
@@ -233,15 +237,22 @@ function parseBlocks(
   stopOnClose: ReadonlySet<string>
 ): Block[] {
   const blocks: Block[] = []
-  let buffer = ''
+  let buffer: Inline[] = []
+
+  const pushText = (value: string) => {
+    const last = buffer.at(-1)
+    if (last?.kind === 'text') {
+      last.value += value
+    } else {
+      buffer.push({ kind: 'text', value })
+    }
+  }
 
   const flush = () => {
-    // Removing a suppressed anchor can leave the spaces that surrounded it
-    // doubled up; `\n` marks a break and has to survive.
-    const text = buffer.replace(/[^\S\n]+/g, ' ').trim()
-    buffer = ''
-    if (text) {
-      blocks.push({ type: 'text', text })
+    const inlines = normalizeInlines(buffer)
+    buffer = []
+    if (inlines.length) {
+      blocks.push({ type: 'text', inlines })
     }
   }
 
@@ -250,7 +261,7 @@ function parseBlocks(
 
     if (token.kind === 'text') {
       cursor.index++
-      buffer += collapseWhitespace(token.value)
+      pushText(collapseWhitespace(token.value))
       continue
     }
 
@@ -277,7 +288,7 @@ function parseBlocks(
     if (token.name === 'br') {
       // Rendered as a single break; a blank line only ever comes from a real
       // block boundary.
-      buffer += '\n'
+      pushText('\n')
       continue
     }
 
@@ -291,11 +302,17 @@ function parseBlocks(
 
     if (token.name === 'a') {
       const label = readElementText(tokens, cursor.index, 'a')
+      const href = getAttribute(token.attributes, 'href')
       skipElement(tokens, cursor, 'a')
       // The CTA is surfaced as its own feed element, so its label must not be
       // repeated in the body.
-      if (tokenIndex !== linkTokenIndex) {
-        buffer += label
+      if (tokenIndex === linkTokenIndex) {
+        continue
+      }
+      if (href) {
+        buffer.push({ kind: 'link', href, label })
+      } else {
+        pushText(label)
       }
       continue
     }
@@ -341,6 +358,33 @@ function parseList(
   return { type: 'list', ordered, items }
 }
 
+/**
+ * Collapses the runs of spaces a suppressed anchor or a block boundary leaves
+ * behind and trims the block's edges. `\n` marks a `<br>` and has to survive.
+ */
+function normalizeInlines(inlines: Inline[]): Inline[] {
+  const collapsed = inlines
+    .map(inline =>
+      inline.kind === 'text'
+        ? { ...inline, value: inline.value.replace(/[^\S\n]+/g, ' ') }
+        : inline
+    )
+    .filter(inline => inline.kind !== 'text' || inline.value !== '')
+
+  const first = collapsed.at(0)
+  if (first?.kind === 'text') {
+    first.value = first.value.replace(/^\s+/, '')
+  }
+  const last = collapsed.at(-1)
+  if (last?.kind === 'text') {
+    last.value = last.value.replace(/\s+$/, '')
+  }
+
+  return collapsed.filter(
+    inline => inline.kind !== 'text' || inline.value !== ''
+  )
+}
+
 const LI_STOP_OPEN: ReadonlySet<string> = new Set(['li'])
 const LI_STOP_CLOSE: ReadonlySet<string> = new Set(['li', 'ol', 'ul'])
 
@@ -359,6 +403,11 @@ const FORBIDDEN_XML_CHARS =
  */
 export function escapeFeedText(text: string): string {
   return escapeXml(decodeHTMLStrict(text).replace(FORBIDDEN_XML_CHARS, ''))
+}
+
+/** The body's anchors quote their `href`, so it may not carry a bare `"`. */
+function escapeFeedAttribute(value: string): string {
+  return escapeFeedText(value).replaceAll('"', '&quot;')
 }
 
 /** Escapes without decoding, so it can be applied on top of `escapeFeedText`. */
@@ -380,13 +429,33 @@ export function serializeFeedBody(body: string, format: FeedFormat): string {
   return format === 'html' ? escapeXml(body) : body
 }
 
+/**
+ * The mobile client cannot follow a link in plain text, so an anchor keeps only
+ * its label there. The desktop client is given the anchor itself.
+ */
+function renderInlines(inlines: Inline[], format: FeedFormat): string {
+  return inlines
+    .map(inline => {
+      if (inline.kind === 'link') {
+        const label = escapeFeedText(inline.label)
+        return format === 'text'
+          ? label
+          : `<a href="${escapeFeedAttribute(inline.href)}">${label}</a>`
+      }
+
+      const text = escapeFeedText(inline.value)
+      return format === 'text' ? text : text.replaceAll('\n', '<br />')
+    })
+    .join('')
+}
+
 function renderBlocks(blocks: Block[], format: FeedFormat): string {
   if (format === 'text') {
     return blocks
       .map(block =>
         block.type === 'list'
           ? renderList(block, format)
-          : escapeFeedText(block.text)
+          : renderInlines(block.inlines, format)
       )
       .filter(Boolean)
       .join(PLAIN_PARAGRAPH_BREAK)
@@ -398,7 +467,7 @@ function renderBlocks(blocks: Block[], format: FeedFormat): string {
     const rendered =
       block.type === 'list'
         ? renderList(block, format)
-        : escapeFeedText(block.text).replaceAll('\n', '<br />')
+        : renderInlines(block.inlines, format)
 
     if (!rendered) {
       return
@@ -429,7 +498,7 @@ function renderList(
           .map(child =>
             child.type === 'list'
               ? renderList(child, format)
-              : escapeFeedText(child.text)
+              : renderInlines(child.inlines, format)
           )
           .filter(Boolean)
           .join('\n')

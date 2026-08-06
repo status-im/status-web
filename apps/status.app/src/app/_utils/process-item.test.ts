@@ -118,6 +118,20 @@ describe('processItem', () => {
     )
   })
 
+  it('escapes a body link on the wire and decodes it back', () => {
+    const item = process(
+      '<p>See the <a href="https://wikipedia.org/?a=1&amp;b=2">test link</a></p>' +
+        '<div class="kg-card kg-button-card"><a href="https://status.app/" class="kg-btn">Update</a></div>'
+    )
+
+    expect(item.description).toBe(
+      'See the &lt;a href="https://wikipedia.org/?a=1&amp;amp;b=2"&gt;test link&lt;/a&gt;'
+    )
+    expect(decodeXML(item.description ?? '')).toBe(
+      'See the <a href="https://wikipedia.org/?a=1&amp;b=2">test link</a>'
+    )
+  })
+
   it('renders the mobile feed as plain text', () => {
     const item = process(
       '<p>This release fixes:</p>' +
