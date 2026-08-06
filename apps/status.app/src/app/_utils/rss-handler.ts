@@ -1,6 +1,7 @@
 import { XMLBuilder, XMLParser } from 'fast-xml-parser'
 
 import { clientEnv } from '~/config/env.client.mjs'
+import { buildLegacyNewsFeed } from '~app/_utils/legacy-news-feed'
 import { buildNewsFeed } from '~app/_utils/news-feed'
 import { baseUrl } from '~website/_lib/base-url'
 
@@ -10,22 +11,38 @@ import type { X2jOptions } from 'fast-xml-parser'
 const FEED = {
   'desktop-news': {
     format: 'html',
+    lineBreak: '<br /><br />',
     path: '/tag/desktop-news/rss/',
   },
   'mobile-news': {
     format: 'text',
+    lineBreak: '\n\n',
     path: '/tag/mobile-news/rss/',
   },
   main: {
     format: 'html',
+    lineBreak: '',
     path: '/rss/',
   },
-} as const satisfies Record<string, { format: FeedFormat; path: string }>
+} as const satisfies Record<
+  string,
+  { format: FeedFormat; lineBreak: string; path: string }
+>
 
 type FeedType = keyof typeof FEED
 
-export async function handleRssFeed(type: FeedType) {
-  const { format, path } = FEED[type]
+/**
+ * `v1` is what the shipped clients parse, so it stays on the rendering they were
+ * built against; `v2` is served from its own URL because the fixes it carries --
+ * the namespaced call-to-action above all -- need a client that expects them.
+ */
+type FeedVersion = 'v1' | 'v2'
+
+export async function handleRssFeed(
+  type: FeedType,
+  version: FeedVersion = 'v1'
+) {
+  const { format, lineBreak, path } = FEED[type]
 
   try {
     const response = await fetch(
@@ -43,7 +60,11 @@ export async function handleRssFeed(type: FeedType) {
 
     const body = await response.text()
     const newXml =
-      type === 'main' ? buildBlogFeed(body) : buildNewsFeed(body, format)
+      type === 'main'
+        ? buildBlogFeed(body)
+        : version === 'v2'
+          ? buildNewsFeed(body, format)
+          : buildLegacyNewsFeed(body, lineBreak)
 
     return new Response(newXml, {
       headers: {
