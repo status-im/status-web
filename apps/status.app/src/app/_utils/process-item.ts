@@ -1,33 +1,38 @@
-function stripHtml(content: string, lineBreak: string) {
-  return content
-    .split(/<\/p>/i)
-    .map((part: string) => part.replace(/<[^>]+>/g, '').trim())
-    .filter(
-      (part: string, index: number, arr: string[]) =>
-        part || index < arr.length - 1
-    )
-    .join(lineBreak)
-}
+import {
+  escapeFeedText,
+  renderFeedContent,
+  serializeFeedBody,
+} from './feed-content'
 
-function processField(item: any, field: string, lineBreak: string) {
-  let content = stripHtml(item[field], lineBreak)
-  if (item.newsLinkLabel) {
-    content = content.replace(item.newsLinkLabel, '')
-  }
-  if (content.endsWith(lineBreak)) {
-    content = content.slice(0, -lineBreak.length)
-  }
+import type { FeedFormat } from './feed-content'
 
-  return content
-}
+/**
+ * The call-to-action has no RSS 2.0 equivalent, so it is carried in a namespace
+ * of ours. RSS 2.0 rejects an extension element that has no namespace, and
+ * gofeed reads a namespaced one from `item.Extensions` rather than
+ * `item.Custom`, so status-go has to be updated in step with this prefix.
+ */
+export const NEWS_NAMESPACE_PREFIX = 'status'
+export const NEWS_NAMESPACE_URI = 'https://status.app/ns/rss/1.0'
 
-export function processItem(item: any, lineBreak: string) {
-  const newsLink = item['content:encoded'].match(
-    /<a[^>]*href="([^"]+)"[^>]*>([^<]*)<\/a>/
-  )
-  item.newsLink = newsLink?.[1]
-  item.newsLinkLabel = newsLink?.[2]
+const LINK_FIELD = `${NEWS_NAMESPACE_PREFIX}:newsLink`
+const LINK_LABEL_FIELD = `${NEWS_NAMESPACE_PREFIX}:newsLinkLabel`
 
-  item['content:encoded'] = processField(item, 'content:encoded', lineBreak)
-  item.description = processField(item, 'description', lineBreak)
+/** Fields this module rewrites; their markup must not be escaped again. */
+export const GENERATED_ITEM_FIELDS: ReadonlySet<string> = new Set([
+  'content:encoded',
+  'description',
+  LINK_FIELD,
+  LINK_LABEL_FIELD,
+])
+
+export function processItem(item: any, format: FeedFormat) {
+  const content = renderFeedContent(item['content:encoded'] ?? '', format)
+  const description = renderFeedContent(item.description ?? '', format)
+  const link = content.link ?? description.link
+
+  item[LINK_FIELD] = link ? escapeFeedText(link.href) : undefined
+  item[LINK_LABEL_FIELD] = link ? escapeFeedText(link.label) : undefined
+  item['content:encoded'] = serializeFeedBody(content.body, format)
+  item.description = serializeFeedBody(description.body, format)
 }
