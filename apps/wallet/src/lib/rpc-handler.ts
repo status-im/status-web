@@ -137,9 +137,31 @@ type PendingApprovalInput = PendingApproval extends infer T
     : never
   : never
 
+/**
+ * Synchronous claim on the single approval slot.
+ *
+ * The stored `pendingApproval` is read asynchronously, so two requests
+ * arriving in the same tick both saw it empty and each opened a popup, then
+ * clobbered each other's record -- one of the windows ends up showing a
+ * request that no longer exists. The service worker is single-threaded, so a
+ * plain variable closes that window; the stored record still guards across
+ * worker restarts.
+ */
+let approvalInFlight = false
+
 function requestApproval(
   approval: PendingApprovalInput,
 ): Promise<ApprovalResult | null> {
+  if (approvalInFlight) {
+    return Promise.reject(
+      new ProviderRpcError({
+        code: -32002,
+        message: 'Already processing a request.',
+      }),
+    )
+  }
+  approvalInFlight = true
+
   return new Promise(resolve => {
     const id = crypto.randomUUID()
     let popupWindowId: number | undefined
@@ -152,6 +174,7 @@ function requestApproval(
     const cleanup = () => {
       if (settled) return
       settled = true
+      approvalInFlight = false
       clearTimeout(timeout)
       chrome.storage.onChanged.removeListener(storageListener)
       chrome.windows.onRemoved.removeListener(windowListener)

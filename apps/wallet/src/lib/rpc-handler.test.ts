@@ -178,6 +178,32 @@ test('an explicit revoke disconnects', async () => {
   expect(await accounts()).toEqual([])
 })
 
+// Regression: the -32002 guard read the stored approval asynchronously, so two
+// requests in the same tick both saw an empty slot and each opened a popup.
+// They then overwrote each other's record and one window was left showing a
+// request that no longer existed -- a blank approval popup.
+test('concurrent connect requests open a single popup', async () => {
+  let popups = 0
+  const create = chrome.windows.create
+  chrome.windows.create = (async (...args: unknown[]) => {
+    popups++
+    // @ts-expect-error passthrough to the mock
+    return create(...args)
+  }) as typeof chrome.windows.create
+
+  const [first, second] = await Promise.allSettled([connect(), connect()])
+
+  expect(popups).toBe(1)
+  expect([first.status, second.status].sort()).toEqual([
+    'fulfilled',
+    'rejected',
+  ])
+  const rejected = [first, second].find(r => r.status === 'rejected')
+  expect((rejected as PromiseRejectedResult).reason).toMatchObject({
+    code: -32002,
+  })
+})
+
 describe('switching accounts in the wallet', () => {
   test('an unconnected account is not exposed to the dApp', async () => {
     await connect()
