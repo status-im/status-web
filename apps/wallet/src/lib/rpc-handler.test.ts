@@ -24,6 +24,9 @@ type Listener = (
 /** Approves whatever approval the handler opens a popup for. */
 let autoApprove = true
 
+/** Popups the handler opened, counted by the mock's `windows.create`. */
+let popupsOpened = 0
+
 function createChromeMock() {
   const session = new Map<string, unknown>()
   const listeners: Listener[] = []
@@ -64,6 +67,7 @@ function createChromeMock() {
       getCurrent: async () => ({ left: 0, top: 0, width: 1200 }),
       // Stands in for the user acting on the approval popup.
       create: async () => {
+        popupsOpened++
         const pending = session.get('pendingApproval') as { id: string }
         queueMicrotask(() => {
           void set({
@@ -93,6 +97,7 @@ const signed: { walletId?: string; fromAddress?: string } = {}
 
 beforeEach(async () => {
   autoApprove = true
+  popupsOpened = 0
   vi.stubGlobal('chrome', createChromeMock())
   vi.stubGlobal('api', {
     wallet: {
@@ -183,17 +188,9 @@ test('an explicit revoke disconnects', async () => {
 // They then overwrote each other's record and one window was left showing a
 // request that no longer existed -- a blank approval popup.
 test('concurrent connect requests open a single popup', async () => {
-  let popups = 0
-  const create = chrome.windows.create
-  chrome.windows.create = (async (...args: unknown[]) => {
-    popups++
-    // @ts-expect-error passthrough to the mock
-    return create(...args)
-  }) as typeof chrome.windows.create
-
   const [first, second] = await Promise.allSettled([connect(), connect()])
 
-  expect(popups).toBe(1)
+  expect(popupsOpened).toBe(1)
   expect([first.status, second.status].sort()).toEqual([
     'fulfilled',
     'rejected',
