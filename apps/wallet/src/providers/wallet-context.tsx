@@ -12,13 +12,14 @@ import { storage } from '@wxt-dev/storage'
 
 import { useSelectAccount } from '../hooks/use-select-account'
 import { useSynchronizedRefetch } from '../hooks/use-synchronized-refetch'
+import { syncAccountToDapps } from '../lib/dapp-events'
+import { SELECTED_WALLET_ID_KEY } from '../lib/storage-keys'
 import { apiClient } from './api-client'
 
 import type { WalletAccount, WalletMeta } from '../data/wallet-metadata'
 
 const WALLET_LIST_STALE_TIME_MS = 5 * 60 * 1000 // 5 minutes
 const WALLET_LIST_GC_TIME_MS = 60 * 60 * 1000 // 1 hour
-const SELECTED_WALLET_ID_KEY = 'local:wallet:selected-id'
 
 type Wallet = WalletMeta
 
@@ -128,9 +129,28 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     )
   }, [hasHydratedSelectedWallet, selectedWalletId])
 
-  const setCurrentWallet = useCallback((id: string) => {
-    setSelectedWalletId(id)
-  }, [])
+  /**
+   * Both setters are the only deliberate account switches in the app, which is
+   * why the dApp sync hangs off them rather than off `currentAccount`. That
+   * value also changes while the persisted wallet selection hydrates -- during
+   * which it briefly reports `wallets[0]` -- and reacting to it would re-point
+   * connected dApps at the wrong account on every page load.
+   */
+  const setCurrentWallet = useCallback(
+    (id: string) => {
+      setSelectedWalletId(id)
+
+      const wallet = wallets.find(w => w.id === id)
+      const account =
+        wallet?.accounts.find(
+          a => a.address === wallet.selectedAccountAddress,
+        ) ?? wallet?.accounts[0]
+      if (account) {
+        void syncAccountToDapps(account.address)
+      }
+    },
+    [wallets],
+  )
 
   const { selectAccount } = useSelectAccount()
 
@@ -139,6 +159,7 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
       if (!currentWallet) return
       if (currentWallet.selectedAccountAddress === address) return
       selectAccount({ walletId: currentWallet.id, address })
+      void syncAccountToDapps(address)
     },
     [currentWallet, selectAccount],
   )

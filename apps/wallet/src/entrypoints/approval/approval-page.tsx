@@ -11,6 +11,7 @@ import {
   type PendingApproval,
   setApprovalResult,
 } from '../../data/approval'
+import { connectAccount } from '../../data/dapp-permissions'
 import { apiClient } from '../../providers/api-client'
 
 const CHAIN_NAMES: Record<string, string> = {
@@ -83,6 +84,18 @@ export function ApprovalPage() {
   const respond = async (approved: boolean) => {
     if (!approval || isSubmitting) return
     setIsSubmitting(true)
+
+    // Persist the grant here rather than leaving it to the service worker.
+    // The worker resumes only once this window closes, and MV3 may terminate
+    // it at exactly that point -- losing the grant while the dApp had already
+    // been told it was connected, so every later load prompts again.
+    //
+    // `connectAccount`, not `grantPermission`: a record written without the
+    // approved account would later adopt whichever account the wallet happens
+    // to have selected.
+    if (approved && approval.type === 'eth_requestAccounts') {
+      await connectAccount(approval.origin, approval.address)
+    }
 
     await setApprovalResult({
       id: approval.id,
