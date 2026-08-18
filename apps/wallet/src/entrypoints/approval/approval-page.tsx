@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { type ReactNode, useEffect, useState } from 'react'
 
 import { Button } from '@status-im/components'
 import { CloseIcon } from '@status-im/icons/20'
@@ -120,7 +120,7 @@ export function ApprovalPage() {
     }
   }
 
-  const isSign = approval.type === 'personal_sign'
+  const view = getApprovalView(approval)
 
   const respond = async (approved: boolean) => {
     if (!approval || isSubmitting) return
@@ -161,9 +161,7 @@ export function ApprovalPage() {
       />
 
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-27 font-semibold text-neutral-100">
-          {isSign ? 'Sign message' : 'Connect dApp'}
-        </h1>
+        <h1 className="text-27 font-semibold text-neutral-100">{view.title}</h1>
         <Button
           icon={<CloseIcon />}
           aria-label="Close"
@@ -195,11 +193,7 @@ export function ApprovalPage() {
         </div>
       </div>
 
-      {isSign ? (
-        <SignContent approval={approval} />
-      ) : (
-        <ConnectContent approval={approval} />
-      )}
+      {view.content}
 
       <div className="mt-auto grid grid-cols-2 gap-3 py-3">
         <Button
@@ -214,11 +208,38 @@ export function ApprovalPage() {
           onPress={() => respond(true)}
           disabled={isSubmitting}
         >
-          {isSign ? 'Sign' : 'Connect'}
+          {view.confirmLabel}
         </Button>
       </div>
     </div>
   )
+}
+
+/**
+ * One place where a request type decides what the popup says and shows.
+ * Returns rendered content rather than a component reference so each case
+ * keeps the narrowing the switch gave it.
+ */
+function getApprovalView(approval: PendingApproval): {
+  title: string
+  confirmLabel: string
+  content: ReactNode
+} {
+  switch (approval.type) {
+    case 'personal_sign':
+      return {
+        title: 'Sign message',
+        confirmLabel: 'Sign',
+        content: <SignContent approval={approval} />,
+      }
+
+    case 'eth_requestAccounts':
+      return {
+        title: 'Connect dApp',
+        confirmLabel: 'Connect',
+        content: <ConnectContent approval={approval} />,
+      }
+  }
 }
 
 function AccountInfo({ address, name }: { address: string; name: string }) {
