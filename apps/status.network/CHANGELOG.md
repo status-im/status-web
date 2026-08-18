@@ -1,5 +1,25 @@
 # status.network
 
+## 0.2.1
+
+### Patch Changes
+
+- 4c9771c: fix(status.network): reuse shared content renderer for karma tokenomics
+- 8ab08c7: refactor(static export): streamline HTML alias creation and add Playwright tests for static exports
+- 3e92c15: chore: upgrade next to version 15.5.16 across all projects
+- 6a69b84: self-host apps/status.network
+- ff2ad28: fix legal timestamps
+- a9b80fd: chore(sn-legal): add pre-deposit withdrawal disclaimer and update legal-external remote
+- 3f3b6f3: fix layout for statically exported `apps/`
+- 43b7a23: update copy for banners
+- d50bf87: fix(blog): show all published posts on /blog
+- 41096e0: chore: migrate hoodi
+- 5b86fe0: redirect blog posts
+- 6c9c8ed: chore: update withdrawal promo
+- cd78f57: chore(status.network): update Karma tokenomics details and links
+- Updated dependencies [3e92c15]
+  - @status-im/status-network@0.1.3
+
 ## 0.2.0
 
 ### Minor Changes

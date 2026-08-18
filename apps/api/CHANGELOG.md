@@ -1,5 +1,25 @@
 # api
 
+## 0.2.3
+
+### Patch Changes
+
+- 3e92c15: chore: upgrade next to version 15.5.16 across all projects
+- 242931b: fix(wallet): use our custom RPC proxy instead of public RPC
+- Updated dependencies [f8f6090]
+- Updated dependencies [ca76e7d]
+- Updated dependencies [3e92c15]
+- Updated dependencies [da1c09d]
+- Updated dependencies [7d880eb]
+- Updated dependencies [710b023]
+- Updated dependencies [b3e3155]
+- Updated dependencies [1a74ebc]
+- Updated dependencies [d361411]
+- Updated dependencies [41096e0]
+- Updated dependencies [816bfcd]
+- Updated dependencies [ab7a9fe]
+  - @status-im/wallet@0.2.0
+
 ## 0.2.2
 
 ### Patch Changes

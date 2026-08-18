@@ -1,6 +1,6 @@
 {
   "name": "@status-im/community-dapp",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Community directory curator dApp for Status",
   "private": true,
   "main": "index.js",
