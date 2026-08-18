@@ -23,6 +23,22 @@ export type PendingApproval = { createdAt: number } & (
       chainId: string
       message: string
     }
+  | {
+      id: string
+      type: 'eth_signTypedData_v4'
+      origin: string
+      title: string
+      favicon: string
+      address: string
+      accountName: string
+      chainId: string
+      /**
+       * The EIP-712 payload, serialised. It crosses `chrome.storage`, which
+       * round-trips JSON, so the handler parses and validates once and the
+       * popup only ever renders this string back.
+       */
+      typedData: string
+    }
 )
 
 export type ApprovalResult = {

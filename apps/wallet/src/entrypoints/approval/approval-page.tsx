@@ -13,6 +13,7 @@ import {
 } from '../../data/approval'
 import { connectAccount } from '../../data/dapp-permissions'
 import { apiClient } from '../../providers/api-client'
+import { clip, flattenTypedData } from './typed-data-rows'
 
 const CHAIN_NAMES: Record<string, string> = {
   '0x1': 'Mainnet',
@@ -193,7 +194,8 @@ export function ApprovalPage() {
         </div>
       </div>
 
-      {view.content}
+      {/* Scrolls so a long payload cannot push Decline off the popup. */}
+      <div className="min-h-0 flex-1 overflow-y-auto">{view.content}</div>
 
       <div className="mt-auto grid grid-cols-2 gap-3 py-3">
         <Button
@@ -231,6 +233,13 @@ function getApprovalView(approval: PendingApproval): {
         title: 'Sign message',
         confirmLabel: 'Sign',
         content: <SignContent approval={approval} />,
+      }
+
+    case 'eth_signTypedData_v4':
+      return {
+        title: 'Sign typed data',
+        confirmLabel: 'Sign',
+        content: <TypedDataContent approval={approval} />,
       }
 
     case 'eth_requestAccounts':
@@ -305,6 +314,84 @@ function ConnectContent({ approval }: { approval: PendingApproval }) {
         </ul>
       </div>
     </>
+  )
+}
+
+function TypedDataContent({
+  approval,
+}: {
+  approval: Extract<PendingApproval, { type: 'eth_signTypedData_v4' }>
+}) {
+  let payload: Record<string, unknown> | null = null
+  try {
+    payload = JSON.parse(approval.typedData)
+  } catch {
+    payload = null
+  }
+
+  const domain = (payload?.domain ?? {}) as Record<string, unknown>
+  const primaryType = String(payload?.primaryType ?? 'unknown')
+  const { rows, truncated } = flattenTypedData(payload?.message)
+
+  return (
+    <>
+      <p className="mb-2 text-13 font-medium text-neutral-50">Request</p>
+      <div className="mb-4 flex flex-col gap-1 rounded-16 border border-neutral-10 bg-neutral-2.5 px-4 py-3">
+        {domain.name !== undefined && (
+          <TypedDataField label="Domain" value={String(domain.name)} />
+        )}
+        {domain.verifyingContract !== undefined && (
+          <TypedDataField
+            label="Contract"
+            value={String(domain.verifyingContract)}
+          />
+        )}
+        <TypedDataField label="Type" value={primaryType} />
+      </div>
+
+      <p className="mb-2 text-13 font-medium text-neutral-50">Message</p>
+      <div className="mb-4 rounded-16 border border-neutral-10 bg-neutral-2.5 px-4 py-3">
+        {rows.length === 0 ? (
+          <p className="text-13 text-neutral-50">No message fields</p>
+        ) : (
+          <ul className="flex flex-col gap-0.5">
+            {rows.map((row, index) => (
+              <li
+                key={`${row.depth}-${row.key}-${index}`}
+                className="flex gap-2 text-13"
+                style={{ paddingLeft: `${row.depth * 12}px` }}
+              >
+                <span className="shrink-0 text-neutral-50">{row.key}</span>
+                {row.value !== null && (
+                  <span className="min-w-0 break-all text-neutral-100">
+                    {row.value}
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+        {truncated && (
+          <p className="mt-2 text-11 text-neutral-50">
+            Message shortened for display. Sign only if you trust this dApp.
+          </p>
+        )}
+      </div>
+
+      <AccountInfo address={approval.address} name={approval.accountName} />
+      <NetworkInfo chainId={approval.chainId} />
+    </>
+  )
+}
+
+function TypedDataField({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex gap-2 text-13">
+      <span className="shrink-0 text-neutral-50">{label}</span>
+      <span className="min-w-0 break-all font-medium text-neutral-100">
+        {clip(value)}
+      </span>
+    </div>
   )
 }
 
