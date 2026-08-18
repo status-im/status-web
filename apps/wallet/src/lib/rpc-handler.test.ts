@@ -126,10 +126,12 @@ async function selectAccount(address: string, walletId: string) {
 }
 
 const signed: { walletId?: string; fromAddress?: string } = {}
+let signedTypedData: Record<string, unknown> | null = null
 
 beforeEach(async () => {
   autoApprove = true
   popupsOpened = 0
+  signedTypedData = null
   nodeRequest.mockClear()
   vi.stubGlobal('chrome', createChromeMock())
   vi.stubGlobal('api', {
@@ -142,6 +144,10 @@ beforeEach(async () => {
           }) => {
             Object.assign(signed, input)
             return { signature: '0xsig' }
+          },
+          signTypedData: async (input: Record<string, unknown>) => {
+            signedTypedData = input
+            return { signature: '0xtypedsig' }
           },
         },
       },
@@ -594,5 +600,222 @@ describe('personal_sign distinguishes its two failures', () => {
       code: 4100,
       message: 'No connected account',
     })
+  })
+})
+
+const TYPED_DATA = {
+  domain: {
+    name: 'Permit2',
+    version: '1',
+    chainId: 1,
+    verifyingContract: '0x000000000022D473030F116dDEE9F6B43aC78BA3',
+  },
+  types: {
+    EIP712Domain: [
+      { name: 'name', type: 'string' },
+      { name: 'version', type: 'string' },
+      { name: 'chainId', type: 'uint256' },
+      { name: 'verifyingContract', type: 'address' },
+    ],
+    Permit: [
+      { name: 'spender', type: 'address' },
+      { name: 'value', type: 'uint256' },
+    ],
+  },
+  primaryType: 'Permit',
+  message: { spender: OTHER_ADDRESS, value: '1000' },
+}
+
+const signTypedData = (address: unknown, typedData: unknown, origin = ORIGIN) =>
+  handleRpcRequest('eth_signTypedData_v4', [address, typedData], origin)
+
+/** `TYPED_DATA` with a replaced domain, still valid everywhere else. */
+const withDomain = (domain: Record<string, unknown>) =>
+  JSON.stringify({ ...TYPED_DATA, domain })
+
+describe('eth_signTypedData_v4', () => {
+  test('signs with the account the origin is pinned to', async () => {
+    await connect()
+    await selectAccount(OTHER_ADDRESS, OTHER_WALLET_ID)
+
+    await expect(
+      signTypedData(ADDRESS, JSON.stringify(TYPED_DATA)),
+    ).resolves.toBe('0xtypedsig')
+    expect(signedTypedData).toMatchObject({
+      walletId: WALLET_ID,
+      fromAddress: ADDRESS,
+      primaryType: 'Permit',
+    })
+  })
+
+  // Most dApps stringify, wagmi and viem pass the object through.
+  test('accepts the payload as an object as well as a string', async () => {
+    await connect()
+
+    await expect(signTypedData(ADDRESS, TYPED_DATA)).resolves.toBe('0xtypedsig')
+  })
+
+  test('rejects a request for the account the dApp cannot see', async () => {
+    await connect()
+    await selectAccount(OTHER_ADDRESS, OTHER_WALLET_ID)
+
+    await expect(
+      signTypedData(OTHER_ADDRESS, JSON.stringify(TYPED_DATA)),
+    ).rejects.toMatchObject({ code: -32602 })
+  })
+
+  test('an unconnected origin cannot sign', async () => {
+    await expect(
+      signTypedData(ADDRESS, JSON.stringify(TYPED_DATA), 'https://evil.test'),
+    ).rejects.toMatchObject({
+      code: 4100,
+      message: 'dApp is not permitted by user',
+    })
+    expect(popupsOpened).toBe(0)
+  })
+
+  test('the user declining is a rejection, not a signature', async () => {
+    await connect()
+    autoApprove = false
+
+    await expect(
+      signTypedData(ADDRESS, JSON.stringify(TYPED_DATA)),
+    ).rejects.toMatchObject({ code: 4001 })
+    expect(signedTypedData).toBeNull()
+  })
+
+  test('a second request while one is pending is refused', async () => {
+    await connect()
+
+    const [first, second] = await Promise.allSettled([
+      signTypedData(ADDRESS, JSON.stringify(TYPED_DATA)),
+      signTypedData(ADDRESS, JSON.stringify(TYPED_DATA)),
+    ])
+
+    expect([first.status, second.status].sort()).toEqual([
+      'fulfilled',
+      'rejected',
+    ])
+    const rejected = [first, second].find(r => r.status === 'rejected')
+    expect((rejected as PromiseRejectedResult).reason).toMatchObject({
+      code: -32002,
+    })
+  })
+})
+
+// status-go `commands/sign.go` takes the address first and the payload second,
+// the opposite of `personal_sign`. Sniffing which argument looks like an
+// address would paper over a dApp that has them the wrong way round -- and
+// hand it a signature over whatever it did send.
+describe('the swapped parameter order', () => {
+  test('eth_signTypedData_v4 takes the address first', async () => {
+    await connect()
+    popupsOpened = 0
+
+    await expect(
+      signTypedData(JSON.stringify(TYPED_DATA), ADDRESS),
+    ).rejects.toMatchObject({
+      code: -32602,
+      message: expect.stringContaining('expects the address as the first'),
+    })
+    expect(popupsOpened).toBe(0)
+  })
+
+  test('personal_sign takes the message first', async () => {
+    await connect()
+
+    await expect(
+      handleRpcRequest('personal_sign', ['0xdeadbeef', ADDRESS], ORIGIN),
+    ).resolves.toBe('0xsig')
+  })
+})
+
+// Everything here would otherwise surface as an opaque -32603 from zod or
+// viem, after the user had already been shown a popup.
+describe('malformed typed data is refused before the popup', () => {
+  beforeEach(async () => {
+    await connect()
+    popupsOpened = 0
+  })
+
+  const refuses = async (typedData: unknown) => {
+    await expect(signTypedData(ADDRESS, typedData)).rejects.toMatchObject({
+      code: -32602,
+    })
+    expect(popupsOpened).toBe(0)
+  }
+
+  test('a payload that is not JSON', () => refuses('{ not json'))
+
+  test('a payload that is not an object', () => refuses('"a string"'))
+
+  test('a missing primaryType', () =>
+    refuses(JSON.stringify({ ...TYPED_DATA, primaryType: undefined })))
+
+  test('a primaryType absent from types', () =>
+    refuses(JSON.stringify({ ...TYPED_DATA, primaryType: 'Nope' })))
+
+  test('a missing message', () =>
+    refuses(JSON.stringify({ ...TYPED_DATA, message: undefined })))
+
+  test('types that are not {name, type} lists', () =>
+    refuses(JSON.stringify({ ...TYPED_DATA, types: { Permit: 'nope' } })))
+
+  test('a payload too large to hold in session storage', () =>
+    refuses(
+      JSON.stringify({
+        ...TYPED_DATA,
+        message: { spender: OTHER_ADDRESS, value: 'x'.repeat(200_000) },
+      }),
+    ))
+})
+
+// Not a status-go check. The domain is the only place the payload names the
+// chain it binds to, and dApps spell the value three different ways.
+describe('the domain chain', () => {
+  beforeEach(() => connect())
+
+  test('a number matching the origin chain is accepted', () =>
+    expect(signTypedData(ADDRESS, withDomain({ chainId: 1 }))).resolves.toBe(
+      '0xtypedsig',
+    ))
+
+  test('a hex string matching the origin chain is accepted', () =>
+    expect(
+      signTypedData(ADDRESS, withDomain({ chainId: '0x1' })),
+    ).resolves.toBe('0xtypedsig'))
+
+  test('a decimal string matching the origin chain is accepted', () =>
+    expect(signTypedData(ADDRESS, withDomain({ chainId: '1' }))).resolves.toBe(
+      '0xtypedsig',
+    ))
+
+  // EIP-712 makes every domain field optional and plenty of dApps omit this
+  // one, so an absent chain must not become a refusal.
+  test('an absent chain is not checked', () =>
+    expect(
+      signTypedData(ADDRESS, withDomain({ name: 'snapshot' })),
+    ).resolves.toBe('0xtypedsig'))
+
+  test('a chain other than the one the origin is on is refused', async () => {
+    await expect(
+      signTypedData(ADDRESS, withDomain({ chainId: 137 })),
+    ).rejects.toMatchObject({ code: -32602 })
+    expect(signedTypedData).toBeNull()
+  })
+
+  test('the origin chain is the switched-to one, not mainnet', async () => {
+    await handleRpcRequest(
+      'wallet_switchEthereumChain',
+      [{ chainId: '0x6300b5ea' }],
+      ORIGIN,
+    )
+
+    await expect(
+      signTypedData(ADDRESS, withDomain({ chainId: 1 })),
+    ).rejects.toMatchObject({ code: -32602 })
+    await expect(
+      signTypedData(ADDRESS, withDomain({ chainId: 0x6300b5ea })),
+    ).resolves.toBe('0xtypedsig')
   })
 })
