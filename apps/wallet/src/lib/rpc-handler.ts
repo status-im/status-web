@@ -96,9 +96,6 @@ export async function handleRpcRequest(
     if (!(await isOriginPermitted(origin))) {
       throw notPermitted()
     }
-    // Read on the chain the origin switched to. A chain the proxy has no route
-    // for throws here, which reads as a new failure but is the previously
-    // silent one surfacing: every such read used to be answered by mainnet.
     const chainId = await getChainIdForOrigin(origin)
     return await getPublicClient(toChainId(chainId)).request({
       method: method as never,

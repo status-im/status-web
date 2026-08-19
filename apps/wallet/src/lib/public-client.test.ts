@@ -14,8 +14,6 @@ describe('getPublicClient', () => {
     expect(getPublicClient(1)).toBe(getPublicClient(1))
   })
 
-  // Advertised and switchable, but the wallet's proxy has no upstream route
-  // for it. Answering from mainnet instead is the bug this replaces.
   test('refuses a chain with no upstream route', () => {
     expect(() => getPublicClient(1660990954)).toThrowError(
       expect.objectContaining({
