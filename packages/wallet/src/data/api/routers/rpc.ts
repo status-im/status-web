@@ -14,6 +14,11 @@ const PROXY_AUTH = {
   password: serverEnv.ETH_RPC_PROXY_AUTH_PASSWORD,
 }
 
+/**
+ * The upstream half of the wallet extension's chain registry
+ * (`apps/wallet/src/lib/chains.ts`): a chain is only readable once it has an
+ * entry here and a matching `proxyChainId` there.
+ */
 const CHAIN_ID_TO_PROXY_PATH: Record<number, string> = {
   1: 'ethereum/mainnet',
   59144: 'linea/mainnet',
