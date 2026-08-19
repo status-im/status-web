@@ -244,7 +244,8 @@ afterEach(async () => {
   vi.unstubAllGlobals()
 })
 
-const connect = () => handleRpcRequest('eth_requestAccounts', [], ORIGIN)
+const connect = (origin = ORIGIN) =>
+  handleRpcRequest('eth_requestAccounts', [], origin)
 const accounts = () => handleRpcRequest('eth_accounts', [], ORIGIN)
 
 test('approving a connection returns the account', async () => {
@@ -475,6 +476,66 @@ describe('the status-go permission table', () => {
         handleRpcRequest('eth_getProof', [], ORIGIN),
       ).rejects.toMatchObject({ code: -32601 })
       expect(nodeRequest).not.toHaveBeenCalled()
+    })
+
+    test('a forwarded read is routed to the chain the origin is on', async () => {
+      await connect()
+
+      await handleRpcRequest('eth_blockNumber', [], ORIGIN)
+
+      expect(clientFor).toHaveBeenCalledWith(1)
+    })
+
+    // The chain is advertised and switchable, but the wallet's proxy has no
+    // upstream route for it. Before per-chain routing this read was answered
+    // by mainnet, which is a wrong answer rather than a missing one.
+    test('a read on a chain with no route fails instead of hitting mainnet', async () => {
+      await connect()
+      await handleRpcRequest(
+        'wallet_switchEthereumChain',
+        [{ chainId: '0x6300b5ea' }],
+        ORIGIN,
+      )
+
+      await expect(
+        handleRpcRequest('eth_getBalance', [ADDRESS, 'latest'], ORIGIN),
+      ).rejects.toMatchObject({ code: 4901 })
+      expect(clientFor).toHaveBeenCalledWith(1660990954)
+      expect(nodeRequest).not.toHaveBeenCalled()
+    })
+
+    // EIP-695 spells chain ids in lowercase, but dApps are not obliged to.
+    // Matching the request against the registry by value rather than by string
+    // keeps one chain from reading as two.
+    test('a chain id in mixed case is the same chain', async () => {
+      await connect()
+
+      await handleRpcRequest(
+        'wallet_switchEthereumChain',
+        [{ chainId: '0x6300B5EA' }],
+        ORIGIN,
+      )
+
+      expect(await handleRpcRequest('eth_chainId', [], ORIGIN)).toBe(
+        '0x6300b5ea',
+      )
+    })
+
+    // Two origins, two chains: the chain is per-origin state, so one switching
+    // must not re-route the other's reads.
+    test('one origin switching chains leaves another routed where it was', async () => {
+      await connect()
+      await connect(OTHER_ORIGIN)
+      await handleRpcRequest(
+        'wallet_switchEthereumChain',
+        [{ chainId: '0x6300b5ea' }],
+        OTHER_ORIGIN,
+      )
+
+      await handleRpcRequest('eth_blockNumber', [], ORIGIN)
+
+      expect(clientFor).toHaveBeenCalledWith(1)
+      expect(clientFor).not.toHaveBeenCalledWith(1660990954)
     })
   })
 
