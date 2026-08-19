@@ -1,10 +1,8 @@
 import { ProviderRpcError } from '@status-im/ethereum-provider'
 
-import { getPendingApproval } from '../../data/approval'
 import { getChainIdForOrigin, isSameAddress } from '../../data/dapp-permissions'
-import { findWalletForAddress, getOriginAddress } from './account'
-import { noConnectedAccount } from './errors'
-import { requestApproval } from './request-approval'
+import { requireOriginAddress, requireWalletFor } from './account'
+import { assertNoPendingApproval, requestApproval } from './request-approval'
 import {
   assertDomainChainId,
   parseTypedData,
@@ -40,44 +38,6 @@ function signingApi(): SigningApi {
 }
 
 const ADDRESS_PATTERN = /^0x[0-9a-fA-F]{40}$/
-
-/**
- * The account the origin is pinned to. Signing with the wallet's selection
- * instead would return a signature from a key the dApp was never shown.
- */
-async function requireOriginAddress(origin: string): Promise<string> {
-  const address = await getOriginAddress(origin)
-  if (!address) {
-    // The dispatch gate already refused unpermitted origins, so reaching this
-    // means the origin is permitted but its pinned account no longer resolves.
-    throw noConnectedAccount()
-  }
-  return address
-}
-
-/** The pinned account may belong to a wallet other than the selected one. */
-async function requireWalletFor(
-  address: string,
-): Promise<{ walletId: string; accountName: string }> {
-  const wallet = await findWalletForAddress(address)
-  if (!wallet) {
-    throw new ProviderRpcError({
-      code: 4100,
-      message: 'No wallet available',
-    })
-  }
-  return wallet
-}
-
-/** The approval slot holds one request; a second must not replace it. */
-async function assertNoPendingApproval(): Promise<void> {
-  if (await getPendingApproval()) {
-    throw new ProviderRpcError({
-      code: -32002,
-      message: 'Already processing a request.',
-    })
-  }
-}
 
 export async function personal_sign({
   params,

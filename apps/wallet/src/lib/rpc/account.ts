@@ -1,3 +1,4 @@
+import { ProviderRpcError } from '@status-im/ethereum-provider'
 import { storage } from '@wxt-dev/storage'
 
 import {
@@ -8,6 +9,7 @@ import {
 } from '../../data/dapp-permissions'
 import * as walletMetadata from '../../data/wallet-metadata'
 import { SELECTED_WALLET_ID_KEY } from '../storage-keys'
+import { noConnectedAccount } from './errors'
 
 export const DEFAULT_ACCOUNT_NAME = 'Account 1'
 
@@ -108,4 +110,32 @@ export async function findWalletForAddress(
     walletId: wallet.id,
     accountName: wallet.name || DEFAULT_ACCOUNT_NAME,
   }
+}
+
+/**
+ * The account the origin is pinned to. Signing or spending with the wallet's
+ * selection instead would act on a key the dApp was never shown.
+ */
+export async function requireOriginAddress(origin: string): Promise<string> {
+  const address = await getOriginAddress(origin)
+  if (!address) {
+    // The dispatch gate already refused unpermitted origins, so reaching this
+    // means the origin is permitted but its pinned account no longer resolves.
+    throw noConnectedAccount()
+  }
+  return address
+}
+
+/** The pinned account may belong to a wallet other than the selected one. */
+export async function requireWalletFor(
+  address: string,
+): Promise<{ walletId: string; accountName: string }> {
+  const wallet = await findWalletForAddress(address)
+  if (!wallet) {
+    throw new ProviderRpcError({
+      code: 4100,
+      message: 'No wallet available',
+    })
+  }
+  return wallet
 }
