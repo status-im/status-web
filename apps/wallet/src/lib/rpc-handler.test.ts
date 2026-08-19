@@ -10,16 +10,32 @@ import {
   setChainIdForOrigin,
 } from '../data/dapp-permissions'
 import { requestFeeRate } from './gas-fees'
-import { publicClient } from './public-client'
+import { getPublicClient } from './public-client'
 import { handleRpcRequest, LOCAL_HANDLERS } from './rpc-handler'
 import { REMOTE_ALLOWED, UNGATED_LOCAL } from './rpc-methods'
 
 // The forwarding branch is the point of the gate, so it needs a stand-in for
-// the node. The real client is a module-level const over the authenticated
-// proxy URL.
-vi.mock('./public-client', () => ({
-  publicClient: { request: vi.fn(async () => '0x1234') },
-}))
+// the node. Only the transport is stubbed: which chains have a route is still
+// the registry's answer, so the test cannot drift from it. One shared `request`
+// spy keeps "which chain was asked" assertable apart from "what was asked".
+vi.mock('./public-client', async () => {
+  const { ProviderRpcError } = await import('@status-im/ethereum-provider')
+  const { getChain } = await import('./chains')
+  const request = vi.fn(async () => '0x1234')
+
+  return {
+    getPublicClient: vi.fn((chainId: number) => {
+      if (!getChain(chainId)?.proxyChainId) {
+        throw new ProviderRpcError({
+          code: 4901,
+          message: `Chain ${chainId} is not available`,
+        })
+      }
+      return { request }
+    }),
+    publicClient: { request },
+  }
+})
 
 // `eth_sendTransaction` prices itself against the wallet's own estimator,
 // which is an authenticated HTTP call.
@@ -27,7 +43,8 @@ vi.mock('./gas-fees', () => ({
   requestFeeRate: vi.fn(),
 }))
 
-const nodeRequest = vi.mocked(publicClient.request)
+const clientFor = vi.mocked(getPublicClient)
+const nodeRequest = vi.mocked(clientFor(1).request)
 const feeRequest = vi.mocked(requestFeeRate)
 
 /** 21000 gas at 1 gwei: a max fee of 0.000021 ETH. */
@@ -161,6 +178,7 @@ beforeEach(async () => {
   signedTypedData = null
   sentTransactions = []
   nodeRequest.mockClear()
+  clientFor.mockClear()
   feeRequest.mockReset()
   feeRequest.mockResolvedValue(GAS_FEES)
   vi.stubGlobal('chrome', createChromeMock())
