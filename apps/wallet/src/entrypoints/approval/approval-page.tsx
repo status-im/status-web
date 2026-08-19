@@ -3,6 +3,7 @@ import { type ReactNode, useEffect, useState } from 'react'
 import { Button } from '@status-im/components'
 import { CloseIcon } from '@status-im/icons/20'
 import { PasswordModal } from '@status-im/wallet/components'
+import { formatEther } from 'viem/utils'
 
 import ethereumIcon from '../../assets/networks/ethereum.png'
 import statusNetworkIcon from '../../assets/networks/status-network.png'
@@ -243,6 +244,13 @@ function getApprovalView(approval: PendingApproval): {
         content: <TypedDataContent approval={approval} />,
       }
 
+    case 'eth_sendTransaction':
+      return {
+        title: 'Confirm transaction',
+        confirmLabel: 'Confirm',
+        content: <TransactionContent approval={approval} />,
+      }
+
     case 'eth_requestAccounts':
       return {
         title: 'Connect dApp',
@@ -344,16 +352,16 @@ function TypedDataContent({
       <p className="mb-2 text-13 font-medium text-neutral-50">Request</p>
       <div className="mb-4 flex flex-col gap-1 rounded-16 border border-neutral-10 bg-neutral-2.5 px-4 py-3">
         {signedDomain.has('name') && domain.name !== undefined && (
-          <TypedDataField label="Domain" value={String(domain.name)} />
+          <DetailRow label="Domain" value={String(domain.name)} />
         )}
         {signedDomain.has('verifyingContract') &&
           domain.verifyingContract !== undefined && (
-            <TypedDataField
+            <DetailRow
               label="Contract"
               value={String(domain.verifyingContract)}
             />
           )}
-        <TypedDataField label="Type" value={primaryType} />
+        <DetailRow label="Type" value={primaryType} />
       </div>
 
       <p className="mb-2 text-13 font-medium text-neutral-50">Message</p>
@@ -395,7 +403,48 @@ function TypedDataContent({
   )
 }
 
-function TypedDataField({ label, value }: { label: string; value: string }) {
+function TransactionContent({
+  approval,
+}: {
+  approval: Extract<PendingApproval, { type: 'eth_sendTransaction' }>
+}) {
+  const value = formatEther(BigInt(approval.value))
+
+  return (
+    <>
+      <div className="mb-4 flex flex-col gap-1 rounded-16 border border-neutral-10 bg-neutral-2.5 px-4 py-3">
+        <div className="mb-1 flex items-center justify-between gap-2">
+          <p className="text-13 font-medium text-neutral-50">Transaction</p>
+          {approval.data && (
+            <span className="rounded-6 bg-neutral-10 px-1.5 py-0.5 text-11 font-medium text-neutral-100">
+              Contract interaction
+            </span>
+          )}
+        </div>
+        <DetailRow label="To" value={approval.to} />
+        <DetailRow label="Amount" value={`${value} ETH`} />
+        <DetailRow label="Max fee" value={`${approval.maxFeeEth} ETH`} />
+      </div>
+
+      {approval.data && (
+        <>
+          <p className="mb-2 text-13 font-medium text-neutral-50">Data</p>
+          <div className="mb-4 rounded-16 border border-neutral-10 bg-neutral-2.5 px-4 py-3">
+            <p className="break-all font-mono text-11 text-neutral-100">
+              {clip(approval.data)}
+            </p>
+          </div>
+        </>
+      )}
+
+      <AccountInfo address={approval.address} name={approval.accountName} />
+      <NetworkInfo chainId={approval.chainId} />
+    </>
+  )
+}
+
+/** A label/value line, shared by the typed-data and transaction views. */
+function DetailRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex gap-2 text-13">
       <span className="shrink-0 text-neutral-50">{label}</span>
