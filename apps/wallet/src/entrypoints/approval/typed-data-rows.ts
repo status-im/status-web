@@ -27,14 +27,6 @@ export type TypedDataRow = {
 
 const ARRAY_SUFFIX = /\[\d*\]$/
 
-const DOMAIN_FIELDS = [
-  'name',
-  'version',
-  'chainId',
-  'verifyingContract',
-  'salt',
-]
-
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
@@ -61,25 +53,6 @@ function formatLeaf(value: unknown): string {
   return clip(String(value))
 }
 
-/**
- * The domain fields that reach the domain separator. viem derives
- * `EIP712Domain` from the keys present on `domain`, unless the dApp declares
- * the type itself -- in which case a field can sit in `domain`, read as
- * official in the popup, and never be signed.
- */
-export function signedDomainFields(
-  domain: unknown,
-  types: unknown,
-): Set<string> {
-  const declared = isRecord(types) ? types.EIP712Domain : undefined
-  if (Array.isArray(declared)) {
-    return new Set(declared.filter(isField).map(field => field.name))
-  }
-
-  const record = isRecord(domain) ? domain : {}
-  return new Set(DOMAIN_FIELDS.filter(name => record[name] !== undefined))
-}
-
 export function flattenTypedData(
   message: unknown,
   types: unknown,
@@ -99,6 +72,13 @@ export function flattenTypedData(
   const rows: TypedDataRow[] = []
   let truncated = false
 
+  // The type and the value disagree, so the value is summarised rather than
+  // walked. Flagged: its contents are as invisible as anything past a cap.
+  const pushLeaf = (key: string, node: unknown, depth: number) => {
+    if (typeof node === 'object' && node !== null) truncated = true
+    rows.push({ key, value: formatLeaf(node), depth })
+  }
+
   const walk = (key: string, type: string, node: unknown, depth: number) => {
     if (rows.length >= MAX_ROWS) {
       truncated = true
@@ -109,7 +89,7 @@ export function flattenTypedData(
 
     if (ARRAY_SUFFIX.test(type)) {
       if (!Array.isArray(node)) {
-        rows.push({ key: label, value: formatLeaf(node), depth })
+        pushLeaf(label, node, depth)
         return
       }
       if (depth >= MAX_DEPTH) {
@@ -131,7 +111,7 @@ export function flattenTypedData(
     // shown as-is rather than dressed up as a branch with no children.
     const struct = typeTable[type]
     if (!Array.isArray(struct) || !isRecord(node)) {
-      rows.push({ key: label, value: formatLeaf(node), depth })
+      pushLeaf(label, node, depth)
       return
     }
     if (depth >= MAX_DEPTH) {

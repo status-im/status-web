@@ -12,8 +12,9 @@ import {
   setApprovalResult,
 } from '../../data/approval'
 import { connectAccount } from '../../data/dapp-permissions'
+import { signedDomainFields } from '../../lib/rpc/typed-data'
 import { apiClient } from '../../providers/api-client'
-import { clip, flattenTypedData, signedDomainFields } from './typed-data-rows'
+import { clip, flattenTypedData } from './typed-data-rows'
 
 const CHAIN_NAMES: Record<string, string> = {
   '0x1': 'Mainnet',

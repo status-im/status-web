@@ -26,6 +26,41 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
 
+function isField(value: unknown): value is TypedDataField {
+  return (
+    isRecord(value) &&
+    typeof value.name === 'string' &&
+    typeof value.type === 'string'
+  )
+}
+
+const DOMAIN_FIELDS = [
+  'name',
+  'version',
+  'chainId',
+  'verifyingContract',
+  'salt',
+]
+
+/**
+ * The domain fields that reach the domain separator. viem derives
+ * `EIP712Domain` from the keys present on `domain`, unless the dApp declares
+ * the type itself -- in which case a field can sit in `domain`, read as
+ * official, and never be signed.
+ */
+export function signedDomainFields(
+  domain: unknown,
+  types: unknown,
+): Set<string> {
+  const declared = isRecord(types) ? types.EIP712Domain : undefined
+  if (Array.isArray(declared)) {
+    return new Set(declared.filter(isField).map(field => field.name))
+  }
+
+  const record = isRecord(domain) ? domain : {}
+  return new Set(DOMAIN_FIELDS.filter(name => record[name] !== undefined))
+}
+
 /**
  * Validates the EIP-712 payload against what
  * `wallet.account.ethereum.signTypedData` accepts. Every rejection here is one
@@ -135,11 +170,18 @@ function parseDomainChainId(value: unknown): number | null {
  * chain they are on but is not is a phishing shape worth closing.
  */
 export function assertDomainChainId(
-  domain: Record<string, unknown>,
+  { domain, types }: TypedData,
   originChainId: string,
 ): void {
   const declared = parseDomainChainId(domain.chainId)
   if (declared === null) return
+
+  // A chainId the dApp leaves out of its own EIP712Domain is not in the
+  // separator, so the signature binds to no chain at all while this check
+  // reads as satisfied.
+  if (!signedDomainFields(domain, types).has('chainId')) {
+    throw invalidParams('typed data declares a chainId it does not sign')
+  }
 
   const current = Number.parseInt(originChainId, 16)
   if (declared !== current) {

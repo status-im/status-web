@@ -161,7 +161,7 @@ export async function eth_signTypedData_v4({
   // Parsed once. The approval record carries the serialised form because it
   // crosses chrome.storage; the signing call takes the structured one.
   const typedData = parseTypedData(p[1])
-  assertDomainChainId(typedData.domain, chainId)
+  assertDomainChainId(typedData, chainId)
   const serialized = serializeTypedData(typedData)
 
   const signer = await requireWalletFor(signerAddress)

@@ -797,6 +797,25 @@ describe('the domain chain', () => {
       signTypedData(ADDRESS, withDomain({ name: 'snapshot' })),
     ).resolves.toBe('0xtypedsig'))
 
+  // A chainId the dApp leaves out of its own EIP712Domain is not in the
+  // separator: the check above would pass on a signature bound to no chain.
+  test('a chain the payload does not sign is refused', async () => {
+    await expect(
+      signTypedData(
+        ADDRESS,
+        JSON.stringify({
+          ...TYPED_DATA,
+          domain: { chainId: 1 },
+          types: {
+            ...TYPED_DATA.types,
+            EIP712Domain: [{ name: 'name', type: 'string' }],
+          },
+        }),
+      ),
+    ).rejects.toMatchObject({ code: -32602 })
+    expect(signedTypedData).toBeNull()
+  })
+
   test('a chain other than the one the origin is on is refused', async () => {
     await expect(
       signTypedData(ADDRESS, withDomain({ chainId: 137 })),

@@ -6,7 +6,6 @@ import {
   MAX_DEPTH,
   MAX_ROWS,
   MAX_VALUE_LENGTH,
-  signedDomainFields,
 } from './typed-data-rows'
 
 const permitTypes = {
@@ -142,6 +141,19 @@ test('an undecodable payload renders nothing and is flagged', () => {
   )
 })
 
+// A value the declared type says is atomic is summarised, not walked, so its
+// contents are as hidden as anything past a cap and must be flagged as such.
+test('a value the type does not describe is collapsed and flagged', () => {
+  const { rows, truncated } = flattenTypedData(
+    { note: { hidden: 'payload' } },
+    { Memo: [{ name: 'note', type: 'string' }] },
+    'Memo',
+  )
+
+  expect(rows).toEqual([{ key: 'note', value: '{ … }', depth: 0 }])
+  expect(truncated).toBe(true)
+})
+
 // `domain.name` and `verifyingContract` render outside the row list, so they
 // need the same clipping -- an uncapped domain name pushed the message the
 // user is meant to read off the popup.
@@ -150,25 +162,4 @@ test('clip caps any attacker-controlled string', () => {
   expect(clip('x'.repeat(MAX_VALUE_LENGTH + 10))).toHaveLength(
     MAX_VALUE_LENGTH + 1,
   )
-})
-
-test('without a declared EIP712Domain every present domain field is signed', () => {
-  const fields = signedDomainFields(
-    { name: 'Uniswap', verifyingContract: '0xabc' },
-    { Permit: [] },
-  )
-
-  expect([...fields].sort()).toEqual(['name', 'verifyingContract'])
-})
-
-// A dApp that declares EIP712Domain itself decides what the domain separator
-// covers. A `name` left out of it is never signed, so the popup must not show
-// it as the dApp's identity.
-test('a declared EIP712Domain limits the domain fields to what it names', () => {
-  const fields = signedDomainFields(
-    { name: 'Uniswap', verifyingContract: '0xabc' },
-    { EIP712Domain: [{ name: 'verifyingContract', type: 'address' }] },
-  )
-
-  expect([...fields]).toEqual(['verifyingContract'])
 })
