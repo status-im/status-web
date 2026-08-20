@@ -8,6 +8,8 @@ import type { GasFeeRequestParams, GasFees } from './gas-fees'
 import type { Address, Hex } from 'viem'
 
 const ERC20_TRANSFER_SIGNATURE = '0xa9059cbb'
+/** `0x` + selector + 32-byte recipient word + 32-byte amount word. */
+const ERC20_TRANSFER_CALLDATA_LENGTH = 2 + 8 + 64 + 64
 
 export type TransactionRequest = {
   to: Address
@@ -175,6 +177,24 @@ function requireHash(result: SendResult, context: string): Hex {
 }
 
 /**
+ * `sendErc20` does not sign the calldata it is handed: it reads the recipient
+ * and amount back out of it and re-encodes an `erc20Transfer`, a shape that
+ * carries no ETH value. Anything the re-encoding would not reproduce -- bytes
+ * past the amount word, a non-zero value, a recipient word with dirty padding
+ * -- would be dropped after the user had already approved it, so only a
+ * transfer that survives the round trip byte-for-byte takes that route. The
+ * rest go through `sendContractCall`, which signs the calldata verbatim.
+ */
+function isCanonicalErc20Transfer(data: Hex, value: bigint): boolean {
+  return (
+    value === 0n &&
+    data.length === ERC20_TRANSFER_CALLDATA_LENGTH &&
+    data.toLowerCase().startsWith(ERC20_TRANSFER_SIGNATURE) &&
+    data.slice(10, 34) === '0'.repeat(24)
+  )
+}
+
+/**
  * Prices, signs and broadcasts a transaction. Unlocking is the caller's job:
  * the extension page prompts through the password modal, the dApp path through
  * the approval popup.
@@ -208,11 +228,7 @@ export async function buildAndSendTransaction(
   }
 
   if (tx.data) {
-    const isErc20Transfer = tx.data
-      .toLowerCase()
-      .startsWith(ERC20_TRANSFER_SIGNATURE)
-
-    if (isErc20Transfer) {
+    if (isCanonicalErc20Transfer(tx.data, tx.value)) {
       const result = await senders.sendErc20({ ...common, data: tx.data })
       return requireHash(result, 'ERC20 transfer')
     }

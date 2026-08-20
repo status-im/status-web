@@ -963,6 +963,49 @@ describe('eth_sendTransaction', () => {
     expect(sentTransactions[0].via).toBe('sendErc20')
   })
 
+  // `sendErc20` re-encodes from the recipient and amount words alone, so it
+  // would sign neither the trailing bytes nor the value the popup displayed.
+  describe('calldata that sendErc20 would not reproduce keeps its bytes', () => {
+    test('trailing bytes after the amount word', async () => {
+      await connect()
+      const data = `${ERC20_TRANSFER}deadbeef`
+
+      await sendTransaction({ to: OTHER_ADDRESS, data })
+
+      expect(sentTransactions[0]).toMatchObject({
+        via: 'sendContractCall',
+        input: { data },
+      })
+    })
+
+    test('a transfer carrying ETH value', async () => {
+      await connect()
+
+      await sendTransaction({
+        to: OTHER_ADDRESS,
+        value: '0x1',
+        data: ERC20_TRANSFER,
+      })
+
+      expect(sentTransactions[0]).toMatchObject({
+        via: 'sendContractCall',
+        input: { data: ERC20_TRANSFER, value: '1' },
+      })
+    })
+
+    test('a recipient word with non-zero padding', async () => {
+      await connect()
+      const data = `0xa9059cbb${'11'.repeat(12)}${'22'.repeat(20)}${'00'.repeat(32)}`
+
+      await sendTransaction({ to: OTHER_ADDRESS, data })
+
+      expect(sentTransactions[0]).toMatchObject({
+        via: 'sendContractCall',
+        input: { data },
+      })
+    })
+  })
+
   // '0x' is what dApps send for "no calldata", and it is truthy.
   test("data of '0x' is a plain transfer", async () => {
     await connect()
