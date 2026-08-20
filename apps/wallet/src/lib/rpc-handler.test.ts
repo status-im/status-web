@@ -797,6 +797,20 @@ describe('the domain chain', () => {
       signTypedData(ADDRESS, withDomain({ name: 'snapshot' })),
     ).resolves.toBe('0xtypedsig'))
 
+  // Most dApps never declare EIP712Domain; viem derives it from the keys the
+  // domain carries, so a chainId sitting there is signed and the check applies.
+  test('an undeclared EIP712Domain leaves the chain signed', () =>
+    expect(
+      signTypedData(
+        ADDRESS,
+        JSON.stringify({
+          ...TYPED_DATA,
+          domain: { chainId: 1 },
+          types: { Permit: TYPED_DATA.types.Permit },
+        }),
+      ),
+    ).resolves.toBe('0xtypedsig'))
+
   // A chainId the dApp leaves out of its own EIP712Domain is not in the
   // separator: the check above would pass on a signature bound to no chain.
   test('a chain the payload does not sign is refused', async () => {
