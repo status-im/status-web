@@ -13,7 +13,7 @@ import {
 } from '../../data/approval'
 import { connectAccount } from '../../data/dapp-permissions'
 import { apiClient } from '../../providers/api-client'
-import { clip, flattenTypedData } from './typed-data-rows'
+import { clip, flattenTypedData, signedDomainFields } from './typed-data-rows'
 
 const CHAIN_NAMES: Record<string, string> = {
   '0x1': 'Mainnet',
@@ -331,28 +331,38 @@ function TypedDataContent({
 
   const domain = (payload?.domain ?? {}) as Record<string, unknown>
   const primaryType = String(payload?.primaryType ?? 'unknown')
-  const { rows, truncated } = flattenTypedData(payload?.message)
+  const signedDomain = signedDomainFields(domain, payload?.types)
+  const { rows, truncated } = flattenTypedData(
+    payload?.message,
+    payload?.types,
+    payload?.primaryType,
+  )
 
   return (
     <>
       <p className="mb-2 text-13 font-medium text-neutral-50">Request</p>
       <div className="mb-4 flex flex-col gap-1 rounded-16 border border-neutral-10 bg-neutral-2.5 px-4 py-3">
-        {domain.name !== undefined && (
+        {signedDomain.has('name') && domain.name !== undefined && (
           <TypedDataField label="Domain" value={String(domain.name)} />
         )}
-        {domain.verifyingContract !== undefined && (
-          <TypedDataField
-            label="Contract"
-            value={String(domain.verifyingContract)}
-          />
-        )}
+        {signedDomain.has('verifyingContract') &&
+          domain.verifyingContract !== undefined && (
+            <TypedDataField
+              label="Contract"
+              value={String(domain.verifyingContract)}
+            />
+          )}
         <TypedDataField label="Type" value={primaryType} />
       </div>
 
       <p className="mb-2 text-13 font-medium text-neutral-50">Message</p>
       <div className="mb-4 rounded-16 border border-neutral-10 bg-neutral-2.5 px-4 py-3">
         {rows.length === 0 ? (
-          <p className="text-13 text-neutral-50">No message fields</p>
+          <p className="text-13 text-neutral-50">
+            {truncated
+              ? 'This message could not be read. Decline unless you trust this dApp.'
+              : 'No message fields'}
+          </p>
         ) : (
           <ul className="flex flex-col gap-0.5">
             {rows.map((row, index) => (
@@ -371,9 +381,9 @@ function TypedDataContent({
             ))}
           </ul>
         )}
-        {truncated && (
+        {truncated && rows.length > 0 && (
           <p className="mt-2 text-11 text-neutral-50">
-            Message shortened for display. Sign only if you trust this dApp.
+            Some signed fields are hidden. Sign only if you trust this dApp.
           </p>
         )}
       </div>
