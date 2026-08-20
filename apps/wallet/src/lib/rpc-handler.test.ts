@@ -1015,6 +1015,54 @@ describe('eth_sendTransaction', () => {
     expect(sentTransactions[0].via).toBe('send')
   })
 
+  // Dropping these would change what the transaction does while the popup
+  // still showed what the dApp asked for.
+  describe('fields the send path cannot honour are refused', () => {
+    // The wallet's nonce tracker assigns its own, so a resubmit meant to
+    // replace or cancel a pending transaction would become a second spend.
+    test('nonce', async () => {
+      await connect()
+
+      await expect(
+        sendTransaction({ to: OTHER_ADDRESS, value: '0x1', nonce: '0x3' }),
+      ).rejects.toMatchObject({ code: -32602 })
+      expect(sentTransactions).toEqual([])
+    })
+
+    test('gasPrice', async () => {
+      await connect()
+
+      await expect(
+        sendTransaction({
+          to: OTHER_ADDRESS,
+          value: '0x1',
+          gasPrice: '0x77359400',
+        }),
+      ).rejects.toMatchObject({ code: -32602 })
+      expect(sentTransactions).toEqual([])
+    })
+
+    test('a non-empty accessList', async () => {
+      await connect()
+
+      await expect(
+        sendTransaction({
+          to: OTHER_ADDRESS,
+          value: '0x1',
+          accessList: [{ address: OTHER_ADDRESS, storageKeys: [] }],
+        }),
+      ).rejects.toMatchObject({ code: -32602 })
+    })
+
+    test('an empty accessList is not a request for anything', async () => {
+      await connect()
+
+      await expect(
+        sendTransaction({ to: OTHER_ADDRESS, value: '0x1', accessList: [] }),
+      ).resolves.toBe(TX_HASH)
+    })
+  })
+
   test('the approved fee is the fee that is sent', async () => {
     await connect()
 

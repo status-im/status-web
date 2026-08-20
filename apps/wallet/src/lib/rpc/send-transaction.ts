@@ -33,6 +33,25 @@ type DappTransaction = {
   gas?: string
   maxFeePerGas?: string
   maxPriorityFeePerGas?: string
+  nonce?: string
+  gasPrice?: string
+  accessList?: unknown
+}
+
+/**
+ * Fields the send path cannot honor, refused rather than dropped: a dropped
+ * field changes what the transaction does, and the popup would still show the
+ * request the dApp made. `nonceTracker` assigns its own nonce, so a resubmit
+ * meant to replace or cancel a pending transaction would broadcast as a second
+ * spend at the next nonce instead. `gasPrice` has no route to the backend,
+ * which takes only the EIP-1559 pair, so it would be silently replaced by our
+ * own estimate. `type` is not listed: every transaction we sign is Enveloped,
+ * so a dApp asking for `0x2` is describing what it already gets.
+ */
+const UNSUPPORTED_FIELDS: Record<string, string> = {
+  nonce: 'nonce is not supported; the wallet assigns the nonce',
+  gasPrice:
+    'gasPrice is not supported; use maxFeePerGas and maxPriorityFeePerGas',
 }
 
 function invalidParams(message: string): ProviderRpcError {
@@ -80,6 +99,21 @@ function parseCalldata(value: unknown): Hex | undefined {
   return value as Hex
 }
 
+function assertSupportedFields(request: DappTransaction): void {
+  for (const [field, message] of Object.entries(UNSUPPORTED_FIELDS)) {
+    const value = request[field as keyof DappTransaction]
+    if (value !== undefined && value !== null) {
+      throw invalidParams(message)
+    }
+  }
+
+  // An empty list is what a dApp defaulting the field sends, and dropping it
+  // changes nothing.
+  if (Array.isArray(request.accessList) && request.accessList.length > 0) {
+    throw invalidParams('accessList is not supported')
+  }
+}
+
 /**
  * Typed against the real caller rather than a hand-written shape, so a change
  * to a send procedure's input schema breaks the build instead of failing
@@ -110,6 +144,8 @@ export async function eth_sendTransaction({
     throw invalidParams('eth_sendTransaction expects a transaction object')
   }
   const request = p[0] as DappTransaction
+
+  assertSupportedFields(request)
 
   if (!request.to) {
     // status-go has the same gap: `broadcastTransaction` is the only route out
