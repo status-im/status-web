@@ -1015,6 +1015,34 @@ describe('eth_sendTransaction', () => {
     expect(sentTransactions[0].via).toBe('send')
   })
 
+  // geth treats `input` as an alias for `data`; reading only `data` would turn
+  // a contract call into a bare transfer to the contract.
+  describe('the input alias', () => {
+    test('is used when data is absent', async () => {
+      await connect()
+
+      await sendTransaction({ to: OTHER_ADDRESS, input: '0xdeadbeef' })
+
+      expect(sentTransactions[0]).toMatchObject({
+        via: 'sendContractCall',
+        input: { data: '0xdeadbeef' },
+      })
+    })
+
+    test('is refused when it disagrees with data', async () => {
+      await connect()
+
+      await expect(
+        sendTransaction({
+          to: OTHER_ADDRESS,
+          data: '0xdeadbeef',
+          input: '0xfeedface',
+        }),
+      ).rejects.toMatchObject({ code: -32602 })
+      expect(sentTransactions).toEqual([])
+    })
+  })
+
   // Dropping these would change what the transaction does while the popup
   // still showed what the dApp asked for.
   describe('fields the send path cannot honour are refused', () => {

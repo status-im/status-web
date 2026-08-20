@@ -30,6 +30,7 @@ type DappTransaction = {
   to?: string
   value?: string
   data?: string
+  input?: string
   gas?: string
   maxFeePerGas?: string
   maxPriorityFeePerGas?: string
@@ -115,6 +116,25 @@ function assertSupportedFields(request: DappTransaction): void {
 }
 
 /**
+ * geth accepts `input` as an alias for `data` and some libraries send only it.
+ * Reading `data` alone would turn a contract call into a bare transfer to the
+ * contract. Two values that disagree is geth's error case, not a precedence
+ * rule -- there is no way to tell which one the dApp meant.
+ */
+function selectCalldata(request: DappTransaction): unknown {
+  const { data, input } = request
+  if (data === undefined || input === undefined) return data ?? input
+  if (
+    typeof data === 'string' &&
+    typeof input === 'string' &&
+    data.toLowerCase() === input.toLowerCase()
+  ) {
+    return data
+  }
+  throw invalidParams('data and input are both set and disagree')
+}
+
+/**
  * Typed against the real caller rather than a hand-written shape, so a change
  * to a send procedure's input schema breaks the build instead of failing
  * inside the worker after the user has already approved.
@@ -177,7 +197,7 @@ export async function eth_sendTransaction({
     // `nodes.getFeeRate` requires it, so default it as `send_transaction.go`
     // does rather than letting zod reject server-side.
     value: parseQuantity(request.value, 'value') ?? 0n,
-    data: parseCalldata(request.data),
+    data: parseCalldata(selectCalldata(request)),
     gas: parseQuantity(request.gas, 'gas'),
     maxFeePerGas: parseQuantity(request.maxFeePerGas, 'maxFeePerGas'),
     maxPriorityFeePerGas: parseQuantity(
