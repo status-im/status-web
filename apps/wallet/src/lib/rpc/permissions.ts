@@ -17,6 +17,8 @@ import type { RpcContext } from './context'
 /** EIP-2255 shape. status-go's `persistence.Permission` carries `Invoker`. */
 type PermissionResponse = Permission & { invoker: string }
 
+const RESTRICT_RETURNED_ACCOUNTS = 'restrictReturnedAccounts'
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
@@ -107,7 +109,9 @@ export async function wallet_requestPermissions({
  * `restrictReturnedAccounts` is derived here rather than stored: the record's
  * `accounts` lists every account ever connected to the origin, while
  * `eth_accounts` returns only the pinned one. Advertising the former would
- * claim access the wallet will never grant.
+ * claim access the wallet will never grant. Only that one caveat is derived --
+ * anything else the dApp asked for through `wallet_requestPermissions` is
+ * reported back as stored.
  */
 export async function wallet_getPermissions({
   origin,
@@ -124,8 +128,14 @@ export async function wallet_getPermissions({
     caveats:
       permission.parentCapability === ETH_ACCOUNTS_CAPABILITY
         ? [
+            // A stored `restrictReturnedAccounts` is dropped: a dApp can write
+            // one through `wallet_requestPermissions`, and it must not shadow
+            // the derived value.
+            ...permission.caveats.filter(
+              caveat => caveat.type !== RESTRICT_RETURNED_ACCOUNTS,
+            ),
             {
-              type: 'restrictReturnedAccounts',
+              type: RESTRICT_RETURNED_ACCOUNTS,
               value: exposed ? [exposed] : [],
             },
           ]

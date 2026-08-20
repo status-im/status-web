@@ -462,6 +462,36 @@ describe('wallet_getPermissions', () => {
       },
     ])
   })
+
+  test('keeps the caveats the dApp asked for alongside the derived one', async () => {
+    await connect()
+    await handleRpcRequest(
+      'wallet_requestPermissions',
+      [
+        {
+          eth_accounts: {
+            requiredMethods: ['personal_sign'],
+            // A dApp-written value for the derived caveat must not survive.
+            restrictReturnedAccounts: [OTHER_ADDRESS],
+          },
+        },
+      ],
+      ORIGIN,
+    )
+
+    await expect(
+      handleRpcRequest('wallet_getPermissions', [], ORIGIN),
+    ).resolves.toEqual([
+      {
+        invoker: ORIGIN,
+        parentCapability: ETH_ACCOUNTS_CAPABILITY,
+        caveats: [
+          { type: 'requiredMethods', value: ['personal_sign'] },
+          { type: 'restrictReturnedAccounts', value: [ADDRESS] },
+        ],
+      },
+    ])
+  })
 })
 
 describe('wallet_requestPermissions', () => {
