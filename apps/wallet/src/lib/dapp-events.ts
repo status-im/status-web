@@ -33,7 +33,10 @@ function originOf(url: string | undefined): string | null {
 
 async function broadcast(origin: string, message: DappEventMessage) {
   const key = normalizeOrigin(origin)
-  const tabs = await chrome.tabs.query({})
+  // Best-effort throughout: `wallet_revokePermissions` notifies after the
+  // permission is already gone, so a failure here must not surface as a failed
+  // revoke.
+  const tabs = await chrome.tabs.query({}).catch(() => [])
 
   await Promise.all(
     tabs.map(tab => {
@@ -90,7 +93,12 @@ export async function connectAccountToDapp(
   await notifyAccountsChanged(origin, [address])
 }
 
-/** Revokes from the wallet UI. The empty array is EIP-1193 for "logged out". */
+/**
+ * Drops the grant and tells the page. The empty array is EIP-1193 for "logged
+ * out". Both revoke paths go through here -- the wallet's Disconnect action and
+ * `wallet_revokePermissions` -- so neither can leave a page showing an account
+ * it no longer has.
+ */
 export async function disconnectDapp(origin: string): Promise<void> {
   await revokeOrigin(origin)
   await notifyAccountsChanged(origin, [])

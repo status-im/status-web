@@ -40,9 +40,18 @@ let autoApprove = true
 /** Popups the handler opened, counted by the mock's `windows.create`. */
 let popupsOpened = 0
 
+type PushedEvent = {
+  tabId: number
+  message: { type: string; event: string; data: unknown }
+}
+
+/** EIP-1193 events the handler pushed at the dApp's tabs. */
+let pushedToTabs: PushedEvent[] = []
+
 function createChromeMock() {
   const session = new Map<string, unknown>()
   const listeners: Listener[] = []
+  pushedToTabs = []
 
   const set = async (items: Record<string, unknown>) => {
     const changes: Record<string, { newValue?: unknown }> = {}
@@ -76,6 +85,16 @@ function createChromeMock() {
       },
     },
     runtime: { getURL: (p: string) => `chrome-extension://test/${p}` },
+    // Wallet-initiated events reach the page through the bridge content script.
+    tabs: {
+      query: async () => [
+        { id: 1, url: `${ORIGIN}/swap` },
+        { id: 2, url: `${OTHER_ORIGIN}/` },
+      ],
+      sendMessage: async (tabId: number, message: PushedEvent['message']) => {
+        pushedToTabs.push({ tabId, message })
+      },
+    },
     windows: {
       getCurrent: async () => ({ left: 0, top: 0, width: 1200 }),
       // Stands in for the user acting on the approval popup.
@@ -195,6 +214,25 @@ test('an explicit revoke disconnects', async () => {
   )
 
   expect(await accounts()).toEqual([])
+})
+
+// The page that revoked, and every other tab on the origin, keep showing the
+// account until told otherwise -- the wallet's own Disconnect action pushes
+// this event, and the RPC path must not be the one that skips it.
+test('an explicit revoke tells the origin its accounts are gone', async () => {
+  await connect()
+  await handleRpcRequest(
+    'wallet_revokePermissions',
+    [{ eth_accounts: {} }],
+    ORIGIN,
+  )
+
+  expect(pushedToTabs).toEqual([
+    {
+      tabId: 1,
+      message: { type: 'status:event', event: 'accountsChanged', data: [] },
+    },
+  ])
 })
 
 // Regression: the -32002 guard read the stored approval asynchronously, so two

@@ -8,8 +8,8 @@ import {
   isOriginPermitted,
   normalizeOrigin,
   type Permission,
-  revokeOrigin,
 } from '../../data/dapp-permissions'
+import { disconnectDapp } from '../dapp-events'
 import { getAddress, getOriginAddress } from './account'
 
 import type { RpcContext } from './context'
@@ -133,10 +133,15 @@ export async function wallet_getPermissions({
   }))
 }
 
+/**
+ * EIP-2255. Notifies as well as revokes: the calling page keeps the account it
+ * was handed until something tells it otherwise, and other tabs on the same
+ * origin never saw the request at all.
+ */
 export async function wallet_revokePermissions({
   origin,
 }: RpcContext): Promise<null> {
-  await revokeOrigin(origin)
+  await disconnectDapp(origin)
   return null
 }
 
