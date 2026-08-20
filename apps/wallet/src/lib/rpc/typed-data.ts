@@ -1,5 +1,7 @@
 import { ProviderRpcError } from '@status-im/ethereum-provider'
 
+import { getChain, toChainId } from '../chains'
+
 export type TypedDataField = { name: string; type: string }
 
 export type TypedData = {
@@ -183,10 +185,10 @@ export function assertDomainChainId(
     throw invalidParams('typed data declares a chainId it does not sign')
   }
 
-  const current = Number.parseInt(originChainId, 16)
+  const current = toChainId(originChainId)
   if (declared !== current) {
     throw invalidParams(
-      `typed data is for chain ${declared}, but this dApp is connected to chain ${current}`,
+      `typed data is for chain ${declared}, but this dApp is connected to ${getChain(current)?.name ?? `chain ${originChainId}`}`,
     )
   }
 }
