@@ -1,6 +1,7 @@
 import { Text } from '@status-im/components'
 import { getTranslations } from 'next-intl/server'
 
+import { SITE_URL } from '~/config/site'
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
 import { buildLandingPageStructuredData } from '~/utils/structured-data'
 import { Metadata } from '~app/_metadata'
@@ -30,7 +31,7 @@ export default async function LearnPage() {
 
   const websiteSchema = jsonLD.website({
     name: 'Status Learn',
-    url: 'https://status.app/learn',
+    url: `${SITE_URL}/learn`,
     description: t('description'),
   })
   const webpageSchema = buildLandingPageStructuredData({

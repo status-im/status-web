@@ -3,6 +3,7 @@ import { ExternalIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
 import { getTranslations } from 'next-intl/server'
 
+import { SITE_URL } from '~/config/site'
 import { isGetSite } from '~/config/site-scope'
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
 import { buildLandingPageStructuredData } from '~/utils/structured-data'
@@ -192,7 +193,7 @@ export default async function HomePage() {
                 <Button
                   size="32"
                   variant="darkGrey"
-                  href="https://status.app/blog/migrate-from-status-legacy-to-unified-status-mobile-app"
+                  href={`${SITE_URL}/blog/migrate-from-status-legacy-to-unified-status-mobile-app`}
                   target="_blank"
                   rel="noopener noreferrer"
                   iconAfter={<ExternalIcon className="text-white-100" />}

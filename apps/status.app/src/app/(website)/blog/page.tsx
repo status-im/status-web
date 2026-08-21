@@ -1,6 +1,7 @@
 import { Text } from '@status-im/components'
 import { getTranslations } from 'next-intl/server'
 
+import { SITE_URL } from '~/config/site'
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
 import { buildLandingPageStructuredData } from '~/utils/structured-data'
 import { Metadata } from '~app/_metadata'
@@ -72,9 +73,9 @@ export default async function BlogPage({ searchParams }: Props) {
 
   const websiteSchema = jsonLD.website({
     name: 'Status Blog',
-    url: 'https://status.app/blog',
+    url: `${SITE_URL}/blog`,
     description: t('description'),
-    searchUrl: 'https://status.app/blog?q={search_term_string}',
+    searchUrl: `${SITE_URL}/blog?q={search_term_string}`,
   })
   const webpageSchema = buildLandingPageStructuredData({
     name: t('title'),

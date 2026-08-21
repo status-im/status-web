@@ -15,7 +15,7 @@ import { Metadata } from './_metadata'
 import { Providers } from './_providers'
 
 export const metadata = Metadata({
-  metadataBase: new URL('https://status.app/'),
+  metadataBase: new URL(SITE_URL),
 
   title: {
     template: '%s',
@@ -89,7 +89,7 @@ export default async function RootLayout({ children }: Props) {
           rel="alternate"
           type="application/atom+xml"
           title="Status.app Updates"
-          href="https://status.app/feed.xml"
+          href={`${SITE_URL}/feed.xml`}
         />
         <meta
           property="article:publisher"
