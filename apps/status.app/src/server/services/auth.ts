@@ -9,6 +9,7 @@ import { parseJWT } from 'oslo/jwt'
 import { z } from 'zod'
 
 import { serverEnv } from '~/config/env.server.mjs'
+import { SITE_URL } from '~/config/site'
 
 import { db } from '../db'
 
@@ -131,7 +132,7 @@ export async function getBaseUrl(): Promise<string> {
   }
 
   if (serverEnv.VERCEL_ENV === 'production') {
-    return 'https://status.app'
+    return SITE_URL
   }
 
   if (serverEnv.VERCEL) {
