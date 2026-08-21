@@ -9,6 +9,7 @@ import {
   selectAccountForOrigin,
   setChainIdForOrigin,
 } from '../data/dapp-permissions'
+import { requestFeeRate } from './gas-fees'
 import { publicClient } from './public-client'
 import { handleRpcRequest, LOCAL_HANDLERS } from './rpc-handler'
 import { REMOTE_ALLOWED, UNGATED_LOCAL } from './rpc-methods'
@@ -20,7 +21,31 @@ vi.mock('./public-client', () => ({
   publicClient: { request: vi.fn(async () => '0x1234') },
 }))
 
+// `eth_sendTransaction` prices itself against the wallet's own estimator,
+// which is an authenticated HTTP call.
+vi.mock('./gas-fees', () => ({
+  requestFeeRate: vi.fn(),
+}))
+
 const nodeRequest = vi.mocked(publicClient.request)
+const feeRequest = vi.mocked(requestFeeRate)
+
+/** 21000 gas at 1 gwei: a max fee of 0.000021 ETH. */
+const GAS_FEES = {
+  feeEth: 0.0000105,
+  feeEur: 0.03,
+  maxFeeEth: 0.000021,
+  maxFeeEur: 0.06,
+  confirmationTime: '~12s',
+  txParams: {
+    gasLimit: '0x5208',
+    maxFeePerGas: '0x3b9aca00',
+    maxPriorityFeePerGas: '0x3b9aca0',
+  },
+}
+
+const TX_HASH = `0x${'ab'.repeat(32)}`
+const ERC20_TRANSFER = `0xa9059cbb${'00'.repeat(64)}`
 
 const ORIGIN = 'https://app.velora.xyz'
 const OTHER_ORIGIN = 'https://app.uniswap.org'
@@ -127,12 +152,17 @@ async function selectAccount(address: string, walletId: string) {
 
 const signed: { walletId?: string; fromAddress?: string } = {}
 let signedTypedData: Record<string, unknown> | null = null
+let sentTransactions: Array<{ via: string; input: Record<string, unknown> }> =
+  []
 
 beforeEach(async () => {
   autoApprove = true
   popupsOpened = 0
   signedTypedData = null
+  sentTransactions = []
   nodeRequest.mockClear()
+  feeRequest.mockReset()
+  feeRequest.mockResolvedValue(GAS_FEES)
   vi.stubGlobal('chrome', createChromeMock())
   vi.stubGlobal('api', {
     wallet: {
@@ -148,6 +178,18 @@ beforeEach(async () => {
           signTypedData: async (input: Record<string, unknown>) => {
             signedTypedData = input
             return { signature: '0xtypedsig' }
+          },
+          send: async (input: Record<string, unknown>) => {
+            sentTransactions.push({ via: 'send', input })
+            return { id: { txid: TX_HASH } }
+          },
+          sendErc20: async (input: Record<string, unknown>) => {
+            sentTransactions.push({ via: 'sendErc20', input })
+            return { id: { txid: TX_HASH } }
+          },
+          sendContractCall: async (input: Record<string, unknown>) => {
+            sentTransactions.push({ via: 'sendContractCall', input })
+            return { id: { txid: TX_HASH } }
           },
         },
       },
@@ -850,5 +892,352 @@ describe('the domain chain', () => {
     await expect(
       signTypedData(ADDRESS, withDomain({ chainId: 0x6300b5ea })),
     ).resolves.toBe('0xtypedsig')
+  })
+})
+
+const sendTransaction = (
+  tx: Record<string, unknown>,
+  origin = ORIGIN,
+): Promise<unknown> => handleRpcRequest('eth_sendTransaction', [tx], origin)
+
+describe('eth_sendTransaction', () => {
+  test('sends a plain transfer and returns the hash', async () => {
+    await connect()
+
+    await expect(
+      sendTransaction({ to: OTHER_ADDRESS, value: '0x64' }),
+    ).resolves.toBe(TX_HASH)
+    expect(sentTransactions).toMatchObject([
+      {
+        via: 'send',
+        input: { walletId: WALLET_ID, fromAddress: ADDRESS, amount: '64' },
+      },
+    ])
+  })
+
+  test('spends from the account the origin is pinned to', async () => {
+    await connect()
+    await selectAccount(OTHER_ADDRESS, OTHER_WALLET_ID)
+
+    await sendTransaction({ to: OTHER_ADDRESS, value: '0x1' })
+
+    expect(sentTransactions[0].input).toMatchObject({
+      walletId: WALLET_ID,
+      fromAddress: ADDRESS,
+    })
+  })
+
+  // `approve`, `transfer` and every other non-payable call omit it, and
+  // `nodes.getFeeRate` requires it.
+  test('an omitted value is sent as zero', async () => {
+    await connect()
+
+    await sendTransaction({ to: OTHER_ADDRESS })
+
+    expect(feeRequest).toHaveBeenCalledWith(
+      expect.objectContaining({ value: '0' }),
+    )
+    expect(sentTransactions[0].input).toMatchObject({ amount: '0' })
+  })
+
+  test('calldata routes through sendContractCall', async () => {
+    await connect()
+
+    await sendTransaction({
+      to: OTHER_ADDRESS,
+      value: '0x0',
+      data: '0xdeadbeef',
+    })
+
+    expect(sentTransactions[0]).toMatchObject({
+      via: 'sendContractCall',
+      input: { data: '0xdeadbeef', value: '0' },
+    })
+  })
+
+  test('an ERC20 transfer routes through sendErc20', async () => {
+    await connect()
+
+    await sendTransaction({ to: OTHER_ADDRESS, data: ERC20_TRANSFER })
+
+    expect(sentTransactions[0].via).toBe('sendErc20')
+  })
+
+  // `sendErc20` re-encodes from the recipient and amount words alone, so it
+  // would sign neither the trailing bytes nor the value the popup displayed.
+  describe('calldata that sendErc20 would not reproduce keeps its bytes', () => {
+    test('trailing bytes after the amount word', async () => {
+      await connect()
+      const data = `${ERC20_TRANSFER}deadbeef`
+
+      await sendTransaction({ to: OTHER_ADDRESS, data })
+
+      expect(sentTransactions[0]).toMatchObject({
+        via: 'sendContractCall',
+        input: { data },
+      })
+    })
+
+    test('a transfer carrying ETH value', async () => {
+      await connect()
+
+      await sendTransaction({
+        to: OTHER_ADDRESS,
+        value: '0x1',
+        data: ERC20_TRANSFER,
+      })
+
+      expect(sentTransactions[0]).toMatchObject({
+        via: 'sendContractCall',
+        input: { data: ERC20_TRANSFER, value: '1' },
+      })
+    })
+
+    test('a recipient word with non-zero padding', async () => {
+      await connect()
+      const data = `0xa9059cbb${'11'.repeat(12)}${'22'.repeat(20)}${'00'.repeat(32)}`
+
+      await sendTransaction({ to: OTHER_ADDRESS, data })
+
+      expect(sentTransactions[0]).toMatchObject({
+        via: 'sendContractCall',
+        input: { data },
+      })
+    })
+  })
+
+  // '0x' is what dApps send for "no calldata", and it is truthy.
+  test("data of '0x' is a plain transfer", async () => {
+    await connect()
+
+    await sendTransaction({ to: OTHER_ADDRESS, value: '0x1', data: '0x' })
+
+    expect(sentTransactions[0].via).toBe('send')
+  })
+
+  // geth treats `input` as an alias for `data`; reading only `data` would turn
+  // a contract call into a bare transfer to the contract.
+  describe('the input alias', () => {
+    test('is used when data is absent', async () => {
+      await connect()
+
+      await sendTransaction({ to: OTHER_ADDRESS, input: '0xdeadbeef' })
+
+      expect(sentTransactions[0]).toMatchObject({
+        via: 'sendContractCall',
+        input: { data: '0xdeadbeef' },
+      })
+    })
+
+    test('is refused when it disagrees with data', async () => {
+      await connect()
+
+      await expect(
+        sendTransaction({
+          to: OTHER_ADDRESS,
+          data: '0xdeadbeef',
+          input: '0xfeedface',
+        }),
+      ).rejects.toMatchObject({ code: -32602 })
+      expect(sentTransactions).toEqual([])
+    })
+  })
+
+  // Dropping these would change what the transaction does while the popup
+  // still showed what the dApp asked for.
+  describe('fields the send path cannot honour are refused', () => {
+    // The wallet's nonce tracker assigns its own, so a resubmit meant to
+    // replace or cancel a pending transaction would become a second spend.
+    test('nonce', async () => {
+      await connect()
+
+      await expect(
+        sendTransaction({ to: OTHER_ADDRESS, value: '0x1', nonce: '0x3' }),
+      ).rejects.toMatchObject({ code: -32602 })
+      expect(sentTransactions).toEqual([])
+    })
+
+    test('gasPrice', async () => {
+      await connect()
+
+      await expect(
+        sendTransaction({
+          to: OTHER_ADDRESS,
+          value: '0x1',
+          gasPrice: '0x77359400',
+        }),
+      ).rejects.toMatchObject({ code: -32602 })
+      expect(sentTransactions).toEqual([])
+    })
+
+    test('a non-empty accessList', async () => {
+      await connect()
+
+      await expect(
+        sendTransaction({
+          to: OTHER_ADDRESS,
+          value: '0x1',
+          accessList: [{ address: OTHER_ADDRESS, storageKeys: [] }],
+        }),
+      ).rejects.toMatchObject({ code: -32602 })
+    })
+
+    test('an empty accessList is not a request for anything', async () => {
+      await connect()
+
+      await expect(
+        sendTransaction({ to: OTHER_ADDRESS, value: '0x1', accessList: [] }),
+      ).resolves.toBe(TX_HASH)
+    })
+  })
+
+  test('the approved fee is the fee that is sent', async () => {
+    await connect()
+
+    await sendTransaction({ to: OTHER_ADDRESS, value: '0x1' })
+
+    expect(feeRequest).toHaveBeenCalledTimes(1)
+    expect(sentTransactions[0].input).toMatchObject({
+      gasLimit: GAS_FEES.txParams.gasLimit,
+      maxFeePerGas: GAS_FEES.txParams.maxFeePerGas,
+      maxInclusionFeePerGas: GAS_FEES.txParams.maxPriorityFeePerGas,
+    })
+  })
+
+  test('fee fields the dApp pinned are not overwritten by the estimate', async () => {
+    await connect()
+
+    await sendTransaction({
+      to: OTHER_ADDRESS,
+      value: '0x1',
+      gas: '0x5208',
+      maxFeePerGas: '0x77359400',
+      maxPriorityFeePerGas: '0x3b9aca00',
+    })
+
+    expect(sentTransactions[0].input).toMatchObject({
+      maxFeePerGas: '0x77359400',
+      maxInclusionFeePerGas: '0x3b9aca00',
+    })
+  })
+
+  // Estimation is also the revert check, so it runs even when the dApp priced
+  // the transaction itself -- otherwise a reverting call reaches the popup and
+  // only fails at broadcast.
+  test('a reverting call is caught even when the dApp priced it', async () => {
+    await connect()
+    feeRequest.mockRejectedValue(new Error('execution reverted'))
+
+    await expect(
+      sendTransaction({
+        to: OTHER_ADDRESS,
+        value: '0x1',
+        gas: '0x5208',
+        maxFeePerGas: '0x77359400',
+        maxPriorityFeePerGas: '0x3b9aca00',
+      }),
+    ).rejects.toMatchObject({ code: -32603 })
+  })
+
+  test('a from that is not the pinned account is refused', async () => {
+    await connect()
+
+    await expect(
+      sendTransaction({ from: OTHER_ADDRESS, to: OTHER_ADDRESS, value: '0x1' }),
+    ).rejects.toMatchObject({ code: -32602 })
+    expect(sentTransactions).toEqual([])
+  })
+
+  test('an omitted from defaults to the pinned account', async () => {
+    await connect()
+
+    await expect(
+      sendTransaction({ to: OTHER_ADDRESS, value: '0x1' }),
+    ).resolves.toBe(TX_HASH)
+  })
+
+  test('a bare decimal quantity is refused rather than guessed at', async () => {
+    await connect()
+
+    await expect(
+      sendTransaction({ to: OTHER_ADDRESS, value: '100' }),
+    ).rejects.toMatchObject({ code: -32602 })
+  })
+
+  test('a to that is not an address is refused', async () => {
+    await connect()
+
+    await expect(
+      sendTransaction({ to: '0xnothing', value: '0x1' }),
+    ).rejects.toMatchObject({ code: -32602 })
+  })
+
+  test('contract deployment is refused by name', async () => {
+    await connect()
+
+    await expect(sendTransaction({ value: '0x1' })).rejects.toMatchObject({
+      code: 4200,
+      message: 'Contract deployment is not supported',
+    })
+  })
+
+  // The backend pins `z.enum(['ethereum'])` on every route a send needs, so an
+  // off-mainnet request cannot be honoured whatever the client does.
+  test('a dApp on another chain is told why', async () => {
+    await connect()
+    await handleRpcRequest(
+      'wallet_switchEthereumChain',
+      [{ chainId: '0x6300b5ea' }],
+      ORIGIN,
+    )
+
+    await expect(
+      sendTransaction({ to: OTHER_ADDRESS, value: '0x1' }),
+    ).rejects.toMatchObject({ code: 4200 })
+    expect(feeRequest).not.toHaveBeenCalled()
+  })
+
+  test('a rejected approval is 4001', async () => {
+    await connect()
+    autoApprove = false
+
+    await expect(
+      sendTransaction({ to: OTHER_ADDRESS, value: '0x1' }),
+    ).rejects.toMatchObject({ code: 4001 })
+    expect(sentTransactions).toEqual([])
+  })
+
+  // A reverting call fails at estimation. The user should see why rather than
+  // approve an empty popup and get an opaque failure afterwards.
+  test('an estimation failure is reported before the popup', async () => {
+    await connect()
+    const popupsBefore = popupsOpened
+    feeRequest.mockRejectedValue(new Error('execution reverted'))
+
+    await expect(
+      sendTransaction({ to: OTHER_ADDRESS, value: '0x1' }),
+    ).rejects.toMatchObject({
+      code: -32603,
+      message: expect.stringContaining('execution reverted'),
+    })
+    expect(popupsOpened).toBe(popupsBefore)
+  })
+
+  test('a second request while one is pending is -32002', async () => {
+    await connect()
+
+    const [first, second] = await Promise.allSettled([
+      sendTransaction({ to: OTHER_ADDRESS, value: '0x1' }),
+      sendTransaction({ to: OTHER_ADDRESS, value: '0x2' }),
+    ])
+
+    expect([first.status, second.status].sort()).toEqual([
+      'fulfilled',
+      'rejected',
+    ])
+    const rejected = [first, second].find(r => r.status === 'rejected')
+    expect((rejected as PromiseRejectedResult).reason).toMatchObject({
+      code: -32002,
+    })
   })
 })

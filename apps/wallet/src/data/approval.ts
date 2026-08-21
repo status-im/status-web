@@ -39,6 +39,27 @@ export type PendingApproval = { createdAt: number } & (
        */
       typedData: string
     }
+  | {
+      id: string
+      type: 'eth_sendTransaction'
+      origin: string
+      title: string
+      favicon: string
+      address: string
+      accountName: string
+      chainId: string
+      to: string
+      /** Wei, hex. A bigint would not survive the `chrome.storage` JSON round trip. */
+      value: string
+      /** Calldata, or null for a plain transfer. */
+      data: string | null
+      /**
+       * The ETH ceiling of `maxFeePerGas * gasLimit`, resolved before the popup
+       * opens. The handler sends with the same numbers, so what the user
+       * approves is what gets broadcast.
+       */
+      maxFeeEth: string
+    }
 )
 
 export type ApprovalResult = {

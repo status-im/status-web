@@ -6,14 +6,13 @@ import {
   useMemo,
 } from 'react'
 
-import {
-  getTransactionHash,
-  isEthereumTransactionHash,
-} from '@status-im/wallet/utils'
 import { type Address, type Hex } from 'viem'
-import { formatEther } from 'viem/utils'
 
 import { useGasFees } from '../hooks/use-gas-fees'
+import {
+  buildAndSendTransaction,
+  type TransactionRequest,
+} from '../lib/send-transaction'
 import { apiClient } from './api-client'
 import { usePassword } from './password-context'
 import { useWallet } from './wallet-context'
@@ -23,14 +22,7 @@ type SignerContextValue = {
   isUnlocked: boolean
   unlock: () => Promise<boolean>
   lock: () => void
-  signAndSendTransaction: (tx: {
-    to: Address
-    value: bigint
-    data?: Hex
-    gas?: bigint
-    maxFeePerGas?: bigint
-    maxPriorityFeePerGas?: bigint
-  }) => Promise<Hex>
+  signAndSendTransaction: (tx: TransactionRequest) => Promise<Hex>
   signMessage: (message: Hex) => Promise<Hex>
   signTypedData: (typedData: string) => Promise<Hex>
   requestUnlock: () => Promise<boolean>
@@ -106,191 +98,27 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
     if (!isUnlocked) throw new Error('Wallet not unlocked')
   }, [hasActiveSession, requestPassword])
 
-  const parseInsufficientFundsError = useCallback(
-    (error: unknown): Error | null => {
-      const errorObj =
-        typeof error === 'object' && error !== null && 'message' in error
-          ? error
-          : null
-      const errorMessage =
-        errorObj && typeof errorObj.message === 'string'
-          ? errorObj.message
-          : typeof error === 'string'
-            ? error
-            : null
-      if (!errorMessage) return null
-      const match = errorMessage.match(
-        /insufficient funds for gas \* price \+ value: have (\d+) want (\d+)/,
-      )
-      if (!match) return null
-      const haveWei = BigInt(match[1])
-      const wantWei = BigInt(match[2])
-      const haveEth = formatEther(haveWei)
-      const wantEth = formatEther(wantWei)
-      const shortfallEth = formatEther(wantWei - haveWei)
-      return new Error(
-        `Insufficient funds for gas. Have ${haveEth} ETH, need up to ${wantEth} ETH (max fee). Short ${shortfallEth} ETH.`,
-      )
-    },
-    [],
-  )
-
-  const handleTransactionError = useCallback(
-    (error: unknown, context: string): never => {
-      console.error(`${context} error:`, error)
-      const parsedError = parseInsufficientFundsError(error)
-      if (parsedError) throw parsedError
-      throw new Error(
-        typeof error === 'object' && error !== null && 'message' in error
-          ? String(error.message)
-          : String(error),
-      )
-    },
-    [parseInsufficientFundsError],
-  )
-
   const signAndSendTransaction = useCallback(
-    async (tx: {
-      to: Address
-      value: bigint
-      data?: Hex
-      gas?: bigint
-      maxFeePerGas?: bigint
-      maxPriorityFeePerGas?: bigint
-    }): Promise<Hex> => {
+    async (tx: TransactionRequest): Promise<Hex> => {
       if (!currentWallet?.id || !address) {
         throw new Error('No wallet connected')
       }
 
       await ensureUnlocked()
 
-      const toHex = (value: bigint) => `0x${value.toString(16)}`
-
-      // Fee policy: transactions created by the wallet itself carry no fee
-      // fields and are priced entirely by the internal estimator. External
-      // callers (e.g. the LiFi widget for swaps) are trusted for every field
-      // they provide — only genuinely missing pieces are filled in.
-      let maxFeePerGas = tx.maxFeePerGas ? toHex(tx.maxFeePerGas) : undefined
-      let maxPriorityFeePerGas =
-        tx.maxPriorityFeePerGas !== undefined
-          ? toHex(tx.maxPriorityFeePerGas)
-          : undefined
-      let gasLimit = tx.gas ? toHex(tx.gas) : undefined
-
-      if (!maxFeePerGas || !maxPriorityFeePerGas || !gasLimit) {
-        const fees = await fetchGasFees({
-          from: address,
-          to: tx.to,
-          value: tx.value.toString(16),
-          data: tx.data,
-        })
-
-        if (!maxFeePerGas && tx.maxPriorityFeePerGas !== undefined) {
-          // LiFi quotes carry a quote-time maxPriorityFeePerGas but the SDK
-          // strips maxFeePerGas, leaving the ceiling to the wallet. Building
-          // it from our own estimate alone can undercut the quoted priority
-          // (invalid EIP-1559 tx, rejected at broadcast), so honor the quoted
-          // priority and add the estimator's base-fee headroom on top
-          // (its maxFeePerGas = 2*baseFee + own priority).
-          const baseFeeHeadroom =
-            BigInt(fees.txParams.maxFeePerGas) -
-            BigInt(fees.txParams.maxPriorityFeePerGas)
-          maxFeePerGas = toHex(baseFeeHeadroom + tx.maxPriorityFeePerGas)
-        }
-
-        maxFeePerGas ??= fees.txParams.maxFeePerGas
-        maxPriorityFeePerGas ??= fees.txParams.maxPriorityFeePerGas
-        gasLimit ??= fees.txParams.gasLimit
-      }
-
-      // EIP-1559 invariant: a tip above the fee ceiling is rejected by nodes.
-      // Only reachable when the caller pinned maxFeePerGas but left the
-      // priority fee to the (potentially higher) internal estimate.
-      if (BigInt(maxPriorityFeePerGas) > BigInt(maxFeePerGas)) {
-        maxPriorityFeePerGas = maxFeePerGas
-      }
-
-      if (tx.data) {
-        const ERC20_TRANSFER_SIGNATURE = '0xa9059cbb'
-        const isErc20Transfer = tx.data
-          .toLowerCase()
-          .startsWith(ERC20_TRANSFER_SIGNATURE)
-
-        if (isErc20Transfer) {
-          const result =
-            await apiClient.wallet.account.ethereum.sendErc20.mutate({
-              walletId: currentWallet.id,
-              fromAddress: address,
-              toAddress: tx.to,
-              gasLimit,
-              maxFeePerGas,
-              maxInclusionFeePerGas: maxPriorityFeePerGas,
-              data: tx.data,
-            })
-
-          if (result.id.txid?.error) {
-            handleTransactionError(result.id.txid.error, 'ERC20 transfer')
-          }
-
-          const txHash = getTransactionHash(result.id.txid)
-          if (!isEthereumTransactionHash(txHash)) {
-            throw new Error('Transaction failed')
-          }
-          return txHash as Hex
-        }
-
-        const valueHex = tx.value.toString(16)
-        const result =
-          await apiClient.wallet.account.ethereum.sendContractCall.mutate({
-            walletId: currentWallet.id,
-            fromAddress: address,
-            toAddress: tx.to,
-            gasLimit,
-            maxFeePerGas,
-            maxInclusionFeePerGas: maxPriorityFeePerGas,
-            data: tx.data,
-            value: valueHex,
-          })
-
-        if (result.id.txid?.error) {
-          handleTransactionError(result.id.txid.error, 'Contract call')
-        }
-
-        const txHash = getTransactionHash(result.id.txid)
-        if (!isEthereumTransactionHash(txHash)) {
-          throw new Error('Transaction failed')
-        }
-        return txHash as Hex
-      }
-
-      const amountHex = tx.value.toString(16)
-      const result = await apiClient.wallet.account.ethereum.send.mutate({
-        walletId: currentWallet.id,
-        fromAddress: address,
-        toAddress: tx.to,
-        amount: amountHex,
-        gasLimit,
-        maxFeePerGas,
-        maxInclusionFeePerGas: maxPriorityFeePerGas,
-      })
-
-      if (result.id.txid?.error) {
-        handleTransactionError(result.id.txid.error, 'Send transaction')
-      }
-
-      const txHash = getTransactionHash(result.id.txid)
-      if (!isEthereumTransactionHash(txHash)) {
-        throw new Error('Transaction failed')
-      }
-      return txHash as Hex
+      return await buildAndSendTransaction(
+        tx,
+        { walletId: currentWallet.id, address, fetchGasFees },
+        {
+          send: input => apiClient.wallet.account.ethereum.send.mutate(input),
+          sendErc20: input =>
+            apiClient.wallet.account.ethereum.sendErc20.mutate(input),
+          sendContractCall: input =>
+            apiClient.wallet.account.ethereum.sendContractCall.mutate(input),
+        },
+      )
     },
-    [
-      currentWallet?.id,
-      address,
-      ensureUnlocked,
-      handleTransactionError,
-      fetchGasFees,
-    ],
+    [currentWallet?.id, address, ensureUnlocked, fetchGasFees],
   )
 
   const signMessage = useCallback(

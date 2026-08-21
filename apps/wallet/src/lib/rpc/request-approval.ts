@@ -6,6 +6,7 @@ import {
   clearApprovalResult,
   clearPendingApproval,
   getApprovalResult,
+  getPendingApproval,
   type PendingApproval,
   setPendingApproval,
 } from '../../data/approval'
@@ -23,6 +24,20 @@ type PendingApprovalInput = PendingApproval extends infer T
  * Synchronous claim on the single approval slot.
  */
 let approvalInFlight = false
+
+/**
+ * The slot holds one request; a second must not replace it. Checked before any
+ * work the user would have to wait through, so a dApp firing two requests is
+ * told immediately rather than after an estimate.
+ */
+export async function assertNoPendingApproval(): Promise<void> {
+  if (await getPendingApproval()) {
+    throw new ProviderRpcError({
+      code: -32002,
+      message: 'Already processing a request.',
+    })
+  }
+}
 
 export function requestApproval(
   approval: PendingApprovalInput,

@@ -4,26 +4,18 @@ import { GasShiftedError } from '@status-im/wallet/constants'
 import { useQuery } from '@tanstack/react-query'
 import { Interface, isAddress } from 'ethers'
 
-import { fetchTrpcData } from '@/utils/trpc'
+import {
+  type GasFeeRequestParams,
+  type GasFees,
+  requestFeeRate,
+} from '@/lib/gas-fees'
+
+export type { GasFeeRequestParams, GasFees }
 
 const GAS_FEES_STALE_TIME = 8 * 1000
 const GAS_FEES_REFETCH_INTERVAL = 12 * 1000
 const ALLOWED_GAS_SLIPPAGE_PERCENT = 30n
-const GAS_LIMIT_BUFFER_PERCENT = 10n
 const erc20 = new Interface(['function transfer(address to, uint256 amount)'])
-
-export type GasFees = {
-  feeEth: number
-  feeEur: number
-  maxFeeEth: number
-  maxFeeEur: number
-  confirmationTime: string
-  txParams: {
-    gasLimit: string
-    maxFeePerGas: string
-    maxPriorityFeePerGas: string
-  }
-}
 
 type GasInput = {
   to: string
@@ -36,19 +28,6 @@ type UseGasFeesOptions = {
   isNative?: boolean
   contractAddress?: string
   includeGasLimitBuffer?: boolean
-}
-
-export type GasFeeRequestParams = {
-  from: string
-  to: string
-  value?: string
-  data?: string
-}
-
-function toRpcHex(value: string): string {
-  if (value.startsWith('0x')) return value
-  if (value === '') return '0x0'
-  return `0x${value}`
 }
 
 function buildGasFeeParams(
@@ -74,41 +53,6 @@ function buildGasFeeParams(
     to: contractAddress,
     value: '0x0',
     data,
-  }
-}
-
-async function requestFeeRate(
-  params: GasFeeRequestParams,
-  includeGasLimitBuffer: boolean = true,
-): Promise<GasFees> {
-  const normalizedParams: GasFeeRequestParams = {
-    ...params,
-    value: params.value ? toRpcHex(params.value) : params.value,
-  }
-
-  const gasFees = await fetchTrpcData<GasFees>(
-    'nodes.getFeeRate',
-    {
-      network: 'ethereum',
-      params: normalizedParams,
-    },
-    'Failed to fetch gas fees',
-  )
-
-  if (!includeGasLimitBuffer) {
-    return gasFees
-  }
-
-  const estimatedGasLimit = BigInt(gasFees.txParams.gasLimit)
-  const gasLimitWithBuffer =
-    estimatedGasLimit + (estimatedGasLimit * GAS_LIMIT_BUFFER_PERCENT) / 100n
-
-  return {
-    ...gasFees,
-    txParams: {
-      ...gasFees.txParams,
-      gasLimit: `0x${gasLimitWithBuffer.toString(16)}`,
-    },
   }
 }
 
