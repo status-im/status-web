@@ -27,9 +27,11 @@ const Prefooter = () => {
             alt=""
             className="size-20"
           />
-          <h1 className="py-4 pb-3 pt-5 text-40 font-bold text-white-100 lg:pb-5 lg:text-88">
+          {/* h2, not h1: this CTA renders below the page's own h1 on `/` and
+              `/apps`, so an h1 here gives both pages two top-level headings. */}
+          <h2 className="py-4 pb-3 pt-5 text-40 font-bold text-white-100 lg:pb-5 lg:text-88">
             {t('title')}
-          </h1>
+          </h2>
           <Text size={19} color="$white-100">
             {t('description')}
           </Text>
