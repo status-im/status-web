@@ -120,7 +120,7 @@ export const invalidateSession = async (): Promise<boolean> => {
 //
 // Order of precedence:
 //   1. SITE_URL — a fixed, operator-controlled origin (set this on self-host).
-//   2. Hardcoded `https://status.app` for Vercel production deployments.
+//   2. `SITE_URL` constant (the canonical origin) for Vercel production deployments.
 //   3. Vercel preview — read `x-forwarded-*` (Vercel sanitizes the host header).
 //   4. Local dev — `http://localhost:PORT`.
 //

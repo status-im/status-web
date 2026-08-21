@@ -1,3 +1,4 @@
+import { SITE_URL } from '~/config/site'
 import gitHubIcon from '~public/images/social/github.svg'
 // import statusIcon from '~public/images/social/status.svg'
 import twitterIcon from '~public/images/social/twitter.svg'
@@ -53,7 +54,7 @@ export const ROUTES = {
     },
     {
       nameKey: 'legacyMobile',
-      href: 'https://status.app/blog/migrate-from-status-legacy-to-unified-status-mobile-app',
+      href: `${SITE_URL}/blog/migrate-from-status-legacy-to-unified-status-mobile-app`,
     },
   ],
   ecosystem: [
@@ -95,8 +96,7 @@ export const ROUTES = {
   snt: [
     { nameKey: 'token', href: '/snt' },
     { nameKey: 'releaseSchedule', href: '/snt/release-schedule' },
-    // todo: replace with BASE_URL after merging https://github.com/status-im/status-website/pull/1108
-    { nameKey: 'whitepaper', href: 'https://status.app/whitepaper.pdf' },
+    { nameKey: 'whitepaper', href: `${SITE_URL}/whitepaper.pdf` },
     { nameKey: 'governance', href: 'https://governance.status.app' },
     { nameKey: 'curate', href: 'https://curate.status.app' },
     { nameKey: 'exchanges', href: '/snt/exchanges' },
