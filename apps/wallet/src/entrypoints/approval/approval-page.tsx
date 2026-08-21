@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { type ReactNode, useEffect, useState } from 'react'
 
 import { Button } from '@status-im/components'
 import { CloseIcon } from '@status-im/icons/20'
@@ -12,7 +12,9 @@ import {
   setApprovalResult,
 } from '../../data/approval'
 import { connectAccount } from '../../data/dapp-permissions'
+import { signedDomainFields } from '../../lib/rpc/typed-data'
 import { apiClient } from '../../providers/api-client'
+import { clip, flattenTypedData } from './typed-data-rows'
 
 const CHAIN_NAMES: Record<string, string> = {
   '0x1': 'Mainnet',
@@ -120,7 +122,7 @@ export function ApprovalPage() {
     }
   }
 
-  const isSign = approval.type === 'personal_sign'
+  const view = getApprovalView(approval)
 
   const respond = async (approved: boolean) => {
     if (!approval || isSubmitting) return
@@ -161,9 +163,7 @@ export function ApprovalPage() {
       />
 
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-27 font-semibold text-neutral-100">
-          {isSign ? 'Sign message' : 'Connect dApp'}
-        </h1>
+        <h1 className="text-27 font-semibold text-neutral-100">{view.title}</h1>
         <Button
           icon={<CloseIcon />}
           aria-label="Close"
@@ -195,11 +195,8 @@ export function ApprovalPage() {
         </div>
       </div>
 
-      {isSign ? (
-        <SignContent approval={approval} />
-      ) : (
-        <ConnectContent approval={approval} />
-      )}
+      {/* Scrolls so a long payload cannot push Decline off the popup. */}
+      <div className="min-h-0 flex-1 overflow-y-auto">{view.content}</div>
 
       <div className="mt-auto grid grid-cols-2 gap-3 py-3">
         <Button
@@ -214,11 +211,45 @@ export function ApprovalPage() {
           onPress={() => respond(true)}
           disabled={isSubmitting}
         >
-          {isSign ? 'Sign' : 'Connect'}
+          {view.confirmLabel}
         </Button>
       </div>
     </div>
   )
+}
+
+/**
+ * One place where a request type decides what the popup says and shows.
+ * Returns rendered content rather than a component reference so each case
+ * keeps the narrowing the switch gave it.
+ */
+function getApprovalView(approval: PendingApproval): {
+  title: string
+  confirmLabel: string
+  content: ReactNode
+} {
+  switch (approval.type) {
+    case 'personal_sign':
+      return {
+        title: 'Sign message',
+        confirmLabel: 'Sign',
+        content: <SignContent approval={approval} />,
+      }
+
+    case 'eth_signTypedData_v4':
+      return {
+        title: 'Sign typed data',
+        confirmLabel: 'Sign',
+        content: <TypedDataContent approval={approval} />,
+      }
+
+    case 'eth_requestAccounts':
+      return {
+        title: 'Connect dApp',
+        confirmLabel: 'Connect',
+        content: <ConnectContent approval={approval} />,
+      }
+  }
 }
 
 function AccountInfo({ address, name }: { address: string; name: string }) {
@@ -284,6 +315,94 @@ function ConnectContent({ approval }: { approval: PendingApproval }) {
         </ul>
       </div>
     </>
+  )
+}
+
+function TypedDataContent({
+  approval,
+}: {
+  approval: Extract<PendingApproval, { type: 'eth_signTypedData_v4' }>
+}) {
+  let payload: Record<string, unknown> | null = null
+  try {
+    payload = JSON.parse(approval.typedData)
+  } catch {
+    payload = null
+  }
+
+  const domain = (payload?.domain ?? {}) as Record<string, unknown>
+  const primaryType = String(payload?.primaryType ?? 'unknown')
+  const signedDomain = signedDomainFields(domain, payload?.types)
+  const { rows, truncated } = flattenTypedData(
+    payload?.message,
+    payload?.types,
+    payload?.primaryType,
+  )
+
+  return (
+    <>
+      <p className="mb-2 text-13 font-medium text-neutral-50">Request</p>
+      <div className="mb-4 flex flex-col gap-1 rounded-16 border border-neutral-10 bg-neutral-2.5 px-4 py-3">
+        {signedDomain.has('name') && domain.name !== undefined && (
+          <TypedDataField label="Domain" value={String(domain.name)} />
+        )}
+        {signedDomain.has('verifyingContract') &&
+          domain.verifyingContract !== undefined && (
+            <TypedDataField
+              label="Contract"
+              value={String(domain.verifyingContract)}
+            />
+          )}
+        <TypedDataField label="Type" value={primaryType} />
+      </div>
+
+      <p className="mb-2 text-13 font-medium text-neutral-50">Message</p>
+      <div className="mb-4 rounded-16 border border-neutral-10 bg-neutral-2.5 px-4 py-3">
+        {rows.length === 0 ? (
+          <p className="text-13 text-neutral-50">
+            {truncated
+              ? 'This message could not be read. Decline unless you trust this dApp.'
+              : 'No message fields'}
+          </p>
+        ) : (
+          <ul className="flex flex-col gap-0.5">
+            {rows.map((row, index) => (
+              <li
+                key={`${row.depth}-${row.key}-${index}`}
+                className="flex gap-2 text-13"
+                style={{ paddingLeft: `${row.depth * 12}px` }}
+              >
+                <span className="shrink-0 text-neutral-50">{row.key}</span>
+                {row.value !== null && (
+                  <span className="min-w-0 break-all text-neutral-100">
+                    {row.value}
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+        {truncated && rows.length > 0 && (
+          <p className="mt-2 text-11 text-neutral-50">
+            Some signed fields are hidden. Sign only if you trust this dApp.
+          </p>
+        )}
+      </div>
+
+      <AccountInfo address={approval.address} name={approval.accountName} />
+      <NetworkInfo chainId={approval.chainId} />
+    </>
+  )
+}
+
+function TypedDataField({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex gap-2 text-13">
+      <span className="shrink-0 text-neutral-50">{label}</span>
+      <span className="min-w-0 break-all font-medium text-neutral-100">
+        {clip(value)}
+      </span>
+    </div>
   )
 }
 

@@ -24,7 +24,7 @@
     "preview:docker": "pnpm build:docker && pnpm start:docker",
     "prelint": "contentlayer2 build",
     "lint": "pnpm lint:remark && pnpm lint:next",
-    "lint:next": "next lint --dir=src --ext=.ts --ext=.tsx",
+    "lint:next": "eslint src",
     "lint:remark": "remark --quiet --ext md --ext mdx content/help content/legal",
     "lint:fix": "pnpm lint:fix:remark && pnpm lint:fix:next",
     "lint:fix:next": "pnpm lint:next --fix",
