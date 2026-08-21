@@ -40,10 +40,7 @@ function waitUntilComplete(doc: Document): Promise<void> {
   })
 }
 
-function statusLog(
-  level: 'info' | 'warn' | 'error',
-  ...args: unknown[]
-) {
+function statusLog(level: 'info' | 'warn' | 'error', ...args: unknown[]) {
   if (!(window?.localStorage.getItem('status:logging') === 'true')) {
     return
   }
@@ -84,6 +81,71 @@ export class Provider {
     this.__isProvider = false
     this.connected = false
     this.#listeners = new Map()
+
+    this.#listenForWalletEvents()
+    void this.#restoreSession()
+  }
+
+  /**
+   * Events the wallet pushes without the page having asked -- today only an
+   * account switch. Delivered by the bridge content script, which is the only
+   * thing that can reach this window from the extension.
+   */
+  #listenForWalletEvents = (): void => {
+    window.addEventListener('message', event => {
+      // Same-origin only. Deliberately not also matching `event.source` against
+      // `window`: the bridge posts from the isolated world, and a `source`
+      // mismatch there would drop every event silently.
+      if (event.origin !== window.origin) {
+        return
+      }
+
+      const message = event.data
+      if (
+        !message ||
+        message.type !== 'status:provider:event' ||
+        message.event !== 'accountsChanged'
+      ) {
+        return
+      }
+
+      const accounts = Array.isArray(message.data) ? message.data : []
+      // EIP-1193 reports a revocation as an empty account list; dApps read it
+      // as a disconnect. `disconnect` itself is not emitted -- it clears the
+      // listener map, and the page may still be reconnected from the wallet.
+      this.connected = accounts.length > 0
+
+      logger.info('accountsChanged::', accounts)
+
+      this.#emit('accountsChanged', accounts)
+    })
+  }
+
+  /**
+   * A page load creates a fresh provider, but the wallet's grant outlives it.
+   * Without asking, this instance reports itself disconnected even while
+   * `eth_accounts` returns the account -- dApps then treat the session as gone
+   * and their reconnect path starts by calling `wallet_revokePermissions`,
+   * destroying a permission the user never asked to drop.
+   */
+  #restoreSession = async (): Promise<void> => {
+    try {
+      const accounts = await this.request({ method: 'eth_accounts' })
+      if (!Array.isArray(accounts) || accounts.length === 0) {
+        return
+      }
+
+      const chainId = await this.request({ method: 'eth_chainId' })
+
+      this.connected = true
+      this.#emit('connect', { chainId })
+      this.#emit('connected', { chainId })
+      this.#emit('accountsChanged', accounts)
+
+      logger.info('session restored::', accounts)
+    } catch (error) {
+      logger.warn('session restore failed::', error)
+    }
   }
 
   #emit = (event: ProviderEvent, ...args: unknown[]): void => {
@@ -142,10 +204,19 @@ export class Provider {
               Array.isArray(message.data) &&
               message.data.length > 0
             ) {
+              const accounts = message.data
               this.connected = true
-              this.#emit('connect', { chainId: DEFAULT_CHAIN_ID })
-              this.#emit('connected', { chainId: DEFAULT_CHAIN_ID })
-              this.#emit('accountsChanged', message.data)
+
+              // The origin's chain, not an assumed mainnet: a dApp told the
+              // wrong chainId on connect can decide it is on an unsupported
+              // network and disconnect itself.
+              void this.request({ method: 'eth_chainId' })
+                .catch(() => DEFAULT_CHAIN_ID)
+                .then(chainId => {
+                  this.#emit('connect', { chainId })
+                  this.#emit('connected', { chainId })
+                  this.#emit('accountsChanged', accounts)
+                })
 
               logger.info('connected::')
             }
@@ -167,13 +238,6 @@ export class Provider {
           }
           case 'status:proxy:error': {
             logger.error(message.error)
-
-            if (
-              message.error.message === 'dApp is not permitted by user' &&
-              this.connected
-            ) {
-              this.disconnect()
-            }
 
             reject(new ProviderRpcError(message.error))
             return
@@ -200,15 +264,23 @@ export class Provider {
     })
   }
 
+  /**
+   * EIP-1193: "connected" means the provider can service RPC requests, not
+   * that accounts are authorized -- MetaMask likewise returns true once
+   * initialized. Reporting account state here made dApps treat a reload as a
+   * dropped session and disconnect themselves.
+   *
+   * @see https://eips.ethereum.org/EIPS/eip-1193#connectivity
+   */
   public isConnected = (): boolean => {
-    return this.connected
+    return true
   }
 
   public on = (
     event: ProviderEvent,
     handler: (...args: unknown[]) => void,
   ): this => {
-    logger.info( 'on::', event)
+    logger.info('on::', event)
 
     let handlers = this.#listeners.get(event)
     if (!handlers) {
@@ -221,7 +293,7 @@ export class Provider {
 
   /** @deprecated */
   public close = async (): Promise<void> => {
-    logger.info( 'close::')
+    logger.info('close::')
 
     this.disconnect()
   }
@@ -230,7 +302,7 @@ export class Provider {
     event: ProviderEvent,
     handler?: (...args: unknown[]) => void,
   ): void => {
-    logger.info( 'removeListener::', event)
+    logger.info('removeListener::', event)
 
     if (handler) {
       this.#listeners.get(event)?.delete(handler)
@@ -247,29 +319,30 @@ export class Provider {
   }
 
   public enable = async (): Promise<boolean> => {
-    logger.info( 'enable::')
+    logger.info('enable::')
 
     return true
   }
 
-  private disconnect = async (): Promise<void> => {
+  /**
+   * Tears down this page's provider session only. It deliberately does not
+   * revoke the stored permission: `close()` is a page-lifecycle call, and a
+   * reload or a library cleaning up must not cost the user their connection.
+   * To actually revoke, a dApp calls `wallet_revokePermissions` (EIP-2255),
+   * or the user disconnects from the wallet.
+   */
+  private disconnect = (): void => {
     if (!this.connected) {
       return
     }
 
     this.connected = false
 
-    logger.info( 'disconnect::')
+    logger.info('disconnect::')
 
-    await this.request({
-      method: 'wallet_revokePermissions',
-      params: [{ eth_accounts: {} }],
-    })
-
-    window.postMessage(
-      { type: 'status:provider:disconnect' },
-      window.origin,
-    )
+    // Signals transport teardown to the content script -- the connector closes
+    // its socket to Desktop on this. It must not be read as a revocation.
+    window.postMessage({ type: 'status:provider:disconnect' }, window.origin)
 
     this.#emit('disconnect')
     this.#emit('close')

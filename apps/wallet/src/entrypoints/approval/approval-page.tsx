@@ -11,6 +11,7 @@ import {
   type PendingApproval,
   setApprovalResult,
 } from '../../data/approval'
+import { connectAccount } from '../../data/dapp-permissions'
 import { apiClient } from '../../providers/api-client'
 
 const CHAIN_NAMES: Record<string, string> = {
@@ -40,21 +41,62 @@ function hexToReadableMessage(hex: string): string {
 
 export function ApprovalPage() {
   const [approval, setApproval] = useState<PendingApproval | null>(null)
+  const [phase, setPhase] = useState<'loading' | 'ready' | 'unavailable'>(
+    'loading',
+  )
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSessionActive, setIsSessionActive] = useState(false)
-  const [isCheckingSession, setIsCheckingSession] = useState(true)
   const [isUnlocking, setIsUnlocking] = useState(false)
 
   useEffect(() => {
-    getPendingApproval().then(setApproval)
-    apiClient.session.status.query().then(status => {
-      setIsSessionActive(status.isUnlocked)
-      setIsCheckingSession(false)
-    })
+    let cancelled = false
+
+    const load = async () => {
+      // Both reads are guarded. Neither used to be, and either rejecting left
+      // the popup rendering null forever -- an empty white window with no way
+      // out. A cold service worker rejecting the first port message is enough
+      // to trigger it, which is why it looked intermittent.
+      const [pending, session] = await Promise.all([
+        getPendingApproval().catch(() => null),
+        apiClient.session.status.query().catch(() => ({ isUnlocked: false })),
+      ])
+
+      if (cancelled) return
+      setApproval(pending)
+      setIsSessionActive(session.isUnlocked)
+      setPhase(pending ? 'ready' : 'unavailable')
+    }
+
+    void load()
+    return () => {
+      cancelled = true
+    }
   }, [])
 
-  if (!approval || isCheckingSession) {
+  if (phase === 'loading') {
     return null
+  }
+
+  // The request is gone: expired, already answered, or dropped when the worker
+  // restarted. Say so rather than showing an empty window.
+  if (phase === 'unavailable' || !approval) {
+    return (
+      <div
+        data-customisation="blue"
+        className="flex h-screen flex-col items-center justify-center gap-3 bg-white-100 p-6 text-center"
+      >
+        <p className="text-15 font-semibold text-neutral-100">
+          Request no longer available
+        </p>
+        <p className="text-13 text-neutral-50">
+          It expired or was already answered. Try connecting again from the
+          site.
+        </p>
+        <Button variant="grey" onPress={() => window.close()}>
+          Close
+        </Button>
+      </div>
+    )
   }
 
   const needsPassword = !isSessionActive
@@ -83,6 +125,18 @@ export function ApprovalPage() {
   const respond = async (approved: boolean) => {
     if (!approval || isSubmitting) return
     setIsSubmitting(true)
+
+    // Persist the grant here rather than leaving it to the service worker.
+    // The worker resumes only once this window closes, and MV3 may terminate
+    // it at exactly that point -- losing the grant while the dApp had already
+    // been told it was connected, so every later load prompts again.
+    //
+    // `connectAccount`, not `grantPermission`: a record written without the
+    // approved account would later adopt whichever account the wallet happens
+    // to have selected.
+    if (approved && approval.type === 'eth_requestAccounts') {
+      await connectAccount(approval.origin, approval.address)
+    }
 
     await setApprovalResult({
       id: approval.id,

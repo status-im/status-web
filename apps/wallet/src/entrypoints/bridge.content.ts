@@ -30,14 +30,6 @@ export default defineContentScript({
         return
       }
 
-      if (message.type === 'status:provider:disconnect') {
-        chrome.runtime.sendMessage({
-          type: 'status:disconnect',
-          data: { origin: window.location.origin },
-        })
-        return
-      }
-
       if (message.type !== 'status:provider') {
         return
       }
@@ -70,6 +62,25 @@ export default defineContentScript({
         } satisfies ProxyMessage)
       }
     }
+
+    // Wallet-initiated events (an account switch) have no open port to answer
+    // on, so the service worker pushes them here and they are re-posted into
+    // the page for the provider to emit.
+    chrome.runtime.onMessage.addListener(message => {
+      if (message?.type !== 'status:event') {
+        return false
+      }
+
+      window.postMessage(
+        {
+          type: 'status:provider:event',
+          event: message.event,
+          data: message.data,
+        },
+        window.origin,
+      )
+      return false
+    })
 
     ctx.addEventListener(window, 'message', handleProviderMessage)
   },

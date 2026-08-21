@@ -1,86 +1,167 @@
 import { ProviderRpcError } from '@status-im/ethereum-provider'
+import { storage } from '@wxt-dev/storage'
 
 import {
+  APPROVAL_TIMEOUT_MS,
   type ApprovalResult,
   clearApprovalResult,
   clearPendingApproval,
+  getApprovalResult,
   getPendingApproval,
   type PendingApproval,
   setPendingApproval,
 } from '../data/approval'
+import {
+  adoptSelectedAddress,
+  connectAccount,
+  debugLog,
+  getChainIdForOrigin,
+  getSelectedAddress,
+  isOriginPermitted,
+  isSameAddress,
+  revokeOrigin,
+  setChainIdForOrigin,
+} from '../data/dapp-permissions'
+import * as walletMetadata from '../data/wallet-metadata'
 import { publicClient } from './public-client'
+import { SELECTED_WALLET_ID_KEY } from './storage-keys'
 
-const DEFAULT_CHAIN_ID = '0x1'
 const SUPPORTED_CHAIN_IDS = new Set(['0x1', '0x6300b5ea'])
 const DEFAULT_ACCOUNT_NAME = 'Account 1'
 
-// 5 minutes in ms
-const APPROVAL_TIMEOUT_MS = 5 * 60 * 1000
 const APPROVAL_POPUP_WIDTH = 390
 const APPROVAL_POPUP_HEIGHT = 628
 
-async function getChainIdForOrigin(origin: string): Promise<string> {
-  const result = await chrome.storage.session.get('originChainIds')
-  const map: Record<string, string> = result.originChainIds || {}
-  return map[origin] || DEFAULT_CHAIN_ID
+type ActiveAccount = {
+  address: string
+  accountName: string
+  walletId: string
 }
 
-async function setChainIdForOrigin(
-  origin: string,
-  chainId: string,
-): Promise<void> {
-  const result = await chrome.storage.session.get('originChainIds')
-  const map: Record<string, string> = result.originChainIds || {}
-  map[origin] = chainId
-  await chrome.storage.session.set({ originChainIds: map })
-}
+/**
+ * The account exposed to dApps.
+ *
+ * The extension page mirrors its selection into session storage, but that is
+ * empty after a browser restart until the page is opened. Permissions live in
+ * `local` and outlast it, so fall back to wallet metadata -- otherwise a still
+ * permitted dApp would be told there is no account. Mirrors the selection rule
+ * in `wallet-context.tsx`.
+ */
+async function getActiveAccount(): Promise<ActiveAccount | null> {
+  const session = await chrome.storage.session.get([
+    'dappAddress',
+    'dappAccountName',
+    'dappWalletId',
+  ])
 
-async function getAddress(): Promise<string | null> {
-  const result = await chrome.storage.session.get('dappAddress')
-  return (result.dappAddress as string) || null
-}
+  if (session.dappAddress && session.dappWalletId) {
+    return {
+      address: session.dappAddress as string,
+      accountName: (session.dappAccountName as string) || DEFAULT_ACCOUNT_NAME,
+      walletId: session.dappWalletId as string,
+    }
+  }
 
-async function getAccountName(): Promise<string> {
-  const result = await chrome.storage.session.get('dappAccountName')
-  return (result.dappAccountName as string) || DEFAULT_ACCOUNT_NAME
-}
+  const wallets = await walletMetadata.getAll()
+  const selectedId = await storage.getItem<string>(SELECTED_WALLET_ID_KEY)
+  const wallet = wallets.find(w => w.id === selectedId) ?? wallets[0]
+  if (!wallet) return null
 
-async function getWalletId(): Promise<string | null> {
-  const result = await chrome.storage.session.get('dappWalletId')
-  return (result.dappWalletId as string) || null
-}
+  const account =
+    wallet.accounts.find(a => a.address === wallet.selectedAccountAddress) ??
+    wallet.accounts[0]
+  if (!account) return null
 
-async function isOriginConnected(origin: string): Promise<boolean> {
-  const result = await chrome.storage.session.get('connectedOrigins')
-  const origins: string[] = result.connectedOrigins || []
-  return origins.includes(origin)
-}
-
-async function addConnectedOrigin(origin: string): Promise<void> {
-  const result = await chrome.storage.session.get('connectedOrigins')
-  const origins: string[] = result.connectedOrigins || []
-  if (!origins.includes(origin)) {
-    origins.push(origin)
-    await chrome.storage.session.set({ connectedOrigins: origins })
+  return {
+    address: account.address,
+    accountName: wallet.name || DEFAULT_ACCOUNT_NAME,
+    walletId: wallet.id,
   }
 }
 
-async function removeConnectedOrigin(origin: string): Promise<void> {
-  const result = await chrome.storage.session.get('connectedOrigins')
-  const origins: string[] = result.connectedOrigins || []
-  const filtered = origins.filter(o => o !== origin)
-  await chrome.storage.session.set({ connectedOrigins: filtered })
+async function getAddress(): Promise<string | null> {
+  return (await getActiveAccount())?.address ?? null
+}
+
+async function getAccountName(): Promise<string> {
+  return (await getActiveAccount())?.accountName ?? DEFAULT_ACCOUNT_NAME
+}
+
+/**
+ * The account this origin sees, which is not necessarily the wallet's current
+ * selection: switching to an account the user never connected here must leave
+ * the dApp on the one it was connected with.
+ *
+ * Every dApp-facing read and signature resolves through this -- reading the
+ * pinned account for `eth_accounts` while signing with the selected one would
+ * hand the dApp a signature from an account it was never shown.
+ */
+async function getOriginAddress(origin: string): Promise<string | null> {
+  if (!(await isOriginPermitted(origin))) {
+    return null
+  }
+
+  const selected = await getSelectedAddress(origin)
+  if (selected) {
+    return selected
+  }
+
+  // Connected before per-account tracking existed: the account it has been
+  // showing is the active one, so pin it there once.
+  const active = await getAddress()
+  return active ? await adoptSelectedAddress(origin, active) : null
+}
+
+/**
+ * Locates the wallet holding `address`, across all wallets -- the account a dApp
+ * is pinned to may not belong to the currently selected wallet.
+ */
+async function findWalletForAddress(
+  address: string,
+): Promise<{ walletId: string; accountName: string } | null> {
+  const wallets = await walletMetadata.getAll()
+  const wallet = wallets.find(w =>
+    w.accounts.some(account => isSameAddress(account.address, address)),
+  )
+  if (!wallet) return null
+
+  return {
+    walletId: wallet.id,
+    accountName: wallet.name || DEFAULT_ACCOUNT_NAME,
+  }
 }
 
 type PendingApprovalInput = PendingApproval extends infer T
   ? T extends PendingApproval
-    ? Omit<T, 'id'>
+    ? Omit<T, 'id' | 'createdAt'>
     : never
   : never
+
+/**
+ * Synchronous claim on the single approval slot.
+ *
+ * The stored `pendingApproval` is read asynchronously, so two requests
+ * arriving in the same tick both saw it empty and each opened a popup, then
+ * clobbered each other's record -- one of the windows ends up showing a
+ * request that no longer exists. The service worker is single-threaded, so a
+ * plain variable closes that window; the stored record still guards across
+ * worker restarts.
+ */
+let approvalInFlight = false
 
 function requestApproval(
   approval: PendingApprovalInput,
 ): Promise<ApprovalResult | null> {
+  if (approvalInFlight) {
+    return Promise.reject(
+      new ProviderRpcError({
+        code: -32002,
+        message: 'Already processing a request.',
+      }),
+    )
+  }
+  approvalInFlight = true
+
   return new Promise(resolve => {
     const id = crypto.randomUUID()
     let popupWindowId: number | undefined
@@ -93,6 +174,7 @@ function requestApproval(
     const cleanup = () => {
       if (settled) return
       settled = true
+      approvalInFlight = false
       clearTimeout(timeout)
       chrome.storage.onChanged.removeListener(storageListener)
       chrome.windows.onRemoved.removeListener(windowListener)
@@ -115,15 +197,26 @@ function requestApproval(
 
     const windowListener = (removedWindowId: number) => {
       if (removedWindowId !== popupWindowId) return
-      cleanup()
-      resolve(null)
+      // The approval page writes its result and then closes itself, so this
+      // can arrive before the storage change that carries the verdict.
+      // Treating the close as a rejection outright loses approvals: re-read
+      // the result and only fall back to rejection when there genuinely is
+      // none.
+      void getApprovalResult().then(result => {
+        cleanup()
+        resolve(result?.id === id && result.approved ? result : null)
+      })
     }
 
     chrome.storage.onChanged.addListener(storageListener)
     chrome.windows.onRemoved.addListener(windowListener)
     ;(async () => {
       try {
-        await setPendingApproval({ id, ...approval } as PendingApproval)
+        await setPendingApproval({
+          id,
+          createdAt: Date.now(),
+          ...approval,
+        } as PendingApproval)
         const popupUrl = chrome.runtime.getURL('approval.html')
         const currentWindow = await chrome.windows.getCurrent()
         const left =
@@ -161,18 +254,34 @@ export async function handleRpcRequest(
   origin: string,
   metadata?: { title?: string; favicon?: string },
 ): Promise<unknown> {
+  if (
+    method === 'eth_accounts' ||
+    method === 'eth_requestAccounts' ||
+    method === 'wallet_requestPermissions'
+  ) {
+    void debugLog(method, {
+      origin,
+      permitted: await isOriginPermitted(origin),
+      address: await getAddress(),
+    })
+  }
+
   switch (method) {
     case 'eth_requestAccounts': {
+      // Answer from the origin's own account when it has one, or a dApp that
+      // calls this on every mount would flip back to the wallet's selection
+      // and contradict eth_accounts.
+      const connected = await getOriginAddress(origin)
+      if (connected) {
+        return [connected]
+      }
+
       const address = await getAddress()
       if (!address) {
         throw new ProviderRpcError({
           code: 4100,
           message: 'No active account',
         })
-      }
-
-      if (await isOriginConnected(origin)) {
-        return [address]
       }
 
       const existing = await getPendingApproval()
@@ -202,15 +311,13 @@ export async function handleRpcRequest(
         })
       }
 
-      await addConnectedOrigin(origin)
+      await connectAccount(origin, address)
+      void debugLog('granted', { origin, address })
       return [address]
     }
 
     case 'eth_accounts': {
-      if (!(await isOriginConnected(origin))) {
-        return []
-      }
-      const address = await getAddress()
+      const address = await getOriginAddress(origin)
       return address ? [address] : []
     }
 
@@ -263,7 +370,7 @@ export async function handleRpcRequest(
     }
 
     case 'wallet_revokePermissions': {
-      await removeConnectedOrigin(origin)
+      await revokeOrigin(origin)
       return null
     }
 
@@ -284,24 +391,25 @@ export async function handleRpcRequest(
     case 'personal_sign': {
       const p = params as [string, string]
       const message = p[0]
-      const storedAddress = await getAddress()
-      if (!storedAddress) {
+      // The origin's own account, not the wallet's selection: signing with the
+      // selected account would return a signature from a key the dApp was
+      // never shown.
+      const signerAddress = await getOriginAddress(origin)
+      if (!signerAddress) {
         throw new ProviderRpcError({
           code: 4100,
-          message: 'No active account',
+          message: 'No connected account',
         })
       }
-      // Validate dApp-provided address matches the active account
-      if (p[1] && storedAddress.toLowerCase() !== p[1].toLowerCase()) {
+      if (p[1] && !isSameAddress(signerAddress, p[1])) {
         throw new ProviderRpcError({
           code: -32602,
-          message: `Requested address ${p[1]} does not match the active account`,
+          message: `Requested address ${p[1]} does not match the connected account`,
         })
       }
-      const signerAddress = storedAddress
 
-      const walletId = await getWalletId()
-      if (!walletId) {
+      const signer = await findWalletForAddress(signerAddress)
+      if (!signer) {
         throw new ProviderRpcError({
           code: 4100,
           message: 'No wallet available',
@@ -318,14 +426,13 @@ export async function handleRpcRequest(
       }
 
       const signChainId = await getChainIdForOrigin(origin)
-      const signAccountName = await getAccountName()
       const signResult = await requestApproval({
         type: 'personal_sign',
         origin,
         title: metadata?.title ?? origin,
         favicon: metadata?.favicon ?? `${origin}/favicon.ico`,
         address: signerAddress,
-        accountName: signAccountName,
+        accountName: signer.accountName,
         chainId: signChainId,
         message,
       })
@@ -354,7 +461,7 @@ export async function handleRpcRequest(
           }
         }
       ).api.wallet.account.ethereum.signMessage({
-        walletId,
+        walletId: signer.walletId,
         fromAddress: signerAddress,
         message,
       })

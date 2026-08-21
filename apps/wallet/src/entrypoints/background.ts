@@ -92,18 +92,6 @@ export default defineBackground({
 
     // dApp message handler (single listener to avoid Chrome port conflicts)
     chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-      if (message?.type === 'status:disconnect') {
-        const origin = message.data?.origin
-        if (typeof origin === 'string') {
-          handleRpcRequest(
-            'wallet_revokePermissions',
-            [{ eth_accounts: {} }],
-            origin,
-          )
-        }
-        return false
-      }
-
       if (message?.type !== 'status:rpc') {
         return false
       }

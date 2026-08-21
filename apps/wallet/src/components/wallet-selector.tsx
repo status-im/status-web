@@ -11,6 +11,7 @@ import { useNavigate } from '@tanstack/react-router'
 
 import { useWallet } from '@/providers/wallet-context'
 
+import { ConnectedDApps } from './connected-dapps'
 import { WatchOnlyTag } from './watch-only-tag'
 
 type Props = {
@@ -74,75 +75,79 @@ export function WalletSelector(props: Props) {
         </div>
       </div>
 
-      <DropdownMenu.Root modal={false}>
-        <Button
-          size="24"
-          variant="outline"
-          icon={<ChevronDownIcon />}
-          aria-label="Open wallet menu"
-        />
+      <div className="inline-flex items-center gap-1.5">
+        <DropdownMenu.Root modal={false}>
+          <Button
+            size="24"
+            variant="outline"
+            icon={<ChevronDownIcon />}
+            aria-label="Open wallet menu"
+          />
 
-        <DropdownMenu.Content className="w-[320px]">
-          <DropdownMenu.Label>Wallets</DropdownMenu.Label>
-          {wallets.map(wallet => (
+          <DropdownMenu.Content className="w-[320px]">
+            <DropdownMenu.Label>Wallets</DropdownMenu.Label>
+            {wallets.map(wallet => (
+              <DropdownMenu.Item
+                key={wallet.id}
+                icon={<WalletIcon />}
+                label={wallet.name}
+                selected={wallet.id === currentWallet.id}
+                onClick={() => setCurrentWallet(wallet.id)}
+              />
+            ))}
+
+            {selectableAccounts.length > 0 && (
+              <>
+                <DropdownMenu.Separator />
+                <DropdownMenu.Label>Accounts</DropdownMenu.Label>
+                {selectableAccounts.map(account => (
+                  <DropdownMenu.Item
+                    key={account.address}
+                    icon={<WalletIcon />}
+                    label={shortenAddress(account.address)}
+                    selected={account.address === currentAccount?.address}
+                    onClick={() => setCurrentAccount(account.address)}
+                  />
+                ))}
+                {currentWallet.type === 'mnemonic' && (
+                  <DropdownMenu.Item
+                    icon={<AddIcon />}
+                    label="Create account"
+                    onClick={() => {
+                      navigate({ to: '/wallet-flow/add-account' })
+                    }}
+                  />
+                )}
+              </>
+            )}
+
+            <DropdownMenu.Separator />
             <DropdownMenu.Item
-              key={wallet.id}
-              icon={<WalletIcon />}
-              label={wallet.name}
-              selected={wallet.id === currentWallet.id}
-              onClick={() => setCurrentWallet(wallet.id)}
+              icon={<AddIcon />}
+              label="Create wallet"
+              onClick={() => {
+                navigate({ to: '/wallet-flow/new' })
+              }}
             />
-          ))}
+            <DropdownMenu.Item
+              icon={<ImportIcon />}
+              label="Import wallet"
+              onClick={() => {
+                navigate({ to: '/wallet-flow/import' })
+              }}
+            />
+            <DropdownMenu.Item
+              icon={<KeycardIcon />}
+              label="Connect hardware wallet"
+              onClick={() => {
+                navigate({ to: '/wallet-flow/import-hardware' })
+              }}
+            />
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
 
-          {selectableAccounts.length > 0 && (
-            <>
-              <DropdownMenu.Separator />
-              <DropdownMenu.Label>Accounts</DropdownMenu.Label>
-              {selectableAccounts.map(account => (
-                <DropdownMenu.Item
-                  key={account.address}
-                  icon={<WalletIcon />}
-                  label={shortenAddress(account.address)}
-                  selected={account.address === currentAccount?.address}
-                  onClick={() => setCurrentAccount(account.address)}
-                />
-              ))}
-              {currentWallet.type === 'mnemonic' && (
-                <DropdownMenu.Item
-                  icon={<AddIcon />}
-                  label="Create account"
-                  onClick={() => {
-                    navigate({ to: '/wallet-flow/add-account' })
-                  }}
-                />
-              )}
-            </>
-          )}
-
-          <DropdownMenu.Separator />
-          <DropdownMenu.Item
-            icon={<AddIcon />}
-            label="Create wallet"
-            onClick={() => {
-              navigate({ to: '/wallet-flow/new' })
-            }}
-          />
-          <DropdownMenu.Item
-            icon={<ImportIcon />}
-            label="Import wallet"
-            onClick={() => {
-              navigate({ to: '/wallet-flow/import' })
-            }}
-          />
-          <DropdownMenu.Item
-            icon={<KeycardIcon />}
-            label="Connect hardware wallet"
-            onClick={() => {
-              navigate({ to: '/wallet-flow/import-hardware' })
-            }}
-          />
-        </DropdownMenu.Content>
-      </DropdownMenu.Root>
+        <ConnectedDApps />
+      </div>
     </div>
   )
 }
