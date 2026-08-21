@@ -7,6 +7,7 @@ import Script from 'next/script'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages, setRequestLocale } from 'next-intl/server'
 
+import { SITE_URL } from '~/config/site'
 import { routing } from '~/i18n/routing'
 
 import { PlatformDetector } from './_components/platform-detector'
@@ -36,12 +37,12 @@ export const metadata = Metadata({
     ios: {
       app_store_id: '6754166924',
       app_name: 'Status - privacy super app',
-      url: 'https://status.app',
+      url: SITE_URL,
     },
     android: {
       package: 'app.status.mobile',
       app_name: 'Status - privacy super app',
-      url: 'https://status.app',
+      url: SITE_URL,
     },
   },
 })

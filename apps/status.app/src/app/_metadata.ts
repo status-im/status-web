@@ -1,10 +1,11 @@
 import { getSeoOverride } from '~/config/seo-overrides'
+import { SITE_URL } from '~/config/site'
 import { createCloudinaryUrl } from '~components/assets/loader'
 
 import type { Metadata } from 'next'
 
 const DEFAULT_SITE_NAME = 'Status'
-const DEFAULT_SITE_URL = 'https://status.app'
+const DEFAULT_SITE_URL = SITE_URL
 const DEFAULT_TWITTER_SITE = '@ethstatus'
 const DEFAULT_OG_IMAGE = createCloudinaryUrl(
   'Open Graph/Status_Open_Graph_01:1200:630'
