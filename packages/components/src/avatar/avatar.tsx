@@ -77,9 +77,16 @@ const Avatar = (props: Props) => {
           }}
         >
           {src ? (
+            // why lazy: React auto-emits `<link rel="preload" as="image">` for
+            // any non-lazy `<img>` it streams, which puts avatars on the
+            // critical path. On status.app article pages that meant two
+            // cross-origin round trips to github.com before the largest text
+            // paint. Avatars are small decoration and never the LCP element.
             <img
               src={src}
               alt={name}
+              loading="lazy"
+              decoding="async"
               className="size-full rounded-full object-cover"
             />
           ) : (
@@ -113,7 +120,13 @@ const Avatar = (props: Props) => {
       return (
         <div className={baseStyles({ size, rounded: 'full' })}>
           {src ? (
-            <img src={src} alt={name} className="size-full object-cover" />
+            <img
+              src={src}
+              alt={name}
+              loading="lazy"
+              decoding="async"
+              className="size-full object-cover"
+            />
           ) : (
             <div className="flex size-full select-none items-center justify-center bg-neutral-95 text-neutral-50">
               {name ? name.charAt(0).toUpperCase() : '?'}
