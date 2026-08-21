@@ -622,6 +622,26 @@ export default makeSource({
 
     const { allSpecsDocs } = await importData()
 
+    // `content/specs` is a git submodule (status-im/status-specs). A build
+    // environment that skips `git submodule update --init` leaves it empty,
+    // and Contentlayer happily emits an empty spec set: /specs renders an
+    // empty hub and every /specs/* detail URL 404s in production. Fail the
+    // build instead of shipping that silently.
+    if (allSpecsDocs.length === 0) {
+      const message =
+        'No specs found in `content/specs`. The submodule is probably not checked out — run `git submodule update --init --recursive`.'
+
+      // why the disable: `no-restricted-globals` funnels app code through the
+      // validated env modules, but this config runs as a plain build script
+      // before those exist.
+      // eslint-disable-next-line no-restricted-globals
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error(message)
+      }
+
+      console.warn(`⚠️  ${message}`)
+    }
+
     const specMetadata: Record<
       string,
       {
