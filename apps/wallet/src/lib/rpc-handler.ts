@@ -1,5 +1,10 @@
-import { debugLog, isOriginPermitted } from '../data/dapp-permissions'
-import { publicClient } from './public-client'
+import {
+  debugLog,
+  getChainIdForOrigin,
+  isOriginPermitted,
+} from '../data/dapp-permissions'
+import { toChainId } from './chains'
+import { getPublicClient } from './public-client'
 import { getAddress } from './rpc/account'
 import { eth_accounts, eth_requestAccounts } from './rpc/accounts'
 import {
@@ -91,7 +96,8 @@ export async function handleRpcRequest(
     if (!(await isOriginPermitted(origin))) {
       throw notPermitted()
     }
-    return await publicClient.request({
+    const chainId = await getChainIdForOrigin(origin)
+    return await getPublicClient(toChainId(chainId)).request({
       method: method as never,
       params: params as never,
     })

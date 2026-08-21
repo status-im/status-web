@@ -10,16 +10,32 @@ import {
   setChainIdForOrigin,
 } from '../data/dapp-permissions'
 import { requestFeeRate } from './gas-fees'
-import { publicClient } from './public-client'
+import { getPublicClient } from './public-client'
 import { handleRpcRequest, LOCAL_HANDLERS } from './rpc-handler'
 import { REMOTE_ALLOWED, UNGATED_LOCAL } from './rpc-methods'
 
 // The forwarding branch is the point of the gate, so it needs a stand-in for
-// the node. The real client is a module-level const over the authenticated
-// proxy URL.
-vi.mock('./public-client', () => ({
-  publicClient: { request: vi.fn(async () => '0x1234') },
-}))
+// the node. Only the transport is stubbed: which chains have a route is still
+// the registry's answer, so the test cannot drift from it. One shared `request`
+// spy keeps "which chain was asked" assertable apart from "what was asked".
+vi.mock('./public-client', async () => {
+  const { ProviderRpcError } = await import('@status-im/ethereum-provider')
+  const { getChain } = await import('./chains')
+  const request = vi.fn(async () => '0x1234')
+
+  return {
+    getPublicClient: vi.fn((chainId: number) => {
+      if (!getChain(chainId)?.proxyChainId) {
+        throw new ProviderRpcError({
+          code: 4901,
+          message: `Chain ${chainId} is not available`,
+        })
+      }
+      return { request }
+    }),
+    publicClient: { request },
+  }
+})
 
 // `eth_sendTransaction` prices itself against the wallet's own estimator,
 // which is an authenticated HTTP call.
@@ -27,7 +43,8 @@ vi.mock('./gas-fees', () => ({
   requestFeeRate: vi.fn(),
 }))
 
-const nodeRequest = vi.mocked(publicClient.request)
+const clientFor = vi.mocked(getPublicClient)
+const nodeRequest = vi.mocked(clientFor(1).request)
 const feeRequest = vi.mocked(requestFeeRate)
 
 /** 21000 gas at 1 gwei: a max fee of 0.000021 ETH. */
@@ -161,6 +178,7 @@ beforeEach(async () => {
   signedTypedData = null
   sentTransactions = []
   nodeRequest.mockClear()
+  clientFor.mockClear()
   feeRequest.mockReset()
   feeRequest.mockResolvedValue(GAS_FEES)
   vi.stubGlobal('chrome', createChromeMock())
@@ -226,7 +244,8 @@ afterEach(async () => {
   vi.unstubAllGlobals()
 })
 
-const connect = () => handleRpcRequest('eth_requestAccounts', [], ORIGIN)
+const connect = (origin = ORIGIN) =>
+  handleRpcRequest('eth_requestAccounts', [], origin)
 const accounts = () => handleRpcRequest('eth_accounts', [], ORIGIN)
 
 test('approving a connection returns the account', async () => {
@@ -457,6 +476,66 @@ describe('the status-go permission table', () => {
         handleRpcRequest('eth_getProof', [], ORIGIN),
       ).rejects.toMatchObject({ code: -32601 })
       expect(nodeRequest).not.toHaveBeenCalled()
+    })
+
+    test('a forwarded read is routed to the chain the origin is on', async () => {
+      await connect()
+
+      await handleRpcRequest('eth_blockNumber', [], ORIGIN)
+
+      expect(clientFor).toHaveBeenCalledWith(1)
+    })
+
+    // The chain is advertised and switchable, but the wallet's proxy has no
+    // upstream route for it. Before per-chain routing this read was answered
+    // by mainnet, which is a wrong answer rather than a missing one.
+    test('a read on a chain with no route fails instead of hitting mainnet', async () => {
+      await connect()
+      await handleRpcRequest(
+        'wallet_switchEthereumChain',
+        [{ chainId: '0x6300b5ea' }],
+        ORIGIN,
+      )
+
+      await expect(
+        handleRpcRequest('eth_getBalance', [ADDRESS, 'latest'], ORIGIN),
+      ).rejects.toMatchObject({ code: 4901 })
+      expect(clientFor).toHaveBeenCalledWith(1660990954)
+      expect(nodeRequest).not.toHaveBeenCalled()
+    })
+
+    // EIP-695 spells chain ids in lowercase, but dApps are not obliged to.
+    // Matching the request against the registry by value rather than by string
+    // keeps one chain from reading as two.
+    test('a chain id in mixed case is the same chain', async () => {
+      await connect()
+
+      await handleRpcRequest(
+        'wallet_switchEthereumChain',
+        [{ chainId: '0x6300B5EA' }],
+        ORIGIN,
+      )
+
+      expect(await handleRpcRequest('eth_chainId', [], ORIGIN)).toBe(
+        '0x6300b5ea',
+      )
+    })
+
+    // Two origins, two chains: the chain is per-origin state, so one switching
+    // must not re-route the other's reads.
+    test('one origin switching chains leaves another routed where it was', async () => {
+      await connect()
+      await connect(OTHER_ORIGIN)
+      await handleRpcRequest(
+        'wallet_switchEthereumChain',
+        [{ chainId: '0x6300b5ea' }],
+        OTHER_ORIGIN,
+      )
+
+      await handleRpcRequest('eth_blockNumber', [], ORIGIN)
+
+      expect(clientFor).toHaveBeenCalledWith(1)
+      expect(clientFor).not.toHaveBeenCalledWith(1660990954)
     })
   })
 

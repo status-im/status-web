@@ -1,6 +1,7 @@
 import { ProviderRpcError } from '@status-im/ethereum-provider'
 
 import { getChainIdForOrigin, isSameAddress } from '../../data/dapp-permissions'
+import { getChainByHex } from '../chains'
 import { requestFeeRate } from '../gas-fees'
 import {
   buildAndSendTransaction,
@@ -15,15 +16,6 @@ import { assertNoPendingApproval, requestApproval } from './request-approval'
 import type { createAPI } from '../../data/api'
 import type { RpcContext } from './context'
 import type { Address, Hex } from 'viem'
-
-/**
- * Signing is fenced to mainnet at the backend, not just here:
- * `nodes.getFeeRate` / `broadcastTransaction` / `getNonce` all pin
- * `z.enum(['ethereum'])`, and `api.ts` hardcodes `chainID: '01'`. Lifting the
- * fence is a backend change, so a dApp on another chain is told why rather
- * than served a mainnet transaction it did not ask for.
- */
-const SIGNABLE_CHAIN_ID = '0x1'
 
 type DappTransaction = {
   from?: string
@@ -151,11 +143,17 @@ export async function eth_sendTransaction({
   origin,
   metadata,
 }: RpcContext): Promise<string> {
+  // Fenced at the backend, not just here: `nodes.getFeeRate` /
+  // `broadcastTransaction` / `getNonce` all pin `z.enum(['ethereum'])`, and
+  // `api.ts` hardcodes `chainID: '01'`. Lifting the fence is a backend change,
+  // so a dApp on another chain is told why rather than served a mainnet
+  // transaction it did not ask for.
   const chainId = await getChainIdForOrigin(origin)
-  if (chainId !== SIGNABLE_CHAIN_ID) {
+  const chain = getChainByHex(chainId)
+  if (!chain?.canSign) {
     throw new ProviderRpcError({
       code: 4200,
-      message: `Transactions can only be sent on Ethereum mainnet. This dApp is connected to chain ${parseInt(chainId, 16)}.`,
+      message: `Transactions can only be sent on Ethereum mainnet. This dApp is connected to ${chain?.name ?? `chain ${chainId}`}.`,
     })
   }
 

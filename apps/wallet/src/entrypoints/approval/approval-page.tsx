@@ -5,26 +5,16 @@ import { CloseIcon } from '@status-im/icons/20'
 import { PasswordModal } from '@status-im/wallet/components'
 import { formatEther } from 'viem/utils'
 
-import ethereumIcon from '../../assets/networks/ethereum.png'
-import statusNetworkIcon from '../../assets/networks/status-network.png'
 import {
   getPendingApproval,
   type PendingApproval,
   setApprovalResult,
 } from '../../data/approval'
 import { connectAccount } from '../../data/dapp-permissions'
+import { getChainByHex, toChainId } from '../../lib/chains'
 import { signedDomainFields } from '../../lib/rpc/typed-data'
 import { apiClient } from '../../providers/api-client'
 import { clip, flattenTypedData } from './typed-data-rows'
-
-const CHAIN_NAMES: Record<string, string> = {
-  '0x1': 'Mainnet',
-  '0x6300b5ea': 'Status Network Sepolia',
-}
-
-function getChainName(chainId: string): string {
-  return CHAIN_NAMES[chainId] ?? `Chain ${parseInt(chainId, 16)}`
-}
 
 function truncateAddress(address: string): string {
   return `${address.slice(0, 6)}...${address.slice(-3)}`
@@ -281,13 +271,9 @@ function AccountInfo({ address, name }: { address: string; name: string }) {
   )
 }
 
-const CHAIN_ICONS: Record<string, string> = {
-  '0x1': ethereumIcon,
-  '0x6300b5ea': statusNetworkIcon,
-}
-
 function NetworkInfo({ chainId }: { chainId: string }) {
-  const icon = CHAIN_ICONS[chainId]
+  const chain = getChainByHex(chainId)
+  const icon = chain?.icon
 
   return (
     <>
@@ -302,7 +288,7 @@ function NetworkInfo({ chainId }: { chainId: string }) {
             </span>
           )}
           <p className="text-15 font-semibold text-neutral-100">
-            {getChainName(chainId)}
+            {chain?.name ?? `Chain ${toChainId(chainId)}`}
           </p>
         </div>
       </div>
