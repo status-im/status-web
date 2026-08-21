@@ -66,6 +66,16 @@ The container does **not** include Postgres or Keycloak — both are pointed at 
 
 See [`.env.example`](./.env.example) for the full list.
 
+### Content submodules
+
+`content/specs` is a git submodule ([status-im/status-specs](https://github.com/status-im/status-specs)). The image build copies the working tree as-is, so the build host **must** check it out first:
+
+```bash
+git submodule update --init --recursive
+```
+
+Skipping it used to produce a build that succeeded but shipped an empty `/specs` hub with every `/specs/*` detail URL returning 404. Contentlayer now fails the production build instead, so a missing submodule surfaces as a build error rather than as lost pages.
+
 ### Build and run locally
 
 From this directory:
@@ -123,6 +133,27 @@ Server-side download tracking (`/api/download/*`) previously used `@vercel/analy
 This PR ships the image build only. A CI job to publish to a registry (Harbor, GHCR, ECR, etc.) and the runtime orchestration (Kubernetes, Nomad, Docker Compose, etc.) are intentionally not included — those are infra-team concerns and depend on choices outside this repo.
 
 For local builds, see `build:docker` / `start:docker` / `preview:docker` in [`package.json`](./package.json).
+
+### CDN / edge caching
+
+Prerendered pages are served with `Cache-Control: s-maxage=3600, stale-while-revalidate=31532400`. A CDN in front of the container **should honor that for HTML**, not just for `/_next/static/*`.
+
+This matters because the container runs in a single region. When the CDN treats HTML as uncacheable, every reader worldwide pays a full round trip to that region, and mobile LCP crosses the 2.5s Core Web Vitals threshold outside it. Measured from Globalping probes against a single-region origin with HTML uncached at the edge:
+
+| Probe        | HTML (uncached) | `/_next/static` (edge HIT) |
+| ------------ | --------------- | -------------------------- |
+| London       | 111ms           | 19ms                       |
+| Los Angeles  | 272ms           | 20ms                       |
+| Singapore    | 328ms           | 22ms                       |
+| Johannesburg | 714ms           | 20ms                       |
+| Sydney       | 1190ms          | (MISS) 962ms               |
+
+Two things make HTML safe to cache here:
+
+- Only `en` ships, with `localeDetection` and `localeCookie` disabled in [`src/i18n/routing.ts`](./src/i18n/routing.ts), so responses are not per-user and HTML carries no `Set-Cookie`.
+- Routes that must stay dynamic already say so — for example `/blog` responds `Cache-Control: private, no-cache, no-store`. A rule that respects the origin's `Cache-Control` will skip them automatically.
+
+One caveat: the same URL returns HTML or an RSC payload (`text/x-component`) depending on the request headers, and the origin sets `Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch`. A CDN that ignores `Vary` will eventually serve an RSC payload as a document. Either include those headers in the cache key, or bypass the cache when `rsc` is present.
 
 ### Security notes for operators
 
