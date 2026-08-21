@@ -4,6 +4,8 @@ import {
   JSONLDScript as BaseJSONLDScript,
 } from '@status-im/components'
 
+import { SITE_URL } from '~/config/site'
+
 import type {
   ArticleSchema,
   BreadcrumbListSchema,
@@ -26,7 +28,7 @@ const STATUS_SOCIAL_LINKS: string[] = [
  * Create JSON-LD schema generators with Status.app defaults
  */
 const baseJsonLD = createJSONLD({
-  defaultSiteUrl: 'https://status.app',
+  defaultSiteUrl: SITE_URL,
   defaultSocialLinks: STATUS_SOCIAL_LINKS,
 })
 const appJsonLD = createAppJSONLD()
@@ -44,7 +46,7 @@ export const jsonLD = {
   }) =>
     baseJsonLD.organization({
       name: 'Status',
-      url: 'https://status.app',
+      url: SITE_URL,
       ...config,
     }),
   website: (config?: {
@@ -55,7 +57,7 @@ export const jsonLD = {
   }) =>
     baseJsonLD.website({
       name: config?.name ?? 'Status',
-      url: config?.url ?? 'https://status.app',
+      url: config?.url ?? SITE_URL,
       description: config?.description,
       searchUrl: config?.searchUrl,
     }),

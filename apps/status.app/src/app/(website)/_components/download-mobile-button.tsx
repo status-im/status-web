@@ -14,6 +14,7 @@ import {
   STATUS_MOBILE_GOOGLE_PLAY_URL,
   STATUS_RELEASES_LATEST_URL,
 } from '~/config/routes'
+import { SITE_URL } from '~/config/site'
 import { isGetSite } from '~/config/site-scope'
 import { trackEvent } from '~app/_utils/track'
 import { ScreenImage } from '~components/assets'
@@ -225,7 +226,7 @@ export const DownloadMobileButton = (props: Props) => {
                 </div>
                 <div className="aspect-square shrink-0 rounded-16 border border-neutral-30 p-2 xl:p-3">
                   <QRCodeSVG
-                    value="https://status.app/api/download/mobile"
+                    value={`${SITE_URL}/api/download/mobile`}
                     className="size-14 xl:size-20"
                   />
                 </div>

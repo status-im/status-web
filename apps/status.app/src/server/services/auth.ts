@@ -9,6 +9,7 @@ import { parseJWT } from 'oslo/jwt'
 import { z } from 'zod'
 
 import { serverEnv } from '~/config/env.server.mjs'
+import { SITE_URL } from '~/config/site'
 
 import { db } from '../db'
 
@@ -119,7 +120,7 @@ export const invalidateSession = async (): Promise<boolean> => {
 //
 // Order of precedence:
 //   1. SITE_URL — a fixed, operator-controlled origin (set this on self-host).
-//   2. Hardcoded `https://status.app` for Vercel production deployments.
+//   2. `SITE_URL` constant (the canonical origin) for Vercel production deployments.
 //   3. Vercel preview — read `x-forwarded-*` (Vercel sanitizes the host header).
 //   4. Local dev — `http://localhost:PORT`.
 //
@@ -131,7 +132,7 @@ export async function getBaseUrl(): Promise<string> {
   }
 
   if (serverEnv.VERCEL_ENV === 'production') {
-    return 'https://status.app'
+    return SITE_URL
   }
 
   if (serverEnv.VERCEL) {

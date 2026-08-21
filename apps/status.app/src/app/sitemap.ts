@@ -1,3 +1,4 @@
+import { SITE_URL } from '~/config/site'
 import { allHelpDocs, allSpecsDocs } from '~content'
 import {
   getLearnPostsForSitemap,
@@ -12,7 +13,7 @@ import type { MetadataRoute } from 'next'
 // API on every request. Crawlers do not need second-by-second freshness.
 export const revalidate = 3600
 
-const BASE_URL = 'https://status.app'
+const BASE_URL = SITE_URL
 
 const STATIC_PATHS = [
   '/',

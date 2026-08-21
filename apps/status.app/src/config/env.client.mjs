@@ -2,6 +2,14 @@ import { z } from 'zod'
 import { handleError } from './env.base.mjs'
 
 export const envSchema = z.object({
+  NODE_ENV: z
+    .union([
+      z.literal('production'),
+      z.literal('preview'),
+      z.literal('development'),
+      z.literal('test'),
+    ])
+    .default('development'),
   NEXT_PUBLIC_VERCEL_ENV: z
     .union([
       z.literal('production'),
@@ -18,6 +26,7 @@ export const envSchema = z.object({
 })
 
 export const result = envSchema.strip().safeParse({
+  NODE_ENV: process.env.NODE_ENV,
   NEXT_PUBLIC_VERCEL_ENV: process.env.NEXT_PUBLIC_VERCEL_ENV,
   NEXT_PUBLIC_VERCEL_URL: process.env.NEXT_PUBLIC_VERCEL_URL,
   NEXT_PUBLIC_GHOST_API_URL: process.env.NEXT_PUBLIC_GHOST_API_URL,

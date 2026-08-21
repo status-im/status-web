@@ -7,6 +7,7 @@ import Script from 'next/script'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages, setRequestLocale } from 'next-intl/server'
 
+import { SITE_URL } from '~/config/site'
 import { routing } from '~/i18n/routing'
 
 import { PlatformDetector } from './_components/platform-detector'
@@ -14,7 +15,7 @@ import { Metadata } from './_metadata'
 import { Providers } from './_providers'
 
 export const metadata = Metadata({
-  metadataBase: new URL('https://status.app/'),
+  metadataBase: new URL(SITE_URL),
 
   title: {
     template: '%s',
@@ -36,12 +37,12 @@ export const metadata = Metadata({
     ios: {
       app_store_id: '6754166924',
       app_name: 'Status - privacy super app',
-      url: 'https://status.app',
+      url: SITE_URL,
     },
     android: {
       package: 'app.status.mobile',
       app_name: 'Status - privacy super app',
-      url: 'https://status.app',
+      url: SITE_URL,
     },
   },
 })
@@ -88,7 +89,7 @@ export default async function RootLayout({ children }: Props) {
           rel="alternate"
           type="application/atom+xml"
           title="Status.app Updates"
-          href="https://status.app/feed.xml"
+          href={`${SITE_URL}/feed.xml`}
         />
         <meta
           property="article:publisher"

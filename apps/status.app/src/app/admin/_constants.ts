@@ -8,6 +8,8 @@ import {
   UpvoteIcon,
 } from '@status-im/icons/20'
 
+import { SITE_URL } from '~/config/site'
+
 export const INTERNAL_ROUTES = [
   {
     icon: InsightsIcon,
@@ -44,7 +46,7 @@ export const EXTERNAL_ROUTES = [
     icon: QuillPenIcon,
     titleKey: 'blog',
     descriptionKey: 'blogDescription',
-    href: 'https://status.app/blog',
+    href: `${SITE_URL}/blog`,
     hrefLabel: 'ghost.org',
   },
   {
@@ -58,7 +60,7 @@ export const EXTERNAL_ROUTES = [
     icon: UpvoteIcon,
     titleKey: 'upvote',
     descriptionKey: 'upvoteDescription',
-    href: 'https://status.app/feature-upvote',
+    href: `${SITE_URL}/feature-upvote`,
     hrefLabel: 'featureupvote.com',
   },
 ] as const

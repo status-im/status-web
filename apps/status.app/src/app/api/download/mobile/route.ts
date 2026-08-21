@@ -4,6 +4,7 @@ import {
   STATUS_MOBILE_APP_STORE_URL,
   STATUS_MOBILE_GOOGLE_PLAY_URL,
 } from '~/config/routes'
+import { SITE_URL } from '~/config/site'
 
 // This handler inspects the request's User-Agent, so it cannot be statically
 // rendered — `force-static` would strip request headers and make the branching
@@ -25,5 +26,5 @@ export function GET(request: Request) {
     }
   }
 
-  return NextResponse.redirect('https://status.app/apps#mobile')
+  return NextResponse.redirect(`${SITE_URL}/apps#mobile`)
 }
