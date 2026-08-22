@@ -1,7 +1,7 @@
 {
   "name": "@status-im/community-contracts",
   "description": "Smart contracts for Status Community Curation DApp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "license": "MIT",
   "exports": {

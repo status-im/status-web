@@ -1,5 +1,26 @@
 # @status-im/wallet
 
+## 0.2.0
+
+### Minor Changes
+
+- 816bfcd: feat(wallet): replace the recovery phrase textarea with a word-by-word grid input featuring a word-count dropdown (12/15/18/21/24), clear button, per-word bip39 validation, and full-phrase paste distribution. `RecoveryPhraseTextarea` is replaced by `RecoveryPhraseGrid`.
+
+### Patch Changes
+
+- f8f6090: Add an API-wide per-client abuse guard and preserve upstream rate-limit
+  responses, including accurate Retry-After metadata.
+- ca76e7d: feat(wallet): add password context
+- 3e92c15: chore: upgrade next to version 15.5.16 across all projects
+- da1c09d: feat(wallet): implement multi-wallets
+- 7d880eb: feat(wallet): extract ScannerScreen and AccountSelect components for hardware wallet import
+- 710b023: fix(wallet): revalidate price chart cache on first stale read
+- b3e3155: feat: connect wallet to dApp
+- 1a74ebc: feat(wallet/assets-list): add hide assets < 1 USD filter
+- d361411: "chore(wallet): change layout & messaging when hide<$1"
+- 41096e0: chore: migrate hoodi
+- ab7a9fe: fix(wallet): pending-then-dropped transactions
+
 ## 0.1.2
 
 ### Patch Changes
