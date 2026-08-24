@@ -4,13 +4,14 @@ import { useEffect, useState } from 'react'
 
 import { Button } from '@status-im/components'
 import { CheckIcon, CopyIcon } from '@status-im/icons/20'
+import { cx } from 'class-variance-authority'
 import { useTranslations } from 'next-intl'
 import { onlyText } from 'react-children-utilities'
 
 import { useCopyToClipboard } from '../../_hooks/use-copy-to-clipboard'
 
 export function CodeBlock(props: React.ComponentProps<'figure'>) {
-  const { children, ...rest } = props
+  const { children, className, ...rest } = props
   const [, copy] = useCopyToClipboard()
   const t = useTranslations('common')
 
@@ -24,7 +25,7 @@ export function CodeBlock(props: React.ComponentProps<'figure'>) {
   }, [success])
 
   return (
-    <figure {...rest} className="my-5">
+    <figure {...rest} className={cx('my-5', className)}>
       <div className="relative grid scrollbar-none [&>pre]:max-h-[624px] [&>pre]:rounded-12 [&>pre]:bg-neutral-90 [&>pre]:p-6">
         <div className="absolute right-3 top-3 block" data-theme="dark">
           <Button
