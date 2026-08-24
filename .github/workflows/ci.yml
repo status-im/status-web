@@ -20,7 +20,6 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
         with:
-          # https://github.com/changesets/changesets/issues/1055
           fetch-depth: 0
 
       - name: Setup pnpm
@@ -33,10 +32,6 @@ jobs:
         with:
           node-version: 22.17.0
           cache: 'pnpm'
-
-      - name: Changeset
-        # https://github.com/changesets/changesets/issues/1048
-        run: pnpm dlx @changesets/cli status --since origin/master
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

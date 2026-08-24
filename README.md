@@ -50,7 +50,6 @@ Optional:
 - **Storybook**: For developing and showcasing components
 - **ESLint**: Keeps our code consistent and catches potential issues
 - **Prettier**: Formats our code
-- **Changesets**: Manages versioning and changelogs
 
 ## Getting Started
 
@@ -142,10 +141,6 @@ To view and interact with the components, you can run Storybook:
     pnpm storybook
 
 This will start the Storybook server, allowing you to browse and test components in isolation.
-
-## Publishing
-
-To publish packages to npm registry merge PR named Release, which is automatically created and updated by Changeset on merge of any other PR containing changesets files.
 
 ## Sponsors
 
