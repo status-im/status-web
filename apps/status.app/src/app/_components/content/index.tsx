@@ -366,14 +366,7 @@ const baseComponents = {
   pre: (props: ComponentProps<'pre'>) => (
     <pre {...props} className="overflow-scroll scrollbar-none" />
   ),
-  div: (props: ComponentProps<'div'>) => {
-    // note: style parent elements of `code` wrapped by `rehype-pretty-code` plugin
-    if (Object.hasOwn(props, 'data-rehype-pretty-code-fragment')) {
-      return <CodeBlock {...props} />
-    }
-
-    return <div {...props} />
-  },
+  div: (props: ComponentProps<'div'>) => <div {...props} />,
   code: (props: any) => {
     const multiline = Children.toArray(props.children).length > 1
 
@@ -396,9 +389,14 @@ const baseComponents = {
     // note: http://localhost:3000/help/getting-started/download-status-for-linux example for scrolling
     return <code className="w-fit" {...props} />
   },
-  figure: (props: ComponentProps<'figure'>) => (
-    <figure {...props} className="my-5" />
-  ),
+  figure: (props: ComponentProps<'figure'>) => {
+    // note: style the element `rehype-pretty-code` wraps highlighted code in
+    if (Object.hasOwn(props, 'data-rehype-pretty-code-figure')) {
+      return <CodeBlock {...props} />
+    }
+
+    return <figure {...props} className="my-5" />
+  },
   iframe: (props: React.ComponentProps<'iframe'>) => {
     // todo?: match youtube props to use aspect-video
     return (
