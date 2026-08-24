@@ -8,7 +8,10 @@ set -euo pipefail
 git -C ../../ submodule update --init --recursive packages/community-contracts/lib
 curl -L https://foundry.paradigm.xyz | bash
 export PATH="$HOME/.foundry/bin:$PATH"
-foundryup
+# --force skips foundryup's attestation check, which reads the manifest through
+# bash process substitution. Vercel's build container has no /dev/fd, so that
+# redirection fails and aborts the install.
+foundryup --force
 
 pnpm --filter @status-im/community-contracts run build
 pnpm --filter @status-im/js run build
