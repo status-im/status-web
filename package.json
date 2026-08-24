@@ -1,28 +1,6 @@
 {
   "type": "module",
   "private": true,
-  "workspaces": {
-    "packages": [
-      "packages/eslint-config",
-      "packages/status-js",
-      "packages/colors",
-      "packages/icons",
-      "packages/components",
-      "packages/wallet",
-      "packages/status-network",
-      "packages/community-contracts",
-      "apps/community-dapp",
-      "apps/hub",
-      "apps/status.app",
-      "apps/get.status.app",
-      "apps/status.network",
-      "apps/connector",
-      "apps/portfolio",
-      "apps/wallet",
-      "apps/api",
-      "e2e"
-    ]
-  },
   "keywords": [],
   "scripts": {
     "preinstall": "npx only-allow pnpm",
