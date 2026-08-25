@@ -1,5 +1,13 @@
 # @status-im/status-network
 
+## 0.1.3
+
+### Patch Changes
+
+- 3e92c15: chore: upgrade next to version 15.5.16 across all projects
+- Updated dependencies [13f4451]
+  - @status-im/components@1.2.1
+
 ## 0.1.2
 
 ### Patch Changes

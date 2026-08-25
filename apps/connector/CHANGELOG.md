@@ -1,5 +1,12 @@
 # connector
 
+## 0.0.8
+
+### Patch Changes
+
+- Updated dependencies [3051af7]
+  - @status-im/ethereum-provider@0.1.1
+
 ## 0.0.7
 
 ### Patch Changes

@@ -1,5 +1,54 @@
 # wallet
 
+## 0.2.0
+
+### Minor Changes
+
+- e88747e: feat(wallet): import hardware wallet via QR (ERC-4527)
+
+### Patch Changes
+
+- af761a6: add browser notifications for wallet transactions
+- dc2703d: feat(wallet): create accounts from within an imported wallet by deriving the next sequential or a custom derivation path
+- ca76e7d: feat(wallet): add password context
+- da1c09d: feat(wallet): implement multi-wallets
+- b3e3155: feat: connect wallet to dApp
+- 630fe05: feat(wallet): route dApp reads to the chain the dApp is on
+
+  Reads for a connected dApp now go to the chain it switched to instead of always
+  to Ethereum mainnet. Status Network Sepolia has no upstream proxy route yet, so
+  reads there fail with "chain is not available" where they previously returned
+  mainnet data.
+
+- ef29a2a: fix(wallet): gate dApp RPC on the connection and add the status-go allowlist
+- c389fd9: feat(wallet): support eth_sendTransaction for dApps
+- ea68132: feat(wallet): mnemonic account discovery and selection
+- 4ebe989: Implement NFT transfers
+- 21095a4: fix(wallet): honor LiFi-quoted fees when signing swap transactions
+- d361411: "chore(wallet): change layout & messaging when hide<$1"
+- 2836972: chore(wallet): remove wxt version number
+- 9e8d0fc: feat(wallet): add token value chart
+- fd96d31: feat(wallet): support eth_signTypedData_v4 for dApps
+- 242931b: fix(wallet): use our custom RPC proxy instead of public RPC
+- ab7a9fe: fix(wallet): pending-then-dropped transactions
+- Updated dependencies [13f4451]
+- Updated dependencies [f8f6090]
+- Updated dependencies [ca76e7d]
+- Updated dependencies [3e92c15]
+- Updated dependencies [da1c09d]
+- Updated dependencies [7d880eb]
+- Updated dependencies [710b023]
+- Updated dependencies [b3e3155]
+- Updated dependencies [1a74ebc]
+- Updated dependencies [3051af7]
+- Updated dependencies [d361411]
+- Updated dependencies [41096e0]
+- Updated dependencies [816bfcd]
+- Updated dependencies [ab7a9fe]
+  - @status-im/components@1.2.1
+  - @status-im/wallet@0.2.0
+  - @status-im/ethereum-provider@0.1.1
+
 ## 0.1.2
 
 ### Patch Changes

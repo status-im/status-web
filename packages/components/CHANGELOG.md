@@ -1,5 +1,11 @@
 # @status-im/components
 
+## 1.2.1
+
+### Patch Changes
+
+- 13f4451: fix(components): lazy-load avatar images so React stops preloading them onto the critical path
+
 ## 1.2.0
 
 ### Minor Changes
