@@ -11,7 +11,7 @@ import { SITE_URL } from '~/config/site'
 import { routing } from '~/i18n/routing'
 
 import { PlatformDetector } from './_components/platform-detector'
-import { Metadata } from './_metadata'
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, Metadata } from './_metadata'
 import { Providers } from './_providers'
 
 export const metadata = Metadata({
@@ -19,10 +19,9 @@ export const metadata = Metadata({
 
   title: {
     template: '%s',
-    default: 'Status — Make the jump to web3',
+    default: DEFAULT_TITLE,
   },
-  description:
-    'The open-source, decentralised wallet and messenger. Own your crypto and chat privately.',
+  description: DEFAULT_DESCRIPTION,
 
   twitter: {
     card: 'summary_large_image',
