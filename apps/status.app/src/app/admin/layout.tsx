@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     template: '%s | Status Admin',
     default: 'Status Admin',
   },
+  // Authenticated tooling, kept out of the index alongside the `robots.txt`
+  // disallow rule.
+  robots: { index: false },
 }
 
 type Props = {

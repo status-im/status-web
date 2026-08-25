@@ -24,10 +24,6 @@ export const metadata = Metadata({
   description:
     'The open-source, decentralised wallet and messenger. Own your crypto and chat privately.',
 
-  alternates: {
-    canonical: './',
-  },
-
   twitter: {
     card: 'summary_large_image',
     site: '@ethstatus',
