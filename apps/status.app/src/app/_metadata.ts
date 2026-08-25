@@ -11,6 +11,32 @@ const DEFAULT_OG_IMAGE = createCloudinaryUrl(
   'Open Graph/Status_Open_Graph_01:1200:630'
 )
 
+/**
+ * Resolve a canonical path to the absolute, query-free URL it should declare.
+ *
+ * Canonicals have to be absolute in the HTML as served. Next resolves a
+ * relative value against the *rendered* pathname, which for the `[locale]`
+ * subtree is the internally rewritten `/en/...` path, a URL that only redirects
+ * back to the one being rendered. Query strings are dropped so that every
+ * referral variant (`?ref=...`, `?utm_campaign=...`) collapses onto one URL.
+ * why: https://github.com/status-im/status-web/issues/1307
+ */
+export function toCanonicalUrl(path: string): string {
+  const url = new URL(path, DEFAULT_SITE_URL)
+  url.search = ''
+  url.hash = ''
+  return url.href
+}
+
+/**
+ * Metadata for a client-rendered route, which cannot export metadata itself.
+ * Mount it on a server `layout.tsx` so the segment still declares where it
+ * lives, without touching the title and description it inherits.
+ */
+export function CanonicalMetadata(canonical: string): Metadata {
+  return { alternates: { canonical: toCanonicalUrl(canonical) } }
+}
+
 type Input = Metadata & {
   title: NonNullable<Metadata['title']>
   description?: string
@@ -25,6 +51,7 @@ export function Metadata(input: Input): Metadata {
       ? input.alternates.canonical
       : undefined
   const override = canonical ? getSeoOverride(canonical) : undefined
+  const canonicalUrl = canonical ? toCanonicalUrl(canonical) : undefined
 
   const finalTitle = override?.title ?? input.title
   const finalDescription = override?.description ?? input.description
@@ -40,10 +67,13 @@ export function Metadata(input: Input): Metadata {
     ...input,
     title: finalTitle,
     description: finalDescription,
+    ...(canonicalUrl && {
+      alternates: { ...input.alternates, canonical: canonicalUrl },
+    }),
     openGraph: {
       type: 'website',
       images: [DEFAULT_OG_IMAGE],
-      url: './',
+      url: canonicalUrl ?? './',
       title: ogTitle,
       description: finalDescription,
       siteName: DEFAULT_SITE_NAME,
@@ -108,12 +138,10 @@ export function BlogMetadata(config: BlogMetadataConfig): Metadata {
   }
 
   // Canonical URL
-  if (canonical) {
-    metadata.alternates = {
-      canonical: canonical.startsWith('http')
-        ? canonical
-        : `${DEFAULT_SITE_URL}${canonical}`,
-    }
+  const canonicalUrl = canonical ? toCanonicalUrl(canonical) : undefined
+
+  if (canonicalUrl) {
+    metadata.alternates = { canonical: canonicalUrl }
   }
 
   // Open Graph metadata
@@ -126,10 +154,8 @@ export function BlogMetadata(config: BlogMetadataConfig): Metadata {
     locale: 'en',
   }
 
-  if (canonical) {
-    baseOG.url = canonical.startsWith('http')
-      ? canonical
-      : `${DEFAULT_SITE_URL}${canonical}`
+  if (canonicalUrl) {
+    baseOG.url = canonicalUrl
   }
 
   // Article-specific Open Graph properties
