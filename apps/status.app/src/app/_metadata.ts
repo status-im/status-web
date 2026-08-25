@@ -7,6 +7,11 @@ import type { Metadata } from 'next'
 const DEFAULT_SITE_NAME = 'Status'
 const DEFAULT_SITE_URL = SITE_URL
 const DEFAULT_TWITTER_SITE = '@ethstatus'
+
+/** Shared with the root layout so an inheriting route keeps the same title. */
+export const DEFAULT_TITLE = 'Status — Make the jump to web3'
+export const DEFAULT_DESCRIPTION =
+  'The open-source, decentralised wallet and messenger. Own your crypto and chat privately.'
 const DEFAULT_OG_IMAGE = createCloudinaryUrl(
   'Open Graph/Status_Open_Graph_01:1200:630'
 )
@@ -26,15 +31,6 @@ export function toCanonicalUrl(path: string): string {
   url.search = ''
   url.hash = ''
   return url.href
-}
-
-/**
- * Metadata for a client-rendered route, which cannot export metadata itself.
- * Mount it on a server `layout.tsx` so the segment still declares where it
- * lives, without touching the title and description it inherits.
- */
-export function CanonicalMetadata(canonical: string): Metadata {
-  return { alternates: { canonical: toCanonicalUrl(canonical) } }
 }
 
 type Input = Metadata & {
@@ -190,4 +186,22 @@ export function BlogMetadata(config: BlogMetadataConfig): Metadata {
   }
 
   return metadata
+}
+
+/**
+ * Metadata for a client-rendered route, which cannot export metadata itself.
+ * Mount it on a server `layout.tsx` so the segment declares where it lives
+ * while keeping the title and description it would otherwise inherit.
+ *
+ * It goes through `Metadata` rather than returning `alternates` on its own so
+ * the route also gets an `og:url` built from the canonical. Open Graph is not
+ * deep merged across segments, so a partial object here would drop the image,
+ * title and description the root layout provides.
+ */
+export function CanonicalMetadata(canonical: string): Metadata {
+  return Metadata({
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    alternates: { canonical },
+  })
 }
