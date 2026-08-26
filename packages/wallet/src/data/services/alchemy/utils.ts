@@ -46,6 +46,46 @@ export function processFeeHistory(feeHistory: FeeHistory) {
   }
 }
 
+/**
+ * `eth_maxPriorityFeePerGas` has been measured on mainnet returning tips ~270x
+ * below the median tip actually paid (and it may legitimately return `0x0`), so
+ * the suggestion is only a lower bound among three.
+ */
+export const MIN_PRIORITY_FEE_WEI = 1_000_000_000n
+
+/**
+ * Headroom for the base fee to keep climbing while the transaction waits. At
+ * ~70% utilisation the base fee grows ~5.2% per block, so 2x is exhausted in
+ * ~14 blocks and the transaction becomes unincludable, then evicted; 3x buys
+ * ~21 blocks.
+ */
+export const BASE_FEE_MULTIPLIER = 3n
+
+/**
+ * The tip and the ceiling compose: a sub-median tip sets how long the
+ * transaction waits, and a tight ceiling makes that wait fatal.
+ */
+export function calculateFeeParams({
+  baseFee,
+  suggestedPriorityFee,
+  averageP50,
+}: {
+  baseFee: bigint
+  suggestedPriorityFee: bigint
+  averageP50: bigint
+}) {
+  const priorityFee = [
+    suggestedPriorityFee,
+    averageP50,
+    MIN_PRIORITY_FEE_WEI,
+  ].reduce((max, fee) => (fee > max ? fee : max))
+
+  return {
+    priorityFee,
+    maxFeePerGas: baseFee * BASE_FEE_MULTIPLIER + priorityFee,
+  }
+}
+
 type FeeAverages = {
   averageP10: bigint
   averageP50: bigint
