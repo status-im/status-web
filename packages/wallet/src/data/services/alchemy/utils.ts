@@ -3,19 +3,19 @@ import { match } from 'ts-pattern'
 // Considering https://www.alchemy.com/docs/how-to-build-a-gas-fee-estimator-using-eip-1559
 
 type FeeHistory = {
-  gasUsedRatio: string[]
+  gasUsedRatio: number[]
   baseFeePerGas: string[]
   reward: Array<string[]> | null
 }
 
 export function processFeeHistory(feeHistory: FeeHistory) {
-  const blocks = feeHistory.gasUsedRatio.map((ratioHex, i) => {
+  const blocks = feeHistory.gasUsedRatio.map((ratio, i) => {
     const baseFeePerGas = BigInt(feeHistory.baseFeePerGas[i])
 
     const reward = feeHistory.reward?.[i] ?? []
 
     return {
-      gasUsedRatio: parseInt(ratioHex, 16) / 0x10000,
+      gasUsedRatio: Number(ratio),
       baseFeePerGas,
       priorityFeePerGas: {
         p10: reward[0] ? BigInt(reward[0]) : 0n,
@@ -25,8 +25,11 @@ export function processFeeHistory(feeHistory: FeeHistory) {
     }
   })
 
+  // An empty fee history would average to NaN, which `BigInt` rejects.
   const average = (getter: (block: (typeof blocks)[0]) => number) =>
-    blocks.reduce((sum, b) => sum + getter(b), 0) / blocks.length
+    blocks.length
+      ? blocks.reduce((sum, b) => sum + getter(b), 0) / blocks.length
+      : 0
 
   return {
     blocks,

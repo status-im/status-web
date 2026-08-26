@@ -1069,7 +1069,7 @@ export async function getFeeRate(
 
   const feeHistoryData = processFeeHistory({
     ...feeHistory?.result,
-    gasUsedRatio: feeHistory?.result?.gasUsedRatio?.map(String) ?? [],
+    gasUsedRatio: feeHistory?.result?.gasUsedRatio ?? [],
     reward: feeHistory?.result?.reward ?? null,
   })
 
