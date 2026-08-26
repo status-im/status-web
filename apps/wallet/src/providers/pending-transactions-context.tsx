@@ -1,8 +1,10 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 
 import { getTransactionHash } from '@status-im/wallet/utils'
+import { storage as extensionStorage } from '@wxt-dev/storage'
 
 import { Storage } from '../data/storage'
+import { PENDING_TXS_KEY } from '../lib/storage-keys'
 
 import type { ApiOutput } from '@status-im/wallet/data'
 
@@ -48,6 +50,9 @@ export function PendingTransactionsProvider({
   >([])
   const [isLoading, setIsLoading] = useState(true)
   const [storage] = useState(() => new Storage('pending-transactions'))
+  // What the stored list last looked like, so a write and the change it echoes
+  // back can be told apart from an edit made outside this page.
+  const storedRef = useRef<string | null>(null)
 
   useEffect(() => {
     const loadPendingTransactions = async () => {
@@ -56,6 +61,7 @@ export function PendingTransactionsProvider({
         const stored = result.transactions as PendingTransaction[] | undefined
 
         if (stored && Array.isArray(stored)) {
+          storedRef.current = JSON.stringify(stored)
           setPendingTransactions(stored)
         }
       } catch (error) {
@@ -68,8 +74,30 @@ export function PendingTransactionsProvider({
     loadPendingTransactions()
   }, [storage])
 
+  /**
+   * The background monitor owns the same key and settles transactions there.
+   * Without this the page keeps a copy from mount and writes it back over the
+   * removals, leaving mined transactions in the list.
+   */
+  useEffect(() => {
+    return extensionStorage.watch<PendingTransaction[]>(
+      PENDING_TXS_KEY,
+      next => {
+        const value = Array.isArray(next) ? next : []
+        const serialized = JSON.stringify(value)
+        if (serialized === storedRef.current) return
+        storedRef.current = serialized
+        setPendingTransactions(value)
+      },
+    )
+  }, [])
+
   useEffect(() => {
     if (isLoading) return
+
+    const serialized = JSON.stringify(pendingTransactions)
+    if (serialized === storedRef.current) return
+    storedRef.current = serialized
 
     storage.set({ transactions: pendingTransactions }).catch(error => {
       console.error('Failed to save pending transactions:', error)
