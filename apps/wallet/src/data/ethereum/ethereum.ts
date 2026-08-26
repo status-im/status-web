@@ -1,4 +1,4 @@
-import { padHex } from '@status-im/wallet/utils'
+import { isEthereumTransactionHash, padHex } from '@status-im/wallet/utils'
 import { Buffer } from 'buffer'
 
 import { nonceTracker } from '../../lib/nonce-tracker'
@@ -9,6 +9,55 @@ import type { WalletCore } from '@trustwallet/wallet-core'
 const BROADCAST_TRANSACTION_URL = new URL(
   `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/nodes.broadcastTransaction`,
 )
+
+/**
+ * The upstream reason, not the status code: `parseInsufficientFundsError` reads
+ * the node's `insufficient funds for gas * price + value` back out of it.
+ */
+async function readBroadcastError(response: Response): Promise<string> {
+  try {
+    const body = await response.json()
+    const message = body?.error?.json?.message ?? body?.error?.message
+    if (typeof message === 'string' && message) {
+      return message
+    }
+  } catch {
+    // Not a tRPC error envelope; the generic message is all there is.
+  }
+  return 'Failed to broadcast transaction'
+}
+
+/**
+ * `withNonce` commits on resolve, so returning anything but a real hash burns
+ * the nonce on a transaction that does not exist and gaps every later one.
+ */
+async function broadcast(rawTx: string, network: string): Promise<string> {
+  const response = await fetch(BROADCAST_TRANSACTION_URL.toString(), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      json: {
+        txHex: rawTx,
+        network,
+      },
+    }),
+    cache: 'no-store',
+  })
+
+  if (!response.ok) {
+    throw new Error(await readBroadcastError(response))
+  }
+
+  const body = await response.json()
+  const txid: unknown = body?.result?.data?.json
+  if (typeof txid !== 'string' || !isEthereumTransactionHash(txid)) {
+    throw new Error('Broadcast returned no transaction hash')
+  }
+
+  return txid
+}
 
 export async function send({
   walletCore,
@@ -66,27 +115,7 @@ export async function send({
     const output = encoder.Ethereum.Proto.SigningOutput.decode(outputData)
     const rawTx = walletCore.HexCoding.encode(output.encoded)
 
-    // broadcast
-    const response = await fetch(BROADCAST_TRANSACTION_URL.toString(), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        json: {
-          txHex: rawTx,
-          network,
-        },
-      }),
-      cache: 'no-store',
-    })
-
-    if (!response.ok) {
-      throw new Error('Failed to broadcast transaction')
-    }
-
-    const body = await response.json()
-    const txid = body.result.data.json
+    const txid = await broadcast(rawTx, network)
 
     return { txid }
   })
@@ -150,19 +179,7 @@ export async function sendContractCall({
     const output = encoder.Ethereum.Proto.SigningOutput.decode(outputData)
     const rawTx = walletCore.HexCoding.encode(output.encoded)
 
-    const response = await fetch(BROADCAST_TRANSACTION_URL.toString(), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ json: { txHex: rawTx, network } }),
-      cache: 'no-store',
-    })
-
-    if (!response.ok) {
-      throw new Error('Failed to broadcast transaction')
-    }
-
-    const body = await response.json()
-    const txid = body.result.data.json
+    const txid = await broadcast(rawTx, network)
 
     return { txid }
   })
@@ -230,27 +247,7 @@ export async function sendErc20({
     const output = encoder.Ethereum.Proto.SigningOutput.decode(outputData)
     const rawTx = walletCore.HexCoding.encode(output.encoded)
 
-    // broadcast
-    const response = await fetch(BROADCAST_TRANSACTION_URL.toString(), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        json: {
-          txHex: rawTx,
-          network,
-        },
-      }),
-      cache: 'no-store',
-    })
-
-    if (!response.ok) {
-      throw new Error('Failed to broadcast transaction')
-    }
-
-    const body = await response.json()
-    const txid = body.result.data.json
+    const txid = await broadcast(rawTx, network)
 
     return { txid }
   })
