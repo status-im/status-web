@@ -95,7 +95,7 @@ export function resolveFeeParams(
       // it from our own estimate alone can undercut the quoted priority
       // (invalid EIP-1559 tx, rejected at broadcast), so honor the quoted
       // priority and add the estimator's base-fee headroom on top
-      // (its maxFeePerGas = 2*baseFee + own priority).
+      // (its maxFeePerGas = BASE_FEE_MULTIPLIER*baseFee + own priority).
       const baseFeeHeadroom =
         BigInt(fees.txParams.maxFeePerGas) -
         BigInt(fees.txParams.maxPriorityFeePerGas)

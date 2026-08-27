@@ -26,7 +26,11 @@ import {
   COINGECKO_REVALIDATION_TIMES,
   fetchTokensPrice,
 } from '../coingecko/index'
-import { estimateConfirmationTime, processFeeHistory } from './utils'
+import {
+  calculateFeeParams,
+  estimateConfirmationTime,
+  processFeeHistory,
+} from './utils'
 
 import type { NetworkType } from '../../api/types'
 import type {
@@ -1063,14 +1067,18 @@ export async function getFeeRate(
   }
 
   const baseFee = BigInt(baseFeeHex)
-  const priorityFee = BigInt(priorityFeeHex)
   const gasLimit = BigInt(gasLimitHex)
-  const maxFeePerGas = baseFee * 2n + priorityFee
 
   const feeHistoryData = processFeeHistory({
     ...feeHistory?.result,
-    gasUsedRatio: feeHistory?.result?.gasUsedRatio?.map(String) ?? [],
+    gasUsedRatio: feeHistory?.result?.gasUsedRatio ?? [],
     reward: feeHistory?.result?.reward ?? null,
+  })
+
+  const { priorityFee, maxFeePerGas } = calculateFeeParams({
+    baseFee,
+    suggestedPriorityFee: BigInt(priorityFeeHex),
+    averageP50: feeHistoryData.averageP50,
   })
 
   const ethPrice = ethPriceData?.['ETH']?.usd || 0

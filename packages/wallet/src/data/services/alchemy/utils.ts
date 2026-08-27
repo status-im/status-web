@@ -3,19 +3,19 @@ import { match } from 'ts-pattern'
 // Considering https://www.alchemy.com/docs/how-to-build-a-gas-fee-estimator-using-eip-1559
 
 type FeeHistory = {
-  gasUsedRatio: string[]
+  gasUsedRatio: number[]
   baseFeePerGas: string[]
   reward: Array<string[]> | null
 }
 
 export function processFeeHistory(feeHistory: FeeHistory) {
-  const blocks = feeHistory.gasUsedRatio.map((ratioHex, i) => {
+  const blocks = feeHistory.gasUsedRatio.map((ratio, i) => {
     const baseFeePerGas = BigInt(feeHistory.baseFeePerGas[i])
 
     const reward = feeHistory.reward?.[i] ?? []
 
     return {
-      gasUsedRatio: parseInt(ratioHex, 16) / 0x10000,
+      gasUsedRatio: Number(ratio),
       baseFeePerGas,
       priorityFeePerGas: {
         p10: reward[0] ? BigInt(reward[0]) : 0n,
@@ -25,8 +25,11 @@ export function processFeeHistory(feeHistory: FeeHistory) {
     }
   })
 
+  // An empty fee history would average to NaN, which `BigInt` rejects.
   const average = (getter: (block: (typeof blocks)[0]) => number) =>
-    blocks.reduce((sum, b) => sum + getter(b), 0) / blocks.length
+    blocks.length
+      ? blocks.reduce((sum, b) => sum + getter(b), 0) / blocks.length
+      : 0
 
   return {
     blocks,
@@ -40,6 +43,49 @@ export function processFeeHistory(feeHistory: FeeHistory) {
     averageP90: BigInt(
       Math.round(average(b => Number(b.priorityFeePerGas.p90))),
     ),
+  }
+}
+
+/**
+ * Never-zero backstop for when neither signal yields a tip: the suggestion may
+ * legitimately be `0x0`, and the p50 is `0n` whenever `eth_feeHistory` comes
+ * back without rewards. Sized to sit under the going rate rather than over it,
+ * so it underprices a congested market when it is the only signal left.
+ */
+export const MIN_PRIORITY_FEE_WEI = 100_000_000n
+
+/**
+ * Headroom for the base fee to keep climbing while the transaction waits. At
+ * ~70% utilisation the base fee grows ~5.2% per block, so 2x is exhausted in
+ * ~14 blocks and the transaction becomes unincludable, then evicted; 3x buys
+ * ~21 blocks.
+ */
+export const BASE_FEE_MULTIPLIER = 3n
+
+/**
+ * `eth_maxPriorityFeePerGas` has been measured on mainnet returning tips ~270x
+ * below the median tip actually paid, hence the p50 alongside it. The tip and
+ * the ceiling compose: a sub-median tip sets how long the transaction waits,
+ * and a tight ceiling makes that wait fatal.
+ */
+export function calculateFeeParams({
+  baseFee,
+  suggestedPriorityFee,
+  averageP50,
+}: {
+  baseFee: bigint
+  suggestedPriorityFee: bigint
+  averageP50: bigint
+}) {
+  const priorityFee = [
+    suggestedPriorityFee,
+    averageP50,
+    MIN_PRIORITY_FEE_WEI,
+  ].reduce((max, fee) => (fee > max ? fee : max))
+
+  return {
+    priorityFee,
+    maxFeePerGas: baseFee * BASE_FEE_MULTIPLIER + priorityFee,
   }
 }
 
