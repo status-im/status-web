@@ -122,18 +122,7 @@ const Collectible = (props: Props) => {
         value: '0',
       })
 
-    const txid = result.id?.txid
-    if (!txid) throw new Error('Failed to send NFT')
-
-    if (
-      typeof txid === 'object' &&
-      'error' in txid &&
-      typeof txid.error === 'string'
-    ) {
-      throw new Error(txid.error)
-    }
-
-    const txHash = getTransactionHash(txid)
+    const txHash = getTransactionHash(result.id.txid)
     if (!isEthereumTransactionHash(txHash)) {
       throw new Error('Transaction hash not found')
     }

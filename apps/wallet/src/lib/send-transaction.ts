@@ -163,6 +163,23 @@ function handleTransactionError(error: unknown, context: string): never {
   )
 }
 
+/**
+ * A failed broadcast rejects rather than resolving error-shaped, so the throw
+ * is where the node's reason arrives and has to be translated.
+ */
+async function sendOrThrow(
+  send: () => Promise<SendResult>,
+  context: string,
+): Promise<Hex> {
+  let result: SendResult
+  try {
+    result = await send()
+  } catch (error) {
+    handleTransactionError(error, context)
+  }
+  return requireHash(result, context)
+}
+
 function requireHash(result: SendResult, context: string): Hex {
   const txid = result.id.txid
   if (txid && typeof txid === 'object' && txid.error) {
@@ -229,21 +246,25 @@ export async function buildAndSendTransaction(
 
   if (tx.data) {
     if (isCanonicalErc20Transfer(tx.data, tx.value)) {
-      const result = await senders.sendErc20({ ...common, data: tx.data })
-      return requireHash(result, 'ERC20 transfer')
+      return sendOrThrow(
+        () => senders.sendErc20({ ...common, data: tx.data as Hex }),
+        'ERC20 transfer',
+      )
     }
 
-    const result = await senders.sendContractCall({
-      ...common,
-      data: tx.data,
-      value: tx.value.toString(16),
-    })
-    return requireHash(result, 'Contract call')
+    return sendOrThrow(
+      () =>
+        senders.sendContractCall({
+          ...common,
+          data: tx.data as Hex,
+          value: tx.value.toString(16),
+        }),
+      'Contract call',
+    )
   }
 
-  const result = await senders.send({
-    ...common,
-    amount: tx.value.toString(16),
-  })
-  return requireHash(result, 'Send transaction')
+  return sendOrThrow(
+    () => senders.send({ ...common, amount: tx.value.toString(16) }),
+    'Send transaction',
+  )
 }

@@ -18,9 +18,12 @@ const PROXY_AUTH = {
  * The upstream half of the wallet extension's chain registry
  * (`apps/wallet/src/lib/chains.ts`): a chain is only readable once it has an
  * entry here and a matching `proxyChainId` there.
+ *
+ * Chain 1 takes the `/alchemy` path `nodes.broadcastTransaction` uses: a node
+ * that does not hold the transaction answers receipt lookups with null forever.
  */
 const CHAIN_ID_TO_PROXY_PATH: Record<number, string> = {
-  1: 'ethereum/mainnet',
+  1: 'ethereum/mainnet/alchemy',
   59144: 'linea/mainnet',
   11155111: 'ethereum/sepolia',
   374: 'status/hoodi',

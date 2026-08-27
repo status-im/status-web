@@ -47,6 +47,7 @@ import { useEthBalance } from '@/hooks/use-eth-balance'
 import { useGasFees } from '@/hooks/use-gas-fees'
 import { renderMarkdown } from '@/lib/markdown'
 import { notifyTransactionSent } from '@/lib/notifications'
+import { parseInsufficientFundsError } from '@/lib/send-transaction'
 import { apiClient } from '@/providers/api-client'
 import { usePassword } from '@/providers/password-context'
 import { usePendingTransactions } from '@/providers/pending-transactions-context'
@@ -328,6 +329,18 @@ const Token = (props: Props) => {
   }
   const isWatchOnlyWallet = currentWallet?.type === 'hardware-qr'
 
+  /** The node's own reason where there is one, translated for the user. */
+  const broadcastOrToast = async <T,>(send: () => Promise<T>): Promise<T> => {
+    try {
+      return await send()
+    } catch (error) {
+      console.error(error)
+      const parsed = parseInsufficientFundsError(error)
+      toast.negative(parsed?.message ?? ERROR_MESSAGES.TX_FAILED)
+      throw parsed ?? error
+    }
+  }
+
   const signTransaction = async (formData: SendAssetsFormData) => {
     // Throws GasShiftedError for spikes >=30% so the modal can ask for confirmation.
     // Smaller bumps are accepted silently with fresh params.
@@ -347,14 +360,11 @@ const Token = (props: Props) => {
         maxInclusionFeePerGas: gasParams.maxPriorityFeePerGas,
       }
 
-      const result = await apiClient.wallet.account.ethereum.send.mutate(params)
-      if (!result.id || result.id.txid?.error) {
-        console.error(result.id.txid?.error)
-        toast.negative(ERROR_MESSAGES.TX_FAILED)
-        throw new Error('Transaction failed')
-      }
+      const result = await broadcastOrToast(() =>
+        apiClient.wallet.account.ethereum.send.mutate(params),
+      )
 
-      const txHash = getTransactionHash(result.id.txid ?? result.id)
+      const txHash = getTransactionHash(result.id.txid)
 
       if (!isEthereumTransactionHash(txHash)) {
         toast.negative(ERROR_MESSAGES.TX_FAILED)
@@ -411,16 +421,11 @@ const Token = (props: Props) => {
         data,
       }
 
-      const result =
-        await apiClient.wallet.account.ethereum.sendErc20.mutate(params)
+      const result = await broadcastOrToast(() =>
+        apiClient.wallet.account.ethereum.sendErc20.mutate(params),
+      )
 
-      if (!result.id || result.id.txid?.error) {
-        console.error(result.id.txid?.error)
-        toast.negative(ERROR_MESSAGES.TX_FAILED)
-        throw new Error('Transaction failed')
-      }
-
-      const txHash = getTransactionHash(result.id.txid ?? result.id)
+      const txHash = getTransactionHash(result.id.txid)
 
       if (!isEthereumTransactionHash(txHash)) {
         toast.negative(ERROR_MESSAGES.TX_FAILED)

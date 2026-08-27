@@ -56,3 +56,13 @@ export async function notifyTransactionFailed(
     `${amount} ${asset} transaction failed`,
   )
 }
+
+export async function notifyTransactionDropped(
+  amount: string,
+  asset: string,
+): Promise<boolean> {
+  return createNotification(
+    'Transaction Dropped',
+    `The network no longer has your ${amount} ${asset} transaction. Send it again.`,
+  )
+}
