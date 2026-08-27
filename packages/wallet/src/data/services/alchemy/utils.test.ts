@@ -37,7 +37,7 @@ describe('processFeeHistory', () => {
 describe('calculateFeeParams', () => {
   const baseFee = 4_070_000_000n
 
-  it('floors a suggested tip below the median actually paid', () => {
+  it('floors a tip when both signals sit under it', () => {
     const { priorityFee } = calculateFeeParams({
       baseFee,
       suggestedPriorityFee: 73_182n,
@@ -45,6 +45,20 @@ describe('calculateFeeParams', () => {
     })
 
     expect(priorityFee).toBe(MIN_PRIORITY_FEE_WEI)
+  })
+
+  it('keeps the floor within an order of magnitude of a quiet-market median', () => {
+    // The tip the floor imposes is quoted to the user, so a floor far over the
+    // median paid inflates the quote by most of its own size.
+    const quietMarketP50 = 62_000_000n
+
+    const { priorityFee } = calculateFeeParams({
+      baseFee: 110_000_000n,
+      suggestedPriorityFee: 0n,
+      averageP50: quietMarketP50,
+    })
+
+    expect(priorityFee).toBeLessThan(quietMarketP50 * 10n)
   })
 
   it('floors a zero tip', () => {

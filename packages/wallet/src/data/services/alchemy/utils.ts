@@ -47,11 +47,12 @@ export function processFeeHistory(feeHistory: FeeHistory) {
 }
 
 /**
- * `eth_maxPriorityFeePerGas` has been measured on mainnet returning tips ~270x
- * below the median tip actually paid (and it may legitimately return `0x0`), so
- * the suggestion is only a lower bound among three.
+ * Never-zero backstop for when neither signal yields a tip: the suggestion may
+ * legitimately be `0x0`, and the p50 is `0n` whenever `eth_feeHistory` comes
+ * back without rewards. Sized to sit under the going rate rather than over it,
+ * so it underprices a congested market when it is the only signal left.
  */
-export const MIN_PRIORITY_FEE_WEI = 1_000_000_000n
+export const MIN_PRIORITY_FEE_WEI = 100_000_000n
 
 /**
  * Headroom for the base fee to keep climbing while the transaction waits. At
@@ -62,8 +63,10 @@ export const MIN_PRIORITY_FEE_WEI = 1_000_000_000n
 export const BASE_FEE_MULTIPLIER = 3n
 
 /**
- * The tip and the ceiling compose: a sub-median tip sets how long the
- * transaction waits, and a tight ceiling makes that wait fatal.
+ * `eth_maxPriorityFeePerGas` has been measured on mainnet returning tips ~270x
+ * below the median tip actually paid, hence the p50 alongside it. The tip and
+ * the ceiling compose: a sub-median tip sets how long the transaction waits,
+ * and a tight ceiling makes that wait fatal.
  */
 export function calculateFeeParams({
   baseFee,
