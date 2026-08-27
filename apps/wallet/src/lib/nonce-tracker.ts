@@ -192,12 +192,19 @@ export function createNonceTracker() {
   /**
    * The nonce to sign at, lowering a counter that tracks a dropped transaction.
    * Best-effort: if the extra reads fail, the pending count alone still sends.
+   *
+   * `marked` reports that a mark for this pool count is already held, so the
+   * caller leaves it alone instead of restarting its window.
    */
   async function resolveNonce(
     key: string,
     fromAddress: string,
     network: string,
-  ): Promise<{ nonce: number; chain: ChainNonceState | null }> {
+  ): Promise<{
+    nonce: number
+    chain: ChainNonceState | null
+    marked: boolean
+  }> {
     const localNonce = nonceCache.get(key) ?? 0
 
     const [pending, mined] = await Promise.allSettled([
@@ -210,7 +217,11 @@ export function createNonceTracker() {
 
     const pendingNonce = pending.value
     if (mined.status === 'rejected') {
-      return { nonce: Math.max(pendingNonce, localNonce), chain: null }
+      return {
+        nonce: Math.max(pendingNonce, localNonce),
+        chain: null,
+        marked: false,
+      }
     }
 
     const chain: ChainNonceState = { pendingNonce, ...mined.value }
@@ -221,7 +232,7 @@ export function createNonceTracker() {
       case 'reconcile':
         await commitNonce(key, decision.nonce)
         await writeMark(key, null)
-        return { nonce: decision.nonce, chain }
+        return { nonce: decision.nonce, chain, marked: false }
       case 'mark':
         await writeMark(key, decision.mark)
         break
@@ -232,7 +243,8 @@ export function createNonceTracker() {
         break
     }
 
-    return { nonce: Math.max(pendingNonce, localNonce), chain }
+    const marked = decision.action === 'mark' || decision.action === 'wait'
+    return { nonce: Math.max(pendingNonce, localNonce), chain, marked }
   }
 
   /**
@@ -252,13 +264,18 @@ export function createNonceTracker() {
 
     const run = async (): Promise<T> => {
       await loadNonce(key)
-      const { nonce, chain } = await resolveNonce(key, fromAddress, network)
+      const { nonce, chain, marked } = await resolveNonce(
+        key,
+        fromAddress,
+        network,
+      )
 
       const result = await callback(padHex(nonce.toString(16)))
       await commitNonce(key, nonce + 1)
       // Marking where the counter went ahead lets the next reservation tell
-      // "still propagating" from "stranded" on its first try.
-      if (chain) {
+      // "still propagating" from "stranded" on its first try. Only the earliest
+      // mark for a pool count holds, or any send restarts the waiting window.
+      if (chain && !marked) {
         await writeMark(key, {
           block: chain.blockNumber,
           pendingNonce: chain.pendingNonce,
