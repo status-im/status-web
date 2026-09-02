@@ -76,10 +76,7 @@ export default async function JobsPage({ searchParams }: Props) {
   )
   const total = statusJobs.meta?.total ?? 0
 
-  const organizationSchema = jsonLD.organization({
-    description:
-      'Join us in our mission to build the open-source, decentralised wallet and messenger.',
-  })
+  const organizationSchema = jsonLD.organization()
 
   const PERKS: FeatureListProps['list'] = [
     {

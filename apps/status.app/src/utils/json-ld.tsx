@@ -4,7 +4,12 @@ import {
   JSONLDScript as BaseJSONLDScript,
 } from '@status-im/components'
 
-import { SITE_URL } from '~/config/site'
+import {
+  SITE_DESCRIPTION,
+  SITE_LOGO_URL,
+  SITE_NAME,
+  SITE_URL,
+} from '~/config/site'
 
 import type {
   ArticleSchema,
@@ -39,15 +44,20 @@ const appJsonLD = createAppJSONLD()
 export const jsonLD = {
   ...baseJsonLD,
   webpage: appJsonLD.webpage,
-  organization: (config?: {
-    description?: string
-    logo?: string
-    sameAs?: string[]
-  }) =>
+  /**
+   * The Status organization, identical on every page that declares it.
+   *
+   * It takes no arguments on purpose. Callers used to pass the current page's
+   * meta description, which made Google read `/keycard` as saying the Status
+   * organization *is* "A secure contactless hardware wallet". Page-level copy
+   * belongs on the `WebPage` node.
+   */
+  organization: () =>
     baseJsonLD.organization({
-      name: 'Status',
+      name: SITE_NAME,
       url: SITE_URL,
-      ...config,
+      logo: SITE_LOGO_URL,
+      description: SITE_DESCRIPTION,
     }),
   website: (config?: {
     description?: string
@@ -56,7 +66,7 @@ export const jsonLD = {
     url?: string
   }) =>
     baseJsonLD.website({
-      name: config?.name ?? 'Status',
+      name: config?.name ?? SITE_NAME,
       url: config?.url ?? SITE_URL,
       description: config?.description,
       searchUrl: config?.searchUrl,

@@ -122,9 +122,7 @@ export default async function HomePage() {
           'Private, secure by design. Manager Assets, Message, Browse on your Terms.',
       })
     : [
-        jsonLD.organization({
-          description: statusWebsiteDescription,
-        }),
+        jsonLD.organization(),
         jsonLD.website({
           description: statusWebsiteDescription,
         }),

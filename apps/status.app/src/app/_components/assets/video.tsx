@@ -2,8 +2,6 @@
 
 import { forwardRef } from 'react'
 
-import Head from 'next/head'
-
 import {
   createCloudinaryUrl,
   createCloudinaryVideoMovUrl,
@@ -39,23 +37,22 @@ const Video = forwardRef(
 
     return (
       <>
+        {/*
+          `next/head` is a Pages Router API and renders nothing in the App
+          Router, so this preload never reached the document and `priority` had
+          no effect. React 19 hoists a bare `<link rel="preload">` into <head>.
+
+          Poster only: the video file behind it runs to several megabytes, and
+          preloading that at high priority would starve the real LCP element
+          rather than help it. The poster is what paints first.
+        */}
         {priority && (
-          <Head>
-            <link
-              rel="preload"
-              href={posterSrc}
-              as="image"
-              // note: https://github.com/facebook/react/issues/27233#issuecomment-2035176576
-              fetchPriority="high"
-            />
-            <link
-              rel="preload"
-              href={webmSrc}
-              as="video"
-              // note: https://github.com/facebook/react/issues/27233#issuecomment-2035176576
-              fetchPriority="high"
-            />
-          </Head>
+          <link
+            rel="preload"
+            href={posterSrc}
+            as="image"
+            fetchPriority="high"
+          />
         )}
 
         <video

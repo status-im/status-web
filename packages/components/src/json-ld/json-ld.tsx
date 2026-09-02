@@ -473,9 +473,10 @@ export function JSONLDScript({ schema }: JSONLDProps): ReactNode {
   return (
     <>
       {schemas.map((s, index) => (
+        // note: no `id`. Nothing reads it, and a page that renders more than
+        // one `JSONLDScript` would otherwise emit duplicate element ids.
         <script
           key={index}
-          id={`json-ld-${index}`}
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: generateJSONLDScript(s),

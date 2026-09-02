@@ -2,7 +2,7 @@ import { Avatar } from '@status-im/components'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 
-import { Metadata } from '~app/_metadata'
+import { Metadata, toMetaDescription } from '~app/_metadata'
 import { Body } from '~components/body'
 import { Breadcrumbs } from '~components/breadcrumbs'
 import { getAuthorSlugs, getPostsByAuthorSlug } from '~website/_lib/ghost'
@@ -39,9 +39,10 @@ export async function generateMetadata({ params }: Props) {
   const authorName = author.name ?? author.slug ?? t('unknownAuthor')
 
   return Metadata({
-    title: authorName,
+    title: t('authorTitle', { author: authorName }),
     description:
-      author.meta_description ?? t('postsByAuthor', { author: authorName }),
+      toMetaDescription(author.meta_description) ??
+      t('postsByAuthor', { author: authorName }),
     alternates: {
       canonical: `/blog/author/${slug}`,
     },

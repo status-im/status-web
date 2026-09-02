@@ -39,9 +39,7 @@ export default async function ManifestoPage() {
 
   const jobsCount = meta?.total ?? 0
 
-  const organizationSchema = jsonLD.organization({
-    description: t('metaDescription'),
-  })
+  const organizationSchema = jsonLD.organization()
 
   const PRINCIPLES = [
     {

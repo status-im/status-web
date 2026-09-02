@@ -13,8 +13,9 @@ import rehypeParse from 'rehype-parse'
 import rehypeReact, { type Options } from 'rehype-react'
 import { unified } from 'unified'
 
+import { SITE_LOGO_URL } from '~/config/site'
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
-import { Metadata } from '~app/_metadata'
+import { Metadata, toMetaDescription } from '~app/_metadata'
 import { formatDate } from '~app/_utils/format-time'
 import { Body } from '~components/body'
 import { Breadcrumbs } from '~components/breadcrumbs'
@@ -56,7 +57,7 @@ export async function generateMetadata({ params }: Props) {
 
   return Metadata({
     title: post.title!,
-    description: post.excerpt,
+    description: toMetaDescription(post.custom_excerpt ?? post.excerpt),
     alternates: {
       canonical: `/blog/${slug}`,
     },
@@ -154,7 +155,7 @@ export default async function BlogDetailPage(props: Props) {
     },
     publisher: {
       name: 'Status',
-      logo: `${baseUrl()}/logo.svg`,
+      logo: SITE_LOGO_URL,
     },
   })
   const faqSchema =
@@ -176,12 +177,12 @@ export default async function BlogDetailPage(props: Props) {
         <Breadcrumbs items={breadcrumbs} />
 
         <div className="container-blog gap-3 pb-6 pt-12 xl:pt-20">
-          {tag && <PostTag size="32" tag={tag} />}
+          {tag && <PostTag size="32" tag={tag} asLink />}
 
           <h1 className="text-40 font-bold xl:text-64">{post.title!}</h1>
 
           <div className="mt-auto flex h-5 items-center gap-1">
-            <PostAuthor author={author} />
+            <PostAuthor author={author} asLink />
             <Text size={15} color="$neutral-50">
               {t('publishedOn', {
                 date: formatDate(new Date(post.published_at!)),

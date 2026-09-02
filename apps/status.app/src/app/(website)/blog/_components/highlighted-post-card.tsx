@@ -27,7 +27,7 @@ export const HighlightedPostCard = (props: Props) => {
         <img
           className="aspect-[366/206] size-full rounded-16 object-cover"
           src={post.feature_image!}
-          alt={post.feature_image_alt!}
+          alt={post.feature_image_alt ?? ''}
         />
       </div>
 

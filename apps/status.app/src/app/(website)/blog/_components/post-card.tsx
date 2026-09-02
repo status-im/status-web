@@ -77,7 +77,7 @@ export const PostCard = (props: PostCardProps) => {
         <img
           className="aspect-[334/188] size-full rounded-16 object-cover"
           src={post.feature_image!}
-          alt={post.feature_image_alt!}
+          alt={post.feature_image_alt ?? ''}
           loading="lazy"
           decoding="async"
         />

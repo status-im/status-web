@@ -1,8 +1,7 @@
 import { Text } from '@status-im/components'
 import { getTranslations } from 'next-intl/server'
 
-import { SITE_URL } from '~/config/site'
-import { jsonLD, JSONLDScript } from '~/utils/json-ld'
+import { JSONLDScript } from '~/utils/json-ld'
 import { buildLandingPageStructuredData } from '~/utils/structured-data'
 import { Metadata } from '~app/_metadata'
 import { Body } from '~components/body'
@@ -71,12 +70,10 @@ export default async function BlogPage({ searchParams }: Props) {
     }
   }
 
-  const websiteSchema = jsonLD.website({
-    name: 'Status Blog',
-    url: `${SITE_URL}/blog`,
-    description: t('description'),
-    searchUrl: `${SITE_URL}/blog?q={search_term_string}`,
-  })
+  // No second `WebSite` node here: a site declares one, at its root. The
+  // `SearchAction` it used to carry fed the sitelinks search box, which Google
+  // retired, and left Google crawling the literal
+  // `/blog?q={search_term_string}` template URL.
   const webpageSchema = buildLandingPageStructuredData({
     name: t('title'),
     description: t('description'),
@@ -85,7 +82,7 @@ export default async function BlogPage({ searchParams }: Props) {
 
   return (
     <>
-      <JSONLDScript schema={[websiteSchema, webpageSchema]} />
+      <JSONLDScript schema={webpageSchema} />
       <Body>
         <div className="px-5">
           <div className="mx-auto max-w-[1184px] pb-24 pt-12 xl:pb-32 xl:pt-20">

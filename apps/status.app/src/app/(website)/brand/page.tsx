@@ -46,9 +46,7 @@ export default async function BrandPage() {
   const t = await getTranslations('brand')
   const tn = await getTranslations('nav')
 
-  const organizationSchema = jsonLD.organization({
-    description: t('metaDescription'),
-  })
+  const organizationSchema = jsonLD.organization()
 
   return (
     <>

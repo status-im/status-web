@@ -223,10 +223,19 @@ export type PostSitemapEntry = {
   updatedAt: string
 }
 
+/**
+ * Every public post, unsampled.
+ *
+ * These fetchers used to cap the page size outside Vercel production, which
+ * silently truncated the sitemap to the first 50 posts wherever
+ * `NEXT_PUBLIC_VERCEL_ENV` was undefined. A sampled sitemap is worse than no
+ * sitemap: the posts it omits lose their only discovery path, because /blog
+ * pages through Ghost on the client and links no further than its first grid.
+ */
 export const getPostsForSitemap = async (): Promise<PostSitemapEntry[]> => {
   try {
     const posts = await ghost.posts.browse({
-      limit: clientEnv.NEXT_PUBLIC_VERCEL_ENV === 'production' ? 'all' : 50,
+      limit: 'all',
       fields: 'slug,updated_at,published_at',
       filter: `visibility:public+${EXCLUDED_TAGS_FILTER}`,
     })
@@ -246,7 +255,7 @@ export const getPostsForSitemap = async (): Promise<PostSitemapEntry[]> => {
 export const getTagSlugs = async (): Promise<string[]> => {
   try {
     const tags = await ghost.tags.browse({
-      limit: clientEnv.NEXT_PUBLIC_VERCEL_ENV === 'production' ? 'all' : 6,
+      limit: 'all',
       fields: 'slug',
       filter: `visibility:public`,
     })
@@ -300,7 +309,7 @@ export const getLearnPostsForSitemap = async (): Promise<
 > => {
   try {
     const posts = await ghostLive.posts.browse({
-      limit: clientEnv.NEXT_PUBLIC_VERCEL_ENV === 'production' ? 'all' : 50,
+      limit: 'all',
       fields: 'slug,updated_at,published_at',
       filter: `tag:${LEARN_TAG}+visibility:public+${LEARN_FETCH_EXCLUDED_TAGS_FILTER}`,
     })
@@ -323,7 +332,7 @@ export const getLearnPostsForSitemap = async (): Promise<
 export const getAuthorSlugs = async (): Promise<string[]> => {
   try {
     const authors = await ghost.authors.browse({
-      limit: clientEnv.NEXT_PUBLIC_VERCEL_ENV === 'production' ? 'all' : 6,
+      limit: 'all',
       fields: 'slug',
       filter: `visibility:public`,
     })

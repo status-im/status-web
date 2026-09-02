@@ -1,11 +1,10 @@
-import { SITE_URL } from '~/config/site'
+import { SITE_LOGO_URL, SITE_NAME, SITE_URL } from '~/config/site'
 
 import { jsonLD } from './json-ld'
 
 import type { FAQPageSchema, JSONLDSchema } from '@status-im/components'
 
 const STATUS_SITE_URL = SITE_URL
-const STATUS_LOGO_URL = `${STATUS_SITE_URL}/icon.png`
 
 export type FAQItem = {
   question: string
@@ -51,8 +50,8 @@ export function buildHelpDocStructuredData(
         type: 'Person',
       },
       publisher: {
-        name: 'Status',
-        logo: STATUS_LOGO_URL,
+        name: SITE_NAME,
+        logo: SITE_LOGO_URL,
       },
     }),
   ]
