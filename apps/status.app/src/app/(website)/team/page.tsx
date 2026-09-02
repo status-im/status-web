@@ -30,9 +30,7 @@ export default async function TeamPage() {
   const t = await getTranslations('team')
   const tn = await getTranslations('nav')
 
-  const organizationSchema = jsonLD.organization({
-    description: t('schemaDescription'),
-  })
+  const organizationSchema = jsonLD.organization()
 
   const ABOUT_LIST = [
     {

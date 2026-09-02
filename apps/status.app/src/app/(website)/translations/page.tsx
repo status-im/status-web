@@ -27,9 +27,7 @@ export async function generateMetadata(): Promise<NextMetadata> {
 export default async function TranslationsPage() {
   const t = await getTranslations('translations')
 
-  const organizationSchema = jsonLD.organization({
-    description: t('metaDescription'),
-  })
+  const organizationSchema = jsonLD.organization()
 
   return (
     <>

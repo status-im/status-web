@@ -24,9 +24,7 @@ export async function generateMetadata(): Promise<NextMetadata> {
 export default async function SecurityPage() {
   const t = await getTranslations('security')
 
-  const organizationSchema = jsonLD.organization({
-    description: t('metaDescription'),
-  })
+  const organizationSchema = jsonLD.organization()
   const webpageSchema = buildLandingPageStructuredData({
     name: t('metaTitle'),
     description: t('metaDescription'),

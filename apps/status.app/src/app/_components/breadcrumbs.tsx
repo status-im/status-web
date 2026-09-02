@@ -3,6 +3,8 @@ import { Fragment } from 'react'
 import { ChevronRightIcon } from '@status-im/icons/20'
 import { cva } from 'class-variance-authority'
 
+import { jsonLD, JSONLDScript } from '~/utils/json-ld'
+
 import { Link } from './link'
 
 type Props = {
@@ -48,38 +50,53 @@ const containerStyles = cva(
 const Breadcrumbs = (props: Props) => {
   const { items, action = null, variant = 'default' } = props
 
+  // The visible trail and the structured one are the same data, so declare it
+  // here rather than asking every page to repeat itself. Admin is behind a
+  // login and disallowed in robots.txt, so it gets the markup only.
+  const isIndexable = variant !== 'admin'
+
   return (
-    <div className={containerStyles({ variant })}>
-      <div className="flex">
-        <div className="flex items-center gap-2 overflow-x-scroll whitespace-nowrap px-5 scrollbar-none">
-          {items.map((item, index) => {
-            if (index === items.length - 1) {
-              return (
-                <div
-                  key={item.label + index}
-                  className={labelStyles({ variant })}
-                >
-                  {item.label}
-                </div>
-              )
-            }
-
-            return (
-              <Fragment key={item.href + index}>
-                <Link href={item.href} className={linkStyles({ variant })}>
-                  {item.label}
-                </Link>
-                <ChevronRightIcon className="min-w-[20px] text-neutral-50" />
-              </Fragment>
-            )
-          })}
-        </div>
-      </div>
-
-      {action && (
-        <div className="w-full px-5 md:flex md:justify-end">{action}</div>
+    <>
+      {isIndexable && items.length > 0 && (
+        <JSONLDScript
+          schema={jsonLD.breadcrumbList(
+            items.map(item => ({ name: item.label, url: item.href }))
+          )}
+        />
       )}
-    </div>
+
+      <div className={containerStyles({ variant })}>
+        <div className="flex">
+          <div className="flex items-center gap-2 overflow-x-scroll whitespace-nowrap px-5 scrollbar-none">
+            {items.map((item, index) => {
+              if (index === items.length - 1) {
+                return (
+                  <div
+                    key={item.label + index}
+                    className={labelStyles({ variant })}
+                  >
+                    {item.label}
+                  </div>
+                )
+              }
+
+              return (
+                <Fragment key={item.href + index}>
+                  <Link href={item.href} className={linkStyles({ variant })}>
+                    {item.label}
+                  </Link>
+                  <ChevronRightIcon className="min-w-[20px] text-neutral-50" />
+                </Fragment>
+              )
+            })}
+          </div>
+        </div>
+
+        {action && (
+          <div className="w-full px-5 md:flex md:justify-end">{action}</div>
+        )}
+      </div>
+    </>
   )
 }
 

@@ -48,9 +48,7 @@ export default async function AppsPage() {
           'Private, secure by design. Manager Assets, Message, Browse on your Terms.',
       })
     : [
-        jsonLD.organization({
-          description: t('metaDescription'),
-        }),
+        jsonLD.organization(),
         buildLandingPageStructuredData({
           name: t('metaTitle'),
           description: t('metaDescription'),

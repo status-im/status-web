@@ -33,6 +33,41 @@ export function toCanonicalUrl(path: string): string {
   return url.href
 }
 
+/**
+ * Google renders roughly 155-160 characters of a description on desktop and
+ * less on mobile, so anything past this is cut mid-sentence in the result.
+ */
+const META_DESCRIPTION_MAX_LENGTH = 155
+
+/**
+ * Collapse an editorial excerpt into a description a search result can show.
+ *
+ * Ghost's auto-generated `excerpt` is the opening ~500 characters of the post
+ * body, newlines and all, so passing it straight through ships a multi-line,
+ * mid-word-truncated snippet. Prefer a hand-written `custom_excerpt` at the
+ * call site; this is the fallback that makes the automatic one presentable.
+ */
+export function toMetaDescription(
+  text: string | null | undefined,
+  maxLength: number = META_DESCRIPTION_MAX_LENGTH
+): string | undefined {
+  const collapsed = text?.replace(/\s+/g, ' ').trim()
+
+  if (!collapsed) {
+    return undefined
+  }
+
+  if (collapsed.length <= maxLength) {
+    return collapsed
+  }
+
+  const truncated = collapsed.slice(0, maxLength)
+  const lastSpace = truncated.lastIndexOf(' ')
+  const body = lastSpace > 0 ? truncated.slice(0, lastSpace) : truncated
+
+  return `${body.replace(/[\s.,;:-]+$/, '')}…`
+}
+
 type Input = Metadata & {
   title: NonNullable<Metadata['title']>
   description?: string

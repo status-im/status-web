@@ -22,9 +22,7 @@ export async function generateMetadata(): Promise<NextMetadata> {
 
 export default async function ReleaseSchedule() {
   const t = await getTranslations('snt')
-  const organizationSchema = jsonLD.organization({
-    description: t('releaseScheduleMetaDescription'),
-  })
+  const organizationSchema = jsonLD.organization()
 
   return (
     <>

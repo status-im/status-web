@@ -26,9 +26,7 @@ export async function generateMetadata(): Promise<NextMetadata> {
 
 export default async function TokenPage() {
   const t = await getTranslations('snt')
-  const organizationSchema = jsonLD.organization({
-    description: t('description'),
-  })
+  const organizationSchema = jsonLD.organization()
   const webpageSchema = buildLandingPageStructuredData({
     name: t('metaTitle'),
     description: t('description'),

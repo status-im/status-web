@@ -277,6 +277,28 @@ let config = {
         destination: '/help/keycard/if-you-can-t-unblock-your-keycard',
         statusCode: 301,
       },
+      // Legacy status.im paths still crawled and returning 404. Only the ones
+      // whose modern equivalent is unambiguous; the rest stay 404 on purpose.
+      {
+        source: '/index',
+        destination: '/',
+        statusCode: 301,
+      },
+      {
+        source: '/token',
+        destination: '/snt',
+        statusCode: 301,
+      },
+      {
+        source: '/guide',
+        destination: '/help',
+        statusCode: 301,
+      },
+      {
+        source: '/features/messenger',
+        destination: '/help/messaging',
+        statusCode: 301,
+      },
       // Renamed spec slug.
       {
         source: '/specs/status-payload',

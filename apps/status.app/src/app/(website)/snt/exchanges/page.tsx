@@ -75,9 +75,7 @@ export default async function ExchangesPage() {
   const tn = await getTranslations('nav')
   const tickers = await getExchangeData()
 
-  const organizationSchema = jsonLD.organization({
-    description: t('exchangesMetaDescription'),
-  })
+  const organizationSchema = jsonLD.organization()
 
   return (
     <>

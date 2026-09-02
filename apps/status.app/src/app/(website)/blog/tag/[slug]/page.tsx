@@ -4,7 +4,7 @@ import { Text } from '@status-im/components'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 
-import { Metadata } from '~app/_metadata'
+import { Metadata, toMetaDescription } from '~app/_metadata'
 import { Body } from '~components/body'
 import { Breadcrumbs } from '~components/breadcrumbs'
 import { getPostsByTagSlug, getTagSlugs } from '~website/_lib/ghost'
@@ -29,10 +29,16 @@ type Props = {
 export async function generateMetadata({ params }: Props) {
   const t = await getTranslations('blog')
   const slug = (await params).slug
+  const response = await getPostsByTagSlug(slug)
+  // Ghost stores a human-readable name and description per tag. The slug is
+  // what the URL needs, not what a search result should read as.
+  const name = response?.tag.name ?? slug
 
   return Metadata({
-    title: t('tagTitle', { slug }),
-    description: t('tagDescription', { slug }),
+    title: t('tagTitle', { name }),
+    description:
+      toMetaDescription(response?.tag.description) ??
+      t('tagDescription', { name }),
     alternates: {
       canonical: `/blog/tag/${slug}`,
     },

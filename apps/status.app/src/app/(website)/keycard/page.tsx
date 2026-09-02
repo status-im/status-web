@@ -38,9 +38,7 @@ export async function generateMetadata(): Promise<NextMetadata> {
 export default async function KeycardPage() {
   const t = await getTranslations('keycard')
 
-  const organizationSchema = jsonLD.organization({
-    description: t('description'),
-  })
+  const organizationSchema = jsonLD.organization()
   const webpageSchema = buildLandingPageStructuredData({
     name: t('getKeycard'),
     description: t('description'),
