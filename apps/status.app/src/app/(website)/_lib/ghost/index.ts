@@ -37,11 +37,32 @@ const ghostLive = GhostContentAPI({
       cache: 'no-store',
     })
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+      const error: Error & { statusCode?: number } = new Error(
+        `HTTP error! status: ${response.status}`
+      )
+      error.statusCode = response.status
+      throw error
     }
     return response.json()
   },
 })
+
+/**
+ * Ghost answering "no such post" is a 404 the route should render.
+ *
+ * Anything else, a 429 under crawl load, a 5xx, a network blip, is a failed
+ * call. Treating those as "not found" turns a momentary Ghost outage into a
+ * `notFound()` that Next then caches for the route's whole revalidate window,
+ * so a crawler that arrives during the blip sees a 404 for the next hour.
+ */
+function isGhostNotFoundError(error: unknown): boolean {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'statusCode' in error &&
+    (error as { statusCode?: number }).statusCode === 404
+  )
+}
 
 type Params = { page?: number; limit?: number; tag?: string }
 
@@ -158,8 +179,12 @@ export const getPostBySlug = async (slug: string) => {
     }
 
     return post
-  } catch {
-    return
+  } catch (error) {
+    if (isGhostNotFoundError(error)) {
+      return
+    }
+
+    throw error
   }
 }
 
