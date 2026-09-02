@@ -277,6 +277,23 @@ let config = {
         destination: '/help/keycard/if-you-can-t-unblock-your-keycard',
         statusCode: 301,
       },
+      // Page 1 of an archive is the archive root, so `/page/1` would be a
+      // second URL for the same listing.
+      {
+        source: '/blog/page/1',
+        destination: '/blog',
+        statusCode: 301,
+      },
+      {
+        source: '/blog/tag/:slug/page/1',
+        destination: '/blog/tag/:slug',
+        statusCode: 301,
+      },
+      {
+        source: '/blog/author/:slug/page/1',
+        destination: '/blog/author/:slug',
+        statusCode: 301,
+      },
       // Legacy status.im paths still crawled and returning 404. Only the ones
       // whose modern equivalent is unambiguous; the rest stay 404 on purpose.
       {

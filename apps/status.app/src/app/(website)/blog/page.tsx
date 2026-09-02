@@ -8,6 +8,7 @@ import { Body } from '~components/body'
 import { getPosts } from '~website/_lib/ghost'
 
 import { isBlogCategory } from './_categories'
+import { BlogPager } from './_components/blog-pager'
 import { BlogSearch } from './_components/blog-search'
 import { searchBlogPosts } from './_utils/search.server'
 import {
@@ -97,6 +98,13 @@ export default async function BlogPage({ searchParams }: Props) {
               initialResults={initialResults}
               initialQuery={query}
               initialCategory={category}
+            />
+
+            <BlogPager
+              basePath="/blog"
+              currentPage={1}
+              totalPages={meta.pagination.pages}
+              hideWhenInteractive
             />
           </div>
         </div>
