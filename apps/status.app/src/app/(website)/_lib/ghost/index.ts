@@ -103,8 +103,17 @@ function hasDisallowedTag(post: { tags?: Array<{ slug?: string | null }> }) {
   )
 }
 
+/**
+ * Page size for /blog and its `/blog/page/[page]` continuations. Shared so the
+ * crawlable pager splits the archive on exactly the boundaries Ghost does.
+ */
+export const BLOG_PAGE_SIZE = 7
+
+/** Page size for the tag and author archives and their continuations. */
+export const ARCHIVE_PAGE_SIZE = 6
+
 export const getPosts = async (params: Params = {}) => {
-  const { page = 1, limit = 7, tag } = params
+  const { page = 1, limit = BLOG_PAGE_SIZE, tag } = params
 
   try {
     const response = await ghost.posts.browse({
@@ -193,7 +202,7 @@ export const getPostsByTagSlug = async (slug: string, page = 1) => {
     const response = await ghost.posts.browse({
       filter: `tag:${slug}+visibility:public+${EXCLUDED_TAGS_FILTER}`,
       include: ['tags', 'authors'],
-      limit: 6,
+      limit: ARCHIVE_PAGE_SIZE,
       order: 'published_at DESC',
       page,
     })
@@ -213,7 +222,7 @@ export const getPostsByAuthorSlug = async (slug: string, page = 1) => {
     const response = await ghost.posts.browse({
       filter: `author:${slug}+visibility:public+${EXCLUDED_TAGS_FILTER}`,
       include: ['tags', 'authors'],
-      limit: 6,
+      limit: ARCHIVE_PAGE_SIZE,
       order: 'published_at DESC',
       page,
     })
