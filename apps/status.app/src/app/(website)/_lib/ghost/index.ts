@@ -112,37 +112,29 @@ export const BLOG_PAGE_SIZE = 7
 /** Page size for the tag and author archives and their continuations. */
 export const ARCHIVE_PAGE_SIZE = 6
 
+/**
+ * @see getPostsByTagSlug for why this does not swallow errors.
+ *
+ * `/blog/page/[page]` reads "no posts" as "no such page" and calls
+ * `notFound()`, so returning an empty list on a failed call would turn a Ghost
+ * blip into a 404 cached for the route's whole revalidate window, on every
+ * continuation URL at once. Callers that can live without the result, like the
+ * homepage strip, catch it themselves.
+ */
 export const getPosts = async (params: Params = {}) => {
   const { page = 1, limit = BLOG_PAGE_SIZE, tag } = params
 
-  try {
-    const response = await ghost.posts.browse({
-      include: ['tags', 'authors'],
-      order: 'published_at DESC',
-      limit,
-      page,
-      ...(tag
-        ? { filter: `tag:${tag}+visibility:public+${EXCLUDED_TAGS_FILTER}` }
-        : { filter: `visibility:public+${EXCLUDED_TAGS_FILTER}` }),
-    })
+  const response = await ghost.posts.browse({
+    include: ['tags', 'authors'],
+    order: 'published_at DESC',
+    limit,
+    page,
+    ...(tag
+      ? { filter: `tag:${tag}+visibility:public+${EXCLUDED_TAGS_FILTER}` }
+      : { filter: `visibility:public+${EXCLUDED_TAGS_FILTER}` }),
+  })
 
-    return { posts: [...response], meta: response.meta }
-  } catch (error) {
-    console.error('Failed to fetch posts from Ghost API:', error)
-    return {
-      posts: [],
-      meta: {
-        pagination: {
-          page: 1,
-          limit,
-          pages: 0,
-          total: 0,
-          next: null,
-          prev: null,
-        },
-      },
-    }
-  }
+  return { posts: [...response], meta: response.meta }
 }
 
 export const getPostsForSearch = async () => {

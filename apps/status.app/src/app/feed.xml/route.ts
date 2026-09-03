@@ -1,6 +1,8 @@
 import { baseUrl } from '~website/_lib/base-url'
 import { getPosts } from '~website/_lib/ghost'
 
+import type { PostOrPage } from '@tryghost/content-api'
+
 const FEED_ITEM_LIMIT = 20
 const FEED_TAG = 'status'
 const FEED_TITLE = 'Status'
@@ -29,7 +31,21 @@ function toIso(date: string | undefined | null): string {
 export async function GET() {
   const site = baseUrl()
   const feedUrl = `${site}/feed.xml`
-  const { posts } = await getPosts({ limit: FEED_ITEM_LIMIT, tag: FEED_TAG })
+
+  let posts: PostOrPage[]
+  try {
+    const response = await getPosts({ limit: FEED_ITEM_LIMIT, tag: FEED_TAG })
+    posts = response.posts
+  } catch (error) {
+    // An empty feed reads as "every entry was withdrawn" to a reader, so a
+    // failed Ghost call has to say retry rather than serve one.
+    console.error('Failed to fetch posts for the feed from Ghost API:', error)
+
+    return new Response('Feed temporarily unavailable', {
+      status: 503,
+      headers: { 'cache-control': 'no-store' },
+    })
+  }
 
   const visiblePosts = posts.filter(post => !!post.slug)
 
