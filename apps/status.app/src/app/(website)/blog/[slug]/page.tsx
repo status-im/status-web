@@ -90,13 +90,18 @@ export default async function BlogDetailPage(props: Props) {
 
   let relatedPosts: PostOrPage[] = []
   if (post.primary_tag) {
-    const response = await getPostsByTagSlug(post.primary_tag.slug)
+    // The post itself already loaded, so a failure here costs a decorative
+    // strip at the bottom of the page. Swallow it rather than 500 the article.
+    try {
+      const response = await getPostsByTagSlug(post.primary_tag.slug)
 
-    if (response) {
-      const filteredPosts = response.posts
-        .filter(p => p.slug !== post.slug)
-        .slice(0, 4)
-      relatedPosts = filteredPosts
+      if (response) {
+        relatedPosts = response.posts
+          .filter(p => p.slug !== post.slug)
+          .slice(0, 4)
+      }
+    } catch (error) {
+      console.error('Failed to fetch related posts from Ghost API:', error)
     }
   }
 

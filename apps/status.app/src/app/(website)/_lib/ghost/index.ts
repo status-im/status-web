@@ -197,43 +197,58 @@ export const getPostBySlug = async (slug: string) => {
   }
 }
 
+/**
+ * An archive is "not found" when Ghost returns no posts for it.
+ *
+ * Ghost answers both an unknown tag and a page past the end with 200 and an
+ * empty list, so emptiness is the only not-found signal a browse can give. A
+ * thrown error means the call itself failed, and the previous blanket `catch`
+ * turned those into `notFound()`, which Next then cached for the route's whole
+ * revalidate window. Let them propagate instead: callers that can live without
+ * the result, like the related-posts strip, catch it themselves.
+ */
 export const getPostsByTagSlug = async (slug: string, page = 1) => {
-  try {
-    const response = await ghost.posts.browse({
-      filter: `tag:${slug}+visibility:public+${EXCLUDED_TAGS_FILTER}`,
-      include: ['tags', 'authors'],
-      limit: ARCHIVE_PAGE_SIZE,
-      order: 'published_at DESC',
-      page,
-    })
+  const response = await ghost.posts.browse({
+    filter: `tag:${slug}+visibility:public+${EXCLUDED_TAGS_FILTER}`,
+    include: ['tags', 'authors'],
+    limit: ARCHIVE_PAGE_SIZE,
+    order: 'published_at DESC',
+    page,
+  })
 
-    return {
-      posts: [...response],
-      tag: response[0].tags!.find(tag => tag.slug === slug)!,
-      meta: response.meta,
-    }
-  } catch {
+  const tag = response[0]?.tags?.find(tag => tag.slug === slug)
+
+  if (!tag) {
     return
+  }
+
+  return {
+    posts: [...response],
+    tag,
+    meta: response.meta,
   }
 }
 
+/** @see getPostsByTagSlug for why this does not swallow errors. */
 export const getPostsByAuthorSlug = async (slug: string, page = 1) => {
-  try {
-    const response = await ghost.posts.browse({
-      filter: `author:${slug}+visibility:public+${EXCLUDED_TAGS_FILTER}`,
-      include: ['tags', 'authors'],
-      limit: ARCHIVE_PAGE_SIZE,
-      order: 'published_at DESC',
-      page,
-    })
+  const response = await ghost.posts.browse({
+    filter: `author:${slug}+visibility:public+${EXCLUDED_TAGS_FILTER}`,
+    include: ['tags', 'authors'],
+    limit: ARCHIVE_PAGE_SIZE,
+    order: 'published_at DESC',
+    page,
+  })
 
-    return {
-      posts: [...response],
-      author: response[0].authors!.find(author => author.slug === slug)!,
-      meta: response.meta,
-    }
-  } catch {
+  const author = response[0]?.authors?.find(author => author.slug === slug)
+
+  if (!author) {
     return
+  }
+
+  return {
+    posts: [...response],
+    author,
+    meta: response.meta,
   }
 }
 

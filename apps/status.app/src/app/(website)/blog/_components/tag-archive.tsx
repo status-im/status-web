@@ -36,6 +36,7 @@ export async function TagArchive(props: Props) {
   }
 
   const { posts, tag, meta } = response
+  const name = tag.name || tag.slug
   const basePath = `/blog/tag/${tag.slug}`
   const isFirstPage = page === 1
 
@@ -48,7 +49,7 @@ export async function TagArchive(props: Props) {
             href: '/blog',
           },
           {
-            label: tag.name || tag.slug,
+            label: name,
             href: basePath,
           },
         ]}
@@ -66,7 +67,7 @@ export async function TagArchive(props: Props) {
 
           <div className="mb-12 grid gap-2">
             <h1 className="text-40 font-bold tracking-[-.02em] lg:text-64">
-              {tag.name}
+              {name}
             </h1>
             {tag.description && <Text size={19}>{tag.description}</Text>}
           </div>
