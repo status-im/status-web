@@ -62,7 +62,7 @@ export async function AuthorArchive(props: Props) {
           </div>
 
           <div className="mb-12 grid gap-2">
-            <h1 className="text-40 font-bold lg:text-64">{author.name}</h1>
+            <h1 className="text-40 font-bold lg:text-64">{name}</h1>
             {author.meta_description && (
               <p className="text-40 font-bold text-neutral-50 lg:text-64">
                 {author.meta_description}

@@ -39,8 +39,14 @@ export const BlogPager = (props: Props) => {
   const [isInteractive, setIsInteractive] = useState(false)
 
   useEffect(() => {
+    // Continuation pages keep the pager for good, so there is nothing to
+    // track there and no reason to spend a render on it.
+    if (!hideWhenInteractive) {
+      return
+    }
+
     setIsInteractive(true)
-  }, [])
+  }, [hideWhenInteractive])
 
   if (totalPages <= 1) {
     return null
