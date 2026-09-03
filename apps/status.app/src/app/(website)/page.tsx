@@ -26,9 +26,32 @@ import { NewsTag } from './_components/news-tag'
 import { ParallaxCircle } from './_components/parallax-circle'
 
 import type { FeatureListProps } from './_components/feature-list'
+import type { PostOrPage } from '@tryghost/content-api'
 import type { ImageId } from '~components/assets'
 
 export const revalidate = 3600 // 1 hour
+
+/** Enough to find a release post in and still fill the three-card strip. */
+const HOMEPAGE_POST_LIMIT = 10
+
+/** Cards shown in the homepage blog strip. */
+const HOMEPAGE_POST_COUNT = 3
+
+/**
+ * The blog strip is decorative, so a Ghost blip should cost the strip rather
+ * than the homepage. Every other `getPosts` caller lets the error propagate.
+ */
+async function getHomepagePosts(): Promise<PostOrPage[]> {
+  try {
+    const { posts } = await getPosts({ limit: HOMEPAGE_POST_LIMIT })
+
+    return posts
+  } catch (error) {
+    console.error('Failed to fetch homepage posts from Ghost API:', error)
+
+    return []
+  }
+}
 
 export async function generateMetadata() {
   return Metadata({
@@ -43,11 +66,9 @@ export default async function HomePage() {
   const t = await getTranslations('home')
   const td = await getTranslations('download')
 
-  const { posts: allPosts } = isGetSite
-    ? { posts: [] }
-    : await getPosts({ limit: 10 })
+  const allPosts = isGetSite ? [] : await getHomepagePosts()
   const releaseResult = isGetSite ? null : findLatestReleasePost(allPosts)
-  const posts = isGetSite ? [] : allPosts.slice(0, 3)
+  const posts = isGetSite ? [] : allPosts.slice(0, HOMEPAGE_POST_COUNT)
 
   const featureList: FeatureListProps['list'] = [
     {
