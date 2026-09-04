@@ -39,7 +39,8 @@ const HOMEPAGE_POST_COUNT = 3
 
 /**
  * The blog strip is decorative, so a Ghost blip should cost the strip rather
- * than the homepage. Every other `getPosts` caller lets the error propagate.
+ * than the homepage. Only the `/blog/page/[page]` continuations let the error
+ * propagate, because there an empty list means "no such page".
  */
 async function getHomepagePosts(): Promise<PostOrPage[]> {
   try {

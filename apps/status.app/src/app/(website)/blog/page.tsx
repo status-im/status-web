@@ -5,7 +5,7 @@ import { JSONLDScript } from '~/utils/json-ld'
 import { buildLandingPageStructuredData } from '~/utils/structured-data'
 import { Metadata } from '~app/_metadata'
 import { Body } from '~components/body'
-import { getPosts } from '~website/_lib/ghost'
+import { BLOG_PAGE_SIZE, getPosts } from '~website/_lib/ghost'
 
 import { isBlogCategory } from './_categories'
 import { BlogPager } from './_components/blog-pager'
@@ -17,9 +17,42 @@ import {
 } from './_utils/search-config'
 
 import type { BlogSearchResults } from './_utils/search-config'
+import type { PostOrPage, PostsOrPages } from '@tryghost/content-api'
 import type { Metadata as NextMetadata } from 'next'
 
 export const revalidate = 3600 // 1 hour
+
+/**
+ * A Ghost blip should cost the listing rather than the whole page.
+ *
+ * The heading, the search box and the nav are all still useful without posts,
+ * and unlike the `/blog/page/[page]` continuations this route never reads "no
+ * posts" as "no such page", so an empty render cannot be cached as a 404.
+ */
+async function getBlogPosts(): Promise<{
+  posts: PostOrPage[]
+  meta: PostsOrPages['meta']
+}> {
+  try {
+    return await getPosts()
+  } catch (error) {
+    console.error('Failed to fetch blog posts from Ghost API:', error)
+
+    return {
+      posts: [],
+      meta: {
+        pagination: {
+          page: 1,
+          limit: BLOG_PAGE_SIZE,
+          pages: 0,
+          total: 0,
+          next: null,
+          prev: null,
+        },
+      },
+    }
+  }
+}
 
 export async function generateMetadata(): Promise<NextMetadata> {
   const t = await getTranslations('blog')
@@ -43,7 +76,7 @@ type Props = {
 export default async function BlogPage({ searchParams }: Props) {
   const t = await getTranslations('blog')
   const [{ posts: initialPosts, meta }, params] = await Promise.all([
-    getPosts(),
+    getBlogPosts(),
     searchParams,
   ])
   const query =
