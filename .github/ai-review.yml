@@ -1,0 +1,16 @@
+# Per-repo settings for the shared reviewer in acid-info/ai-review.
+# Only extra_ignore, guidelines_files and ignore are settable here -- models,
+# severity threshold and diff budget are owned centrally.
+
+# Appended to the shared defaults, which already cover lockfiles, **/dist/**,
+# **/vendor/**, **/*.min.js, **/*.map, **/__snapshots__/** and **/*.generated.*.
+extra_ignore:
+  - '**/*_pb.ts' # protoc-gen-es output; the .proto sources beside it stay reviewed
+  - '**/*.gen.ts' # TanStack Router route tree in apps/wallet
+  - '**/_graphql/generated/**' # graphql-codegen output, see apps/status.app/codegen.yml
+  - '**/next-env.d.ts' # written by Next.js, "should not be edited"
+  - 'packages/icons/src/**' # svgr output; `pnpm generate` deletes and rewrites it from svg/
+
+guidelines_files:
+  - AGENTS.md
+  - .cursor/rules/components.mdc
