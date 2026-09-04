@@ -10,19 +10,33 @@ import { Link } from '~components/link'
 /** Numbered links rendered either side of the current page. */
 const ADJACENT_PAGE_COUNT = 2
 
+const PAGER_STYLES = 'mt-10 flex justify-center'
+
+/**
+ * Out of the layout but still in the DOM and the accessibility tree, and back
+ * on screen as soon as a keyboard reaches it, so tabbing never lands on a
+ * control nobody can see.
+ */
+const HIDDEN_PAGER_STYLES = cx(
+  'sr-only',
+  'focus-within:not-sr-only focus-within:mt-10 focus-within:flex focus-within:justify-center'
+)
+
 type Props = {
   /** Archive root, e.g. `/blog` or `/blog/tag/privacy`. Page 1 lives here. */
   basePath: string
   currentPage: number
   totalPages: number
   /**
-   * Drop the pager once React has hydrated.
+   * Visually hide the pager once React has hydrated.
    *
    * The archive roots load more posts by scrolling, which a crawler never
    * does, so without this every post past the first page has no link pointing
-   * at it. Rendering the pager on the server and removing it on mount gives
-   * crawlers and no-JS visitors a real path through the archive while leaving
-   * the infinite scroll everyone else sees untouched.
+   * at it. The pager is rendered on the server for crawlers and no-JS
+   * visitors, then stays in the DOM visually hidden after mount, so crawlers
+   * that render JavaScript and anyone navigating by keyboard or screen reader
+   * keep a path through the archive while the infinite scroll everyone else
+   * sees is left untouched.
    */
   hideWhenInteractive?: boolean
 }
@@ -52,9 +66,7 @@ export const BlogPager = (props: Props) => {
     return null
   }
 
-  if (hideWhenInteractive && isInteractive) {
-    return null
-  }
+  const isVisuallyHidden = hideWhenInteractive && isInteractive
 
   const itemStyles =
     'flex h-8 min-w-8 items-center justify-center rounded-10 px-2 text-15 font-medium'
@@ -62,7 +74,7 @@ export const BlogPager = (props: Props) => {
   return (
     <nav
       aria-label={t('paginationLabel')}
-      className="mt-10 flex justify-center"
+      className={isVisuallyHidden ? HIDDEN_PAGER_STYLES : PAGER_STYLES}
     >
       <ul className="flex flex-wrap items-center justify-center gap-1">
         {currentPage > 1 && (
