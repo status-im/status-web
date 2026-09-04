@@ -118,8 +118,9 @@ export const ARCHIVE_PAGE_SIZE = 6
  * `/blog/page/[page]` reads "no posts" as "no such page" and calls
  * `notFound()`, so returning an empty list on a failed call would turn a Ghost
  * blip into a 404 cached for the route's whole revalidate window, on every
- * continuation URL at once. Callers that can live without the result, like the
- * homepage strip, catch it themselves.
+ * continuation URL at once. Callers that can live without the result catch it
+ * themselves: the homepage strip and `/blog` render without posts, the feed
+ * answers 503.
  */
 export const getPosts = async (params: Params = {}) => {
   const { page = 1, limit = BLOG_PAGE_SIZE, tag } = params
