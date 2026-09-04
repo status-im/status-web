@@ -7,7 +7,10 @@ import { Body } from '~components/body'
 import { getPosts } from '~website/_lib/ghost'
 import { BlogPager } from '~website/blog/_components/blog-pager'
 import { PostGrid } from '~website/blog/_components/post-grid'
-import { parsePageParam } from '~website/blog/_utils/page-param'
+import {
+  parsePageParam,
+  resolvePageParam,
+} from '~website/blog/_utils/page-param'
 
 export const revalidate = 3600 // 1 hour
 export const dynamicParams = true
@@ -42,11 +45,7 @@ export async function generateMetadata({ params }: Props) {
  */
 export default async function BlogArchivePage(props: Props) {
   const t = await getTranslations('blog')
-  const page = parsePageParam((await props.params).page)
-
-  if (!page) {
-    notFound()
-  }
+  const page = resolvePageParam((await props.params).page, '/blog')
 
   const { posts, meta } = await getPosts({ page })
 

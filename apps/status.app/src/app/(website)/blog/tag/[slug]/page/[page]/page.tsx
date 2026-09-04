@@ -1,10 +1,12 @@
-import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 
 import { Metadata, toMetaDescription } from '~app/_metadata'
 import { getPostsByTagSlug } from '~website/_lib/ghost'
 import { TagArchive } from '~website/blog/_components/tag-archive'
-import { parsePageParam } from '~website/blog/_utils/page-param'
+import {
+  parsePageParam,
+  resolvePageParam,
+} from '~website/blog/_utils/page-param'
 
 export const revalidate = 3600 // 1 hour
 export const dynamicParams = true
@@ -38,11 +40,7 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function BlogTagArchivePage(props: Props) {
   const { slug, page: pageParam } = await props.params
-  const page = parsePageParam(pageParam)
-
-  if (!page) {
-    notFound()
-  }
+  const page = resolvePageParam(pageParam, `/blog/tag/${slug}`)
 
   return <TagArchive slug={slug} page={page} />
 }
