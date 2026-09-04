@@ -278,7 +278,9 @@ let config = {
         statusCode: 301,
       },
       // Page 1 of an archive is the archive root, so `/page/1` would be a
-      // second URL for the same listing.
+      // second URL for the same listing. The locale-prefixed forms are listed
+      // too: `localePrefix: 'as-needed'` strips `/en` today, but only while
+      // `en` is the sole locale. `resolvePageParam` backstops both.
       {
         source: '/blog/page/1',
         destination: '/blog',
@@ -292,6 +294,21 @@ let config = {
       {
         source: '/blog/author/:slug/page/1',
         destination: '/blog/author/:slug',
+        statusCode: 301,
+      },
+      {
+        source: '/:locale(en)/blog/page/1',
+        destination: '/:locale/blog',
+        statusCode: 301,
+      },
+      {
+        source: '/:locale(en)/blog/tag/:slug/page/1',
+        destination: '/:locale/blog/tag/:slug',
+        statusCode: 301,
+      },
+      {
+        source: '/:locale(en)/blog/author/:slug/page/1',
+        destination: '/:locale/blog/author/:slug',
         statusCode: 301,
       },
       // Legacy status.im paths still crawled and returning 404. Only the ones

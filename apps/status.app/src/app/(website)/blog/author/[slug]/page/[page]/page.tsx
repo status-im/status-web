@@ -1,10 +1,12 @@
-import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 
 import { Metadata, toMetaDescription } from '~app/_metadata'
 import { getPostsByAuthorSlug } from '~website/_lib/ghost'
 import { AuthorArchive } from '~website/blog/_components/author-archive'
-import { parsePageParam } from '~website/blog/_utils/page-param'
+import {
+  parsePageParam,
+  resolvePageParam,
+} from '~website/blog/_utils/page-param'
 
 export const revalidate = 3600 // 1 hour
 export const dynamicParams = true
@@ -39,11 +41,7 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function BlogAuthorArchivePage(props: Props) {
   const { slug, page: pageParam } = await props.params
-  const page = parsePageParam(pageParam)
-
-  if (!page) {
-    notFound()
-  }
+  const page = resolvePageParam(pageParam, `/blog/author/${slug}`)
 
   return <AuthorArchive slug={slug} page={page} />
 }
