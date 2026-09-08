@@ -48,19 +48,32 @@ const ghostLive = GhostContentAPI({
 })
 
 /**
- * Ghost answering "no such post" is a 404 the route should render.
+ * The answers Ghost gives about the slug itself, as opposed to a failed call.
  *
- * Anything else, a 429 under crawl load, a 5xx, a network blip, is a failed
- * call. Treating those as "not found" turns a momentary Ghost outage into a
- * `notFound()` that Next then caches for the route's whole revalidate window,
- * so a crawler that arrives during the blip sees a 404 for the next hour.
+ * 404 is the ordinary miss. 422 is Ghost refusing the slug against its own
+ * `isSlug` validation, which is what a slug carrying a dot, an uppercase
+ * letter or a space gets: `/blog/run-prater-beacon-node.sh` is a filename a
+ * crawler lifted out of a code block, not a post that might exist later.
+ * Both are permanent answers about that URL, so both are the 404 to render.
+ */
+const NO_SUCH_POST_STATUS_CODES = [404, 422]
+
+/**
+ * Anything outside {@link NO_SUCH_POST_STATUS_CODES}, a 429 under crawl load,
+ * a 5xx, a network blip, is a failed call. Treating those as "not found" turns
+ * a momentary Ghost outage into a `notFound()` that Next then caches for the
+ * route's whole revalidate window, so a crawler that arrives during the blip
+ * sees a 404 for the next hour.
  */
 function isGhostNotFoundError(error: unknown): boolean {
+  if (typeof error !== 'object' || error === null || !('statusCode' in error)) {
+    return false
+  }
+
+  const { statusCode } = error as { statusCode?: number }
+
   return (
-    typeof error === 'object' &&
-    error !== null &&
-    'statusCode' in error &&
-    (error as { statusCode?: number }).statusCode === 404
+    statusCode !== undefined && NO_SUCH_POST_STATUS_CODES.includes(statusCode)
   )
 }
 
