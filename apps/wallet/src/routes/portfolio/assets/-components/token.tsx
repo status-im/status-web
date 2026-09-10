@@ -45,6 +45,7 @@ import { Interface, parseUnits } from 'ethers'
 import { WatchOnlyActionTooltip } from '@/components/watch-only-action-tooltip'
 import { useEthBalance } from '@/hooks/use-eth-balance'
 import { useGasFees } from '@/hooks/use-gas-fees'
+import { FEATURE_FLAGS } from '@/lib/feature-flags'
 import { renderMarkdown } from '@/lib/markdown'
 import { notifyTransactionSent } from '@/lib/notifications'
 import { parseInsufficientFundsError } from '@/lib/send-transaction'
@@ -484,7 +485,7 @@ const Token = (props: Props) => {
               <span className="block max-w-20 truncate">Buy</span>
             </Button>
           </BuyCryptoDrawer>
-          {fromTokenAddress && (
+          {FEATURE_FLAGS.SWAP && fromTokenAddress && (
             <WatchOnlyActionTooltip
               disabled={isWatchOnlyWallet}
               content={WATCH_ONLY_ACTION_TOOLTIP}
@@ -586,7 +587,7 @@ const Token = (props: Props) => {
               </Button>
             </BuyCryptoDrawer>
 
-            {fromTokenAddress && (
+            {FEATURE_FLAGS.SWAP && fromTokenAddress && (
               <WatchOnlyActionTooltip
                 disabled={isWatchOnlyWallet}
                 content={WATCH_ONLY_ACTION_TOOLTIP}
