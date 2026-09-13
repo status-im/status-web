@@ -28,6 +28,8 @@ export function TokenIcon({ icon, name, symbol, size }: Props) {
       className={tokenIconStyles({ size })}
       fallback={
         <div
+          role="img"
+          aria-label={name}
           className={cx([
             'flex items-center justify-center bg-neutral-20',
             tokenIconStyles({ size }),
