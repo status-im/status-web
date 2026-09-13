@@ -93,6 +93,79 @@ describe('token image loading', () => {
     )
   })
 
+  it('uses the contract address when activity tokens share a symbol', () => {
+    render(
+      <ActivityTokenLogo
+        symbol="UNI"
+        address="0xe6877ea9c28fbdec631ffbc087956d0023a76bf2"
+      />,
+    )
+    expect(container.querySelector('img')?.getAttribute('src')).toBe(
+      'https://s2.coinmarketcap.com/static/img/coins/64x64/4113.png',
+    )
+  })
+
+  it.each(['UNI', 'ETH'])(
+    'does not use the %s symbol to identify an unknown contract',
+    symbol => {
+      render(
+        <ActivityTokenLogo
+          symbol={symbol}
+          address="0x0000000000000000000000000000000000000001"
+        />,
+      )
+      expect(container.querySelector('img')).toBeNull()
+      expect(container.textContent).toBe(symbol)
+    },
+  )
+
+  it.each([
+    ['UNI', uniHttps],
+    ['ETH', 'https://assets.coingecko.com/coins/images/279/large/ethereum.png'],
+  ])(
+    'keeps symbol lookup for %s activity without a contract',
+    (symbol, src) => {
+      render(<ActivityTokenLogo symbol={symbol} address="" />)
+      expect(container.querySelector('img')?.getAttribute('src')).toBe(src)
+    },
+  )
+
+  it.each([
+    [
+      'list',
+      <TokenIcon icon={uni} name="Uniswap" symbol="UNI" size="24" />,
+      'Uniswap',
+    ],
+    ['activity', <ActivityTokenLogo symbol="UNI" address="" />, 'UNI'],
+  ])(
+    'preserves the accessible name after an image fails in the %s',
+    (_, component, name) => {
+      render(component)
+      act(() =>
+        container.querySelector('img')!.dispatchEvent(new Event('error')),
+      )
+      expect(
+        container.querySelector('[role="img"]')?.getAttribute('aria-label'),
+      ).toBe(name)
+    },
+  )
+
+  it('retries when a new source resolves to the same image URL', () => {
+    const icon = (src: string) => (
+      <TokenImage
+        src={src}
+        alt="Uniswap"
+        className="size-6"
+        fallback={<span>Fallback</span>}
+      />
+    )
+    render(icon(uni))
+    act(() => container.querySelector('img')!.dispatchEvent(new Event('error')))
+    expect(container.textContent).toBe('Fallback')
+    render(icon(uniHttps))
+    expect(container.querySelector('img')?.getAttribute('src')).toBe(uniHttps)
+  })
+
   it('shows the existing initial when an icon is missing', () => {
     render(<TokenIcon name="Agave" symbol="AGVE" size="24" />)
     expect(container.querySelector('img')).toBeNull()

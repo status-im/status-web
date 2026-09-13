@@ -10,15 +10,14 @@ const ActivityTokenLogo = (props: ActivityTokenLogoProps) => {
   const { symbol, address } = props
 
   const getActivityTokenLogo = (symbol: string, contractAddress?: string) => {
-    if (symbol === 'ETH') {
+    if (!contractAddress && symbol === 'ETH') {
       return 'https://assets.coingecko.com/coins/images/279/large/ethereum.png'
     }
 
-    const token = erc20TokenList.tokens.find(
-      token =>
-        token.symbol === symbol ||
-        (contractAddress &&
-          token.address.toLowerCase() === contractAddress.toLowerCase()),
+    const token = erc20TokenList.tokens.find(token =>
+      contractAddress
+        ? token.address.toLowerCase() === contractAddress.toLowerCase()
+        : token.symbol === symbol,
     )
 
     return token?.logoURI ?? ''
@@ -32,7 +31,11 @@ const ActivityTokenLogo = (props: ActivityTokenLogoProps) => {
       alt={symbol}
       src={src}
       fallback={
-        <div className="flex size-8 flex-shrink-0 items-center justify-center rounded-full bg-neutral-10 text-11 font-600 text-neutral-50">
+        <div
+          role="img"
+          aria-label={symbol}
+          className="flex size-8 flex-shrink-0 items-center justify-center rounded-full bg-neutral-10 text-11 font-600 text-neutral-50"
+        >
           {symbol.slice(0, 4).toUpperCase()}
         </div>
       }

@@ -43,6 +43,6 @@ function ImageWithFallback({ src, alt, className, fallback }: Props) {
 export function TokenImage(props: Props) {
   const src = resolveIconUrl(props.src)
 
-  // Remount for a different URL so a previous failure does not hide the next icon.
-  return <ImageWithFallback key={src} {...props} src={src} />
+  // Retry each incoming URL change, even if it resolves to the same image URL.
+  return <ImageWithFallback key={props.src} {...props} src={src} />
 }
