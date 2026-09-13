@@ -1,5 +1,7 @@
 import { cva, cx } from 'class-variance-authority'
 
+import { TokenImage } from './token-image'
+
 type Props = {
   icon?: string
   name: string
@@ -16,29 +18,24 @@ const tokenIconStyles = cva('rounded-full bg-neutral-10', {
   },
 })
 
-function resolveIconUrl(icon: string): string {
-  if (icon.startsWith('ipfs://')) {
-    const cid = icon.replace('ipfs://', '')
-    return `https://ipfs.io/ipfs/${cid}`
-  }
-  return icon
-}
-
 export function TokenIcon({ icon, name, symbol, size }: Props) {
   const initial = (symbol || name || '?').charAt(0).toUpperCase()
-  if (icon) {
-    const src = resolveIconUrl(icon)
-    return <img src={src} alt={name} className={tokenIconStyles({ size })} />
-  }
 
   return (
-    <div
-      className={cx([
-        'flex items-center justify-center bg-neutral-20',
-        tokenIconStyles({ size }),
-      ])}
-    >
-      <span className="font-semibold text-neutral-40">{initial}</span>
-    </div>
+    <TokenImage
+      src={icon}
+      alt={name}
+      className={tokenIconStyles({ size })}
+      fallback={
+        <div
+          className={cx([
+            'flex items-center justify-center bg-neutral-20',
+            tokenIconStyles({ size }),
+          ])}
+        >
+          <span className="font-semibold text-neutral-40">{initial}</span>
+        </div>
+      }
+    />
   )
 }
