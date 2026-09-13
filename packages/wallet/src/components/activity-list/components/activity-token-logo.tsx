@@ -1,4 +1,5 @@
 import erc20TokenList from '../../../constants/erc20.json'
+import { TokenImage } from '../../token-icon/token-image'
 
 type ActivityTokenLogoProps = {
   symbol: string
@@ -25,19 +26,16 @@ const ActivityTokenLogo = (props: ActivityTokenLogoProps) => {
 
   const src = getActivityTokenLogo(symbol, address)
 
-  if (!src) {
-    return (
-      <div className="flex size-8 flex-shrink-0 items-center justify-center rounded-full bg-neutral-10 text-11 font-600 text-neutral-50">
-        {symbol.slice(0, 4).toUpperCase()}
-      </div>
-    )
-  }
-
   return (
-    <img
+    <TokenImage
       className="size-8 flex-shrink-0 rounded-full bg-neutral-10"
       alt={symbol}
       src={src}
+      fallback={
+        <div className="flex size-8 flex-shrink-0 items-center justify-center rounded-full bg-neutral-10 text-11 font-600 text-neutral-50">
+          {symbol.slice(0, 4).toUpperCase()}
+        </div>
+      }
     />
   )
 }

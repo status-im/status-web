@@ -1,5 +1,7 @@
 import { cx } from 'class-variance-authority'
 
+import { TokenImage } from '../token-icon/token-image'
+
 type Props = {
   variant?: 'default' | 'small'
   name: string
@@ -12,10 +14,19 @@ const TokenLogo = (props: Props) => {
 
   return (
     <div className="flex items-center gap-1.5 pb-0">
-      <img
+      <TokenImage
         className="size-5 flex-shrink-0 rounded-full bg-neutral-10"
         alt={name}
         src={icon}
+        fallback={
+          <div
+            role="img"
+            aria-label={name}
+            className="flex size-5 flex-shrink-0 items-center justify-center rounded-full bg-neutral-10 text-11 text-neutral-50"
+          >
+            {(ticker || name || '?').charAt(0).toUpperCase()}
+          </div>
+        }
       />
       <div
         className={cx([
