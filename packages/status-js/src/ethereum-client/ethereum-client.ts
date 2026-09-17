@@ -6,8 +6,12 @@ import { publicKeyToETHAddress } from '../utils/public-key-to-eth-address'
 export class EthereumClient {
   #provider: ethers.JsonRpcApiProvider
 
-  constructor(url: string) {
-    this.#provider = new ethers.JsonRpcProvider(url)
+  constructor(url: string, chainId: number) {
+    // Without a static network ethers retries `eth_chainId` forever and never
+    // dispatches queued requests, so a rejected RPC would hang every call.
+    this.#provider = new ethers.JsonRpcProvider(url, chainId, {
+      staticNetwork: true,
+    })
   }
 
   stop() {

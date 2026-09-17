@@ -47,6 +47,9 @@ type HandledWakuMessage = {
   payload: Uint8Array
 }
 
+/** Thrown by a decode callback to stop querying the remaining messages and shards. */
+class StopFetch extends Error {}
+
 export interface RequestClientOptions {
   ethProviderApiKey: string
   environment?: 'development' | 'preview' | 'production'
@@ -164,7 +167,7 @@ class RequestClient {
         return
       }
 
-      const client = new EthereumClient(url + this.#ethProviderApiKey)
+      const client = new EthereumClient(url + this.#ethProviderApiKey, chainId)
 
       return this.#ethereumClients.set(chainId, client).get(chainId)
     }
@@ -222,7 +225,10 @@ class RequestClient {
     const contentTopic = idToContentTopic(communityPublicKey)
     const symmetricKey = await generateKeyFromPassword(communityPublicKey)
 
-    return this.fetchLatest(contentTopic, symmetricKey, {
+    const ownerPublicKeys = new Map<number, Promise<string | undefined>>()
+    let ownerUnresolved = false
+
+    const description = await this.fetchLatest(contentTopic, symmetricKey, {
       decode: async message => {
         if (
           message.type !== ApplicationMetadataMessage_Type.COMMUNITY_DESCRIPTION
@@ -254,29 +260,28 @@ class RequestClient {
         if (ownerTokenPermission) {
           const criteria = ownerTokenPermission.tokenCriteria[0]
           const contracts = criteria?.contractAddresses
-          const chainId = Object.keys(contracts)[0]
+          const chainId = Number(Object.keys(contracts)[0])
 
           if (!chainId) {
-            return
+            ownerUnresolved = true
+            throw new StopFetch()
           }
 
-          const providerUrl = this.#ethProviderURLs[Number(chainId)]
-
-          if (!providerUrl) {
-            return
+          // one registry lookup per fetch; every owner-signed description shares it
+          let pendingOwnerPublicKey = ownerPublicKeys.get(chainId)
+          if (!pendingOwnerPublicKey) {
+            pendingOwnerPublicKey = this.resolveOwnerPublicKey(
+              chainId,
+              communityPublicKey,
+            )
+            ownerPublicKeys.set(chainId, pendingOwnerPublicKey)
           }
 
-          const ethereumClient = this.getEthereumClient(Number(chainId))
-
-          if (!ethereumClient) {
-            return
+          const ownerPublicKey = await pendingOwnerPublicKey
+          if (!ownerPublicKey) {
+            ownerUnresolved = true
+            throw new StopFetch()
           }
-
-          const ownerPublicKey = await ethereumClient.resolveOwner(
-            this.#contractAddresses[Number(chainId)]
-              .CommunityOwnerTokenRegistry,
-            communityPublicKey,
-          )
 
           if (ownerPublicKey !== message.signerPublicKey) {
             return
@@ -292,6 +297,30 @@ class RequestClient {
       },
       getClock: description => BigInt(description.clock),
     })
+
+    // descriptions signed by the community key predate token ownership, so
+    // they are stale whenever an owner-signed one could not be verified
+    if (ownerUnresolved) {
+      return
+    }
+
+    return description
+  }
+
+  private resolveOwnerPublicKey = async (
+    chainId: number,
+    /** Compressed */
+    communityPublicKey: string,
+  ): Promise<string | undefined> => {
+    const registryAddress =
+      this.#contractAddresses[chainId]?.CommunityOwnerTokenRegistry
+    const ethereumClient = this.getEthereumClient(chainId)
+
+    if (!registryAddress || !ethereumClient) {
+      return
+    }
+
+    return ethereumClient.resolveOwner(registryAddress, communityPublicKey)
   }
 
   private fetchContactCodeAdvertisement = async (
@@ -389,7 +418,10 @@ class RequestClient {
             break shard
           }
         }
-      } catch {
+      } catch (error) {
+        if (error instanceof StopFetch) {
+          break
+        }
         // Query failed on this shard, try next
       }
     }
