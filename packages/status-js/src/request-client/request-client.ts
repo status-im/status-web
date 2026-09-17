@@ -40,6 +40,13 @@ import type { CommunityInfo } from './map-community'
 import type { UserInfo } from './map-user'
 import type { LightNode } from '@waku/interfaces'
 
+type HandledWakuMessage = {
+  timestamp: Date
+  signerPublicKey: string
+  type: ApplicationMetadataMessage_Type
+  payload: Uint8Array
+}
+
 export interface RequestClientOptions {
   ethProviderApiKey: string
   environment?: 'development' | 'preview' | 'production'
@@ -215,97 +222,76 @@ class RequestClient {
     const contentTopic = idToContentTopic(communityPublicKey)
     const symmetricKey = await generateKeyFromPassword(communityPublicKey)
 
-    for (const shardId of SHARDS) {
-      const decoder = createDecoder(
-        contentTopic,
-        getRoutingInfo(shardId),
-        symmetricKey,
-      )
-      const wakuMessageGenerator = this.waku.store.queryGenerator([decoder])
-      for await (const wakuMessages of wakuMessageGenerator) {
-        for await (const wakuMessage of wakuMessages) {
-          if (!wakuMessage) {
-            continue
-          }
-
-          // handle
-          const message = this.handleWakuMessage(wakuMessage)
-          if (!message) {
-            continue
-          }
-
-          if (
-            message.type !==
-            ApplicationMetadataMessage_Type.COMMUNITY_DESCRIPTION
-          ) {
-            continue
-          }
-
-          // decode
-          const decodedCommunityDescription = fromBinary(
-            CommunityDescriptionSchema,
-            message.payload,
-          )
-
-          // validate
-          if (
-            !isClockValid(
-              BigInt(decodedCommunityDescription.clock),
-              message.timestamp,
-            )
-          ) {
-            continue
-          }
-
-          const ownerTokenPermission = Object.values(
-            decodedCommunityDescription.tokenPermissions,
-          ).find(
-            permission =>
-              permission.type ===
-              CommunityTokenPermission_Type.BECOME_TOKEN_OWNER,
-          )
-          if (ownerTokenPermission) {
-            const criteria = ownerTokenPermission.tokenCriteria[0]
-            const contracts = criteria?.contractAddresses
-            const chainId = Object.keys(contracts)[0]
-
-            if (!chainId) {
-              continue
-            }
-
-            const providerUrl = this.#ethProviderURLs[Number(chainId)]
-
-            if (!providerUrl) {
-              continue
-            }
-
-            const ethereumClient = this.getEthereumClient(Number(chainId))
-
-            if (!ethereumClient) {
-              continue
-            }
-
-            const ownerPublicKey = await ethereumClient.resolveOwner(
-              this.#contractAddresses[Number(chainId)]
-                .CommunityOwnerTokenRegistry,
-              communityPublicKey,
-            )
-
-            if (ownerPublicKey !== message.signerPublicKey) {
-              continue
-            }
-          } else if (
-            communityPublicKey !==
-            `0x${compressPublicKey(message.signerPublicKey)}`
-          ) {
-            continue
-          }
-
-          // stop
-          return decodedCommunityDescription
+    return this.fetchLatest(contentTopic, symmetricKey, {
+      decode: async message => {
+        if (
+          message.type !== ApplicationMetadataMessage_Type.COMMUNITY_DESCRIPTION
+        ) {
+          return
         }
-      }
-    }
+
+        const decodedCommunityDescription = fromBinary(
+          CommunityDescriptionSchema,
+          message.payload,
+        )
+
+        if (
+          !isClockValid(
+            BigInt(decodedCommunityDescription.clock),
+            message.timestamp,
+          )
+        ) {
+          return
+        }
+
+        const ownerTokenPermission = Object.values(
+          decodedCommunityDescription.tokenPermissions,
+        ).find(
+          permission =>
+            permission.type ===
+            CommunityTokenPermission_Type.BECOME_TOKEN_OWNER,
+        )
+        if (ownerTokenPermission) {
+          const criteria = ownerTokenPermission.tokenCriteria[0]
+          const contracts = criteria?.contractAddresses
+          const chainId = Object.keys(contracts)[0]
+
+          if (!chainId) {
+            return
+          }
+
+          const providerUrl = this.#ethProviderURLs[Number(chainId)]
+
+          if (!providerUrl) {
+            return
+          }
+
+          const ethereumClient = this.getEthereumClient(Number(chainId))
+
+          if (!ethereumClient) {
+            return
+          }
+
+          const ownerPublicKey = await ethereumClient.resolveOwner(
+            this.#contractAddresses[Number(chainId)]
+              .CommunityOwnerTokenRegistry,
+            communityPublicKey,
+          )
+
+          if (ownerPublicKey !== message.signerPublicKey) {
+            return
+          }
+        } else if (
+          communityPublicKey !==
+          `0x${compressPublicKey(message.signerPublicKey)}`
+        ) {
+          return
+        }
+
+        return decodedCommunityDescription
+      },
+      getClock: description => BigInt(description.clock),
+    })
   }
 
   private fetchContactCodeAdvertisement = async (
@@ -316,6 +302,58 @@ class RequestClient {
       `${publicKey}-contact-code`,
     )
 
+    return this.fetchLatest(contentTopic, symmetricKey, {
+      decode: async message => {
+        if (
+          message.type !==
+          ApplicationMetadataMessage_Type.CONTACT_CODE_ADVERTISEMENT
+        ) {
+          return
+        }
+
+        const decodedContactCode = fromBinary(
+          ContactCodeAdvertisementSchema,
+          message.payload,
+        )
+
+        if (!decodedContactCode.chatIdentity) {
+          return
+        }
+
+        if (
+          !isClockValid(
+            BigInt(decodedContactCode.chatIdentity.clock),
+            message.timestamp,
+          )
+        ) {
+          return
+        }
+
+        if (publicKey !== message.signerPublicKey) {
+          return
+        }
+
+        return decodedContactCode
+      },
+      getClock: contactCode => BigInt(contactCode.chatIdentity!.clock),
+    })
+  }
+
+  /**
+   * Queries every shard newest-first and returns the valid message with the
+   * highest clock. Only the first valid message per shard is considered, since
+   * store nodes order by receive time and a newer clock is published later.
+   */
+  private fetchLatest = async <T>(
+    contentTopic: string,
+    symmetricKey: Uint8Array,
+    options: {
+      decode: (message: HandledWakuMessage) => Promise<T | undefined>
+      getClock: (decoded: T) => bigint
+    },
+  ): Promise<T | undefined> => {
+    let latest: { decoded: T; clock: bigint } | undefined
+
     for (const shardId of SHARDS) {
       try {
         const decoder = createDecoder(
@@ -323,71 +361,45 @@ class RequestClient {
           getRoutingInfo(shardId),
           symmetricKey,
         )
-        const wakuMessageGenerator = this.waku.store.queryGenerator([decoder])
-        for await (const wakuMessages of wakuMessageGenerator) {
+        const wakuMessageGenerator = this.waku.store.queryGenerator([decoder], {
+          paginationForward: false,
+        })
+
+        shard: for await (const wakuMessages of wakuMessageGenerator) {
           for await (const wakuMessage of wakuMessages) {
             if (!wakuMessage) {
               continue
             }
 
-            // handle
             const message = this.handleWakuMessage(wakuMessage)
-
             if (!message) {
               continue
             }
 
-            if (
-              message.type !==
-              ApplicationMetadataMessage_Type.CONTACT_CODE_ADVERTISEMENT
-            ) {
+            const decoded = await options.decode(message)
+            if (!decoded) {
               continue
             }
 
-            // decode
-            const decodedContactCode = fromBinary(
-              ContactCodeAdvertisementSchema,
-              message.payload,
-            )
-
-            // validate
-            if (!decodedContactCode.chatIdentity) {
-              continue
+            const clock = options.getClock(decoded)
+            if (!latest || clock > latest.clock) {
+              latest = { decoded, clock }
             }
 
-            if (
-              !isClockValid(
-                BigInt(decodedContactCode.chatIdentity.clock),
-                message.timestamp,
-              )
-            ) {
-              continue
-            }
-
-            if (publicKey !== message.signerPublicKey) {
-              continue
-            }
-
-            // return
-            return decodedContactCode
+            break shard
           }
         }
       } catch {
         // Query failed on this shard, try next
       }
     }
+
+    return latest?.decoded
   }
 
   private handleWakuMessage = (
     wakuMessage: DecodedMessage,
-  ):
-    | {
-        timestamp: Date
-        signerPublicKey: string
-        type: ApplicationMetadataMessage_Type
-        payload: Uint8Array
-      }
-    | undefined => {
+  ): HandledWakuMessage | undefined => {
     // validate
     if (!wakuMessage.payload) {
       return
