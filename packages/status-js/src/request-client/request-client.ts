@@ -369,9 +369,9 @@ class RequestClient {
   }
 
   /**
-   * Queries every shard newest-first and returns the valid message with the
-   * highest clock. Only the first valid message per shard is considered, since
-   * store nodes order by receive time and a newer clock is published later.
+   * Queries every shard from its newest page and returns the valid message
+   * with the highest clock. A page is sorted oldest-first regardless of the
+   * pagination direction, so the whole page is evaluated before stopping.
    */
   private fetchLatest = async <T>(
     contentTopic: string,
@@ -394,7 +394,9 @@ class RequestClient {
           paginationForward: false,
         })
 
-        shard: for await (const wakuMessages of wakuMessageGenerator) {
+        for await (const wakuMessages of wakuMessageGenerator) {
+          let found = false
+
           for await (const wakuMessage of wakuMessages) {
             if (!wakuMessage) {
               continue
@@ -415,7 +417,11 @@ class RequestClient {
               latest = { decoded, clock }
             }
 
-            break shard
+            found = true
+          }
+
+          if (found) {
+            break
           }
         }
       } catch (error) {
