@@ -377,6 +377,8 @@ class RequestClient {
    * Queries every shard from its newest page and returns the valid message
    * with the highest clock. A page is sorted oldest-first regardless of the
    * pagination direction, so the whole page is evaluated before stopping.
+   * Older pages are skipped once a page has a valid message: Status clocks
+   * track wall time, so the newest page holds the highest clock in practice.
    */
   private fetchLatest = async <T>(
     contentTopic: string,
