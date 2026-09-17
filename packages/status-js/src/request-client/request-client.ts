@@ -40,6 +40,16 @@ import type { CommunityInfo } from './map-community'
 import type { UserInfo } from './map-user'
 import type { LightNode } from '@waku/interfaces'
 
+type HandledWakuMessage = {
+  timestamp: Date
+  signerPublicKey: string
+  type: ApplicationMetadataMessage_Type
+  payload: Uint8Array
+}
+
+/** Thrown by a decode callback to abort the fetch; `fetchLatest` rethrows it to its caller. */
+class StopFetch extends Error {}
+
 export interface RequestClientOptions {
   ethProviderApiKey: string
   environment?: 'development' | 'preview' | 'production'
@@ -157,7 +167,7 @@ class RequestClient {
         return
       }
 
-      const client = new EthereumClient(url + this.#ethProviderApiKey)
+      const client = new EthereumClient(url + this.#ethProviderApiKey, chainId)
 
       return this.#ethereumClients.set(chainId, client).get(chainId)
     }
@@ -215,46 +225,30 @@ class RequestClient {
     const contentTopic = idToContentTopic(communityPublicKey)
     const symmetricKey = await generateKeyFromPassword(communityPublicKey)
 
-    for (const shardId of SHARDS) {
-      const decoder = createDecoder(
-        contentTopic,
-        getRoutingInfo(shardId),
-        symmetricKey,
-      )
-      const wakuMessageGenerator = this.waku.store.queryGenerator([decoder])
-      for await (const wakuMessages of wakuMessageGenerator) {
-        for await (const wakuMessage of wakuMessages) {
-          if (!wakuMessage) {
-            continue
-          }
+    const ownerPublicKeys = new Map<number, Promise<string | undefined>>()
 
-          // handle
-          const message = this.handleWakuMessage(wakuMessage)
-          if (!message) {
-            continue
-          }
-
+    try {
+      return await this.fetchLatest(contentTopic, symmetricKey, {
+        decode: async message => {
           if (
             message.type !==
             ApplicationMetadataMessage_Type.COMMUNITY_DESCRIPTION
           ) {
-            continue
+            return
           }
 
-          // decode
           const decodedCommunityDescription = fromBinary(
             CommunityDescriptionSchema,
             message.payload,
           )
 
-          // validate
           if (
             !isClockValid(
               BigInt(decodedCommunityDescription.clock),
               message.timestamp,
             )
           ) {
-            continue
+            return
           }
 
           const ownerTokenPermission = Object.values(
@@ -264,48 +258,74 @@ class RequestClient {
               permission.type ===
               CommunityTokenPermission_Type.BECOME_TOKEN_OWNER,
           )
+          // anyone holding the community key can publish to its topic, so an
+          // unverifiable owner claim only invalidates this message, never the fetch
           if (ownerTokenPermission) {
-            const criteria = ownerTokenPermission.tokenCriteria[0]
-            const contracts = criteria?.contractAddresses
-            const chainId = Object.keys(contracts)[0]
+            const contracts =
+              ownerTokenPermission.tokenCriteria[0]?.contractAddresses ?? {}
+            const chainId = Number(Object.keys(contracts)[0])
 
             if (!chainId) {
-              continue
+              return
             }
 
-            const providerUrl = this.#ethProviderURLs[Number(chainId)]
-
-            if (!providerUrl) {
-              continue
+            // one registry lookup per fetch; every owner-signed description shares it
+            let pendingOwnerPublicKey = ownerPublicKeys.get(chainId)
+            if (!pendingOwnerPublicKey) {
+              pendingOwnerPublicKey = this.resolveOwnerPublicKey(
+                chainId,
+                communityPublicKey,
+              )
+              ownerPublicKeys.set(chainId, pendingOwnerPublicKey)
             }
 
-            const ethereumClient = this.getEthereumClient(Number(chainId))
-
-            if (!ethereumClient) {
-              continue
+            let ownerPublicKey: string | undefined
+            try {
+              ownerPublicKey = await pendingOwnerPublicKey
+            } catch {
+              throw new StopFetch()
             }
-
-            const ownerPublicKey = await ethereumClient.resolveOwner(
-              this.#contractAddresses[Number(chainId)]
-                .CommunityOwnerTokenRegistry,
-              communityPublicKey,
-            )
 
             if (ownerPublicKey !== message.signerPublicKey) {
-              continue
+              return
             }
           } else if (
             communityPublicKey !==
             `0x${compressPublicKey(message.signerPublicKey)}`
           ) {
-            continue
+            return
           }
 
-          // stop
           return decodedCommunityDescription
-        }
+        },
+        getClock: description => BigInt(description.clock),
+      })
+    } catch (error) {
+      // descriptions signed by the community key predate token ownership, so
+      // they are stale whenever an owner-signed one could not be verified
+      if (error instanceof StopFetch) {
+        return
       }
+
+      throw error
     }
+  }
+
+  /** Resolves to undefined when the chain has no registry or the community is not registered. */
+  private resolveOwnerPublicKey = async (
+    chainId: number,
+    /** Compressed */
+    communityPublicKey: string,
+  ): Promise<string | undefined> => {
+    const registryAddress =
+      this.#contractAddresses[chainId]?.CommunityOwnerTokenRegistry
+    const ethereumClient = this.getEthereumClient(chainId)
+
+    if (!registryAddress || !ethereumClient) {
+      return
+    }
+
+    return ethereumClient.resolveOwner(registryAddress, communityPublicKey)
   }
 
   private fetchContactCodeAdvertisement = async (
@@ -316,6 +336,60 @@ class RequestClient {
       `${publicKey}-contact-code`,
     )
 
+    return this.fetchLatest(contentTopic, symmetricKey, {
+      decode: async message => {
+        if (
+          message.type !==
+          ApplicationMetadataMessage_Type.CONTACT_CODE_ADVERTISEMENT
+        ) {
+          return
+        }
+
+        const decodedContactCode = fromBinary(
+          ContactCodeAdvertisementSchema,
+          message.payload,
+        )
+
+        if (!decodedContactCode.chatIdentity) {
+          return
+        }
+
+        if (
+          !isClockValid(
+            BigInt(decodedContactCode.chatIdentity.clock),
+            message.timestamp,
+          )
+        ) {
+          return
+        }
+
+        if (publicKey !== message.signerPublicKey) {
+          return
+        }
+
+        return decodedContactCode
+      },
+      getClock: contactCode => BigInt(contactCode.chatIdentity!.clock),
+    })
+  }
+
+  /**
+   * Queries every shard from its newest page and returns the valid message
+   * with the highest clock. A page is sorted oldest-first regardless of the
+   * pagination direction, so the whole page is evaluated before stopping.
+   * Older pages are skipped once a page has a valid message: Status clocks
+   * track wall time, so the newest page holds the highest clock in practice.
+   */
+  private fetchLatest = async <T>(
+    contentTopic: string,
+    symmetricKey: Uint8Array,
+    options: {
+      decode: (message: HandledWakuMessage) => Promise<T | undefined>
+      getClock: (decoded: T) => bigint
+    },
+  ): Promise<T | undefined> => {
+    let latest: { decoded: T; clock: bigint } | undefined
+
     for (const shardId of SHARDS) {
       try {
         const decoder = createDecoder(
@@ -323,71 +397,63 @@ class RequestClient {
           getRoutingInfo(shardId),
           symmetricKey,
         )
-        const wakuMessageGenerator = this.waku.store.queryGenerator([decoder])
+        const wakuMessageGenerator = this.waku.store.queryGenerator([decoder], {
+          paginationForward: false,
+        })
+
         for await (const wakuMessages of wakuMessageGenerator) {
+          let found = false
+
           for await (const wakuMessage of wakuMessages) {
             if (!wakuMessage) {
               continue
             }
 
-            // handle
             const message = this.handleWakuMessage(wakuMessage)
-
             if (!message) {
               continue
             }
 
-            if (
-              message.type !==
-              ApplicationMetadataMessage_Type.CONTACT_CODE_ADVERTISEMENT
-            ) {
+            let decoded: T | undefined
+            try {
+              decoded = await options.decode(message)
+            } catch (error) {
+              if (error instanceof StopFetch) {
+                throw error
+              }
+              // malformed payload
+              continue
+            }
+            if (!decoded) {
               continue
             }
 
-            // decode
-            const decodedContactCode = fromBinary(
-              ContactCodeAdvertisementSchema,
-              message.payload,
-            )
-
-            // validate
-            if (!decodedContactCode.chatIdentity) {
-              continue
+            const clock = options.getClock(decoded)
+            if (!latest || clock > latest.clock) {
+              latest = { decoded, clock }
             }
 
-            if (
-              !isClockValid(
-                BigInt(decodedContactCode.chatIdentity.clock),
-                message.timestamp,
-              )
-            ) {
-              continue
-            }
+            found = true
+          }
 
-            if (publicKey !== message.signerPublicKey) {
-              continue
-            }
-
-            // return
-            return decodedContactCode
+          if (found) {
+            break
           }
         }
-      } catch {
+      } catch (error) {
+        if (error instanceof StopFetch) {
+          throw error
+        }
         // Query failed on this shard, try next
       }
     }
+
+    return latest?.decoded
   }
 
   private handleWakuMessage = (
     wakuMessage: DecodedMessage,
-  ):
-    | {
-        timestamp: Date
-        signerPublicKey: string
-        type: ApplicationMetadataMessage_Type
-        payload: Uint8Array
-      }
-    | undefined => {
+  ): HandledWakuMessage | undefined => {
     // validate
     if (!wakuMessage.payload) {
       return

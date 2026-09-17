@@ -7,7 +7,8 @@ let client: EthereumClient | undefined
 export function getEthereumClient(): EthereumClient | undefined {
   if (!client) {
     client = new EthereumClient(
-      `https://mainnet.infura.io/v3/${serverEnv.INFURA_API_KEY}`
+      `https://mainnet.infura.io/v3/${serverEnv.INFURA_API_KEY}`,
+      1
     )
 
     return client

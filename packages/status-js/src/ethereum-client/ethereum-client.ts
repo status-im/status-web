@@ -6,8 +6,12 @@ import { publicKeyToETHAddress } from '../utils/public-key-to-eth-address'
 export class EthereumClient {
   #provider: ethers.JsonRpcApiProvider
 
-  constructor(url: string) {
-    this.#provider = new ethers.JsonRpcProvider(url)
+  constructor(url: string, chainId: number) {
+    // Without a static network ethers retries `eth_chainId` forever and never
+    // dispatches queued requests, so a rejected RPC would hang every call.
+    this.#provider = new ethers.JsonRpcProvider(url, chainId, {
+      staticNetwork: true,
+    })
   }
 
   stop() {
@@ -49,30 +53,33 @@ export class EthereumClient {
     }
   }
 
+  /**
+   * Resolves to undefined when the registry has no entry for the community.
+   * Rejects on RPC failure so callers can tell "no owner" from "unknown".
+   */
   async resolveOwner(
     registryContractAddress: string,
     communityPublicKey: string,
   ): Promise<string | undefined> {
-    try {
-      const registryContract = new ethers.Contract(
-        registryContractAddress,
-        ['function getEntry(address _communityAddress) view returns (address)'],
-        this.#provider,
-      )
-      const ownerContractAddress = await registryContract.getEntry(
-        publicKeyToETHAddress(communityPublicKey),
-      )
+    const registryContract = new ethers.Contract(
+      registryContractAddress,
+      ['function getEntry(address _communityAddress) view returns (address)'],
+      this.#provider,
+    )
+    const ownerContractAddress: string = await registryContract.getEntry(
+      publicKeyToETHAddress(communityPublicKey),
+    )
 
-      const ownerContract = new ethers.Contract(
-        ownerContractAddress,
-        ['function signerPublicKey() view returns (bytes)'],
-        this.#provider,
-      )
-      const owner = await ownerContract.signerPublicKey()
-
-      return owner
-    } catch {
+    if (ownerContractAddress === ethers.ZeroAddress) {
       return
     }
+
+    const ownerContract = new ethers.Contract(
+      ownerContractAddress,
+      ['function signerPublicKey() view returns (bytes)'],
+      this.#provider,
+    )
+
+    return ownerContract.signerPublicKey()
   }
 }
