@@ -47,7 +47,7 @@ type HandledWakuMessage = {
   payload: Uint8Array
 }
 
-/** Thrown by a decode callback to stop querying the remaining messages and shards. */
+/** Thrown by a decode callback to abort the fetch; `fetchLatest` rethrows it to its caller. */
 class StopFetch extends Error {}
 
 export interface RequestClientOptions {
@@ -226,87 +226,92 @@ class RequestClient {
     const symmetricKey = await generateKeyFromPassword(communityPublicKey)
 
     const ownerPublicKeys = new Map<number, Promise<string | undefined>>()
-    let ownerUnresolved = false
 
-    const description = await this.fetchLatest(contentTopic, symmetricKey, {
-      decode: async message => {
-        if (
-          message.type !== ApplicationMetadataMessage_Type.COMMUNITY_DESCRIPTION
-        ) {
-          return
-        }
-
-        const decodedCommunityDescription = fromBinary(
-          CommunityDescriptionSchema,
-          message.payload,
-        )
-
-        if (
-          !isClockValid(
-            BigInt(decodedCommunityDescription.clock),
-            message.timestamp,
-          )
-        ) {
-          return
-        }
-
-        const ownerTokenPermission = Object.values(
-          decodedCommunityDescription.tokenPermissions,
-        ).find(
-          permission =>
-            permission.type ===
-            CommunityTokenPermission_Type.BECOME_TOKEN_OWNER,
-        )
-        if (ownerTokenPermission) {
-          const criteria = ownerTokenPermission.tokenCriteria[0]
-          const contracts = criteria?.contractAddresses
-          const chainId = Number(Object.keys(contracts)[0])
-
-          if (!chainId) {
-            ownerUnresolved = true
-            throw new StopFetch()
-          }
-
-          // one registry lookup per fetch; every owner-signed description shares it
-          let pendingOwnerPublicKey = ownerPublicKeys.get(chainId)
-          if (!pendingOwnerPublicKey) {
-            pendingOwnerPublicKey = this.resolveOwnerPublicKey(
-              chainId,
-              communityPublicKey,
-            )
-            ownerPublicKeys.set(chainId, pendingOwnerPublicKey)
-          }
-
-          const ownerPublicKey = await pendingOwnerPublicKey
-          if (!ownerPublicKey) {
-            ownerUnresolved = true
-            throw new StopFetch()
-          }
-
-          if (ownerPublicKey !== message.signerPublicKey) {
+    try {
+      return await this.fetchLatest(contentTopic, symmetricKey, {
+        decode: async message => {
+          if (
+            message.type !==
+            ApplicationMetadataMessage_Type.COMMUNITY_DESCRIPTION
+          ) {
             return
           }
-        } else if (
-          communityPublicKey !==
-          `0x${compressPublicKey(message.signerPublicKey)}`
-        ) {
-          return
-        }
 
-        return decodedCommunityDescription
-      },
-      getClock: description => BigInt(description.clock),
-    })
+          const decodedCommunityDescription = fromBinary(
+            CommunityDescriptionSchema,
+            message.payload,
+          )
 
-    // descriptions signed by the community key predate token ownership, so
-    // they are stale whenever an owner-signed one could not be verified
-    if (ownerUnresolved) {
-      return
+          if (
+            !isClockValid(
+              BigInt(decodedCommunityDescription.clock),
+              message.timestamp,
+            )
+          ) {
+            return
+          }
+
+          const ownerTokenPermission = Object.values(
+            decodedCommunityDescription.tokenPermissions,
+          ).find(
+            permission =>
+              permission.type ===
+              CommunityTokenPermission_Type.BECOME_TOKEN_OWNER,
+          )
+          // anyone holding the community key can publish to its topic, so an
+          // unverifiable owner claim only invalidates this message, never the fetch
+          if (ownerTokenPermission) {
+            const contracts =
+              ownerTokenPermission.tokenCriteria[0]?.contractAddresses ?? {}
+            const chainId = Number(Object.keys(contracts)[0])
+
+            if (!chainId) {
+              return
+            }
+
+            // one registry lookup per fetch; every owner-signed description shares it
+            let pendingOwnerPublicKey = ownerPublicKeys.get(chainId)
+            if (!pendingOwnerPublicKey) {
+              pendingOwnerPublicKey = this.resolveOwnerPublicKey(
+                chainId,
+                communityPublicKey,
+              )
+              ownerPublicKeys.set(chainId, pendingOwnerPublicKey)
+            }
+
+            let ownerPublicKey: string | undefined
+            try {
+              ownerPublicKey = await pendingOwnerPublicKey
+            } catch {
+              throw new StopFetch()
+            }
+
+            if (ownerPublicKey !== message.signerPublicKey) {
+              return
+            }
+          } else if (
+            communityPublicKey !==
+            `0x${compressPublicKey(message.signerPublicKey)}`
+          ) {
+            return
+          }
+
+          return decodedCommunityDescription
+        },
+        getClock: description => BigInt(description.clock),
+      })
+    } catch (error) {
+      // descriptions signed by the community key predate token ownership, so
+      // they are stale whenever an owner-signed one could not be verified
+      if (error instanceof StopFetch) {
+        return
+      }
+
+      throw error
     }
-
-    return description
   }
 
+  /** Resolves to undefined when the chain has no registry or the community is not registered. */
   private resolveOwnerPublicKey = async (
     chainId: number,
     /** Compressed */
@@ -426,7 +431,7 @@ class RequestClient {
         }
       } catch (error) {
         if (error instanceof StopFetch) {
-          break
+          throw error
         }
         // Query failed on this shard, try next
       }

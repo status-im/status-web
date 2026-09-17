@@ -53,30 +53,33 @@ export class EthereumClient {
     }
   }
 
+  /**
+   * Resolves to undefined when the registry has no entry for the community.
+   * Rejects on RPC failure so callers can tell "no owner" from "unknown".
+   */
   async resolveOwner(
     registryContractAddress: string,
     communityPublicKey: string,
   ): Promise<string | undefined> {
-    try {
-      const registryContract = new ethers.Contract(
-        registryContractAddress,
-        ['function getEntry(address _communityAddress) view returns (address)'],
-        this.#provider,
-      )
-      const ownerContractAddress = await registryContract.getEntry(
-        publicKeyToETHAddress(communityPublicKey),
-      )
+    const registryContract = new ethers.Contract(
+      registryContractAddress,
+      ['function getEntry(address _communityAddress) view returns (address)'],
+      this.#provider,
+    )
+    const ownerContractAddress: string = await registryContract.getEntry(
+      publicKeyToETHAddress(communityPublicKey),
+    )
 
-      const ownerContract = new ethers.Contract(
-        ownerContractAddress,
-        ['function signerPublicKey() view returns (bytes)'],
-        this.#provider,
-      )
-      const owner = await ownerContract.signerPublicKey()
-
-      return owner
-    } catch {
+    if (ownerContractAddress === ethers.ZeroAddress) {
       return
     }
+
+    const ownerContract = new ethers.Contract(
+      ownerContractAddress,
+      ['function signerPublicKey() view returns (bytes)'],
+      this.#provider,
+    )
+
+    return ownerContract.signerPublicKey()
   }
 }
