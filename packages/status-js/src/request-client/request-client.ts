@@ -412,7 +412,16 @@ class RequestClient {
               continue
             }
 
-            const decoded = await options.decode(message)
+            let decoded: T | undefined
+            try {
+              decoded = await options.decode(message)
+            } catch (error) {
+              if (error instanceof StopFetch) {
+                throw error
+              }
+              // malformed payload
+              continue
+            }
             if (!decoded) {
               continue
             }
