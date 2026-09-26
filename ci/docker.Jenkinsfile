@@ -50,6 +50,13 @@ pipeline {
   }
 
   stages {
+    stage('Submodules') {
+      steps {
+        /* must run before `docker build` to avoid github auth 401 on public repos */
+        sh 'git submodule update --init --recursive apps/status.app/content/specs'
+      }
+    }
+
     stage('Build image') {
       steps {
         script {
