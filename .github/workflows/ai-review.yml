@@ -1,4 +1,4 @@
-# AI PR review. The reviewer lives in acid-info/ai-review -- edit it there.
+# AI PR review. The reviewer lives in acid-info/ai-tools (tools/ai-review); edit it there.
 # Trigger: comment "/ai-review" on any PR. This file must be on the default branch.
 name: AI PR Review
 
@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   review:
-    uses: acid-info/ai-review/.github/workflows/ai-review.yml@v1
+    uses: acid-info/ai-tools/.github/workflows/ai-review.yml@ai-review/v1
     secrets:
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}

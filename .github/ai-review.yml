@@ -1,5 +1,5 @@
-# Per-repo settings for the shared reviewer in acid-info/ai-review.
-# Only extra_ignore, guidelines_files and ignore are settable here -- models,
+# Per-repo settings for the shared reviewer in acid-info/ai-tools (tools/ai-review).
+# Only extra_ignore, guidelines_files and ignore are settable here; models,
 # severity threshold and diff budget are owned centrally.
 
 # Appended to the shared defaults, which already cover lockfiles, **/dist/**,
