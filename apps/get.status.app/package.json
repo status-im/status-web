@@ -35,7 +35,7 @@
     "@vercel/analytics": "^1.2.2",
     "class-variance-authority": "^0.6.0",
     "next": "15.5.27",
-    "next-intl": "^4.6.0",
+    "next-intl": "^4.9.2",
     "next-mdx-remote": "^6.0.0",
     "parallax-controller": "^1.7.1",
     "react": "19.1.2",

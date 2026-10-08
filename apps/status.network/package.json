@@ -33,7 +33,7 @@
     "framer-motion": "^12.0.6",
     "negotiator": "^1.0.0",
     "next": "15.5.27",
-    "next-intl": "^4.6.0",
+    "next-intl": "^4.9.2",
     "next-mdx-remote": "^6.0.0",
     "react": "19.1.2",
     "react-dom": "19.1.2",
