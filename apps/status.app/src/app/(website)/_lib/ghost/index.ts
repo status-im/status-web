@@ -168,7 +168,7 @@ export const getPostsForSearch = async () => {
   }
 }
 
-const RELEASE_TITLE_PATTERN = /\bv\d+\.\d+/
+const RELEASE_TITLE_PATTERN = /\bstatus\s+v?\d+\.\d+/i
 
 export function findLatestReleasePost(posts: PostOrPage[]): PostOrPage | null {
   if (posts.length === 0) return null
