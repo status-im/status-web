@@ -102,7 +102,8 @@
       "oslo@1.0.1": "patches/oslo@1.0.1.patch",
       "@trpc/server@11.1.0": "patches/@trpc__server@11.1.0.patch",
       "@noble/secp256k1@1.7.2": "patches/@noble__secp256k1@1.7.2.patch",
-      "@waku/message-encryption@0.0.38": "patches/@waku__message-encryption@0.0.38.patch"
+      "@waku/message-encryption@0.0.38": "patches/@waku__message-encryption@0.0.38.patch",
+      "next@15.5.27": "patches/next@15.5.27.patch"
     }
   },
   "dependencies": {
