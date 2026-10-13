@@ -1,15 +1,15 @@
 {
-    "timestamp": "2026-10-09T10:31:06Z",
+    "timestamp": "2026-10-13T15:14:42Z",
     "git": {
-        "commit": "88bf870f6221a8b0336ea9418163273ab9d3397c",
+        "commit": "a4d78481821a74b6b3a4dbde24b1b9064f990de6",
         "branch": "origin/develop",
         "url": "git@github.com:status-im/status-web.git"
     },
     "build": {
-        "id": "43",
-        "number": "43",
+        "id": "46",
+        "number": "46",
         "name": "website/dev-get.status.app",
         "slave": "linux-02",
-        "url": "https://ci.infra.status.im/job/website/job/dev-get.status.app/43/"
+        "url": "https://ci.infra.status.im/job/website/job/dev-get.status.app/46/"
     }
 }
