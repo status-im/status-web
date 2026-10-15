@@ -1,0 +1,23 @@
+# Repo-specific tuning for the shared docs sync (acid-info/ai-tools, tools/ai-docs-sync).
+# Read from the target branch (develop). Site content (help centre, legal pages) is not listed.
+doc_paths:
+  - README.md
+  - AGENTS.md
+  - CLAUDE.md
+  - docs/**/*.md
+  - e2e/README.md
+  - apps/*/AGENTS.md
+  - apps/*/README.md
+  - packages/*/AGENTS.md
+  - packages/*/README.md
+
+extra_ignore:
+  - flake.lock
+  - 'packages/status-js/src/protos/*_pb.ts'
+  - 'apps/status.app/src/app/(website)/insights/_graphql/generated/**'
+  - 'packages/community-contracts/abi/**'
+  - 'packages/community-subgraph/abis/**'
+
+guidelines_files:
+  - AGENTS.md
+  - CLAUDE.md
