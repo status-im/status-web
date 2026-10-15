@@ -1,0 +1,40 @@
+# AI docs sync. The tool lives in acid-info/ai-tools (tools/ai-docs-sync); edit it there.
+# Runs on every push to the target branch and maintains one rolling docs PR.
+name: AI Docs Sync
+
+on:
+  push:
+    # List every branch that could be the target. The shared workflow resolves the real one at
+    # run time and exits for the others, so over-listing is harmless.
+    branches: [develop, main, master]
+  workflow_dispatch:
+    inputs:
+      since:
+        description: 'Commit SHA to diff from (backfill / re-run). Defaults to the cursor.'
+        required: false
+      dry_run:
+        description: 'Print the would-be PR instead of pushing it'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  statuses: write
+
+jobs:
+  sync:
+    uses: acid-info/ai-tools/.github/workflows/ai-docs-sync.yml@ai-docs-sync/v1
+    with:
+      # Optional. Forces the target branch. Omitted: `develop` if it exists, else the default
+      # branch. Lives here rather than in .github/docs-sync.yml because the config file is read
+      # from the target branch, so it cannot also choose it.
+      target_branch: ''
+      since: ${{ inputs.since }}
+      dry_run: ${{ inputs.dry_run == true }}
+    secrets:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      # Optional. A fine-grained PAT from a shared bot account. Only needed when the default
+      # branch requires status checks on every PR; see "Secrets".
+      DOCS_SYNC_TOKEN: ${{ secrets.DOCS_SYNC_TOKEN }}
