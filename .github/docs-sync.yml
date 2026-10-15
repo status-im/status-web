@@ -21,3 +21,6 @@ extra_ignore:
 guidelines_files:
   - AGENTS.md
   - CLAUDE.md
+
+reviewers:
+  - '@status-im/web'
