@@ -1,0 +1,19 @@
+# This file overrides the deployment image's root .dockerignore. Scanner tests,
+# submodules, and git metadata must remain available in the image.
+**/node_modules
+**/.next
+**/.turbo
+**/.vercel
+**/.output
+**/dist
+**/build
+**/coverage
+**/playwright-report
+**/test-results
+**/.env
+**/.env.*
+!**/.env.example
+**/*.pem
+**/*.key
+**/*.crt
+.DS_Store
