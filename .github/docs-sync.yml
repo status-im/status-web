@@ -22,5 +22,8 @@ guidelines_files:
   - AGENTS.md
   - CLAUDE.md
 
+# Members of @status-im/web, by login: the Actions token cannot read org teams, so a team request
+# fails with a 422. Keep in sync with the team.
 reviewers:
-  - '@status-im/web'
+  - '@jinhojang6'
+  - '@JulesFiliot'
