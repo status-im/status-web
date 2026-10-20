@@ -13,4 +13,3 @@ extra_ignore:
 
 guidelines_files:
   - AGENTS.md
-  - .cursor/rules/components.mdc

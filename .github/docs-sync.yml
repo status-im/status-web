@@ -3,13 +3,21 @@
 doc_paths:
   - README.md
   - AGENTS.md
-  - CLAUDE.md
   - docs/**/*.md
   - e2e/README.md
-  - apps/*/AGENTS.md
+  - e2e/AGENTS.md
   - apps/*/README.md
-  - packages/*/AGENTS.md
+  - apps/*/AGENTS.md
+  - apps/*/docs/**/*.md
   - packages/*/README.md
+  - packages/*/AGENTS.md
+  - packages/*/docs/**/*.md
+
+# content/ is website copy for end users, not code docs; these globs are defensive.
+never_touch:
+  - 'apps/*/content/**'
+  - 'packages/community-contracts/lib/**'
+  - 'apps/*/docs/research/**'
 
 extra_ignore:
   - flake.lock
@@ -20,7 +28,6 @@ extra_ignore:
 
 guidelines_files:
   - AGENTS.md
-  - CLAUDE.md
 
 # Members of @status-im/web, by login: the Actions token cannot read org teams, so a team request
 # fails with a 422. Keep in sync with the team.

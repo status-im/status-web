@@ -4,9 +4,9 @@ This is the source for <https://status.network> – a [Next.js](https://nextjs.o
 
 ## Prerequisites
 
-*   **[Node.js](https://nodejs.org/en/)** `v22.x`
-*   **[pnpm](https://pnpm.io)** v9.12.x
-*   **[perl](https://www.perl.org/)** v5.36.x (for `postbuild` locale stripping)
+- **[Node.js](https://nodejs.org/en/)** `v22.x`
+- **[pnpm](https://pnpm.io)** v9.12.x
+- **[perl](https://www.perl.org/)** v5.36.x (for `postbuild` locale stripping)
 
 From the **repo root**, install dependencies and submodules:
 
@@ -32,12 +32,12 @@ cd apps/status.network
 vercel env pull .env.local
 ```
 
-| Variable | Required | Purpose |
-| --- | --- | --- |
-| `GHOST_API_URL` | yes | Server fetch at build/dev |
-| `GHOST_API_KEY` | yes | Pre-render `/blog` pages from live Ghost data |
-| `NEXT_PUBLIC_GHOST_API_URL` | yes (same URL as `GHOST_API_URL`) | Client refresh after deploy |
-| `NEXT_PUBLIC_GHOST_API_KEY` | yes (same value as `GHOST_API_KEY`) | Client refresh after deploy |
+| Variable                    | Required                            | Purpose                                       |
+| --------------------------- | ----------------------------------- | --------------------------------------------- |
+| `GHOST_API_URL`             | yes                                 | Server fetch at build/dev                     |
+| `GHOST_API_KEY`             | yes                                 | Pre-render `/blog` pages from live Ghost data |
+| `NEXT_PUBLIC_GHOST_API_URL` | yes (same URL as `GHOST_API_URL`)   | Client refresh after deploy                   |
+| `NEXT_PUBLIC_GHOST_API_KEY` | yes (same value as `GHOST_API_KEY`) | Client refresh after deploy                   |
 
 `pnpm env:check` validates env vars from `.env.local` (runs automatically before `pnpm build`). When Ghost is unavailable at build time, `/blog/[slug]` routes fall back to the committed slug list in `content/network-blog-slugs.json` (update that file when new posts ship).
 
@@ -76,4 +76,4 @@ pnpm start   # serve out/ on port 3002
 
 ## Deploying
 
-Deployment is handled via [`Jenkinsfile.website`](../../Jenkinsfile.website). Jenkins reads the Ghost API key from the `status-network-ghost-api-key` secret-text credential and passes it via `withCredentials` / `withEnv` (not the shell command line) when building `status.network`.
+Deployment is handled via [`ci/website.Jenkinsfile`](../../ci/website.Jenkinsfile). Jenkins reads the Ghost API key from the `status-network-ghost-api-key` secret-text credential and passes it via `withCredentials` / `withEnv` (not the shell command line) when building `status.network`.
