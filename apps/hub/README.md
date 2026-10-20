@@ -1,49 +1,39 @@
 # Status Hub
 
-This is the source for <https://hub.status.network> – a [Next.js](https://nextjs.org/) project with static export.
+Source for the Status Network hub website, <https://hub.status.network>. A [Next.js](https://nextjs.org/) app exported as a static build.
 
-## Prerequisites
+## Run
 
-- **[Node.js](https://nodejs.org/en/)** `v22.x`
-- **[pnpm](https://pnpm.io)** v9.12.x
-- **[perl](https://www.perl.org/)** v5.36.x
+    pnpm --filter hub dev    # http://localhost:3003
 
-## Getting Started
+Run from the repo root. `predev` regenerates the legal "last edited" dates before the server starts.
 
-First, follow the [root README](../../README.md#getting-started) to clone the repo, initialize submodules, and install dependencies.
+## Build
 
-Then, pull environment variables:
+    pnpm --filter hub build   # next build -> out/
+    pnpm --filter hub start   # serve the out/ export
 
-```bash
-  vercel env pull .env.local
-```
+`build` runs the static export (`output: 'export'`). `postbuild` generates the sitemap and strips the default locale prefix.
 
-> \[!NOTE]
-> `NEXT_PUBLIC_STATUS_NETWORK_API_URL`: Base URL for the Status Network API used by the hub for auth, current user (`/auth/me`), karma/sybil (proof-of-work), predeposit vaults APR, and captcha. You can run this API locally by cloning the sn-api repo <https://github.com/status-im/sn-api>. If you do so don't forget to change the value of this variable to the local API's URL.
->
-> `NEXT_PUBLIC_STATUS_API_URL`: Base URL for the Status API used by the hub to fetch token exchange rates (market data).
-> You can run this API locally by running `pnpm dev` the root or in the [api](https://github.com/status-im/status-web/tree/main/apps/api) project. If you do so don't forget to change the value of this variable to `http://localhost:3030`.
+## Environment
 
-Start the development server:
+Secrets are not committed. Pull them locally:
 
-```bash
-pnpm dev
-```
+    vercel env pull .env.local
 
-## Building
+The build validates these variables (see `src/app/_constants/env.client.mjs`):
 
-Build the static export:
+- `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` (required)
+- `NEXT_PUBLIC_STATUS_NETWORK_API_URL` (required, the Status Network API base URL)
+- `NEXT_PUBLIC_STATUS_API_URL` (required, the Status API used for exchange rates and the RPC proxy)
+- `NEXT_PUBLIC_USE_PUZZLE_AUTH`, `NEXT_PUBLIC_RPC_PROXY_URL` (optional)
 
-```bash
-pnpm build
-```
+Committed defaults live in `.env` and `.env.development`.
 
-Preview the static build locally:
+## Deploy
 
-```bash
-pnpm start
-```
+Jenkins builds the export and publishes it with `ghp-import`. `master` deploys `hub.status.network`, `develop` deploys `dev-hub.status.network`. See [deployment](../../docs/deployment.md) and [ci/website.Jenkinsfile](../../ci/website.Jenkinsfile).
 
-## Deploying
+## More
 
-Deployment is handled via [`ci/website.Jenkinsfile`](../../ci/website.Jenkinsfile)
+- [Agent guide](AGENTS.md)

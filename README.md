@@ -1,147 +1,88 @@
-# `status-web`
+# status-web
 
 [![CI](https://github.com/status-im/status-web/actions/workflows/ci.yml/badge.svg)](https://github.com/status-im/status-web/actions/workflows/ci.yml)
 
-Packages for building user interfaces, websites, web applications, dapps, browser extensions, and APIs in the Status ecosystem
+Monorepo for the Status ecosystem: websites, web apps, dapps, browser extensions, shared libraries and the Status API.
 
 ## Packages
 
-| Name                                                   | Deployments                                                                                                          | Builds                                                                                                                              | Description                                                                                                                                                                   |
-| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`@status-im/colors`](./packages/colors)               | [![vercel](https://img.shields.io/badge/vercel-black)](https://status-components.vercel.app/?path=/story/colors)     | [![npm version](https://img.shields.io/npm/v/@status-im/colors.svg)](https://www.npmjs.com/package/@status-im/colors)               | Auto-generated color palette based on our [design system](https://www.figma.com/design/v98g9ZiaSHYUdKWrbFg9eM/Foundations?node-id=619-5995&node-type=canvas&m=dev).           |
-| [`@status-im/icons`](./packages/icons)                 | [![vercel](https://img.shields.io/badge/vercel-black)](https://status-components.vercel.app/?path=/story/icons)      | [![npm version](https://img.shields.io/npm/v/@status-im/icons)](https://www.npmjs.com/package/@status-im/icons)                     | Auto-generated icon library based on our [design system](https://www.figma.com/design/qLLuMLfpGxK9OfpIavwsmK/Iconset?node-id=3239-987&node-type=frame&t=0h8iIiZ3Sf0g4MRV-11). |
-| [`@status-im/components`](./packages/components)       | [![vercel](https://img.shields.io/badge/vercel-black)](https://status-components.vercel.app/?path=/story/components) | [![npm version](https://img.shields.io/npm/v/@status-im/components)](https://www.npmjs.com/package/@status-im/components)           | Component library built with Radix UI, React Aria, Tailwind CSS.                                                                                                              |
-| [`@status-im/js`](./packages/status-js)                |                                                                                                                      | [![npm version](https://img.shields.io/npm/v/@status-im/js)](https://www.npmjs.com/package/@status-im/js)                           |                                                                                                                                                                               |
-| [`@status-im/wallet`](./packages/wallet)               |                                                                                                                      |                                                                                                                                     |
-| [`@status-im/eslint-config`](./packages/eslint-config) |                                                                                                                      | [![npm version](https://img.shields.io/npm/v/@status-im/eslint-config.svg)](https://www.npmjs.com/package/@status-im/eslint-config) | Shared ESLint configuration for consistent code style across projects.                                                                                                        |
+| Name                                                               | Storybook                                                                                                            | Builds                                                                                                                              | Description                                                                      |
+| ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| [`@status-im/colors`](./packages/colors)                           | [![vercel](https://img.shields.io/badge/vercel-black)](https://status-components.vercel.app/?path=/story/colors)     | [![npm version](https://img.shields.io/npm/v/@status-im/colors.svg)](https://www.npmjs.com/package/@status-im/colors)               | Design tokens: color palette generated from the design system.                   |
+| [`@status-im/icons`](./packages/icons)                             | [![vercel](https://img.shields.io/badge/vercel-black)](https://status-components.vercel.app/?path=/story/icons)      | [![npm version](https://img.shields.io/npm/v/@status-im/icons.svg)](https://www.npmjs.com/package/@status-im/icons)                 | Design tokens: icon set generated from the design system.                        |
+| [`@status-im/components`](./packages/components)                   | [![vercel](https://img.shields.io/badge/vercel-black)](https://status-components.vercel.app/?path=/story/components) | [![npm version](https://img.shields.io/npm/v/@status-im/components.svg)](https://www.npmjs.com/package/@status-im/components)       | UI component library built on Radix UI, React Aria and Tailwind CSS.             |
+| [`@status-im/js`](./packages/status-js)                            |                                                                                                                      | [![npm version](https://img.shields.io/npm/v/@status-im/js.svg)](https://www.npmjs.com/package/@status-im/js)                       | Status JS SDK, used by status.app, get.status.app and community-dapp.            |
+| [`@status-im/wallet`](./packages/wallet)                           |                                                                                                                      |                                                                                                                                     | Shared wallet UI, hooks and tRPC data layer (private).                           |
+| [`@status-im/status-network`](./packages/status-network)           |                                                                                                                      |                                                                                                                                     | Shared code for status.network and hub (private).                                |
+| [`@status-im/ethereum-provider`](./packages/ethereum-provider)     |                                                                                                                      |                                                                                                                                     | EIP-1193 provider shared by wallet and connector (public, not published to npm). |
+| [`@status-im/eslint-config`](./packages/eslint-config)             |                                                                                                                      | [![npm version](https://img.shields.io/npm/v/@status-im/eslint-config.svg)](https://www.npmjs.com/package/@status-im/eslint-config) | Shared ESLint configuration.                                                     |
+| [`@status-im/sitemap-utils`](./packages/sitemap-utils)             |                                                                                                                      |                                                                                                                                     | Sitemap helpers for the static exports (private).                                |
+| [`@status-im/community-contracts`](./packages/community-contracts) |                                                                                                                      |                                                                                                                                     | Solidity contracts for the community dapp, built with Foundry (private).         |
 
 ## Apps
 
-| Name                                             | Deployments                                                                                                                                | Builds                                                                                                                   | Description                                                                                                       |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
-| [`./apps/status.app`](./apps/status.app)         | [![vercel](https://img.shields.io/badge/vercel-black)](https://status.app)                                                                 |                                                                                                                          |                                                                                                                   |
-| [`./apps/get.status.app`](./apps/get.status.app) | [![vercel](https://img.shields.io/badge/vercel-black)](https://get.status.app)                                                             |                                                                                                                          | Download-focused subset of status.app (home, apps, legal, security).                                              |
-| [`./apps/status.network`](./apps/status.network) | [![vercel](https://img.shields.io/badge/vercel-black)](https://status.network)                                                             |                                                                                                                          |                                                                                                                   |
-| [`./apps/hub`](./apps/hub)                       | [![vercel](https://img.shields.io/badge/vercel-black)](https://hub.status.network)                                                         |                                                                                                                          |                                                                                                                   |
-| [`./apps/connector`](./apps/connector)           | [![chrome web store](https://img.shields.io/badge/chrome-grey)](https://chromewebstore.google.com/detail/kahehnbpamjplefhpkhafinaodkkenpg) | [![jenkins job](https://img.shields.io/badge/jenkins-grey)](https://ci.status.im/job/status-web/job/main/job/connector/) | Status Desktop Wallet extended to decentralised applications in your browser.                                     |
-| [`./apps/portfolio`](./apps/portfolio)           |                                                                                                                                            |                                                                                                                          |                                                                                                                   |
-| [`./apps/wallet`](./apps/wallet)                 | [![chrome web store](https://img.shields.io/badge/chrome-grey)](https://chromewebstore.google.com/detail/opkfeajbclhjdneghppfnfiannideafj) | [![jenkins job](https://img.shields.io/badge/jenkins-grey)](https://ci.status.im/job/status-web/job/main/job/wallet/)    | Easily view and manage your crypto portfolio in real time — Beta crypto wallet and Web3 portfolio tracker in one. |
-| [`./apps/api`](./apps/api)                       |                                                                                                                                            |                                                                                                                          |                                                                                                                   |
+| Name                                           | Deployments                                                                                                                                | Builds                                                                                                                   | Description                                                         |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------- |
+| [`apps/status.app`](./apps/status.app)         | [![vercel](https://img.shields.io/badge/vercel-black)](https://status.app)                                                                 |                                                                                                                          | Main Status website: help centre, specs, blog and admin. Port 3001. |
+| [`apps/get.status.app`](./apps/get.status.app) | [![vercel](https://img.shields.io/badge/vercel-black)](https://get.status.app)                                                             |                                                                                                                          | Download-focused subset of status.app. Port 3005.                   |
+| [`apps/status.network`](./apps/status.network) | [![vercel](https://img.shields.io/badge/vercel-black)](https://status.network)                                                             |                                                                                                                          | Status Network website. Port 3002.                                  |
+| [`apps/hub`](./apps/hub)                       | [![vercel](https://img.shields.io/badge/vercel-black)](https://hub.status.network)                                                         |                                                                                                                          | Status Network Hub dapp. Port 3003.                                 |
+| [`apps/connector`](./apps/connector)           | [![chrome web store](https://img.shields.io/badge/chrome-grey)](https://chromewebstore.google.com/detail/kahehnbpamjplefhpkhafinaodkkenpg) | [![jenkins job](https://img.shields.io/badge/jenkins-grey)](https://ci.status.im/job/status-web/job/main/job/connector/) | Browser extension connecting dapps to Status Desktop (Plasmo).      |
+| [`apps/portfolio`](./apps/portfolio)           |                                                                                                                                            |                                                                                                                          | Portfolio tracker dapp. Port 3004.                                  |
+| [`apps/wallet`](./apps/wallet)                 | [![chrome web store](https://img.shields.io/badge/chrome-grey)](https://chromewebstore.google.com/detail/opkfeajbclhjdneghppfnfiannideafj) | [![jenkins job](https://img.shields.io/badge/jenkins-grey)](https://ci.status.im/job/status-web/job/main/job/wallet/)    | Crypto wallet browser extension (WXT). Port 4000.                   |
+| [`apps/api`](./apps/api)                       |                                                                                                                                            |                                                                                                                          | Status API: tRPC backend serving the wallet data layer. Port 3030.  |
+| [`apps/community-dapp`](./apps/community-dapp) |                                                                                                                                            |                                                                                                                          | Community directory curator dapp.                                   |
 
-## Prerequisites
+## Other workspaces
 
-Required:
+| Name           | Description                                         |
+| -------------- | --------------------------------------------------- |
+| [`e2e`](./e2e) | Playwright end-to-end tests for the Hub and wallet. |
 
-- **[Node.js](https://nodejs.org/)** v22.x
-- **[pnpm](https://pnpm.io)** v9.12.x
+## Requirements
 
-Optional:
-
-- **[Nix](https://nixos.org/download.html)** 2.32.x
+- [Node.js](https://nodejs.org/) 22 (see `.node-version`)
+- [pnpm](https://pnpm.io) 9.12.3 (see `packageManager` in `package.json`)
+- Optional: [Nix](https://nixos.org/download.html) for `nix develop`
 
 ## Stack
 
-- **Turborepo**: Manages our monorepo and speeds up builds
-- **TypeScript**: Adds type safety to our code
-- **React**: Our main library for building UIs
-- **Radix UI / React Aria**: Provides accessible UI primitives
-- **Tailwind CSS**: Used for styling
-- **Vite**: Our build tool and dev server
-- **Storybook**: For developing and showcasing components
-- **ESLint**: Keeps our code consistent and catches potential issues
-- **Prettier**: Formats our code
+Next.js 15 apps, WXT (wallet extension), Plasmo (connector extension), tRPC, Drizzle ORM, Contentlayer, Tailwind CSS, Vite for packages, Storybook for components, Turborepo, TypeScript, pnpm.
 
 ## Getting Started
 
-1.
+```bash
+git clone https://github.com/status-im/status-web.git
+cd status-web
+git submodule update --init --recursive   # specs, legal and Foundry submodules
+pnpm install
+pnpm build
+pnpm test
+pnpm dev
+```
 
-Clone the repository:
-
-          git clone https://github.com/status-im/status-web.git
-          cd status-web
-          git submodule update --init --recursive
-
-2\. Initialize and update submodules:
-
-          git submodule init
-          git submodule update
-
-> \[!TIP]
-> If submodule URLs have changed (e.g., after a repo migration), sync them first:
->
-> ```bash
-> git submodule sync --recursive
-> git submodule update --init --recursive
-> ```
-
-> \[!TIP]
-> To update all submodules to the latest commit from their remote:
->
-> ```bash
-> git submodule update --remote
-> ```
-
-3.  (Optional) If using Nix, enter development shell:
-
-          nix develop
-
-4.  Install dependencies:
-
-         pnpm install
-
-5.  Build all packages:
-
-         pnpm build
-
-6.  Run tests:
-
-         pnpm test
-
-7.  Start development mode:
-
-         pnpm dev
+Optional: run `nix develop` before `pnpm install` to enter the Nix shell.
 
 ## Contributing
 
-To contribute changes via a pull request:
-
-1.  Fork the repository on GitHub: open [status-im/status-web](https://github.com/status-im/status-web), click "Fork", and create your fork under your account.
-
-2.  Clone your fork and add the official repo as `upstream`:
-
-        git clone https://github.com/YOUR_USERNAME/status-web.git
-        cd status-web
-        git remote add upstream https://github.com/status-im/status-web.git
-        git submodule update --init --recursive
-
-3.  Create a branch, make your changes, then push to your fork:
-
-        git checkout -b your-branch-name
-        # make changes, then:
-        git add .
-        git commit -m "your commit message"
-        git push origin your-branch-name
-
-4.  Open a pull request on GitHub: go to your fork, click "Compare & pull request" for your branch, and open the PR against `status-im/status-web` (base: `main`).
-
-> [!NOTE]
-> Keep your fork in sync before starting new work:
->
-> ```bash
-> git fetch upstream
-> git checkout main
-> git merge upstream/main
-> git push origin main
-> ```
+- Pull requests target the `develop` branch.
+- Read [AGENTS.md](AGENTS.md) for repo rules and the docs layout.
+- Fork the repo, create a branch, and open a PR against `status-im/status-web`.
 
 ## Storybook
 
-To view and interact with the components, you can run Storybook:
-
-    pnpm storybook
-
-This will start the Storybook server, allowing you to browse and test components in isolation.
+```bash
+pnpm storybook
+```
 
 ## Sponsors
 
 This project is sponsored by Browserstack.
+
+## Docs
+
+- [AGENTS.md](AGENTS.md): rules for agents.
+- [docs/README.md](docs/README.md): index of cross-cutting docs.
+- [docs/architecture.md](docs/architecture.md): apps vs packages and content pipelines.
+- [docs/deployment.md](docs/deployment.md): CI, Vercel, extension releases and npm packages.
+- [e2e/README.md](e2e/README.md): how to run the end-to-end tests.

@@ -1,77 +1,47 @@
-# A wallet extension by Status
+# wallet
 
-## Compatibility
+Status Portfolio Wallet: a WXT browser extension for viewing and managing crypto portfolios. A beta
+crypto wallet and Web3 portfolio tracker in one, available on the Chrome Web Store.
 
-Tested with these browsers:
+## Run
 
-- Google Chrome
+    pnpm --filter wallet dev           # Chrome, dev server on http://localhost:4000
+    pnpm --filter wallet dev:chrome    # same as dev
+    pnpm --filter wallet dev:firefox
 
-## Development
+Load the unpacked build from `.output/chrome-mv3` (Chrome) or `.output/firefox-mv3` (Firefox).
 
-### Env
+## Environment
 
-Set environment variables in:
+`WXT_STATUS_API_URL` lives in the committed `.env.development` and `.env.production` files. The
+extension also depends on the API app and the shared wallet package: see `apps/api/.env` and
+`packages/wallet/.env`.
 
-- [`apps/api/.env`](../api/.env)
-- [`packages/wallet/.env`](../../packages/wallet/.env)
+## Release
 
-### Google Chrome
+See [Chrome Web Store release](#chrome-web-store-release).
 
-#### Develop
+## More
 
-Follow [Getting Started](../../README.md#getting-started)
-
-#### Load
-
-Google Chrome > Window > Extensions > enable Developer mode
-
-Google Chrome > Window > Extensions > Load unpacked > select build (.output/chrome-mv3)
-
-> Note: Reloads automatically in development.
-
-> Note: Press Command + Shift + . to show hidden files like `.output/`.
-
-#### Visit
-
-Google Chrome > Extensions > !Status Portfolio Wallet (Beta) > Inspect views > service worker
-
-Google Chrome > Toolbar > Extensions > !Status Portfolio Wallet (Beta)
-
-Google Chrome > Toolbar > Extensions > !Status Portfolio Wallet (Beta) > Open side panel
-
-chrome-extension://\[ID]/page.html#/portfolio
-
-chrome-extension://\[ID]/page.html#/onboarding
-
-### Swap availability
-
-`src/lib/feature-flags.ts` controls Swap (labelled "Exchange" in the UI).
-It is enabled only when WXT's `import.meta.env.MODE` is `development`,
-including standalone development builds used by E2E tests. Production builds
-hide both the token detail action and its sticky header action, including
-their disabled watch-only variants. Chrome's Developer mode toggle does not
-change this build-time flag.
+- [Agent guide](AGENTS.md)
 
 ## Chrome Web Store release
 
-The wallet job linked in the root README uses `ci/Jenkinsfile` to build
-`wallet`, zip `.output/chrome-mv3`, archive the ZIP, and upload the artifact.
-It does not submit or publish the extension to the Chrome Web Store.
+The wallet job in [`ci/Jenkinsfile`](../../ci/Jenkinsfile) builds `wallet`, zips
+`.output/chrome-mv3`, archives the ZIP and uploads the artifact. It does not submit or publish the
+extension to the Chrome Web Store.
 
 To prepare the same production package locally:
 
-```sh
-pnpm install --frozen-lockfile
-pnpm exec turbo run build --filter=wallet
-pnpm --filter wallet zip:chrome
-```
+    pnpm install --frozen-lockfile
+    pnpm exec turbo run build --filter=wallet
+    pnpm --filter wallet zip:chrome
 
-Check the ZIP's manifest version is higher than the published version and
-load the extracted ZIP in a test browser. Verify Exchange is absent from
-both token headers and that Buy, Receive, and Send still appear.
+Check the ZIP's manifest version is higher than the published version and load the extracted ZIP in
+a test browser. Verify Exchange is absent from both token headers and that Buy, Receive and Send
+still appear.
 
-In the existing Web Store item `opkfeajbclhjdneghppfnfiannideafj`, open
-Package and upload the ZIP from `.output/`. Save the draft and verify the
-version and package checks before submitting for review. For manual
-publication after review, turn off automatic publishing in the submission
-dialog. Final submission/publication belongs to the release owner.
+In the existing Web Store item `opkfeajbclhjdneghppfnfiannideafj`, open Package and upload the ZIP
+from `.output/`. Save the draft and verify the version and package checks before submitting for
+review. For manual publication after review, turn off automatic publishing in the submission
+dialog. Final submission and publication belong to the release owner.

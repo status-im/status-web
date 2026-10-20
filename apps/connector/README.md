@@ -1,110 +1,54 @@
-# A wallet connector by Status
+# connector
 
-Status Desktop Wallet extended to decentralized applications in your browser.
+A wallet connector by Status: extends the Status Desktop Wallet to decentralised applications in
+your browser. Built with Plasmo for Chrome, Safari and Firefox.
+
+## Run
+
+    pnpm --filter connector dev           # Chrome (alias of dev:chrome)
+    pnpm --filter connector dev:safari
+    pnpm --filter connector dev:firefox
+
+Load the unpacked Chrome build from `build/chrome-mv3-dev`.
+
+## Build
+
+    pnpm --filter connector build          # Chrome, to build/chrome-mv3-prod
+    pnpm --filter connector build:firefox  # Firefox, also zips the build
 
 ## Compatibility
 
-Depends on:
+Depends on [Status Desktop](https://github.com/status-im/status-app/releases) >= 2.32.x. Tested
+with Google Chrome and Arc. Safari and Firefox Developer Edition are also supported (see below).
 
-*   **[Status Desktop](https://github.com/status-im/status-app/releases)** >=2.32.x
+## Safari
 
-Tested with these browsers:
+    pnpm --filter connector dev:safari
+    xcrun safari-web-extension-converter --no-open --macos-only --swift --project-location ./apps --app-name Status --bundle-identifier im.Status.Status ./build/safari-mv3-dev/
+    xcodebuild -project apps/Status/Status.xcodeproj -scheme Status build
 
-*   Google Chrome
-*   Arc
+Safari does not reload automatically: rebuild and reconvert when adding new files.
 
-## Development
+## Firefox Developer Edition
 
-### Google Chrome
+    pnpm --filter connector dev:firefox
+    pnpm --filter connector build:firefox
 
-#### Develop
-
-```bash
-pnpm dev:chrome
-```
-
-#### Build
-
-```bash
-pnpm build:chrome
-```
-
-#### Load
-
-Google Chrome > Window > Extensions > enable Developer mode
-
-Google Chrome > Window > Extensions > Load unpacked > select build (build/chrome-mv3-dev)
-
-> Note: Reloads automatically in development.
-
-### Safari
-
-#### Develop
-
-```bash
-pnpm dev:safari
-```
-
-#### Convert
-
-```bash
-xcrun safari-web-extension-converter --no-open --macos-only --swift --project-location ./apps --app-name Status --bundle-identifier im.Status.Status ./build/safari-mv3-dev/
-```
-
-#### Build
-
-```bash
-xcodebuild -project apps/Status/Status.xcodeproj -scheme Status build
-```
-
-#### Load
-
-Safari > Settings... > Developer > Allow unsigned extensions
-
-Safari > Settings... > Extensions > check Status
-
-> Note: Does not reload automatically, requires build on change and converting as well if adding new files.
-
-### Firefox Developer Edition
-
-#### Develop
-
-```bash
-pnpm dev:firefox
-```
-
-#### Build
-
-```bash
-pnpm build:firefox
-```
-
-#### Load
-
-https://support.mozilla.org/en-US/kb/add-on-signing-in-firefox#w\_what-are-my-options-if-i-want-to-use-an-unsigned-add-on-advanced-users
-
-Firefox Developer Edition > Tools > Add-ons and Themes > click on gear icon (Tools for all add-ons) > Install Add-on From File... > select build (build/firefox-mv3-prod.zip)
-
-> Note: Does not reload automatically, requires build and load on change.
-
-### Status Desktop
-
-#### Run
-
-##### macOS
-
-```bash
-FLAG_CONNECTOR_ENABLED=1 '/Volumes/Status Desktop/Status.app/Contents/MacOS/nim_status_client'
-```
-
-> Tip: Point to the installer package location without dropping and replacing current app.
+Install the zipped build (`build/firefox-mv3-prod.zip`) from Add-ons and Themes. See the
+[add-on signing guide](https://support.mozilla.org/en-US/kb/add-on-signing-in-firefox).
 
 ## Testing
 
-Download latest build from last merged PR or build from source. To use the extension see the load steps from [Development](#development) section.
-
-### Logging
-
-Browser > Console
+Use the load steps above, then enable logging from the page console:
 
     await connector.enableLogging(true)
+
+To run Status Desktop with the connector enabled on macOS:
+
+    FLAG_CONNECTOR_ENABLED=1 '/Volumes/Status Desktop/Status.app/Contents/MacOS/nim_status_client'
+
+Point the path at the installer package location without replacing the current app.
+
+## More
+
+- [Agent guide](AGENTS.md)

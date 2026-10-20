@@ -1,39 +1,52 @@
-# Status API
+# api
 
-This is the repository for the Status API.
+The hosted tRPC API for Status web apps, served at
+[https://status-api-status-im-web.vercel.app](https://status-api-status-im-web.vercel.app). It is a
+thin Next.js App Router handler that exposes the `apiRouter` from
+[`@status-im/wallet/data`](../../packages/wallet/src/data/api/index.ts) over HTTP, plus a JSON-RPC
+proxy. No UI, no root page.
 
-## Prerequisites
-
-Required:
-
-- **[Node.js](https://nodejs.org/)** v22.x
-- **[pnpm](https://pnpm.io)** v9.12.x
-
-## Getting Started
-Go to the project directory:
+## Run
 
 ```bash
-  cd apps/api
+pnpm --filter api dev        # http://localhost:3030
+pnpm --filter api build
+pnpm --filter api test       # vitest
+pnpm --filter api typecheck  # tsc
 ```
 
-Install dependencies:
+## Environment
+
+Pull the Vercel env set into `.env.local`:
 
 ```bash
-  pnpm install
+vercel env pull .env.local
 ```
 
-Pull environment variables:
+`env:check` validates `.env` against `src/config/env.server.mjs`. The required vars (Infura,
+MercuryO, Alchemy, CoinGecko, and the ETH and market RPC proxy credentials) are listed there.
 
-```bash
-  vercel env pull .env.local
-```
-> [!NOTE]
-> This project is deployed on Vercel at [https://vercel.com/status-im-web/status-api](https://vercel.com/status-im-web/status-api).
-> You can also get the environment variables manually from [there](https://vercel.com/status-im-web/status-api/settings/environment-variables). However this is recommended to pull envs through the Vercel CLI as there are a lot of them.
+## Endpoints
 
+- `POST /api/trpc/<procedure>`: tRPC procedures (`nodes`, `activities`, `assets`, `collectibles`,
+  `config`, `market`, `rpc`) from `apiRouter`.
+- `POST /api/trpc/rpc.proxy?chainId=<id>`: JSON-RPC proxy that translates a JSON-RPC body to tRPC
+  and back, for wallet and hub read traffic.
 
-Start the development server:
+All routes send permissive CORS headers; `vercel.json` caps `app/api/**/*` at `maxDuration` 800.
 
-```bash
-  pnpm dev
-```
+## Consumers
+
+- `apps/wallet` (browser extension): `WXT_STATUS_API_URL`.
+- `apps/hub`: `NEXT_PUBLIC_STATUS_API_URL` (default `http://localhost:3030`) for
+  `market.tokenPrice` and the RPC proxy.
+- `apps/portfolio`: runs the same router in-process via `createAPI` from `@status-im/wallet/data`
+  rather than over HTTP.
+
+## Deploy
+
+Deployed on Vercel as the `status-im-web/status-api` project.
+
+## More
+
+- [Agent guide](AGENTS.md)
