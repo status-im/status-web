@@ -16,7 +16,6 @@ extra_ignore:
   - 'packages/status-js/src/protos/*_pb.ts'
   - 'apps/status.app/src/app/(website)/insights/_graphql/generated/**'
   - 'packages/community-contracts/abi/**'
-  - 'packages/community-subgraph/abis/**'
 
 guidelines_files:
   - AGENTS.md
