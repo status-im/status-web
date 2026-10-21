@@ -26,7 +26,7 @@ Playwright + TypeScript end-to-end tests for the Status Network Hub and the wall
 
 - The `@anvil` fixture redirects RPC by the `?chainId=` query param and deliberately skips `localhost`; the Hub must point `NEXT_PUBLIC_STATUS_API_URL` at a non-localhost host.
 - Default fork URLs are pruning nodes. SNT funding reads historical state, so point `MAINNET_FORK_URL` at an archive provider or those tests fail with historical-state errors.
-- Do not edit `.env`; copy `.env.example` and set values there.
+- Copy `.env.example` to `.env` and set values in `.env` (gitignored). Never put values, especially `WALLET_SEED_PHRASE`, in `.env.example`.
 
 ## Docs
 
