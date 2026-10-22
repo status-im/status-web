@@ -28,9 +28,9 @@ cd apps/get.status.app
 vercel env pull .env.local
 ```
 
-| Variable | Required | Purpose |
-| --- | --- | --- |
-| `CLOUDINARY_API_KEY` / `CLOUDINARY_API_SECRET` | no | `pnpm sync:cloudinary` only |
+| Variable                                       | Required | Purpose                     |
+| ---------------------------------------------- | -------- | --------------------------- |
+| `CLOUDINARY_API_KEY` / `CLOUDINARY_API_SECRET` | no       | `pnpm sync:cloudinary` only |
 
 `pnpm env:check` validates env vars (runs automatically before `pnpm build`).
 
@@ -71,7 +71,7 @@ pnpm --filter get.status.app preview:production
 
 `postbuild` runs `next-sitemap`, strips the default locale prefix from `out/`, and copies `serve.json` for `serve` (`cleanUrls`).
 
-Deploy via [`Jenkinsfile.website`](../../Jenkinsfile.website) with `APP_NAME=get.status.app` (branches `deploy-get-status-app-main` / `deploy-get-status-app-develop`, domains `get.status.app` / `dev.get.status.app`).
+Deploy via [`ci/website.Jenkinsfile`](../../ci/website.Jenkinsfile) with `APP_NAME=get.status.app` (branches `deploy-get-status-app-master` / `deploy-get-status-app-develop`, domains `get.status.app` / `dev-get.status.app`).
 
 ## Shared assets
 

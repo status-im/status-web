@@ -4,9 +4,9 @@ This is the source for <https://hub.status.network> – a [Next.js](https://next
 
 ## Prerequisites
 
-*   **[Node.js](https://nodejs.org/en/)** `v22.x`
-*   **[pnpm](https://pnpm.io)** v9.12.x
-*   **[perl](https://www.perl.org/)** v5.36.x
+- **[Node.js](https://nodejs.org/en/)** `v22.x`
+- **[pnpm](https://pnpm.io)** v9.12.x
+- **[perl](https://www.perl.org/)** v5.36.x
 
 ## Getting Started
 
@@ -46,4 +46,4 @@ pnpm start
 
 ## Deploying
 
-Deployment is handled via [`Jenkinsfile.website`](../../Jenkinsfile.website)
+Deployment is handled via [`ci/website.Jenkinsfile`](../../ci/website.Jenkinsfile)
