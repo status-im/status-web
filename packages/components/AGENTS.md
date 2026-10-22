@@ -1,4 +1,4 @@
-# components
+# packages/components
 
 Rules for agents working in `packages/components`. The root [AGENTS.md](../../AGENTS.md) applies too. `@status-im/components` is the shared component library for the Status apps and sites, consumed through the workspace and also on npm as a public package.
 

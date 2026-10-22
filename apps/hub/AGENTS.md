@@ -1,4 +1,4 @@
-# AGENTS.md
+# apps/hub
 
 Rules for agents working in `apps/hub`. The root [AGENTS.md](../../AGENTS.md) also applies.
 

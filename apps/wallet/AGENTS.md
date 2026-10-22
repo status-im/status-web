@@ -1,4 +1,4 @@
-# AGENTS.md
+# apps/wallet
 
 Rules for agents working in `apps/wallet`. The root `AGENTS.md` also applies.
 

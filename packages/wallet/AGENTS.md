@@ -1,4 +1,4 @@
-# wallet
+# packages/wallet
 
 Rules for agents working in `packages/wallet`. The root [AGENTS.md](../../AGENTS.md) applies too. This is the private package behind the wallet UI and the portfolio data layer; `apps/wallet`, `apps/portfolio` and `apps/api` import it through the workspace.
 

@@ -1,4 +1,4 @@
-# AGENTS.md
+# apps/community-dapp
 
 Rules for agents working in `apps/community-dapp`. The root [AGENTS.md](../../AGENTS.md) also applies.
 

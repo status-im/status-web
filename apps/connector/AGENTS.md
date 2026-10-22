@@ -1,4 +1,4 @@
-# AGENTS.md
+# apps/connector
 
 Rules for agents working in `apps/connector`. The root `AGENTS.md` also applies.
 

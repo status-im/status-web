@@ -1,4 +1,4 @@
-# AGENTS.md
+# apps/status.network
 
 Rules for agents working in `apps/status.network`. The root [AGENTS.md](../../AGENTS.md) also applies.
 

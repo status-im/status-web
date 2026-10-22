@@ -1,4 +1,4 @@
-# AGENTS.md
+# apps/api
 
 Rules for agents working in `apps/api`. The root `AGENTS.md` also applies.
 

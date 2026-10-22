@@ -1,4 +1,4 @@
-# status-js
+# packages/status-js
 
 Rules for agents working in `packages/status-js`. The root [AGENTS.md](../../AGENTS.md) applies too. The folder publishes as `@status-im/js`, a client for Status communities over Waku, with the Status protobuf types and an Ethereum client.
 
