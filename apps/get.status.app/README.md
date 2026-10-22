@@ -1,94 +1,38 @@
 # get.status.app
 
-Scoped download-focused site that reuses [`status.app`](../status.app) components, styles, and page implementations.
+Download-focused marketing site at <https://get.status.app>. It reuses the pages, components and styles of [`status.app`](../status.app), narrowed to the routes that exist in [`src/app`](src/app).
 
-## Pages
+## Run
 
-- `/` — homepage
-- `/apps` — apps
-- `/legal/terms-of-use`
-- `/legal/privacy-policy`
-- `/security`
-
-Navigation and footer only link to routes available on this site (see `src/config/routes.ts`).
+    pnpm --filter get.status.app dev                     # http://localhost:3005
+    pnpm --filter get.status.app build                   # static export into out/
+    pnpm --filter get.status.app preview:production      # build then serve out/ on :3005
+    pnpm --filter get.status.app test:page-source        # assert no status.app marketing copy leaks
 
 ## Environment
 
-Environment variables are defined in this app — not the full `status.app` set.
+Copy `.env.example` to `.env.local`, or pull from Vercel with `vercel env pull .env.local`. `CLOUDINARY_API_KEY` and `CLOUDINARY_API_SECRET` are optional and only used by `sync:cloudinary`. `env:check` runs before `build`.
 
-```bash
-cd apps/get.status.app
-cp .env.example .env.local
-```
+## Deploy
 
-Or pull from Vercel:
+Built and deployed by [`ci/website.Jenkinsfile`](../../ci/website.Jenkinsfile) with `APP_NAME=get.status.app`: branch `deploy-get-status-app-master` publishes get.status.app, `deploy-get-status-app-develop` publishes dev-get.status.app.
 
-```bash
-cd apps/get.status.app
-vercel env pull .env.local
-```
+## Pages
 
-| Variable                                       | Required | Purpose                     |
-| ---------------------------------------------- | -------- | --------------------------- |
-| `CLOUDINARY_API_KEY` / `CLOUDINARY_API_SECRET` | no       | `pnpm sync:cloudinary` only |
-
-`pnpm env:check` validates env vars (runs automatically before `pnpm build`).
-
-## Development
-
-```bash
-pnpm --filter get.status.app dev
-```
-
-Runs on **http://127.0.0.1:3005** (hub uses 3003, status.network uses 3002).
-
-Desktop and APK download buttons fetch the latest GitHub release in the browser on click (1h session cache). App Store and Google Play links go directly to the stores.
+`/`, `/apps`, `/legal/terms-of-use` and `/legal/privacy-policy`, plus the catch-all 404. The header, footer and promo bar come from status.app and check `isGetSite` in `src/config/site-scope.ts` to hide links to pages this site does not have. `src/config/routes.ts` holds the app route list.
 
 ## Analytics
 
-Client-side analytics mirror [`status.app`](../status.app):
+All client-side: Umami scoped to `get.status.app`, Vercel Analytics, and the `trackEvent` calls inside the shared status.app download components. Server-side tracking cannot work in a static export.
 
-- **Umami** — loaded in [`src/app/layout.tsx`](./src/app/layout.tsx) from `https://umami.bi.status.im/script.js`, scoped to `get.status.app` via `data-domains`.
-- **Vercel Analytics** — `<Analytics />` in the root layout.
-- **Custom events** — download clicks call [`trackEvent`](../status.app/src/app/_utils/track.ts) from shared `status.app` components; events are sent to both Vercel Analytics and `window.umami`.
+## Shared with status.app
 
-Unlike `status.app`, there is no server-side Umami tracking here: production builds are static (`output: 'export'`) and desktop/APK downloads resolve in the browser instead of via `/api/download/*`.
+`public` is a symlink to `status.app/public` and `content/legal` holds the get.status.app legal copy. Reused pages resolve status.app code through the path aliases in `next.config.mjs`.
 
-## Static export (self-hosted)
+## Cloudinary
 
-Production builds use `output: 'export'` and write static files to `out/`.
+The site uses the status.app Cloudinary account (`dhgck7ebz`) with its own generated types in `src/app/_components/assets/types.ts`. Upload get-only assets under the `get.status.app/` folder, then refresh with `pnpm --filter get.status.app sync:cloudinary`. The one-time bootstrap from the status.app types is `bootstrap:cloudinary`.
 
-```bash
-pnpm --filter get.status.app build
-pnpm --filter get.status.app start   # serves out/ on port 3005
-```
+## More
 
-Or in one step:
-
-```bash
-pnpm --filter get.status.app preview:production
-```
-
-`postbuild` runs `next-sitemap`, strips the default locale prefix from `out/`, and copies `serve.json` for `serve` (`cleanUrls`).
-
-Deploy via [`ci/website.Jenkinsfile`](../../ci/website.Jenkinsfile) with `APP_NAME=get.status.app` (branches `deploy-get-status-app-master` / `deploy-get-status-app-develop`, domains `get.status.app` / `dev-get.status.app`).
-
-## Shared assets
-
-- `content/legal` — get.status.app–specific legal copy (not shared with `status.app`)
-- `public` → symlink to `status.app/public`
-
-### Cloudinary
-
-Uses the same Cloudinary account and asset ID format as `status.app` (`dhgck7ebz`), but keeps its own generated types in `src/app/_components/assets/types.ts` so new media for this site does not require re-running `status.app`’s sync.
-
-- Reused pages pull IDs from the filtered type union (homepage, apps, download UI, etc.).
-- Upload **get-only** assets under the `get.status.app/` folder in Cloudinary.
-
-```bash
-# One-time bootstrap from status.app types (no API keys)
-pnpm --filter get.status.app bootstrap:cloudinary
-
-# Refresh from Cloudinary (needs CLOUDINARY_* in .env or .env.local)
-pnpm --filter get.status.app sync:cloudinary
-```
+- [Agent guide](AGENTS.md): commands, rules and caveats for coding agents.

@@ -1,147 +1,102 @@
-# `status-web`
+# status-web
 
 [![CI](https://github.com/status-im/status-web/actions/workflows/ci.yml/badge.svg)](https://github.com/status-im/status-web/actions/workflows/ci.yml)
 
-Packages for building user interfaces, websites, web applications, dapps, browser extensions, and APIs in the Status ecosystem
-
-## Packages
-
-| Name                                                   | Deployments                                                                                                          | Builds                                                                                                                              | Description                                                                                                                                                                   |
-| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`@status-im/colors`](./packages/colors)               | [![vercel](https://img.shields.io/badge/vercel-black)](https://status-components.vercel.app/?path=/story/colors)     | [![npm version](https://img.shields.io/npm/v/@status-im/colors.svg)](https://www.npmjs.com/package/@status-im/colors)               | Auto-generated color palette based on our [design system](https://www.figma.com/design/v98g9ZiaSHYUdKWrbFg9eM/Foundations?node-id=619-5995&node-type=canvas&m=dev).           |
-| [`@status-im/icons`](./packages/icons)                 | [![vercel](https://img.shields.io/badge/vercel-black)](https://status-components.vercel.app/?path=/story/icons)      | [![npm version](https://img.shields.io/npm/v/@status-im/icons)](https://www.npmjs.com/package/@status-im/icons)                     | Auto-generated icon library based on our [design system](https://www.figma.com/design/qLLuMLfpGxK9OfpIavwsmK/Iconset?node-id=3239-987&node-type=frame&t=0h8iIiZ3Sf0g4MRV-11). |
-| [`@status-im/components`](./packages/components)       | [![vercel](https://img.shields.io/badge/vercel-black)](https://status-components.vercel.app/?path=/story/components) | [![npm version](https://img.shields.io/npm/v/@status-im/components)](https://www.npmjs.com/package/@status-im/components)           | Component library built with Radix UI, React Aria, Tailwind CSS.                                                                                                              |
-| [`@status-im/js`](./packages/status-js)                |                                                                                                                      | [![npm version](https://img.shields.io/npm/v/@status-im/js)](https://www.npmjs.com/package/@status-im/js)                           |                                                                                                                                                                               |
-| [`@status-im/wallet`](./packages/wallet)               |                                                                                                                      |                                                                                                                                     |
-| [`@status-im/eslint-config`](./packages/eslint-config) |                                                                                                                      | [![npm version](https://img.shields.io/npm/v/@status-im/eslint-config.svg)](https://www.npmjs.com/package/@status-im/eslint-config) | Shared ESLint configuration for consistent code style across projects.                                                                                                        |
+Everything Status runs on the web lives in this monorepo: the status.app and Status Network
+websites, the hub, portfolio and community dapps, the wallet and connector browser extensions, the
+API the wallet reads from, plus the design tokens and components they share. It is one pnpm
+workspace with Turborepo driving the builds.
 
 ## Apps
 
-| Name                                             | Deployments                                                                                                                                | Builds                                                                                                                   | Description                                                                                                       |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
-| [`./apps/status.app`](./apps/status.app)         | [![vercel](https://img.shields.io/badge/vercel-black)](https://status.app)                                                                 |                                                                                                                          |                                                                                                                   |
-| [`./apps/get.status.app`](./apps/get.status.app) | [![vercel](https://img.shields.io/badge/vercel-black)](https://get.status.app)                                                             |                                                                                                                          | Download-focused subset of status.app (home, apps, legal, security).                                              |
-| [`./apps/status.network`](./apps/status.network) | [![vercel](https://img.shields.io/badge/vercel-black)](https://status.network)                                                             |                                                                                                                          |                                                                                                                   |
-| [`./apps/hub`](./apps/hub)                       | [![vercel](https://img.shields.io/badge/vercel-black)](https://hub.status.network)                                                         |                                                                                                                          |                                                                                                                   |
-| [`./apps/connector`](./apps/connector)           | [![chrome web store](https://img.shields.io/badge/chrome-grey)](https://chromewebstore.google.com/detail/kahehnbpamjplefhpkhafinaodkkenpg) | [![jenkins job](https://img.shields.io/badge/jenkins-grey)](https://ci.status.im/job/status-web/job/main/job/connector/) | Status Desktop Wallet extended to decentralised applications in your browser.                                     |
-| [`./apps/portfolio`](./apps/portfolio)           |                                                                                                                                            |                                                                                                                          |                                                                                                                   |
-| [`./apps/wallet`](./apps/wallet)                 | [![chrome web store](https://img.shields.io/badge/chrome-grey)](https://chromewebstore.google.com/detail/opkfeajbclhjdneghppfnfiannideafj) | [![jenkins job](https://img.shields.io/badge/jenkins-grey)](https://ci.status.im/job/status-web/job/main/job/wallet/)    | Easily view and manage your crypto portfolio in real time — Beta crypto wallet and Web3 portfolio tracker in one. |
-| [`./apps/api`](./apps/api)                       |                                                                                                                                            |                                                                                                                          |                                                                                                                   |
+| App                                            | What it is                                                                        | Port |
+| ---------------------------------------------- | --------------------------------------------------------------------------------- | ---- |
+| [`apps/status.app`](./apps/status.app)         | Marketing site, help centre, specs hub, blog and the admin screens behind them.   | 3001 |
+| [`apps/get.status.app`](./apps/get.status.app) | The download pages, cut out of status.app so they stay small.                     | 3005 |
+| [`apps/status.network`](./apps/status.network) | Status Network website; the blog comes from Ghost.                                | 3002 |
+| [`apps/hub`](./apps/hub)                       | Status Network Hub dapp.                                                          | 3003 |
+| [`apps/portfolio`](./apps/portfolio)           | Portfolio tracker for assets and collectibles across addresses and networks.      | 3004 |
+| [`apps/community-dapp`](./apps/community-dapp) | Curator dapp for Status communities, reading the contracts and sharing over Waku. | 8080 |
+| [`apps/wallet`](./apps/wallet)                 | Wallet extension built with WXT.                                                  | 4000 |
+| [`apps/connector`](./apps/connector)           | Extension that hands Status Desktop's wallet to dapps, built with Plasmo.         | -    |
+| [`apps/api`](./apps/api)                       | tRPC API for the wallet data layer, plus a JSON-RPC proxy.                        | 3030 |
 
-## Prerequisites
+Four sites are live on their own domains: [status.app](https://status.app),
+[get.status.app](https://get.status.app), [status.network](https://status.network) and
+[hub.status.network](https://hub.status.network). The extensions are in the Chrome Web Store
+([wallet](https://chromewebstore.google.com/detail/opkfeajbclhjdneghppfnfiannideafj),
+[connector](https://chromewebstore.google.com/detail/kahehnbpamjplefhpkhafinaodkkenpg)) and are built
+by the [wallet](https://ci.status.im/job/status-web/job/main/job/wallet/) and
+[connector](https://ci.status.im/job/status-web/job/main/job/connector/) Jenkins jobs.
 
-Required:
+## Packages
 
-- **[Node.js](https://nodejs.org/)** v22.x
-- **[pnpm](https://pnpm.io)** v9.12.x
+| Package                                                            | What it is                                                            | Ships as                                                                                                                              |
+| ------------------------------------------------------------------ | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| [`@status-im/colors`](./packages/colors)                           | Color tokens generated from the design system.                        | [npm](https://www.npmjs.com/package/@status-im/colors), [Storybook](https://status-components.vercel.app/?path=/story/colors)         |
+| [`@status-im/icons`](./packages/icons)                             | Icon set generated from the design system.                            | [npm](https://www.npmjs.com/package/@status-im/icons), [Storybook](https://status-components.vercel.app/?path=/story/icons)           |
+| [`@status-im/components`](./packages/components)                   | UI components on Radix UI, React Aria and Tailwind CSS.               | [npm](https://www.npmjs.com/package/@status-im/components), [Storybook](https://status-components.vercel.app/?path=/story/components) |
+| [`@status-im/js`](./packages/status-js)                            | Status JS SDK, used by status.app, get.status.app and community-dapp. | [npm](https://www.npmjs.com/package/@status-im/js)                                                                                    |
+| [`@status-im/eslint-config`](./packages/eslint-config)             | Shared ESLint configuration.                                          | [npm](https://www.npmjs.com/package/@status-im/eslint-config)                                                                         |
+| [`@status-im/wallet`](./packages/wallet)                           | Wallet UI, hooks and the tRPC data layer.                             | Private                                                                                                                               |
+| [`@status-im/status-network`](./packages/status-network)           | Code shared by status.network and hub.                                | Private                                                                                                                               |
+| [`@status-im/ethereum-provider`](./packages/ethereum-provider)     | EIP-1193 provider shared by the wallet and connector.                 | Never published                                                                                                                       |
+| [`@status-im/sitemap-utils`](./packages/sitemap-utils)             | Sitemap helpers for the static exports.                               | Private                                                                                                                               |
+| [`@status-im/community-contracts`](./packages/community-contracts) | Solidity contracts for community-dapp, built with Foundry.            | Private                                                                                                                               |
 
-Optional:
+[`e2e`](./e2e) holds the Playwright tests for the hub and the wallet extension.
 
-- **[Nix](https://nixos.org/download.html)** 2.32.x
+The sites and dapps are Next.js 15 and Tailwind CSS, apart from community-dapp, which webpacks a
+styled-components app. The wallet is WXT, the connector is Plasmo, the API is tRPC. status.app
+builds its pages from `content/` through Contentlayer and keeps reporting data in Postgres with
+Drizzle. The packages build with Vite and the components have a Storybook.
 
-## Stack
+## Getting started
 
-- **Turborepo**: Manages our monorepo and speeds up builds
-- **TypeScript**: Adds type safety to our code
-- **React**: Our main library for building UIs
-- **Radix UI / React Aria**: Provides accessible UI primitives
-- **Tailwind CSS**: Used for styling
-- **Vite**: Our build tool and dev server
-- **Storybook**: For developing and showcasing components
-- **ESLint**: Keeps our code consistent and catches potential issues
-- **Prettier**: Formats our code
+You need Node.js 22 (`.node-version` pins 22.17.0) and pnpm 9.12.3 (`packageManager` in
+`package.json`). [Nix](https://nixos.org/download.html) is optional: `nix develop` gives you the
+dev shell with Node 22, pnpm, Foundry and ghp-import.
 
-## Getting Started
+```bash
+git clone https://github.com/status-im/status-web.git
+cd status-web
+git submodule update --init --recursive
+pnpm install
+pnpm build
+pnpm test
+pnpm dev
+```
 
-1.
+The submodules are load-bearing: status.app will not build without `content/specs`, status.network
+needs `content/legal-external` for its legal pages, and `packages/community-contracts` needs the
+Foundry libraries in `lib/`.
 
-Clone the repository:
+`pnpm dev` installs first, then runs every app and `@status-im/*` package in watch mode. Filter it
+when you only care about one app, for example `pnpm --filter hub dev`. `pnpm storybook` opens the
+components.
 
-          git clone https://github.com/status-im/status-web.git
-          cd status-web
-          git submodule update --init --recursive
+Every app reads its own env file. Where the app has a `.env.example`, copy it and fill in the
+values; the app's README lists what is required and where to get it.
 
-2\. Initialize and update submodules:
+## Deploying
 
-          git submodule init
-          git submodule update
-
-> \[!TIP]
-> If submodule URLs have changed (e.g., after a repo migration), sync them first:
->
-> ```bash
-> git submodule sync --recursive
-> git submodule update --init --recursive
-> ```
-
-> \[!TIP]
-> To update all submodules to the latest commit from their remote:
->
-> ```bash
-> git submodule update --remote
-> ```
-
-3.  (Optional) If using Nix, enter development shell:
-
-          nix develop
-
-4.  Install dependencies:
-
-         pnpm install
-
-5.  Build all packages:
-
-         pnpm build
-
-6.  Run tests:
-
-         pnpm test
-
-7.  Start development mode:
-
-         pnpm dev
+Jenkins builds the two extensions, the static exports of hub, status.network and get.status.app,
+and the status.app Docker image. Vercel builds status.app, portfolio, api and community-dapp, and
+previews pull requests. Nothing is published to npm at the moment, so version bumps stay in the
+repo. [docs/deployment.md](docs/deployment.md) has the branches, jobs and credentials.
 
 ## Contributing
 
-To contribute changes via a pull request:
-
-1.  Fork the repository on GitHub: open [status-im/status-web](https://github.com/status-im/status-web), click "Fork", and create your fork under your account.
-
-2.  Clone your fork and add the official repo as `upstream`:
-
-        git clone https://github.com/YOUR_USERNAME/status-web.git
-        cd status-web
-        git remote add upstream https://github.com/status-im/status-web.git
-        git submodule update --init --recursive
-
-3.  Create a branch, make your changes, then push to your fork:
-
-        git checkout -b your-branch-name
-        # make changes, then:
-        git add .
-        git commit -m "your commit message"
-        git push origin your-branch-name
-
-4.  Open a pull request on GitHub: go to your fork, click "Compare & pull request" for your branch, and open the PR against `status-im/status-web` (base: `main`).
-
-> [!NOTE]
-> Keep your fork in sync before starting new work:
->
-> ```bash
-> git fetch upstream
-> git checkout main
-> git merge upstream/main
-> git push origin main
-> ```
-
-## Storybook
-
-To view and interact with the components, you can run Storybook:
-
-    pnpm storybook
-
-This will start the Storybook server, allowing you to browse and test components in isolation.
-
-## Sponsors
+Branch off `develop` and open the pull request against `develop` on `status-im/status-web`. CI runs
+`pnpm build`, `pnpm typecheck`, `pnpm lint`, `pnpm format --check` and `pnpm test`, so run those
+before you push. [AGENTS.md](AGENTS.md) holds the repo rules, including where docs go.
 
 This project is sponsored by Browserstack.
+
+## More docs
+
+- [docs/README.md](docs/README.md): index of the docs that span several apps or packages.
+- [docs/architecture.md](docs/architecture.md): which app uses which package, and how content reaches each site.
+- [docs/deployment.md](docs/deployment.md): Jenkins, Vercel, extension releases and npm.
+- [e2e/README.md](e2e/README.md): running the end-to-end tests.
+- Every app and package README: run and deploy steps for that workspace.

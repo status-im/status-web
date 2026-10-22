@@ -1,49 +1,38 @@
 # Status Hub
 
-This is the source for <https://hub.status.network> – a [Next.js](https://nextjs.org/) project with static export.
+The Status Network hub dapp at <https://hub.status.network>: staking, karma, pre-deposits, the checker, discover and the legal pages. A Next.js app built from [`src/app`](src/app) and exported as a static site.
 
-## Prerequisites
+## Run
 
-- **[Node.js](https://nodejs.org/en/)** `v22.x`
-- **[pnpm](https://pnpm.io)** v9.12.x
-- **[perl](https://www.perl.org/)** v5.36.x
+    pnpm --filter hub dev    # http://localhost:3003
 
-## Getting Started
+Run it from the repo root. `predev` regenerates the "last edited" dates shown on the legal pages before the dev server starts.
 
-First, follow the [root README](../../README.md#getting-started) to clone the repo, initialize submodules, and install dependencies.
+## Build
 
-Then, pull environment variables:
+    pnpm --filter hub build   # static export into out/
+    pnpm --filter hub start   # serve out/ with serve
 
-```bash
-  vercel env pull .env.local
-```
+`next.config.ts` turns on `output: 'export'` for production builds. `postbuild` writes the sitemap and then runs `scripts/strip-default-locale-prefix.sh`, which moves the `en` pages to the root and adds a `page/index.html` alias for each route, so `/checker` works on a plain file server.
 
-> \[!NOTE]
-> `NEXT_PUBLIC_STATUS_NETWORK_API_URL`: Base URL for the Status Network API used by the hub for auth, current user (`/auth/me`), karma/sybil (proof-of-work), predeposit vaults APR, and captcha. You can run this API locally by cloning the sn-api repo <https://github.com/status-im/sn-api>. If you do so don't forget to change the value of this variable to the local API's URL.
->
-> `NEXT_PUBLIC_STATUS_API_URL`: Base URL for the Status API used by the hub to fetch token exchange rates (market data).
-> You can run this API locally by running `pnpm dev` the root or in the [api](https://github.com/status-im/status-web/tree/main/apps/api) project. If you do so don't forget to change the value of this variable to `http://localhost:3030`.
+## Environment
 
-Start the development server:
+`.env` and `.env.development` are committed with local defaults. Pull the real values with `vercel env pull .env.local`.
 
-```bash
-pnpm dev
-```
+`src/app/_constants/env.client.mjs` parses these with zod:
 
-## Building
+| Variable                               | Notes                                        |
+| -------------------------------------- | -------------------------------------------- |
+| `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` | required                                     |
+| `NEXT_PUBLIC_STATUS_NETWORK_API_URL`   | required, base URL of the Status Network API |
+| `NEXT_PUBLIC_STATUS_API_URL`           | required, exchange rates and the RPC proxy   |
+| `NEXT_PUBLIC_USE_PUZZLE_AUTH`          | optional, defaults to `false`                |
+| `NEXT_PUBLIC_RPC_PROXY_URL`            | optional                                     |
 
-Build the static export:
+## Deploy
 
-```bash
-pnpm build
-```
+Jenkins builds the export and pushes `out/` to a deploy branch with `ghp-import`. `master` publishes hub.status.network, `develop` publishes dev-hub.status.network. See [ci/website.Jenkinsfile](../../ci/website.Jenkinsfile) for the pipeline and [docs/deployment.md](../../docs/deployment.md) for the full picture.
 
-Preview the static build locally:
+## More
 
-```bash
-pnpm start
-```
-
-## Deploying
-
-Deployment is handled via [`ci/website.Jenkinsfile`](../../ci/website.Jenkinsfile)
+- [Agent guide](AGENTS.md): commands, rules and caveats for coding agents.

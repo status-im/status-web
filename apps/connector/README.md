@@ -1,110 +1,63 @@
-# A wallet connector by Status
+# connector
 
-Status Desktop Wallet extended to decentralized applications in your browser.
+A wallet connector by Status: it hands the Status Desktop Wallet to decentralised applications in
+your browser. Built with Plasmo, so one codebase covers Chrome, Safari and Firefox.
 
-## Compatibility
-
-Depends on:
-
-*   **[Status Desktop](https://github.com/status-im/status-app/releases)** >=2.32.x
-
-Tested with these browsers:
-
-*   Google Chrome
-*   Arc
-
-## Development
-
-### Google Chrome
-
-#### Develop
+## Run
 
 ```bash
-pnpm dev:chrome
+pnpm --filter connector dev           # Chrome, alias of dev:chrome
+pnpm --filter connector dev:safari
+pnpm --filter connector dev:firefox
+
+pnpm --filter connector build          # Chrome, to build/chrome-mv3-prod
+pnpm --filter connector build:firefox  # Firefox, also zips the build
 ```
 
-#### Build
+Load the unpacked Chrome build from `build/chrome-mv3-dev`.
+
+The connector needs [Status Desktop](https://github.com/status-im/status-app/releases) 2.32.x or
+later. Day to day it is tested in Google Chrome and Arc; Safari and Firefox Developer Edition work
+too, with the extra steps below.
+
+## Safari
 
 ```bash
-pnpm build:chrome
-```
-
-#### Load
-
-Google Chrome > Window > Extensions > enable Developer mode
-
-Google Chrome > Window > Extensions > Load unpacked > select build (build/chrome-mv3-dev)
-
-> Note: Reloads automatically in development.
-
-### Safari
-
-#### Develop
-
-```bash
-pnpm dev:safari
-```
-
-#### Convert
-
-```bash
+pnpm --filter connector dev:safari
 xcrun safari-web-extension-converter --no-open --macos-only --swift --project-location ./apps --app-name Status --bundle-identifier im.Status.Status ./build/safari-mv3-dev/
-```
-
-#### Build
-
-```bash
 xcodebuild -project apps/Status/Status.xcodeproj -scheme Status build
 ```
 
-#### Load
+There is no build script for Safari: the converter writes an Xcode project and `xcodebuild` builds
+it. Safari does not reload the extension either, so rebuild and reconvert whenever you add a file.
 
-Safari > Settings... > Developer > Allow unsigned extensions
-
-Safari > Settings... > Extensions > check Status
-
-> Note: Does not reload automatically, requires build on change and converting as well if adding new files.
-
-### Firefox Developer Edition
-
-#### Develop
+## Firefox Developer Edition
 
 ```bash
-pnpm dev:firefox
+pnpm --filter connector dev:firefox
+pnpm --filter connector build:firefox
 ```
 
-#### Build
+Install the zipped build (`build/firefox-mv3-prod.zip`) from Add-ons and Themes. The
+[add-on signing guide](https://support.mozilla.org/en-US/kb/add-on-signing-in-firefox) covers what
+Firefox expects from the package.
 
-```bash
-pnpm build:firefox
+## Testing
+
+Load the extension as above, open the page console and turn on logging:
+
+```js
+await connector.enableLogging(true)
 ```
 
-#### Load
-
-https://support.mozilla.org/en-US/kb/add-on-signing-in-firefox#w\_what-are-my-options-if-i-want-to-use-an-unsigned-add-on-advanced-users
-
-Firefox Developer Edition > Tools > Add-ons and Themes > click on gear icon (Tools for all add-ons) > Install Add-on From File... > select build (build/firefox-mv3-prod.zip)
-
-> Note: Does not reload automatically, requires build and load on change.
-
-### Status Desktop
-
-#### Run
-
-##### macOS
+To run Status Desktop with the connector flag on, on macOS:
 
 ```bash
 FLAG_CONNECTOR_ENABLED=1 '/Volumes/Status Desktop/Status.app/Contents/MacOS/nim_status_client'
 ```
 
-> Tip: Point to the installer package location without dropping and replacing current app.
+Point that path at the installer package location and leave the app you normally run alone.
 
-## Testing
+## More
 
-Download latest build from last merged PR or build from source. To use the extension see the load steps from [Development](#development) section.
-
-### Logging
-
-Browser > Console
-
-    await connector.enableLogging(true)
+- [Agent guide](AGENTS.md)
