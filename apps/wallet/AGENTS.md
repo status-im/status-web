@@ -33,7 +33,7 @@ secret material (mnemonics, private keys) outside the background service worker.
   `import.meta.env.MODE === 'development'` only, at build time. Do not gate it on runtime Chrome
   state; production builds always hide it.
 
-## Gotchas
+## Caveats
 
 - Env vars live in the committed `.env.development` and `.env.production` (`WXT_STATUS_API_URL`).
   WXT only exposes vars prefixed with `WXT_`.

@@ -25,7 +25,7 @@ safari-web-extension-converter` and build with `xcodebuild` (steps in the README
 - Output dirs: `build/chrome-mv3-dev` (dev), `build/chrome-mv3-prod` (build),
   `build/safari-mv3-dev`, `build/firefox-mv3-prod.zip`.
 
-## Gotchas
+## Caveats
 
 - `package.json` declares React 18.2.0, but the root `pnpm.overrides` (`react: 19.1.2`) overrides
   it, so the app actually runs React 19.1.2 like the rest of the repo.

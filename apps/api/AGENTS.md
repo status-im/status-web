@@ -26,7 +26,7 @@ Hosts the tRPC `apiRouter` from `@status-im/wallet/data` over HTTP, plus a JSON-
 - The API is consumed by `apps/wallet` (`WXT_STATUS_API_URL`) and `apps/hub`
   (`NEXT_PUBLIC_STATUS_API_URL`). Do not break the tRPC response shape (`result.data.json`).
 
-## Gotchas
+## Caveats
 
 - `vercel.json` caps `app/api/**/*` at `maxDuration` 800 seconds on Vercel.
 - CORS is permissive (`Access-Control-Allow-Origin: *`) on purpose; this is a public read layer.

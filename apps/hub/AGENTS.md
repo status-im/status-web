@@ -22,7 +22,7 @@ The Status Network hub website: a Next.js app exported as a static site in produ
 - `NEXT_PUBLIC_*` variables are inlined at build time and validated by `src/app/_constants/env.client.mjs`. Add any new required public variable there.
 - Reuse components, colors and icons from `packages/*` (see the root AGENTS.md).
 
-## Gotchas
+## Caveats
 
 - Images use `unoptimized: true`: the static export has no image optimization service.
 - `pnpm start` serves `out/` via `serve`, which defaults to port 3000. Use `pnpm --filter hub dev` for the app on port 3003.

@@ -27,7 +27,7 @@ Private shared wallet logic and UI used by `apps/wallet`, `apps/portfolio`, `app
   `./constants`, `./utils`, `./data`, `./tailwind.config`) and the matching library entry in
   `vite.config.ts`; keep both in step.
 
-## Gotchas
+## Caveats
 
 - Consumers must add `./node_modules/@status-im/wallet/dist/**/*.js` to their Tailwind content so
   classes in this package are collected (see `apps/wallet/tailwind.config.ts`).

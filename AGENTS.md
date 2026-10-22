@@ -81,7 +81,7 @@ this layout so both stay in step:
 
 - `README.md` (root and every app or package): for humans. What it is, how to run it, where to go
   next. Short. No agent rules.
-- `AGENTS.md` (root and app or package roots only): rules and gotchas for agents. Imperative, no
+- `AGENTS.md` (root and app or package roots only): rules and caveats for agents. Imperative, no
   reference material. Root at most 6,000 characters, others at most 3,500.
 - `docs/` at the root: topics that span more than one app or package. `docs/README.md` is the index.
 - `apps/<name>/docs/`, `packages/<name>/docs/`: detailed reference owned by one app or package,

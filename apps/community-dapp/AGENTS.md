@@ -23,7 +23,7 @@ The community directory curator dApp: SNT holders vote on which communities are 
 - Contract addresses live in `src/config.ts` for preview and production. Development addresses come from env vars set after a local forge deploy (see `docs/local-development.md`).
 - The `test` script is intentionally disabled (a `@waku/utils` libp2p dependency clash). Do not re-enable it without resolving that.
 
-## Gotchas
+## Caveats
 
 - Community data is fetched over Waku via `@status-im/js` `RequestClient`, which needs `INFURA_API_KEY` in every environment, including development.
 - There is no subgraph. `packages/community-subgraph` is a dead scaffold and is not part of this app or the workspace.

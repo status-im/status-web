@@ -23,7 +23,7 @@ The Status Network website: a Next.js app exported as a static site in productio
 - `build:strip-locale` (run in `postbuild`) strips the default locale prefix from `out/`. Update the strip script if the default locale changes.
 - `postbuild` copies `serve.json` into `out/`; keep it in sync with any new rewrite or redirect rules.
 
-## Gotchas
+## Caveats
 
 - `content/` is published site content (legal, the `legal-external` submodule, `karma-tokenomics.md`). Do not treat it as code docs or edit it during docs work.
 - Initialize the submodule before building with real content: `git submodule update --init --recursive apps/status.network/content/legal-external`.

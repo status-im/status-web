@@ -22,7 +22,7 @@ chats and request client, plus Status protobuf types generated from `.proto` sou
 - Keep public exports in `src/index.ts`. The `./encode-url-data` and `./create-url` subpath
   exports map to `src/utils/encode-url-data.ts` and `src/utils/create-url.ts`.
 
-## Gotchas
+## Caveats
 
 - `build:types` runs `tsc ... || true`, so it can pass with type errors; `typecheck` is the real
   check and what CI should gate on.

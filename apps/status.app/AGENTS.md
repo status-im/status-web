@@ -37,7 +37,7 @@ tooling. Port 3001. `content/` is published site content, never code documentati
 - `env:check` runs before builds and via lint-staged on `.env` and the env schema files. Keep the
   Zod schemas in `src/config/env.{server,client}.mjs` in sync with `.env.example`.
 
-## Gotchas
+## Caveats
 
 - `.contentlayer/` and `.contentlayer2/` are generated and gitignored; `predev:next`, `prelint` and
   `build` regenerate them.

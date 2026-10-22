@@ -28,7 +28,7 @@ aliases and builds to a static export served from `out/`. Port 3005.
 - Analytics are client-side only. Do not add server-side tracking: it cannot fire in a static
   export.
 
-## Gotchas
+## Caveats
 
 - `public` is a symlink to `status.app/public`. Keep it a symlink.
 - Reused `status.app` pages resolve through aliases in `next.config.mjs` (`~components`, `~website`,

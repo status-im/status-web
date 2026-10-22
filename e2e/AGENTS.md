@@ -22,7 +22,7 @@ Playwright + TypeScript end-to-end tests for the Status Network Hub and the wall
 - `@wallet` matches the MetaMask Hub flows. The `wallet-flows` project greps `/@wallet(?![\w-])/`, so do not tag a MetaMask flow `@wallet-send` or `@wallet-swap`, or it will be picked up by the wrong project.
 - `@anvil` tests need the Docker forks running. Let `test:anvil` / `test:all` / `test:ci` manage them, or call `anvil:up` first.
 
-## Gotchas
+## Caveats
 
 - The `@anvil` fixture redirects RPC by the `?chainId=` query param and deliberately skips `localhost`; the Hub must point `NEXT_PUBLIC_STATUS_API_URL` at a non-localhost host.
 - Default fork URLs are pruning nodes. SNT funding reads historical state, so point `MAINNET_FORK_URL` at an archive provider or those tests fail with historical-state errors.

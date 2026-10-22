@@ -29,7 +29,7 @@ consuming app.
 - The package is published (`@status-im/components` on npm): public props and exports are API. Do not
   rename or remove them without a deprecation path.
 
-## Gotchas
+## Caveats
 
 - Apps must list `./node_modules/@status-im/components/dist/**/*.js` in their Tailwind `content`, or
   component classes are purged. See [apps/status.app/tailwind.config.ts](../../apps/status.app/tailwind.config.ts).
