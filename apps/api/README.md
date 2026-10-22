@@ -28,8 +28,9 @@ MercuryO, Alchemy, CoinGecko, and the ETH and market RPC proxy credentials) are 
 
 ## Endpoints
 
-- `POST /api/trpc/<procedure>`: tRPC procedures (`nodes`, `activities`, `assets`, `collectibles`,
-  `config`, `market`, `rpc`) from `apiRouter`.
+- `GET /api/trpc/<query>`: tRPC queries (`activities`, `assets`, `collectibles`, `config`,
+  `market`, and the `nodes` read procedures) from `apiRouter`. POST is accepted for queries too.
+- `POST /api/trpc/<mutation>`: tRPC mutations (`nodes.broadcastTransaction`, `rpc.proxy`).
 - `POST /api/trpc/rpc.proxy?chainId=<id>`: JSON-RPC proxy that translates a JSON-RPC body to tRPC
   and back, for wallet and hub read traffic.
 

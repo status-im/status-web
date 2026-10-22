@@ -27,8 +27,8 @@ safari-web-extension-converter` and build with `xcodebuild` (steps in the README
 
 ## Gotchas
 
-- This app pins React 18.2.0 while most of the repo uses React 19.1.2; keep dependencies
-  compatible with 18.
+- `package.json` declares React 18.2.0, but the root `pnpm.overrides` (`react: 19.1.2`) overrides
+  it, so the app actually runs React 19.1.2 like the rest of the repo.
 - Safari and Firefox do not auto-reload; rebuild and reload on every change.
 - `src/contents/provider.ts` sets `window.ethereum`; the injection helpers come from
   `@status-im/ethereum-provider`.

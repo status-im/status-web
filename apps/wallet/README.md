@@ -15,7 +15,8 @@ Load the unpacked build from `.output/chrome-mv3` (Chrome) or `.output/firefox-m
 
 `WXT_STATUS_API_URL` lives in the committed `.env.development` and `.env.production` files. The
 extension also depends on the API app and the shared wallet package: see `apps/api/.env` and
-`packages/wallet/.env`.
+`packages/wallet/.env`. Those tracked `.env` files only define variable names and non-secret
+defaults; put real API keys in the gitignored `.env.local` files instead.
 
 ## Release
 

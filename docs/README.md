@@ -12,5 +12,7 @@ Reference for topics that span more than one app or package in [status-web](..).
 This repo uses `AGENTS.md` only and never a `CLAUDE.md` (Claude Code skips every `AGENTS.md` when a `CLAUDE.md` exists). Known tool limits:
 
 - Claude Code below v2.1.277 reads no `AGENTS.md`.
-- A personal `CLAUDE.local.md` disables `AGENTS.md` for that user; the fix is `instructionFiles: claude-md-and-agents-md` in `~/.claude/settings.json`.
+- A personal `CLAUDE.local.md` disables `AGENTS.md` for that user; fix it by setting
+  `pluginConfigs["cc-plugin-agents-md@builtin"].options.instructionFiles` to
+  `claude-md-and-agents-md` in `~/.claude/settings.json`.
 - VS Code Copilot reads nested `AGENTS.md` files only with `chat.useNestedAgentsMdFiles`.
