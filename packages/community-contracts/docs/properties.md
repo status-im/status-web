@@ -1,15 +1,11 @@
 # Protocol properties and invariants
 
-Below is a list of all documented properties and invariants of this project that must hold true.
+The properties these contracts have to uphold, and the format for recording them. Covers [`contracts/`](../contracts) and the Foundry suite in [`test/`](../test).
 
-- **Property**: Describes the property of the project or protocol that should ultimately be tested and formally verified.
-- **Type**: Properties are split into 5 main types: **Valid State**, **State Transition**, **Variable Transition**,
-  **High-Level Property**, **Unit Test**.
-- **Risk**: One of **High**, **Medium** and **Low**, depending on the property's risk factor.
-- **Tested**: Whether this property has been (fuzz) tested.
+`Property` states one thing that must stay true. `Type` is one of Valid State, State Transition, Variable Transition, High-Level Property or Unit Test. `Risk` is High, Medium or Low. `Tested` says whether a (fuzz) test covers the property today.
 
-| **Property** | **Type** | **Risk** | **Tested** |
-| ------------ | -------- | -------- | ---------- |
-|              |          |          |            |
-|              |          |          |            |
-|              |          |          |            |
+The table is empty: no property has been written down here yet. The suite in [`test/`](../test), 59 tests over the three contracts, is what pins the behaviour down for now. A property earns a row once it is stated as something a test can check, and the row should point at that test once one exists.
+
+| Property | Type | Risk | Tested |
+| -------- | ---- | ---- | ------ |
+|          |      |      |        |

@@ -1,10 +1,10 @@
 # api
 
-The hosted tRPC API for Status web apps, served at
+The hosted tRPC API for the Status web apps, at
 [https://status-api-status-im-web.vercel.app](https://status-api-status-im-web.vercel.app). It is a
-thin Next.js App Router handler that exposes the `apiRouter` from
-[`@status-im/wallet/data`](../../packages/wallet/src/data/api/index.ts) over HTTP, plus a JSON-RPC
-proxy. No UI, no root page.
+thin Next.js App Router handler that serves the `apiRouter` from
+[`@status-im/wallet/data`](../../packages/wallet/src/data/api/index.ts) over HTTP, and answers plain
+JSON-RPC by routing it through the same router. No UI, no root page.
 
 ## Run
 
@@ -17,36 +17,43 @@ pnpm --filter api typecheck  # tsc
 
 ## Environment
 
-Pull the Vercel env set into `.env.local`:
+`.env` is committed with empty defaults. Pull the deployed set into `.env.local`, which is
+gitignored:
 
 ```bash
 vercel env pull .env.local
 ```
 
-`env:check` validates `.env` against `src/config/env.server.mjs`. The required vars (Infura,
-MercuryO, Alchemy, CoinGecko, and the ETH and market RPC proxy credentials) are listed there.
+`src/config/env.server.mjs` has the full list and is imported by `next.config.mjs`, so a missing
+variable fails the build rather than a request. The app needs Infura, MercuryO, Alchemy and
+CoinGecko keys plus credentials for the ETH and market RPC proxies. `pnpm --filter api env:check`
+runs the same schema against `.env` without a build.
 
 ## Endpoints
 
-- `GET /api/trpc/<query>`: tRPC queries (`activities`, `assets`, `collectibles`, `config`,
-  `market`, and the `nodes` read procedures) from `apiRouter`. POST is accepted for queries too.
-- `POST /api/trpc/<mutation>`: tRPC mutations (`nodes.broadcastTransaction`, `rpc.proxy`).
-- `POST /api/trpc/rpc.proxy?chainId=<id>`: JSON-RPC proxy that translates a JSON-RPC body to tRPC
-  and back, for wallet and hub read traffic.
+`GET /api/trpc/<query>` answers queries from `apiRouter`: `activities`, `assets`, `collectibles`,
+`config`, `market`, and the read procedures on `nodes`. `POST` works for queries too.
 
-All routes send permissive CORS headers; `vercel.json` caps `app/api/**/*` at `maxDuration` 800.
+`POST /api/trpc/<mutation>` covers the mutations: `nodes.broadcastTransaction` and `rpc.proxy`.
 
-## Consumers
+`POST /api/trpc/rpc.proxy?chainId=<id>` takes a plain JSON-RPC body, runs it through the tRPC
+mutation and returns JSON-RPC. The wallet and hub use it for chain reads.
 
-- `apps/wallet` (browser extension): `WXT_STATUS_API_URL`.
-- `apps/hub`: `NEXT_PUBLIC_STATUS_API_URL` (default `http://localhost:3030`) for
-  `market.tokenPrice` and the RPC proxy.
-- `apps/portfolio`: runs the same router in-process via `createAPI` from `@status-im/wallet/data`
-  rather than over HTTP.
+CORS is open on purpose, since everything here is public read traffic. Queries are cached for an
+hour unless the procedure is on the no-store list in
+[`route.ts`](src/app/api/trpc/%5Btrpc%5D/route.ts); `vercel.json` caps `app/api/**/*` at
+`maxDuration` 800 seconds.
+
+## Who calls it
+
+`apps/wallet` points `WXT_STATUS_API_URL` here. `apps/hub` uses `NEXT_PUBLIC_STATUS_API_URL`, which
+defaults to `http://localhost:3030` locally, for `market.tokenPrice` and the RPC proxy.
+`apps/portfolio` does not go over HTTP at all: it runs the same router in-process with `createAPI`.
 
 ## Deploy
 
-Deployed on Vercel as the `status-im-web/status-api` project.
+Vercel, project `status-im-web/status-api`. Preview deployments for pull requests from forks come
+from `.github/workflows/preview-deploy.yml`.
 
 ## More
 

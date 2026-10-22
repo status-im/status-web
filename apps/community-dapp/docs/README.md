@@ -2,6 +2,4 @@
 
 Reference for [../README.md](../README.md).
 
-| Doc                                          | Read it when                                 |
-| -------------------------------------------- | -------------------------------------------- |
-| [local-development.md](local-development.md) | You need the Anvil and MetaMask walkthrough. |
+- [local-development.md](local-development.md): run the dapp against a local Anvil chain, deploy the contracts and point MetaMask at them.

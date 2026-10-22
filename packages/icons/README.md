@@ -1,34 +1,44 @@
 # @status-im/icons
 
-The Status icon set as generated React components plus the raw SVGs. Icons are split into five sets,
-each imported from its own subpath. Source SVGs live in [svg/](./svg); the components in `src/` are
-generated from them by [scripts/sync.ts](./scripts/sync.ts) and SVGR.
+The Status icon set as React components plus the raw SVGs they were built from. Icons come in five sets, and each set is its own import path. The components in [src](./src) are generated from [svg](./svg) by SVGR.
 
 ## Install
 
-    pnpm add @status-im/icons
+```bash
+pnpm add @status-im/icons
+```
+
+React 16, 17 or 18 and `react-dom` are peer dependencies.
 
 ## Usage
 
-    import { AddIcon, ArrowLeftIcon } from '@status-im/icons/20'
+```tsx
+import { AddIcon, ArrowLeftIcon } from '@status-im/icons/20'
+```
 
-The root entry `@status-im/icons` throws on import. Import from `@status-im/icons/12`, `/16`, `/20`,
-`/reactions` or `/social` instead. Raw SVGs are also published, e.g. `@status-im/icons/20/add-icon.svg`.
+The sets are `12`, `16`, `20`, `reactions` and `social`, and names follow the file name in PascalCase:
 
-Browse all icons in Storybook: https://status-components.vercel.app/?path=/story/icons
+| Import path                  | Set                         |
+| ---------------------------- | --------------------------- |
+| `@status-im/icons/12`        | 12px UI icons               |
+| `@status-im/icons/16`        | 16px UI icons               |
+| `@status-im/icons/20`        | 20px UI icons, the main set |
+| `@status-im/icons/reactions` | Message reactions           |
+| `@status-im/icons/social`    | Social network logos        |
 
-## Updating icons
+Importing from `@status-im/icons` itself throws, so always name the set. The SVGs are published too: `@status-im/icons/20/add-icon.svg` and so on, if you need one as a file instead of a component.
 
-Two scripts, run in order:
+The sync script turns the Figma `#09101C` fill into `currentColor`, so most icons take their color from the parent's text color. A few keep their own fills. Browse them at https://status-components.vercel.app/?path=/story/icons
 
-    pnpm --filter @status-im/icons sync       # Figma -> svg/
-    pnpm --filter @status-im/icons generate   # svg/ -> src/ (svgr)
+## Updating the icons
 
-`sync` fetches SVGs from the Figma
-[Iconset](https://www.figma.com/design/qLLuMLfpGxK9OfpIavwsmK/Iconset?node-id=3239-987&node-type=frame&m=dev)
-file into `svg/` and prompts for a Figma personal access token. `generate` runs SVGR
-([svgr.config.js](./svgr.config.js)) to build the React components in `src/`. `src/` is generated
-output: never hand-edit it. Change the Figma file, the `svg/` source, or the scripts instead.
+```bash
+pnpm --filter @status-im/icons sync       # Figma -> svg/
+pnpm --filter @status-im/icons generate   # svg/ -> src/
+```
 
-Publishing is currently manual with no automated flow; see
-[../../docs/deployment.md#npm-packages](../../docs/deployment.md#npm-packages).
+`sync` asks for a Figma personal access token and pulls the frames of the [Iconset](https://www.figma.com/design/qLLuMLfpGxK9OfpIavwsmK/Iconset?node-id=3239-987&node-type=frame&m=dev) file into `svg/`, one folder per set. `generate` deletes `src/` and runs SVGR with [svgr.config.js](./svgr.config.js), then lints and formats the result.
+
+Change the Figma file, the SVGs in `svg/` or the two scripts. Never edit `src/` by hand: the next `generate` throws it away.
+
+There is no publish flow: releases happen by hand and have no owner. See [docs/deployment.md](../../docs/deployment.md#npm-packages).

@@ -1,35 +1,31 @@
 # @status-im/colors
 
-The Status design system color palette as plain object exports, generated from Figma. Tokens are
-`rgba()` strings consumed by Tailwind configs and the component library. See [src/index.ts](./src/index.ts).
+The Status color palette as plain objects, one export per palette, generated from Figma. Values are `rgba()` strings, so they go straight into a Tailwind config, a `style` object or a stylesheet. Everything is re-exported from [src/index.ts](./src/index.ts).
 
 ## Install
 
-    pnpm add @status-im/colors
+```bash
+pnpm add @status-im/colors
+```
 
 ## Usage
 
-    import { danger, neutral } from '@status-im/colors'
+```ts
+import { danger, neutral } from '@status-im/colors'
 
-    console.log(neutral['50']) // 'rgba(100 112 132 / 100%)'
+neutral['50'] // 'rgba(100 112 132 / 100%)'
+```
 
-Namespaces exported: `blur`, `customisation`, `danger`, `networks`, `neutral`, `security`, `social`,
-`success`, `white`. Components spread these into their Tailwind config, see
-[../components](../components).
+Nine palettes: `blur`, `customisation`, `danger`, `networks`, `neutral`, `security`, `social`, `success` and `white`. Keys are strings and several contain a slash or a dot (`'2.5'`, `'80/5'`), so use brackets. `customisation` has one level more than the others: a family such as `army`, `sky` or `yellow`, then its shades.
 
-Browse the palette in Storybook: https://status-components.vercel.app/?path=/story/colors
+[`@status-im/components`](../components) spreads the palettes into the Tailwind preset it ships as `@status-im/components/config`, which is how the apps get these colors as classes. Browse the whole palette in Storybook: https://status-components.vercel.app/?path=/story/colors
 
-## Updating tokens
+## Updating the palette
 
-Tokens are generated from the Figma
-[Foundations](https://www.figma.com/design/v98g9ZiaSHYUdKWrbFg9eM/Foundations?node-id=619-5995&node-type=canvas&m=dev)
-file:
+```bash
+pnpm --filter @status-im/colors sync
+```
 
-    pnpm --filter @status-im/colors sync
+The script ([scripts/sync.ts](./scripts/sync.ts)) asks for a Figma personal access token, reads the color styles in the [Foundations](https://www.figma.com/design/v98g9ZiaSHYUdKWrbFg9eM/Foundations?node-id=619-5995&node-type=canvas&m=dev) file, deletes `src/` and writes one file per palette plus a new `src/index.ts`. Anything you change in `src/` by hand is overwritten, so edit the Figma file or the script instead.
 
-The script ([scripts/sync.ts](./scripts/sync.ts)) reads Figma color styles, writes one file per
-namespace into `src/` and regenerates `src/index.ts`. It prompts for a Figma personal access token.
-`src/` is generated output: edit the Figma file or the sync script, not the generated files.
-
-Publishing is currently manual with no automated flow; see
-[../../docs/deployment.md#npm-packages](../../docs/deployment.md#npm-packages).
+There is no publish flow: releases happen by hand and have no owner. See [docs/deployment.md](../../docs/deployment.md#npm-packages).

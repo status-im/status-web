@@ -1,16 +1,18 @@
 # Architecture
 
-How the status-web monorepo is split across [`apps/`](../apps) and [`packages/`](../packages), who consumes each package, and how content flows into the published sites.
+How the status-web monorepo splits into [`apps/`](../apps) and [`packages/`](../packages), which app uses which package, and how content reaches the published sites.
 
-## Apps vs packages
+## Apps and packages
 
-- `apps/*` are deployable products: Next.js websites and dapps, two browser extensions, and the Status API. Each has its own `package.json` and `dev` port (see the root [AGENTS.md](../AGENTS.md) table).
-- `packages/*` are shared libraries, published to npm or kept private. Public ones carry an npm badge in the root [README.md](../README.md); `wallet`, `status-network`, `sitemap-utils` and `community-contracts` are private.
-- `e2e` is a Playwright workspace, not shipped.
+The nine apps are the deployed products: six Next.js apps, the `community-dapp` webpack app, and the `wallet` and `connector` browser extensions. Each starts a dev server on its own port, through its `dev`, `dev:next` or `dev:content` script; the root [AGENTS.md](../AGENTS.md) table lists them.
 
-## Package consumers
+The packages are libraries. `colors`, `icons`, `components`, `js`, `eslint-config` and `ethereum-provider` are public on npm; `wallet`, `status-network`, `sitemap-utils` and `community-contracts` are private. Turborepo builds a package before the apps that depend on it (`"dependsOn": ["^build"]` in [`turbo.json`](../turbo.json)), so `pnpm build` resolves a fresh `dist/`. Starting `next dev` right after editing a package is the usual way to run an app against a stale build.
 
-Mapped from each workspace's `package.json` dependencies:
+`e2e` is a Playwright workspace and ships nothing.
+
+## Who uses which package
+
+Taken from the `dependencies` block of each workspace's `package.json`:
 
 - `@status-im/components`: status.app, status.network, hub, portfolio, wallet, get.status.app.
 - `@status-im/colors`: status.app, status.network, hub, portfolio, wallet, get.status.app, connector.
@@ -19,23 +21,28 @@ Mapped from each workspace's `package.json` dependencies:
 - `@status-im/wallet`: apps/api (the data router), wallet, portfolio, hub.
 - `@status-im/status-network`: status.network, hub.
 - `@status-im/ethereum-provider`: wallet, connector.
+- `@status-im/sitemap-utils`: hub, status.network, get.status.app.
 - `@status-im/community-contracts`: community-dapp.
-- `@status-im/eslint-config`: most apps and packages. `apps/api` and `apps/status.network` use `eslint-config-next`; `apps/community-dapp` has its own config; `community-contracts`, `ethereum-provider` and `sitemap-utils` declare none.
+
+`@status-im/eslint-config` is used by the packages and by most apps. `apps/api` and `apps/status.network` use only `eslint-config-next`, `apps/community-dapp` has its own `eslint.config.mjs`, and `community-contracts`, `ethereum-provider` and `sitemap-utils` declare no ESLint config.
 
 ## Status API and tRPC
 
-[`apps/api`](../apps/api) is a thin Next.js app. Its [`route.ts`](../apps/api/src/app/api/trpc/[trpc]/route.ts) exposes the `apiRouter` from [`@status-im/wallet/data`](../packages/wallet/src/data) over tRPC at `/api/trpc`, including a JSON-RPC to tRPC shim for `rpc.proxy`. Consumers:
+[`apps/api`](../apps/api) is a Next.js App Router app with no UI. One route handler, [`route.ts`](../apps/api/src/app/api/trpc/[trpc]/route.ts), serves the `apiRouter` from [`@status-im/wallet/data`](../packages/wallet/src/data) at `/api/trpc`, and also answers plain JSON-RPC on `rpc.proxy` by converting it to tRPC and back. Consumers:
 
-- `apps/hub` points `NEXT_PUBLIC_STATUS_API_URL` at it for exchange rates and the RPC proxy.
-- `apps/wallet` points `WXT_STATUS_API_URL` at it for assets, collectibles, activities and RPC.
-- `apps/status.app` runs its own separate tRPC server (v11) for the admin insights and reporting area under [`src/server`](../apps/status.app/src/server).
+- `apps/hub` sends `NEXT_PUBLIC_STATUS_API_URL` traffic here for exchange rates and the RPC proxy.
+- `apps/wallet` points `WXT_STATUS_API_URL` here for assets, collectibles, activities and RPC.
+- `apps/portfolio` calls the same router in-process through `createAPI` instead of over HTTP ([`src/data/api.ts`](../apps/portfolio/src/data/api.ts)).
+- `apps/status.app` runs its own tRPC v11 server for the admin insights and reporting area under [`src/server`](../apps/status.app/src/server).
 
 ## Content pipelines
 
-- **status.app**: [Contentlayer](../apps/status.app/contentlayer.config.ts) turns `content/help`, `content/legal` and the `content/specs` submodule into MDX at build time, wired in via `next-contentlayer2`. Admin insights use GraphQL codegen against Hasura, and reporting data lives in Postgres via [Drizzle](../apps/status.app/drizzle.config.ts).
-- **status.network**: static export plus a Ghost blog client under [`src/app/_lib`](../apps/status.network/src/app/_lib); the `content/legal-external` submodule supplies legal pages.
-- **get.status.app**: static export of the download-focused subset.
-- **community-dapp**: reads contracts directly and does not use the dead `packages/community-subgraph` scaffold.
+hub, status.network and get.status.app export statically in production (`output: 'export'` behind a `NODE_ENV` check in each `next.config`). Their `postbuild` runs `next-sitemap`, then each app's own `scripts/strip-default-locale-prefix.sh`, which moves the default locale out of `/en` to the root and copies each page to `page/index.html`. next-intl needs explicit locale prefixes for a static export, and simple file servers do not map `/page` to `page.html`, so both rewrites happen after the build. status.app and portfolio need a Node server and do neither.
+
+- status.app turns `content/help`, `content/legal` and the `content/specs` submodule into MDX at build time through [Contentlayer](../apps/status.app/contentlayer.config.ts) and `next-contentlayer2`. Admin insights use GraphQL codegen against Hasura, and reporting data lives in Postgres through [Drizzle](../apps/status.app/drizzle.config.ts).
+- status.network takes its blog from Ghost through the client in [`src/app/_lib`](../apps/status.network/src/app/_lib), and the `content/legal-external` submodule supplies the legal pages.
+- get.status.app is the download-focused subset of status.app, and also ships `llms.txt`.
+- community-dapp reads the deployed contracts through the ABIs exported from `@status-im/community-contracts/abi` and exchanges community data over Waku.
 
 ### Submodules
 
@@ -45,5 +52,6 @@ Mapped from each workspace's `package.json` dependencies:
 
 ## Extensions
 
-- **wallet** is a WXT extension built with `wxt build -b chrome|firefox` (see [`apps/wallet`](../apps/wallet)).
-- **connector** is a Plasmo extension connecting dapps to Status Desktop, built with `plasmo build` (see [`apps/connector`](../apps/connector)).
+wallet is a WXT extension, built with `wxt build -b chrome` or `-b firefox` and wrapped by `pnpm --filter wallet build:chrome` and `build:firefox`. See [`apps/wallet`](../apps/wallet).
+
+connector is a Plasmo extension that connects dapps to Status Desktop, built with `plasmo build` and wrapped by `pnpm --filter connector build:chrome` and `build:firefox`. See [`apps/connector`](../apps/connector).

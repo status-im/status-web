@@ -1,44 +1,30 @@
-# AGENTS.md
+# components
 
-Rules for agents working in `packages/components`. The root [AGENTS.md](../../AGENTS.md) also applies.
-
-## Role
-
-`@status-im/components` is the shared, published component library for Status apps and websites. It is
-built on Radix UI and React Aria primitives, styled with Tailwind CSS and `@status-im/colors`, and
-exported from [src/index.tsx](./src/index.tsx). Never add app-specific logic here; that belongs in the
-consuming app.
+Rules for agents working in `packages/components`. The root [AGENTS.md](../../AGENTS.md) applies too. `@status-im/components` is the shared component library for the Status apps and sites, consumed through the workspace and also on npm as a public package.
 
 ## Commands
 
-- `pnpm --filter @status-im/components storybook`: run Storybook on port 3001.
-- `pnpm --filter @status-im/components build`: build the library and types (`vite build` + `tsc`).
-- `pnpm --filter @status-im/components typecheck` and `... lint`: typecheck and lint `src`.
+- `pnpm --filter @status-im/components storybook`: Storybook on port 3001. Run it before a visual change.
+- `pnpm --filter @status-im/components build`: Vite build plus `tsc` declarations.
+- `pnpm --filter @status-im/components typecheck` and `... lint`.
 
 ## Rules
 
-- Compose primitives from Radix UI (`@radix-ui/react-*`) and React Aria (`react-aria-components`).
-  Do not hand-roll accessibility behaviour they already provide.
-- Style with Tailwind classes via `cva` variants and `cx`. Colors come from `@status-im/colors`,
-  never hard-coded hex values.
-- Every component gets a colocated `*.stories.tsx`. Stories cover variants, sizes, states and dark
-  mode (Storybook backgrounds switch light/dark).
-- Add new components to [src/index.tsx](./src/index.tsx) or they do not ship.
-- Keep [tailwind.config.ts](./tailwind.config.ts) in sync with design tokens; apps consume it as a
-  preset via `@status-im/components/config`.
-- The package is published (`@status-im/components` on npm): public props and exports are API. Do not
-  rename or remove them without a deprecation path.
+- Build on Radix UI (`@radix-ui/react-*`) and React Aria. Do not hand-roll focus, dismissal or keyboard behaviour they already give you.
+- Style with Tailwind classes through `cva` variants, and take colors from `@status-im/colors`, never a hex literal.
+- Export every component from [src/index.tsx](./src/index.tsx) or consumers cannot import it.
+- Add a colocated `*.stories.tsx` with the variants and sizes, and check it under the Storybook customisation and dark mode toolbars.
+- Keep app logic out. If only one app needs the behaviour, it belongs in that app.
+- Treat public props and exports as API: the package is on npm, so rename or remove them only with a deprecation path.
 
 ## Caveats
 
-- Apps must list `./node_modules/@status-im/components/dist/**/*.js` in their Tailwind `content`, or
-  component classes are purged. See [apps/status.app/tailwind.config.ts](../../apps/status.app/tailwind.config.ts).
-- The `sideEffects: ["*.css"]` setting and the `preserveDirectives` build plugin keep `use client`
-  directives and CSS working; do not remove them.
-- `StatusProvider` requires a `config.link` element (defaults to `a`); Next.js apps pass their `Link`.
-- Storybook is the source of visual truth; run it before opening a PR for visual changes.
+- Consumers must list `./node_modules/@status-im/components/dist/**/*.js` in their Tailwind `content`, or the component classes are purged. See [apps/status.app/tailwind.config.ts](../../apps/status.app/tailwind.config.ts).
+- The build keeps `use client` directives through `rollup-plugin-preserve-directives`, and `sideEffects: ["*.css"]` keeps any CSS the package imports from being tree-shaken. Do not remove either.
+- `StatusProvider` carries the link element in `config.link` (`a` by default); Next.js apps pass their `Link`.
+- [tailwind.config.ts](./tailwind.config.ts) is the preset apps import as `@status-im/components/config`. Change theme values there rather than in each app.
 
 ## Docs
 
 - [README.md](./README.md): install and usage for consumers.
-- [../../docs/deployment.md](../../docs/deployment.md): npm publishing state and manual flow.
+- [../../docs/deployment.md](../../docs/deployment.md#npm-packages): where npm publishing stands.

@@ -1,63 +1,60 @@
 # AGENTS.md
 
-Operating guide for AI agents in this pnpm + Turborepo monorepo. Human docs are in [README.md](README.md).
+Rules for agents working in this pnpm + Turborepo monorepo. The human overview is in
+[README.md](README.md). Workspaces with their own `AGENTS.md` add rules on top of this file, so
+read both.
 
 ## Repo shape
 
-| Path                           | Role                                   | Dev port |
-| ------------------------------ | -------------------------------------- | -------- |
-| `apps/api`                     | Status API tRPC backend                | 3030     |
-| `apps/community-dapp`          | Community curator dapp (webpack)       | 8080     |
-| `apps/connector`               | Connector extension (Plasmo)           | -        |
-| `apps/get.status.app`          | Download subset of status.app          | 3005     |
-| `apps/hub`                     | Status Network Hub dapp                | 3003     |
-| `apps/portfolio`               | Portfolio tracker dapp                 | 3004     |
-| `apps/status.app`              | Main Status website (Contentlayer)     | 3001     |
-| `apps/status.network`          | Status Network website (Ghost)         | 3002     |
-| `apps/wallet`                  | Crypto wallet extension (WXT)          | 4000     |
-| `packages/colors`              | Color design tokens                    | -        |
-| `packages/icons`               | Icon design tokens                     | -        |
-| `packages/components`          | UI component library                   | -        |
-| `packages/status-js`           | Status JS SDK (`@status-im/js`)        | -        |
-| `packages/wallet`              | Shared wallet UI and tRPC data layer   | -        |
-| `packages/status-network`      | Shared code for status.network and hub | -        |
-| `packages/ethereum-provider`   | EIP-1193 provider (wallet, connector)  | -        |
-| `packages/eslint-config`       | Shared ESLint configuration            | -        |
-| `packages/sitemap-utils`       | Sitemap helpers for static exports     | -        |
-| `packages/community-contracts` | Solidity contracts (Foundry)           | -        |
-| `e2e`                          | Playwright end-to-end tests            | -        |
+Apps, with the dev port each one uses:
+
+| Path                  | What it is                        | Port |
+| --------------------- | --------------------------------- | ---- |
+| `apps/api`            | tRPC API plus a JSON-RPC proxy    | 3030 |
+| `apps/community-dapp` | Community curator dapp, webpack   | 8080 |
+| `apps/connector`      | Dapp connector extension, Plasmo  | -    |
+| `apps/get.status.app` | Download subset of status.app     | 3005 |
+| `apps/hub`            | Status Network Hub dapp           | 3003 |
+| `apps/portfolio`      | Portfolio tracker dapp            | 3004 |
+| `apps/status.app`     | Main Status website, Contentlayer | 3001 |
+| `apps/status.network` | Status Network website, Ghost     | 3002 |
+| `apps/wallet`         | Wallet extension, WXT             | 4000 |
+
+The packages hold the libraries the apps share: `colors` and `icons` are the design tokens,
+`components` is the UI library, `status-js` is the SDK (`@status-im/js`), `wallet` has the wallet UI
+and tRPC data layer, `status-network` is shared by status.network and hub, `ethereum-provider` is the
+EIP-1193 provider, `eslint-config` is the shared lint config, `sitemap-utils` writes the sitemaps for
+the static exports, and `community-contracts` holds the Solidity contracts (Foundry). `e2e` is the
+Playwright workspace.
 
 ## Commands
 
-Run from the repo root. Node 22 (`engines`, `.node-version`) and pnpm 9.12.3 (`packageManager`) are required.
+Run everything from the repo root on Node 22 and pnpm 9.12.3. Use
+`pnpm --filter <name> <script>` for a single workspace, for example `pnpm --filter hub dev`.
 
-- `pnpm dev` runs `predev` first, which runs `pnpm install`, then `turbo run dev dev:next dev:content` across every app and package.
-- `pnpm build`, `pnpm test`, `pnpm lint`, `pnpm typecheck` run the same task across every workspace via Turbo.
-- `pnpm storybook` starts the components Storybook.
-- `pnpm --filter <name> <script>` targets one workspace (for example `pnpm --filter hub dev`).
+`pnpm dev` runs `pnpm install` first (the `predev` hook), then the `dev`, `dev:next` and
+`dev:content` tasks of every app and `@status-im/*` package. `pnpm build` and `pnpm test` skip
+`e2e`; `pnpm lint` includes it; `pnpm typecheck` runs every workspace's `typecheck` script. CI runs
+build, typecheck, lint, `pnpm format --check` and test, so format any file you touch, Markdown
+included.
 
 ## Submodules
 
-Initialize once with `git submodule update --init --recursive`. The apps and packages that need them:
-
-- `apps/status.app/content/specs` (status-im/status-specs): required by status.app builds.
-- `apps/status.network/content/legal-external`: required by status.network builds.
-- `packages/community-contracts/lib/*` (forge-std, minime, openzeppelin-contracts): required by the Foundry build.
+Run `git submodule update --init --recursive` before building. status.app builds need
+`apps/status.app/content/specs` (status-im/status-specs), status.network builds need
+`apps/status.network/content/legal-external`, and the Foundry build needs
+`packages/community-contracts/lib/*` (forge-std, minime, openzeppelin-contracts).
 
 ## Dependencies
 
-- `patches/` holds pnpm `patchedDependencies`. `package.json` `pnpm.overrides` pins React and several transitive versions. Do not remove a patch or override without checking why it exists.
-- Changesets are gone. Do not add changesets or bump versions to publish; there is no release automation. See [docs/deployment.md](docs/deployment.md).
+- Do not remove a patch in `patches/` (pnpm `patchedDependencies`) or an entry in `pnpm.overrides` (React and several transitive pins) without finding out why it is there.
+- Do not add changesets or bump versions to publish. Changesets were removed and nothing publishes; see [docs/deployment.md](docs/deployment.md).
 
 ## UI work
 
-When implementing designs and building UI:
-
-- Reuse existing UI components and Tailwind configuration from `packages/components/`.
-- Reuse colors from `packages/colors/`.
-- Reuse icons from `packages/icons/`.
-- Search for components in `apps/`. If none solves the problem, extract one or create a new one by composing UI components.
-- Ask the human how to proceed when components or designs are missing.
+- Reuse components and the Tailwind configuration from `packages/components/`, colors from `packages/colors/` and icons from `packages/icons/`.
+- Search `apps/` for an existing component before writing one. If none fits, extract it or compose a new one from the UI components.
+- Ask the human how to proceed when a component or design is missing.
 
 ## Site content is not code documentation
 
@@ -72,7 +69,7 @@ These paths are published to end users on the websites. Do not treat them as doc
 ## Git
 
 - Never add AI attribution or `Co-Authored-By` trailers to commits, PRs or docs.
-- The PR base branch is `develop`.
+- Open PRs against `develop`.
 
 ## Documentation
 
@@ -96,6 +93,6 @@ Update the matching doc in the same PR when you change behaviour, commands, env 
 ## Docs map
 
 - [docs/README.md](docs/README.md): index of the cross-cutting docs.
-- [docs/architecture.md](docs/architecture.md): apps vs packages, consumers, content pipelines, extensions.
-- [docs/deployment.md](docs/deployment.md): CI, Vercel, extension releases, npm packages.
+- [docs/architecture.md](docs/architecture.md): which app uses which package, content pipelines, extensions.
+- [docs/deployment.md](docs/deployment.md): Jenkins, Vercel, extension releases, npm packages.
 - Each workspace has its own `README.md` and, where rules exist, `AGENTS.md`.

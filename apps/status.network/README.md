@@ -1,35 +1,36 @@
 # Status Network Website
 
-Source for <https://status.network>. A [Next.js](https://nextjs.org/) app exported as a static build, with a Ghost-powered blog.
+Source for <https://status.network>: the marketing pages plus a blog backed by Ghost. The pages and the Ghost client live in [`src/app`](src/app).
 
 ## Run
 
     pnpm --filter status.network dev    # http://localhost:3002
 
-Run from the repo root. Without real Ghost credentials the marketing pages work and the blog is empty.
+Run it from the repo root. Without real Ghost credentials the marketing pages render and the blog stays empty.
 
 ## Build
 
-    pnpm --filter status.network build                  # next build -> out/
+    pnpm --filter status.network build                  # static export into out/
     pnpm --filter status.network start                  # serve out/ on port 3002
-    pnpm --filter status.network preview:production     # build then serve, the Jenkins-like path
+    pnpm --filter status.network preview:production     # build then serve, close to the Jenkins path
 
-`prebuild` runs the legal dates generator and `env:check`. `postbuild` generates the sitemap, strips the default locale prefix and copies `serve.json` into `out/`.
+`prebuild` regenerates the legal dates and runs `env:check`. `postbuild` writes the sitemap, strips the default locale prefix and copies `serve.json` into `out/`.
 
 ## Environment
 
-The blog and static export need Ghost Content API credentials.
+The site needs four Ghost variables, two for the build and two for the browser:
 
-- `.env` (committed) holds demo Ghost values, so builds work out of the box.
-- Copy `.env.example` to `.env.local` and fill real `GHOST_API_URL` and `GHOST_API_KEY` for live content. Set `NEXT_PUBLIC_GHOST_API_URL` and `NEXT_PUBLIC_GHOST_API_KEY` to the same values for client refresh after deploy.
-- `pnpm --filter status.network env:check` validates the four variables from `.env`; `prebuild` runs it automatically.
+- `GHOST_API_URL` and `GHOST_API_KEY` are read during the build.
+- `NEXT_PUBLIC_GHOST_API_URL` and `NEXT_PUBLIC_GHOST_API_KEY` are inlined at build time so the browser can refresh blog content after deploy. Set them to the same values.
 
-When Ghost is unavailable at build time, `/blog/[slug]` routes fall back to the committed slug list in `content/network-blog-slugs.json`.
+`.env` is committed with demo Ghost values, so a build works out of the box. For live content copy `.env.example` to `.env.local` and fill in the real values; Next reads `.env.local` over `.env`. `pnpm --filter status.network env:check` validates `.env` (not `.env.local`) and runs in `prebuild`.
+
+When Ghost is unreachable at build time, `/blog/[slug]` falls back to the committed list in `content/network-blog-slugs.json`.
 
 ## Deploy
 
-Jenkins builds the export and publishes it with `ghp-import`, passing the Ghost key from the `status-network-ghost-api-key` secret. `master` deploys `status.network`, `develop` deploys `dev.status.network`. See [deployment](../../docs/deployment.md) and [ci/website.Jenkinsfile](../../ci/website.Jenkinsfile).
+Jenkins builds the export and pushes `out/` to a deploy branch with `ghp-import`, passing the Ghost key from the `status-network-ghost-api-key` credential. `master` publishes status.network, `develop` publishes dev.status.network. See [ci/website.Jenkinsfile](../../ci/website.Jenkinsfile) and [docs/deployment.md](../../docs/deployment.md).
 
 ## More
 
-- [Agent guide](AGENTS.md)
+- [Agent guide](AGENTS.md): commands, rules and caveats for coding agents.
