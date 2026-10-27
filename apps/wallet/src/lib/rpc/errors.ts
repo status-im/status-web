@@ -31,11 +31,3 @@ export function noConnectedAccount(): ProviderRpcError {
     message: 'No connected account',
   })
 }
-
-/** Only `personal_sign` has the popup QR round trip so far. */
-export function hardwareWalletUnsupported(method: string): ProviderRpcError {
-  return new ProviderRpcError({
-    code: 4200,
-    message: `${method} is not supported for hardware wallets yet`,
-  })
-}

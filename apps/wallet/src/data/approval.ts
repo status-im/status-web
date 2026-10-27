@@ -43,6 +43,8 @@ export type PendingApproval = { createdAt: number } & (
        * popup only ever renders this string back.
        */
       typedData: string
+      walletType: WalletMeta['type']
+      sourceFingerprint?: number
     }
   | {
       id: string
@@ -64,6 +66,10 @@ export type PendingApproval = { createdAt: number } & (
        * approves is what gets broadcast.
        */
       maxFeeEth: string
+      walletType: WalletMeta['type']
+      sourceFingerprint?: number
+      /** Hardware wallets only: what the device signs. The handler holds its nonce. */
+      serializedUnsignedTx?: string
     }
 )
 
