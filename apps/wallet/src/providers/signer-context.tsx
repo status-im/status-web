@@ -8,6 +8,7 @@ import {
   useState,
 } from 'react'
 
+import * as Dialog from '@radix-ui/react-dialog'
 import {
   HardwareSignCancelledError,
   type HardwareSignRequest,
@@ -358,22 +359,40 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
   return (
     <SignerContext.Provider value={value}>
       {children}
+      {/* A Radix dialog, so it stacks above open modals like the exchange drawer instead of closing them. */}
       {hardwareSignRequest && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          style={{ background: 'rgba(9, 16, 28, 0.6)' }}
+        <Dialog.Root
+          open
+          onOpenChange={open => {
+            if (!open) handleHardwareCancel()
+          }}
         >
-          <div className="flex max-h-[90vh] w-full max-w-md flex-col overflow-y-auto rounded-16 bg-white-100 p-4">
-            <HardwareSignScreen
-              request={hardwareSignRequest.request}
-              address={hardwareSignRequest.address}
-              sourceFingerprint={hardwareSignRequest.sourceFingerprint}
-              origin={hardwareSignRequest.origin}
-              onSignature={handleHardwareSignature}
-              onCancel={handleHardwareCancel}
-            />
-          </div>
-        </div>
+          <Dialog.Portal>
+            <Dialog.Overlay
+              className="fixed inset-0 z-50 flex items-center justify-center p-4"
+              style={{ background: 'rgba(9, 16, 28, 0.6)' }}
+            >
+              <Dialog.Content
+                aria-describedby={undefined}
+                data-customisation="blue"
+                onInteractOutside={event => event.preventDefault()}
+                className="flex max-h-[90vh] w-full max-w-md flex-col overflow-y-auto rounded-16 bg-white-100 p-4"
+              >
+                <Dialog.Title className="sr-only">
+                  Sign with hardware wallet
+                </Dialog.Title>
+                <HardwareSignScreen
+                  request={hardwareSignRequest.request}
+                  address={hardwareSignRequest.address}
+                  sourceFingerprint={hardwareSignRequest.sourceFingerprint}
+                  origin={hardwareSignRequest.origin}
+                  onSignature={handleHardwareSignature}
+                  onCancel={handleHardwareCancel}
+                />
+              </Dialog.Content>
+            </Dialog.Overlay>
+          </Dialog.Portal>
+        </Dialog.Root>
       )}
     </SignerContext.Provider>
   )
