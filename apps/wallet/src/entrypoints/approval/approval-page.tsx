@@ -84,7 +84,10 @@ export function ApprovalPage() {
     )
   }
 
-  const needsPassword = !isSessionActive
+  const isHardwareSign =
+    approval.type === 'personal_sign' && approval.walletType === 'hardware-qr'
+
+  const needsPassword = !isSessionActive && !isHardwareSign
 
   const handlePasswordConfirm = async (password: string) => {
     setIsUnlocking(true)
@@ -129,9 +132,6 @@ export function ApprovalPage() {
     })
     window.close()
   }
-
-  const isHardwareSign =
-    approval.type === 'personal_sign' && approval.walletType === 'hardware-qr'
 
   const handleConfirm = async () => {
     if (!isHardwareSign || approval.type !== 'personal_sign') {
