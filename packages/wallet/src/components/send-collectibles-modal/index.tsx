@@ -6,6 +6,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { Avatar, Button, useToast } from '@status-im/components'
 import { CloseIcon, ExternalIcon } from '@status-im/icons/20'
 
+import { HardwareSignCancelledError } from '../hardware-sign-screen'
 import { AddressField } from './address-field'
 import { AmountField } from './amount-field'
 import { BottomBar } from './bottom-bar'
@@ -56,6 +57,8 @@ type Props = {
   onSend: (params: SendCollectibleParams) => Promise<void>
   /** Called after a successful send so the parent can invalidate queries */
   onSuccess?: () => void
+  /** Close before `onSend`, so a signing overlay outside the dialog can take input */
+  closeBeforeSigning?: boolean
   hasActiveSession: boolean
   requestPassword: (options?: {
     title?: string
@@ -82,6 +85,7 @@ const SendCollectiblesModal = (props: Props) => {
     ethBalance,
     onSend,
     onSuccess,
+    closeBeforeSigning,
     hasActiveSession,
     requestPassword,
   } = props
@@ -186,6 +190,10 @@ const SendCollectiblesModal = (props: Props) => {
         amount: isErc1155 ? effectiveAmount : undefined,
       })
 
+      if (closeBeforeSigning) {
+        handleOpenChange(false)
+      }
+
       await onSend({
         to: recipientAddress,
         contractAddress: contract,
@@ -202,6 +210,7 @@ const SendCollectiblesModal = (props: Props) => {
       toast.positive('NFT transfer submitted')
       handleOpenChange(false)
     } catch (error: unknown) {
+      if (error instanceof HardwareSignCancelledError) return
       toast.negative(getNftSendErrorMessage(error))
     } finally {
       setIsSending(false)
