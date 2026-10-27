@@ -40,7 +40,6 @@ import { Link } from '@tanstack/react-router'
 import { cx } from 'class-variance-authority'
 import { Interface, parseUnits } from 'ethers'
 
-import { WatchOnlyActionTooltip } from '@/components/watch-only-action-tooltip'
 import { useEthBalance } from '@/hooks/use-eth-balance'
 import { useGasFees } from '@/hooks/use-gas-fees'
 import { FEATURE_FLAGS } from '@/lib/feature-flags'
@@ -83,7 +82,6 @@ const TOKEN_DETAIL_GC_TIME = 60 * 60 * 1000 // 1 hour
 const OPTIMIZED_TOKEN_STALE_TIME = 5 * 1000 // 5 seconds
 const OPTIMIZED_TOKEN_REFETCH_INTERVAL = 30 * 1000 // 30 seconds
 const erc20 = new Interface(['function transfer(address to, uint256 amount)'])
-const WATCH_ONLY_ACTION_TOOLTIP = 'Unavailable for watch-only wallets'
 
 const Token = (props: Props) => {
   const { ticker, address } = props
@@ -330,7 +328,6 @@ const Token = (props: Props) => {
     emoji: '🍑',
     color: 'magenta',
   }
-  const isWatchOnlyWallet = false
   const isHardwareWallet = currentWallet?.type === 'hardware-qr'
 
   /** The node's own reason where there is one, translated for the user. */
@@ -457,31 +454,15 @@ const Token = (props: Props) => {
             </Button>
           </BuyCryptoDrawer>
           {FEATURE_FLAGS.SWAP && fromTokenAddress && (
-            <WatchOnlyActionTooltip
-              disabled={isWatchOnlyWallet}
-              content={WATCH_ONLY_ACTION_TOOLTIP}
+            <ExchangeDrawer
+              account={account}
+              fromChain={1}
+              fromToken={fromTokenAddress}
             >
-              {isWatchOnlyWallet ? (
-                <Button
-                  size="32"
-                  iconBefore={<SwapIcon />}
-                  variant="outline"
-                  disabled
-                >
-                  <span className="block max-w-20 truncate">Exchange</span>
-                </Button>
-              ) : (
-                <ExchangeDrawer
-                  account={account}
-                  fromChain={1}
-                  fromToken={fromTokenAddress}
-                >
-                  <Button size="32" iconBefore={<SwapIcon />} variant="outline">
-                    <span className="block max-w-20 truncate">Exchange</span>
-                  </Button>
-                </ExchangeDrawer>
-              )}
-            </WatchOnlyActionTooltip>
+              <Button size="32" iconBefore={<SwapIcon />} variant="outline">
+                <span className="block max-w-20 truncate">Exchange</span>
+              </Button>
+            </ExchangeDrawer>
           )}
           <ReceiveCryptoDrawer account={account} onCopy={copy}>
             <Button
@@ -492,44 +473,24 @@ const Token = (props: Props) => {
               Receive
             </Button>
           </ReceiveCryptoDrawer>
-          <WatchOnlyActionTooltip
-            disabled={isWatchOnlyWallet}
-            content={WATCH_ONLY_ACTION_TOOLTIP}
+          <SendAssetsModal
+            asset={sendAsset}
+            account={{
+              ...account,
+              ethBalance: sendAsset.ethBalance,
+            }}
+            signTransaction={signTransaction}
+            closeBeforeSigning={isHardwareWallet}
+            hasActiveSession={hasActiveSession}
+            requestPassword={requestPassword}
+            gasFees={gasFeeQuery.data}
+            isLoadingFees={gasFeeQuery.isFetching}
+            onEstimateGas={prepareGasEstimate}
           >
-            {isWatchOnlyWallet ? (
-              <Button
-                size="32"
-                iconBefore={<SendBlurIcon />}
-                variant="outline"
-                disabled
-              >
-                Send
-              </Button>
-            ) : (
-              <SendAssetsModal
-                asset={sendAsset}
-                account={{
-                  ...account,
-                  ethBalance: sendAsset.ethBalance,
-                }}
-                signTransaction={signTransaction}
-                closeBeforeSigning={isHardwareWallet}
-                hasActiveSession={hasActiveSession}
-                requestPassword={requestPassword}
-                gasFees={gasFeeQuery.data}
-                isLoadingFees={gasFeeQuery.isFetching}
-                onEstimateGas={prepareGasEstimate}
-              >
-                <Button
-                  size="32"
-                  iconBefore={<SendBlurIcon />}
-                  variant="outline"
-                >
-                  Send
-                </Button>
-              </SendAssetsModal>
-            )}
-          </WatchOnlyActionTooltip>
+            <Button size="32" iconBefore={<SendBlurIcon />} variant="outline">
+              Send
+            </Button>
+          </SendAssetsModal>
         </div>
       }
     >
@@ -560,35 +521,15 @@ const Token = (props: Props) => {
             </BuyCryptoDrawer>
 
             {FEATURE_FLAGS.SWAP && fromTokenAddress && (
-              <WatchOnlyActionTooltip
-                disabled={isWatchOnlyWallet}
-                content={WATCH_ONLY_ACTION_TOOLTIP}
+              <ExchangeDrawer
+                account={account}
+                fromChain={1}
+                fromToken={fromTokenAddress}
               >
-                {isWatchOnlyWallet ? (
-                  <Button
-                    size="32"
-                    iconBefore={<SwapIcon />}
-                    variant="outline"
-                    disabled
-                  >
-                    Exchange
-                  </Button>
-                ) : (
-                  <ExchangeDrawer
-                    account={account}
-                    fromChain={1}
-                    fromToken={fromTokenAddress}
-                  >
-                    <Button
-                      size="32"
-                      iconBefore={<SwapIcon />}
-                      variant="outline"
-                    >
-                      Exchange
-                    </Button>
-                  </ExchangeDrawer>
-                )}
-              </WatchOnlyActionTooltip>
+                <Button size="32" iconBefore={<SwapIcon />} variant="outline">
+                  Exchange
+                </Button>
+              </ExchangeDrawer>
             )}
 
             <ReceiveCryptoDrawer account={account} onCopy={copy}>
@@ -600,44 +541,24 @@ const Token = (props: Props) => {
                 Receive
               </Button>
             </ReceiveCryptoDrawer>
-            <WatchOnlyActionTooltip
-              disabled={isWatchOnlyWallet}
-              content={WATCH_ONLY_ACTION_TOOLTIP}
+            <SendAssetsModal
+              asset={sendAsset}
+              account={{
+                ...account,
+                ethBalance: sendAsset.ethBalance,
+              }}
+              signTransaction={signTransaction}
+              closeBeforeSigning={isHardwareWallet}
+              hasActiveSession={hasActiveSession}
+              requestPassword={requestPassword}
+              gasFees={gasFeeQuery.data}
+              isLoadingFees={gasFeeQuery.isFetching}
+              onEstimateGas={prepareGasEstimate}
             >
-              {isWatchOnlyWallet ? (
-                <Button
-                  size="32"
-                  variant="outline"
-                  iconBefore={<SendBlurIcon />}
-                  disabled
-                >
-                  Send
-                </Button>
-              ) : (
-                <SendAssetsModal
-                  asset={sendAsset}
-                  account={{
-                    ...account,
-                    ethBalance: sendAsset.ethBalance,
-                  }}
-                  signTransaction={signTransaction}
-                  closeBeforeSigning={isHardwareWallet}
-                  hasActiveSession={hasActiveSession}
-                  requestPassword={requestPassword}
-                  gasFees={gasFeeQuery.data}
-                  isLoadingFees={gasFeeQuery.isFetching}
-                  onEstimateGas={prepareGasEstimate}
-                >
-                  <Button
-                    size="32"
-                    variant="outline"
-                    iconBefore={<SendBlurIcon />}
-                  >
-                    Send
-                  </Button>
-                </SendAssetsModal>
-              )}
-            </WatchOnlyActionTooltip>
+              <Button size="32" variant="outline" iconBefore={<SendBlurIcon />}>
+                Send
+              </Button>
+            </SendAssetsModal>
           </div>
         </div>
 
