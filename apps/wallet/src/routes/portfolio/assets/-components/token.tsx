@@ -481,7 +481,7 @@ const Token = (props: Props) => {
             }}
             signTransaction={signTransaction}
             closeBeforeSigning={isHardwareWallet}
-            hasActiveSession={hasActiveSession}
+            hasActiveSession={hasActiveSession || isHardwareWallet}
             requestPassword={requestPassword}
             gasFees={gasFeeQuery.data}
             isLoadingFees={gasFeeQuery.isFetching}
@@ -549,7 +549,7 @@ const Token = (props: Props) => {
               }}
               signTransaction={signTransaction}
               closeBeforeSigning={isHardwareWallet}
-              hasActiveSession={hasActiveSession}
+              hasActiveSession={hasActiveSession || isHardwareWallet}
               requestPassword={requestPassword}
               gasFees={gasFeeQuery.data}
               isLoadingFees={gasFeeQuery.isFetching}
