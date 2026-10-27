@@ -2,7 +2,12 @@ import { type ReactNode, useEffect, useState } from 'react'
 
 import { Button } from '@status-im/components'
 import { CloseIcon } from '@status-im/icons/20'
-import { HardwareSignScreen, PasswordModal } from '@status-im/wallet/components'
+import {
+  type HardwareSignRequest,
+  HardwareSignScreen,
+  PasswordModal,
+} from '@status-im/wallet/components'
+import { type Hex, hexToBytes } from 'viem'
 import { formatEther } from 'viem/utils'
 
 import {
@@ -82,11 +87,10 @@ export function ApprovalPage() {
     )
   }
 
-  const isHardwareWallet =
-    (approval.type === 'eth_requestAccounts' ||
-      approval.type === 'personal_sign') &&
-    approval.walletType === 'hardware-qr'
-  const isHardwareSign = isHardwareWallet && approval.type === 'personal_sign'
+  const isHardwareWallet = approval.walletType === 'hardware-qr'
+  const hardwareSignRequest = isHardwareWallet
+    ? toHardwareSignRequest(approval)
+    : null
 
   const needsPassword = !isSessionActive && !isHardwareWallet
 
@@ -135,7 +139,7 @@ export function ApprovalPage() {
   }
 
   const handleConfirm = () => {
-    if (isHardwareSign) {
+    if (hardwareSignRequest) {
       setIsHardwareSigning(true)
       return
     }
@@ -149,19 +153,20 @@ export function ApprovalPage() {
     window.close()
   }
 
-  if (isHardwareSigning && approval.type === 'personal_sign') {
+  if (isHardwareSigning && hardwareSignRequest) {
     return (
       <div
         data-customisation="blue"
         className="flex h-screen flex-col bg-white-100 p-4"
       >
         <HardwareSignScreen
-          request={{
-            kind: 'personalMessage',
-            message: approval.message as `0x${string}`,
-          }}
+          request={hardwareSignRequest}
           address={approval.address}
-          sourceFingerprint={approval.sourceFingerprint}
+          sourceFingerprint={
+            'sourceFingerprint' in approval
+              ? approval.sourceFingerprint
+              : undefined
+          }
           origin={approval.origin}
           onSignature={handleHardwareSignature}
           onCancel={() => respond(false)}
@@ -239,6 +244,28 @@ export function ApprovalPage() {
       </div>
     </div>
   )
+}
+
+/** What the device signs, or null for a request that only needs the user's yes. */
+function toHardwareSignRequest(
+  approval: PendingApproval,
+): HardwareSignRequest | null {
+  switch (approval.type) {
+    case 'personal_sign':
+      return { kind: 'personalMessage', message: approval.message as Hex }
+    case 'eth_signTypedData_v4':
+      return { kind: 'typedData', typedData: approval.typedData }
+    case 'eth_sendTransaction':
+      return approval.serializedUnsignedTx
+        ? {
+            kind: 'transaction',
+            serializedTx: hexToBytes(approval.serializedUnsignedTx as Hex),
+            chainId: toChainId(approval.chainId),
+          }
+        : null
+    case 'eth_requestAccounts':
+      return null
+  }
 }
 
 /**

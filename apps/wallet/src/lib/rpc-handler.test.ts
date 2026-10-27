@@ -62,6 +62,8 @@ const GAS_FEES = {
 }
 
 const TX_HASH = `0x${'ab'.repeat(32)}`
+const UNSIGNED_TX = '0x02c0'
+const RESERVATION_ID = 'reservation-1'
 const ERC20_TRANSFER = `0xa9059cbb${'00'.repeat(64)}`
 
 const ORIGIN = 'https://app.velora.xyz'
@@ -182,6 +184,7 @@ const signed: { walletId?: string; fromAddress?: string } = {}
 let signedTypedData: Record<string, unknown> | null = null
 let sentTransactions: Array<{ via: string; input: Record<string, unknown> }> =
   []
+let hardwareCalls: Array<{ via: string; input: Record<string, unknown> }> = []
 
 beforeEach(async () => {
   autoApprove = true
@@ -190,6 +193,7 @@ beforeEach(async () => {
   lastApproval = undefined
   signedTypedData = null
   sentTransactions = []
+  hardwareCalls = []
   nodeRequest.mockClear()
   clientFor.mockClear()
   feeRequest.mockReset()
@@ -221,6 +225,23 @@ beforeEach(async () => {
           sendContractCall: async (input: Record<string, unknown>) => {
             sentTransactions.push({ via: 'sendContractCall', input })
             return { id: { txid: TX_HASH } }
+          },
+          buildUnsignedTransaction: async (input: Record<string, unknown>) => {
+            hardwareCalls.push({ via: 'build', input })
+            return {
+              serializedUnsignedTx: UNSIGNED_TX,
+              chainId: 1,
+              nonceReservationId: RESERVATION_ID,
+            }
+          },
+          broadcastSignedTransaction: async (
+            input: Record<string, unknown>,
+          ) => {
+            hardwareCalls.push({ via: 'broadcast', input })
+            return { txid: TX_HASH }
+          },
+          releaseNonceReservation: async (input: Record<string, unknown>) => {
+            hardwareCalls.push({ via: 'release', input })
           },
         },
       },
@@ -1362,26 +1383,70 @@ describe('hardware wallets', () => {
     })
   })
 
-  test('eth_signTypedData_v4 is refused before the popup', async () => {
+  test('eth_signTypedData_v4 returns the signature the popup produced', async () => {
     await connect()
-    const opened = popupsOpened
+    popupSignature = '0xhardwaretypedsig'
 
     await expect(
       signTypedData(ADDRESS, JSON.stringify(TYPED_DATA)),
-    ).rejects.toMatchObject({ code: 4200 })
-    expect(popupsOpened).toBe(opened)
+    ).resolves.toBe('0xhardwaretypedsig')
+    expect(lastApproval).toMatchObject({
+      type: 'eth_signTypedData_v4',
+      walletType: 'hardware-qr',
+      sourceFingerprint: 0x12345678,
+    })
     expect(signedTypedData).toBeNull()
   })
 
-  test('eth_sendTransaction is refused before pricing or the popup', async () => {
+  test('eth_sendTransaction broadcasts what the popup signed, at the approved fee', async () => {
     await connect()
-    const opened = popupsOpened
+    popupSignature = '0xhardwaretxsig'
 
     await expect(
       sendTransaction({ to: OTHER_ADDRESS, value: '0x1' }),
-    ).rejects.toMatchObject({ code: 4200 })
-    expect(popupsOpened).toBe(opened)
-    expect(feeRequest).not.toHaveBeenCalled()
+    ).resolves.toBe(TX_HASH)
+    expect(lastApproval).toMatchObject({
+      type: 'eth_sendTransaction',
+      walletType: 'hardware-qr',
+      sourceFingerprint: 0x12345678,
+      serializedUnsignedTx: UNSIGNED_TX,
+    })
+    expect(hardwareCalls).toEqual([
+      {
+        via: 'build',
+        input: expect.objectContaining({
+          walletId: WALLET_ID,
+          fromAddress: ADDRESS,
+          toAddress: OTHER_ADDRESS,
+          value: '0x1',
+          gasLimit: GAS_FEES.txParams.gasLimit,
+          maxFeePerGas: GAS_FEES.txParams.maxFeePerGas,
+          maxInclusionFeePerGas: GAS_FEES.txParams.maxPriorityFeePerGas,
+        }),
+      },
+      {
+        via: 'broadcast',
+        input: {
+          serializedUnsignedTx: UNSIGNED_TX,
+          signature: '0xhardwaretxsig',
+          fromAddress: ADDRESS,
+          nonceReservationId: RESERVATION_ID,
+        },
+      },
+    ])
     expect(sentTransactions).toEqual([])
+  })
+
+  test('a rejected eth_sendTransaction releases the held nonce', async () => {
+    await connect()
+    autoApprove = false
+
+    await expect(
+      sendTransaction({ to: OTHER_ADDRESS, value: '0x1' }),
+    ).rejects.toMatchObject({ code: 4001 })
+    expect(hardwareCalls).toEqual([
+      { via: 'build', input: expect.anything() },
+      { via: 'release', input: { nonceReservationId: RESERVATION_ID } },
+    ])
   })
 })

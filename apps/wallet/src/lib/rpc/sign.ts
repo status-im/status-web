@@ -2,7 +2,6 @@ import { ProviderRpcError } from '@status-im/ethereum-provider'
 
 import { getChainIdForOrigin, isSameAddress } from '../../data/dapp-permissions'
 import { requireOriginAddress, requireWalletFor } from './account'
-import { hardwareWalletUnsupported } from './errors'
 import { assertNoPendingApproval, requestApproval } from './request-approval'
 import {
   assertDomainChainId,
@@ -133,9 +132,6 @@ export async function eth_signTypedData_v4({
   const serialized = serializeTypedData(typedData)
 
   const signer = await requireWalletFor(signerAddress)
-  if (signer.walletType === 'hardware-qr') {
-    throw hardwareWalletUnsupported('eth_signTypedData_v4')
-  }
   await assertNoPendingApproval()
 
   const result = await requestApproval({
@@ -147,6 +143,8 @@ export async function eth_signTypedData_v4({
     accountName: signer.accountName,
     chainId,
     typedData: serialized,
+    walletType: signer.walletType,
+    sourceFingerprint: signer.sourceFingerprint,
   })
 
   if (!result) {
@@ -154,6 +152,10 @@ export async function eth_signTypedData_v4({
       code: 4001,
       message: 'User rejected the request.',
     })
+  }
+
+  if (result.signature) {
+    return result.signature
   }
 
   const signed = await signingApi().wallet.account.ethereum.signTypedData({

@@ -6,7 +6,7 @@ How `hardware-qr` wallets sign through the ERC-4527 two-QR round trip, covering 
 
 A wallet imported over QR is stored with `type: 'hardware-qr'` and a `hardware` field holding `vendor`, `publicKey` and `sourceFingerprint` ([`wallet-metadata.ts`](../apps/wallet/src/data/wallet-metadata.ts)). The extension holds no key for it. `sourceFingerprint` tells the device which key should sign and goes into every sign request; it is `undefined` for devices that do not expose it.
 
-Signing needs no unlocked session for these wallets, so the send dialogs, the exchange drawer and the dApp connect and signing popups skip the password prompt. The popup learns the wallet type from `walletType` in the `eth_requestAccounts` and `personal_sign` approval records.
+Signing needs no unlocked session for these wallets, so the send dialogs, the exchange drawer and the dApp connect and signing popups skip the password prompt. The popup learns the wallet type from `walletType` in the approval record.
 
 The key-based procedures in [`api.ts`](../apps/wallet/src/data/api.ts) (`send`, `sendErc20`, `sendContractCall`, `signMessage`, `signTypedData`) are never called for a hardware wallet. `getSigningKey` has no hardware case, so one that reached it would fail with `Wallet is not private key type`.
 
@@ -56,5 +56,7 @@ The lock lives in the service worker's memory. If the worker restarts during an 
 
 The service worker has no camera, so dApp signing for a hardware wallet happens in the approval popup ([`approval-page.tsx`](../apps/wallet/src/entrypoints/approval/approval-page.tsx)). The wallet type comes from the wallet holding the origin's connected account, which is not necessarily the selected wallet.
 
-- `personal_sign`: the handler in [`rpc/sign.ts`](../apps/wallet/src/lib/rpc/sign.ts) puts `walletType` and `sourceFingerprint` into the approval record. For a hardware wallet the popup opens `HardwareSignScreen` after Sign and writes the signature to `ApprovalResult.signature`, and the handler returns it instead of signing in the worker.
-- `eth_signTypedData_v4` and `eth_sendTransaction` are refused with code 4200 for hardware wallets, before any popup opens or fee estimate runs.
+Every approval record carries `walletType`, and the signing ones carry `sourceFingerprint`. For a hardware wallet the popup opens `HardwareSignScreen` after the user confirms and writes the device's signature to `ApprovalResult.signature`.
+
+- `personal_sign` and `eth_signTypedData_v4`: the handlers in [`rpc/sign.ts`](../apps/wallet/src/lib/rpc/sign.ts) return that signature instead of signing in the worker.
+- `eth_sendTransaction`: the handler in [`rpc/send-transaction.ts`](../apps/wallet/src/lib/rpc/send-transaction.ts) prices the transaction as for any wallet, then builds it with `buildUnsignedTransaction` before the popup opens and puts `serializedUnsignedTx` in the approval record. It broadcasts the signed transaction with `broadcastSignedTransaction` and returns the hash. The nonce is held from the build on; a reject, cancel, closed popup or timeout releases it in the handler.
