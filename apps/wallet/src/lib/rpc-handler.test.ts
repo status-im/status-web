@@ -84,6 +84,12 @@ let autoApprove = true
 /** Popups the handler opened, counted by the mock's `windows.create`. */
 let popupsOpened = 0
 
+/** Leaves the popup open instead of answering it, as a user who looked away would. */
+let holdPopup = false
+
+/** Windows the handler brought to the front. */
+let focusedWindows: number[] = []
+
 /** What the popup returns when it signed itself, as it does for hardware wallets. */
 let popupSignature: string | undefined
 
@@ -152,6 +158,7 @@ function createChromeMock() {
         popupsOpened++
         const pending = session.get('pendingApproval') as { id: string }
         lastApproval = pending
+        if (holdPopup) return { id: 1 }
         queueMicrotask(() => {
           void set({
             approvalResult: {
@@ -162,6 +169,10 @@ function createChromeMock() {
           })
         })
         return { id: 1 }
+      },
+      update: async (windowId: number) => {
+        focusedWindows.push(windowId)
+        return { id: windowId }
       },
       onRemoved: {
         addListener: () => {},
@@ -188,6 +199,8 @@ let hardwareCalls: Array<{ via: string; input: Record<string, unknown> }> = []
 
 beforeEach(async () => {
   autoApprove = true
+  holdPopup = false
+  focusedWindows = []
   popupsOpened = 0
   popupSignature = undefined
   lastApproval = undefined
@@ -1352,6 +1365,29 @@ describe('eth_sendTransaction', () => {
     expect((rejected as PromiseRejectedResult).reason).toMatchObject({
       code: -32002,
     })
+  })
+
+  test('a request refused while a popup is open brings that popup to the front', async () => {
+    await connect()
+    const opened = popupsOpened
+    holdPopup = true
+
+    const first = handleRpcRequest(
+      'personal_sign',
+      ['0xdeadbeef', ADDRESS],
+      ORIGIN,
+    )
+    await vi.waitFor(() => expect(popupsOpened).toBe(opened + 1))
+
+    await expect(
+      handleRpcRequest('personal_sign', ['0xdeadbeef', ADDRESS], ORIGIN),
+    ).rejects.toMatchObject({ code: -32002 })
+    expect(focusedWindows).toEqual([1])
+
+    await chrome.storage.session.set({
+      approvalResult: { id: lastApproval!.id, approved: false },
+    })
+    await expect(first).rejects.toMatchObject({ code: 4001 })
   })
 })
 
