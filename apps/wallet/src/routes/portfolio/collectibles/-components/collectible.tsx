@@ -16,17 +16,13 @@ import {
   SendCollectiblesModal,
   shortenAddress,
 } from '@status-im/wallet/components'
-import {
-  getTransactionHash,
-  isEthereumTransactionHash,
-} from '@status-im/wallet/utils'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 
 import { useEthBalance } from '@/hooks/use-eth-balance'
-import { apiClient } from '@/providers/api-client'
 import { usePassword } from '@/providers/password-context'
 import { usePendingTransactions } from '@/providers/pending-transactions-context'
+import { useWalletSigner } from '@/providers/signer-context'
 import { useWallet } from '@/providers/wallet-context'
 
 import { useCollectible } from '../-hooks/use-collectible'
@@ -52,8 +48,10 @@ const Collectible = (props: Props) => {
 
   const { currentWallet, currentAccount } = useWallet()
   const address = currentAccount?.address
+  const isHardwareWallet = currentWallet?.type === 'hardware-qr'
 
   const { hasActiveSession, requestPassword } = usePassword()
+  const { signAndSendTransaction } = useWalletSigner()
   const { addPendingTransaction } = usePendingTransactions()
   const queryClient = useQueryClient()
 
@@ -110,22 +108,14 @@ const Collectible = (props: Props) => {
   }
 
   const handleSend = async (params: SendCollectibleParams) => {
-    const result =
-      await apiClient.wallet.account.ethereum.sendContractCall.mutate({
-        walletId: currentWallet!.id,
-        fromAddress: address!,
-        toAddress: params.contractAddress,
-        gasLimit: params.gasLimit,
-        maxFeePerGas: params.maxFeePerGas,
-        maxInclusionFeePerGas: params.maxInclusionFeePerGas,
-        data: params.encodedData,
-        value: '0',
-      })
-
-    const txHash = getTransactionHash(result.id.txid)
-    if (!isEthereumTransactionHash(txHash)) {
-      throw new Error('Transaction hash not found')
-    }
+    const txHash = await signAndSendTransaction({
+      to: params.contractAddress as `0x${string}`,
+      value: 0n,
+      data: params.encodedData as `0x${string}`,
+      gas: BigInt(params.gasLimit),
+      maxFeePerGas: BigInt(params.maxFeePerGas),
+      maxPriorityFeePerGas: BigInt(params.maxInclusionFeePerGas),
+    })
 
     addPendingTransaction({
       hash: txHash,
@@ -222,7 +212,8 @@ const Collectible = (props: Props) => {
                     ethBalance={ethBalance}
                     onSend={handleSend}
                     onSuccess={handleSuccess}
-                    hasActiveSession={hasActiveSession}
+                    closeBeforeSigning={isHardwareWallet}
+                    hasActiveSession={hasActiveSession || isHardwareWallet}
                     requestPassword={requestPassword}
                   >
                     <Button
