@@ -2,6 +2,7 @@ import { ProviderRpcError } from '@status-im/ethereum-provider'
 
 import { getChainIdForOrigin, isSameAddress } from '../../data/dapp-permissions'
 import { requireOriginAddress, requireWalletFor } from './account'
+import { hardwareWalletUnsupported } from './errors'
 import { assertNoPendingApproval, requestApproval } from './request-approval'
 import {
   assertDomainChainId,
@@ -67,6 +68,8 @@ export async function personal_sign({
     accountName: signer.accountName,
     chainId: signChainId,
     message,
+    walletId: signer.walletId,
+    walletType: signer.walletType,
   })
 
   if (!signResult) {
@@ -74,6 +77,11 @@ export async function personal_sign({
       code: 4001,
       message: 'User rejected the request.',
     })
+  }
+
+  // Hardware wallets sign in the popup, which has the camera.
+  if (signResult.signature) {
+    return signResult.signature
   }
 
   const signed = await signingApi().wallet.account.ethereum.signMessage({
@@ -125,6 +133,9 @@ export async function eth_signTypedData_v4({
   const serialized = serializeTypedData(typedData)
 
   const signer = await requireWalletFor(signerAddress)
+  if (signer.walletType === 'hardware-qr') {
+    throw hardwareWalletUnsupported('eth_signTypedData_v4')
+  }
   await assertNoPendingApproval()
 
   const result = await requestApproval({

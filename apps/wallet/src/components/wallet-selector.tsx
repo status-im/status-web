@@ -12,7 +12,6 @@ import { useNavigate } from '@tanstack/react-router'
 import { useWallet } from '@/providers/wallet-context'
 
 import { ConnectedDApps } from './connected-dapps'
-import { WatchOnlyTag } from './watch-only-tag'
 
 type Props = {
   className?: string
@@ -35,7 +34,6 @@ export function WalletSelector(props: Props) {
     setCurrentWallet,
     setCurrentAccount,
   } = useWallet()
-  const isWatchOnly = currentWallet?.type === 'hardware-qr'
 
   if (!currentWallet) {
     return null
@@ -64,7 +62,6 @@ export function WalletSelector(props: Props) {
           <div className="text-15 font-semibold text-neutral-100">
             {currentWallet.name}
           </div>
-          {isWatchOnly && <WatchOnlyTag />}
           {currentAccount?.address ? (
             <Tooltip content={currentAccount.address} side="top">
               <div className="text-13 font-medium text-neutral-50">

@@ -21,6 +21,7 @@ import {
   privateKeyFromData,
 } from './derive'
 import * as ethereum from './ethereum/ethereum'
+import * as hardwareTx from './ethereum/hardware-tx'
 import * as sessionManager from './session'
 import * as solana from './solana/solana'
 import { encryptAndStore, hasVault } from './vault'
@@ -592,6 +593,58 @@ const apiRouter = router({
             } finally {
               privateKey.delete()
             }
+          }),
+
+        buildUnsignedTransaction: procedure
+          .input(
+            z.object({
+              walletId: z.string(),
+              fromAddress: z.string(),
+              toAddress: z.string(),
+              value: z.string(),
+              data: z.string().optional(),
+              gasLimit: z.string(),
+              maxFeePerGas: z.string(),
+              maxInclusionFeePerGas: z.string(),
+              network: z.string().default('ethereum'),
+              chainId: z.number().default(1),
+            }),
+          )
+          .mutation(async ({ input }) => {
+            const wallet = await walletMetadata.get(input.walletId)
+            if (!wallet) throw new Error('Wallet not found')
+            if (wallet.type !== 'hardware-qr') {
+              throw new Error('Only hardware-qr wallets use this procedure')
+            }
+            const toHex = (s: string) =>
+              (s.startsWith('0x') ? s : `0x${s}`) as `0x${string}`
+            return hardwareTx.buildUnsignedEthTransaction({
+              fromAddress: toHex(input.fromAddress),
+              toAddress: toHex(input.toAddress),
+              value: toHex(input.value),
+              data: input.data ? toHex(input.data) : undefined,
+              gasLimit: toHex(input.gasLimit),
+              maxFeePerGas: toHex(input.maxFeePerGas),
+              maxInclusionFeePerGas: toHex(input.maxInclusionFeePerGas),
+              network: input.network,
+              chainId: input.chainId,
+            })
+          }),
+
+        broadcastSignedTransaction: procedure
+          .input(
+            z.object({
+              serializedUnsignedTx: z.string(),
+              signature: z.string(),
+              network: z.string().default('ethereum'),
+            }),
+          )
+          .mutation(async ({ input }) => {
+            return hardwareTx.broadcastSignedEthTransaction({
+              serializedUnsignedTx: input.serializedUnsignedTx as `0x${string}`,
+              signature: input.signature as `0x${string}`,
+              network: input.network,
+            })
           }),
 
         signMessage: procedure

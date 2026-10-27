@@ -2,7 +2,7 @@ import { type ReactNode, useEffect, useState } from 'react'
 
 import { Button } from '@status-im/components'
 import { CloseIcon } from '@status-im/icons/20'
-import { PasswordModal } from '@status-im/wallet/components'
+import { HardwareSignScreen, PasswordModal } from '@status-im/wallet/components'
 import { formatEther } from 'viem/utils'
 
 import {
@@ -29,6 +29,9 @@ export function ApprovalPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSessionActive, setIsSessionActive] = useState(false)
   const [isUnlocking, setIsUnlocking] = useState(false)
+  const [hardwareSigning, setHardwareSigning] = useState<{
+    sourceFingerprint: number | undefined
+  } | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -127,6 +130,52 @@ export function ApprovalPage() {
     window.close()
   }
 
+  const isHardwareSign =
+    approval.type === 'personal_sign' && approval.walletType === 'hardware-qr'
+
+  const handleConfirm = async () => {
+    if (!isHardwareSign || approval.type !== 'personal_sign') {
+      respond(true)
+      return
+    }
+    const wallets = await apiClient.wallet.all.query()
+    const wallet = wallets.find(w => w.id === approval.walletId)
+    if (!wallet || wallet.type !== 'hardware-qr') {
+      throw new Error('Wallet not found or not a hardware wallet')
+    }
+    setHardwareSigning({
+      sourceFingerprint: wallet.hardware?.sourceFingerprint,
+    })
+  }
+
+  const handleHardwareSignature = async (signature: string) => {
+    if (isSubmitting) return
+    setIsSubmitting(true)
+    await setApprovalResult({ id: approval.id, approved: true, signature })
+    window.close()
+  }
+
+  if (hardwareSigning && approval.type === 'personal_sign') {
+    return (
+      <div
+        data-customisation="blue"
+        className="flex h-screen flex-col bg-white-100 p-4"
+      >
+        <HardwareSignScreen
+          request={{
+            kind: 'personalMessage',
+            message: approval.message as `0x${string}`,
+          }}
+          address={approval.address}
+          sourceFingerprint={hardwareSigning.sourceFingerprint}
+          origin={approval.origin}
+          onSignature={handleHardwareSignature}
+          onCancel={() => respond(false)}
+        />
+      </div>
+    )
+  }
+
   return (
     <div
       data-customisation="blue"
@@ -188,7 +237,7 @@ export function ApprovalPage() {
         </Button>
         <Button
           variant="primary"
-          onPress={() => respond(true)}
+          onPress={handleConfirm}
           disabled={isSubmitting}
         >
           {view.confirmLabel}

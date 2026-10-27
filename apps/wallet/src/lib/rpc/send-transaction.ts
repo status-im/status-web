@@ -11,6 +11,7 @@ import {
   type TransactionSenders,
 } from '../send-transaction'
 import { requireOriginAddress, requireWalletFor } from './account'
+import { hardwareWalletUnsupported } from './errors'
 import { assertNoPendingApproval, requestApproval } from './request-approval'
 
 import type { createAPI } from '../../data/api'
@@ -187,6 +188,9 @@ export async function eth_sendTransaction({
   }
 
   const signer = await requireWalletFor(signerAddress)
+  if (signer.walletType === 'hardware-qr') {
+    throw hardwareWalletUnsupported('eth_sendTransaction')
+  }
   await assertNoPendingApproval()
 
   const tx: TransactionRequest = {

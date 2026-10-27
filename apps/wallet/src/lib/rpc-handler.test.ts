@@ -82,6 +82,12 @@ let autoApprove = true
 /** Popups the handler opened, counted by the mock's `windows.create`. */
 let popupsOpened = 0
 
+/** What the popup returns when it signed itself, as it does for hardware wallets. */
+let popupSignature: string | undefined
+
+/** The approval record the last popup was opened for. */
+let lastApproval: Record<string, unknown> | undefined
+
 type PushedEvent = {
   tabId: number
   message: { type: string; event: string; data: unknown }
@@ -143,9 +149,14 @@ function createChromeMock() {
       create: async () => {
         popupsOpened++
         const pending = session.get('pendingApproval') as { id: string }
+        lastApproval = pending
         queueMicrotask(() => {
           void set({
-            approvalResult: { id: pending.id, approved: autoApprove },
+            approvalResult: {
+              id: pending.id,
+              approved: autoApprove,
+              ...(popupSignature && { signature: popupSignature }),
+            },
           })
         })
         return { id: 1 }
@@ -175,6 +186,8 @@ let sentTransactions: Array<{ via: string; input: Record<string, unknown> }> =
 beforeEach(async () => {
   autoApprove = true
   popupsOpened = 0
+  popupSignature = undefined
+  lastApproval = undefined
   signedTypedData = null
   sentTransactions = []
   nodeRequest.mockClear()
@@ -1318,5 +1331,52 @@ describe('eth_sendTransaction', () => {
     expect((rejected as PromiseRejectedResult).reason).toMatchObject({
       code: -32002,
     })
+  })
+})
+
+describe('hardware wallets', () => {
+  beforeEach(async () => {
+    const metadata = JSON.parse(
+      (await storage.getItem<string>('local:vault:metadata'))!,
+    )
+    metadata[WALLET_ID].type = 'hardware-qr'
+    await storage.setItem('local:vault:metadata', JSON.stringify(metadata))
+  })
+
+  test('personal_sign returns the signature the popup produced', async () => {
+    await connect()
+    popupSignature = '0xhardwaresig'
+
+    await expect(
+      handleRpcRequest('personal_sign', ['0xdeadbeef', ADDRESS], ORIGIN),
+    ).resolves.toBe('0xhardwaresig')
+    expect(lastApproval).toMatchObject({
+      type: 'personal_sign',
+      walletId: WALLET_ID,
+      walletType: 'hardware-qr',
+    })
+  })
+
+  test('eth_signTypedData_v4 is refused before the popup', async () => {
+    await connect()
+    const opened = popupsOpened
+
+    await expect(
+      signTypedData(ADDRESS, JSON.stringify(TYPED_DATA)),
+    ).rejects.toMatchObject({ code: 4200 })
+    expect(popupsOpened).toBe(opened)
+    expect(signedTypedData).toBeNull()
+  })
+
+  test('eth_sendTransaction is refused before pricing or the popup', async () => {
+    await connect()
+    const opened = popupsOpened
+
+    await expect(
+      sendTransaction({ to: OTHER_ADDRESS, value: '0x1' }),
+    ).rejects.toMatchObject({ code: 4200 })
+    expect(popupsOpened).toBe(opened)
+    expect(feeRequest).not.toHaveBeenCalled()
+    expect(sentTransactions).toEqual([])
   })
 })

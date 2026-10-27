@@ -37,6 +37,7 @@ type Props = {
     decimals: number
   }
   signTransaction: (data: FormData) => Promise<string>
+  closeBeforeSigning?: boolean
   onEstimateGas: (to: string, value: string) => void
   hasActiveSession: boolean
   requestPassword: (options?: {
@@ -117,6 +118,7 @@ const SendAssetsModal = (props: Props) => {
     asset,
     account,
     signTransaction,
+    closeBeforeSigning,
     onEstimateGas,
     hasActiveSession,
     requestPassword,
@@ -239,9 +241,15 @@ const SendAssetsModal = (props: Props) => {
 
     setTransactionState('signing')
 
+    if (closeBeforeSigning) {
+      handleOnOpenChange(false)
+    }
+
     try {
       await signTransaction(data)
-      handleOnOpenChange(false)
+      if (!closeBeforeSigning) {
+        handleOnOpenChange(false)
+      }
       toast.positive('Transaction signed and sent', {
         duration: TOAST_SUCCESS_DURATION_MS,
       })
