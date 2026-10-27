@@ -103,11 +103,6 @@ async function getSigningKey(
   coin: InstanceType<Context['walletCore']['CoinType']>,
 ): Promise<ReturnType<typeof derivePrivateKey>> {
   const { walletCore, session } = ctx
-  if (wallet.type === 'hardware-qr') {
-    throw new Error(
-      'WALLET_IS_WATCH_ONLY: hardware-wallet signing requires the air-gapped QR sign flow which is not yet implemented',
-    )
-  }
   if (wallet.type === 'mnemonic') {
     const mnemonic = await session.getMnemonic(walletId)
     return derivePrivateKey(walletCore, mnemonic, coin, account.derivationPath)
