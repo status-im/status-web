@@ -152,7 +152,7 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
           : null
         const { gasLimit, maxFeePerGas, maxPriorityFeePerGas } =
           resolveFeeParams(tx, fees)
-        const { serializedUnsignedTx, chainId } =
+        const { serializedUnsignedTx, chainId, nonceReservationId } =
           await apiClient.wallet.account.ethereum.buildUnsignedTransaction.mutate(
             {
               walletId: currentWallet.id,
@@ -165,19 +165,33 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
               maxInclusionFeePerGas: maxPriorityFeePerGas,
             },
           )
-        const signature = await requestHardwareSign({
-          request: {
-            kind: 'transaction',
-            serializedTx: hexToBytes(serializedUnsignedTx),
-            chainId,
-          },
-          address,
-          sourceFingerprint: currentWallet.hardware?.sourceFingerprint,
-          origin: 'Status Wallet',
-        })
+        let signature: string
+        try {
+          signature = await requestHardwareSign({
+            request: {
+              kind: 'transaction',
+              serializedTx: hexToBytes(serializedUnsignedTx),
+              chainId,
+            },
+            address,
+            sourceFingerprint: currentWallet.hardware?.sourceFingerprint,
+            origin: 'Status Wallet',
+          })
+        } catch (error) {
+          // The held nonce lapses on its own if this release does not arrive.
+          void apiClient.wallet.account.ethereum.releaseNonceReservation
+            .mutate({ nonceReservationId })
+            .catch(() => {})
+          throw error
+        }
         const { txid } =
           await apiClient.wallet.account.ethereum.broadcastSignedTransaction
-            .mutate({ serializedUnsignedTx, signature })
+            .mutate({
+              serializedUnsignedTx,
+              signature,
+              fromAddress: address,
+              nonceReservationId,
+            })
             .catch((error: unknown) => {
               throw parseInsufficientFundsError(error) ?? error
             })

@@ -632,6 +632,8 @@ const apiRouter = router({
               serializedUnsignedTx: z.string(),
               signature: z.string(),
               network: z.string().default('ethereum'),
+              fromAddress: z.string(),
+              nonceReservationId: z.string(),
             }),
           )
           .mutation(async ({ input }) => {
@@ -639,7 +641,15 @@ const apiRouter = router({
               serializedUnsignedTx: input.serializedUnsignedTx as `0x${string}`,
               signature: input.signature as `0x${string}`,
               network: input.network,
+              fromAddress: input.fromAddress,
+              nonceReservationId: input.nonceReservationId,
             })
+          }),
+
+        releaseNonceReservation: procedure
+          .input(z.object({ nonceReservationId: z.string() }))
+          .mutation(({ input }) => {
+            hardwareTx.releaseNonceReservation(input.nonceReservationId)
           }),
 
         signMessage: procedure
