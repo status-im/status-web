@@ -1492,6 +1492,11 @@ describe('hardware wallets', () => {
       (await storage.getItem<string>('local:vault:metadata'))!,
     )
     metadata[WALLET_ID].type = 'hardware-qr'
+    metadata[WALLET_ID].hardware = {
+      vendor: 'keystone',
+      publicKey: 'xpub',
+      sourceFingerprint: 0x12345678,
+    }
     await storage.setItem('local:vault:metadata', JSON.stringify(metadata))
   })
 
@@ -1504,8 +1509,8 @@ describe('hardware wallets', () => {
     ).resolves.toBe('0xhardwaresig')
     expect(lastApproval).toMatchObject({
       type: 'personal_sign',
-      walletId: WALLET_ID,
       walletType: 'hardware-qr',
+      sourceFingerprint: 0x12345678,
     })
   })
 

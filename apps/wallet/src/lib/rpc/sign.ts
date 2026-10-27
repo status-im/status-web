@@ -68,8 +68,8 @@ export async function personal_sign({
     accountName: signer.accountName,
     chainId: signChainId,
     message,
-    walletId: signer.walletId,
     walletType: signer.walletType,
+    sourceFingerprint: signer.sourceFingerprint,
   })
 
   if (!signResult) {

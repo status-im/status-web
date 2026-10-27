@@ -24,8 +24,8 @@ export type PendingApproval = { createdAt: number } & (
       accountName: string
       chainId: string
       message: string
-      walletId: string
       walletType: WalletMeta['type']
+      sourceFingerprint?: number
     }
   | {
       id: string
