@@ -11,6 +11,8 @@ import * as walletMetadata from '../../data/wallet-metadata'
 import { SELECTED_WALLET_ID_KEY } from '../storage-keys'
 import { noConnectedAccount } from './errors'
 
+import type { WalletMeta } from '../../data/wallet-metadata'
+
 export const DEFAULT_ACCOUNT_NAME = 'Account 1'
 
 type ActiveAccount = {
@@ -97,9 +99,11 @@ export async function getOriginAddress(origin: string): Promise<string | null> {
  * Locates the wallet holding `address`, across all wallets -- the account a dApp
  * is pinned to may not belong to the currently selected wallet.
  */
-export async function findWalletForAddress(
-  address: string,
-): Promise<{ walletId: string; accountName: string } | null> {
+export async function findWalletForAddress(address: string): Promise<{
+  walletId: string
+  accountName: string
+  walletType: WalletMeta['type']
+} | null> {
   const wallets = await walletMetadata.getAll()
   const wallet = wallets.find(w =>
     w.accounts.some(account => isSameAddress(account.address, address)),
@@ -109,6 +113,7 @@ export async function findWalletForAddress(
   return {
     walletId: wallet.id,
     accountName: wallet.name || DEFAULT_ACCOUNT_NAME,
+    walletType: wallet.type,
   }
 }
 
@@ -127,9 +132,11 @@ export async function requireOriginAddress(origin: string): Promise<string> {
 }
 
 /** The pinned account may belong to a wallet other than the selected one. */
-export async function requireWalletFor(
-  address: string,
-): Promise<{ walletId: string; accountName: string }> {
+export async function requireWalletFor(address: string): Promise<{
+  walletId: string
+  accountName: string
+  walletType: WalletMeta['type']
+}> {
   const wallet = await findWalletForAddress(address)
   if (!wallet) {
     throw new ProviderRpcError({

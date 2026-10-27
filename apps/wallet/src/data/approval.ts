@@ -1,3 +1,5 @@
+import type { WalletMeta } from './wallet-metadata'
+
 /** How long a pending approval stays valid. Mirrored in `rpc-handler.ts`. */
 export const APPROVAL_TIMEOUT_MS = 5 * 60 * 1000
 
@@ -22,6 +24,8 @@ export type PendingApproval = { createdAt: number } & (
       accountName: string
       chainId: string
       message: string
+      walletId: string
+      walletType: WalletMeta['type']
     }
   | {
       id: string
@@ -65,6 +69,7 @@ export type PendingApproval = { createdAt: number } & (
 export type ApprovalResult = {
   id: string
   approved: boolean
+  signature?: string
 }
 
 export async function setPendingApproval(

@@ -70,7 +70,7 @@ export function decideNonce(
   return { action: 'reconcile', nonce: chain.pendingNonce }
 }
 
-async function fetchPendingNonce(
+export async function fetchPendingNonce(
   fromAddress: string,
   network: string,
 ): Promise<number> {

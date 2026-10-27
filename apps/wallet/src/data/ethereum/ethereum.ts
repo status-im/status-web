@@ -31,7 +31,10 @@ async function readBroadcastError(response: Response): Promise<string> {
  * `withNonce` commits on resolve, so returning anything but a real hash burns
  * the nonce on a transaction that does not exist and gaps every later one.
  */
-async function broadcast(rawTx: string, network: string): Promise<string> {
+export async function broadcast(
+  rawTx: string,
+  network: string,
+): Promise<string> {
   const response = await fetch(BROADCAST_TRANSACTION_URL.toString(), {
     method: 'POST',
     headers: {
