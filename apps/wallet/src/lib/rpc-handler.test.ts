@@ -1436,6 +1436,7 @@ describe('eth_sendTransaction', () => {
       address: ADDRESS,
       accountName: 'Wallet 1',
       chainId: '0x1',
+      walletType: 'mnemonic' as const,
     })
 
     const first = requestApproval(approval(OTHER_ORIGIN))

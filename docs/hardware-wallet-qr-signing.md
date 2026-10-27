@@ -6,7 +6,7 @@ How `hardware-qr` wallets sign through the ERC-4527 two-QR round trip, covering 
 
 A wallet imported over QR is stored with `type: 'hardware-qr'` and a `hardware` field holding `vendor`, `publicKey` and `sourceFingerprint` ([`wallet-metadata.ts`](../apps/wallet/src/data/wallet-metadata.ts)). The extension holds no key for it. `sourceFingerprint` tells the device which key should sign and goes into every sign request; it is `undefined` for devices that do not expose it.
 
-Signing needs no unlocked session for these wallets, so the send dialogs, the exchange drawer and the dApp signing popup skip the password prompt.
+Signing needs no unlocked session for these wallets, so the send dialogs, the exchange drawer and the dApp connect and signing popups skip the password prompt. The popup learns the wallet type from `walletType` in the `eth_requestAccounts` and `personal_sign` approval records.
 
 The key-based procedures in [`api.ts`](../apps/wallet/src/data/api.ts) (`send`, `sendErc20`, `sendContractCall`, `signMessage`, `signTypedData`) are never called for a hardware wallet. `getSigningKey` has no hardware case, so one that reached it would fail with `Wallet is not private key type`.
 

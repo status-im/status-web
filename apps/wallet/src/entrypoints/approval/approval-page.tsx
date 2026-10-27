@@ -82,10 +82,13 @@ export function ApprovalPage() {
     )
   }
 
-  const isHardwareSign =
-    approval.type === 'personal_sign' && approval.walletType === 'hardware-qr'
+  const isHardwareWallet =
+    (approval.type === 'eth_requestAccounts' ||
+      approval.type === 'personal_sign') &&
+    approval.walletType === 'hardware-qr'
+  const isHardwareSign = isHardwareWallet && approval.type === 'personal_sign'
 
-  const needsPassword = !isSessionActive && !isHardwareSign
+  const needsPassword = !isSessionActive && !isHardwareWallet
 
   const handlePasswordConfirm = async (password: string) => {
     setIsUnlocking(true)

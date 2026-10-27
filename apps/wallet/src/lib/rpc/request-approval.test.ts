@@ -51,6 +51,7 @@ test('a timed-out approval closes its popup', async () => {
     address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
     accountName: 'Wallet 1',
     chainId: '0x1',
+    walletType: 'mnemonic',
   })
   await vi.waitFor(() => expect(createWindow).toHaveBeenCalled())
 
