@@ -4,6 +4,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react'
 
@@ -64,6 +65,7 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
   const { hasActiveSession, requestPassword, clearSession } = usePassword()
   const [hardwareSignRequest, setHardwareSignRequest] =
     useState<PendingHardwareSign | null>(null)
+  const hardwareSignPending = useRef(false)
 
   const address = useMemo(() => {
     return currentAccount?.address as Address | undefined
@@ -85,8 +87,17 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
       sourceFingerprint: number | undefined
       origin: string
     }): Promise<string> => {
-      return new Promise((resolve, reject) => {
+      // One overlay at a time; replacing it would leave the first caller hanging.
+      if (hardwareSignPending.current) {
+        return Promise.reject(
+          new Error('Another hardware wallet signature is in progress'),
+        )
+      }
+      hardwareSignPending.current = true
+      return new Promise<string>((resolve, reject) => {
         setHardwareSignRequest({ ...params, resolve, reject })
+      }).finally(() => {
+        hardwareSignPending.current = false
       })
     },
     [],
