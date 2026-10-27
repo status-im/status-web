@@ -19,6 +19,9 @@ export class HardwareSignCancelledError extends Error {
   }
 }
 
+// Drawn larger than shown so the QR stays sharp when scaled to fit.
+const QR_BITMAP_SIZE = 800
+
 type BackButtonProps = Omit<ComponentProps<typeof Button>, 'children'>
 
 type Hex = `0x${string}`
@@ -170,7 +173,13 @@ function HardwareSignScreen({
             Continue to scan the signed response.
           </Text>
           <div className="flex aspect-square w-full items-center justify-center overflow-hidden rounded-12 bg-white-100">
-            <QRDisplay parts={parts} interval={200} className="size-full" />
+            {/* qrcode sizes the canvas with inline styles, so !important is needed to fit it; the hint names one device. */}
+            <QRDisplay
+              parts={parts}
+              interval={200}
+              size={QR_BITMAP_SIZE}
+              className="size-full [&_canvas]:!size-full [&_p]:hidden"
+            />
           </div>
           <div className="mt-4 grid grid-cols-2 gap-3">
             <Button variant="grey" onPress={onCancel}>
