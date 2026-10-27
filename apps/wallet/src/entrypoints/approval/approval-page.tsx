@@ -29,9 +29,7 @@ export function ApprovalPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSessionActive, setIsSessionActive] = useState(false)
   const [isUnlocking, setIsUnlocking] = useState(false)
-  const [hardwareSigning, setHardwareSigning] = useState<{
-    sourceFingerprint: number | undefined
-  } | null>(null)
+  const [isHardwareSigning, setIsHardwareSigning] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -133,19 +131,12 @@ export function ApprovalPage() {
     window.close()
   }
 
-  const handleConfirm = async () => {
-    if (!isHardwareSign || approval.type !== 'personal_sign') {
-      respond(true)
+  const handleConfirm = () => {
+    if (isHardwareSign) {
+      setIsHardwareSigning(true)
       return
     }
-    const wallets = await apiClient.wallet.all.query()
-    const wallet = wallets.find(w => w.id === approval.walletId)
-    if (!wallet || wallet.type !== 'hardware-qr') {
-      throw new Error('Wallet not found or not a hardware wallet')
-    }
-    setHardwareSigning({
-      sourceFingerprint: wallet.hardware?.sourceFingerprint,
-    })
+    respond(true)
   }
 
   const handleHardwareSignature = async (signature: string) => {
@@ -155,7 +146,7 @@ export function ApprovalPage() {
     window.close()
   }
 
-  if (hardwareSigning && approval.type === 'personal_sign') {
+  if (isHardwareSigning && approval.type === 'personal_sign') {
     return (
       <div
         data-customisation="blue"
@@ -167,7 +158,7 @@ export function ApprovalPage() {
             message: approval.message as `0x${string}`,
           }}
           address={approval.address}
-          sourceFingerprint={hardwareSigning.sourceFingerprint}
+          sourceFingerprint={approval.sourceFingerprint}
           origin={approval.origin}
           onSignature={handleHardwareSignature}
           onCancel={() => respond(false)}
