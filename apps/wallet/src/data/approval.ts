@@ -13,6 +13,7 @@ export type PendingApproval = { createdAt: number } & (
       address: string
       accountName: string
       chainId: string
+      walletType: WalletMeta['type']
     }
   | {
       id: string
