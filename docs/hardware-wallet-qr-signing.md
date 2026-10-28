@@ -16,11 +16,11 @@ The key-based procedures in [`api.ts`](../apps/wallet/src/data/api.ts) (`send`, 
 
 Callers reject with `HardwareSignCancelledError` when the user cancels, and the send dialogs treat it as the user's decision rather than a failure, so no error toast appears.
 
-| `kind`            | ERC-4527 data type     | Sign data                                                                             |
-| ----------------- | ---------------------- | ------------------------------------------------------------------------------------- |
-| `personalMessage` | `PersonalMessage` (3)  | The message bytes; a hex string is decoded first. The device adds the EIP-191 prefix. |
-| `typedData`       | `TypedData` (2)        | The EIP-712 payload as a JSON string.                                                 |
-| `transaction`     | `TypedTransaction` (4) | The serialized unsigned EIP-1559 transaction, with its `chainId`.                     |
+| `kind`            | ERC-4527 data type     | Sign data                                                                                                                                                                                  |
+| ----------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `personalMessage` | `PersonalMessage` (3)  | The message bytes. A dApp message is decoded if hex and UTF-8 encoded otherwise ([`personal-message.ts`](../apps/wallet/src/lib/personal-message.ts)). The device adds the EIP-191 prefix. |
+| `typedData`       | `TypedData` (2)        | The EIP-712 payload as a JSON string.                                                                                                                                                      |
+| `transaction`     | `TypedTransaction` (4) | The serialized unsigned EIP-1559 transaction, with its `chainId`.                                                                                                                          |
 
 The request's `origin` is the dApp origin for dApp requests and `Status Wallet` for the extension's own.
 

@@ -69,7 +69,10 @@ beforeEach(() => {
   act(() =>
     root.render(
       <HardwareSignScreen
-        request={{ kind: 'personalMessage', message: '0x68656c6c6f' }}
+        request={{
+          kind: 'personalMessage',
+          message: new TextEncoder().encode('hello'),
+        }}
         address="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
         sourceFingerprint={0x12345678}
         derivationPath="m/44'/60'/1'/0/0"
