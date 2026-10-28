@@ -151,8 +151,10 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
 
   const ensureUnlocked = useCallback(async (): Promise<void> => {
     if (hasActiveSession) return
-    const isUnlocked = await requestPassword()
-    if (!isUnlocked) throw new Error('Wallet not unlocked')
+    // The flag lags an unlock made earlier in the same action, so ask the worker.
+    const { isUnlocked } = await apiClient.session.status.query()
+    if (isUnlocked) return
+    if (!(await requestPassword())) throw new Error('Wallet not unlocked')
   }, [hasActiveSession, requestPassword])
 
   const signAndSendTransaction = useCallback(
