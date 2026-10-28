@@ -1403,12 +1403,15 @@ test('a software wallet signs in the worker even when the popup returns a signat
   ).resolves.toBe('0xtypedsig')
 })
 
+const HARDWARE_PATH = "m/44'/60'/1'/0/0"
+
 describe('hardware wallets', () => {
   beforeEach(async () => {
     const metadata = JSON.parse(
       (await storage.getItem<string>('local:vault:metadata'))!,
     )
     metadata[WALLET_ID].type = 'hardware-qr'
+    metadata[WALLET_ID].accounts[0].derivationPath = HARDWARE_PATH
     metadata[WALLET_ID].hardware = {
       vendor: 'keystone',
       publicKey: 'xpub',
@@ -1428,6 +1431,7 @@ describe('hardware wallets', () => {
       type: 'personal_sign',
       walletType: 'hardware-qr',
       sourceFingerprint: 0x12345678,
+      derivationPath: HARDWARE_PATH,
     })
   })
 
@@ -1442,6 +1446,7 @@ describe('hardware wallets', () => {
       type: 'eth_signTypedData_v4',
       walletType: 'hardware-qr',
       sourceFingerprint: 0x12345678,
+      derivationPath: HARDWARE_PATH,
     })
     expect(signedTypedData).toBeNull()
   })
@@ -1457,6 +1462,7 @@ describe('hardware wallets', () => {
       type: 'eth_sendTransaction',
       walletType: 'hardware-qr',
       sourceFingerprint: 0x12345678,
+      derivationPath: HARDWARE_PATH,
       serializedUnsignedTx: UNSIGNED_TX,
     })
     expect(hardwareCalls).toEqual([

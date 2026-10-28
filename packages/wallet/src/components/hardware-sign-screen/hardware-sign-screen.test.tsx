@@ -1,6 +1,10 @@
 import { act } from 'react'
 
-import { parseEthSignature, type ScannedUR } from '@qrkit/core'
+import {
+  buildEthSignRequestURParts,
+  parseEthSignature,
+  type ScannedUR,
+} from '@qrkit/core'
 import { createRoot } from 'react-dom/client'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -27,10 +31,14 @@ vi.mock('@qrkit/react', () => ({
   },
 }))
 
-vi.mock(import('@qrkit/core'), async importOriginal => ({
-  ...(await importOriginal()),
-  parseEthSignature: vi.fn(),
-}))
+vi.mock(import('@qrkit/core'), async importOriginal => {
+  const original = await importOriginal()
+  return {
+    ...original,
+    buildEthSignRequestURParts: vi.fn(original.buildEthSignRequestURParts),
+    parseEthSignature: vi.fn(),
+  }
+})
 
 const parseSignature = vi.mocked(parseEthSignature)
 const SCANNED = { type: 'eth-signature', cbor: new Uint8Array() } as ScannedUR
@@ -64,6 +72,7 @@ beforeEach(() => {
         request={{ kind: 'personalMessage', message: '0x68656c6c6f' }}
         address="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
         sourceFingerprint={0x12345678}
+        derivationPath="m/44'/60'/1'/0/0"
         origin="Status Wallet"
         checkSignature={checkSignature}
         onSignature={onSignature}
@@ -80,6 +89,16 @@ afterEach(() => {
 })
 
 describe('HardwareSignScreen', () => {
+  it("asks the device to sign with the account's key", () => {
+    expect(vi.mocked(buildEthSignRequestURParts)).toHaveBeenCalledWith(
+      expect.objectContaining({
+        address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
+        sourceFingerprint: 0x12345678,
+        derivationPath: "m/44'/60'/1'/0/0",
+      }),
+    )
+  })
+
   it('turns the camera on only after the request QR is shown', () => {
     expect(scanner.enabled).toBe(false)
 

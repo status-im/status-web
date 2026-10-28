@@ -318,6 +318,7 @@ export async function eth_sendTransaction({
     maxFeeEth: maxFeeEth(feeParams),
     walletType: signer.walletType,
     sourceFingerprint: signer.sourceFingerprint,
+    derivationPath: signer.derivationPath,
   }
 
   if (signer.walletType === 'hardware-qr') {

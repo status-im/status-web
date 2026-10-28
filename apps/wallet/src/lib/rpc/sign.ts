@@ -81,6 +81,7 @@ export async function personal_sign({
     message,
     walletType: signer.walletType,
     sourceFingerprint: signer.sourceFingerprint,
+    derivationPath: signer.derivationPath,
   })
 
   if (!signResult) {
@@ -156,6 +157,7 @@ export async function eth_signTypedData_v4({
     typedData: serialized,
     walletType: signer.walletType,
     sourceFingerprint: signer.sourceFingerprint,
+    derivationPath: signer.derivationPath,
   })
 
   if (!result) {

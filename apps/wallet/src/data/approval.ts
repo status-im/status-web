@@ -27,6 +27,7 @@ export type PendingApproval = { createdAt: number } & (
       message: string
       walletType: WalletMeta['type']
       sourceFingerprint?: number
+      derivationPath?: string
     }
   | {
       id: string
@@ -45,6 +46,7 @@ export type PendingApproval = { createdAt: number } & (
       typedData: string
       walletType: WalletMeta['type']
       sourceFingerprint?: number
+      derivationPath?: string
     }
   | {
       id: string
@@ -68,6 +70,7 @@ export type PendingApproval = { createdAt: number } & (
       maxFeeEth: string
       walletType: WalletMeta['type']
       sourceFingerprint?: number
+      derivationPath?: string
       /** Hardware wallets only: what the device signs. The handler holds its nonce. */
       serializedUnsignedTx?: string
     }

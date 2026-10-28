@@ -16,8 +16,8 @@ function signedHash(request: HardwareSignRequest): Hex {
 
 /**
  * Null when `signature` is `address`'s signature over `request`, otherwise
- * what the user should be told. The device may sign with another key, since
- * the request carries a fixed derivation path, or show an older answer.
+ * what the user should be told. The device may sign with another key or show
+ * an older answer.
  */
 export function checkHardwareSignature(
   request: HardwareSignRequest,

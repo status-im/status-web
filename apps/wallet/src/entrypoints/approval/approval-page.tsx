@@ -168,6 +168,9 @@ export function ApprovalPage() {
               ? approval.sourceFingerprint
               : undefined
           }
+          derivationPath={
+            'derivationPath' in approval ? approval.derivationPath : undefined
+          }
           origin={approval.origin}
           checkSignature={signature =>
             checkHardwareSignature(

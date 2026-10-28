@@ -4,7 +4,7 @@ How `hardware-qr` wallets sign through the ERC-4527 two-QR round trip, covering 
 
 ## Hardware wallets
 
-A wallet imported over QR is stored with `type: 'hardware-qr'` and a `hardware` field holding `vendor`, `publicKey` and `sourceFingerprint` ([`wallet-metadata.ts`](../apps/wallet/src/data/wallet-metadata.ts)). The extension holds no key for it. `sourceFingerprint` identifies the device's seed and goes into every sign request; it is `undefined` for devices that do not expose it. Every request names the derivation path `m/44'/60'/0'/0/0`, because `@qrkit/core` has no field for an account's stored `derivationPath`, so a device that signs by path signs with that account.
+A wallet imported over QR is stored with `type: 'hardware-qr'` and a `hardware` field holding `vendor`, `publicKey` and `sourceFingerprint` ([`wallet-metadata.ts`](../apps/wallet/src/data/wallet-metadata.ts)). The extension holds no key for it. `sourceFingerprint` identifies the device's seed and goes into every sign request; it is `undefined` for devices that do not expose it. Every request also names the signing account's stored `derivationPath`, so the device signs with that account's key.
 
 Signing needs no unlocked session for these wallets, so the send dialogs, the exchange drawer and the dApp connect and signing popups skip the password prompt. The popup learns the wallet type from `walletType` in the approval record.
 
