@@ -18,7 +18,10 @@ import {
 import { connectAccount } from '../../data/dapp-permissions'
 import { getChainByHex, toChainId } from '../../lib/chains'
 import { checkHardwareSignature } from '../../lib/hardware-signature'
-import { personalMessageText } from '../../lib/personal-message'
+import {
+  personalMessageBytes,
+  personalMessageText,
+} from '../../lib/personal-message'
 import { signedDomainFields } from '../../lib/rpc/typed-data'
 import { apiClient } from '../../providers/api-client'
 import { clip, flattenTypedData } from './typed-data-rows'
@@ -263,7 +266,10 @@ function toHardwareSignRequest(
 ): HardwareSignRequest | null {
   switch (approval.type) {
     case 'personal_sign':
-      return { kind: 'personalMessage', message: approval.message as Hex }
+      return {
+        kind: 'personalMessage',
+        message: personalMessageBytes(approval.message),
+      }
     case 'eth_signTypedData_v4':
       return { kind: 'typedData', typedData: approval.typedData }
     case 'eth_sendTransaction':

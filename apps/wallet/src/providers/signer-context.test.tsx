@@ -227,7 +227,10 @@ describe('hardware wallet signature requests', () => {
       signing = signer.signMessage('0x68656c6c6f')
     })
     expect(mocks.screen).toMatchObject({
-      request: { kind: 'personalMessage', message: '0x68656c6c6f' },
+      request: {
+        kind: 'personalMessage',
+        message: new TextEncoder().encode('hello'),
+      },
     })
 
     act(() => mocks.screen!.onSignature('0xmessagesig'))

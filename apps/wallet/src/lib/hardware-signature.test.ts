@@ -3,7 +3,7 @@ import {
   hexToBytes,
   keccak256,
   serializeTransaction,
-  toHex,
+  toBytes,
 } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 import { describe, expect, it } from 'vitest'
@@ -44,7 +44,7 @@ function withParityV(signature: Hex): Hex {
 
 describe('checkHardwareSignature', () => {
   it('accepts a personal message signed by the account', async () => {
-    const message = toHex('Hello')
+    const message = toBytes('Hello')
     const signature = await account.signMessage({ message: { raw: message } })
 
     expect(
@@ -88,7 +88,7 @@ describe('checkHardwareSignature', () => {
   )
 
   it('names the signer when another key signed', async () => {
-    const message = toHex('Hello')
+    const message = toBytes('Hello')
     const signature = await otherKey.signMessage({ message: { raw: message } })
 
     expect(
@@ -104,12 +104,12 @@ describe('checkHardwareSignature', () => {
 
   it('refuses a signature over a different payload', async () => {
     const signature = await account.signMessage({
-      message: { raw: toHex('An older request') },
+      message: { raw: toBytes('An older request') },
     })
 
     expect(
       checkHardwareSignature(
-        { kind: 'personalMessage', message: toHex('Hello') },
+        { kind: 'personalMessage', message: toBytes('Hello') },
         account.address,
         signature,
       ),
@@ -117,7 +117,7 @@ describe('checkHardwareSignature', () => {
   })
 
   it('refuses a signature with a v that is neither a parity nor a legacy v', async () => {
-    const message = toHex('Hello')
+    const message = toBytes('Hello')
     const signature = await account.signMessage({ message: { raw: message } })
 
     expect(

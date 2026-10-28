@@ -24,12 +24,10 @@ const QR_BITMAP_SIZE = 800
 
 type BackButtonProps = Omit<ComponentProps<typeof Button>, 'children'>
 
-type Hex = `0x${string}`
-
 export type HardwareSignRequest =
   | {
       kind: 'personalMessage'
-      message: Hex | Uint8Array
+      message: Uint8Array
     }
   | {
       kind: 'typedData'
@@ -54,15 +52,6 @@ type Props = {
   backButtonProps?: BackButtonProps
 }
 
-function hexToBytes(hex: Hex): Uint8Array {
-  const clean = hex.slice(2)
-  const bytes = new Uint8Array(clean.length / 2)
-  for (let i = 0; i < bytes.length; i++) {
-    bytes[i] = parseInt(clean.slice(i * 2, i * 2 + 2), 16)
-  }
-  return bytes
-}
-
 function toSignRequestParams(
   request: HardwareSignRequest,
   address: string,
@@ -73,10 +62,7 @@ function toSignRequestParams(
   switch (request.kind) {
     case 'personalMessage':
       return {
-        signData:
-          typeof request.message === 'string'
-            ? hexToBytes(request.message)
-            : request.message,
+        signData: request.message,
         dataType: EthDataType.PersonalMessage,
         address,
         sourceFingerprint,

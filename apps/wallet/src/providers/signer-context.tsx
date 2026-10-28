@@ -249,7 +249,7 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
       if (isHardwareWallet) {
         const signature = await requestHardwareSign({
           kind: 'personalMessage',
-          message,
+          message: hexToBytes(message),
         })
         return signature as Hex
       }
