@@ -3,9 +3,11 @@ import { useEffect, useRef, useState } from 'react'
 import { Button, Input, Text } from '@status-im/components'
 import { useNavigate } from '@tanstack/react-router'
 
+import { isAddressPathUnder } from '@/data/derive'
 import { useAddAccount } from '@/hooks/use-add-account'
 import { usePreviewWalletAccount } from '@/hooks/use-preview-wallet-account'
 import { useWalletFlowSuccess } from '@/hooks/use-wallet-flow-success'
+import { canDeriveAccounts } from '@/lib/wallet-accounts'
 import { usePassword } from '@/providers/password-context'
 import { useWallet } from '@/providers/wallet-context'
 
@@ -43,7 +45,12 @@ export function AddAccountFlow({ backHref, successHref }: Props) {
   const [isCreating, setIsCreating] = useState(false)
 
   const walletId = currentWallet?.id
-  const canDerive = currentWallet?.type === 'mnemonic'
+  const canDerive = currentWallet ? canDeriveAccounts(currentWallet) : false
+  // Hardware wallets derive from a stored public key, so there is nothing to unlock.
+  const accountPath =
+    currentWallet?.type === 'hardware-qr'
+      ? currentWallet.hardware?.accountPath
+      : undefined
 
   // Preview results are tracked in local state via mutateAsync instead of the
   // mutation hook's state: mutations observed from a mount effect hang forever
@@ -87,19 +94,21 @@ export function AddAccountFlow({ backHref, successHref }: Props) {
     hasInitialized.current = true
 
     const initialize = async () => {
-      const isUnlocked = await requestPassword({
-        title: 'Enter password',
-        description: 'To create a new account',
-      })
-      if (!isUnlocked) {
-        navigate({ to: backHref })
-        return
+      if (!accountPath) {
+        const isUnlocked = await requestPassword({
+          title: 'Enter password',
+          description: 'To create a new account',
+        })
+        if (!isUnlocked) {
+          navigate({ to: backHref })
+          return
+        }
       }
       await runPreviewRef.current()
     }
 
     initialize().catch(error => console.error(error))
-  }, [backHref, canDerive, navigate, requestPassword, walletId])
+  }, [accountPath, backHref, canDerive, navigate, requestPassword, walletId])
 
   // Re-preview (debounced) when the user edits the path.
   useEffect(() => {
@@ -111,6 +120,13 @@ export function AddAccountFlow({ backHref, successHref }: Props) {
       setIsPreviewing(false)
       setPreview(null)
       setPathError("Enter a valid derivation path, e.g. m/44'/60'/0'/0/1")
+      return
+    }
+    if (accountPath && !isAddressPathUnder(accountPath, derivationPath)) {
+      previewSeq.current++
+      setIsPreviewing(false)
+      setPreview(null)
+      setPathError(`Enter a path under this account, e.g. ${accountPath}/0/1`)
       return
     }
     setPathError(null)
@@ -176,8 +192,9 @@ export function AddAccountFlow({ backHref, successHref }: Props) {
         Create account
       </Text>
       <Text size={15} color="$neutral-50" className="mb-4">
-        Derive a new account from the recovery phrase of {currentWallet.name}.
-        Use the suggested derivation path or enter a custom one.
+        {accountPath
+          ? `Derive a new address from the public key of ${currentWallet.name}. Use the suggested derivation path or enter another one under ${accountPath}.`
+          : `Derive a new account from the recovery phrase of ${currentWallet.name}. Use the suggested derivation path or enter a custom one.`}
       </Text>
 
       <div className="mb-4 flex flex-col gap-2">
@@ -185,7 +202,7 @@ export function AddAccountFlow({ backHref, successHref }: Props) {
           label="Derivation path"
           value={path ?? ''}
           onChange={handlePathChange}
-          placeholder="m/44'/60'/0'/0/1"
+          placeholder={accountPath ? `${accountPath}/0/1` : "m/44'/60'/0'/0/1"}
           isDisabled={path === null}
         />
         {pathError && <p className="text-13 text-danger-50">{pathError}</p>}

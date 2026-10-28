@@ -13,6 +13,10 @@ export type HardwareWalletInfo = {
   vendor: string
   publicKey: string
   sourceFingerprint?: number
+  /** Account-level extended public key that new addresses are derived from. */
+  xpub?: string
+  /** Derivation path of `xpub`, e.g. m/44'/60'/0'. */
+  accountPath?: string
 }
 
 export type WalletMeta = {

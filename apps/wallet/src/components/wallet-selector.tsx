@@ -9,6 +9,7 @@ import {
 import { shortenAddress } from '@status-im/wallet/components'
 import { useNavigate } from '@tanstack/react-router'
 
+import { canDeriveAccounts } from '@/lib/wallet-accounts'
 import { useWallet } from '@/providers/wallet-context'
 
 import { ConnectedDApps } from './connected-dapps'
@@ -106,7 +107,7 @@ export function WalletSelector(props: Props) {
                     onClick={() => setCurrentAccount(account.address)}
                   />
                 ))}
-                {currentWallet.type === 'mnemonic' && (
+                {canDeriveAccounts(currentWallet) && (
                   <DropdownMenu.Item
                     icon={<AddIcon />}
                     label="Create account"

@@ -14,10 +14,13 @@ import * as bitcoin from './bitcoin/bitcoin'
 import { chromeLinkWithRetries } from './chromeLink'
 import {
   deriveAccount,
+  deriveAccountFromExtendedKey,
   deriveAccountsAtPaths,
   deriveNextAccountIndex,
   derivePrivateKey,
+  isAddressPathUnder,
   nextDerivationPath,
+  pathAtIndex,
   privateKeyFromData,
 } from './derive'
 import * as ethereum from './ethereum/ethereum'
@@ -44,42 +47,101 @@ const derivationPathSchema = z
   .max(128)
   .regex(/^m(\/\d+'?)+$/, 'Invalid derivation path')
 
-const hardwareWalletImportSchema = z.object({
-  name: z.string().trim().min(1).max(80),
-  vendor: z.string().trim().min(1).max(80),
-  password: z.string().optional(),
-  address: z
-    .string()
-    .trim()
-    .refine(isAddress, 'Invalid Ethereum address')
-    .transform(value => getAddress(value)),
-  derivationPath: derivationPathSchema,
-  publicKey: z
-    .string()
-    .trim()
-    .min(1)
-    .max(512)
-    .regex(/^\S+$/, 'Invalid public key'),
-  sourceFingerprint: z.number().int().nonnegative().max(0xffffffff).optional(),
-})
+const hardwareWalletImportSchema = z
+  .object({
+    name: z.string().trim().min(1).max(80),
+    vendor: z.string().trim().min(1).max(80),
+    password: z.string().optional(),
+    address: z
+      .string()
+      .trim()
+      .refine(isAddress, 'Invalid Ethereum address')
+      .transform(value => getAddress(value)),
+    derivationPath: derivationPathSchema,
+    publicKey: z
+      .string()
+      .trim()
+      .min(1)
+      .max(512)
+      .regex(/^\S+$/, 'Invalid public key'),
+    sourceFingerprint: z
+      .number()
+      .int()
+      .nonnegative()
+      .max(0xffffffff)
+      .optional(),
+    xpub: z
+      .string()
+      .trim()
+      .max(200)
+      .regex(/^xpub[1-9A-HJ-NP-Za-km-z]+$/, 'Invalid extended public key')
+      .optional(),
+    accountPath: z
+      .string()
+      .trim()
+      .regex(/^m\/44'\/60'\/\d+'$/, 'Invalid account path')
+      .optional(),
+  })
+  .refine(
+    input => (input.xpub === undefined) === (input.accountPath === undefined),
+    'xpub and accountPath must be sent together',
+  )
+  .refine(
+    input =>
+      input.accountPath === undefined ||
+      isAddressPathUnder(input.accountPath, input.derivationPath),
+    'derivationPath must be under accountPath',
+  )
 
-// Loads a wallet that can derive new accounts (mnemonic only) and resolves
-// the derivation path to use: the provided one, or the next sequential
-// Ethereum path after the wallet's existing accounts.
+// Loads a wallet that can derive new accounts and resolves the derivation
+// path to use: the provided one, or the next sequential Ethereum path after
+// the wallet's existing accounts. A hardware wallet derives from its stored
+// extended key; one imported without it cannot derive.
 async function resolveEthereumDerivation(
   walletCore: Context['walletCore'],
   walletId: string,
   derivationPath: string | undefined,
-): Promise<{ wallet: WalletMeta; derivationPath: string }> {
+): Promise<{
+  wallet: WalletMeta
+  derivationPath: string
+  extendedKey?: string
+}> {
   const wallet = await walletMetadata.get(walletId)
   if (!wallet) throw new Error('Wallet not found')
+  const { xpub, accountPath } = wallet.hardware ?? {}
+  if (wallet.type === 'hardware-qr' && xpub && accountPath) {
+    // wallet-core derives only the last two levels from the key, so a path
+    // under another account would silently name this account's address.
+    if (
+      derivationPath !== undefined &&
+      !isAddressPathUnder(accountPath, derivationPath)
+    ) {
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: `WALLET_CANNOT_DERIVE: hardware wallet paths must start with ${accountPath}/`,
+      })
+    }
+    return {
+      wallet,
+      extendedKey: xpub,
+      derivationPath:
+        derivationPath ??
+        pathAtIndex(
+          `${accountPath}/0/0`,
+          deriveNextAccountIndex(
+            wallet.accounts,
+            walletCore.CoinType.ethereum.value,
+          ),
+        ),
+    }
+  }
   // TRPCError so the message survives the chrome transport; trpc-chrome
   // replaces other error types with a generic "Internal server error"
   if (wallet.type !== 'mnemonic') {
     throw new TRPCError({
       code: 'BAD_REQUEST',
       message:
-        'WALLET_CANNOT_DERIVE: only mnemonic wallets support deriving new accounts',
+        'WALLET_CANNOT_DERIVE: only mnemonic wallets and hardware wallets imported with an extended key support deriving new accounts',
     })
   }
   return {
@@ -93,6 +155,33 @@ async function resolveEthereumDerivation(
         walletCore.Derivation.default,
       ),
   }
+}
+
+async function deriveEthereumAccount(
+  ctx: Context,
+  resolved: Awaited<ReturnType<typeof resolveEthereumDerivation>>,
+): Promise<WalletAccount> {
+  const { walletCore } = ctx
+  const coin = walletCore.CoinType.ethereum
+  const derivation = walletCore.Derivation.default
+  if (resolved.extendedKey) {
+    return deriveAccountFromExtendedKey(
+      walletCore,
+      resolved.extendedKey,
+      coin,
+      derivation,
+      resolved.derivationPath,
+    )
+  }
+  const mnemonic = await ctx.session.getMnemonic(resolved.wallet.id)
+  const [account] = deriveAccountsAtPaths(
+    walletCore,
+    mnemonic,
+    coin,
+    derivation,
+    [resolved.derivationPath],
+  )
+  return account
 }
 
 async function getSigningKey(
@@ -315,6 +404,22 @@ const apiRouter = router({
       .input(hardwareWalletImportSchema)
       .mutation(async ({ input, ctx }) => {
         const { walletCore, session } = ctx
+        if (input.xpub) {
+          const derived = deriveAccountFromExtendedKey(
+            walletCore,
+            input.xpub,
+            walletCore.CoinType.ethereum,
+            walletCore.Derivation.default,
+            input.derivationPath,
+          )
+          if (derived.address !== input.address) {
+            throw new TRPCError({
+              code: 'BAD_REQUEST',
+              message:
+                'HARDWARE_KEY_MISMATCH: the address is not derived from the extended key',
+            })
+          }
+        }
         const id = crypto.randomUUID()
         const account: WalletAccount = {
           address: input.address,
@@ -342,6 +447,8 @@ const apiRouter = router({
             vendor: input.vendor,
             publicKey: input.publicKey,
             sourceFingerprint: input.sourceFingerprint,
+            xpub: input.xpub,
+            accountPath: input.accountPath,
           },
         })
         return { id, name: input.name, address: input.address }
@@ -379,26 +486,19 @@ const apiRouter = router({
             }),
           )
           .mutation(async ({ input, ctx }) => {
-            const { walletCore } = ctx
-            const { wallet, derivationPath } = await resolveEthereumDerivation(
-              walletCore,
+            const resolved = await resolveEthereumDerivation(
+              ctx.walletCore,
               input.walletId,
               input.derivationPath,
             )
+            const { wallet, derivationPath } = resolved
             if (wallet.accounts.some(a => a.derivationPath === derivationPath))
               throw new TRPCError({
                 code: 'CONFLICT',
                 message:
                   'ACCOUNT_ALREADY_EXISTS: derivation path already imported',
               })
-            const mnemonic = await ctx.session.getMnemonic(input.walletId)
-            const [account] = deriveAccountsAtPaths(
-              walletCore,
-              mnemonic,
-              walletCore.CoinType.ethereum,
-              walletCore.Derivation.default,
-              [derivationPath],
-            )
+            const account = await deriveEthereumAccount(ctx, resolved)
             if (wallet.accounts.some(a => a.address === account.address))
               throw new TRPCError({
                 code: 'CONFLICT',
@@ -416,6 +516,7 @@ const apiRouter = router({
         // the next sequential path) and reports whether it has on-chain
         // activity and is already imported. Does not persist anything. Unlike
         // wallet.previewAccount, the mnemonic never leaves the background.
+        // Hardware wallets derive from their stored extended key instead.
         preview: procedure
           .input(
             z.object({
@@ -424,20 +525,13 @@ const apiRouter = router({
             }),
           )
           .mutation(async ({ input, ctx }) => {
-            const { walletCore } = ctx
-            const { wallet, derivationPath } = await resolveEthereumDerivation(
-              walletCore,
+            const resolved = await resolveEthereumDerivation(
+              ctx.walletCore,
               input.walletId,
               input.derivationPath,
             )
-            const mnemonic = await ctx.session.getMnemonic(input.walletId)
-            const [account] = deriveAccountsAtPaths(
-              walletCore,
-              mnemonic,
-              walletCore.CoinType.ethereum,
-              walletCore.Derivation.default,
-              [derivationPath],
-            )
+            const { wallet } = resolved
+            const account = await deriveEthereumAccount(ctx, resolved)
             let active = false
             try {
               active = await hasActivity(account.address)
