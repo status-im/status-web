@@ -105,6 +105,11 @@ function HardwareSignScreen({
   const [phase, setPhase] = useState<'display' | 'scan'>('display')
   const [scanError, setScanError] = useState<string | null>(null)
 
+  const showPhase = (next: 'display' | 'scan') => {
+    setScanError(null)
+    setPhase(next)
+  }
+
   const parts = useMemo(
     () =>
       buildEthSignRequestURParts(
@@ -192,7 +197,7 @@ function HardwareSignScreen({
             <Button variant="grey" onPress={onCancel}>
               Cancel
             </Button>
-            <Button variant="primary" onPress={() => setPhase('scan')}>
+            <Button variant="primary" onPress={() => showPhase('scan')}>
               Continue
             </Button>
           </div>
@@ -229,7 +234,7 @@ function HardwareSignScreen({
             <Button variant="grey" onPress={onCancel}>
               Cancel
             </Button>
-            <Button variant="outline" onPress={() => setPhase('display')}>
+            <Button variant="outline" onPress={() => showPhase('display')}>
               Back to QR
             </Button>
           </div>
