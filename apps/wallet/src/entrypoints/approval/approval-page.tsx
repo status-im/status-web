@@ -12,7 +12,7 @@ import {
 } from '../../data/approval'
 import { connectAccount } from '../../data/dapp-permissions'
 import { getChainByHex, toChainId } from '../../lib/chains'
-import { personalMessageBytes } from '../../lib/personal-message'
+import { personalMessageText } from '../../lib/personal-message'
 import { signedDomainFields } from '../../lib/rpc/typed-data'
 import { apiClient } from '../../providers/api-client'
 import { clip, flattenTypedData } from './typed-data-rows'
@@ -435,9 +435,7 @@ function SignContent({
 }: {
   approval: Extract<PendingApproval, { type: 'personal_sign' }>
 }) {
-  const readableMessage = new TextDecoder().decode(
-    personalMessageBytes(approval.message),
-  )
+  const readableMessage = personalMessageText(approval.message)
 
   return (
     <>
