@@ -18,6 +18,7 @@ import { isEthereumTransactionHash } from '@status-im/wallet/utils'
 import { type Address, type Hex, hexToBytes } from 'viem'
 
 import { useGasFees } from '../hooks/use-gas-fees'
+import { checkHardwareSignature } from '../lib/hardware-signature'
 import {
   buildAndSendTransaction,
   needsFeeEstimate,
@@ -386,6 +387,13 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
                   address={hardwareSignRequest.address}
                   sourceFingerprint={hardwareSignRequest.sourceFingerprint}
                   origin={hardwareSignRequest.origin}
+                  checkSignature={signature =>
+                    checkHardwareSignature(
+                      hardwareSignRequest.request,
+                      hardwareSignRequest.address,
+                      signature,
+                    )
+                  }
                   onSignature={handleHardwareSignature}
                   onCancel={handleHardwareCancel}
                 />

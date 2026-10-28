@@ -17,6 +17,7 @@ import {
 } from '../../data/approval'
 import { connectAccount } from '../../data/dapp-permissions'
 import { getChainByHex, toChainId } from '../../lib/chains'
+import { checkHardwareSignature } from '../../lib/hardware-signature'
 import { personalMessageText } from '../../lib/personal-message'
 import { signedDomainFields } from '../../lib/rpc/typed-data'
 import { apiClient } from '../../providers/api-client'
@@ -168,6 +169,13 @@ export function ApprovalPage() {
               : undefined
           }
           origin={approval.origin}
+          checkSignature={signature =>
+            checkHardwareSignature(
+              hardwareSignRequest,
+              approval.address,
+              signature,
+            )
+          }
           onSignature={handleHardwareSignature}
           onCancel={() => respond(false)}
         />

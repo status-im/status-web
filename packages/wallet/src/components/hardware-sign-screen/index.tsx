@@ -46,6 +46,8 @@ type Props = {
   address: string
   sourceFingerprint: number | undefined
   origin: string
+  /** Why `signature` is not the account's signature over `request`, or null. */
+  checkSignature: (signature: string) => string | null
   onSignature: (signature: string) => void
   onCancel: () => void
   backButtonProps?: BackButtonProps
@@ -103,6 +105,7 @@ function HardwareSignScreen({
   address,
   sourceFingerprint,
   origin,
+  checkSignature,
   onSignature,
   onCancel,
   backButtonProps,
@@ -121,11 +124,9 @@ function HardwareSignScreen({
   const handleScan = useCallback(
     (result: ScannedUR | string) => {
       if (typeof result === 'string') return false
+      let signature: string
       try {
-        const signature = parseEthSignature(result)
-        setScanError(null)
-        onSignature(signature)
-        return true
+        signature = parseEthSignature(result)
       } catch (error) {
         setScanError(
           error instanceof Error
@@ -134,8 +135,16 @@ function HardwareSignScreen({
         )
         return false
       }
+      const problem = checkSignature(signature)
+      if (problem) {
+        setScanError(problem)
+        return false
+      }
+      setScanError(null)
+      onSignature(signature)
+      return true
     },
-    [onSignature],
+    [checkSignature, onSignature],
   )
 
   const {

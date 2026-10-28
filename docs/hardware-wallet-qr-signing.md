@@ -4,7 +4,7 @@ How `hardware-qr` wallets sign through the ERC-4527 two-QR round trip, covering 
 
 ## Hardware wallets
 
-A wallet imported over QR is stored with `type: 'hardware-qr'` and a `hardware` field holding `vendor`, `publicKey` and `sourceFingerprint` ([`wallet-metadata.ts`](../apps/wallet/src/data/wallet-metadata.ts)). The extension holds no key for it. `sourceFingerprint` tells the device which key should sign and goes into every sign request; it is `undefined` for devices that do not expose it.
+A wallet imported over QR is stored with `type: 'hardware-qr'` and a `hardware` field holding `vendor`, `publicKey` and `sourceFingerprint` ([`wallet-metadata.ts`](../apps/wallet/src/data/wallet-metadata.ts)). The extension holds no key for it. `sourceFingerprint` identifies the device's seed and goes into every sign request; it is `undefined` for devices that do not expose it. Every request names the derivation path `m/44'/60'/0'/0/0`, because `@qrkit/core` has no field for an account's stored `derivationPath`, so a device that signs by path signs with that account.
 
 Signing needs no unlocked session for these wallets, so the send dialogs, the exchange drawer and the dApp connect and signing popups skip the password prompt. The popup learns the wallet type from `walletType` in the approval record.
 
@@ -12,7 +12,7 @@ The key-based procedures in [`api.ts`](../apps/wallet/src/data/api.ts) (`send`, 
 
 ## The QR round trip
 
-`HardwareSignScreen` runs one exchange. It shows the request as an animated QR built by `buildEthSignRequestURParts` from `@qrkit/core`, one frame every 200 ms. After Continue it turns the camera on and reads the device's answer with `parseEthSignature`. It calls `onSignature` with the hex signature, or `onCancel`. An answer that does not parse is shown on screen and scanning continues.
+`HardwareSignScreen` runs one exchange. It shows the request as an animated QR built by `buildEthSignRequestURParts` from `@qrkit/core`, one frame every 200 ms. After Continue it turns the camera on and reads the device's answer with `parseEthSignature`. It passes the hex signature to `checkSignature` and then to `onSignature`, or calls `onCancel`. Callers check with `checkHardwareSignature` ([`hardware-signature.ts`](../apps/wallet/src/lib/hardware-signature.ts)), which recovers the signer from the signed hash and refuses any other address, including the device's answer to an older request. An answer that does not parse or fails the check is shown on screen and scanning continues.
 
 Callers reject with `HardwareSignCancelledError` when the user cancels, and the send dialogs treat it as the user's decision rather than a failure, so no error toast appears.
 
@@ -38,7 +38,7 @@ The service worker builds and broadcasts the transaction, and only the signature
 
 1. `wallet.account.ethereum.buildUnsignedTransaction` reserves a nonce and returns the serialized unsigned transaction with a `nonceReservationId`.
 2. The overlay gets the signature from the device.
-3. `wallet.account.ethereum.broadcastSignedTransaction` attaches `r`, `s` and the parity to the unsigned transaction and broadcasts it. It requires a 65-byte signature; `v` may be the bare parity (0 or 1) or carry the legacy offset (27 or 28).
+3. `wallet.account.ethereum.broadcastSignedTransaction` attaches `r`, `s` and the parity to the unsigned transaction and broadcasts it. It requires a 65-byte signature whose `v` is the bare parity (0 or 1) or carries the legacy offset (27 or 28), and refuses one that does not recover to the sending address.
 
 Fees come from the same `resolveFeeParams` as software sends. Transactions are built for Ethereum mainnet only: chain ID 1, network `ethereum`.
 
@@ -58,5 +58,5 @@ The service worker has no camera, so dApp signing for a hardware wallet happens 
 
 Every approval record carries `walletType`, and the signing ones carry `sourceFingerprint`. For a hardware wallet the popup opens `HardwareSignScreen` after the user confirms and writes the device's signature to `ApprovalResult.signature`.
 
-- `personal_sign` and `eth_signTypedData_v4`: the handlers in [`rpc/sign.ts`](../apps/wallet/src/lib/rpc/sign.ts) return that signature instead of signing in the worker.
+- `personal_sign` and `eth_signTypedData_v4`: the handlers in [`rpc/sign.ts`](../apps/wallet/src/lib/rpc/sign.ts) return that signature instead of signing in the worker. They take a signature from the popup only for hardware wallets.
 - `eth_sendTransaction`: the handler in [`rpc/send-transaction.ts`](../apps/wallet/src/lib/rpc/send-transaction.ts) prices the transaction as for any wallet, then builds it with `buildUnsignedTransaction` before the popup opens and puts `serializedUnsignedTx` in the approval record. It broadcasts the signed transaction with `broadcastSignedTransaction` and returns the hash. The nonce is held from the build on; a reject, cancel, closed popup or timeout releases it in the handler.

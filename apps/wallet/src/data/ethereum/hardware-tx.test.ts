@@ -153,6 +153,45 @@ describe('broadcastSignedEthTransaction', () => {
     expect(tracker.commitHeld).not.toHaveBeenCalled()
   })
 
+  it('refuses a signature from another key and gives the nonce back', async () => {
+    const { serializedUnsignedTx } =
+      await buildUnsignedEthTransaction(BUILD_INPUT)
+    const { signature } = await signWithDevice(serializedUnsignedTx, 0)
+
+    await expect(
+      broadcastSignedEthTransaction({
+        serializedUnsignedTx,
+        signature,
+        network: 'ethereum',
+        fromAddress: RECIPIENT,
+        nonceReservationId: RESERVATION_ID,
+      }),
+    ).rejects.toThrow(`Signed by ${device.address}, not by ${RECIPIENT}`)
+
+    expect(broadcastMock).not.toHaveBeenCalled()
+    expect(tracker.releaseHeld).toHaveBeenCalledWith(RESERVATION_ID)
+    expect(tracker.commitHeld).not.toHaveBeenCalled()
+  })
+
+  it('refuses a v that is neither a parity nor a legacy v', async () => {
+    const { serializedUnsignedTx } =
+      await buildUnsignedEthTransaction(BUILD_INPUT)
+    const { signature } = await signWithDevice(serializedUnsignedTx, 0)
+
+    await expect(
+      broadcastSignedEthTransaction({
+        serializedUnsignedTx,
+        signature: `${signature.slice(0, -2)}02` as Hex,
+        network: 'ethereum',
+        fromAddress: device.address,
+        nonceReservationId: RESERVATION_ID,
+      }),
+    ).rejects.toThrow('Unexpected signature v value 2')
+
+    expect(broadcastMock).not.toHaveBeenCalled()
+    expect(tracker.releaseHeld).toHaveBeenCalledWith(RESERVATION_ID)
+  })
+
   it('gives the nonce back when the broadcast fails', async () => {
     const { serializedUnsignedTx } =
       await buildUnsignedEthTransaction(BUILD_INPUT)

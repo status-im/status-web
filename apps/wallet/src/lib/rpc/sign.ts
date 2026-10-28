@@ -9,6 +9,7 @@ import {
   serializeTypedData,
 } from './typed-data'
 
+import type { ApprovalResult } from '../../data/approval'
 import type { RpcContext } from './context'
 
 type SigningApi = {
@@ -38,6 +39,17 @@ function signingApi(): SigningApi {
 }
 
 const ADDRESS_PATTERN = /^0x[0-9a-fA-F]{40}$/
+
+/** Hardware wallets sign in the popup, which has the camera. */
+function popupSignature(result: ApprovalResult): string {
+  if (!result.signature) {
+    throw new ProviderRpcError({
+      code: -32603,
+      message: 'The hardware wallet returned no signature',
+    })
+  }
+  return result.signature
+}
 
 export async function personal_sign({
   params,
@@ -78,9 +90,8 @@ export async function personal_sign({
     })
   }
 
-  // Hardware wallets sign in the popup, which has the camera.
-  if (signResult.signature) {
-    return signResult.signature
+  if (signer.walletType === 'hardware-qr') {
+    return popupSignature(signResult)
   }
 
   const signed = await signingApi().wallet.account.ethereum.signMessage({
@@ -154,8 +165,8 @@ export async function eth_signTypedData_v4({
     })
   }
 
-  if (result.signature) {
-    return result.signature
+  if (signer.walletType === 'hardware-qr') {
+    return popupSignature(result)
   }
 
   const signed = await signingApi().wallet.account.ethereum.signTypedData({

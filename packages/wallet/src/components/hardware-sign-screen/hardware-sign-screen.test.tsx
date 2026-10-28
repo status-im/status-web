@@ -37,6 +37,7 @@ const SCANNED = { type: 'eth-signature', cbor: new Uint8Array() } as ScannedUR
 
 let container: HTMLDivElement
 let root: Root
+const checkSignature = vi.fn<(signature: string) => string | null>()
 const onSignature = vi.fn()
 const onCancel = vi.fn()
 
@@ -51,6 +52,7 @@ function pressButton(label: string) {
 beforeEach(() => {
   vi.stubGlobal('IS_REACT_ACT_ENVIRONMENT', true)
   vi.clearAllMocks()
+  checkSignature.mockReturnValue(null)
   scanner.onScan = undefined
   scanner.enabled = false
   container = document.createElement('div')
@@ -63,6 +65,7 @@ beforeEach(() => {
         address="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
         sourceFingerprint={0x12345678}
         origin="Status Wallet"
+        checkSignature={checkSignature}
         onSignature={onSignature}
         onCancel={onCancel}
       />,
@@ -111,7 +114,25 @@ describe('HardwareSignScreen', () => {
     })
 
     expect(accepted!).toBe(true)
+    expect(checkSignature).toHaveBeenCalledWith('0xsignature')
     expect(onSignature).toHaveBeenCalledWith('0xsignature')
+  })
+
+  it('keeps scanning when the signature fails the check', () => {
+    parseSignature.mockReturnValue('0xsignature')
+    checkSignature.mockReturnValue('Signed by 0xabc, not by this account.')
+    pressButton('Continue')
+
+    let accepted: boolean | void
+    act(() => {
+      accepted = scanner.onScan!(SCANNED)
+    })
+
+    expect(accepted!).toBe(false)
+    expect(container.textContent).toContain(
+      'Signed by 0xabc, not by this account.',
+    )
+    expect(onSignature).not.toHaveBeenCalled()
   })
 
   it('ignores plain-text QR codes', () => {
