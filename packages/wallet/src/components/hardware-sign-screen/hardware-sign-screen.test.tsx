@@ -157,6 +157,20 @@ describe('HardwareSignScreen', () => {
     expect(onSignature).not.toHaveBeenCalled()
   })
 
+  it('clears the error when going back to the request QR', () => {
+    parseSignature.mockReturnValue('0xsignature')
+    checkSignature.mockReturnValue('Signed by 0xabc, not by this account.')
+    pressButton('Continue')
+    act(() => {
+      scanner.onScan!(SCANNED)
+    })
+
+    pressButton('Back to QR')
+    pressButton('Continue')
+
+    expect(container.textContent).not.toContain('Signed by 0xabc')
+  })
+
   it('ignores plain-text QR codes', () => {
     pressButton('Continue')
 
