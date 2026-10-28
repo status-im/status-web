@@ -134,6 +134,7 @@ export function PasswordProvider({ children }: { children: React.ReactNode }) {
       setIsVerifying(true)
       try {
         await apiClient.session.unlock.mutate({ password })
+        void queryClient.invalidateQueries({ queryKey: ['session', 'status'] })
         setIsModalOpen(false)
         isModalOpenRef.current = false
         if (passwordResolveRef.current) {
@@ -144,7 +145,7 @@ export function PasswordProvider({ children }: { children: React.ReactNode }) {
         setIsVerifying(false)
       }
     },
-    [currentWallet?.id],
+    [currentWallet?.id, queryClient],
   )
 
   const handleModalOpenChange = useCallback((open: boolean) => {
