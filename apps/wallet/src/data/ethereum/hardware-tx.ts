@@ -2,7 +2,9 @@ import {
   type Hex,
   hexToBigInt,
   hexToNumber,
+  isAddressEqual,
   parseTransaction,
+  recoverTransactionAddress,
   serializeTransaction,
 } from 'viem'
 
@@ -20,6 +22,8 @@ type BuildInput = {
   network: string
   chainId: number
 }
+
+const PARITY_BY_V: Record<number, 0 | 1> = { 0: 0, 1: 1, 27: 0, 28: 1 }
 
 export type UnsignedTransactionResult = {
   serializedUnsignedTx: Hex
@@ -73,9 +77,19 @@ export async function broadcastSignedEthTransaction(input: {
     }
     const r = `0x${sig.slice(0, 64)}` as Hex
     const s = `0x${sig.slice(64, 128)}` as Hex
-    const vByte = hexToNumber(`0x${sig.slice(128, 130)}` as Hex)
-    const yParity = (vByte === 0 || vByte === 27 ? 0 : 1) as 0 | 1
+    const v = hexToNumber(`0x${sig.slice(128, 130)}` as Hex)
+    const yParity = PARITY_BY_V[v]
+    if (yParity === undefined) {
+      throw new Error(`Unexpected signature v value ${v}`)
+    }
     const signed = serializeTransaction(unsigned, { r, s, yParity })
+    // A device can sign with another key, and the network would accept that as a send from it.
+    const signer = await recoverTransactionAddress({
+      serializedTransaction: signed,
+    })
+    if (!isAddressEqual(signer, input.fromAddress as Hex)) {
+      throw new Error(`Signed by ${signer}, not by ${input.fromAddress}`)
+    }
     txid = await broadcast(signed.slice(2), input.network)
   } catch (error) {
     nonceTracker.releaseHeld(input.nonceReservationId)

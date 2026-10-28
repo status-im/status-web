@@ -1391,6 +1391,18 @@ describe('eth_sendTransaction', () => {
   })
 })
 
+test('a software wallet signs in the worker even when the popup returns a signature', async () => {
+  await connect()
+  popupSignature = '0xinjected'
+
+  await expect(
+    handleRpcRequest('personal_sign', ['0xdeadbeef', ADDRESS], ORIGIN),
+  ).resolves.toBe('0xsig')
+  await expect(
+    signTypedData(ADDRESS, JSON.stringify(TYPED_DATA)),
+  ).resolves.toBe('0xtypedsig')
+})
+
 describe('hardware wallets', () => {
   beforeEach(async () => {
     const metadata = JSON.parse(
