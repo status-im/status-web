@@ -45,6 +45,7 @@ type Props = {
   request: HardwareSignRequest
   address: string
   sourceFingerprint: number | undefined
+  derivationPath: string | undefined
   origin: string
   /** Why `signature` is not the account's signature over `request`, or null. */
   checkSignature: (signature: string) => string | null
@@ -66,6 +67,7 @@ function toSignRequestParams(
   request: HardwareSignRequest,
   address: string,
   sourceFingerprint: number | undefined,
+  derivationPath: string | undefined,
   origin: string,
 ) {
   switch (request.kind) {
@@ -78,6 +80,7 @@ function toSignRequestParams(
         dataType: EthDataType.PersonalMessage,
         address,
         sourceFingerprint,
+        derivationPath,
         origin,
       }
     case 'typedData':
@@ -86,6 +89,7 @@ function toSignRequestParams(
         dataType: EthDataType.TypedData,
         address,
         sourceFingerprint,
+        derivationPath,
         origin,
       }
     case 'transaction':
@@ -94,6 +98,7 @@ function toSignRequestParams(
         dataType: EthDataType.TypedTransaction,
         address,
         sourceFingerprint,
+        derivationPath,
         chainId: request.chainId,
         origin,
       }
@@ -104,6 +109,7 @@ function HardwareSignScreen({
   request,
   address,
   sourceFingerprint,
+  derivationPath,
   origin,
   checkSignature,
   onSignature,
@@ -116,9 +122,15 @@ function HardwareSignScreen({
   const parts = useMemo(
     () =>
       buildEthSignRequestURParts(
-        toSignRequestParams(request, address, sourceFingerprint, origin),
+        toSignRequestParams(
+          request,
+          address,
+          sourceFingerprint,
+          derivationPath,
+          origin,
+        ),
       ),
-    [request, address, sourceFingerprint, origin],
+    [request, address, sourceFingerprint, derivationPath, origin],
   )
 
   const handleScan = useCallback(

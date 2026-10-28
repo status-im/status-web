@@ -20,6 +20,7 @@ type SignerWallet = {
   accountName: string
   walletType: WalletMeta['type']
   sourceFingerprint?: number
+  derivationPath?: string
 }
 
 type ActiveAccount = {
@@ -110,17 +111,19 @@ export async function findWalletForAddress(
   address: string,
 ): Promise<SignerWallet | null> {
   const wallets = await walletMetadata.getAll()
-  const wallet = wallets.find(w =>
-    w.accounts.some(account => isSameAddress(account.address, address)),
-  )
-  if (!wallet) return null
-
-  return {
-    walletId: wallet.id,
-    accountName: wallet.name || DEFAULT_ACCOUNT_NAME,
-    walletType: wallet.type,
-    sourceFingerprint: wallet.hardware?.sourceFingerprint,
+  for (const wallet of wallets) {
+    const account = wallet.accounts.find(a => isSameAddress(a.address, address))
+    if (account) {
+      return {
+        walletId: wallet.id,
+        accountName: wallet.name || DEFAULT_ACCOUNT_NAME,
+        walletType: wallet.type,
+        sourceFingerprint: wallet.hardware?.sourceFingerprint,
+        derivationPath: account.derivationPath,
+      }
+    }
   }
+  return null
 }
 
 /**

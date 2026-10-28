@@ -47,6 +47,7 @@ type PendingHardwareSign = {
   request: HardwareSignRequest
   address: string
   sourceFingerprint: number | undefined
+  derivationPath: string
   origin: string
   resolve: (signature: string) => void
   reject: (error: Error) => void
@@ -83,12 +84,10 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
   const isHardwareWallet = currentWallet?.type === 'hardware-qr'
 
   const requestHardwareSign = useCallback(
-    (params: {
-      request: HardwareSignRequest
-      address: string
-      sourceFingerprint: number | undefined
-      origin: string
-    }): Promise<string> => {
+    (request: HardwareSignRequest): Promise<string> => {
+      if (!currentAccount) {
+        return Promise.reject(new Error('No wallet connected'))
+      }
       // One overlay at a time; replacing it would leave the first caller hanging.
       if (hardwareSignPending.current) {
         return Promise.reject(
@@ -97,12 +96,20 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
       }
       hardwareSignPending.current = true
       return new Promise<string>((resolve, reject) => {
-        setHardwareSignRequest({ ...params, resolve, reject })
+        setHardwareSignRequest({
+          request,
+          address: currentAccount.address,
+          sourceFingerprint: currentWallet?.hardware?.sourceFingerprint,
+          derivationPath: currentAccount.derivationPath,
+          origin: 'Status Wallet',
+          resolve,
+          reject,
+        })
       }).finally(() => {
         hardwareSignPending.current = false
       })
     },
-    [],
+    [currentAccount, currentWallet?.hardware?.sourceFingerprint],
   )
 
   useEffect(() => {
@@ -181,14 +188,9 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
         let signature: string
         try {
           signature = await requestHardwareSign({
-            request: {
-              kind: 'transaction',
-              serializedTx: hexToBytes(serializedUnsignedTx),
-              chainId,
-            },
-            address,
-            sourceFingerprint: currentWallet.hardware?.sourceFingerprint,
-            origin: 'Status Wallet',
+            kind: 'transaction',
+            serializedTx: hexToBytes(serializedUnsignedTx),
+            chainId,
           })
         } catch (error) {
           // The held nonce lapses on its own if this release does not arrive.
@@ -230,7 +232,6 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
     },
     [
       currentWallet?.id,
-      currentWallet?.hardware?.sourceFingerprint,
       address,
       ensureUnlocked,
       fetchGasFees,
@@ -247,10 +248,8 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
 
       if (isHardwareWallet) {
         const signature = await requestHardwareSign({
-          request: { kind: 'personalMessage', message },
-          address,
-          sourceFingerprint: currentWallet.hardware?.sourceFingerprint,
-          origin: 'Status Wallet',
+          kind: 'personalMessage',
+          message,
         })
         return signature as Hex
       }
@@ -269,7 +268,6 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
     },
     [
       currentWallet?.id,
-      currentWallet?.hardware?.sourceFingerprint,
       address,
       ensureUnlocked,
       isHardwareWallet,
@@ -285,10 +283,8 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
 
       if (isHardwareWallet) {
         const signature = await requestHardwareSign({
-          request: { kind: 'typedData', typedData },
-          address,
-          sourceFingerprint: currentWallet.hardware?.sourceFingerprint,
-          origin: 'Status Wallet',
+          kind: 'typedData',
+          typedData,
         })
         return signature as Hex
       }
@@ -311,7 +307,6 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
     },
     [
       currentWallet?.id,
-      currentWallet?.hardware?.sourceFingerprint,
       address,
       ensureUnlocked,
       isHardwareWallet,
@@ -386,6 +381,7 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
                   request={hardwareSignRequest.request}
                   address={hardwareSignRequest.address}
                   sourceFingerprint={hardwareSignRequest.sourceFingerprint}
+                  derivationPath={hardwareSignRequest.derivationPath}
                   origin={hardwareSignRequest.origin}
                   checkSignature={signature =>
                     checkHardwareSignature(
