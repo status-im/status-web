@@ -4,11 +4,15 @@ How `hardware-qr` wallets sign through the ERC-4527 two-QR round trip, covering 
 
 ## Hardware wallets
 
-A wallet imported over QR is stored with `type: 'hardware-qr'` and a `hardware` field holding `vendor`, `publicKey` and `sourceFingerprint` ([`wallet-metadata.ts`](../apps/wallet/src/data/wallet-metadata.ts)). The extension holds no key for it. `sourceFingerprint` identifies the device's seed and goes into every sign request; it is `undefined` for devices that do not expose it. Every request also names the signing account's stored `derivationPath`, so the device signs with that account's key.
+A wallet imported over QR is stored with `type: 'hardware-qr'` and a `hardware` field holding `vendor`, `publicKey`, `sourceFingerprint`, and the account's extended public key `xpub` with its path `accountPath` ([`wallet-metadata.ts`](../apps/wallet/src/data/wallet-metadata.ts)). The extension holds no key for it. `sourceFingerprint` identifies the device's seed and goes into every sign request; it is `undefined` for devices that do not expose it. Every request also names the signing account's stored `derivationPath`, so the device signs with that account's key.
 
 Signing needs no unlocked session for these wallets, so the send dialogs, the exchange drawer and the dApp connect and signing popups skip the password prompt. The popup learns the wallet type from `walletType` in the approval record.
 
 The key-based procedures in [`api.ts`](../apps/wallet/src/data/api.ts) (`send`, `sendErc20`, `sendContractCall`, `signMessage`, `signTypedData`) are never called for a hardware wallet. `getSigningKey` has no hardware case and a hardware wallet has no vault entry, so one that reached it would fail with `Wallet <id> not found`, or `Wallet Locked` while the wallet is locked.
+
+### Accounts
+
+The import offers the first five addresses of each account in the scanned QR, `accountPath/0/0` to `accountPath/0/4` ([`ScannerScreen`](../packages/wallet/src/components/scanner-screen/index.tsx)). **Create account** derives further addresses from the stored `xpub` in the service worker, through `wallet.account.ethereum.preview` and `add`, without a password. Paths must stay under `accountPath`: wallet-core derives only the last two levels from the key, so the API refuses any other path. Wallets imported before the key was stored have no `xpub` and cannot add accounts.
 
 ## The QR round trip
 

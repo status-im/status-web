@@ -6,6 +6,7 @@ import { ArrowLeftIcon } from '@status-im/icons/20'
 export type SelectableAccount = {
   chain: string
   address: string
+  derivationPath?: string
 }
 
 type Props = {
@@ -30,7 +31,7 @@ function AccountSelect({ accounts, onSelect, onBack }: Props) {
         Select account
       </Text>
       <Text size={15} color="$neutral-50">
-        Multiple accounts were found in the QR code. Select one to import.
+        Select the account to import.
       </Text>
       <div className="flex flex-col gap-2">
         {accounts.map(account => (
@@ -41,6 +42,7 @@ function AccountSelect({ accounts, onSelect, onBack }: Props) {
           >
             <Text size={13} color="$neutral-50">
               {account.chain === 'evm' ? 'Ethereum' : account.chain}
+              {account.derivationPath && ` · ${account.derivationPath}`}
             </Text>
             <Text size={13} weight="medium" className="break-all">
               {account.address}

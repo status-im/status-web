@@ -1,6 +1,10 @@
 import { expect, test } from 'vitest'
 
-import { deriveNextAccountIndex, pathAtIndex } from './derive'
+import {
+  deriveNextAccountIndex,
+  isAddressPathUnder,
+  pathAtIndex,
+} from './derive'
 
 import type { WalletAccount } from './wallet-metadata'
 
@@ -37,4 +41,17 @@ test('deriveNextAccountIndex continues after the highest index of the coin', () 
     { ...ethereumAccount("m/44'/0'/0'/0/9"), coin: 0 },
   ]
   expect(deriveNextAccountIndex(accounts, 60)).toBe(6)
+})
+
+test('isAddressPathUnder accepts change and index under the account path', () => {
+  expect(isAddressPathUnder("m/44'/60'/0'", "m/44'/60'/0'/0/7")).toBe(true)
+  expect(isAddressPathUnder("m/44'/60'/0'", "m/44'/60'/0'/1/0")).toBe(true)
+})
+
+test('isAddressPathUnder refuses other accounts and other depths', () => {
+  expect(isAddressPathUnder("m/44'/60'/0'", "m/44'/60'/1'/0/0")).toBe(false)
+  expect(isAddressPathUnder("m/44'/60'/1'", "m/44'/60'/10'/0/0")).toBe(false)
+  expect(isAddressPathUnder("m/44'/60'/0'", "m/44'/60'/0'/0")).toBe(false)
+  expect(isAddressPathUnder("m/44'/60'/0'", "m/44'/60'/0'/0/0/1")).toBe(false)
+  expect(isAddressPathUnder("m/44'/60'/0'", "m/44'/60'/0'/0'/0")).toBe(false)
 })
