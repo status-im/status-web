@@ -99,9 +99,9 @@ type Block =
   | { type: 'list'; ordered: boolean; items: Block[][] }
 
 /**
- * `html` targets the desktop client's rich text view; `text` targets the mobile
- * client, which renders the description as plain text and would show markup
- * literally.
+ * `html` targets the status-app rich text view, on desktop and mobile alike.
+ * `text` is for a client that renders the description as plain text and would
+ * show markup literally; no `/v2` feed uses it today.
  */
 export type FeedFormat = 'html' | 'text'
 
@@ -419,10 +419,10 @@ function escapeXml(text: string): string {
 }
 
 /**
- * RSS 2.0 defines `description` as character data, so the desktop feed's markup
- * is escaped on its way into the XML tree rather than served as child elements.
+ * RSS 2.0 defines `description` as character data, so the `html` markup is
+ * escaped on its way into the XML tree rather than served as child elements.
  * status-go decodes the element with gofeed before handing it to the client,
- * which therefore receives the same markup as it did before. The mobile feed
+ * which therefore receives the same markup as it did before. The `text` format
  * carries no markup and is already character data.
  */
 export function serializeFeedBody(body: string, format: FeedFormat): string {
@@ -430,8 +430,8 @@ export function serializeFeedBody(body: string, format: FeedFormat): string {
 }
 
 /**
- * The mobile client cannot follow a link in plain text, so an anchor keeps only
- * its label there. The desktop client is given the anchor itself.
+ * A plain text client cannot follow a link, so an anchor keeps only its label
+ * there. The `html` format keeps the anchor itself.
  */
 function renderInlines(inlines: Inline[], format: FeedFormat): string {
   return inlines

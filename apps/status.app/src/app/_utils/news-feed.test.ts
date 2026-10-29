@@ -80,18 +80,18 @@ describe('buildNewsFeed', () => {
     expect(feed).toContain('xmlns:status="https://status.app/ns/rss/1.0"')
   })
 
-  it('emits the desktop feed as markup and the mobile feed as text', () => {
-    const desktop = buildNewsFeed(LIST_FEED, 'html')
+  it('emits the html format as markup and the text format as text', () => {
+    const html = buildNewsFeed(LIST_FEED, 'html')
 
     // RSS 2.0 defines `description` as character data, so the markup is escaped
     // on the wire and the client decodes it back.
-    expect(desktop).toContain(
+    expect(html).toContain(
       '<description>Fixes:&lt;ul&gt;&lt;li&gt;High CPU usage&lt;/li&gt;&lt;/ul&gt;</description>'
     )
-    expect(parseItem(desktop).description).toBe(
+    expect(parseItem(html).description).toBe(
       'Fixes:<ul><li>High CPU usage</li></ul>'
     )
-    expect(XMLValidator.validate(desktop)).toBe(true)
+    expect(XMLValidator.validate(html)).toBe(true)
     expect(parseItem(buildNewsFeed(LIST_FEED, 'text')).description).toBe(
       'Fixes:\n\n• High CPU usage'
     )
