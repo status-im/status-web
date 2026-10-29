@@ -28,9 +28,9 @@ The request's `origin` is the dApp origin for dApp requests and `Status Wallet` 
 
 ## Signing in the extension
 
-[`SignerProvider`](../apps/wallet/src/providers/signer-context.tsx) checks the current wallet's type in `signMessage`, `signTypedData` and `signAndSendTransaction`. For a hardware wallet it opens `HardwareSignScreen` in a Radix dialog and waits for the result. Being a Radix dialog, it stacks above a modal that is already open, such as the exchange drawer, without closing it. One overlay is open at a time: a second request fails with `Another hardware wallet signature is in progress` instead of replacing the first.
+[`SignerProvider`](../apps/wallet/src/providers/signer-context.tsx) checks the current wallet's type in `signMessage`, `signTypedData` and `signAndSendTransaction`. For a hardware wallet it opens `HardwareSignScreen` in a Radix dialog and waits for the result. Being a Radix dialog, it stacks above a modal that is already open, such as a send dialog or the exchange drawer, without closing it. One overlay is open at a time: a second request fails with `Another hardware wallet signature is in progress` instead of replacing the first.
 
-The token and collectible pages send through `signAndSendTransaction` for every wallet type. For hardware wallets their send dialogs close before signing (`closeBeforeSigning`).
+The token and collectible pages send through `signAndSendTransaction` for every wallet type. Their send dialogs stay open under the QR screen, so a cancel on the device returns to the filled-in form.
 
 ### Transactions
 

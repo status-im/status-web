@@ -13,6 +13,7 @@ import * as z from 'zod'
 
 import { GasShiftedError } from '../../constants/errors'
 import { CurrencyAmount } from '../currency-amount'
+import { HardwareSignCancelledError } from '../hardware-sign-screen'
 import { NetworkLogo } from '../network-logo'
 import { TokenAmount } from '../token-amount'
 import { TokenIcon } from '../token-icon'
@@ -37,7 +38,6 @@ type Props = {
     decimals: number
   }
   signTransaction: (data: FormData) => Promise<string>
-  closeBeforeSigning?: boolean
   onEstimateGas: (to: string, value: string) => void
   hasActiveSession: boolean
   requestPassword: (options?: {
@@ -118,7 +118,6 @@ const SendAssetsModal = (props: Props) => {
     asset,
     account,
     signTransaction,
-    closeBeforeSigning,
     onEstimateGas,
     hasActiveSession,
     requestPassword,
@@ -241,20 +240,18 @@ const SendAssetsModal = (props: Props) => {
 
     setTransactionState('signing')
 
-    if (closeBeforeSigning) {
-      handleOnOpenChange(false)
-    }
-
     try {
       await signTransaction(data)
-      if (!closeBeforeSigning) {
-        handleOnOpenChange(false)
-      }
+      handleOnOpenChange(false)
       toast.positive('Transaction signed and sent', {
         duration: TOAST_SUCCESS_DURATION_MS,
       })
       setTransactionState('success')
     } catch (error) {
+      if (error instanceof HardwareSignCancelledError) {
+        setTransactionState('idle')
+        return
+      }
       if (error instanceof GasShiftedError) {
         setTransactionState('gas-shifted')
         return

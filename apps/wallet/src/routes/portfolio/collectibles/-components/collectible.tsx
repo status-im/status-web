@@ -212,7 +212,6 @@ const Collectible = (props: Props) => {
                     ethBalance={ethBalance}
                     onSend={handleSend}
                     onSuccess={handleSuccess}
-                    closeBeforeSigning={isHardwareWallet}
                     hasActiveSession={hasActiveSession || isHardwareWallet}
                     requestPassword={requestPassword}
                   >
