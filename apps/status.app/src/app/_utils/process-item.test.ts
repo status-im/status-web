@@ -106,7 +106,7 @@ describe('processItem', () => {
     expect(item['status:newsLink']).toBe('https://status.app/')
   })
 
-  it('hands the desktop client back its markup once decoded', () => {
+  it('hands the client back its markup once decoded', () => {
     const item = process(
       '<p>Ada &amp; Co released:</p><ul><li>High CPU usage</li></ul>'
     )
@@ -132,7 +132,7 @@ describe('processItem', () => {
     )
   })
 
-  it('renders the mobile feed as plain text', () => {
+  it('renders the text format as plain text', () => {
     const item = process(
       '<p>This release fixes:</p>' +
         '<ul><li>High CPU usage on Linux</li><li>Endless message loading</li></ul>',
@@ -144,7 +144,7 @@ describe('processItem', () => {
     )
   })
 
-  it('keeps the mobile feed free of markup for the manually numbered post', () => {
+  it('keeps the text format free of markup for the manually numbered post', () => {
     const item = process(GHOST.manuallyNumbered, 'text')
 
     expect(item.description).toBe(

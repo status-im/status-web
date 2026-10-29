@@ -14,8 +14,11 @@ const FEED = {
     lineBreak: '<br /><br />',
     path: '/tag/desktop-news/rss/',
   },
+  // status-app renders the description as rich text on mobile as on desktop, so
+  // a newline collapses to a space there: `/v2` serves it markup. `lineBreak`
+  // only feeds the frozen v1 output.
   'mobile-news': {
-    format: 'text',
+    format: 'html',
     lineBreak: '\n\n',
     path: '/tag/mobile-news/rss/',
   },

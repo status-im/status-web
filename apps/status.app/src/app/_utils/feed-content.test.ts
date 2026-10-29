@@ -207,7 +207,7 @@ describe('renderFeedContent', () => {
       expect(body).toBe('An anchor only')
     })
 
-    it('keeps only the label for the mobile client', () => {
+    it('keeps only the label in the text format', () => {
       const { body } = renderFeedContent(
         '<p>See the <a href="https://wikipedia.org/">test link</a> for details</p>' +
           BUTTON_CARD,
@@ -257,7 +257,7 @@ describe('renderFeedContent', () => {
     })
   })
 
-  describe("the mobile client's plain text format", () => {
+  describe('the plain text format', () => {
     it('renders lists as text bullets, never as markup', () => {
       const { body } = renderFeedContent(
         '<p>Fixes:</p><ul><li>High CPU usage</li><li>Endless loading</li></ul>',
