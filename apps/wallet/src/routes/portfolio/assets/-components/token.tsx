@@ -480,7 +480,6 @@ const Token = (props: Props) => {
               ethBalance: sendAsset.ethBalance,
             }}
             signTransaction={signTransaction}
-            closeBeforeSigning={isHardwareWallet}
             hasActiveSession={hasActiveSession || isHardwareWallet}
             requestPassword={requestPassword}
             gasFees={gasFeeQuery.data}
@@ -548,7 +547,6 @@ const Token = (props: Props) => {
                 ethBalance: sendAsset.ethBalance,
               }}
               signTransaction={signTransaction}
-              closeBeforeSigning={isHardwareWallet}
               hasActiveSession={hasActiveSession || isHardwareWallet}
               requestPassword={requestPassword}
               gasFees={gasFeeQuery.data}

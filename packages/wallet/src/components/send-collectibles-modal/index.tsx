@@ -57,8 +57,6 @@ type Props = {
   onSend: (params: SendCollectibleParams) => Promise<void>
   /** Called after a successful send so the parent can invalidate queries */
   onSuccess?: () => void
-  /** Close before `onSend`, so a signing overlay outside the dialog can take input */
-  closeBeforeSigning?: boolean
   hasActiveSession: boolean
   requestPassword: (options?: {
     title?: string
@@ -85,7 +83,6 @@ const SendCollectiblesModal = (props: Props) => {
     ethBalance,
     onSend,
     onSuccess,
-    closeBeforeSigning,
     hasActiveSession,
     requestPassword,
   } = props
@@ -189,10 +186,6 @@ const SendCollectiblesModal = (props: Props) => {
         tokenId,
         amount: isErc1155 ? effectiveAmount : undefined,
       })
-
-      if (closeBeforeSigning) {
-        handleOpenChange(false)
-      }
 
       await onSend({
         to: recipientAddress,

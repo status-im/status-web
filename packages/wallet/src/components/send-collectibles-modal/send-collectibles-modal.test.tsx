@@ -38,10 +38,7 @@ let root: Root
 
 const isDialogOpen = () => document.querySelector('[role="dialog"]') !== null
 
-function render(props: {
-  onSend: () => Promise<void>
-  closeBeforeSigning?: boolean
-}) {
+function render(props: { onSend: () => Promise<void> }) {
   act(() =>
     root.render(
       <SendCollectiblesModal
@@ -126,7 +123,8 @@ afterEach(() => {
 })
 
 describe('SendCollectiblesModal', () => {
-  it('stays open while a software wallet signs', async () => {
+  // The signing overlay stacks above the dialog, so it can stay open.
+  it('stays open while signing', async () => {
     const { seen, onSend } = recordDialogDuringSend()
     render({ onSend })
 
@@ -136,20 +134,8 @@ describe('SendCollectiblesModal', () => {
     expect(toast.positive).toHaveBeenCalledWith('NFT transfer submitted')
   })
 
-  // A modal dialog blocks input to the signing overlay rendered outside it.
-  it('closes before signing when asked to', async () => {
-    const { seen, onSend } = recordDialogDuringSend()
-    render({ closeBeforeSigning: true, onSend })
-
-    await send()
-
-    expect(seen.open).toBe(false)
-    expect(toast.positive).toHaveBeenCalledWith('NFT transfer submitted')
-  })
-
-  it('says nothing when the user cancels on the hardware wallet', async () => {
+  it('stays open and says nothing when the user cancels on the hardware wallet', async () => {
     render({
-      closeBeforeSigning: true,
       onSend: async () => {
         throw new HardwareSignCancelledError()
       },
@@ -157,6 +143,7 @@ describe('SendCollectiblesModal', () => {
 
     await send()
 
+    expect(isDialogOpen()).toBe(true)
     expect(toast.negative).not.toHaveBeenCalled()
     expect(toast.positive).not.toHaveBeenCalled()
   })
