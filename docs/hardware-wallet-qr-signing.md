@@ -8,7 +8,7 @@ A wallet imported over QR is stored with `type: 'hardware-qr'` and a `hardware` 
 
 Signing needs no unlocked session for these wallets, so the send dialogs, the exchange drawer and the dApp connect and signing popups skip the password prompt. The popup learns the wallet type from `walletType` in the approval record.
 
-The key-based procedures in [`api.ts`](../apps/wallet/src/data/api.ts) (`send`, `sendErc20`, `sendContractCall`, `signMessage`, `signTypedData`) are never called for a hardware wallet. `getSigningKey` has no hardware case, so one that reached it would fail with `Wallet is not private key type`.
+The key-based procedures in [`api.ts`](../apps/wallet/src/data/api.ts) (`send`, `sendErc20`, `sendContractCall`, `signMessage`, `signTypedData`) are never called for a hardware wallet. `getSigningKey` has no hardware case and a hardware wallet has no vault entry, so one that reached it would fail with `Wallet <id> not found`, or `Wallet Locked` while the wallet is locked.
 
 ## The QR round trip
 
