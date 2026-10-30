@@ -297,10 +297,7 @@ export function createNonceTracker() {
     }
   }
 
-  /**
-   * The next nonce for `fromAddress` on `network`, holding the address's lock
-   * until `commit` (after a successful broadcast) or `release`.
-   */
+  /** Holds the address's lock until `commit` or `release`. */
   async function reserve(
     fromAddress: string,
     network: string,

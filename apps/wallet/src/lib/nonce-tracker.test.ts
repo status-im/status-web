@@ -75,8 +75,7 @@ const ADDRESS = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
 const NETWORK = 'ethereum'
 
 describe('held reservations', () => {
-  // What `nodes.getNonce` reports. Left unchanged after a send, as a node that
-  // has not counted it yet would.
+  // The node's pending nonce, left unchanged after a send as a lagging node would.
   let pendingNonce = 5
 
   beforeEach(async () => {

@@ -94,8 +94,7 @@ describe('buildUnsignedEthTransaction', () => {
 })
 
 describe('broadcastSignedEthTransaction', () => {
-  // Devices answer with v as the bare parity or with the legacy 27 offset; the
-  // two values sign with opposite parities under the dev key.
+  // Each value signs with the parity its v names under the dev key.
   it.each([
     { v: 0, value: '0x65' },
     { v: 1, value: '0x64' },

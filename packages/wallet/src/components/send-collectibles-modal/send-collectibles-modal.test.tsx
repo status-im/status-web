@@ -85,10 +85,7 @@ function typeRecipient(address: string) {
   })
 }
 
-/**
- * Opens the modal, fills it in and presses send. The press commits its render
- * before `onSend` resumes, as the real build call's await lets it.
- */
+/** The press renders before `onSend` resumes, as the real build call's await allows. */
 async function send() {
   pressButton('Open')
   typeRecipient(RECIPIENT)
