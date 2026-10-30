@@ -149,11 +149,7 @@ type TransactionApproval = Omit<
   'id' | 'createdAt'
 >
 
-/**
- * The device signs a transaction that already has its nonce, so the nonce is
- * held from before the popup opens. Every way the popup can end comes back
- * here, which is what releases it.
- */
+/** The device signs the nonce, so hold it from before the popup until this returns. */
 async function sendFromHardwareWallet(
   approval: TransactionApproval,
   tx: TransactionRequest,

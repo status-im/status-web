@@ -357,7 +357,7 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
   return (
     <SignerContext.Provider value={value}>
       {children}
-      {/* A Radix dialog, so it stacks above open modals like the exchange drawer instead of closing them. */}
+      {/* Radix, so it stacks above open modals instead of closing them. */}
       {hardwareSignRequest && (
         <Dialog.Root
           open

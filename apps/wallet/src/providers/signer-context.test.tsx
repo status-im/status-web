@@ -113,10 +113,7 @@ async function settle() {
   })
 }
 
-/**
- * Starts a send and waits for the QR screen. The outcome is wrapped so awaiting
- * this does not wait for the send itself, and so it never rejects unobserved.
- */
+/** Wrapped so callers skip waiting for the send and no rejection goes unobserved. */
 async function startSend() {
   const outcome = signer.signAndSendTransaction(TX).then(
     hash => ({ hash }),

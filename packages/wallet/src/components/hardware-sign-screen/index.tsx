@@ -185,7 +185,7 @@ function HardwareSignScreen({
             Continue to scan the signed response.
           </Text>
           <div className="flex aspect-square w-full items-center justify-center overflow-hidden rounded-12 bg-white-100">
-            {/* qrcode sizes the canvas with inline styles, so !important is needed to fit it; the hint names one device. */}
+            {/* qrcode sizes the canvas inline, so !important; its hint names one device, so it is hidden. */}
             <QRDisplay
               parts={parts}
               interval={200}

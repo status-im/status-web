@@ -83,7 +83,7 @@ export async function broadcastSignedEthTransaction(input: {
       throw new Error(`Unexpected signature v value ${v}`)
     }
     const signed = serializeTransaction(unsigned, { r, s, yParity })
-    // A device can sign with another key, and the network would accept that as a send from it.
+    // A device can sign with another key, and the network would still accept it.
     const signer = await recoverTransactionAddress({
       serializedTransaction: signed,
     })
