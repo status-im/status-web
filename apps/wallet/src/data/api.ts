@@ -603,6 +603,7 @@ const apiRouter = router({
               maxInclusionFeePerGas: z.string(),
               network: z.string().default('ethereum'),
               chainId: z.number().default(1),
+              renewsHold: z.boolean().default(false),
             }),
           )
           .mutation(async ({ input }) => {
@@ -623,6 +624,7 @@ const apiRouter = router({
               maxInclusionFeePerGas: toHex(input.maxInclusionFeePerGas),
               network: input.network,
               chainId: input.chainId,
+              renewsHold: input.renewsHold,
             })
           }),
 
@@ -644,6 +646,12 @@ const apiRouter = router({
               fromAddress: input.fromAddress,
               nonceReservationId: input.nonceReservationId,
             })
+          }),
+
+        renewNonceReservation: procedure
+          .input(z.object({ nonceReservationId: z.string() }))
+          .mutation(({ input }) => {
+            return hardwareTx.renewNonceReservation(input.nonceReservationId)
           }),
 
         releaseNonceReservation: procedure

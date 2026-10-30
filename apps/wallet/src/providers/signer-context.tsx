@@ -43,6 +43,9 @@ type SignerContextValue = {
 
 const DEFAULT_ACCOUNT_NAME = 'Account 1'
 
+/** A third of the worker's `RENEWED_HOLD_TTL_MS`, so one missed renewal keeps the hold. */
+const HOLD_RENEW_INTERVAL_MS = 20 * 1000
+
 type PendingHardwareSign = {
   request: HardwareSignRequest
   address: string
@@ -185,8 +188,14 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
               gasLimit,
               maxFeePerGas,
               maxInclusionFeePerGas: maxPriorityFeePerGas,
+              renewsHold: true,
             },
           )
+        const renewal = setInterval(() => {
+          void apiClient.wallet.account.ethereum.renewNonceReservation
+            .mutate({ nonceReservationId })
+            .catch(() => {})
+        }, HOLD_RENEW_INTERVAL_MS)
         let signature: string
         try {
           signature = await requestHardwareSign({
@@ -200,6 +209,8 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
             .mutate({ nonceReservationId })
             .catch(() => {})
           throw error
+        } finally {
+          clearInterval(renewal)
         }
         const { txid } =
           await apiClient.wallet.account.ethereum.broadcastSignedTransaction

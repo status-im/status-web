@@ -2,7 +2,7 @@ import { type Hex, padHex, parseTransaction } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { nonceTracker } from '../../lib/nonce-tracker'
+import { nonceTracker, RENEWED_HOLD_TTL_MS } from '../../lib/nonce-tracker'
 import { broadcast } from './ethereum'
 import {
   broadcastSignedEthTransaction,
@@ -10,9 +10,10 @@ import {
 } from './hardware-tx'
 
 vi.mock('../../lib/nonce-tracker', () => ({
+  RENEWED_HOLD_TTL_MS: 60_000,
   nonceTracker: {
     reserveHeld: vi.fn(),
-    commitHeld: vi.fn(),
+    claimHeld: vi.fn(),
     releaseHeld: vi.fn(),
   },
 }))
@@ -30,6 +31,8 @@ const RECIPIENT = '0x70997970C51812dc3A010C7d01b50e0d17dc79C8'
 const RESERVATION_ID = 'reservation-1'
 const NONCE = 7
 const TX_HASH = `0x${'ab'.repeat(32)}`
+
+const held = { nonce: NONCE, commit: vi.fn(async () => {}), release: vi.fn() }
 
 const BUILD_INPUT = {
   fromAddress: device.address,
@@ -58,6 +61,7 @@ async function signWithDevice(serializedUnsignedTx: Hex, vOffset: 0 | 27) {
 beforeEach(() => {
   vi.clearAllMocks()
   tracker.reserveHeld.mockResolvedValue({ id: RESERVATION_ID, nonce: NONCE })
+  tracker.claimHeld.mockReturnValue(held)
   broadcastMock.mockResolvedValue(TX_HASH)
 })
 
@@ -65,7 +69,11 @@ describe('buildUnsignedEthTransaction', () => {
   it('builds an EIP-1559 transaction at the reserved nonce', async () => {
     const result = await buildUnsignedEthTransaction(BUILD_INPUT)
 
-    expect(tracker.reserveHeld).toHaveBeenCalledWith(device.address, 'ethereum')
+    expect(tracker.reserveHeld).toHaveBeenCalledWith(
+      device.address,
+      'ethereum',
+      undefined,
+    )
     expect(result).toMatchObject({
       chainId: 1,
       nonceReservationId: RESERVATION_ID,
@@ -82,6 +90,16 @@ describe('buildUnsignedEthTransaction', () => {
       maxPriorityFeePerGas: 100_000_000n,
     })
     expect(tx.to?.toLowerCase()).toBe(RECIPIENT.toLowerCase())
+  })
+
+  it('holds the nonce briefly for a caller that renews the hold', async () => {
+    await buildUnsignedEthTransaction({ ...BUILD_INPUT, renewsHold: true })
+
+    expect(tracker.reserveHeld).toHaveBeenCalledWith(
+      device.address,
+      'ethereum',
+      RENEWED_HOLD_TTL_MS,
+    )
   })
 
   it('gives the nonce back when the transaction cannot be built', async () => {
@@ -123,13 +141,9 @@ describe('broadcastSignedEthTransaction', () => {
 
       expect(result).toEqual({ txid: TX_HASH })
       expect(broadcastMock).toHaveBeenCalledWith(signed.slice(2), 'ethereum')
-      expect(tracker.commitHeld).toHaveBeenCalledWith(
-        RESERVATION_ID,
-        device.address,
-        'ethereum',
-        NONCE,
-      )
-      expect(tracker.releaseHeld).not.toHaveBeenCalled()
+      expect(tracker.claimHeld).toHaveBeenCalledWith(RESERVATION_ID)
+      expect(held.commit).toHaveBeenCalled()
+      expect(held.release).not.toHaveBeenCalled()
     },
   )
 
@@ -148,8 +162,8 @@ describe('broadcastSignedEthTransaction', () => {
     ).rejects.toThrow('Expected 65-byte signature, got 64 bytes')
 
     expect(broadcastMock).not.toHaveBeenCalled()
-    expect(tracker.releaseHeld).toHaveBeenCalledWith(RESERVATION_ID)
-    expect(tracker.commitHeld).not.toHaveBeenCalled()
+    expect(held.release).toHaveBeenCalled()
+    expect(held.commit).not.toHaveBeenCalled()
   })
 
   it('refuses a signature from another key and gives the nonce back', async () => {
@@ -168,8 +182,8 @@ describe('broadcastSignedEthTransaction', () => {
     ).rejects.toThrow(`Signed by ${device.address}, not by ${RECIPIENT}`)
 
     expect(broadcastMock).not.toHaveBeenCalled()
-    expect(tracker.releaseHeld).toHaveBeenCalledWith(RESERVATION_ID)
-    expect(tracker.commitHeld).not.toHaveBeenCalled()
+    expect(held.release).toHaveBeenCalled()
+    expect(held.commit).not.toHaveBeenCalled()
   })
 
   it('refuses a v that is neither a parity nor a legacy v', async () => {
@@ -188,7 +202,26 @@ describe('broadcastSignedEthTransaction', () => {
     ).rejects.toThrow('Unexpected signature v value 2')
 
     expect(broadcastMock).not.toHaveBeenCalled()
-    expect(tracker.releaseHeld).toHaveBeenCalledWith(RESERVATION_ID)
+    expect(held.release).toHaveBeenCalled()
+  })
+
+  it('refuses to broadcast once the hold is gone', async () => {
+    const { serializedUnsignedTx } =
+      await buildUnsignedEthTransaction(BUILD_INPUT)
+    const { signature } = await signWithDevice(serializedUnsignedTx, 0)
+    tracker.claimHeld.mockReturnValue(null)
+
+    await expect(
+      broadcastSignedEthTransaction({
+        serializedUnsignedTx,
+        signature,
+        network: 'ethereum',
+        fromAddress: device.address,
+        nonceReservationId: RESERVATION_ID,
+      }),
+    ).rejects.toThrow('Signing took too long. Sign the transaction again.')
+
+    expect(broadcastMock).not.toHaveBeenCalled()
   })
 
   it('gives the nonce back when the broadcast fails', async () => {
@@ -207,7 +240,7 @@ describe('broadcastSignedEthTransaction', () => {
       }),
     ).rejects.toThrow('nonce too low')
 
-    expect(tracker.releaseHeld).toHaveBeenCalledWith(RESERVATION_ID)
-    expect(tracker.commitHeld).not.toHaveBeenCalled()
+    expect(held.release).toHaveBeenCalled()
+    expect(held.commit).not.toHaveBeenCalled()
   })
 })
