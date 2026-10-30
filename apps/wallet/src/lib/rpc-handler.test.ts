@@ -262,6 +262,13 @@ afterEach(async () => {
   vi.unstubAllGlobals()
 })
 
+/** Declines the held popup: the approval slot is module state that later tests share. */
+async function answerHeldPopup() {
+  await chrome.storage.session.set({
+    approvalResult: { id: lastApproval!.id, approved: false },
+  })
+}
+
 const connect = (origin = ORIGIN) =>
   handleRpcRequest('eth_requestAccounts', [], origin)
 const accounts = () => handleRpcRequest('eth_accounts', [], ORIGIN)
@@ -1348,16 +1355,33 @@ describe('eth_sendTransaction', () => {
       ['0xdeadbeef', ADDRESS],
       ORIGIN,
     )
-    await vi.waitFor(() => expect(popupsOpened).toBe(opened + 1))
+    try {
+      await vi.waitFor(() => expect(popupsOpened).toBe(opened + 1))
 
-    await expect(
-      handleRpcRequest('personal_sign', ['0xdeadbeef', ADDRESS], ORIGIN),
-    ).rejects.toMatchObject({ code: -32002 })
-    expect(focusedWindows).toEqual([1])
+      await expect(
+        handleRpcRequest('personal_sign', ['0xdeadbeef', ADDRESS], ORIGIN),
+      ).rejects.toMatchObject({ code: -32002 })
+      expect(focusedWindows).toEqual([1])
+    } finally {
+      await answerHeldPopup()
+    }
+    await expect(first).rejects.toMatchObject({ code: 4001 })
+  })
 
-    await chrome.storage.session.set({
-      approvalResult: { id: lastApproval!.id, approved: false },
-    })
+  test('a repeated connect brings the open connect popup to the front', async () => {
+    holdPopup = true
+
+    const first = connect(OTHER_ORIGIN)
+    try {
+      await vi.waitFor(() => expect(popupsOpened).toBe(1))
+
+      await expect(connect(OTHER_ORIGIN)).rejects.toMatchObject({
+        code: -32002,
+      })
+      expect(focusedWindows).toEqual([1])
+    } finally {
+      await answerHeldPopup()
+    }
     await expect(first).rejects.toMatchObject({ code: 4001 })
   })
 })
