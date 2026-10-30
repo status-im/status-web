@@ -24,6 +24,7 @@ const mocks = vi.hoisted(() => {
     build: vi.fn(),
     broadcast: vi.fn(),
     release: vi.fn(),
+    renew: vi.fn(),
     signMessage: vi.fn(),
     sessionStatus: vi.fn(),
     requestPassword: vi.fn(),
@@ -47,6 +48,7 @@ vi.mock('./api-client', () => ({
           buildUnsignedTransaction: { mutate: mocks.build },
           broadcastSignedTransaction: { mutate: mocks.broadcast },
           releaseNonceReservation: { mutate: mocks.release },
+          renewNonceReservation: { mutate: mocks.renew },
           signMessage: { mutate: mocks.signMessage },
         },
       },
@@ -140,6 +142,7 @@ beforeEach(() => {
   })
   mocks.broadcast.mockReset().mockResolvedValue({ txid: TX_HASH })
   mocks.release.mockReset().mockResolvedValue(undefined)
+  mocks.renew.mockReset().mockResolvedValue(true)
 
   container = document.createElement('div')
   document.body.append(container)
@@ -156,6 +159,7 @@ beforeEach(() => {
 afterEach(() => {
   act(() => root.unmount())
   container.remove()
+  vi.useRealTimers()
   vi.unstubAllGlobals()
 })
 
@@ -170,6 +174,7 @@ describe('hardware wallet transactions', () => {
         gasLimit: '0x5208',
         maxFeePerGas: '0x3b9aca00',
         maxInclusionFeePerGas: '0x5f5e100',
+        renewsHold: true,
       }),
     )
     expect(mocks.screen).toMatchObject({
@@ -188,6 +193,23 @@ describe('hardware wallet transactions', () => {
       nonceReservationId: RESERVATION_ID,
     })
     expect(mocks.release).not.toHaveBeenCalled()
+  })
+
+  it('renews the held nonce while the QR screen is open', async () => {
+    vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] })
+    const { outcome } = await startSend()
+
+    vi.advanceTimersByTime(40_000)
+    expect(mocks.renew).toHaveBeenCalledTimes(2)
+    expect(mocks.renew).toHaveBeenCalledWith({
+      nonceReservationId: RESERVATION_ID,
+    })
+
+    act(() => mocks.screen!.onCancel())
+    await outcome
+    vi.advanceTimersByTime(40_000)
+
+    expect(mocks.renew).toHaveBeenCalledTimes(2)
   })
 
   it('releases the held nonce when the user cancels', async () => {

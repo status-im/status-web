@@ -1,11 +1,13 @@
 import { storage } from '@wxt-dev/storage'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { readNonceMarkStore, writeNonceMarkStore } from '../data/nonce-tracker'
 import {
   createNonceTracker,
   decideNonce,
   HELD_NONCE_TTL_MS,
   RECONCILE_AFTER_BLOCKS,
+  RENEWED_HOLD_TTL_MS,
 } from './nonce-tracker'
 
 import type { ChainNonceState } from './nonce-tracker'
@@ -112,7 +114,7 @@ describe('held reservations', () => {
     await new Promise(resolve => setTimeout(resolve, 0))
     expect(second).toBeUndefined()
 
-    await tracker.commitHeld(first.id, ADDRESS, NETWORK, first.nonce)
+    await tracker.claimHeld(first.id)!.commit()
     await waiting
 
     expect(first.nonce).toBe(5)
@@ -141,15 +143,63 @@ describe('held reservations', () => {
     await expect(waiting).resolves.toMatchObject({ nonce: first.nonce })
   })
 
-  it('counts a broadcast whose reservation a worker restart lost', async () => {
+  it('cannot claim a hold that lapsed', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+    const tracker = createNonceTracker()
+    const held = await tracker.reserveHeld(ADDRESS, NETWORK)
+
+    vi.advanceTimersByTime(HELD_NONCE_TTL_MS)
+
+    expect(tracker.renewHeld(held.id)).toBe(false)
+    expect(tracker.claimHeld(held.id)).toBeNull()
+  })
+
+  it('cannot claim a hold that a worker restart lost', async () => {
     const held = await createNonceTracker().reserveHeld(ADDRESS, NETWORK)
 
-    const restarted = createNonceTracker()
-    await restarted.commitHeld(held.id, ADDRESS, NETWORK, held.nonce)
+    expect(createNonceTracker().claimHeld(held.id)).toBeNull()
+  })
 
-    await expect(
-      restarted.reserveHeld(ADDRESS, NETWORK),
-    ).resolves.toMatchObject({ nonce: held.nonce + 1 })
+  it('keeps a renewed hold past its lifetime', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+    const tracker = createNonceTracker()
+    const held = await tracker.reserveHeld(
+      ADDRESS,
+      NETWORK,
+      RENEWED_HOLD_TTL_MS,
+    )
+
+    vi.advanceTimersByTime(RENEWED_HOLD_TTL_MS - 1000)
+    expect(tracker.renewHeld(held.id)).toBe(true)
+    vi.advanceTimersByTime(RENEWED_HOLD_TTL_MS - 1000)
+
+    expect(tracker.claimHeld(held.id)).toMatchObject({ nonce: held.nonce })
+  })
+
+  it('releases a short hold nobody renews', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+    const tracker = createNonceTracker()
+    const held = await tracker.reserveHeld(
+      ADDRESS,
+      NETWORK,
+      RENEWED_HOLD_TTL_MS,
+    )
+    const waiting = tracker.reserveHeld(ADDRESS, NETWORK)
+
+    vi.advanceTimersByTime(RENEWED_HOLD_TTL_MS)
+
+    await expect(waiting).resolves.toMatchObject({ nonce: held.nonce })
+  })
+
+  it('drops the reserve-time mark when a held nonce is committed', async () => {
+    const key = `${ADDRESS}:${NETWORK}`
+    await writeNonceMarkStore({ [key]: { block: 100, pendingNonce: 5 } })
+    const tracker = createNonceTracker()
+    const held = await tracker.reserveHeld(ADDRESS, NETWORK)
+
+    await tracker.claimHeld(held.id)!.commit()
+
+    expect((await readNonceMarkStore())[key]).toBeUndefined()
   })
 
   it('withNonce gives the nonce back when the send fails', async () => {

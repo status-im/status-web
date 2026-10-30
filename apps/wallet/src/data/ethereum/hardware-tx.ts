@@ -8,7 +8,7 @@ import {
   serializeTransaction,
 } from 'viem'
 
-import { nonceTracker } from '../../lib/nonce-tracker'
+import { nonceTracker, RENEWED_HOLD_TTL_MS } from '../../lib/nonce-tracker'
 import { broadcast } from './ethereum'
 
 type BuildInput = {
@@ -21,6 +21,7 @@ type BuildInput = {
   maxInclusionFeePerGas: Hex
   network: string
   chainId: number
+  renewsHold?: boolean
 }
 
 const PARITY_BY_V: Record<number, 0 | 1> = { 0: 0, 1: 1, 27: 0, 28: 1 }
@@ -37,6 +38,7 @@ export async function buildUnsignedEthTransaction(
   const { id, nonce } = await nonceTracker.reserveHeld(
     input.fromAddress,
     input.network,
+    input.renewsHold ? RENEWED_HOLD_TTL_MS : undefined,
   )
   try {
     const serializedUnsignedTx = serializeTransaction({
@@ -68,6 +70,10 @@ export async function broadcastSignedEthTransaction(input: {
   fromAddress: string
   nonceReservationId: string
 }): Promise<{ txid: string }> {
+  const held = nonceTracker.claimHeld(input.nonceReservationId)
+  if (!held) {
+    throw new Error('Signing took too long. Sign the transaction again.')
+  }
   const unsigned = parseTransaction(input.serializedUnsignedTx)
   let txid: string
   try {
@@ -92,16 +98,15 @@ export async function broadcastSignedEthTransaction(input: {
     }
     txid = await broadcast(signed.slice(2), input.network)
   } catch (error) {
-    nonceTracker.releaseHeld(input.nonceReservationId)
+    held.release()
     throw error
   }
-  await nonceTracker.commitHeld(
-    input.nonceReservationId,
-    input.fromAddress,
-    input.network,
-    unsigned.nonce ?? 0,
-  )
+  await held.commit()
   return { txid }
+}
+
+export function renewNonceReservation(nonceReservationId: string): boolean {
+  return nonceTracker.renewHeld(nonceReservationId)
 }
 
 export function releaseNonceReservation(nonceReservationId: string): void {
