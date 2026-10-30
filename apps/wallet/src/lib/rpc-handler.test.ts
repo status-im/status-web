@@ -1444,6 +1444,15 @@ describe('hardware wallets', () => {
     await storage.setItem('local:vault:metadata', JSON.stringify(metadata))
   })
 
+  test('the connect popup is told the account is on a hardware wallet', async () => {
+    await connect()
+
+    expect(lastApproval).toMatchObject({
+      type: 'eth_requestAccounts',
+      walletType: 'hardware-qr',
+    })
+  })
+
   test('personal_sign returns the signature the popup produced', async () => {
     await connect()
     popupSignature = '0xhardwaresig'
