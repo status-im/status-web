@@ -7,7 +7,7 @@ import { useQRScanner } from '@qrkit/react'
 import { Button, Text } from '@status-im/components'
 import { ArrowLeftIcon } from '@status-im/icons/20'
 
-const DEFAULT_ADDRESS_INDEX = 0
+const ADDRESS_COUNT = 5
 
 export type HardwareWalletAccount = {
   chain: string
@@ -16,19 +16,27 @@ export type HardwareWalletAccount = {
   publicKey: string
   sourceFingerprint: number | undefined
   device: string | undefined
+  /** Account-level extended public key that more addresses are derived from. */
+  xpub: string
+  /** Derivation path of `xpub`, e.g. m/44'/60'/0'. */
+  accountPath: string
 }
 
-function toHardwareWalletAccount(account: Account): HardwareWalletAccount {
-  const derived = account.deriveAddress(DEFAULT_ADDRESS_INDEX)
-  return {
-    chain: account.chain,
-    address: derived.address,
-    derivationPath: derived.derivationPath,
-    publicKey: derived.publicKey,
-    sourceFingerprint:
-      account.chain === 'evm' ? account.sourceFingerprint : undefined,
-    device: account.device,
-  }
+function toHardwareWalletAccounts(account: Account): HardwareWalletAccount[] {
+  return Array.from({ length: ADDRESS_COUNT }, (_, index) => {
+    const derived = account.deriveAddress(index)
+    return {
+      chain: account.chain,
+      address: derived.address,
+      derivationPath: derived.derivationPath,
+      publicKey: derived.publicKey,
+      sourceFingerprint:
+        account.chain === 'evm' ? account.sourceFingerprint : undefined,
+      device: account.device,
+      xpub: account.xpub,
+      accountPath: account.derivationPath,
+    }
+  })
 }
 
 type BackButtonProps = Omit<ComponentProps<typeof Button>, 'children'>
@@ -55,7 +63,7 @@ function ScannerScreen({ backButtonProps, onAccounts }: Props) {
         }
 
         setScanError(null)
-        onAccounts(foundAccounts.map(toHardwareWalletAccount))
+        onAccounts(foundAccounts.flatMap(toHardwareWalletAccounts))
         return true
       } catch (error) {
         setScanError(

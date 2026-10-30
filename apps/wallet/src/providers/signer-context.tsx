@@ -4,13 +4,26 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
+  useState,
 } from 'react'
 
-import { type Address, type Hex } from 'viem'
+import * as Dialog from '@radix-ui/react-dialog'
+import {
+  HardwareSignCancelledError,
+  type HardwareSignRequest,
+  HardwareSignScreen,
+} from '@status-im/wallet/components'
+import { isEthereumTransactionHash } from '@status-im/wallet/utils'
+import { type Address, type Hex, hexToBytes } from 'viem'
 
 import { useGasFees } from '../hooks/use-gas-fees'
+import { checkHardwareSignature } from '../lib/hardware-signature'
 import {
   buildAndSendTransaction,
+  needsFeeEstimate,
+  parseInsufficientFundsError,
+  resolveFeeParams,
   type TransactionRequest,
 } from '../lib/send-transaction'
 import { apiClient } from './api-client'
@@ -30,6 +43,19 @@ type SignerContextValue = {
 
 const DEFAULT_ACCOUNT_NAME = 'Account 1'
 
+/** A third of the worker's `RENEWED_HOLD_TTL_MS`, so one missed renewal keeps the hold. */
+const HOLD_RENEW_INTERVAL_MS = 20 * 1000
+
+type PendingHardwareSign = {
+  request: HardwareSignRequest
+  address: string
+  sourceFingerprint: number | undefined
+  derivationPath: string
+  origin: string
+  resolve: (signature: string) => void
+  reject: (error: Error) => void
+}
+
 const SignerContext = createContext<SignerContextValue | undefined>(undefined)
 
 export function useWalletSigner() {
@@ -43,6 +69,9 @@ export function useWalletSigner() {
 export function SignerProvider({ children }: { children: React.ReactNode }) {
   const { currentWallet, currentAccount } = useWallet()
   const { hasActiveSession, requestPassword, clearSession } = usePassword()
+  const [hardwareSignRequest, setHardwareSignRequest] =
+    useState<PendingHardwareSign | null>(null)
+  const hardwareSignPending = useRef(false)
 
   const address = useMemo(() => {
     return currentAccount?.address as Address | undefined
@@ -54,6 +83,37 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
     // TODO: Use currently selected account name instead when multi-account support is implemented.
     return currentWallet?.name ?? DEFAULT_ACCOUNT_NAME
   }, [currentWallet])
+
+  const isHardwareWallet = currentWallet?.type === 'hardware-qr'
+
+  const requestHardwareSign = useCallback(
+    (request: HardwareSignRequest): Promise<string> => {
+      if (!currentAccount) {
+        return Promise.reject(new Error('No wallet connected'))
+      }
+      // One overlay at a time; replacing it would leave the first caller hanging.
+      if (hardwareSignPending.current) {
+        return Promise.reject(
+          new Error('Another hardware wallet signature is in progress'),
+        )
+      }
+      hardwareSignPending.current = true
+      return new Promise<string>((resolve, reject) => {
+        setHardwareSignRequest({
+          request,
+          address: currentAccount.address,
+          sourceFingerprint: currentWallet?.hardware?.sourceFingerprint,
+          derivationPath: currentAccount.derivationPath,
+          origin: 'Status Wallet',
+          resolve,
+          reject,
+        })
+      }).finally(() => {
+        hardwareSignPending.current = false
+      })
+    },
+    [currentAccount, currentWallet?.hardware?.sourceFingerprint],
+  )
 
   useEffect(() => {
     if (address) {
@@ -94,14 +154,79 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
 
   const ensureUnlocked = useCallback(async (): Promise<void> => {
     if (hasActiveSession) return
-    const isUnlocked = await requestPassword()
-    if (!isUnlocked) throw new Error('Wallet not unlocked')
+    // The flag lags an unlock made earlier in the same action, so ask the worker.
+    const { isUnlocked } = await apiClient.session.status.query()
+    if (isUnlocked) return
+    if (!(await requestPassword())) throw new Error('Wallet not unlocked')
   }, [hasActiveSession, requestPassword])
 
   const signAndSendTransaction = useCallback(
     async (tx: TransactionRequest): Promise<Hex> => {
       if (!currentWallet?.id || !address) {
         throw new Error('No wallet connected')
+      }
+
+      if (isHardwareWallet) {
+        const fees = needsFeeEstimate(tx)
+          ? await fetchGasFees({
+              from: address,
+              to: tx.to,
+              value: tx.value.toString(16),
+              data: tx.data,
+            })
+          : null
+        const { gasLimit, maxFeePerGas, maxPriorityFeePerGas } =
+          resolveFeeParams(tx, fees)
+        const { serializedUnsignedTx, chainId, nonceReservationId } =
+          await apiClient.wallet.account.ethereum.buildUnsignedTransaction.mutate(
+            {
+              walletId: currentWallet.id,
+              fromAddress: address,
+              toAddress: tx.to,
+              value: tx.value.toString(16),
+              data: tx.data,
+              gasLimit,
+              maxFeePerGas,
+              maxInclusionFeePerGas: maxPriorityFeePerGas,
+              renewsHold: true,
+            },
+          )
+        const renewal = setInterval(() => {
+          void apiClient.wallet.account.ethereum.renewNonceReservation
+            .mutate({ nonceReservationId })
+            .catch(() => {})
+        }, HOLD_RENEW_INTERVAL_MS)
+        let signature: string
+        try {
+          signature = await requestHardwareSign({
+            kind: 'transaction',
+            serializedTx: hexToBytes(serializedUnsignedTx),
+            chainId,
+          })
+        } catch (error) {
+          // The held nonce lapses on its own if this release does not arrive.
+          void apiClient.wallet.account.ethereum.releaseNonceReservation
+            .mutate({ nonceReservationId })
+            .catch(() => {})
+          throw error
+        } finally {
+          clearInterval(renewal)
+        }
+        const { txid } =
+          await apiClient.wallet.account.ethereum.broadcastSignedTransaction
+            .mutate({
+              serializedUnsignedTx,
+              signature,
+              fromAddress: address,
+              nonceReservationId,
+            })
+            .catch((error: unknown) => {
+              throw parseInsufficientFundsError(error) ?? error
+            })
+        if (!isEthereumTransactionHash(txid)) {
+          throw new Error('Transaction failed')
+        }
+        return txid as Hex
       }
 
       await ensureUnlocked()
@@ -118,13 +243,28 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
         },
       )
     },
-    [currentWallet?.id, address, ensureUnlocked, fetchGasFees],
+    [
+      currentWallet?.id,
+      address,
+      ensureUnlocked,
+      fetchGasFees,
+      isHardwareWallet,
+      requestHardwareSign,
+    ],
   )
 
   const signMessage = useCallback(
     async (message: Hex): Promise<Hex> => {
       if (!currentWallet?.id || !address) {
         throw new Error('No wallet connected')
+      }
+
+      if (isHardwareWallet) {
+        const signature = await requestHardwareSign({
+          kind: 'personalMessage',
+          message: hexToBytes(message),
+        })
+        return signature as Hex
       }
 
       await ensureUnlocked()
@@ -139,13 +279,27 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
 
       return result.signature as Hex
     },
-    [currentWallet?.id, address, ensureUnlocked],
+    [
+      currentWallet?.id,
+      address,
+      ensureUnlocked,
+      isHardwareWallet,
+      requestHardwareSign,
+    ],
   )
 
   const signTypedData = useCallback(
     async (typedData: string): Promise<Hex> => {
       if (!currentWallet?.id || !address) {
         throw new Error('No wallet connected')
+      }
+
+      if (isHardwareWallet) {
+        const signature = await requestHardwareSign({
+          kind: 'typedData',
+          typedData,
+        })
+        return signature as Hex
       }
 
       await ensureUnlocked()
@@ -164,7 +318,13 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
 
       return result.signature as Hex
     },
-    [currentWallet?.id, address, ensureUnlocked],
+    [
+      currentWallet?.id,
+      address,
+      ensureUnlocked,
+      isHardwareWallet,
+      requestHardwareSign,
+    ],
   )
 
   const value: SignerContextValue = useMemo(
@@ -190,7 +350,67 @@ export function SignerProvider({ children }: { children: React.ReactNode }) {
     ],
   )
 
+  const handleHardwareSignature = useCallback(
+    (signature: string) => {
+      if (!hardwareSignRequest) return
+      hardwareSignRequest.resolve(signature)
+      setHardwareSignRequest(null)
+    },
+    [hardwareSignRequest],
+  )
+
+  const handleHardwareCancel = useCallback(() => {
+    if (!hardwareSignRequest) return
+    hardwareSignRequest.reject(new HardwareSignCancelledError())
+    setHardwareSignRequest(null)
+  }, [hardwareSignRequest])
+
   return (
-    <SignerContext.Provider value={value}>{children}</SignerContext.Provider>
+    <SignerContext.Provider value={value}>
+      {children}
+      {/* Radix, so it stacks above open modals instead of closing them. */}
+      {hardwareSignRequest && (
+        <Dialog.Root
+          open
+          onOpenChange={open => {
+            if (!open) handleHardwareCancel()
+          }}
+        >
+          <Dialog.Portal>
+            <Dialog.Overlay
+              className="fixed inset-0 z-50 flex items-center justify-center p-4"
+              style={{ background: 'rgba(9, 16, 28, 0.6)' }}
+            >
+              <Dialog.Content
+                aria-describedby={undefined}
+                data-customisation="blue"
+                onInteractOutside={event => event.preventDefault()}
+                className="flex max-h-[90vh] w-full max-w-md flex-col overflow-y-auto rounded-16 bg-white-100 p-4"
+              >
+                <Dialog.Title className="sr-only">
+                  Sign with hardware wallet
+                </Dialog.Title>
+                <HardwareSignScreen
+                  request={hardwareSignRequest.request}
+                  address={hardwareSignRequest.address}
+                  sourceFingerprint={hardwareSignRequest.sourceFingerprint}
+                  derivationPath={hardwareSignRequest.derivationPath}
+                  origin={hardwareSignRequest.origin}
+                  checkSignature={signature =>
+                    checkHardwareSignature(
+                      hardwareSignRequest.request,
+                      hardwareSignRequest.address,
+                      signature,
+                    )
+                  }
+                  onSignature={handleHardwareSignature}
+                  onCancel={handleHardwareCancel}
+                />
+              </Dialog.Content>
+            </Dialog.Overlay>
+          </Dialog.Portal>
+        </Dialog.Root>
+      )}
+    </SignerContext.Provider>
   )
 }

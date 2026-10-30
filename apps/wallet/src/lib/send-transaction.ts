@@ -126,7 +126,16 @@ export function maxFeeEth(fees: FeeParams): string {
   return formatEther(BigInt(fees.maxFeePerGas) * BigInt(fees.gasLimit))
 }
 
-export function parseInsufficientFundsError(error: unknown): Error | null {
+export class InsufficientFundsError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = 'InsufficientFundsError'
+  }
+}
+
+export function parseInsufficientFundsError(
+  error: unknown,
+): InsufficientFundsError | null {
   const errorObj =
     typeof error === 'object' && error !== null && 'message' in error
       ? error
@@ -147,7 +156,7 @@ export function parseInsufficientFundsError(error: unknown): Error | null {
   const haveEth = formatEther(haveWei)
   const wantEth = formatEther(wantWei)
   const shortfallEth = formatEther(wantWei - haveWei)
-  return new Error(
+  return new InsufficientFundsError(
     `Insufficient funds for gas. Have ${haveEth} ETH, need up to ${wantEth} ETH (max fee). Short ${shortfallEth} ETH.`,
   )
 }

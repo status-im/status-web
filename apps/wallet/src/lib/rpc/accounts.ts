@@ -1,13 +1,17 @@
 import { ProviderRpcError } from '@status-im/ethereum-provider'
 
-import { getPendingApproval } from '../../data/approval'
 import {
   connectAccount,
   debugLog,
   getChainIdForOrigin,
 } from '../../data/dapp-permissions'
-import { getAccountName, getAddress, getOriginAddress } from './account'
-import { requestApproval } from './request-approval'
+import {
+  getAccountName,
+  getAddress,
+  getOriginAddress,
+  requireWalletFor,
+} from './account'
+import { assertNoPendingApproval, requestApproval } from './request-approval'
 
 import type { RpcContext } from './context'
 
@@ -31,16 +35,11 @@ export async function eth_requestAccounts({
     })
   }
 
-  const existing = await getPendingApproval()
-  if (existing) {
-    throw new ProviderRpcError({
-      code: -32002,
-      message: 'Already processing a connection request.',
-    })
-  }
+  await assertNoPendingApproval()
 
   const chainId = await getChainIdForOrigin(origin)
   const accountName = await getAccountName()
+  const { walletType } = await requireWalletFor(address)
   const connectResult = await requestApproval({
     type: 'eth_requestAccounts',
     origin,
@@ -49,6 +48,7 @@ export async function eth_requestAccounts({
     address,
     accountName,
     chainId,
+    walletType,
   })
 
   if (!connectResult) {

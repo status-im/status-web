@@ -5,6 +5,7 @@ import { getChainByHex } from '../chains'
 import { requestFeeRate } from '../gas-fees'
 import {
   buildAndSendTransaction,
+  type FeeParams,
   maxFeeEth,
   resolveFeeParams,
   type TransactionRequest,
@@ -14,6 +15,7 @@ import { requireOriginAddress, requireWalletFor } from './account'
 import { assertNoPendingApproval, requestApproval } from './request-approval'
 
 import type { createAPI } from '../../data/api'
+import type { PendingApproval } from '../../data/approval'
 import type { RpcContext } from './context'
 import type { Address, Hex } from 'viem'
 
@@ -131,11 +133,82 @@ function selectCalldata(request: DappTransaction): unknown {
  * to a send procedure's input schema breaks the build instead of failing
  * inside the worker after the user has already approved.
  */
-function sendingApi(): TransactionSenders {
+function ethereumApi() {
   const api = (
     globalThis as unknown as { api: Awaited<ReturnType<typeof createAPI>> }
   ).api
   return api.wallet.account.ethereum
+}
+
+function sendingApi(): TransactionSenders {
+  return ethereumApi()
+}
+
+type TransactionApproval = Omit<
+  Extract<PendingApproval, { type: 'eth_sendTransaction' }>,
+  'id' | 'createdAt'
+>
+
+/** The device signs the nonce, so hold it from before the popup until this returns. */
+async function sendFromHardwareWallet(
+  approval: TransactionApproval,
+  tx: TransactionRequest,
+  feeParams: FeeParams,
+  walletId: string,
+): Promise<string> {
+  const ethereum = ethereumApi()
+
+  let unsigned
+  try {
+    unsigned = await ethereum.buildUnsignedTransaction({
+      walletId,
+      fromAddress: approval.address,
+      toAddress: tx.to,
+      value: approval.value,
+      data: tx.data,
+      gasLimit: feeParams.gasLimit,
+      maxFeePerGas: feeParams.maxFeePerGas,
+      maxInclusionFeePerGas: feeParams.maxPriorityFeePerGas,
+    })
+  } catch (error) {
+    throw new ProviderRpcError({
+      code: -32603,
+      message: error instanceof Error ? error.message : String(error),
+    })
+  }
+  const { serializedUnsignedTx, nonceReservationId } = unsigned
+
+  let result
+  try {
+    result = await requestApproval({ ...approval, serializedUnsignedTx })
+  } catch (error) {
+    await ethereum.releaseNonceReservation({ nonceReservationId })
+    throw error
+  }
+
+  if (!result?.signature) {
+    await ethereum.releaseNonceReservation({ nonceReservationId })
+    throw new ProviderRpcError({
+      code: 4001,
+      message: 'User rejected the request.',
+    })
+  }
+
+  try {
+    // Releases the nonce itself when the broadcast fails.
+    const { txid } = await ethereum.broadcastSignedTransaction({
+      serializedUnsignedTx,
+      signature: result.signature,
+      fromAddress: approval.address,
+      nonceReservationId,
+    })
+    return txid
+  } catch (error) {
+    throw new ProviderRpcError({
+      code: -32603,
+      message: error instanceof Error ? error.message : String(error),
+    })
+  }
 }
 
 export async function eth_sendTransaction({
@@ -227,7 +300,7 @@ export async function eth_sendTransaction({
 
   const feeParams = resolveFeeParams(tx, fees)
 
-  const result = await requestApproval({
+  const approval: TransactionApproval = {
     type: 'eth_sendTransaction',
     origin,
     title: metadata?.title ?? origin,
@@ -239,7 +312,16 @@ export async function eth_sendTransaction({
     value: `0x${tx.value.toString(16)}`,
     data: tx.data ?? null,
     maxFeeEth: maxFeeEth(feeParams),
-  })
+    walletType: signer.walletType,
+    sourceFingerprint: signer.sourceFingerprint,
+    derivationPath: signer.derivationPath,
+  }
+
+  if (signer.walletType === 'hardware-qr') {
+    return sendFromHardwareWallet(approval, tx, feeParams, signer.walletId)
+  }
+
+  const result = await requestApproval(approval)
 
   if (!result) {
     throw new ProviderRpcError({

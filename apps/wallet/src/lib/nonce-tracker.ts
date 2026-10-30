@@ -146,6 +146,26 @@ async function fetchMinedNonceAndBlock(
   return { latestNonce, blockNumber }
 }
 
+/** Outlasts a QR round trip; bounds how long an abandoned one blocks the address. */
+export const HELD_NONCE_TTL_MS = 10 * 60 * 1000
+
+/** For holds their caller renews, so one from a closed page frees the address soon. */
+export const RENEWED_HOLD_TTL_MS = 60 * 1000
+
+type Reservation = {
+  nonce: number
+  commit: () => Promise<void>
+  release: () => void
+}
+
+type HeldReservation = {
+  key: string
+  nonce: number
+  unlock: () => void
+  ttlMs: number
+  timer: ReturnType<typeof setTimeout>
+}
+
 export type NonceTracker = ReturnType<typeof createNonceTracker>
 export function createNonceTracker() {
   const nonceCache = new Map<string, number>()
@@ -154,7 +174,8 @@ export function createNonceTracker() {
   // keys don't race on the shared nonce-tracker object.
   let storageWriteChain: Promise<void> = Promise.resolve()
   // Per-key mutex: serializes concurrent nonce reservations for the same address.
-  const nonceLocks = new Map<string, Promise<unknown>>()
+  const nonceLocks = new Map<string, Promise<void>>()
+  const heldReservations = new Map<string, HeldReservation>()
 
   async function loadNonce(key: string): Promise<void> {
     if (nonceCacheLoaded.has(key)) return
@@ -247,6 +268,78 @@ export function createNonceTracker() {
     return { nonce: Math.max(pendingNonce, localNonce), chain, marked }
   }
 
+  /** Waits for the key's lock and returns its release. */
+  async function acquireLock(key: string): Promise<() => void> {
+    const prev = nonceLocks.get(key) ?? Promise.resolve()
+    let release!: () => void
+    const held = new Promise<void>(resolve => {
+      release = resolve
+    })
+    const tail = prev.then(() => held)
+    nonceLocks.set(key, tail)
+    await prev
+    return () => {
+      release()
+      if (nonceLocks.get(key) === tail) {
+        nonceLocks.delete(key)
+      }
+    }
+  }
+
+  async function commitSent(
+    key: string,
+    nonce: number,
+    chain: ChainNonceState | null,
+    marked: boolean,
+  ): Promise<void> {
+    await loadNonce(key)
+    await commitNonce(key, Math.max(nonceCache.get(key) ?? 0, nonce + 1))
+    // Marking where the counter went ahead lets the next reservation tell
+    // "still propagating" from "stranded" on its first try. Only the earliest
+    // mark for a pool count holds, or any send restarts the waiting window.
+    if (chain && !marked) {
+      await writeMark(key, {
+        block: chain.blockNumber,
+        pendingNonce: chain.pendingNonce,
+      })
+    }
+  }
+
+  /** Holds the address's lock until the returned `unlock`. */
+  async function lockNonce(fromAddress: string, network: string) {
+    const key = `${fromAddress}:${network}`
+    const unlock = await acquireLock(key)
+    try {
+      await loadNonce(key)
+      const resolved = await resolveNonce(key, fromAddress, network)
+      return { key, unlock, ...resolved }
+    } catch (error) {
+      unlock()
+      throw error
+    }
+  }
+
+  async function reserve(
+    fromAddress: string,
+    network: string,
+  ): Promise<Reservation> {
+    const { key, unlock, nonce, chain, marked } = await lockNonce(
+      fromAddress,
+      network,
+    )
+    return {
+      nonce,
+      commit: async () => {
+        try {
+          await commitSent(key, nonce, chain, marked)
+        } finally {
+          unlock()
+        }
+      },
+      release: unlock,
+    }
+  }
+
   /**
    * Executes `callback` with a reserved nonce for `fromAddress` on `network`.
    * The nonce is committed to persistent session storage only when the callback
@@ -260,46 +353,70 @@ export function createNonceTracker() {
     network: string,
     callback: (nonceHex: string) => Promise<T>,
   ): Promise<T> {
-    const key = `${fromAddress}:${network}`
-
-    const run = async (): Promise<T> => {
-      await loadNonce(key)
-      const { nonce, chain, marked } = await resolveNonce(
-        key,
-        fromAddress,
-        network,
-      )
-
-      const result = await callback(padHex(nonce.toString(16)))
-      await commitNonce(key, nonce + 1)
-      // Marking where the counter went ahead lets the next reservation tell
-      // "still propagating" from "stranded" on its first try. Only the earliest
-      // mark for a pool count holds, or any send restarts the waiting window.
-      if (chain && !marked) {
-        await writeMark(key, {
-          block: chain.blockNumber,
-          pendingNonce: chain.pendingNonce,
-        })
-      }
-      return result
+    const reservation = await reserve(fromAddress, network)
+    let result: T
+    try {
+      result = await callback(padHex(reservation.nonce.toString(16)))
+    } catch (error) {
+      reservation.release()
+      throw error
     }
-
-    const prev = nonceLocks.get(key) ?? Promise.resolve()
-    const next = prev.then(run)
-    // The silenced promise keeps the chain alive even when `next` rejects.
-    const silenced = next.catch(() => {})
-    nonceLocks.set(key, silenced)
-    // Release the lock slot once this link settles.
-    silenced.then(() => {
-      if (nonceLocks.get(key) === silenced) {
-        nonceLocks.delete(key)
-      }
-    })
-
-    return next
+    await reservation.commit()
+    return result
   }
 
-  return { withNonce }
+  /** A reservation kept across calls, for signing that happens outside the worker. */
+  async function reserveHeld(
+    fromAddress: string,
+    network: string,
+    ttlMs = HELD_NONCE_TTL_MS,
+  ): Promise<{ id: string; nonce: number }> {
+    const { key, unlock, nonce } = await lockNonce(fromAddress, network)
+    const id = crypto.randomUUID()
+    const timer = setTimeout(() => releaseHeld(id), ttlMs)
+    heldReservations.set(id, { key, nonce, unlock, ttlMs, timer })
+    return { id, nonce }
+  }
+
+  /** False once the hold has lapsed or a worker restart lost it. */
+  function renewHeld(id: string): boolean {
+    const held = heldReservations.get(id)
+    if (!held) return false
+    clearTimeout(held.timer)
+    held.timer = setTimeout(() => releaseHeld(id), held.ttlMs)
+    return true
+  }
+
+  /** Null once the hold is gone, as its nonce may already be someone else's. */
+  function claimHeld(id: string): Reservation | null {
+    const held = heldReservations.get(id)
+    if (!held) return null
+    heldReservations.delete(id)
+    clearTimeout(held.timer)
+    return {
+      nonce: held.nonce,
+      commit: async () => {
+        try {
+          await loadNonce(held.key)
+          await commitNonce(
+            held.key,
+            Math.max(nonceCache.get(held.key) ?? 0, held.nonce + 1),
+          )
+          // The block seen at reserve time is stale after a long signing.
+          await writeMark(held.key, null)
+        } finally {
+          held.unlock()
+        }
+      },
+      release: held.unlock,
+    }
+  }
+
+  function releaseHeld(id: string): void {
+    claimHeld(id)?.release()
+  }
+
+  return { withNonce, reserveHeld, renewHeld, claimHeld, releaseHeld }
 }
 
 export const nonceTracker = createNonceTracker()

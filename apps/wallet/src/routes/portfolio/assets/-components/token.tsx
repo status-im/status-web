@@ -22,6 +22,7 @@ import {
   CurrencyAmount,
   DEFAULT_DATA_TYPE,
   DEFAULT_TIME_FRAME,
+  HardwareSignCancelledError,
   ReceiveCryptoDrawer,
   type SendAssetsFormData,
   SendAssetsModal,
@@ -33,25 +34,24 @@ import {
 } from '@status-im/wallet/components'
 import { ERROR_MESSAGES } from '@status-im/wallet/constants'
 import { useCopyToClipboard } from '@status-im/wallet/hooks'
-import {
-  getTransactionHash,
-  isEthereumTransactionHash,
-} from '@status-im/wallet/utils'
+import { isEthereumTransactionHash } from '@status-im/wallet/utils'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { cx } from 'class-variance-authority'
 import { Interface, parseUnits } from 'ethers'
 
-import { WatchOnlyActionTooltip } from '@/components/watch-only-action-tooltip'
 import { useEthBalance } from '@/hooks/use-eth-balance'
 import { useGasFees } from '@/hooks/use-gas-fees'
 import { FEATURE_FLAGS } from '@/lib/feature-flags'
 import { renderMarkdown } from '@/lib/markdown'
 import { notifyTransactionSent } from '@/lib/notifications'
-import { parseInsufficientFundsError } from '@/lib/send-transaction'
-import { apiClient } from '@/providers/api-client'
+import {
+  InsufficientFundsError,
+  type TransactionRequest,
+} from '@/lib/send-transaction'
 import { usePassword } from '@/providers/password-context'
 import { usePendingTransactions } from '@/providers/pending-transactions-context'
+import { useWalletSigner } from '@/providers/signer-context'
 import { useWallet } from '@/providers/wallet-context'
 import { fetchTrpcData } from '@/utils/trpc'
 import { ExchangeDrawer } from '~/components/exchange-drawer'
@@ -82,7 +82,6 @@ const TOKEN_DETAIL_GC_TIME = 60 * 60 * 1000 // 1 hour
 const OPTIMIZED_TOKEN_STALE_TIME = 5 * 1000 // 5 seconds
 const OPTIMIZED_TOKEN_REFETCH_INTERVAL = 30 * 1000 // 30 seconds
 const erc20 = new Interface(['function transfer(address to, uint256 amount)'])
-const WATCH_ONLY_ACTION_TOOLTIP = 'Unavailable for watch-only wallets'
 
 const Token = (props: Props) => {
   const { ticker, address } = props
@@ -92,6 +91,7 @@ const Token = (props: Props) => {
   const { currentWallet } = useWallet()
   const { addPendingTransaction } = usePendingTransactions()
   const { hasActiveSession, requestPassword } = usePassword()
+  const { signAndSendTransaction } = useWalletSigner()
 
   const [activeDataType, setActiveDataType] =
     useState<ChartDataType>(DEFAULT_DATA_TYPE)
@@ -328,17 +328,21 @@ const Token = (props: Props) => {
     emoji: '🍑',
     color: 'magenta',
   }
-  const isWatchOnlyWallet = currentWallet?.type === 'hardware-qr'
+  const isHardwareWallet = currentWallet?.type === 'hardware-qr'
 
   /** The node's own reason where there is one, translated for the user. */
-  const broadcastOrToast = async <T,>(send: () => Promise<T>): Promise<T> => {
+  const sendOrToast = async (tx: TransactionRequest): Promise<string> => {
     try {
-      return await send()
+      return await signAndSendTransaction(tx)
     } catch (error) {
+      if (error instanceof HardwareSignCancelledError) throw error
       console.error(error)
-      const parsed = parseInsufficientFundsError(error)
-      toast.negative(parsed?.message ?? ERROR_MESSAGES.TX_FAILED)
-      throw parsed ?? error
+      toast.negative(
+        error instanceof InsufficientFundsError
+          ? error.message
+          : ERROR_MESSAGES.TX_FAILED,
+      )
+      throw error
     }
   }
 
@@ -349,118 +353,82 @@ const Token = (props: Props) => {
     const gasParams = freshGasFees.txParams
     const isNative = finalTokenDetail?.summary.symbol === 'ETH'
 
+    const gas = BigInt(gasParams.gasLimit)
+    const maxFeePerGas = BigInt(gasParams.maxFeePerGas)
+    const maxPriorityFeePerGas = BigInt(gasParams.maxPriorityFeePerGas)
+
+    let txHash: string
+    let amountHex: string
+    let tokenDecimals: number
+
     if (isNative) {
-      const amountHex = parseUnits(formData.amount, 18).toString(16)
-      const params = {
-        amount: amountHex,
-        toAddress: formData.to,
-        fromAddress: address,
-        walletId: currentWallet?.id || '',
-        gasLimit: gasParams.gasLimit,
-        maxFeePerGas: gasParams.maxFeePerGas,
-        maxInclusionFeePerGas: gasParams.maxPriorityFeePerGas,
-      }
-
-      const result = await broadcastOrToast(() =>
-        apiClient.wallet.account.ethereum.send.mutate(params),
-      )
-
-      const txHash = getTransactionHash(result.id.txid)
-
-      if (!isEthereumTransactionHash(txHash)) {
-        toast.negative(ERROR_MESSAGES.TX_FAILED)
-        throw new Error('Transaction hash not found')
-      }
-
-      await notifyTransactionSent(
-        formData.amount,
-        finalTokenDetail.summary.symbol,
-      )
-
-      addPendingTransaction({
-        hash: txHash,
-        from: address,
-        to: formData.to,
-        value: parseFloat(formData.amount),
-        displayAmount: formData.amount,
-        asset: finalTokenDetail.summary.symbol,
-        network: 'ethereum',
-        status: 'pending',
-        category: 'external',
-        blockNum: '0',
-        metadata: {
-          blockTimestamp: new Date().toISOString(),
-        },
-        rawContract: {
-          value: amountHex,
-          address: ticker.startsWith('0x') ? ticker : null,
-          decimal: '18',
-        },
-        eurRate: 0,
+      const value = parseUnits(formData.amount, 18)
+      amountHex = value.toString(16)
+      txHash = await sendOrToast({
+        to: formData.to as `0x${string}`,
+        value,
+        gas,
+        maxFeePerGas,
+        maxPriorityFeePerGas,
       })
-      return txHash
     } else {
-      const tokenDecimals = asset.decimals ?? 18
+      tokenDecimals = asset.decimals ?? 18
       const amount = parseUnits(formData.amount, tokenDecimals)
-      const amountHex = amount.toString(16)
+      amountHex = amount.toString(16)
       const contractAddress = finalTokenDetail?.summary.contracts.ethereum
 
       if (!contractAddress) {
         throw new Error('Token contract address not found')
       }
 
-      const data = erc20.encodeFunctionData('transfer', [formData.to, amount])
+      const data = erc20.encodeFunctionData('transfer', [
+        formData.to,
+        amount,
+      ]) as `0x${string}`
 
-      const params = {
-        amount: '0',
-        toAddress: contractAddress,
-        fromAddress: address,
-        walletId: currentWallet?.id || '',
-        gasLimit: gasParams.gasLimit,
-        maxFeePerGas: gasParams.maxFeePerGas,
-        maxInclusionFeePerGas: gasParams.maxPriorityFeePerGas,
+      txHash = await sendOrToast({
+        to: contractAddress as `0x${string}`,
+        value: 0n,
         data,
-      }
-
-      const result = await broadcastOrToast(() =>
-        apiClient.wallet.account.ethereum.sendErc20.mutate(params),
-      )
-
-      const txHash = getTransactionHash(result.id.txid)
-
-      if (!isEthereumTransactionHash(txHash)) {
-        toast.negative(ERROR_MESSAGES.TX_FAILED)
-        throw new Error('Transaction hash not found')
-      }
-
-      await notifyTransactionSent(
-        formData.amount,
-        finalTokenDetail.summary.symbol,
-      )
-
-      addPendingTransaction({
-        hash: txHash,
-        from: address,
-        to: formData.to,
-        value: parseFloat(formData.amount),
-        displayAmount: formData.amount,
-        asset: finalTokenDetail.summary.symbol,
-        network: 'ethereum',
-        status: 'pending',
-        category: 'external',
-        blockNum: '0',
-        metadata: {
-          blockTimestamp: new Date().toISOString(),
-        },
-        rawContract: {
-          value: amountHex,
-          address: ticker.startsWith('0x') ? ticker : null,
-          decimal: asset.decimals?.toString() ?? '18',
-        },
-        eurRate: 0,
+        gas,
+        maxFeePerGas,
+        maxPriorityFeePerGas,
       })
-      return txHash
     }
+
+    if (!isEthereumTransactionHash(txHash)) {
+      toast.negative(ERROR_MESSAGES.TX_FAILED)
+      throw new Error('Transaction hash not found')
+    }
+
+    await notifyTransactionSent(
+      formData.amount,
+      finalTokenDetail.summary.symbol,
+    )
+
+    addPendingTransaction({
+      hash: txHash,
+      from: address,
+      to: formData.to,
+      value: parseFloat(formData.amount),
+      displayAmount: formData.amount,
+      asset: finalTokenDetail.summary.symbol,
+      network: 'ethereum',
+      status: 'pending',
+      category: 'external',
+      blockNum: '0',
+      metadata: {
+        blockTimestamp: new Date().toISOString(),
+      },
+      rawContract: {
+        value: amountHex!,
+        address: ticker.startsWith('0x') ? ticker : null,
+        decimal: isNative ? '18' : (asset.decimals?.toString() ?? '18'),
+      },
+      eurRate: 0,
+    })
+
+    return txHash
   }
 
   return (
@@ -486,31 +454,15 @@ const Token = (props: Props) => {
             </Button>
           </BuyCryptoDrawer>
           {FEATURE_FLAGS.SWAP && fromTokenAddress && (
-            <WatchOnlyActionTooltip
-              disabled={isWatchOnlyWallet}
-              content={WATCH_ONLY_ACTION_TOOLTIP}
+            <ExchangeDrawer
+              account={account}
+              fromChain={1}
+              fromToken={fromTokenAddress}
             >
-              {isWatchOnlyWallet ? (
-                <Button
-                  size="32"
-                  iconBefore={<SwapIcon />}
-                  variant="outline"
-                  disabled
-                >
-                  <span className="block max-w-20 truncate">Exchange</span>
-                </Button>
-              ) : (
-                <ExchangeDrawer
-                  account={account}
-                  fromChain={1}
-                  fromToken={fromTokenAddress}
-                >
-                  <Button size="32" iconBefore={<SwapIcon />} variant="outline">
-                    <span className="block max-w-20 truncate">Exchange</span>
-                  </Button>
-                </ExchangeDrawer>
-              )}
-            </WatchOnlyActionTooltip>
+              <Button size="32" iconBefore={<SwapIcon />} variant="outline">
+                <span className="block max-w-20 truncate">Exchange</span>
+              </Button>
+            </ExchangeDrawer>
           )}
           <ReceiveCryptoDrawer account={account} onCopy={copy}>
             <Button
@@ -521,43 +473,23 @@ const Token = (props: Props) => {
               Receive
             </Button>
           </ReceiveCryptoDrawer>
-          <WatchOnlyActionTooltip
-            disabled={isWatchOnlyWallet}
-            content={WATCH_ONLY_ACTION_TOOLTIP}
+          <SendAssetsModal
+            asset={sendAsset}
+            account={{
+              ...account,
+              ethBalance: sendAsset.ethBalance,
+            }}
+            signTransaction={signTransaction}
+            hasActiveSession={hasActiveSession || isHardwareWallet}
+            requestPassword={requestPassword}
+            gasFees={gasFeeQuery.data}
+            isLoadingFees={gasFeeQuery.isFetching}
+            onEstimateGas={prepareGasEstimate}
           >
-            {isWatchOnlyWallet ? (
-              <Button
-                size="32"
-                iconBefore={<SendBlurIcon />}
-                variant="outline"
-                disabled
-              >
-                Send
-              </Button>
-            ) : (
-              <SendAssetsModal
-                asset={sendAsset}
-                account={{
-                  ...account,
-                  ethBalance: sendAsset.ethBalance,
-                }}
-                signTransaction={signTransaction}
-                hasActiveSession={hasActiveSession}
-                requestPassword={requestPassword}
-                gasFees={gasFeeQuery.data}
-                isLoadingFees={gasFeeQuery.isFetching}
-                onEstimateGas={prepareGasEstimate}
-              >
-                <Button
-                  size="32"
-                  iconBefore={<SendBlurIcon />}
-                  variant="outline"
-                >
-                  Send
-                </Button>
-              </SendAssetsModal>
-            )}
-          </WatchOnlyActionTooltip>
+            <Button size="32" iconBefore={<SendBlurIcon />} variant="outline">
+              Send
+            </Button>
+          </SendAssetsModal>
         </div>
       }
     >
@@ -588,35 +520,15 @@ const Token = (props: Props) => {
             </BuyCryptoDrawer>
 
             {FEATURE_FLAGS.SWAP && fromTokenAddress && (
-              <WatchOnlyActionTooltip
-                disabled={isWatchOnlyWallet}
-                content={WATCH_ONLY_ACTION_TOOLTIP}
+              <ExchangeDrawer
+                account={account}
+                fromChain={1}
+                fromToken={fromTokenAddress}
               >
-                {isWatchOnlyWallet ? (
-                  <Button
-                    size="32"
-                    iconBefore={<SwapIcon />}
-                    variant="outline"
-                    disabled
-                  >
-                    Exchange
-                  </Button>
-                ) : (
-                  <ExchangeDrawer
-                    account={account}
-                    fromChain={1}
-                    fromToken={fromTokenAddress}
-                  >
-                    <Button
-                      size="32"
-                      iconBefore={<SwapIcon />}
-                      variant="outline"
-                    >
-                      Exchange
-                    </Button>
-                  </ExchangeDrawer>
-                )}
-              </WatchOnlyActionTooltip>
+                <Button size="32" iconBefore={<SwapIcon />} variant="outline">
+                  Exchange
+                </Button>
+              </ExchangeDrawer>
             )}
 
             <ReceiveCryptoDrawer account={account} onCopy={copy}>
@@ -628,43 +540,23 @@ const Token = (props: Props) => {
                 Receive
               </Button>
             </ReceiveCryptoDrawer>
-            <WatchOnlyActionTooltip
-              disabled={isWatchOnlyWallet}
-              content={WATCH_ONLY_ACTION_TOOLTIP}
+            <SendAssetsModal
+              asset={sendAsset}
+              account={{
+                ...account,
+                ethBalance: sendAsset.ethBalance,
+              }}
+              signTransaction={signTransaction}
+              hasActiveSession={hasActiveSession || isHardwareWallet}
+              requestPassword={requestPassword}
+              gasFees={gasFeeQuery.data}
+              isLoadingFees={gasFeeQuery.isFetching}
+              onEstimateGas={prepareGasEstimate}
             >
-              {isWatchOnlyWallet ? (
-                <Button
-                  size="32"
-                  variant="outline"
-                  iconBefore={<SendBlurIcon />}
-                  disabled
-                >
-                  Send
-                </Button>
-              ) : (
-                <SendAssetsModal
-                  asset={sendAsset}
-                  account={{
-                    ...account,
-                    ethBalance: sendAsset.ethBalance,
-                  }}
-                  signTransaction={signTransaction}
-                  hasActiveSession={hasActiveSession}
-                  requestPassword={requestPassword}
-                  gasFees={gasFeeQuery.data}
-                  isLoadingFees={gasFeeQuery.isFetching}
-                  onEstimateGas={prepareGasEstimate}
-                >
-                  <Button
-                    size="32"
-                    variant="outline"
-                    iconBefore={<SendBlurIcon />}
-                  >
-                    Send
-                  </Button>
-                </SendAssetsModal>
-              )}
-            </WatchOnlyActionTooltip>
+              <Button size="32" variant="outline" iconBefore={<SendBlurIcon />}>
+                Send
+              </Button>
+            </SendAssetsModal>
           </div>
         </div>
 

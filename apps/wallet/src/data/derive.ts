@@ -67,6 +67,42 @@ export function deriveAccountsAtPaths(
   }
 }
 
+/** Whether `path` is an address path, change then index, under `accountPath`. */
+export function isAddressPathUnder(accountPath: string, path: string): boolean {
+  return (
+    path.startsWith(`${accountPath}/`) &&
+    /^\d+\/\d+$/.test(path.slice(accountPath.length + 1))
+  )
+}
+
+export function deriveAccountFromExtendedKey(
+  walletCore: WalletCore,
+  extendedKey: string,
+  coin: InstanceType<WalletCore['CoinType']>,
+  derivation: InstanceType<WalletCore['Derivation']>,
+  path: string,
+): WalletAccount {
+  const publicKey = walletCore.HDWallet.getPublicKeyFromExtended(
+    extendedKey,
+    coin,
+    path,
+  )
+  if (!publicKey) throw new Error('Invalid extended public key')
+  try {
+    return {
+      address: walletCore.CoinTypeExt.deriveAddressFromPublicKey(
+        coin,
+        publicKey,
+      ),
+      coin: coin.value,
+      derivationPath: path,
+      derivation: derivation.value,
+    }
+  } finally {
+    publicKey.delete()
+  }
+}
+
 export function deriveAccounts(
   walletCore: WalletCore,
   mnemonic: string,
