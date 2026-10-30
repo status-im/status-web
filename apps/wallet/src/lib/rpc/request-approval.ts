@@ -58,6 +58,10 @@ export function requestApproval(
     let settled = false
     const timeout: ReturnType<typeof setTimeout> = setTimeout(() => {
       cleanup()
+      // Left open, the popup would take an answer that nothing reads any more.
+      if (popupWindowId !== undefined) {
+        chrome.windows.remove(popupWindowId).catch(() => {})
+      }
       resolve(null)
     }, APPROVAL_TIMEOUT_MS)
 
