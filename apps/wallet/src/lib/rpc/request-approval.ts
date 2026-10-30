@@ -25,6 +25,14 @@ type PendingApprovalInput = PendingApproval extends infer T
  */
 let approvalInFlight = false
 
+let openPopupWindowId: number | undefined
+
+/** A popup behind the browser window looks closed, so a refused request shows it again. */
+function focusOpenPopup(): void {
+  if (openPopupWindowId === undefined) return
+  chrome.windows.update(openPopupWindowId, { focused: true }).catch(() => {})
+}
+
 /**
  * The slot holds one request; a second must not replace it. Checked before any
  * work the user would have to wait through, so a dApp firing two requests is
@@ -32,6 +40,7 @@ let approvalInFlight = false
  */
 export async function assertNoPendingApproval(): Promise<void> {
   if (await getPendingApproval()) {
+    focusOpenPopup()
     throw new ProviderRpcError({
       code: -32002,
       message: 'Already processing a request.',
@@ -43,6 +52,7 @@ export function requestApproval(
   approval: PendingApprovalInput,
 ): Promise<ApprovalResult | null> {
   if (approvalInFlight) {
+    focusOpenPopup()
     return Promise.reject(
       new ProviderRpcError({
         code: -32002,
@@ -65,6 +75,7 @@ export function requestApproval(
       if (settled) return
       settled = true
       approvalInFlight = false
+      openPopupWindowId = undefined
       clearTimeout(timeout)
       chrome.storage.onChanged.removeListener(storageListener)
       chrome.windows.onRemoved.removeListener(windowListener)
@@ -126,6 +137,7 @@ export function requestApproval(
           focused: true,
         })
         popupWindowId = popup?.id
+        if (!settled) openPopupWindowId = popupWindowId
       } catch {
         cleanup()
         resolve(null)
