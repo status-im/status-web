@@ -2835,11 +2835,11 @@ importers:
         specifier: ^3.3.4
         version: 3.10.0(react-hook-form@7.66.0(react@19.1.2))
       '@qrkit/core':
-        specifier: ^0.7.0
-        version: 0.7.0
+        specifier: ^0.8.0
+        version: 0.8.0
       '@qrkit/react':
-        specifier: ^0.6.0
-        version: 0.6.0(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
+        specifier: ^0.7.0
+        version: 0.7.0(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
       '@radix-ui/react-accordion':
         specifier: ^1.2.0
         version: 1.2.12(@types/react-dom@19.1.2(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
@@ -8175,11 +8175,11 @@ packages:
   '@qrkit/bc-ur-web@2.0.1':
     resolution: {integrity: sha512-sng5nX2K6S99mn4USxVPwG3i960gfu2Ucgsyfmdo0LoK/6dk/ks2LKjEFx0unlQY4J+M2xn+Aa/q+SUQJetFdA==}
 
-  '@qrkit/core@0.7.0':
-    resolution: {integrity: sha512-4atEUQl3UqhVwyblFJFnCZKDr1QGQ+cd6bSkr7d55l87Qiyb13YDDG+9UKjwXeB+kGIdP2QZqjQI6JKN4wpIqQ==}
+  '@qrkit/core@0.8.0':
+    resolution: {integrity: sha512-veyuuNBjFbM/dH4hbV/+4HTQywUwOagia6DAVcIZYfF+uG9ma48b0k3q0kgcyfx0b8OFlBuE1oqktcDyflqiLg==}
 
-  '@qrkit/react@0.6.0':
-    resolution: {integrity: sha512-MPWC8ADoVY0N6sVyxJUznZPCZr6yR1qBHoWl3IUaBvzadsKWoL8pul0TCcKzM24/Uty6o6hmQytDH696QYTUlQ==}
+  '@qrkit/react@0.7.0':
+    resolution: {integrity: sha512-AyQoz1pa9g9naHla812KwoyaUxozBlliJ82KPY2T2gA/eyN03vB8CPi/X1G0PDs0OaB7ND1ZPzRYAvWSJipoLQ==}
     peerDependencies:
       react: 19.1.2
       react-dom: 19.1.2
@@ -31114,7 +31114,7 @@ snapshots:
     dependencies:
       cbor2: 1.12.0
 
-  '@qrkit/core@0.7.0':
+  '@qrkit/core@0.8.0':
     dependencies:
       '@noble/curves': 2.2.0
       '@noble/hashes': 2.2.0
@@ -31123,10 +31123,10 @@ snapshots:
       '@scure/bip32': 2.2.0
       cborg: 4.5.8
 
-  '@qrkit/react@0.6.0(react-dom@19.1.2(react@19.1.2))(react@19.1.2)':
+  '@qrkit/react@0.7.0(react-dom@19.1.2(react@19.1.2))(react@19.1.2)':
     dependencies:
       '@qrkit/bc-ur-web': 2.0.1
-      '@qrkit/core': 0.7.0
+      '@qrkit/core': 0.8.0
       focus-trap: 8.1.0
       jsqr: 1.4.0
       qrcode: 1.5.4
