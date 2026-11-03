@@ -5,13 +5,12 @@ import 'server-only'
 import { Keycloak } from 'arctic'
 import { cookies, headers } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { parseJWT } from 'oslo/jwt'
-import { z } from 'zod'
 
 import { serverEnv } from '~/config/env.server.mjs'
 import { SITE_URL } from '~/config/site'
 
 import { db } from '../db'
+import { createKeycloakAccessTokenVerifier } from './keycloak-access-token'
 
 export const KEYCLOAK_STATE_COOKIE_NAME = 'keycloak_state'
 export const KEYCLOAK_VERIFIER_COOKIE_NAME = 'keycloak_verifier'
@@ -24,10 +23,10 @@ export const keycloak = new Keycloak(
   serverEnv.KEYCLOAK_CLIENT_SECRET
 )
 
-const decodedAccessTokenSchema = z.object({
-  exp: z.number(),
-  email: z.string(),
-})
+// Runtime-only configuration is unavailable during static page generation.
+let verifyAccessToken:
+  | ReturnType<typeof createKeycloakAccessTokenVerifier>
+  | undefined
 
 export const auth = async () => {
   /*
@@ -42,11 +41,22 @@ export const auth = async () => {
     redirect('/login/keycloak')
   }
 
+  let email: string
   try {
-    const jwt = parseJWT(accessToken)
-    const decodedAccessToken = decodedAccessTokenSchema.parse(jwt?.payload)
+    verifyAccessToken ??= createKeycloakAccessTokenVerifier({
+      issuer: serverEnv.KEYCLOAK_ISSUER,
+      clientId: serverEnv.KEYCLOAK_CLIENT_ID,
+    })
+    email = (await verifyAccessToken(accessToken)).email
+  } catch {
+    // Invalid cookies cannot be trusted to log out a Keycloak session. Fail
+    // closed even when Keycloak is unavailable, without logging token claims.
+    redirect('/login/keycloak')
+  }
+
+  try {
     const user = await db.query.Users.findFirst({
-      where: (Users, { eq }) => eq(Users.email, decodedAccessToken.email),
+      where: (Users, { eq }) => eq(Users.email, email),
     })
 
     // fixme: ditto `src/app/login/keycloak/callback/route.ts` comment about redirecting to a `app/login/page.tsx`
@@ -67,12 +77,12 @@ export const auth = async () => {
   } catch (error) {
     console.error(error)
 
+    // Preserve session cleanup for verified users who cannot access admin.
+    // Otherwise an active Keycloak SSO session can repeatedly log them back in.
     const response = await fetch(
       new URL('/login/keycloak/invalidate', await getBaseUrl()).toString(),
       {
-        headers: {
-          cookie: (await cookies()).toString(),
-        },
+        headers: { cookie: (await cookies()).toString() },
         cache: 'no-store',
       }
     )
