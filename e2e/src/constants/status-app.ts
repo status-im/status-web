@@ -13,7 +13,10 @@ const BLOCKED_REQUESTS = [
  * Console errors that do not fail a test. Each entry is a known site bug: fix
  * it, then delete the entry.
  */
-const IGNORED_CONSOLE_ERRORS: RegExp[] = []
+const IGNORED_CONSOLE_ERRORS = [
+  // The help search dialog has no DialogTitle (Radix accessibility warning).
+  /`DialogContent` requires a `DialogTitle`/,
+]
 
 export const STATUS_APP_RULES: SiteRules = {
   blockedRequests: BLOCKED_REQUESTS,
