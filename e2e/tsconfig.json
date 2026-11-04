@@ -33,6 +33,7 @@
     "src/**/*.ts",
     "tests/**/*.ts",
     "playwright.config.ts",
+    "playwright.status-app.config.ts",
     "global-setup.ts",
     "global-teardown.ts",
     "download-metamask-extension.ts"
