@@ -187,7 +187,7 @@ export async function eth_sendTransaction({
   }
 
   const signer = await requireWalletFor(signerAddress)
-  await assertNoPendingApproval()
+  await assertNoPendingApproval(origin)
 
   const tx: TransactionRequest = {
     to: request.to as Address,

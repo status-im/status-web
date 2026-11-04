@@ -11,6 +11,7 @@ import {
 } from '../data/dapp-permissions'
 import { requestFeeRate } from './gas-fees'
 import { getPublicClient } from './public-client'
+import { requestApproval } from './rpc/request-approval'
 import { handleRpcRequest, LOCAL_HANDLERS } from './rpc-handler'
 import { REMOTE_ALLOWED, UNGATED_LOCAL } from './rpc-methods'
 
@@ -1380,6 +1381,97 @@ describe('eth_sendTransaction', () => {
       })
       expect(focusedWindows).toEqual([1])
     } finally {
+      await answerHeldPopup()
+    }
+    await expect(first).rejects.toMatchObject({ code: 4001 })
+  })
+
+  test('a refused request from another site leaves the popup where it is', async () => {
+    holdPopup = true
+
+    const first = connect(OTHER_ORIGIN)
+    try {
+      await vi.waitFor(() => expect(popupsOpened).toBe(1))
+
+      await expect(connect()).rejects.toMatchObject({ code: -32002 })
+      expect(focusedWindows).toEqual([])
+    } finally {
+      await answerHeldPopup()
+    }
+    await expect(first).rejects.toMatchObject({ code: 4001 })
+  })
+
+  test("the popup's own site raises it however it spells its origin", async () => {
+    holdPopup = true
+
+    const first = connect(OTHER_ORIGIN)
+    try {
+      await vi.waitFor(() => expect(popupsOpened).toBe(1))
+
+      await expect(
+        connect(`${OTHER_ORIGIN.toUpperCase()}/`),
+      ).rejects.toMatchObject({ code: -32002 })
+      expect(focusedWindows).toEqual([1])
+    } finally {
+      await answerHeldPopup()
+    }
+    await expect(first).rejects.toMatchObject({ code: 4001 })
+  })
+
+  test('a request refused while another is still in flight raises only its own popup', async () => {
+    holdPopup = true
+    const approval = (origin: string) => ({
+      type: 'eth_requestAccounts' as const,
+      origin,
+      title: origin,
+      favicon: `${origin}/favicon.ico`,
+      address: ADDRESS,
+      accountName: 'Wallet 1',
+      chainId: '0x1',
+    })
+
+    const first = requestApproval(approval(OTHER_ORIGIN))
+    try {
+      await vi.waitFor(() => expect(popupsOpened).toBe(1))
+
+      await expect(requestApproval(approval(ORIGIN))).rejects.toMatchObject({
+        code: -32002,
+      })
+      expect(focusedWindows).toEqual([])
+
+      await expect(
+        requestApproval(approval(OTHER_ORIGIN)),
+      ).rejects.toMatchObject({ code: -32002 })
+      expect(focusedWindows).toEqual([1])
+    } finally {
+      await answerHeldPopup()
+    }
+    await expect(first).resolves.toBeNull()
+  })
+
+  test('a site that keeps asking raises its popup at most once a second', async () => {
+    vi.useFakeTimers({ toFake: ['performance'] })
+    holdPopup = true
+
+    const first = connect(OTHER_ORIGIN)
+    try {
+      await vi.waitFor(() => expect(popupsOpened).toBe(1))
+
+      await expect(connect(OTHER_ORIGIN)).rejects.toMatchObject({
+        code: -32002,
+      })
+      await expect(connect(OTHER_ORIGIN)).rejects.toMatchObject({
+        code: -32002,
+      })
+      expect(focusedWindows).toEqual([1])
+
+      vi.advanceTimersByTime(1000)
+      await expect(connect(OTHER_ORIGIN)).rejects.toMatchObject({
+        code: -32002,
+      })
+      expect(focusedWindows).toEqual([1, 1])
+    } finally {
+      vi.useRealTimers()
       await answerHeldPopup()
     }
     await expect(first).rejects.toMatchObject({ code: 4001 })

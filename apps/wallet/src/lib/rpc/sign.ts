@@ -55,7 +55,7 @@ export async function personal_sign({
   }
 
   const signer = await requireWalletFor(signerAddress)
-  await assertNoPendingApproval()
+  await assertNoPendingApproval(origin)
 
   const signChainId = await getChainIdForOrigin(origin)
   const signResult = await requestApproval({
@@ -125,7 +125,7 @@ export async function eth_signTypedData_v4({
   const serialized = serializeTypedData(typedData)
 
   const signer = await requireWalletFor(signerAddress)
-  await assertNoPendingApproval()
+  await assertNoPendingApproval(origin)
 
   const result = await requestApproval({
     type: 'eth_signTypedData_v4',

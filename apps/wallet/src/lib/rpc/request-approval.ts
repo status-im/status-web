@@ -10,6 +10,7 @@ import {
   type PendingApproval,
   setPendingApproval,
 } from '../../data/approval'
+import { normalizeOrigin } from '../../data/dapp-permissions'
 
 const APPROVAL_POPUP_WIDTH = 390
 const APPROVAL_POPUP_HEIGHT = 628
@@ -26,10 +27,19 @@ type PendingApprovalInput = PendingApproval extends infer T
 let approvalInFlight = false
 
 let openPopupWindowId: number | undefined
+let openPopupOrigin: string | undefined
+let lastFocusAt = -Infinity
 
-/** A popup behind the browser window looks closed, so a refused request shows it again. */
-function focusOpenPopup(): void {
+// Bounds how often a page that keeps asking can pull the popup in front of the user.
+const FOCUS_INTERVAL_MS = 1000
+
+/** A popup behind the browser window looks closed, so a refused request from its own site shows it again. */
+function focusOpenPopup(origin: string): void {
   if (openPopupWindowId === undefined) return
+  if (openPopupOrigin !== normalizeOrigin(origin)) return
+  const now = performance.now()
+  if (now - lastFocusAt < FOCUS_INTERVAL_MS) return
+  lastFocusAt = now
   chrome.windows.update(openPopupWindowId, { focused: true }).catch(() => {})
 }
 
@@ -38,9 +48,9 @@ function focusOpenPopup(): void {
  * work the user would have to wait through, so a dApp firing two requests is
  * told immediately rather than after an estimate.
  */
-export async function assertNoPendingApproval(): Promise<void> {
+export async function assertNoPendingApproval(origin: string): Promise<void> {
   if (await getPendingApproval()) {
-    focusOpenPopup()
+    focusOpenPopup(origin)
     throw new ProviderRpcError({
       code: -32002,
       message: 'Already processing a request.',
@@ -52,7 +62,7 @@ export function requestApproval(
   approval: PendingApprovalInput,
 ): Promise<ApprovalResult | null> {
   if (approvalInFlight) {
-    focusOpenPopup()
+    focusOpenPopup(approval.origin)
     return Promise.reject(
       new ProviderRpcError({
         code: -32002,
@@ -76,6 +86,8 @@ export function requestApproval(
       settled = true
       approvalInFlight = false
       openPopupWindowId = undefined
+      openPopupOrigin = undefined
+      lastFocusAt = -Infinity
       clearTimeout(timeout)
       chrome.storage.onChanged.removeListener(storageListener)
       chrome.windows.onRemoved.removeListener(windowListener)
@@ -137,7 +149,10 @@ export function requestApproval(
           focused: true,
         })
         popupWindowId = popup?.id
-        if (!settled) openPopupWindowId = popupWindowId
+        if (!settled) {
+          openPopupWindowId = popupWindowId
+          openPopupOrigin = normalizeOrigin(approval.origin)
+        }
       } catch {
         cleanup()
         resolve(null)

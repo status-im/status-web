@@ -30,7 +30,7 @@ export async function eth_requestAccounts({
     })
   }
 
-  await assertNoPendingApproval()
+  await assertNoPendingApproval(origin)
 
   const chainId = await getChainIdForOrigin(origin)
   const accountName = await getAccountName()
