@@ -21,3 +21,34 @@ export const STATUS_APP_RULES: SiteRules = {
   strictConsole: strictConsole(STATUS_APP_URL),
   testIntervalMs: 0,
 }
+
+/** Known console errors limited to one route, same rule as above. */
+export const STATUS_APP_KNOWN_ROUTE_ERRORS: Record<string, RegExp[]> = {
+  // The exchanges table renders "x minutes ago" on the server and again in the
+  // browser, so the text never matches (React error #418).
+  '/snt/exchanges': [/#418|hydrat/i],
+}
+
+/**
+ * Pages every run opens. Each must answer 200 and render a non-empty `h1`;
+ * page-specific checks live in their own spec.
+ */
+export const STATUS_APP_CORE_ROUTES = [
+  '/',
+  '/apps',
+  '/blog',
+  '/brand',
+  '/help',
+  '/jobs',
+  '/keycard',
+  '/learn',
+  '/legal/privacy-policy',
+  '/legal/terms-of-use',
+  '/manifesto',
+  '/security',
+  '/snt',
+  '/snt/exchanges',
+  '/snt/release-schedule',
+  '/specs',
+  '/team',
+] as const
