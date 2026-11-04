@@ -54,17 +54,20 @@ Tag every test with exactly one of them. `wallet-flows` greps `/@wallet(?![\w-])
 
 ## status.app
 
-The status.app suite starts no server. Start one yourself and point `STATUS_APP_URL` at it, or at a deployed site:
+The status.app suite has its own config, [`playwright.status-app.config.ts`](./playwright.status-app.config.ts), and starts no server. Start one yourself and point `STATUS_APP_URL` at it, or at a deployed site:
 
 ```bash
 pnpm --filter status.app dev:next                      # from the repo root, serves :3001
 pnpm test:status-app                                   # in e2e/
 STATUS_APP_URL=https://dev.status.app pnpm test:status-app
+STATUS_APP_URL=https://dev.status.app SITEMAP_SAMPLE=all pnpm test:status-app
 ```
+
+The suite reads its settings from the shell, `e2e/.env.local` or `e2e/.env`, in that order of precedence; `.env.example` lists them. Every test is read-only: it opens forms and dialogs but never submits them.
 
 Against localhost only uncaught page errors fail a test, because `next dev` logs React warnings that production strips; set `E2E_STRICT_CONSOLE=1` for a local production build. The sitemap test checks 30 entries unless `SITEMAP_SAMPLE` says otherwise (`all` in CI). The `/insights` test skips on localhost: Hasura only answers CORS for the status.app origins.
 
-[`e2e-daily.yml`](../.github/workflows/e2e-daily.yml) runs the suite every day at 05:17 UTC against https://dev.status.app and https://status.app. A failure opens or comments on the issue labelled `e2e-daily`, and the next green run closes it. Same-origin requests carry an `x-e2e-bypass` header set from the `E2E_BYPASS_TOKEN` secret, so Cloudflare can skip its bot checks for the run.
+[`e2e-daily.yml`](../.github/workflows/e2e-daily.yml) runs the suite every day at 05:17 UTC against https://dev.status.app and https://status.app. A failure opens or comments on the issue labelled `e2e-daily`, and the next green run closes it. Same-origin requests carry an `x-e2e-bypass` header set from the `E2E_BYPASS_TOKEN` secret, so Cloudflare can skip its bot checks for the run. `E2E_BYPASS_TOKEN` is optional: when it is unset, the header is not sent.
 
 ## Anvil forks
 
