@@ -1,0 +1,160 @@
+name: E2E daily
+
+# Runs the status.app suite against staging and production once a day. A failed
+# scheduled run opens (or comments on) one issue labelled `e2e-daily`; the next
+# green run closes it.
+
+on:
+  schedule:
+    # 05:17 UTC. Off the hour, when GitHub delays scheduled runs the most.
+    - cron: '17 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: e2e-daily
+  cancel-in-progress: false
+
+jobs:
+  status-app:
+    name: status.app (${{ matrix.environment }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - environment: staging
+            url: https://dev.status.app
+          - environment: production
+            url: https://status.app
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: pnpm
+
+      # The suite tests a deployed site, so only the e2e workspace is needed.
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --filter e2e...
+
+      - name: Install Playwright browsers
+        run: cd e2e && pnpm exec playwright install chromium --with-deps
+
+      - name: Run status.app E2E tests
+        run: cd e2e && pnpm test:status-app
+        env:
+          STATUS_APP_URL: ${{ matrix.url }}
+          SITEMAP_SAMPLE: all
+          # Sent as `x-e2e-bypass` on same-origin requests so the CDN can let
+          # the run through bot protection. Optional until the rule exists.
+          E2E_BYPASS_TOKEN: ${{ secrets.E2E_BYPASS_TOKEN }}
+          CI: true
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-daily-status-app-${{ matrix.environment }}
+          path: e2e/test-results/
+          retention-days: 14
+
+  report:
+    name: Report to issue
+    needs: status-app
+    # Scheduled runs and manual runs on the default branch only, so a run on a
+    # feature branch never opens or closes the tracking issue.
+    if: always() && github.ref_name == github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      issues: write
+
+    steps:
+      - name: Open, update or close the e2e-daily issue
+        uses: actions/github-script@v7
+        env:
+          RESULT: ${{ needs.status-app.result }}
+        with:
+          script: |
+            const label = 'e2e-daily'
+            const { owner, repo } = context.repo
+            const runUrl = `${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}`
+            if (process.env.RESULT === 'cancelled') return
+            const failed = process.env.RESULT !== 'success'
+
+            const { data: jobs } = await github.rest.actions.listJobsForWorkflowRun({
+              owner,
+              repo,
+              run_id: context.runId,
+            })
+            const failedJobs = jobs.jobs
+              .filter(job => job.name !== 'Report to issue' && job.conclusion !== 'success')
+              .map(job => `- [${job.name}](${job.html_url}): ${job.conclusion ?? job.status}`)
+
+            const { data: open } = await github.rest.issues.listForRepo({
+              owner,
+              repo,
+              labels: label,
+              state: 'open',
+              per_page: 1,
+            })
+            const issue = open[0]
+
+            if (!failed) {
+              if (issue) {
+                await github.rest.issues.createComment({
+                  owner,
+                  repo,
+                  issue_number: issue.number,
+                  body: `Passing again in ${runUrl}.`,
+                })
+                await github.rest.issues.update({
+                  owner,
+                  repo,
+                  issue_number: issue.number,
+                  state: 'closed',
+                  state_reason: 'completed',
+                })
+              }
+              return
+            }
+
+            const body = [
+              `Daily E2E run failed: ${runUrl}`,
+              '',
+              ...failedJobs,
+              '',
+              'The Playwright HTML report and traces are in the run artifacts.',
+            ].join('\n')
+
+            if (issue) {
+              await github.rest.issues.createComment({ owner, repo, issue_number: issue.number, body })
+              return
+            }
+
+            try {
+              await github.rest.issues.createLabel({ owner, repo, name: label, color: 'd73a4a' })
+            } catch (error) {
+              if (error.status !== 422) throw error
+            }
+            await github.rest.issues.create({
+              owner,
+              repo,
+              title: 'Daily E2E tests are failing',
+              labels: [label],
+              body,
+            })
