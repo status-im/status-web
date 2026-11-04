@@ -1,7 +1,12 @@
 import { BYPASS_HEADER, BYPASS_TOKEN } from '@config/site.js'
 import { expect, test as base } from '@playwright/test'
 
-import type { BrowserContext, Page, Request } from '@playwright/test'
+import type {
+  APIRequestContext,
+  BrowserContext,
+  Page,
+  Request,
+} from '@playwright/test'
 
 /**
  * Fixture for website suites that run against a live URL (local, staging or
@@ -54,6 +59,50 @@ let lastTestStart = 0
 function isSameOrigin(request: Request, baseURL: string | undefined) {
   if (!baseURL) return false
   return new URL(request.url()).origin === new URL(baseURL).origin
+}
+
+const REQUEST_METHODS = new Set([
+  'delete',
+  'fetch',
+  'get',
+  'head',
+  'patch',
+  'post',
+  'put',
+])
+
+/**
+ * Wrap an API request context so the bypass header goes to the site under test
+ * only. Specs also call GitHub through `request`, and the token must never
+ * leave the origin it was issued for.
+ */
+function withBypassHeader(
+  request: APIRequestContext,
+  baseURL: string | undefined,
+): APIRequestContext {
+  if (!BYPASS_TOKEN || !baseURL) return request
+  const origin = new URL(baseURL).origin
+
+  return new Proxy(request, {
+    get(target, property, receiver) {
+      const value: unknown = Reflect.get(target, property, receiver)
+      if (typeof value !== 'function') return value
+      if (typeof property !== 'string' || !REQUEST_METHODS.has(property)) {
+        return value.bind(target)
+      }
+      return (
+        url: unknown,
+        options: { headers?: Record<string, string> } = {},
+      ) => {
+        const sameOrigin =
+          typeof url === 'string' && new URL(url, baseURL).origin === origin
+        const headers = sameOrigin
+          ? { ...options.headers, [BYPASS_HEADER]: BYPASS_TOKEN }
+          : options.headers
+        return value.call(target, url, { ...options, headers })
+      }
+    },
+  })
 }
 
 async function prepareContext(
@@ -117,11 +166,8 @@ export const test = base.extend<SiteOptions & SiteFixtures>({
   },
 
   request: async ({ playwright, baseURL }, use) => {
-    const request = await playwright.request.newContext({
-      baseURL,
-      extraHTTPHeaders: BYPASS_TOKEN ? { [BYPASS_HEADER]: BYPASS_TOKEN } : {},
-    })
-    await use(request)
+    const request = await playwright.request.newContext({ baseURL })
+    await use(withBypassHeader(request, baseURL))
     await request.dispose()
   },
 
