@@ -1,6 +1,6 @@
 # e2e
 
-Playwright and TypeScript end-to-end tests for the [Status Network Hub](https://hub.status.network) and the wallet extension. Tags, projects and the dev servers each project needs are in [`playwright.config.ts`](./playwright.config.ts); page objects and fixtures are under [`src/`](./src).
+Playwright and TypeScript end-to-end tests for the [Status Network Hub](https://hub.status.network), the wallet extension and [status.app](https://status.app). Tags, projects and the dev servers each project needs are in [`playwright.config.ts`](./playwright.config.ts); page objects and fixtures are under [`src/`](./src).
 
 The default target is this repo's Hub: Playwright builds the Hub's workspace dependencies and starts `next dev` on `http://localhost:3003`, so a run covers the branch you are on. CI does the same on pull requests, `master` and `develop`. To test a deployed build instead, set `BASE_URL`, which is what stops the local server:
 
@@ -26,6 +26,7 @@ pnpm test:all             # forks up, smoke, wallet, anvil, forks down
 pnpm test:ci              # forks up, whole suite with CI=true, forks down
 pnpm test:static-export   # build then serve the three static exports
 pnpm test:get-static      # deprecated alias for the same config
+pnpm test:status-app      # status.app at STATUS_APP_URL, default http://localhost:3001
 # forks, and the servers the wallet extension projects need
 pnpm anvil:up             # mainnet and Linea forks in Docker
 pnpm anvil:down
@@ -50,6 +51,20 @@ pnpm clean
 `@smoke` runs in the `smoke` project (headless, no wallet), `@wallet` in `wallet-flows` (MetaMask, headed), and `@anvil` in `anvil` (headed, needs the forks). `@wallet-onboarding`, `@wallet-send` and `@wallet-swap` have their own projects, gated by `RUN_WALLET_ONBOARDING` and `RUN_WALLET_E2E`.
 
 Tag every test with exactly one of them. `wallet-flows` greps `/@wallet(?![\w-])/`, so a `@wallet-send` or `@wallet-swap` test stays out of the MetaMask flows.
+
+## status.app
+
+The status.app suite starts no server. Start one yourself and point `STATUS_APP_URL` at it, or at a deployed site:
+
+```bash
+pnpm --filter status.app dev:next                      # from the repo root, serves :3001
+pnpm test:status-app                                   # in e2e/
+STATUS_APP_URL=https://dev.status.app pnpm test:status-app
+```
+
+Against localhost only uncaught page errors fail a test, because `next dev` logs React warnings that production strips; set `E2E_STRICT_CONSOLE=1` for a local production build. The sitemap test checks 30 entries unless `SITEMAP_SAMPLE` says otherwise (`all` in CI). The `/insights` test skips on localhost: Hasura only answers CORS for the status.app origins.
+
+[`e2e-daily.yml`](../.github/workflows/e2e-daily.yml) runs the suite every day at 05:17 UTC against https://dev.status.app and https://status.app. A failure opens or comments on the issue labelled `e2e-daily`, and the next green run closes it. Same-origin requests carry an `x-e2e-bypass` header set from the `E2E_BYPASS_TOKEN` secret, so Cloudflare can skip its bot checks for the run.
 
 ## Anvil forks
 
