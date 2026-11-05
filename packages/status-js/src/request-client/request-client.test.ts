@@ -23,7 +23,7 @@ describe('RequestClient', () => {
     const client = new RequestClient(waku, { ethProviderApiKey: '' })
 
     const result = client.fetchCommunityDescription(communityPublicKey)
-    await vi.advanceTimersByTimeAsync(10_000)
+    await vi.advanceTimersByTimeAsync(30_000)
 
     await expect(result).resolves.toBeUndefined()
     expect(queryGenerator).toHaveBeenCalledTimes(3)

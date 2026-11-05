@@ -47,7 +47,7 @@ type HandledWakuMessage = {
   payload: Uint8Array
 }
 
-const STORE_QUERY_TIMEOUT_MS = 10_000
+const STORE_QUERY_TIMEOUT_MS = 30_000
 
 /** Thrown by a decode callback to abort the fetch; `fetchLatest` rethrows it to its caller. */
 class StopFetch extends Error {}
