@@ -93,6 +93,9 @@ let focusedWindows: number[] = []
 /** The approval record the last popup was opened for. */
 let lastApproval: Record<string, unknown> | undefined
 
+/** Runs after the popup saves an approved connection, before the worker resumes. */
+let afterApprovalPersisted: (() => Promise<void>) | null = null
+
 type PushedEvent = {
   tabId: number
   message: { type: string; event: string; data: unknown }
@@ -153,13 +156,24 @@ function createChromeMock() {
       // Stands in for the user acting on the approval popup.
       create: async () => {
         popupsOpened++
-        const pending = session.get('pendingApproval') as { id: string }
+        const pending = session.get('pendingApproval') as {
+          id: string
+          type: string
+          origin: string
+          address: string
+        }
         lastApproval = pending
         if (holdPopup) return { id: 1 }
         queueMicrotask(() => {
-          void set({
-            approvalResult: { id: pending.id, approved: autoApprove },
-          })
+          void (async () => {
+            if (autoApprove && pending.type === 'eth_requestAccounts') {
+              await connectAccount(pending.origin, pending.address)
+              await afterApprovalPersisted?.()
+            }
+            await set({
+              approvalResult: { id: pending.id, approved: autoApprove },
+            })
+          })()
         })
         return { id: 1 }
       },
@@ -195,6 +209,7 @@ beforeEach(async () => {
   focusedWindows = []
   popupsOpened = 0
   lastApproval = undefined
+  afterApprovalPersisted = null
   signedTypedData = null
   sentTransactions = []
   nodeRequest.mockClear()
@@ -279,6 +294,17 @@ test('approving a connection returns the account', async () => {
   await expect(connect()).resolves.toEqual([ADDRESS])
 })
 
+test('a disconnect after popup approval is not undone by the service worker', async () => {
+  afterApprovalPersisted = () => disconnectDapp(ORIGIN)
+
+  await expect(connect()).rejects.toMatchObject({ code: 4100 })
+  expect(await accounts()).toEqual([])
+  expect(await getOriginRecord(ORIGIN)).toBeNull()
+
+  await selectAccount(OTHER_ADDRESS, OTHER_WALLET_ID)
+  expect(await accounts()).toEqual([])
+})
+
 test('the grant survives a dApp reload', async () => {
   await connect()
 
@@ -339,6 +365,8 @@ test('concurrent connect requests open a single popup', async () => {
   const first = connect()
   await expect(connect()).rejects.toMatchObject({ code: -32002 })
   expect(popupsOpened).toBe(1)
+  // The real popup saves the connection before publishing the verdict.
+  await connectAccount(ORIGIN, ADDRESS)
   await chrome.storage.session.set({
     approvalResult: { id: lastApproval!.id, approved: true },
   })
