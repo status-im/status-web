@@ -141,7 +141,9 @@ pipeline {
     }
 
     stage('Upload') {
-      when { expression { changesDetected || params.FORCE_BUILD } }
+      // PR builds are archived by Jenkins above. The shared S3 library has no
+      // PR bucket mapping for this repo, so only branch builds upload there.
+      when { expression { (changesDetected || params.FORCE_BUILD) && !env.CHANGE_ID } }
       steps {
         dir("${env.WORKSPACE}/apps/${params.APP_NAME}") {
           script {

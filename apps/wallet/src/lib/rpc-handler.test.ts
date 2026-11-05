@@ -449,13 +449,18 @@ describe('personal_sign follows the origin, not the wallet selection', () => {
 })
 
 describe('records predating per-account tracking', () => {
-  test('adopt the active account once, then hold it', async () => {
+  test('require approval instead of adopting the active account', async () => {
     await storage.setItem('session:connectedOrigins', [ORIGIN])
 
-    expect(await accounts()).toEqual([ADDRESS])
+    expect(await accounts()).toEqual([])
 
     await selectAccount(OTHER_ADDRESS, OTHER_WALLET_ID)
-    expect(await accounts()).toEqual([ADDRESS])
+    expect(await accounts()).toEqual([])
+    await expect(
+      handleRpcRequest('personal_sign', ['0xdeadbeef'], ORIGIN),
+    ).rejects.toMatchObject({ code: 4100 })
+    await expect(connect()).resolves.toEqual([OTHER_ADDRESS])
+    expect(await accounts()).toEqual([OTHER_ADDRESS])
   })
 })
 
@@ -803,7 +808,7 @@ describe('personal_sign distinguishes its two failures', () => {
   // A permitted origin whose pinned account no longer resolves -- the wallet
   // holding it was deleted. Reporting this as "not permitted" would be false.
   test('a permitted origin with no resolvable account is not', async () => {
-    await storage.setItem('session:connectedOrigins', [ORIGIN])
+    await connectAccount(ORIGIN, ADDRESS)
     await storage.removeItem('local:vault:metadata')
     await chrome.storage.session.remove([
       'dappAddress',
@@ -815,7 +820,7 @@ describe('personal_sign distinguishes its two failures', () => {
       handleRpcRequest('personal_sign', ['0xdeadbeef'], ORIGIN),
     ).rejects.toMatchObject({
       code: 4100,
-      message: 'No connected account',
+      message: 'No wallet available',
     })
   })
 })

@@ -35,8 +35,9 @@ The [permission store](src/data/dapp-permissions.ts) keeps approved connections 
 and account switches. Permission updates require an existing `eth_accounts` grant. The connection
 check and write share a Web Lock across extension pages and the background service worker, including
 legacy storage migration, so an overlapping permission request cannot restore a disconnected dApp.
-Legacy account adoption also rechecks the connection before returning the selected account.
-After disconnecting, the user must approve a new connection before the dApp can access accounts again.
+Older records without an approved account keep their chain setting but require a new connection
+approval. After disconnecting, the user must approve a new connection before the dApp can access
+accounts again.
 
 ## Chrome Web Store release
 

@@ -35,10 +35,7 @@ export type OriginRecord = {
    * derived from it rather than stored alongside it.
    */
   accounts: string[]
-  /**
-   * The single account this origin currently sees. Null until adopted, which
-   * only happens for records predating per-account tracking.
-   */
+  /** The approved account this origin currently sees. */
   selectedAddress: string | null
   chainId: string
   grantedAt: number
@@ -81,10 +78,17 @@ export function isSameAddress(a: string | null, b: string | null): boolean {
  * anything is connected. The upgraded shape persists on the next real write.
  */
 function normalizeRecord(record: Partial<OriginRecord>): OriginRecord {
+  const accounts = record.accounts ?? []
+  const selectedAddress = record.selectedAddress ?? null
+  // Older grants stored no account. They cannot prove which account was
+  // approved, so retain their chain setting but require a new connection.
+  const approved = accounts.some(account =>
+    isSameAddress(account, selectedAddress),
+  )
   return {
-    permissions: record.permissions ?? [],
-    accounts: record.accounts ?? [],
-    selectedAddress: record.selectedAddress ?? null,
+    permissions: approved ? record.permissions ?? [] : [],
+    accounts,
+    selectedAddress: approved ? selectedAddress : null,
     chainId: record.chainId ?? DEFAULT_CHAIN_ID,
     grantedAt: record.grantedAt ?? Date.now(),
   }
@@ -123,20 +127,15 @@ async function migrateLegacyKeys(): Promise<PermissionStore | null> {
     return null
   }
 
-  const grantedAt = Date.now()
   const store: PermissionStore = {
     version: STORE_VERSION,
     origins: Object.fromEntries(
       origins.map(origin => [
         normalizeOrigin(origin),
-        // The legacy keys carried no account identity, so these records adopt
-        // the active account on first use -- see `adoptSelectedAddress`.
+        // The legacy keys carried no approved account identity. Preserve the
+        // chain preference, but require explicit approval before reconnecting.
         normalizeRecord({
-          permissions: [
-            { parentCapability: ETH_ACCOUNTS_CAPABILITY, caveats: [] },
-          ],
           chainId: chainIds?.[origin] ?? DEFAULT_CHAIN_ID,
-          grantedAt,
         }),
       ]),
     ),
@@ -353,49 +352,6 @@ export function selectAccountForOrigin(
         },
       },
       result: true,
-    }
-  })
-}
-
-/**
- * Pins a record that predates per-account tracking to `address`, which is the
- * account it has been showing all along. Idempotent and one-way: once a record
- * has a selected address nothing here can move it, so the fallback can never
- * become a path for drifting a dApp onto the wallet's current selection.
- * Returns null if the connection was revoked while the caller read the account.
- */
-export function adoptSelectedAddress(
-  origin: string,
-  address: string,
-): Promise<string | null> {
-  const key = normalizeOrigin(origin)
-
-  return withStore<string | null>(store => {
-    const existing = store.origins[key]
-    if (
-      !existing?.permissions.some(
-        p => p.parentCapability === ETH_ACCOUNTS_CAPABILITY,
-      )
-    ) {
-      return { store, result: null }
-    }
-    if (existing.selectedAddress) {
-      return { store, result: existing.selectedAddress }
-    }
-
-    return {
-      store: {
-        ...store,
-        origins: {
-          ...store.origins,
-          [key]: {
-            ...existing,
-            accounts: existing.accounts.length ? existing.accounts : [address],
-            selectedAddress: address,
-          },
-        },
-      },
-      result: address,
     }
   })
 }

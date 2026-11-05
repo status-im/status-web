@@ -2,7 +2,6 @@ import { storage } from '@wxt-dev/storage'
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 
 import {
-  adoptSelectedAddress,
   connectAccount,
   DAPP_PERMISSIONS_KEY,
   ETH_ACCOUNTS_CAPABILITY,
@@ -201,49 +200,50 @@ describe('switching the account an origin sees', () => {
   })
 })
 
-describe('adopting records written before per-account tracking', () => {
-  test('an accountless record pins to the account it was showing', async () => {
-    await storage.setItem('session:connectedOrigins', [ORIGIN])
+describe('grants without an approved account', () => {
+  test('an accountless stored grant cannot expose a newly selected account', async () => {
+    await storage.setItem(DAPP_PERMISSIONS_KEY, {
+      version: 2,
+      origins: {
+        [ORIGIN]: {
+          permissions: [
+            { parentCapability: ETH_ACCOUNTS_CAPABILITY, caveats: [] },
+          ],
+          accounts: [],
+          selectedAddress: null,
+          chainId: '0xa',
+          grantedAt: 123,
+        },
+      },
+    })
 
-    expect(await adoptSelectedAddress(ORIGIN, ACCOUNT_A)).toBe(ACCOUNT_A)
-    expect(await getConnectedAccounts(ORIGIN)).toEqual([ACCOUNT_A])
-  })
-
-  test('adoption cannot move an origin that already has an account', async () => {
+    expect(await isOriginPermitted(ORIGIN)).toBe(false)
+    expect(await grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY)).toBeNull()
+    expect(await getPermissions(ORIGIN)).toEqual([])
+    expect(await getChainIdForOrigin(ORIGIN)).toBe('0xa')
     await connectAccount(ORIGIN, ACCOUNT_A)
-
-    expect(await adoptSelectedAddress(ORIGIN, ACCOUNT_B)).toBe(ACCOUNT_A)
-    expect(await getConnectedAccounts(ORIGIN)).toEqual([ACCOUNT_A])
+    expect(await getSelectedAddress(ORIGIN)).toBe(ACCOUNT_A)
+    expect(await isOriginPermitted(ORIGIN)).toBe(true)
   })
 
-  test('adoption does not create a record for an unknown origin', async () => {
-    expect(await adoptSelectedAddress(OTHER_ORIGIN, ACCOUNT_A)).toBeNull()
+  test('a selected address outside the approved account list loses its grant', async () => {
+    await storage.setItem(DAPP_PERMISSIONS_KEY, {
+      version: 2,
+      origins: {
+        [ORIGIN]: {
+          permissions: [
+            { parentCapability: ETH_ACCOUNTS_CAPABILITY, caveats: [] },
+          ],
+          accounts: [ACCOUNT_A],
+          selectedAddress: ACCOUNT_B,
+          chainId: '0x1',
+          grantedAt: 123,
+        },
+      },
+    })
 
-    expect(await isOriginPermitted(OTHER_ORIGIN)).toBe(false)
-  })
-
-  test('adoption refuses a revoked or chain-only origin', async () => {
-    await connectAccount(ORIGIN, ACCOUNT_A)
-    await revokeOrigin(ORIGIN)
-    expect(await adoptSelectedAddress(ORIGIN, ACCOUNT_B)).toBeNull()
-    await setChainIdForOrigin(ORIGIN, '0xa')
-    expect(await adoptSelectedAddress(ORIGIN, ACCOUNT_B)).toBeNull()
-    expect(await getConnectedAccounts(ORIGIN)).toEqual([])
-  })
-
-  // Regression: the approval popup persisted the grant with `grantPermission`,
-  // leaving no account on the record. Adoption would then pin the dApp to
-  // whichever account the wallet had selected, which need not be the approved
-  // one -- exactly the drift per-account tracking exists to prevent.
-  test('a grant carrying no account is adoptable by any account', async () => {
-    await storage.setItem('session:connectedOrigins', [ORIGIN])
-
-    expect(await adoptSelectedAddress(ORIGIN, ACCOUNT_B)).toBe(ACCOUNT_B)
-
-    // Whereas connecting records the account up front and pins it.
-    await revokeOrigin(OTHER_ORIGIN)
-    await connectAccount(OTHER_ORIGIN, ACCOUNT_A)
-    expect(await adoptSelectedAddress(OTHER_ORIGIN, ACCOUNT_B)).toBe(ACCOUNT_A)
+    expect(await isOriginPermitted(ORIGIN)).toBe(false)
+    expect(await getSelectedAddress(ORIGIN)).toBeNull()
   })
 })
 
@@ -281,16 +281,14 @@ describe('a grant is dropped only by an explicit request', () => {
   // everything when it changed. wallet-context resolves `currentWallet` to
   // `wallets[0]` until the persisted selection hydrates, so every extension
   // page load briefly reported the wrong account and wiped all connections.
-  test('the store holds no account identity to invalidate against', async () => {
+  test('legacy origins without account identity require reconnection', async () => {
     await storage.setItem('session:connectedOrigins', [ORIGIN])
 
     expect(await readStore()).toEqual({
       version: 2,
       origins: {
         [ORIGIN]: {
-          permissions: [
-            { parentCapability: ETH_ACCOUNTS_CAPABILITY, caveats: [] },
-          ],
+          permissions: [],
           accounts: [],
           selectedAddress: null,
           chainId: '0x1',
@@ -344,12 +342,12 @@ describe('watchPermissions', () => {
 })
 
 describe('legacy migration', () => {
-  test('adopts session connectedOrigins as eth_accounts grants', async () => {
+  test('keeps legacy chain settings without transferring account grants', async () => {
     await storage.setItem('session:connectedOrigins', [ORIGIN, OTHER_ORIGIN])
     await storage.setItem('session:originChainIds', { [ORIGIN]: '0x6300b5ea' })
 
-    expect(await isOriginPermitted(ORIGIN)).toBe(true)
-    expect(await isOriginPermitted(OTHER_ORIGIN)).toBe(true)
+    expect(await isOriginPermitted(ORIGIN)).toBe(false)
+    expect(await isOriginPermitted(OTHER_ORIGIN)).toBe(false)
     expect(await getChainIdForOrigin(ORIGIN)).toBe('0x6300b5ea')
     expect(await getChainIdForOrigin(OTHER_ORIGIN)).toBe('0x1')
   })
