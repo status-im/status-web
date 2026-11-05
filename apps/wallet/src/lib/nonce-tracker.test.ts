@@ -2,6 +2,7 @@ import { storage } from '@wxt-dev/storage'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { readNonceMarkStore, writeNonceMarkStore } from '../data/nonce-tracker'
+import { REQUEST_DEADLINE_MS } from './fetch-with-deadline'
 import {
   createNonceTracker,
   decideNonce,
@@ -79,13 +80,23 @@ const NETWORK = 'ethereum'
 describe('held reservations', () => {
   // The node's pending nonce, left unchanged after a send as a lagging node would.
   let pendingNonce = 5
+  let stalledNonceReads = 0
 
   beforeEach(async () => {
     pendingNonce = 5
+    stalledNonceReads = 0
     await storage.clear('session')
     vi.stubGlobal(
       'fetch',
-      vi.fn(async (url: string) => {
+      vi.fn(async (url: string, init?: RequestInit) => {
+        if (url.includes('nodes.getNonce') && stalledNonceReads > 0) {
+          stalledNonceReads--
+          return new Promise<Response>((_, reject) => {
+            init?.signal?.addEventListener('abort', () =>
+              reject(new DOMException('aborted', 'AbortError')),
+            )
+          })
+        }
         if (url.includes('nodes.getNonce')) {
           return new Response(
             JSON.stringify({
@@ -200,6 +211,40 @@ describe('held reservations', () => {
     await tracker.claimHeld(held.id)!.commit()
 
     expect((await readNonceMarkStore())[key]).toBeUndefined()
+  })
+
+  it('keeps a claimed hold until the broadcast settles', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+    const tracker = createNonceTracker()
+    const held = await tracker.reserveHeld(ADDRESS, NETWORK)
+    const claimed = tracker.claimHeld(held.id)!
+
+    let next: { nonce: number } | undefined
+    const waiting = tracker
+      .reserveHeld(ADDRESS, NETWORK)
+      .then(reservation => (next = reservation))
+    await vi.advanceTimersByTimeAsync(HELD_NONCE_TTL_MS)
+    expect(next).toBeUndefined()
+
+    claimed.release()
+    await waiting
+    expect(next?.nonce).toBe(held.nonce)
+  })
+
+  it('gives the lock back when the nonce read stalls', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+    stalledNonceReads = 1
+    const tracker = createNonceTracker()
+
+    const refused = expect(
+      tracker.reserveHeld(ADDRESS, NETWORK),
+    ).rejects.toThrow('Failed to fetch nonce')
+    await vi.advanceTimersByTimeAsync(REQUEST_DEADLINE_MS)
+    await refused
+
+    await expect(tracker.reserveHeld(ADDRESS, NETWORK)).resolves.toMatchObject({
+      nonce: 5,
+    })
   })
 
   it('withNonce gives the nonce back when the send fails', async () => {

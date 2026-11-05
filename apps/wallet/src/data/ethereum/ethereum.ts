@@ -1,6 +1,10 @@
 import { isEthereumTransactionHash, padHex } from '@status-im/wallet/utils'
 import { Buffer } from 'buffer'
 
+import {
+  fetchWithDeadline,
+  REQUEST_DEADLINE_MS,
+} from '../../lib/fetch-with-deadline'
 import { nonceTracker } from '../../lib/nonce-tracker'
 import { encoder } from '../encoder'
 
@@ -9,6 +13,9 @@ import type { WalletCore } from '@trustwallet/wallet-core'
 const BROADCAST_TRANSACTION_URL = new URL(
   `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/nodes.broadcastTransaction`,
 )
+
+export const BROADCAST_TIMEOUT_MESSAGE =
+  'Broadcast timed out. The transaction may still have been sent, so check your activity before sending again.'
 
 /**
  * The upstream reason, not the status code: `parseInsufficientFundsError` reads
@@ -35,31 +42,37 @@ export async function broadcast(
   rawTx: string,
   network: string,
 ): Promise<string> {
-  const response = await fetch(BROADCAST_TRANSACTION_URL.toString(), {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      json: {
-        txHex: rawTx,
-        network,
+  return fetchWithDeadline(
+    BROADCAST_TRANSACTION_URL.toString(),
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    }),
-    cache: 'no-store',
-  })
+      body: JSON.stringify({
+        json: {
+          txHex: rawTx,
+          network,
+        },
+      }),
+      cache: 'no-store',
+    },
+    REQUEST_DEADLINE_MS,
+    async response => {
+      if (!response.ok) {
+        throw new Error(await readBroadcastError(response))
+      }
 
-  if (!response.ok) {
-    throw new Error(await readBroadcastError(response))
-  }
+      const body = await response.json()
+      const txid: unknown = body?.result?.data?.json
+      if (typeof txid !== 'string' || !isEthereumTransactionHash(txid)) {
+        throw new Error('Broadcast returned no transaction hash')
+      }
 
-  const body = await response.json()
-  const txid: unknown = body?.result?.data?.json
-  if (typeof txid !== 'string' || !isEthereumTransactionHash(txid)) {
-    throw new Error('Broadcast returned no transaction hash')
-  }
-
-  return txid
+      return txid
+    },
+    BROADCAST_TIMEOUT_MESSAGE,
+  )
 }
 
 export async function send({

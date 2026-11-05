@@ -50,13 +50,13 @@ Fees come from the same `resolveFeeParams` as software sends. Transactions are b
 
 The exchange can take minutes and spans two calls to the service worker, so the nonce is held across it with `nonceTracker.reserveHeld` in [`nonce-tracker.ts`](../apps/wallet/src/lib/nonce-tracker.ts). A held reservation keeps the address's lock, so a second hardware send from the same address waits until the first one finishes.
 
-- The broadcast first claims the hold (`claimHeld`). If the hold is gone, the nonce may already belong to another transaction, so it refuses with `Signing took too long. Sign the transaction again.` and broadcasts nothing.
+- The broadcast first claims the hold (`claimHeld`). If the hold is gone, the nonce may already belong to another transaction, so it refuses with `Signing took too long. Sign the transaction again.` and broadcasts nothing. A claimed hold has no timer of its own; it ends when the broadcast settles.
 - A successful broadcast commits the nonce and clears the address's reconcile mark, so the next reservation counts `RECONCILE_AFTER_BLOCKS` from after the broadcast rather than from the reserve.
-- A failed broadcast releases it in the worker. A cancel or a failed exchange releases it from the UI through `wallet.account.ethereum.releaseNonceReservation` (`releaseHeld`).
+- A failed broadcast releases it in the worker. `broadcast()` in [`ethereum.ts`](../apps/wallet/src/data/ethereum/ethereum.ts) gives up after `REQUEST_DEADLINE_MS`, 20 seconds, which is under the 30 seconds after which Chrome stops a worker waiting on a fetch. A timeout counts as a failure, although the API server retries rate-limited requests and may still deliver the transaction, so the error tells the user to check their activity before sending again. A cancel or a failed exchange releases it from the UI through `wallet.account.ethereum.releaseNonceReservation` (`releaseHeld`).
 - The extension's own sends build with `renewsHold`, which holds the nonce for `RENEWED_HOLD_TTL_MS`, 1 minute. `SignerProvider` renews it every 20 seconds through `wallet.account.ethereum.renewNonceReservation` while the QR screen is open, so a closed or reloaded page frees the address within a minute.
 - dApp sends hold it for `HELD_NONCE_TTL_MS`, 10 minutes, longer than the approval timeout. Their handler releases it when the popup's result arrives.
 
-The lock lives in the service worker's memory. If the worker restarts during an exchange the hold is lost and the broadcast is refused. The renewals keep the worker running while the QR screen is open. `withNonce`, which software sends use, is built on the same lock.
+The lock lives in the service worker's memory. If the worker restarts during an exchange the hold is lost and the broadcast is refused. The renewals keep the worker running while the QR screen is open. `withNonce`, which software sends use, is built on the same lock. The nonce reads taken under the lock give up after `REQUEST_DEADLINE_MS` too, so a stalled node cannot block the address.
 
 ## dApp requests
 

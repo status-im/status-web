@@ -6,6 +6,7 @@ import {
   writeNonceMarkStore,
   writeNonceStore,
 } from '../data/nonce-tracker'
+import { fetchWithDeadline, REQUEST_DEADLINE_MS } from './fetch-with-deadline'
 import { getRpcProxyUrl } from './rpc-proxy'
 
 import type { NonceMark } from '../data/nonce-tracker'
@@ -80,19 +81,25 @@ async function fetchPendingNonce(
     JSON.stringify({ json: { address: fromAddress, network } }),
   )
 
-  const response = await fetch(url.toString(), {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
-    cache: 'no-store',
-  })
+  return fetchWithDeadline(
+    url.toString(),
+    {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      cache: 'no-store',
+    },
+    REQUEST_DEADLINE_MS,
+    async response => {
+      if (!response.ok) {
+        throw new Error('Failed to fetch nonce')
+      }
 
-  if (!response.ok) {
-    throw new Error('Failed to fetch nonce')
-  }
-
-  const body = await response.json()
-  const hex: string = body.result.data.json
-  return Number(hex)
+      const body = await response.json()
+      const hex: string = body.result.data.json
+      return Number(hex)
+    },
+    'Failed to fetch nonce',
+  )
 }
 
 /**
@@ -110,24 +117,30 @@ async function fetchMinedNonceAndBlock(
     { method: 'eth_blockNumber', params: [] },
   ]
 
-  const response = await fetch(getRpcProxyUrl(1), {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(
-      calls.map((call, index) => ({ jsonrpc: '2.0', id: index, ...call })),
-    ),
-    cache: 'no-store',
-  })
+  const body = await fetchWithDeadline(
+    getRpcProxyUrl(1),
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(
+        calls.map((call, index) => ({ jsonrpc: '2.0', id: index, ...call })),
+      ),
+      cache: 'no-store',
+    },
+    REQUEST_DEADLINE_MS,
+    async response => {
+      if (!response.ok) {
+        throw new Error('Failed to fetch chain state')
+      }
 
-  if (!response.ok) {
-    throw new Error('Failed to fetch chain state')
-  }
-
-  const body = (await response.json()) as {
-    id: number
-    result?: unknown
-    error?: unknown
-  }[]
+      return (await response.json()) as {
+        id: number
+        result?: unknown
+        error?: unknown
+      }[]
+    },
+    'Failed to fetch chain state',
+  )
 
   const [latestNonce, blockNumber] = calls.map((_, index) => {
     const entry = Array.isArray(body)
