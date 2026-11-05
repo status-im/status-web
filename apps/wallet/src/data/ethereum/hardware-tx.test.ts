@@ -205,6 +205,26 @@ describe('broadcastSignedEthTransaction', () => {
     expect(held.release).toHaveBeenCalled()
   })
 
+  it('gives the nonce back when the unsigned transaction does not parse', async () => {
+    const { serializedUnsignedTx } =
+      await buildUnsignedEthTransaction(BUILD_INPUT)
+    const { signature } = await signWithDevice(serializedUnsignedTx, 0)
+
+    await expect(
+      broadcastSignedEthTransaction({
+        serializedUnsignedTx: '0xnot-a-transaction',
+        signature,
+        network: 'ethereum',
+        fromAddress: device.address,
+        nonceReservationId: RESERVATION_ID,
+      }),
+    ).rejects.toThrow()
+
+    expect(broadcastMock).not.toHaveBeenCalled()
+    expect(held.release).toHaveBeenCalled()
+    expect(held.commit).not.toHaveBeenCalled()
+  })
+
   it('refuses to broadcast once the hold is gone', async () => {
     const { serializedUnsignedTx } =
       await buildUnsignedEthTransaction(BUILD_INPUT)

@@ -74,9 +74,9 @@ export async function broadcastSignedEthTransaction(input: {
   if (!held) {
     throw new Error('Signing took too long. Sign the transaction again.')
   }
-  const unsigned = parseTransaction(input.serializedUnsignedTx)
   let txid: string
   try {
+    const unsigned = parseTransaction(input.serializedUnsignedTx)
     const sig = input.signature.slice(2)
     if (sig.length !== 130) {
       throw new Error(`Expected 65-byte signature, got ${sig.length / 2} bytes`)
