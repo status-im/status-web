@@ -50,7 +50,7 @@ type HandledWakuMessage = {
 const STORE_QUERY_TIMEOUT_MS = 30_000
 /** Store queries cannot span more than 24 hours. */
 const STORE_WINDOW_MS = 24 * 60 * 60 * 1000
-/** How many windows to walk back before giving up. */
+/** Matches the 30-day retention of the status.prod store nodes. */
 const STORE_LOOKBACK_WINDOWS = 30
 
 /** Thrown by a decode callback to abort the fetch; `fetchLatest` rethrows it to its caller. */
@@ -397,6 +397,9 @@ class RequestClient {
     },
   ): Promise<T | undefined> => {
     let latest: { decoded: T; clock: bigint } | undefined
+    // the store API takes no abort signal, so timed-out shards check this to
+    // stop between pages and windows
+    let settled = false
 
     const queryShard = async (shardId: number) => {
       const decoder = createDecoder(
@@ -408,7 +411,11 @@ class RequestClient {
       // store nodes do not answer unbounded queries, so walk back one window
       // at a time
       const now = Date.now()
-      for (let window = 0; window < STORE_LOOKBACK_WINDOWS; window++) {
+      for (
+        let window = 0;
+        window < STORE_LOOKBACK_WINDOWS && !settled;
+        window++
+      ) {
         const timeEnd = new Date(now - window * STORE_WINDOW_MS)
         const timeStart = new Date(timeEnd.getTime() - STORE_WINDOW_MS)
         const wakuMessageGenerator = this.waku.store.queryGenerator([decoder], {
@@ -419,6 +426,11 @@ class RequestClient {
         let found = false
 
         for await (const wakuMessages of wakuMessageGenerator) {
+          if (settled) {
+            // closes the generator
+            return
+          }
+
           for await (const wakuMessage of wakuMessages) {
             if (!wakuMessage) {
               continue
@@ -463,18 +475,22 @@ class RequestClient {
     }
 
     // a store node may accept the query and never respond, so bound each shard
-    await Promise.all(
-      SHARDS.map(async shardId => {
-        try {
-          await withTimeout(queryShard(shardId), STORE_QUERY_TIMEOUT_MS)
-        } catch (error) {
-          if (error instanceof StopFetch) {
-            throw error
+    try {
+      await Promise.all(
+        SHARDS.map(async shardId => {
+          try {
+            await withTimeout(queryShard(shardId), STORE_QUERY_TIMEOUT_MS)
+          } catch (error) {
+            if (error instanceof StopFetch) {
+              throw error
+            }
+            // Query failed or timed out on this shard
           }
-          // Query failed or timed out on this shard
-        }
-      }),
-    )
+        }),
+      )
+    } finally {
+      settled = true
+    }
 
     return latest?.decoded
   }

@@ -38,6 +38,28 @@ describe('RequestClient', () => {
     })
   })
 
+  it('stops walking windows once the fetch times out', async () => {
+    vi.useFakeTimers()
+
+    const queryGenerator = vi.fn(async function* () {
+      // slow, empty window
+      await new Promise(resolve => setTimeout(resolve, 2_000))
+      yield* []
+    })
+    const waku = { store: { queryGenerator } } as unknown as LightNode
+    const client = new RequestClient(waku, { ethProviderApiKey: '' })
+
+    const result = client.fetchCommunityDescription(communityPublicKey)
+    await vi.advanceTimersByTimeAsync(30_000)
+    await expect(result).resolves.toBeUndefined()
+
+    const calls = queryGenerator.mock.calls.length
+    await vi.advanceTimersByTimeAsync(60_000)
+
+    expect(calls).toBeLessThan(90)
+    expect(queryGenerator).toHaveBeenCalledTimes(calls)
+  })
+
   it('settles when a store node never responds', async () => {
     vi.useFakeTimers()
 
