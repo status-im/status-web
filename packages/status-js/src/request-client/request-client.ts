@@ -48,6 +48,10 @@ type HandledWakuMessage = {
 }
 
 const STORE_QUERY_TIMEOUT_MS = 30_000
+/** Store queries cannot span more than 24 hours. */
+const STORE_WINDOW_MS = 24 * 60 * 60 * 1000
+/** How many windows to walk back before giving up. */
+const STORE_LOOKBACK_WINDOWS = 30
 
 /** Thrown by a decode callback to abort the fetch; `fetchLatest` rethrows it to its caller. */
 class StopFetch extends Error {}
@@ -376,12 +380,13 @@ class RequestClient {
   }
 
   /**
-   * Queries every shard in parallel from its newest page and returns the
-   * valid message with the highest clock. A page is sorted oldest-first
-   * regardless of the pagination direction, so the whole page is evaluated
-   * before stopping.
-   * Older pages are skipped once a page has a valid message: Status clocks
-   * track wall time, so the newest page holds the highest clock in practice.
+   * Queries every shard in parallel, newest 24-hour window and page first, and
+   * returns the valid message with the highest clock. A page is sorted
+   * oldest-first regardless of the pagination direction, so the whole page is
+   * evaluated before stopping.
+   * Older pages and windows are skipped once a page has a valid message: Status
+   * clocks track wall time, so the newest page holds the highest clock in
+   * practice.
    */
   private fetchLatest = async <T>(
     contentTopic: string,
@@ -399,47 +404,60 @@ class RequestClient {
         getRoutingInfo(shardId),
         symmetricKey,
       )
-      const wakuMessageGenerator = this.waku.store.queryGenerator([decoder], {
-        paginationForward: false,
-      })
 
-      for await (const wakuMessages of wakuMessageGenerator) {
+      // store nodes do not answer unbounded queries, so walk back one window
+      // at a time
+      const now = Date.now()
+      for (let window = 0; window < STORE_LOOKBACK_WINDOWS; window++) {
+        const timeEnd = new Date(now - window * STORE_WINDOW_MS)
+        const timeStart = new Date(timeEnd.getTime() - STORE_WINDOW_MS)
+        const wakuMessageGenerator = this.waku.store.queryGenerator([decoder], {
+          paginationForward: false,
+          timeStart,
+          timeEnd,
+        })
         let found = false
 
-        for await (const wakuMessage of wakuMessages) {
-          if (!wakuMessage) {
-            continue
-          }
-
-          const message = this.handleWakuMessage(wakuMessage)
-          if (!message) {
-            continue
-          }
-
-          let decoded: T | undefined
-          try {
-            decoded = await options.decode(message)
-          } catch (error) {
-            if (error instanceof StopFetch) {
-              throw error
+        for await (const wakuMessages of wakuMessageGenerator) {
+          for await (const wakuMessage of wakuMessages) {
+            if (!wakuMessage) {
+              continue
             }
-            // malformed payload
-            continue
-          }
-          if (!decoded) {
-            continue
+
+            const message = this.handleWakuMessage(wakuMessage)
+            if (!message) {
+              continue
+            }
+
+            let decoded: T | undefined
+            try {
+              decoded = await options.decode(message)
+            } catch (error) {
+              if (error instanceof StopFetch) {
+                throw error
+              }
+              // malformed payload
+              continue
+            }
+            if (!decoded) {
+              continue
+            }
+
+            const clock = options.getClock(decoded)
+            if (!latest || clock > latest.clock) {
+              latest = { decoded, clock }
+            }
+
+            found = true
           }
 
-          const clock = options.getClock(decoded)
-          if (!latest || clock > latest.clock) {
-            latest = { decoded, clock }
+          if (found) {
+            break
           }
-
-          found = true
         }
 
         if (found) {
-          break
+          return
         }
       }
     }
