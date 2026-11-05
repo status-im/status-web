@@ -47,6 +47,12 @@ type HandledWakuMessage = {
   payload: Uint8Array
 }
 
+const STORE_QUERY_TIMEOUT_MS = 30_000
+/** Store queries cannot span more than 24 hours. */
+const STORE_WINDOW_MS = 24 * 60 * 60 * 1000
+/** Matches the 30-day retention of the status.prod store nodes. */
+const STORE_LOOKBACK_WINDOWS = 30
+
 /** Thrown by a decode callback to abort the fetch; `fetchLatest` rethrows it to its caller. */
 class StopFetch extends Error {}
 
@@ -374,11 +380,13 @@ class RequestClient {
   }
 
   /**
-   * Queries every shard from its newest page and returns the valid message
-   * with the highest clock. A page is sorted oldest-first regardless of the
-   * pagination direction, so the whole page is evaluated before stopping.
-   * Older pages are skipped once a page has a valid message: Status clocks
-   * track wall time, so the newest page holds the highest clock in practice.
+   * Queries every shard in parallel, newest 24-hour window and page first, and
+   * returns the valid message with the highest clock. A page is sorted
+   * oldest-first regardless of the pagination direction, so the whole page is
+   * evaluated before stopping.
+   * Older pages and windows are skipped once a page has a valid message: Status
+   * clocks track wall time, so the newest page holds the highest clock in
+   * practice.
    */
   private fetchLatest = async <T>(
     contentTopic: string,
@@ -389,20 +397,39 @@ class RequestClient {
     },
   ): Promise<T | undefined> => {
     let latest: { decoded: T; clock: bigint } | undefined
+    // the store API takes no abort signal, so timed-out shards check this to
+    // stop between pages and windows
+    let settled = false
 
-    for (const shardId of SHARDS) {
-      try {
-        const decoder = createDecoder(
-          contentTopic,
-          getRoutingInfo(shardId),
-          symmetricKey,
-        )
+    const queryShard = async (shardId: number) => {
+      const decoder = createDecoder(
+        contentTopic,
+        getRoutingInfo(shardId),
+        symmetricKey,
+      )
+
+      // store nodes do not answer unbounded queries, so walk back one window
+      // at a time
+      const now = Date.now()
+      for (
+        let window = 0;
+        window < STORE_LOOKBACK_WINDOWS && !settled;
+        window++
+      ) {
+        const timeEnd = new Date(now - window * STORE_WINDOW_MS)
+        const timeStart = new Date(timeEnd.getTime() - STORE_WINDOW_MS)
         const wakuMessageGenerator = this.waku.store.queryGenerator([decoder], {
           paginationForward: false,
+          timeStart,
+          timeEnd,
         })
+        let found = false
 
         for await (const wakuMessages of wakuMessageGenerator) {
-          let found = false
+          if (settled) {
+            // closes the generator
+            return
+          }
 
           for await (const wakuMessage of wakuMessages) {
             if (!wakuMessage) {
@@ -440,12 +467,29 @@ class RequestClient {
             break
           }
         }
-      } catch (error) {
-        if (error instanceof StopFetch) {
-          throw error
+
+        if (found) {
+          return
         }
-        // Query failed on this shard, try next
       }
+    }
+
+    // a store node may accept the query and never respond, so bound each shard
+    try {
+      await Promise.all(
+        SHARDS.map(async shardId => {
+          try {
+            await withTimeout(queryShard(shardId), STORE_QUERY_TIMEOUT_MS)
+          } catch (error) {
+            if (error instanceof StopFetch) {
+              throw error
+            }
+            // Query failed or timed out on this shard
+          }
+        }),
+      )
+    } finally {
+      settled = true
     }
 
     return latest?.decoded
@@ -572,6 +616,20 @@ class RequestClient {
       payload: decodedMetadata.payload,
     }
   }
+}
+
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  let timeout: ReturnType<typeof setTimeout> | undefined
+
+  return Promise.race([
+    promise,
+    new Promise<never>((_, reject) => {
+      timeout = setTimeout(
+        () => reject(new Error(`Timed out after ${ms}ms`)),
+        ms,
+      )
+    }),
+  ]).finally(() => clearTimeout(timeout))
 }
 
 export async function createRequestClient(

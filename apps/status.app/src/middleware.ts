@@ -6,5 +6,5 @@ export default createMiddleware(routing)
 
 export const config = {
   matcher:
-    '/((?!api(?:/|$)|admin(?:/|$)|login(?:/|$)|c(?:/|$)|cc(?:/|$)|u(?:/|$)|rss(?:/|$)|mobile-news(?:/|$)|desktop-news(?:/|$)|_next|_static|.*\\..*).*)',
+    '/((?!api(?:/|$)|admin(?:/|$)|login(?:/|$)|c(?:/|$)|cc(?:/|$)|m(?:/|$)|u(?:/|$)|rss(?:/|$)|mobile-news(?:/|$)|desktop-news(?:/|$)|_next|_static|.*\\..*).*)',
 }
