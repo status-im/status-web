@@ -85,8 +85,9 @@ function normalizeRecord(record: Partial<OriginRecord>): OriginRecord {
   const approved = accounts.some(account =>
     isSameAddress(account, selectedAddress),
   )
+  const permissions = record.permissions ?? []
   return {
-    permissions: approved ? record.permissions ?? [] : [],
+    permissions: approved ? permissions : [],
     accounts,
     selectedAddress: approved ? selectedAddress : null,
     chainId: record.chainId ?? DEFAULT_CHAIN_ID,
