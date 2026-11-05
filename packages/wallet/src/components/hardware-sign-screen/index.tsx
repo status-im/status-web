@@ -91,6 +91,12 @@ function toSignRequestParams(
   }
 }
 
+// A contract's `ecrecover` takes only 27 or 28, and devices may send the recovery id as 0 or 1.
+function withLegacyV(signature: string): string {
+  if (!/^0x[0-9a-fA-F]{128}0[01]$/.test(signature)) return signature
+  return `${signature.slice(0, 130)}${signature.endsWith('0') ? '1b' : '1c'}`
+}
+
 function HardwareSignScreen({
   request,
   address,
@@ -144,10 +150,12 @@ function HardwareSignScreen({
         return false
       }
       setScanError(null)
-      onSignature(signature)
+      onSignature(
+        request.kind === 'transaction' ? signature : withLegacyV(signature),
+      )
       return true
     },
-    [checkSignature, onSignature],
+    [checkSignature, onSignature, request.kind],
   )
 
   const {

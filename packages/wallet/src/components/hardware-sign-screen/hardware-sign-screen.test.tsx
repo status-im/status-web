@@ -10,6 +10,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { HardwareSignScreen } from './index'
 
+import type { HardwareSignRequest } from './index'
 import type { Root } from 'react-dom/client'
 
 const scanner = vi.hoisted(() => ({
@@ -66,13 +67,17 @@ beforeEach(() => {
   container = document.createElement('div')
   document.body.append(container)
   root = createRoot(container)
+  renderScreen({
+    kind: 'personalMessage',
+    message: new TextEncoder().encode('hello'),
+  })
+})
+
+function renderScreen(request: HardwareSignRequest) {
   act(() =>
     root.render(
       <HardwareSignScreen
-        request={{
-          kind: 'personalMessage',
-          message: new TextEncoder().encode('hello'),
-        }}
+        request={request}
         address="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
         sourceFingerprint={0x12345678}
         derivationPath="m/44'/60'/1'/0/0"
@@ -83,7 +88,7 @@ beforeEach(() => {
       />,
     ),
   )
-})
+}
 
 afterEach(() => {
   act(() => root.unmount())
@@ -138,6 +143,40 @@ describe('HardwareSignScreen', () => {
     expect(accepted!).toBe(true)
     expect(checkSignature).toHaveBeenCalledWith('0xsignature')
     expect(onSignature).toHaveBeenCalledWith('0xsignature')
+  })
+
+  it('returns a message signature with v as 27 or 28', () => {
+    const rs = `0x${'11'.repeat(32)}${'22'.repeat(32)}`
+    pressButton('Continue')
+
+    for (const [device, returned] of [
+      ['00', '1b'],
+      ['01', '1c'],
+      ['1b', '1b'],
+    ]) {
+      parseSignature.mockReturnValue(`${rs}${device}`)
+      act(() => {
+        scanner.onScan!(SCANNED)
+      })
+      expect(onSignature).toHaveBeenLastCalledWith(`${rs}${returned}`)
+    }
+  })
+
+  it('leaves a transaction signature as the device sent it', () => {
+    const signature = `0x${'11'.repeat(32)}${'22'.repeat(32)}01`
+    renderScreen({
+      kind: 'transaction',
+      serializedTx: new Uint8Array([0x02, 0xc0]),
+      chainId: 1,
+    })
+    parseSignature.mockReturnValue(signature)
+    pressButton('Continue')
+
+    act(() => {
+      scanner.onScan!(SCANNED)
+    })
+
+    expect(onSignature).toHaveBeenCalledWith(signature)
   })
 
   it('keeps scanning when the signature fails the check', () => {
