@@ -47,6 +47,8 @@ type HandledWakuMessage = {
   payload: Uint8Array
 }
 
+const STORE_QUERY_TIMEOUT_MS = 10_000
+
 /** Thrown by a decode callback to abort the fetch; `fetchLatest` rethrows it to its caller. */
 class StopFetch extends Error {}
 
@@ -374,9 +376,10 @@ class RequestClient {
   }
 
   /**
-   * Queries every shard from its newest page and returns the valid message
-   * with the highest clock. A page is sorted oldest-first regardless of the
-   * pagination direction, so the whole page is evaluated before stopping.
+   * Queries every shard in parallel from its newest page and returns the
+   * valid message with the highest clock. A page is sorted oldest-first
+   * regardless of the pagination direction, so the whole page is evaluated
+   * before stopping.
    * Older pages are skipped once a page has a valid message: Status clocks
    * track wall time, so the newest page holds the highest clock in practice.
    */
@@ -390,63 +393,70 @@ class RequestClient {
   ): Promise<T | undefined> => {
     let latest: { decoded: T; clock: bigint } | undefined
 
-    for (const shardId of SHARDS) {
-      try {
-        const decoder = createDecoder(
-          contentTopic,
-          getRoutingInfo(shardId),
-          symmetricKey,
-        )
-        const wakuMessageGenerator = this.waku.store.queryGenerator([decoder], {
-          paginationForward: false,
-        })
+    const queryShard = async (shardId: number) => {
+      const decoder = createDecoder(
+        contentTopic,
+        getRoutingInfo(shardId),
+        symmetricKey,
+      )
+      const wakuMessageGenerator = this.waku.store.queryGenerator([decoder], {
+        paginationForward: false,
+      })
 
-        for await (const wakuMessages of wakuMessageGenerator) {
-          let found = false
+      for await (const wakuMessages of wakuMessageGenerator) {
+        let found = false
 
-          for await (const wakuMessage of wakuMessages) {
-            if (!wakuMessage) {
-              continue
-            }
-
-            const message = this.handleWakuMessage(wakuMessage)
-            if (!message) {
-              continue
-            }
-
-            let decoded: T | undefined
-            try {
-              decoded = await options.decode(message)
-            } catch (error) {
-              if (error instanceof StopFetch) {
-                throw error
-              }
-              // malformed payload
-              continue
-            }
-            if (!decoded) {
-              continue
-            }
-
-            const clock = options.getClock(decoded)
-            if (!latest || clock > latest.clock) {
-              latest = { decoded, clock }
-            }
-
-            found = true
+        for await (const wakuMessage of wakuMessages) {
+          if (!wakuMessage) {
+            continue
           }
 
-          if (found) {
-            break
+          const message = this.handleWakuMessage(wakuMessage)
+          if (!message) {
+            continue
           }
+
+          let decoded: T | undefined
+          try {
+            decoded = await options.decode(message)
+          } catch (error) {
+            if (error instanceof StopFetch) {
+              throw error
+            }
+            // malformed payload
+            continue
+          }
+          if (!decoded) {
+            continue
+          }
+
+          const clock = options.getClock(decoded)
+          if (!latest || clock > latest.clock) {
+            latest = { decoded, clock }
+          }
+
+          found = true
         }
-      } catch (error) {
-        if (error instanceof StopFetch) {
-          throw error
+
+        if (found) {
+          break
         }
-        // Query failed on this shard, try next
       }
     }
+
+    // a store node may accept the query and never respond, so bound each shard
+    await Promise.all(
+      SHARDS.map(async shardId => {
+        try {
+          await withTimeout(queryShard(shardId), STORE_QUERY_TIMEOUT_MS)
+        } catch (error) {
+          if (error instanceof StopFetch) {
+            throw error
+          }
+          // Query failed or timed out on this shard
+        }
+      }),
+    )
 
     return latest?.decoded
   }
@@ -572,6 +582,20 @@ class RequestClient {
       payload: decodedMetadata.payload,
     }
   }
+}
+
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  let timeout: ReturnType<typeof setTimeout> | undefined
+
+  return Promise.race([
+    promise,
+    new Promise<never>((_, reject) => {
+      timeout = setTimeout(
+        () => reject(new Error(`Timed out after ${ms}ms`)),
+        ms,
+      )
+    }),
+  ]).finally(() => clearTimeout(timeout))
 }
 
 export async function createRequestClient(
