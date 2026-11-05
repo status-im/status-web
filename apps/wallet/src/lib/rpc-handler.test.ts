@@ -1602,6 +1602,7 @@ describe('hardware wallets', () => {
           gasLimit: GAS_FEES.txParams.gasLimit,
           maxFeePerGas: GAS_FEES.txParams.maxFeePerGas,
           maxInclusionFeePerGas: GAS_FEES.txParams.maxPriorityFeePerGas,
+          chainId: 1,
         }),
       },
       {
@@ -1615,6 +1616,22 @@ describe('hardware wallets', () => {
       },
     ])
     expect(sentTransactions).toEqual([])
+  })
+
+  test('eth_sendTransaction on another chain is refused before a nonce is held', async () => {
+    await connect()
+    await handleRpcRequest(
+      'wallet_switchEthereumChain',
+      [{ chainId: '0x6300b5ea' }],
+      ORIGIN,
+    )
+    const opened = popupsOpened
+
+    await expect(
+      sendTransaction({ to: OTHER_ADDRESS, value: '0x1' }),
+    ).rejects.toMatchObject({ code: 4200 })
+    expect(hardwareCalls).toEqual([])
+    expect(popupsOpened).toBe(opened)
   })
 
   test('a rejected eth_sendTransaction releases the held nonce', async () => {

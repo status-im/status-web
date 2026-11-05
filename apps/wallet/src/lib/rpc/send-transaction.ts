@@ -1,7 +1,7 @@
 import { ProviderRpcError } from '@status-im/ethereum-provider'
 
 import { getChainIdForOrigin, isSameAddress } from '../../data/dapp-permissions'
-import { getChainByHex } from '../chains'
+import { getChainByHex, toChainId } from '../chains'
 import { requestFeeRate } from '../gas-fees'
 import {
   buildAndSendTransaction,
@@ -169,6 +169,7 @@ async function sendFromHardwareWallet(
       gasLimit: feeParams.gasLimit,
       maxFeePerGas: feeParams.maxFeePerGas,
       maxInclusionFeePerGas: feeParams.maxPriorityFeePerGas,
+      chainId: toChainId(approval.chainId),
     })
   } catch (error) {
     throw new ProviderRpcError({
