@@ -1,7 +1,11 @@
 import { storage } from '@wxt-dev/storage'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { readNonceMarkStore, writeNonceMarkStore } from '../data/nonce-tracker'
+import {
+  readNonceMarkStore,
+  readNonceStore,
+  writeNonceMarkStore,
+} from '../data/nonce-tracker'
 import { REQUEST_DEADLINE_MS } from './fetch-with-deadline'
 import {
   createNonceTracker,
@@ -12,6 +16,22 @@ import {
 } from './nonce-tracker'
 
 import type { ChainNonceState } from './nonce-tracker'
+
+const storageFaults = vi.hoisted(() => ({ failingWrites: 0 }))
+
+vi.mock(import('../data/nonce-tracker'), async importOriginal => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    writeNonceStore: async (store: Record<string, number>) => {
+      if (storageFaults.failingWrites > 0) {
+        storageFaults.failingWrites--
+        throw new Error('storage unavailable')
+      }
+      await actual.writeNonceStore(store)
+    },
+  }
+})
 
 const chain = (
   pendingNonce: number,
@@ -85,6 +105,7 @@ describe('held reservations', () => {
   beforeEach(async () => {
     pendingNonce = 5
     stalledNonceReads = 0
+    storageFaults.failingWrites = 0
     await storage.clear('session')
     vi.stubGlobal(
       'fetch',
@@ -112,6 +133,7 @@ describe('held reservations', () => {
   afterEach(() => {
     vi.useRealTimers()
     vi.unstubAllGlobals()
+    vi.restoreAllMocks()
   })
 
   it('blocks the next reservation until the held one is committed', async () => {
@@ -245,6 +267,50 @@ describe('held reservations', () => {
     await expect(tracker.reserveHeld(ADDRESS, NETWORK)).resolves.toMatchObject({
       nonce: 5,
     })
+  })
+
+  it('counts a sent nonce and keeps storing after a storage write fails', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const tracker = createNonceTracker()
+    storageFaults.failingWrites = 1
+
+    const first = await tracker.reserveHeld(ADDRESS, NETWORK)
+    await tracker.claimHeld(first.id)!.commit()
+    expect(warn).toHaveBeenCalled()
+
+    const second = await tracker.reserveHeld(ADDRESS, NETWORK)
+    await tracker.claimHeld(second.id)!.commit()
+
+    expect(second.nonce).toBe(first.nonce + 1)
+    expect((await readNonceStore())[`${ADDRESS}:${NETWORK}`]).toBe(
+      second.nonce + 1,
+    )
+  })
+
+  it('drops the reserve-time mark even when storing the nonce fails', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const key = `${ADDRESS}:${NETWORK}`
+    await writeNonceMarkStore({ [key]: { block: 100, pendingNonce: 5 } })
+    const tracker = createNonceTracker()
+    const held = await tracker.reserveHeld(ADDRESS, NETWORK)
+    storageFaults.failingWrites = 1
+
+    await tracker.claimHeld(held.id)!.commit()
+
+    expect((await readNonceMarkStore())[key]).toBeUndefined()
+  })
+
+  it('withNonce returns the sent result when storing its nonce fails', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const tracker = createNonceTracker()
+    storageFaults.failingWrites = 1
+
+    await expect(
+      tracker.withNonce(ADDRESS, NETWORK, async () => '0xsent'),
+    ).resolves.toBe('0xsent')
+
+    const nonceHex = await tracker.withNonce(ADDRESS, NETWORK, async hex => hex)
+    expect(parseInt(nonceHex, 16)).toBe(6)
   })
 
   it('withNonce gives the nonce back when the send fails', async () => {

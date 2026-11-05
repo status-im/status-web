@@ -200,18 +200,23 @@ export function createNonceTracker() {
     }
   }
 
+  /** Runs after the previous write even if it failed, so one failure does not reject every later write. */
+  function queueWrite(write: () => Promise<void>): Promise<void> {
+    storageWriteChain = storageWriteChain.catch(() => {}).then(write)
+    return storageWriteChain
+  }
+
   async function commitNonce(key: string, value: number): Promise<void> {
     nonceCache.set(key, value)
-    storageWriteChain = storageWriteChain.then(async () => {
+    await queueWrite(async () => {
       const store = await readNonceStore()
       store[key] = value
       await writeNonceStore(store)
     })
-    await storageWriteChain
   }
 
   async function writeMark(key: string, mark: NonceMark | null): Promise<void> {
-    storageWriteChain = storageWriteChain.then(async () => {
+    await queueWrite(async () => {
       const store = await readNonceMarkStore()
       if (mark) {
         store[key] = mark
@@ -220,7 +225,6 @@ export function createNonceTracker() {
       }
       await writeNonceMarkStore(store)
     })
-    await storageWriteChain
   }
 
   /**
@@ -318,6 +322,20 @@ export function createNonceTracker() {
     }
   }
 
+  /** The transaction is already out, so a storage failure here must not report the send as failed. */
+  async function recordSent(
+    record: () => Promise<void>,
+    unlock: () => void,
+  ): Promise<void> {
+    try {
+      await record()
+    } catch (error) {
+      console.warn('Failed to store a sent nonce', error)
+    } finally {
+      unlock()
+    }
+  }
+
   /** Holds the address's lock until the returned `unlock`. */
   async function lockNonce(fromAddress: string, network: string) {
     const key = `${fromAddress}:${network}`
@@ -342,13 +360,8 @@ export function createNonceTracker() {
     )
     return {
       nonce,
-      commit: async () => {
-        try {
-          await commitSent(key, nonce, chain, marked)
-        } finally {
-          unlock()
-        }
-      },
+      commit: () =>
+        recordSent(() => commitSent(key, nonce, chain, marked), unlock),
       release: unlock,
     }
   }
@@ -408,19 +421,19 @@ export function createNonceTracker() {
     clearTimeout(held.timer)
     return {
       nonce: held.nonce,
-      commit: async () => {
-        try {
+      commit: () =>
+        recordSent(async () => {
           await loadNonce(held.key)
-          await commitNonce(
-            held.key,
-            Math.max(nonceCache.get(held.key) ?? 0, held.nonce + 1),
-          )
-          // The block seen at reserve time is stale after a long signing.
-          await writeMark(held.key, null)
-        } finally {
-          held.unlock()
-        }
-      },
+          try {
+            await commitNonce(
+              held.key,
+              Math.max(nonceCache.get(held.key) ?? 0, held.nonce + 1),
+            )
+          } finally {
+            // The block seen at reserve time is stale after a long signing.
+            await writeMark(held.key, null)
+          }
+        }, held.unlock),
       release: held.unlock,
     }
   }
