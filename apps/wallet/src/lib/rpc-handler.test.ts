@@ -4,11 +4,12 @@ import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 import {
   connectAccount,
   ETH_ACCOUNTS_CAPABILITY,
+  getOriginRecord,
   getPermissions,
-  grantPermission,
   selectAccountForOrigin,
   setChainIdForOrigin,
 } from '../data/dapp-permissions'
+import { disconnectDapp } from './dapp-events'
 import { requestFeeRate } from './gas-fees'
 import { getPublicClient } from './public-client'
 import { requestApproval } from './rpc/request-approval'
@@ -333,20 +334,50 @@ test('an explicit revoke tells the origin its accounts are gone', async () => {
 // They then overwrote each other's record and one window was left showing a
 // request that no longer existed -- a blank approval popup.
 test('concurrent connect requests open a single popup', async () => {
-  const [first, second] = await Promise.allSettled([connect(), connect()])
-
+  // Keep the first approval pending while the second request reaches it.
+  holdPopup = true
+  const first = connect()
+  await expect(connect()).rejects.toMatchObject({ code: -32002 })
   expect(popupsOpened).toBe(1)
-  expect([first.status, second.status].sort()).toEqual([
-    'fulfilled',
-    'rejected',
-  ])
-  const rejected = [first, second].find(r => r.status === 'rejected')
-  expect((rejected as PromiseRejectedResult).reason).toMatchObject({
-    code: -32002,
+  await chrome.storage.session.set({
+    approvalResult: { id: lastApproval!.id, approved: true },
   })
+  await expect(first).resolves.toEqual([ADDRESS])
 })
 
 describe('switching accounts in the wallet', () => {
+  test('a disconnect during an account read cannot expose the wallet selection', async () => {
+    await connect()
+    await selectAccount(OTHER_ADDRESS, OTHER_WALLET_ID)
+    const entered = Promise.withResolvers<void>()
+    const release = Promise.withResolvers<void>()
+    const getItem = storage.getItem.bind(storage)
+    const read = vi
+      .spyOn(storage, 'getItem')
+      .mockImplementationOnce(async key => {
+        const value = await getItem(key)
+        entered.resolve()
+        await release.promise
+        return value
+      })
+
+    const reading = LOCAL_HANDLERS.eth_accounts({
+      method: 'eth_accounts',
+      params: [],
+      origin: ORIGIN,
+    })
+    await entered.promise
+    const disconnect = disconnectDapp(ORIGIN)
+    release.resolve()
+    try {
+      await disconnect
+      expect(await reading).toEqual([])
+      expect(await getOriginRecord(ORIGIN)).toBeNull()
+    } finally {
+      read.mockRestore()
+    }
+  })
+
   test('an unconnected account is not exposed to the dApp', async () => {
     await connect()
     await selectAccount(OTHER_ADDRESS, OTHER_WALLET_ID)
@@ -419,7 +450,7 @@ describe('personal_sign follows the origin, not the wallet selection', () => {
 
 describe('records predating per-account tracking', () => {
   test('adopt the active account once, then hold it', async () => {
-    await grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY)
+    await storage.setItem('session:connectedOrigins', [ORIGIN])
 
     expect(await accounts()).toEqual([ADDRESS])
 
@@ -651,6 +682,45 @@ describe('wallet_requestPermissions', () => {
   const request = (params: unknown, origin = ORIGIN) =>
     handleRpcRequest('wallet_requestPermissions', params, origin)
 
+  test('a concurrent disconnect cannot be undone by a permission request', async () => {
+    await connect()
+
+    await Promise.allSettled([
+      LOCAL_HANDLERS.wallet_requestPermissions({
+        method: 'wallet_requestPermissions',
+        params: [{ eth_accounts: {} }],
+        origin: ORIGIN,
+      }),
+      disconnectDapp(ORIGIN),
+    ])
+    await selectAccount(OTHER_ADDRESS, OTHER_WALLET_ID)
+
+    expect(await accounts()).toEqual([])
+    expect(await getOriginRecord(ORIGIN)).toBeNull()
+    expect(await handleRpcRequest('wallet_getPermissions', [], ORIGIN)).toEqual(
+      [],
+    )
+  })
+
+  test('a revoked origin is refused until the user approves a new connection', async () => {
+    await connect()
+    await disconnectDapp(ORIGIN)
+    await selectAccount(OTHER_ADDRESS, OTHER_WALLET_ID)
+
+    await expect(request([{ eth_accounts: {} }])).rejects.toMatchObject({
+      code: 4100,
+      message: 'dApp not found; permission not persisted',
+    })
+    expect(await accounts()).toEqual([])
+
+    await expect(connect()).resolves.toEqual([OTHER_ADDRESS])
+    expect(popupsOpened).toBe(2)
+    await expect(request([{ eth_accounts: {} }])).resolves.toMatchObject([
+      { parentCapability: 'eth_accounts', caveats: [] },
+    ])
+    expect(await accounts()).toEqual([OTHER_ADDRESS])
+  })
+
   test('persists the requested capability and echoes it', async () => {
     await connect()
 
@@ -733,7 +803,7 @@ describe('personal_sign distinguishes its two failures', () => {
   // A permitted origin whose pinned account no longer resolves -- the wallet
   // holding it was deleted. Reporting this as "not permitted" would be false.
   test('a permitted origin with no resolvable account is not', async () => {
-    await grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY)
+    await storage.setItem('session:connectedOrigins', [ORIGIN])
     await storage.removeItem('local:vault:metadata')
     await chrome.storage.session.remove([
       'dappAddress',
