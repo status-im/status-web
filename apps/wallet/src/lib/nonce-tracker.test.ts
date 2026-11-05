@@ -101,10 +101,12 @@ describe('held reservations', () => {
   // The node's pending nonce, left unchanged after a send as a lagging node would.
   let pendingNonce = 5
   let stalledNonceReads = 0
+  let chainHead: { latestNonce: number; block: number } | null = null
 
   beforeEach(async () => {
     pendingNonce = 5
     stalledNonceReads = 0
+    chainHead = null
     storageFaults.failingWrites = 0
     await storage.clear('session')
     vi.stubGlobal(
@@ -123,6 +125,14 @@ describe('held reservations', () => {
             JSON.stringify({
               result: { data: { json: `0x${pendingNonce.toString(16)}` } },
             }),
+          )
+        }
+        if (url.includes('rpc.proxy') && chainHead) {
+          return new Response(
+            JSON.stringify([
+              { id: 0, result: `0x${chainHead.latestNonce.toString(16)}` },
+              { id: 1, result: `0x${chainHead.block.toString(16)}` },
+            ]),
           )
         }
         return new Response(null, { status: 503 })
@@ -224,7 +234,7 @@ describe('held reservations', () => {
     await expect(waiting).resolves.toMatchObject({ nonce: held.nonce })
   })
 
-  it('drops the reserve-time mark when a held nonce is committed', async () => {
+  it('keeps the mark when a held nonce is committed', async () => {
     const key = `${ADDRESS}:${NETWORK}`
     await writeNonceMarkStore({ [key]: { block: 100, pendingNonce: 5 } })
     const tracker = createNonceTracker()
@@ -232,7 +242,24 @@ describe('held reservations', () => {
 
     await tracker.claimHeld(held.id)!.commit()
 
-    expect((await readNonceMarkStore())[key]).toBeUndefined()
+    expect((await readNonceMarkStore())[key]).toEqual({
+      block: 100,
+      pendingNonce: 5,
+    })
+  })
+
+  it('reuses a dropped nonce after hardware sends a window apart', async () => {
+    const tracker = createNonceTracker()
+    const send = async (block: number) => {
+      chainHead = { latestNonce: 5, block }
+      const held = await tracker.reserveHeld(ADDRESS, NETWORK)
+      await tracker.claimHeld(held.id)!.commit()
+      return held.nonce
+    }
+
+    const nonces = [await send(100), await send(110), await send(120)]
+
+    expect(nonces).toEqual([5, 6, 5])
   })
 
   it('keeps a claimed hold until the broadcast settles', async () => {
@@ -285,19 +312,6 @@ describe('held reservations', () => {
     expect((await readNonceStore())[`${ADDRESS}:${NETWORK}`]).toBe(
       second.nonce + 1,
     )
-  })
-
-  it('drops the reserve-time mark even when storing the nonce fails', async () => {
-    vi.spyOn(console, 'warn').mockImplementation(() => {})
-    const key = `${ADDRESS}:${NETWORK}`
-    await writeNonceMarkStore({ [key]: { block: 100, pendingNonce: 5 } })
-    const tracker = createNonceTracker()
-    const held = await tracker.reserveHeld(ADDRESS, NETWORK)
-    storageFaults.failingWrites = 1
-
-    await tracker.claimHeld(held.id)!.commit()
-
-    expect((await readNonceMarkStore())[key]).toBeUndefined()
   })
 
   it('withNonce returns the sent result when storing its nonce fails', async () => {

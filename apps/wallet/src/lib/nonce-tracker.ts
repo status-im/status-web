@@ -424,15 +424,11 @@ export function createNonceTracker() {
       commit: () =>
         recordSent(async () => {
           await loadNonce(held.key)
-          try {
-            await commitNonce(
-              held.key,
-              Math.max(nonceCache.get(held.key) ?? 0, held.nonce + 1),
-            )
-          } finally {
-            // The block seen at reserve time is stale after a long signing.
-            await writeMark(held.key, null)
-          }
+          // Writes no mark: the block seen at reserve time is stale after a long signing.
+          await commitNonce(
+            held.key,
+            Math.max(nonceCache.get(held.key) ?? 0, held.nonce + 1),
+          )
         }, held.unlock),
       release: held.unlock,
     }
