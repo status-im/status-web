@@ -254,6 +254,7 @@ it('shows the full origin ahead of the site-controlled name', async () => {
 
   expect(origin.classList.contains('truncate')).toBe(false)
   expect(origin.classList.contains('break-all')).toBe(true)
+  expect(origin.closest('.overflow-y-auto')).toBeNull()
   expect(siteName.textContent).toBe(
     'Site name (provided by site): Trusted Wallet',
   )

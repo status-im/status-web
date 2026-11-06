@@ -215,33 +215,31 @@ export function ApprovalPage() {
         />
       </div>
 
-      {/* Keep the full origin readable while the approval actions stay visible. */}
-      <div className="min-h-0 flex-1 overflow-y-auto">
-        <p className="mb-2 text-13 font-medium text-neutral-50">
-          Requesting site
+      <p className="mb-2 text-13 font-medium text-neutral-50">
+        Requesting site
+      </p>
+      <div className="mb-4 rounded-16 border border-neutral-10 p-3">
+        <p className="mb-2 text-13 text-neutral-50">Origin</p>
+        <p className="break-all text-15 font-semibold text-neutral-100">
+          {approval.origin}
         </p>
-        <div className="mb-4 rounded-16 border border-neutral-10 p-3">
-          <p className="mb-2 text-13 text-neutral-50">Origin</p>
-          <p className="break-all text-15 font-semibold text-neutral-100">
-            {approval.origin}
+        <div className="mt-2 flex items-center gap-2 border-t border-neutral-10 pt-2">
+          <img
+            src={approval.favicon}
+            alt=""
+            className="size-4 rounded-full"
+            onError={e => {
+              ;(e.target as HTMLImageElement).style.display = 'none'
+            }}
+          />
+          <p className="min-w-0 truncate text-13 text-neutral-50">
+            Site name (provided by site): <bdi>{approval.title}</bdi>
           </p>
-          <div className="mt-2 flex items-center gap-2 border-t border-neutral-10 pt-2">
-            <img
-              src={approval.favicon}
-              alt=""
-              className="size-4 rounded-full"
-              onError={e => {
-                ;(e.target as HTMLImageElement).style.display = 'none'
-              }}
-            />
-            <p className="min-w-0 truncate text-13 text-neutral-50">
-              Site name (provided by site): <bdi>{approval.title}</bdi>
-            </p>
-          </div>
         </div>
-
-        {view.content}
       </div>
+
+      {/* Scrolls so long request details cannot push Decline off the popup. */}
+      <div className="min-h-0 flex-1 overflow-y-auto">{view.content}</div>
 
       <div className="mt-auto grid grid-cols-2 gap-3 py-3">
         <Button
