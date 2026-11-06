@@ -553,7 +553,7 @@ function InspectableText({
       {isLong && (
         <button
           type="button"
-          className="mt-1 block text-11 font-medium text-customisation-blue-50 hover:underline"
+          className="mt-1 block py-1.5 text-11 font-medium text-customisation-blue-50 hover:underline"
           aria-expanded={expanded}
           onClick={() => setExpanded(!expanded)}
         >
