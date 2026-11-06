@@ -44,9 +44,10 @@ accounts again.
 The approval popup shows the full requesting origin as the main site identity. The site-provided
 name and icon appear as secondary information.
 
-The approval popup shortens long typed-data fields and transaction data for readability. Use
-"Show full value" to inspect the complete content before signing. Field count and nesting limits
-still flag content the popup cannot display.
+The approval popup shortens long values for readability: typed-data field names and values, signed
+domain values such as the domain name, and transaction data. Each shortened value has a "Show full
+value" button, so you can inspect the complete content before signing. Field count and nesting
+limits still flag content the popup cannot display.
 
 ## Chrome Web Store release
 
