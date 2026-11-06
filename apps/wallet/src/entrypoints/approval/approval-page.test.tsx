@@ -247,7 +247,9 @@ it('lets the user inspect the complete signed typed-data value before approving'
   )
 
   expect(container.textContent).not.toContain(fullValue)
-  expect(container.textContent).toContain('Some values are shortened')
+  expect(container.textContent).toContain(
+    'Long values are shortened by default',
+  )
 
   await pressButton('Show full value')
 

@@ -468,8 +468,8 @@ function TypedDataContent({
         )}
         {hasShortenedValues && (
           <p className="mt-2 text-11 text-neutral-50">
-            Some values are shortened. Use Show full value to inspect them
-            before signing.
+            Long values are shortened by default. Use Show full value to inspect
+            them before signing.
           </p>
         )}
       </div>
