@@ -423,7 +423,7 @@ const Token = (props: Props) => {
       rawContract: {
         value: amountHex!,
         address: ticker.startsWith('0x') ? ticker : null,
-        decimal: isNative ? '18' : asset.decimals?.toString() ?? '18',
+        decimal: isNative ? '18' : String(asset.decimals ?? 18),
       },
       eurRate: 0,
     })
