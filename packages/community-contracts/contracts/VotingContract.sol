@@ -283,7 +283,9 @@ contract VotingContract is Ownable2Step {
             require(votingRoom.endAt < block.timestamp, "vote still ongoing");
             votingRoom.finalized = true;
             votingRoom.endAt = block.timestamp;
-            votingRoom.endBlock = block.number;
+            // MiniMe checkpoints in the current block can still change after this call.
+            // Use a completed block so every finalization batch sees the same balances.
+            votingRoom.endBlock = block.number - 1;
 
             // resetting evaluation state as we're not entering finalization
             // phase in which all votes have to be reevaluated

@@ -205,6 +205,7 @@ contract GetActiveVotingRoomsTest is VotingContractTest {
 
         // fast forward such that voting time has passed
         skip(votingWithVerificationLength + 1);
+        vm.roll(block.number + 1);
 
         // finalize voting room with a `limit` of `1`, meaning, 1 vote left to evaluate
         votingContract.finalizeVotingRoom(1, 1);
@@ -283,6 +284,7 @@ contract GetVotingHistoryTest is VotingContractTest {
         assertEq(votingRooms[0].totalVotesAgainst, 0);
 
         skip(votingWithVerificationLength + 1);
+        vm.roll(block.number + 1);
         votingContract.finalizeVotingRoom(1, 1);
 
         // make sure enough time has passed to initialize another voting room
@@ -347,6 +349,7 @@ contract InitializeVotingRoomTest is VotingContractTest {
         votingContract.initializeVotingRoom(VotingContract.VoteType.FOR, communityID1, 100);
         // fast forward such that voting time has passed
         skip(votingWithVerificationLength + 1);
+        vm.roll(block.number + 1);
         votingContract.finalizeVotingRoom(1, 1);
 
         vm.expectRevert(bytes("Community was in a vote recently"));
@@ -396,6 +399,7 @@ contract FinalizeVotingRoomTest is VotingContractTest {
         vm.prank(bob);
         votingContract.initializeVotingRoom(VotingContract.VoteType.FOR, communityID1, 100);
         skip(votingWithVerificationLength + 1);
+        vm.roll(block.number + 1);
         votingContract.finalizeVotingRoom(1, 1);
         vm.expectRevert(bytes("vote already finalized"));
         votingContract.finalizeVotingRoom(1, 1);
@@ -407,6 +411,7 @@ contract FinalizeVotingRoomTest is VotingContractTest {
         votingContract.initializeVotingRoom(VotingContract.VoteType.FOR, communityID1, 100);
 
         skip(votingWithVerificationLength + 1);
+        vm.roll(block.number + 1);
 
         // finalize voting room
         vm.expectEmit(false, false, false, true);
@@ -440,6 +445,7 @@ contract FinalizeVotingRoomTest is VotingContractTest {
 
         // fast forward to finalize vote
         skip(votingWithVerificationLength + 1);
+        vm.roll(block.number + 1);
 
         // finalize voting room
         vm.expectEmit(false, false, false, true);
@@ -492,6 +498,7 @@ contract FinalizeVotingRoomTest is VotingContractTest {
 
         // fast forward to finalize vote
         skip(votingWithVerificationLength + 1);
+        vm.roll(block.number + 1);
 
         // finalize voting with a `limit` of `1`, meaning, 3 votes + 1 for initialization left to evaluate
         votingContract.finalizeVotingRoom(1, 1);
@@ -528,6 +535,42 @@ contract FinalizeVotingRoomTest is VotingContractTest {
         vm.expectRevert(bytes("vote already finalized"));
         votingContract.finalizeVotingRoom(1, 1);
     }
+
+    function test_FinalizeVotingRoom_SplitBatchesCannotReuseTransferredTokens() public {
+        address attackerA = makeAddr("attackerA");
+        (address attackerB, uint256 attackerBKey) = makeAddrAndKey("attackerB");
+        (address attackerC, uint256 attackerCKey) = makeAddrAndKey("attackerC");
+
+        _ensureVoteTokens(attackerA, 100);
+        _ensureVoteTokens(alice, 250);
+
+        vm.prank(attackerA);
+        votingContract.initializeVotingRoom(VotingContract.VoteType.FOR, communityID1, 100);
+
+        VotingContract.SignedVote[] memory votes = new VotingContract.SignedVote[](3);
+        votes[0] = _createSignedVote(attackerBKey, attackerB, 1, VotingContract.VoteType.FOR, 100, block.timestamp);
+        votes[1] = _createSignedVote(attackerCKey, attackerC, 1, VotingContract.VoteType.FOR, 100, block.timestamp);
+        votes[2] = _createSignedVote(alicesKey, alice, 1, VotingContract.VoteType.AGAINST, 250, block.timestamp);
+        votingContract.castVotes(votes);
+
+        skip(votingWithVerificationLength + 1);
+        vm.roll(block.number + 1);
+
+        votingContract.finalizeVotingRoom(1, 1);
+        vm.prank(attackerA);
+        mockSNT.transfer(attackerB, 100);
+        votingContract.finalizeVotingRoom(1, 1);
+        vm.prank(attackerB);
+        mockSNT.transfer(attackerC, 100);
+        votingContract.finalizeVotingRoom(1, 1);
+        votingContract.finalizeVotingRoom(1, 1);
+
+        VotingContract.VotingRoom[] memory rooms = votingContract.getVotingHistory(communityID1);
+        assertEq(rooms[0].endBlock, block.number - 1);
+        assertEq(rooms[0].totalVotesFor, 100);
+        assertEq(rooms[0].totalVotesAgainst, 250);
+        assertFalse(directoryContract.isCommunityInDirectory(communityID1));
+    }
 }
 
 contract CastVotesTest is VotingContractTest {
@@ -539,6 +582,7 @@ contract CastVotesTest is VotingContractTest {
         vm.prank(bob);
         votingContract.initializeVotingRoom(VotingContract.VoteType.FOR, communityID1, 100);
         skip(votingWithVerificationLength + 1);
+        vm.roll(block.number + 1);
 
         VotingContract.SignedVote[] memory votes = new VotingContract.SignedVote[](1);
         votes[0] = _createSignedVote(bobsKey, bob, 1, VotingContract.VoteType.FOR, 200, block.timestamp);
@@ -681,6 +725,7 @@ contract CastVotesTest is VotingContractTest {
         assertEq(votingRooms[0].evaluatingPos, 3);
 
         skip(votingWithVerificationLength + 1);
+        vm.roll(block.number + 1);
 
         vm.expectEmit(false, false, false, true);
         emit VotingRoomFinalized(1, communityID1, false, VotingContract.VoteType.FOR);
@@ -727,6 +772,7 @@ contract CastVotesTest is VotingContractTest {
         assertEq(votingRooms[1].evaluatingPos, 3);
 
         skip(votingWithVerificationLength + 1);
+        vm.roll(block.number + 1);
 
         vm.expectEmit(false, false, false, true);
         emit VotingRoomFinalized(2, communityID1, true, VotingContract.VoteType.FOR);

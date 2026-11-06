@@ -36,6 +36,8 @@ Addresses in use by `@status-im/community-dapp`. The source of truth is [`apps/c
 
 The SNT and Multicall2 addresses per network are in [`script/DeploymentConfig.s.sol`](./script/DeploymentConfig.s.sol).
 
+Changing contract source does not change the deployed contracts. A production rollout needs a new deployment and updated addresses in [`config.ts`](../../apps/community-dapp/src/config.ts). The deployment script creates a new Directory, so its existing community state also needs a migration plan before switching addresses.
+
 ## More
 
 - [Protocol properties](docs/properties.md): the invariants the contracts have to uphold.
