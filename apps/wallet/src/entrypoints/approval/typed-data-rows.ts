@@ -8,10 +8,9 @@ import type { TypedDataField } from '../../lib/rpc/typed-data'
  * hundreds of unsigned keys and push `spender` or `value` past the row cap.
  * Walking the type ignores the padding and keeps the signed fields visible.
  *
- * The payload is attacker-controlled. React escapes the text, so the risk is
- * not injection but a popup drowned in a megabyte of nesting -- hence the caps
- * below, which are what stops a hostile dApp from making the Decline button
- * unreachable.
+ * The payload is attacker-controlled. React escapes the text, while the row
+ * and depth caps keep hostile nesting from overwhelming the popup. Scalar
+ * values stay intact here so the approval page can reveal them on request.
  */
 
 export const MAX_DEPTH = 4
@@ -39,7 +38,7 @@ function isField(value: unknown): value is TypedDataField {
   )
 }
 
-/** Every attacker-controlled string reaching the popup goes through this. */
+/** Shorten a collapsed display value while keeping its original available. */
 export function clip(text: string): string {
   return text.length > MAX_VALUE_LENGTH
     ? `${text.slice(0, MAX_VALUE_LENGTH)}…`
@@ -50,7 +49,7 @@ function formatLeaf(value: unknown): string {
   if (value === null || value === undefined) return 'null'
   if (typeof value === 'object') return Array.isArray(value) ? '[ … ]' : '{ … }'
 
-  return clip(String(value))
+  return String(value)
 }
 
 export function flattenTypedData(
@@ -85,7 +84,7 @@ export function flattenTypedData(
       return
     }
 
-    const label = clip(key)
+    const label = key
 
     if (ARRAY_SUFFIX.test(type)) {
       if (!Array.isArray(node)) {
