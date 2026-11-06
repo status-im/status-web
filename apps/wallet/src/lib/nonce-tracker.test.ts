@@ -1,8 +1,37 @@
-import { describe, expect, it } from 'vitest'
+import { storage } from '@wxt-dev/storage'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { decideNonce, RECONCILE_AFTER_BLOCKS } from './nonce-tracker'
+import {
+  readNonceMarkStore,
+  readNonceStore,
+  writeNonceMarkStore,
+} from '../data/nonce-tracker'
+import { REQUEST_DEADLINE_MS } from './fetch-with-deadline'
+import {
+  createNonceTracker,
+  decideNonce,
+  HELD_NONCE_TTL_MS,
+  RECONCILE_AFTER_BLOCKS,
+  RENEWED_HOLD_TTL_MS,
+} from './nonce-tracker'
 
 import type { ChainNonceState } from './nonce-tracker'
+
+const storageFaults = vi.hoisted(() => ({ failingWrites: 0 }))
+
+vi.mock(import('../data/nonce-tracker'), async importOriginal => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    writeNonceStore: async (store: Record<string, number>) => {
+      if (storageFaults.failingWrites > 0) {
+        storageFaults.failingWrites--
+        throw new Error('storage unavailable')
+      }
+      await actual.writeNonceStore(store)
+    },
+  }
+})
 
 const chain = (
   pendingNonce: number,
@@ -62,5 +91,252 @@ describe('decideNonce', () => {
     expect(
       decideNonce(9, chain(5, 5, 100 + RECONCILE_AFTER_BLOCKS), mark),
     ).toEqual({ action: 'reconcile', nonce: 5 })
+  })
+})
+
+const ADDRESS = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+const NETWORK = 'ethereum'
+
+describe('held reservations', () => {
+  // The node's pending nonce, left unchanged after a send as a lagging node would.
+  let pendingNonce = 5
+  let stalledNonceReads = 0
+  let chainHead: { latestNonce: number; block: number } | null = null
+
+  beforeEach(async () => {
+    pendingNonce = 5
+    stalledNonceReads = 0
+    chainHead = null
+    storageFaults.failingWrites = 0
+    await storage.clear('session')
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string, init?: RequestInit) => {
+        if (url.includes('nodes.getNonce') && stalledNonceReads > 0) {
+          stalledNonceReads--
+          return new Promise<Response>((_, reject) => {
+            init?.signal?.addEventListener('abort', () =>
+              reject(new DOMException('aborted', 'AbortError')),
+            )
+          })
+        }
+        if (url.includes('nodes.getNonce')) {
+          return new Response(
+            JSON.stringify({
+              result: { data: { json: `0x${pendingNonce.toString(16)}` } },
+            }),
+          )
+        }
+        if (url.includes('rpc.proxy') && chainHead) {
+          return new Response(
+            JSON.stringify([
+              { id: 0, result: `0x${chainHead.latestNonce.toString(16)}` },
+              { id: 1, result: `0x${chainHead.block.toString(16)}` },
+            ]),
+          )
+        }
+        return new Response(null, { status: 503 })
+      }),
+    )
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+    vi.unstubAllGlobals()
+    vi.restoreAllMocks()
+  })
+
+  it('blocks the next reservation until the held one is committed', async () => {
+    const tracker = createNonceTracker()
+    const first = await tracker.reserveHeld(ADDRESS, NETWORK)
+
+    let second: { nonce: number } | undefined
+    const waiting = tracker
+      .reserveHeld(ADDRESS, NETWORK)
+      .then(reservation => (second = reservation))
+    await new Promise(resolve => setTimeout(resolve, 0))
+    expect(second).toBeUndefined()
+
+    await tracker.claimHeld(first.id)!.commit()
+    await waiting
+
+    expect(first.nonce).toBe(5)
+    expect(second?.nonce).toBe(6)
+  })
+
+  it('hands a released nonce to the next reservation', async () => {
+    const tracker = createNonceTracker()
+    const first = await tracker.reserveHeld(ADDRESS, NETWORK)
+
+    tracker.releaseHeld(first.id)
+
+    await expect(tracker.reserveHeld(ADDRESS, NETWORK)).resolves.toMatchObject({
+      nonce: first.nonce,
+    })
+  })
+
+  it('lets an abandoned reservation lapse', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+    const tracker = createNonceTracker()
+    const first = await tracker.reserveHeld(ADDRESS, NETWORK)
+    const waiting = tracker.reserveHeld(ADDRESS, NETWORK)
+
+    vi.advanceTimersByTime(HELD_NONCE_TTL_MS)
+
+    await expect(waiting).resolves.toMatchObject({ nonce: first.nonce })
+  })
+
+  it('cannot claim a hold that lapsed', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+    const tracker = createNonceTracker()
+    const held = await tracker.reserveHeld(ADDRESS, NETWORK)
+
+    vi.advanceTimersByTime(HELD_NONCE_TTL_MS)
+
+    expect(tracker.renewHeld(held.id)).toBe(false)
+    expect(tracker.claimHeld(held.id)).toBeNull()
+  })
+
+  it('cannot claim a hold that a worker restart lost', async () => {
+    const held = await createNonceTracker().reserveHeld(ADDRESS, NETWORK)
+
+    expect(createNonceTracker().claimHeld(held.id)).toBeNull()
+  })
+
+  it('keeps a renewed hold past its lifetime', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+    const tracker = createNonceTracker()
+    const held = await tracker.reserveHeld(
+      ADDRESS,
+      NETWORK,
+      RENEWED_HOLD_TTL_MS,
+    )
+
+    vi.advanceTimersByTime(RENEWED_HOLD_TTL_MS - 1000)
+    expect(tracker.renewHeld(held.id)).toBe(true)
+    vi.advanceTimersByTime(RENEWED_HOLD_TTL_MS - 1000)
+
+    expect(tracker.claimHeld(held.id)).toMatchObject({ nonce: held.nonce })
+  })
+
+  it('releases a short hold nobody renews', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+    const tracker = createNonceTracker()
+    const held = await tracker.reserveHeld(
+      ADDRESS,
+      NETWORK,
+      RENEWED_HOLD_TTL_MS,
+    )
+    const waiting = tracker.reserveHeld(ADDRESS, NETWORK)
+
+    vi.advanceTimersByTime(RENEWED_HOLD_TTL_MS)
+
+    await expect(waiting).resolves.toMatchObject({ nonce: held.nonce })
+  })
+
+  it('keeps the mark when a held nonce is committed', async () => {
+    const key = `${ADDRESS}:${NETWORK}`
+    await writeNonceMarkStore({ [key]: { block: 100, pendingNonce: 5 } })
+    const tracker = createNonceTracker()
+    const held = await tracker.reserveHeld(ADDRESS, NETWORK)
+
+    await tracker.claimHeld(held.id)!.commit()
+
+    expect((await readNonceMarkStore())[key]).toEqual({
+      block: 100,
+      pendingNonce: 5,
+    })
+  })
+
+  it('reuses a dropped nonce after hardware sends a window apart', async () => {
+    const tracker = createNonceTracker()
+    const send = async (block: number) => {
+      chainHead = { latestNonce: 5, block }
+      const held = await tracker.reserveHeld(ADDRESS, NETWORK)
+      await tracker.claimHeld(held.id)!.commit()
+      return held.nonce
+    }
+
+    const nonces = [await send(100), await send(110), await send(120)]
+
+    expect(nonces).toEqual([5, 6, 5])
+  })
+
+  it('keeps a claimed hold until the broadcast settles', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+    const tracker = createNonceTracker()
+    const held = await tracker.reserveHeld(ADDRESS, NETWORK)
+    const claimed = tracker.claimHeld(held.id)!
+
+    let next: { nonce: number } | undefined
+    const waiting = tracker
+      .reserveHeld(ADDRESS, NETWORK)
+      .then(reservation => (next = reservation))
+    await vi.advanceTimersByTimeAsync(HELD_NONCE_TTL_MS)
+    expect(next).toBeUndefined()
+
+    claimed.release()
+    await waiting
+    expect(next?.nonce).toBe(held.nonce)
+  })
+
+  it('gives the lock back when the nonce read stalls', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+    stalledNonceReads = 1
+    const tracker = createNonceTracker()
+
+    const refused = expect(
+      tracker.reserveHeld(ADDRESS, NETWORK),
+    ).rejects.toThrow('Failed to fetch nonce')
+    await vi.advanceTimersByTimeAsync(REQUEST_DEADLINE_MS)
+    await refused
+
+    await expect(tracker.reserveHeld(ADDRESS, NETWORK)).resolves.toMatchObject({
+      nonce: 5,
+    })
+  })
+
+  it('counts a sent nonce and keeps storing after a storage write fails', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const tracker = createNonceTracker()
+    storageFaults.failingWrites = 1
+
+    const first = await tracker.reserveHeld(ADDRESS, NETWORK)
+    await tracker.claimHeld(first.id)!.commit()
+    expect(warn).toHaveBeenCalled()
+
+    const second = await tracker.reserveHeld(ADDRESS, NETWORK)
+    await tracker.claimHeld(second.id)!.commit()
+
+    expect(second.nonce).toBe(first.nonce + 1)
+    expect((await readNonceStore())[`${ADDRESS}:${NETWORK}`]).toBe(
+      second.nonce + 1,
+    )
+  })
+
+  it('withNonce returns the sent result when storing its nonce fails', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const tracker = createNonceTracker()
+    storageFaults.failingWrites = 1
+
+    await expect(
+      tracker.withNonce(ADDRESS, NETWORK, async () => '0xsent'),
+    ).resolves.toBe('0xsent')
+
+    const nonceHex = await tracker.withNonce(ADDRESS, NETWORK, async hex => hex)
+    expect(parseInt(nonceHex, 16)).toBe(6)
+  })
+
+  it('withNonce gives the nonce back when the send fails', async () => {
+    const tracker = createNonceTracker()
+
+    await expect(
+      tracker.withNonce(ADDRESS, NETWORK, async () => {
+        throw new Error('broadcast failed')
+      }),
+    ).rejects.toThrow('broadcast failed')
+
+    const nonceHex = await tracker.withNonce(ADDRESS, NETWORK, async hex => hex)
+    expect(parseInt(nonceHex, 16)).toBe(5)
   })
 })

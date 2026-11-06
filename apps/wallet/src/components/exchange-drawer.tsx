@@ -12,6 +12,7 @@ import { mainnet } from 'wagmi/chains'
 
 import { getRpcProxyUrl } from '../lib/rpc-proxy'
 import { usePassword } from '../providers/password-context'
+import { useWallet } from '../providers/wallet-context'
 
 const NATIVE_ETH_ADDRESS = '0x0000000000000000000000000000000000000000'
 const ETHEREUM_MAINNET_CHAIN_ID = 1
@@ -33,6 +34,8 @@ export const ExchangeDrawer = (props: ExchangeDrawerProps) => {
 
   const [open, setOpen] = useState(false)
   const { hasActiveSession, requestPassword } = usePassword()
+  const { currentWallet } = useWallet()
+  const isHardwareWallet = currentWallet?.type === 'hardware-qr'
   const { isConnected, address: connectedAddress } = useAccount()
 
   const handleOpenChange = useCallback(
@@ -42,7 +45,7 @@ export const ExchangeDrawer = (props: ExchangeDrawerProps) => {
         return
       }
 
-      if (hasActiveSession) {
+      if (hasActiveSession || isHardwareWallet) {
         setOpen(true)
         return
       }
@@ -57,7 +60,7 @@ export const ExchangeDrawer = (props: ExchangeDrawerProps) => {
         setOpen(true)
       }
     },
-    [hasActiveSession, requestPassword],
+    [hasActiveSession, isHardwareWallet, requestPassword],
   )
 
   const widgetConfig: WidgetConfig = useMemo(

@@ -402,7 +402,7 @@ test('should reject adding an already imported account', async () => {
   expect(accounts).toHaveLength(1)
 }, 15000)
 
-test('should reject adding an account to a non-mnemonic wallet', async () => {
+test('should reject adding an account to a hardware wallet imported without an extended key', async () => {
   await createAPI()
   const apiClient = createAPIClient()
 
@@ -421,6 +421,101 @@ test('should reject adding an account to a non-mnemonic wallet', async () => {
     }),
   ).rejects.toThrow(/WALLET_CANNOT_DERIVE/)
 }, 7000)
+
+// The account xpub of the test mnemonic, as a hardware wallet exports it.
+const TEST_XPUB =
+  'xpub6Ce9NcJvTk36xtLSrJLZqE7wtgA5deCeYs7rSQtreh4cj6ByPtrg9sD7V2FNFLPnf8heNP3FGkeV9qwfzvZNSd54JoNXVsXFYSYwHsnJxqP'
+
+const importHardwareWithKey = (
+  apiClient: ReturnType<typeof createAPIClient>,
+  overrides: { address?: string; derivationPath?: string } = {},
+) =>
+  apiClient.wallet.importHardware.mutate({
+    name: 'Keycard',
+    vendor: 'Keycard',
+    password: 'hardware-password',
+    address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
+    derivationPath: "m/44'/60'/0'/0/0",
+    publicKey: '0x02abcdef',
+    xpub: TEST_XPUB,
+    accountPath: "m/44'/60'/0'",
+    ...overrides,
+  })
+
+test('should add the next address of a hardware wallet without unlocking', async () => {
+  await createAPI()
+  const apiClient = createAPIClient()
+  const importedWallet = await importHardwareWithKey(apiClient)
+  await apiClient.session.lock.mutate()
+
+  const preview = await apiClient.wallet.account.ethereum.preview.mutate({
+    walletId: importedWallet.id,
+  })
+  expect(preview).toMatchObject({
+    address: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
+    derivationPath: "m/44'/60'/0'/0/1",
+    alreadyImported: false,
+  })
+
+  const account = await apiClient.wallet.account.ethereum.add.mutate({
+    walletId: importedWallet.id,
+  })
+  expect(account).toMatchObject({
+    address: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
+    derivationPath: "m/44'/60'/0'/0/1",
+  })
+
+  const custom = await apiClient.wallet.account.ethereum.add.mutate({
+    walletId: importedWallet.id,
+    derivationPath: "m/44'/60'/0'/0/3",
+  })
+  expect(custom.address).toBe('0x90F79bf6EB2c4f870365E785982E1f101E93b906')
+
+  const wallets = await apiClient.wallet.all.query()
+  const wallet = wallets.find(w => w.id === importedWallet.id)
+  expect(wallet?.accounts.map(a => a.derivationPath)).toEqual([
+    "m/44'/60'/0'/0/0",
+    "m/44'/60'/0'/0/1",
+    "m/44'/60'/0'/0/3",
+  ])
+  expect(wallet?.hardware).toMatchObject({
+    xpub: TEST_XPUB,
+    accountPath: "m/44'/60'/0'",
+  })
+}, 15000)
+
+test('should refuse a hardware wallet path under another account', async () => {
+  await createAPI()
+  const apiClient = createAPIClient()
+  const importedWallet = await importHardwareWithKey(apiClient)
+
+  await expect(
+    apiClient.wallet.account.ethereum.add.mutate({
+      walletId: importedWallet.id,
+      derivationPath: "m/44'/60'/1'/0/0",
+    }),
+  ).rejects.toThrow(/WALLET_CANNOT_DERIVE/)
+}, 15000)
+
+test('should refuse a hardware address the extended key does not derive', async () => {
+  await createAPI()
+  const apiClient = createAPIClient()
+
+  await expect(
+    importHardwareWithKey(apiClient, {
+      address: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
+    }),
+  ).rejects.toThrow(/HARDWARE_KEY_MISMATCH/)
+}, 15000)
+
+test('should refuse a hardware path outside the account path', async () => {
+  await createAPI()
+  const apiClient = createAPIClient()
+
+  await expect(
+    importHardwareWithKey(apiClient, { derivationPath: "m/44'/60'/1'/0/0" }),
+  ).rejects.toThrow()
+}, 15000)
 
 test('should reject adding an account when the session is locked', async () => {
   await createAPI()

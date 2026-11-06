@@ -63,6 +63,8 @@ const GAS_FEES = {
 }
 
 const TX_HASH = `0x${'ab'.repeat(32)}`
+const UNSIGNED_TX = '0x02c0'
+const RESERVATION_ID = 'reservation-1'
 const ERC20_TRANSFER = `0xa9059cbb${'00'.repeat(64)}`
 
 const ORIGIN = 'https://app.velora.xyz'
@@ -88,6 +90,9 @@ let holdPopup = false
 
 /** Windows the handler brought to the front. */
 let focusedWindows: number[] = []
+
+/** What the popup returns when it signed itself, as it does for hardware wallets. */
+let popupSignature: string | undefined
 
 /** The approval record the last popup was opened for. */
 let lastApproval: Record<string, unknown> | undefined
@@ -157,7 +162,11 @@ function createChromeMock() {
         if (holdPopup) return { id: 1 }
         queueMicrotask(() => {
           void set({
-            approvalResult: { id: pending.id, approved: autoApprove },
+            approvalResult: {
+              id: pending.id,
+              approved: autoApprove,
+              ...(popupSignature && { signature: popupSignature }),
+            },
           })
         })
         return { id: 1 }
@@ -187,15 +196,18 @@ const signed: { walletId?: string; fromAddress?: string } = {}
 let signedTypedData: Record<string, unknown> | null = null
 let sentTransactions: Array<{ via: string; input: Record<string, unknown> }> =
   []
+let hardwareCalls: Array<{ via: string; input: Record<string, unknown> }> = []
 
 beforeEach(async () => {
   autoApprove = true
   holdPopup = false
   focusedWindows = []
   popupsOpened = 0
+  popupSignature = undefined
   lastApproval = undefined
   signedTypedData = null
   sentTransactions = []
+  hardwareCalls = []
   nodeRequest.mockClear()
   clientFor.mockClear()
   feeRequest.mockReset()
@@ -227,6 +239,23 @@ beforeEach(async () => {
           sendContractCall: async (input: Record<string, unknown>) => {
             sentTransactions.push({ via: 'sendContractCall', input })
             return { id: { txid: TX_HASH } }
+          },
+          buildUnsignedTransaction: async (input: Record<string, unknown>) => {
+            hardwareCalls.push({ via: 'build', input })
+            return {
+              serializedUnsignedTx: UNSIGNED_TX,
+              chainId: 1,
+              nonceReservationId: RESERVATION_ID,
+            }
+          },
+          broadcastSignedTransaction: async (
+            input: Record<string, unknown>,
+          ) => {
+            hardwareCalls.push({ via: 'broadcast', input })
+            return { txid: TX_HASH }
+          },
+          releaseNonceReservation: async (input: Record<string, unknown>) => {
+            hardwareCalls.push({ via: 'release', input })
           },
         },
       },
@@ -1428,6 +1457,7 @@ describe('eth_sendTransaction', () => {
       address: ADDRESS,
       accountName: 'Wallet 1',
       chainId: '0x1',
+      walletType: 'mnemonic' as const,
     })
 
     const first = requestApproval(approval(OTHER_ORIGIN))
@@ -1475,5 +1505,145 @@ describe('eth_sendTransaction', () => {
       await answerHeldPopup()
     }
     await expect(first).rejects.toMatchObject({ code: 4001 })
+  })
+})
+
+test('a software wallet signs in the worker even when the popup returns a signature', async () => {
+  await connect()
+  popupSignature = '0xinjected'
+
+  await expect(
+    handleRpcRequest('personal_sign', ['0xdeadbeef', ADDRESS], ORIGIN),
+  ).resolves.toBe('0xsig')
+  await expect(
+    signTypedData(ADDRESS, JSON.stringify(TYPED_DATA)),
+  ).resolves.toBe('0xtypedsig')
+})
+
+const HARDWARE_PATH = "m/44'/60'/1'/0/0"
+
+describe('hardware wallets', () => {
+  beforeEach(async () => {
+    const metadata = JSON.parse(
+      (await storage.getItem<string>('local:vault:metadata'))!,
+    )
+    metadata[WALLET_ID].type = 'hardware-qr'
+    metadata[WALLET_ID].accounts[0].derivationPath = HARDWARE_PATH
+    metadata[WALLET_ID].hardware = {
+      vendor: 'keystone',
+      publicKey: 'xpub',
+      sourceFingerprint: 0x12345678,
+    }
+    await storage.setItem('local:vault:metadata', JSON.stringify(metadata))
+  })
+
+  test('the connect popup is told the account is on a hardware wallet', async () => {
+    await connect()
+
+    expect(lastApproval).toMatchObject({
+      type: 'eth_requestAccounts',
+      walletType: 'hardware-qr',
+    })
+  })
+
+  test('personal_sign returns the signature the popup produced', async () => {
+    await connect()
+    popupSignature = '0xhardwaresig'
+
+    await expect(
+      handleRpcRequest('personal_sign', ['0xdeadbeef', ADDRESS], ORIGIN),
+    ).resolves.toBe('0xhardwaresig')
+    expect(lastApproval).toMatchObject({
+      type: 'personal_sign',
+      walletType: 'hardware-qr',
+      sourceFingerprint: 0x12345678,
+      derivationPath: HARDWARE_PATH,
+    })
+  })
+
+  test('eth_signTypedData_v4 returns the signature the popup produced', async () => {
+    await connect()
+    popupSignature = '0xhardwaretypedsig'
+
+    await expect(
+      signTypedData(ADDRESS, JSON.stringify(TYPED_DATA)),
+    ).resolves.toBe('0xhardwaretypedsig')
+    expect(lastApproval).toMatchObject({
+      type: 'eth_signTypedData_v4',
+      walletType: 'hardware-qr',
+      sourceFingerprint: 0x12345678,
+      derivationPath: HARDWARE_PATH,
+    })
+    expect(signedTypedData).toBeNull()
+  })
+
+  test('eth_sendTransaction broadcasts what the popup signed, at the approved fee', async () => {
+    await connect()
+    popupSignature = '0xhardwaretxsig'
+
+    await expect(
+      sendTransaction({ to: OTHER_ADDRESS, value: '0x1' }),
+    ).resolves.toBe(TX_HASH)
+    expect(lastApproval).toMatchObject({
+      type: 'eth_sendTransaction',
+      walletType: 'hardware-qr',
+      sourceFingerprint: 0x12345678,
+      derivationPath: HARDWARE_PATH,
+      serializedUnsignedTx: UNSIGNED_TX,
+    })
+    expect(hardwareCalls).toEqual([
+      {
+        via: 'build',
+        input: expect.objectContaining({
+          walletId: WALLET_ID,
+          fromAddress: ADDRESS,
+          toAddress: OTHER_ADDRESS,
+          value: '0x1',
+          gasLimit: GAS_FEES.txParams.gasLimit,
+          maxFeePerGas: GAS_FEES.txParams.maxFeePerGas,
+          maxInclusionFeePerGas: GAS_FEES.txParams.maxPriorityFeePerGas,
+          chainId: 1,
+        }),
+      },
+      {
+        via: 'broadcast',
+        input: {
+          serializedUnsignedTx: UNSIGNED_TX,
+          signature: '0xhardwaretxsig',
+          fromAddress: ADDRESS,
+          nonceReservationId: RESERVATION_ID,
+        },
+      },
+    ])
+    expect(sentTransactions).toEqual([])
+  })
+
+  test('eth_sendTransaction on another chain is refused before a nonce is held', async () => {
+    await connect()
+    await handleRpcRequest(
+      'wallet_switchEthereumChain',
+      [{ chainId: '0x6300b5ea' }],
+      ORIGIN,
+    )
+    const opened = popupsOpened
+
+    await expect(
+      sendTransaction({ to: OTHER_ADDRESS, value: '0x1' }),
+    ).rejects.toMatchObject({ code: 4200 })
+    expect(hardwareCalls).toEqual([])
+    expect(popupsOpened).toBe(opened)
+  })
+
+  test('a rejected eth_sendTransaction releases the held nonce', async () => {
+    await connect()
+    autoApprove = false
+
+    await expect(
+      sendTransaction({ to: OTHER_ADDRESS, value: '0x1' }),
+    ).rejects.toMatchObject({ code: 4001 })
+    expect(hardwareCalls).toEqual([
+      { via: 'build', input: expect.anything() },
+      { via: 'release', input: { nonceReservationId: RESERVATION_ID } },
+    ])
   })
 })

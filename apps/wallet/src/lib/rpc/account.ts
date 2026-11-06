@@ -11,7 +11,17 @@ import * as walletMetadata from '../../data/wallet-metadata'
 import { SELECTED_WALLET_ID_KEY } from '../storage-keys'
 import { noConnectedAccount } from './errors'
 
+import type { WalletMeta } from '../../data/wallet-metadata'
+
 export const DEFAULT_ACCOUNT_NAME = 'Account 1'
+
+type SignerWallet = {
+  walletId: string
+  accountName: string
+  walletType: WalletMeta['type']
+  sourceFingerprint?: number
+  derivationPath?: string
+}
 
 type ActiveAccount = {
   address: string
@@ -99,17 +109,21 @@ export async function getOriginAddress(origin: string): Promise<string | null> {
  */
 export async function findWalletForAddress(
   address: string,
-): Promise<{ walletId: string; accountName: string } | null> {
+): Promise<SignerWallet | null> {
   const wallets = await walletMetadata.getAll()
-  const wallet = wallets.find(w =>
-    w.accounts.some(account => isSameAddress(account.address, address)),
-  )
-  if (!wallet) return null
-
-  return {
-    walletId: wallet.id,
-    accountName: wallet.name || DEFAULT_ACCOUNT_NAME,
+  for (const wallet of wallets) {
+    const account = wallet.accounts.find(a => isSameAddress(a.address, address))
+    if (account) {
+      return {
+        walletId: wallet.id,
+        accountName: wallet.name || DEFAULT_ACCOUNT_NAME,
+        walletType: wallet.type,
+        sourceFingerprint: wallet.hardware?.sourceFingerprint,
+        derivationPath: account.derivationPath,
+      }
+    }
   }
+  return null
 }
 
 /**
@@ -127,9 +141,7 @@ export async function requireOriginAddress(origin: string): Promise<string> {
 }
 
 /** The pinned account may belong to a wallet other than the selected one. */
-export async function requireWalletFor(
-  address: string,
-): Promise<{ walletId: string; accountName: string }> {
+export async function requireWalletFor(address: string): Promise<SignerWallet> {
   const wallet = await findWalletForAddress(address)
   if (!wallet) {
     throw new ProviderRpcError({

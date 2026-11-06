@@ -2,7 +2,12 @@ import { type ReactNode, useEffect, useState } from 'react'
 
 import { Button } from '@status-im/components'
 import { CloseIcon } from '@status-im/icons/20'
-import { PasswordModal } from '@status-im/wallet/components'
+import {
+  type HardwareSignRequest,
+  HardwareSignScreen,
+  PasswordModal,
+} from '@status-im/wallet/components'
+import { type Hex, hexToBytes } from 'viem'
 import { formatEther } from 'viem/utils'
 
 import {
@@ -12,7 +17,11 @@ import {
 } from '../../data/approval'
 import { connectAccount } from '../../data/dapp-permissions'
 import { getChainByHex, toChainId } from '../../lib/chains'
-import { personalMessageText } from '../../lib/personal-message'
+import { checkHardwareSignature } from '../../lib/hardware-signature'
+import {
+  personalMessageBytes,
+  personalMessageText,
+} from '../../lib/personal-message'
 import { signedDomainFields } from '../../lib/rpc/typed-data'
 import { apiClient } from '../../providers/api-client'
 import { clip, flattenTypedData } from './typed-data-rows'
@@ -29,6 +38,7 @@ export function ApprovalPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSessionActive, setIsSessionActive] = useState(false)
   const [isUnlocking, setIsUnlocking] = useState(false)
+  const [isHardwareSigning, setIsHardwareSigning] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -81,7 +91,12 @@ export function ApprovalPage() {
     )
   }
 
-  const needsPassword = !isSessionActive
+  const isHardwareWallet = approval.walletType === 'hardware-qr'
+  const hardwareSignRequest = isHardwareWallet
+    ? toHardwareSignRequest(approval)
+    : null
+
+  const needsPassword = !isSessionActive && !isHardwareWallet
 
   const handlePasswordConfirm = async (password: string) => {
     setIsUnlocking(true)
@@ -125,6 +140,53 @@ export function ApprovalPage() {
       approved,
     })
     window.close()
+  }
+
+  const handleConfirm = () => {
+    if (hardwareSignRequest) {
+      setIsHardwareSigning(true)
+      return
+    }
+    respond(true)
+  }
+
+  const handleHardwareSignature = async (signature: string) => {
+    if (isSubmitting) return
+    setIsSubmitting(true)
+    await setApprovalResult({ id: approval.id, approved: true, signature })
+    window.close()
+  }
+
+  if (isHardwareSigning && hardwareSignRequest) {
+    return (
+      <div
+        data-customisation="blue"
+        className="flex h-screen flex-col bg-white-100 p-4"
+      >
+        <HardwareSignScreen
+          request={hardwareSignRequest}
+          address={approval.address}
+          sourceFingerprint={
+            'sourceFingerprint' in approval
+              ? approval.sourceFingerprint
+              : undefined
+          }
+          derivationPath={
+            'derivationPath' in approval ? approval.derivationPath : undefined
+          }
+          origin={approval.origin}
+          checkSignature={signature =>
+            checkHardwareSignature(
+              hardwareSignRequest,
+              approval.address,
+              signature,
+            )
+          }
+          onSignature={handleHardwareSignature}
+          onCancel={() => respond(false)}
+        />
+      </div>
+    )
   }
 
   return (
@@ -188,7 +250,7 @@ export function ApprovalPage() {
         </Button>
         <Button
           variant="primary"
-          onPress={() => respond(true)}
+          onPress={handleConfirm}
           disabled={isSubmitting}
         >
           {view.confirmLabel}
@@ -196,6 +258,31 @@ export function ApprovalPage() {
       </div>
     </div>
   )
+}
+
+/** What the device signs, or null for a request that only needs the user's yes. */
+function toHardwareSignRequest(
+  approval: PendingApproval,
+): HardwareSignRequest | null {
+  switch (approval.type) {
+    case 'personal_sign':
+      return {
+        kind: 'personalMessage',
+        message: personalMessageBytes(approval.message),
+      }
+    case 'eth_signTypedData_v4':
+      return { kind: 'typedData', typedData: approval.typedData }
+    case 'eth_sendTransaction':
+      return approval.serializedUnsignedTx
+        ? {
+            kind: 'transaction',
+            serializedTx: hexToBytes(approval.serializedUnsignedTx as Hex),
+            chainId: toChainId(approval.chainId),
+          }
+        : null
+    case 'eth_requestAccounts':
+      return null
+  }
 }
 
 /**
