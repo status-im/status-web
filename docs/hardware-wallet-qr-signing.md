@@ -12,7 +12,9 @@ The key-based procedures in [`api.ts`](../apps/wallet/src/data/api.ts) (`send`, 
 
 ### Accounts
 
-The import offers the first five addresses of each account in the scanned QR, `accountPath/0/0` to `accountPath/0/4` ([`ScannerScreen`](../packages/wallet/src/components/scanner-screen/index.tsx)). **Create account** derives further addresses from the stored `xpub` in the service worker, through `wallet.account.ethereum.preview` and `add`, without a password. Paths must stay under `accountPath`: wallet-core derives only the last two levels from the key, so the API refuses any other path. Wallets imported before the key was stored have no `xpub` and cannot add accounts.
+The import offers the first five addresses of each account in the scanned QR, `accountPath/0/0` to `accountPath/0/4` ([`ScannerScreen`](../packages/wallet/src/components/scanner-screen/index.tsx)), and always asks the user to pick one, showing each address with its derivation path. `wallet.importHardware` stores the `xpub` and `accountPath` with the wallet. It refuses the import with `HARDWARE_KEY_MISMATCH` when the chosen address is not derived from the `xpub`, and refuses a `derivationPath` outside `accountPath`.
+
+**Create account** appears in the wallet selector for any wallet that `canDeriveAccounts` ([`wallet-accounts.ts`](../apps/wallet/src/lib/wallet-accounts.ts)) accepts: mnemonic wallets, and hardware wallets with a stored `xpub`. For a hardware wallet it derives further addresses from the stored `xpub` in the service worker, through `wallet.account.ethereum.preview` and `add`, without a password. Paths must stay under `accountPath`, as change then index (`isAddressPathUnder` in [`derive.ts`](../apps/wallet/src/data/derive.ts)): wallet-core derives only the last two levels from the key, so the API refuses any other path with `WALLET_CANNOT_DERIVE`. Wallets imported before the key was stored have no `xpub` and cannot add accounts.
 
 ## The QR round trip
 
@@ -34,7 +36,7 @@ The request's `origin` is the dApp origin for dApp requests and `Status Wallet` 
 
 [`SignerProvider`](../apps/wallet/src/providers/signer-context.tsx) checks the current wallet's type in `signMessage`, `signTypedData` and `signAndSendTransaction`. For a hardware wallet it opens `HardwareSignScreen` in a Radix dialog and waits for the result. Being a Radix dialog, it stacks above a modal that is already open, such as a send dialog or the exchange drawer, without closing it. One overlay is open at a time: a second request fails with `Another hardware wallet signature is in progress` instead of replacing the first.
 
-The token and collectible pages send through `signAndSendTransaction` for every wallet type. Their send dialogs stay open under the QR screen, so a cancel on the device returns to the filled-in form.
+The token and collectible pages send through `signAndSendTransaction` for every wallet type. Their send dialogs stay open under the QR screen, so a cancel on the device returns to the filled-in form. A broadcast refused for insufficient funds reaches the token page as an `InsufficientFundsError` ([`send-transaction.ts`](../apps/wallet/src/lib/send-transaction.ts)), whose message the error toast shows.
 
 ### Transactions
 
@@ -44,7 +46,7 @@ The service worker builds and broadcasts the transaction, and only the signature
 2. The overlay gets the signature from the device.
 3. `wallet.account.ethereum.broadcastSignedTransaction` attaches `r`, `s` and the parity to the unsigned transaction and broadcasts it. It requires a 65-byte signature whose `v` is the bare parity (0 or 1) or carries the legacy offset (27 or 28), and refuses one that does not recover to the sending address.
 
-Fees come from the same `resolveFeeParams` as software sends. Transactions are built for Ethereum mainnet only: chain ID 1, network `ethereum`.
+Fees come from the same `resolveFeeParams` as software sends. `buildUnsignedTransaction` defaults to chain ID 1 and network `ethereum`, which is what the extension's own sends use. dApp sends pass the chain ID approved for the origin; the network stays `ethereum`.
 
 ### Nonces
 
@@ -62,7 +64,7 @@ The lock lives in the service worker's memory. If the worker restarts during an 
 
 The service worker has no camera, so dApp signing for a hardware wallet happens in the approval popup ([`approval-page.tsx`](../apps/wallet/src/entrypoints/approval/approval-page.tsx)). The wallet type comes from the wallet holding the origin's connected account, which is not necessarily the selected wallet.
 
-Every approval record carries `walletType`, and the signing ones carry `sourceFingerprint`. For a hardware wallet the popup opens `HardwareSignScreen` after the user confirms and writes the device's signature to `ApprovalResult.signature`.
+Every approval record carries `walletType`, and the signing ones carry `sourceFingerprint` and the account's `derivationPath`. For a hardware wallet the popup opens `HardwareSignScreen` after the user confirms and writes the device's signature to `ApprovalResult.signature`. A connect request (`eth_requestAccounts`) needs neither the password nor the device.
 
 - `personal_sign` and `eth_signTypedData_v4`: the handlers in [`rpc/sign.ts`](../apps/wallet/src/lib/rpc/sign.ts) return that signature instead of signing in the worker. They take a signature from the popup only for hardware wallets.
-- `eth_sendTransaction`: the handler in [`rpc/send-transaction.ts`](../apps/wallet/src/lib/rpc/send-transaction.ts) prices the transaction as for any wallet, then builds it with `buildUnsignedTransaction` before the popup opens and puts `serializedUnsignedTx` in the approval record. It broadcasts the signed transaction with `broadcastSignedTransaction` and returns the hash. The nonce is held from the build on; a reject, cancel, closed popup or timeout releases it in the handler.
+- `eth_sendTransaction`: the handler in [`rpc/send-transaction.ts`](../apps/wallet/src/lib/rpc/send-transaction.ts) prices the transaction as for any wallet, then builds it with `buildUnsignedTransaction` for the origin's chain before the popup opens and puts `serializedUnsignedTx` in the approval record. It broadcasts the signed transaction with `broadcastSignedTransaction` and returns the hash. The nonce is held from the build on; a reject, cancel, closed popup or timeout releases it in the handler. A request on a chain the wallet does not support is refused with 4200 before any nonce is held.
