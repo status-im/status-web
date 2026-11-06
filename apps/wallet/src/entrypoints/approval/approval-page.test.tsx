@@ -231,6 +231,38 @@ it('asks a locked software wallet for the password', async () => {
   expect(mocks.passwordOpen).toBe(true)
 })
 
+it('shows the full origin ahead of the site-controlled name', async () => {
+  const longOrigin = `https://${'subdomain.'.repeat(15)}example.com`
+  await open(
+    approval({
+      type: 'eth_requestAccounts',
+      walletType: 'hardware-qr',
+      origin: longOrigin,
+      title: 'Trusted Wallet',
+    }),
+  )
+
+  const origin = [...container.querySelectorAll('p')].find(
+    element => element.textContent === longOrigin,
+  )
+  const siteName = [...container.querySelectorAll('p')].find(element =>
+    element.textContent?.includes('Site name (provided by site)'),
+  )
+
+  if (!origin || !siteName)
+    throw new Error('Requesting site details are missing')
+
+  expect(origin.classList.contains('truncate')).toBe(false)
+  expect(origin.classList.contains('break-all')).toBe(true)
+  expect(siteName.textContent).toBe(
+    'Site name (provided by site): Trusted Wallet',
+  )
+  expect(siteName.querySelector('bdi')?.textContent).toBe('Trusted Wallet')
+  expect(
+    origin.compareDocumentPosition(siteName) & Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy()
+})
+
 it('lets the user inspect the complete signed typed-data value before approving', async () => {
   const fullValue = `recipient:${'a'.repeat(250)}:amount:999`
   await open(
