@@ -40,6 +40,12 @@ export { EmptyState } from './empty-state'
 export { EmptyStateActions } from './empty-state-actions'
 export { ExchangeDrawer, type ExchangeDrawerProps } from './exchange-drawer'
 export { FeedbackPopover, FeedbackSection } from './feedback'
+export {
+  HardwareSignCancelledError,
+  type HardwareSignRequest,
+  HardwareSignScreen,
+  type HardwareSignScreenProps,
+} from './hardware-sign-screen'
 export { Image, type ImageProps } from './image'
 export {
   ImportRecoveryPhraseForm,

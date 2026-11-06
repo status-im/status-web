@@ -60,6 +60,9 @@ type PreviewPageProps = {
       type: 'channel'
       decodedData?: DecodedChannelData
       channelUuid?: string
+      // from message links
+      communityPublicKey?: string
+      messageId?: string
     }
   | {
       type: 'profile'
@@ -114,7 +117,12 @@ export function PreviewPage(props: PreviewPageProps) {
     errorCode: urlErrorCode,
     isLoading: urlIsLoading,
     url,
-  } = useURLData(type, decodedData, encodedData)
+  } = useURLData(
+    type,
+    decodedData,
+    encodedData,
+    'communityPublicKey' in props ? props.communityPublicKey : undefined
+  )
 
   const wakuQueryIsEnabled = Boolean(publicKey)
   const {
@@ -246,8 +254,12 @@ export function PreviewPage(props: PreviewPageProps) {
   const joinHandler = () => {
     const pathname = window.location.pathname.replace(/\//, '')
     const hash = window.location.hash
+    const search =
+      'messageId' in props && props.messageId
+        ? `?message-id=${props.messageId}`
+        : ''
 
-    window.open(`status-app://${pathname}${hash}`, '_self', 'noopener')
+    window.open(`status-app://${pathname}${search}${hash}`, '_self', 'noopener')
   }
 
   if ((loading && !data) || !data || !publicKey) {

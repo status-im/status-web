@@ -1,7 +1,12 @@
 import { ProviderRpcError } from '@status-im/ethereum-provider'
 
 import { debugLog, getChainIdForOrigin } from '../../data/dapp-permissions'
-import { getAccountName, getAddress, getOriginAddress } from './account'
+import {
+  getAccountName,
+  getAddress,
+  getOriginAddress,
+  requireWalletFor,
+} from './account'
 import { notPermitted } from './errors'
 import { assertNoPendingApproval, requestApproval } from './request-approval'
 
@@ -31,6 +36,7 @@ export async function eth_requestAccounts({
 
   const chainId = await getChainIdForOrigin(origin)
   const accountName = await getAccountName()
+  const { walletType } = await requireWalletFor(address)
   const connectResult = await requestApproval({
     type: 'eth_requestAccounts',
     origin,
@@ -39,6 +45,7 @@ export async function eth_requestAccounts({
     address,
     accountName,
     chainId,
+    walletType,
   })
 
   if (!connectResult) {

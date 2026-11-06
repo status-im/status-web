@@ -28,7 +28,9 @@ export const useURLData = (
     | ReturnType<typeof decodeUserURLData>
     | undefined
     | null,
-  encodedData: string | undefined | null
+  encodedData: string | undefined | null,
+  // overrides the public key in the URL hash (e.g. community ID from a message link)
+  providedPublicKey?: string
 ) => {
   const [publicKey, setPublicKey] = useState<string>()
   const [channelUuid, setChannelUuid] = useState<string>()
@@ -43,7 +45,7 @@ export const useURLData = (
     try {
       setUrl(window.location.href)
 
-      const hash = window.location.hash.replace('#', '')
+      const hash = providedPublicKey ?? window.location.hash.replace('#', '')
 
       // without encoded data
 

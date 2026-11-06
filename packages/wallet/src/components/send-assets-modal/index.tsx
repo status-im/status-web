@@ -13,6 +13,7 @@ import * as z from 'zod'
 
 import { GasShiftedError } from '../../constants/errors'
 import { CurrencyAmount } from '../currency-amount'
+import { HardwareSignCancelledError } from '../hardware-sign-screen'
 import { NetworkLogo } from '../network-logo'
 import { TokenAmount } from '../token-amount'
 import { TokenIcon } from '../token-icon'
@@ -247,6 +248,10 @@ const SendAssetsModal = (props: Props) => {
       })
       setTransactionState('success')
     } catch (error) {
+      if (error instanceof HardwareSignCancelledError) {
+        setTransactionState('idle')
+        return
+      }
       if (error instanceof GasShiftedError) {
         setTransactionState('gas-shifted')
         return
