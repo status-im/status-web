@@ -39,6 +39,12 @@ Older records without an approved account keep their chain setting but require a
 approval. After disconnecting, the user must approve a new connection before the dApp can access
 accounts again.
 
+## Signing requests
+
+The approval popup shortens long typed-data fields and transaction data for readability. Use
+"Show full value" to inspect the complete content before signing. Field count and nesting limits
+still flag content the popup cannot display.
+
 ## Chrome Web Store release
 
 The wallet job in [`ci/Jenkinsfile`](../../ci/Jenkinsfile) builds the extension, zips

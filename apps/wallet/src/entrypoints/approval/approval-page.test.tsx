@@ -230,3 +230,68 @@ it('asks a locked software wallet for the password', async () => {
 
   expect(mocks.passwordOpen).toBe(true)
 })
+
+it('lets the user inspect the complete signed typed-data value before approving', async () => {
+  const fullValue = `recipient:${'a'.repeat(250)}:amount:999`
+  await open(
+    approval({
+      type: 'eth_signTypedData_v4',
+      walletType: 'hardware-qr',
+      typedData: JSON.stringify({
+        domain: { name: 'Test' },
+        types: { Memo: [{ name: 'note', type: 'string' }] },
+        primaryType: 'Memo',
+        message: { note: fullValue },
+      }),
+    }),
+  )
+
+  expect(container.textContent).not.toContain(fullValue)
+  expect(container.textContent).toContain(
+    'Long values are shortened by default',
+  )
+
+  await pressButton('Show full value')
+
+  expect(container.textContent).toContain(fullValue)
+  expect(container.textContent).toContain('Sign')
+  expect(container.textContent).toContain('Decline')
+})
+
+it('lets the user inspect a long signed domain name', async () => {
+  const domainName = `domain:${'d'.repeat(250)}:end`
+  await open(
+    approval({
+      type: 'eth_signTypedData_v4',
+      walletType: 'hardware-qr',
+      typedData: JSON.stringify({
+        domain: { name: domainName },
+        types: { Memo: [{ name: 'note', type: 'string' }] },
+        primaryType: 'Memo',
+        message: { note: 'short' },
+      }),
+    }),
+  )
+
+  expect(container.textContent).not.toContain(domainName)
+  await pressButton('Show full value')
+  expect(container.textContent).toContain(domainName)
+})
+
+it('lets the user inspect complete transaction data', async () => {
+  const data = `0x${'ab'.repeat(250)}`
+  await open(
+    approval({
+      type: 'eth_sendTransaction',
+      walletType: 'hardware-qr',
+      to: ADDRESS,
+      value: '0x0',
+      data,
+      maxFeeEth: '0.000021',
+    }),
+  )
+
+  expect(container.textContent).not.toContain(data)
+  await pressButton('Show full value')
+  expect(container.textContent).toContain(data)
+})
