@@ -1,13 +1,13 @@
 import { storage } from '@wxt-dev/storage'
-import { afterEach, beforeEach, describe, expect, test } from 'vitest'
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 
 import {
-  adoptSelectedAddress,
   connectAccount,
   DAPP_PERMISSIONS_KEY,
   ETH_ACCOUNTS_CAPABILITY,
   getChainIdForOrigin,
   getConnectedAccounts,
+  getOriginRecord,
   getPermissions,
   getPermittedOrigins,
   getSelectedAddress,
@@ -34,6 +34,7 @@ beforeEach(async () => {
 })
 
 afterEach(async () => {
+  vi.restoreAllMocks()
   await storage.clear('local')
   await storage.clear('session')
 })
@@ -43,7 +44,7 @@ describe('grants', () => {
     expect(await isOriginPermitted(ORIGIN)).toBe(false)
     expect(await getPermissions(ORIGIN)).toEqual([])
 
-    await grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY)
+    await connectAccount(ORIGIN, ACCOUNT_A)
 
     expect(await isOriginPermitted(ORIGIN)).toBe(true)
     expect(await getPermissions(ORIGIN)).toEqual([
@@ -51,14 +52,53 @@ describe('grants', () => {
     ])
   })
 
-  test('a non-eth_accounts capability alone does not connect an origin', async () => {
-    await grantPermission(ORIGIN, 'endowment:permitted-chains')
+  test('an unconnected origin cannot grant itself any capability', async () => {
+    expect(
+      await grantPermission(ORIGIN, 'endowment:permitted-chains'),
+    ).toBeNull()
 
     expect(await isOriginPermitted(ORIGIN)).toBe(false)
     expect(await getPermittedOrigins()).toEqual([])
   })
 
+  test('a revoked origin cannot be recreated by a grant', async () => {
+    await connectAccount(ORIGIN, ACCOUNT_A)
+    await revokeOrigin(ORIGIN)
+    const writes = vi.spyOn(storage, 'setItem')
+
+    expect(await grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY)).toBeNull()
+    expect(await getOriginRecord(ORIGIN)).toBeNull()
+    expect(writes).not.toHaveBeenCalled()
+  })
+
+  test('a chain-only record cannot grant itself accounts', async () => {
+    await setChainIdForOrigin(ORIGIN, '0xa')
+    const before = await getOriginRecord(ORIGIN)
+
+    expect(await grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY)).toBeNull()
+    expect(await getOriginRecord(ORIGIN)).toEqual(before)
+  })
+
+  test('permission updates preserve connected accounts, selection and chain', async () => {
+    await connectAccount(ORIGIN, ACCOUNT_A)
+    await connectAccount(ORIGIN, ACCOUNT_B)
+    await setChainIdForOrigin(ORIGIN, '0xa')
+    const before = await getOriginRecord(ORIGIN)
+
+    const permission = await grantPermission(
+      'https://App.Uniswap.org/',
+      'endowment:permitted-chains',
+      [{ type: 'chains', value: ['0xa'] }],
+    )
+
+    expect(await getOriginRecord(ORIGIN)).toEqual({
+      ...before,
+      permissions: [...before!.permissions, permission],
+    })
+  })
+
   test('re-granting a capability replaces it rather than duplicating', async () => {
+    await connectAccount(ORIGIN, ACCOUNT_A)
     await grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY, [
       { type: 'restrictReturnedAccounts', value: ['0x1'] },
     ])
@@ -70,7 +110,7 @@ describe('grants', () => {
   })
 
   test('revoking removes the origin entirely', async () => {
-    await grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY)
+    await connectAccount(ORIGIN, ACCOUNT_A)
     await revokeOrigin(ORIGIN)
 
     expect(await isOriginPermitted(ORIGIN)).toBe(false)
@@ -78,7 +118,7 @@ describe('grants', () => {
   })
 
   test('revoking an unknown origin is a no-op', async () => {
-    await grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY)
+    await connectAccount(ORIGIN, ACCOUNT_A)
     await revokeOrigin(OTHER_ORIGIN)
 
     expect(await isOriginPermitted(ORIGIN)).toBe(true)
@@ -86,8 +126,8 @@ describe('grants', () => {
 
   test('concurrent grants for different origins do not clobber each other', async () => {
     await Promise.all([
-      grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY),
-      grantPermission(OTHER_ORIGIN, ETH_ACCOUNTS_CAPABILITY),
+      connectAccount(ORIGIN, ACCOUNT_A),
+      connectAccount(OTHER_ORIGIN, ACCOUNT_B),
     ])
 
     expect(await getPermittedOrigins()).toEqual(
@@ -160,40 +200,50 @@ describe('switching the account an origin sees', () => {
   })
 })
 
-describe('adopting records written before per-account tracking', () => {
-  test('an accountless record pins to the account it was showing', async () => {
-    await grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY)
+describe('grants without an approved account', () => {
+  test('an accountless stored grant cannot expose a newly selected account', async () => {
+    await storage.setItem(DAPP_PERMISSIONS_KEY, {
+      version: 2,
+      origins: {
+        [ORIGIN]: {
+          permissions: [
+            { parentCapability: ETH_ACCOUNTS_CAPABILITY, caveats: [] },
+          ],
+          accounts: [],
+          selectedAddress: null,
+          chainId: '0xa',
+          grantedAt: 123,
+        },
+      },
+    })
 
-    expect(await adoptSelectedAddress(ORIGIN, ACCOUNT_A)).toBe(ACCOUNT_A)
-    expect(await getConnectedAccounts(ORIGIN)).toEqual([ACCOUNT_A])
-  })
-
-  test('adoption cannot move an origin that already has an account', async () => {
+    expect(await isOriginPermitted(ORIGIN)).toBe(false)
+    expect(await grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY)).toBeNull()
+    expect(await getPermissions(ORIGIN)).toEqual([])
+    expect(await getChainIdForOrigin(ORIGIN)).toBe('0xa')
     await connectAccount(ORIGIN, ACCOUNT_A)
-
-    expect(await adoptSelectedAddress(ORIGIN, ACCOUNT_B)).toBe(ACCOUNT_A)
-    expect(await getConnectedAccounts(ORIGIN)).toEqual([ACCOUNT_A])
+    expect(await getSelectedAddress(ORIGIN)).toBe(ACCOUNT_A)
+    expect(await isOriginPermitted(ORIGIN)).toBe(true)
   })
 
-  test('adoption does not create a record for an unknown origin', async () => {
-    await adoptSelectedAddress(OTHER_ORIGIN, ACCOUNT_A)
+  test('a selected address outside the approved account list loses its grant', async () => {
+    await storage.setItem(DAPP_PERMISSIONS_KEY, {
+      version: 2,
+      origins: {
+        [ORIGIN]: {
+          permissions: [
+            { parentCapability: ETH_ACCOUNTS_CAPABILITY, caveats: [] },
+          ],
+          accounts: [ACCOUNT_A],
+          selectedAddress: ACCOUNT_B,
+          chainId: '0x1',
+          grantedAt: 123,
+        },
+      },
+    })
 
-    expect(await isOriginPermitted(OTHER_ORIGIN)).toBe(false)
-  })
-
-  // Regression: the approval popup persisted the grant with `grantPermission`,
-  // leaving no account on the record. Adoption would then pin the dApp to
-  // whichever account the wallet had selected, which need not be the approved
-  // one -- exactly the drift per-account tracking exists to prevent.
-  test('a grant carrying no account is adoptable by any account', async () => {
-    await grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY)
-
-    expect(await adoptSelectedAddress(ORIGIN, ACCOUNT_B)).toBe(ACCOUNT_B)
-
-    // Whereas connecting records the account up front and pins it.
-    await revokeOrigin(OTHER_ORIGIN)
-    await connectAccount(OTHER_ORIGIN, ACCOUNT_A)
-    expect(await adoptSelectedAddress(OTHER_ORIGIN, ACCOUNT_B)).toBe(ACCOUNT_A)
+    expect(await isOriginPermitted(ORIGIN)).toBe(false)
+    expect(await getSelectedAddress(ORIGIN)).toBeNull()
   })
 })
 
@@ -201,7 +251,7 @@ describe('origin normalization', () => {
   test('trailing slashes and case do not create a second key', async () => {
     expect(normalizeOrigin('https://App.Uniswap.org/')).toBe(ORIGIN)
 
-    await grantPermission('https://App.Uniswap.org/', ETH_ACCOUNTS_CAPABILITY)
+    await connectAccount('https://App.Uniswap.org/', ACCOUNT_A)
 
     expect(await isOriginPermitted(ORIGIN)).toBe(true)
     expect(Object.keys((await readStore()).origins)).toEqual([ORIGIN])
@@ -219,7 +269,7 @@ describe('per-origin chain', () => {
   })
 
   test('switching chains preserves an existing grant', async () => {
-    await grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY)
+    await connectAccount(ORIGIN, ACCOUNT_A)
     await setChainIdForOrigin(ORIGIN, '0x6300b5ea')
 
     expect(await isOriginPermitted(ORIGIN)).toBe(true)
@@ -231,16 +281,14 @@ describe('a grant is dropped only by an explicit request', () => {
   // everything when it changed. wallet-context resolves `currentWallet` to
   // `wallets[0]` until the persisted selection hydrates, so every extension
   // page load briefly reported the wrong account and wiped all connections.
-  test('the store holds no account identity to invalidate against', async () => {
-    await grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY)
+  test('legacy origins without account identity require reconnection', async () => {
+    await storage.setItem('session:connectedOrigins', [ORIGIN])
 
     expect(await readStore()).toEqual({
       version: 2,
       origins: {
         [ORIGIN]: {
-          permissions: [
-            { parentCapability: ETH_ACCOUNTS_CAPABILITY, caveats: [] },
-          ],
+          permissions: [],
           accounts: [],
           selectedAddress: null,
           chainId: '0x1',
@@ -251,10 +299,10 @@ describe('a grant is dropped only by an explicit request', () => {
   })
 
   test('unrelated writes never drop an existing grant', async () => {
-    await grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY)
+    await connectAccount(ORIGIN, ACCOUNT_A)
 
     await setChainIdForOrigin(ORIGIN, '0x6300b5ea')
-    await grantPermission(OTHER_ORIGIN, ETH_ACCOUNTS_CAPABILITY)
+    await connectAccount(OTHER_ORIGIN, ACCOUNT_B)
     await setChainIdForOrigin(OTHER_ORIGIN, '0x1')
     await revokeOrigin(OTHER_ORIGIN)
 
@@ -263,7 +311,7 @@ describe('a grant is dropped only by an explicit request', () => {
   })
 
   test('reads are pure -- repeated reads cannot revoke', async () => {
-    await grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY)
+    await connectAccount(ORIGIN, ACCOUNT_A)
 
     for (let i = 0; i < 5; i++) {
       await readStore()
@@ -284,22 +332,22 @@ describe('watchPermissions', () => {
       seen.push(Object.keys(store.origins))
     })
 
-    await grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY)
+    await connectAccount(ORIGIN, ACCOUNT_A)
     await revokeOrigin(ORIGIN)
     unwatch()
-    await grantPermission(OTHER_ORIGIN, ETH_ACCOUNTS_CAPABILITY)
+    await connectAccount(OTHER_ORIGIN, ACCOUNT_B)
 
     expect(seen).toEqual([[ORIGIN], []])
   })
 })
 
 describe('legacy migration', () => {
-  test('adopts session connectedOrigins as eth_accounts grants', async () => {
+  test('keeps legacy chain settings without transferring account grants', async () => {
     await storage.setItem('session:connectedOrigins', [ORIGIN, OTHER_ORIGIN])
     await storage.setItem('session:originChainIds', { [ORIGIN]: '0x6300b5ea' })
 
-    expect(await isOriginPermitted(ORIGIN)).toBe(true)
-    expect(await isOriginPermitted(OTHER_ORIGIN)).toBe(true)
+    expect(await isOriginPermitted(ORIGIN)).toBe(false)
+    expect(await isOriginPermitted(OTHER_ORIGIN)).toBe(false)
     expect(await getChainIdForOrigin(ORIGIN)).toBe('0x6300b5ea')
     expect(await getChainIdForOrigin(OTHER_ORIGIN)).toBe('0x1')
   })
@@ -323,5 +371,100 @@ describe('legacy migration', () => {
     expect(
       await storage.getItem<PermissionStore>(DAPP_PERMISSIONS_KEY),
     ).toBeNull()
+  })
+})
+
+describe('writes from separate extension contexts', () => {
+  test.each(['permission update', 'legacy migration'])(
+    'a disconnect waits for an in-flight %s and remains final',
+    async operation => {
+      if (operation === 'legacy migration') {
+        await storage.setItem('session:connectedOrigins', [ORIGIN])
+      } else {
+        await connectAccount(ORIGIN, ACCOUNT_A)
+      }
+      // A fresh module instance has its own module state, as an extension page
+      // does relative to the service worker. Only the browser lock is shared.
+      vi.resetModules()
+      const otherContext = await import('./dapp-permissions')
+      const entered = Promise.withResolvers<void>()
+      const release = Promise.withResolvers<void>()
+      const setItem = storage.setItem.bind(storage)
+      vi.spyOn(storage, 'setItem').mockImplementationOnce(
+        async (key, value) => {
+          entered.resolve()
+          await release.promise
+          return setItem(key, value)
+        },
+      )
+
+      const update =
+        operation === 'legacy migration'
+          ? readStore()
+          : grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY)
+      await entered.promise
+      let disconnected = false
+      const disconnect = otherContext.revokeOrigin(ORIGIN).then(() => {
+        disconnected = true
+      })
+      try {
+        // Let the other context run until it blocks on the shared lock.
+        await new Promise(resolve => setTimeout(resolve, 0))
+        expect(disconnected).toBe(false)
+      } finally {
+        release.resolve()
+        await Promise.all([update, disconnect])
+      }
+
+      expect(await getOriginRecord(ORIGIN)).toBeNull()
+    },
+  )
+
+  test('a permission update waits for an in-flight disconnect and is refused', async () => {
+    await connectAccount(ORIGIN, ACCOUNT_A)
+    vi.resetModules()
+    const otherContext = await import('./dapp-permissions')
+    const entered = Promise.withResolvers<void>()
+    const release = Promise.withResolvers<void>()
+    const setItem = storage.setItem.bind(storage)
+    vi.spyOn(storage, 'setItem').mockImplementationOnce(async (key, value) => {
+      entered.resolve()
+      await release.promise
+      return setItem(key, value)
+    })
+
+    const disconnect = revokeOrigin(ORIGIN)
+    await entered.promise
+    let updated = false
+    const update = otherContext
+      .grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY)
+      .then(result => {
+        updated = true
+        return result
+      })
+    try {
+      await new Promise(resolve => setTimeout(resolve, 0))
+      expect(updated).toBe(false)
+    } finally {
+      release.resolve()
+      await disconnect
+    }
+
+    expect(await update).toBeNull()
+    expect(await getOriginRecord(ORIGIN)).toBeNull()
+  })
+
+  test('a failed write releases the lock for a later disconnect', async () => {
+    await connectAccount(ORIGIN, ACCOUNT_A)
+    vi.spyOn(storage, 'setItem').mockRejectedValueOnce(
+      new Error('Storage failed'),
+    )
+
+    await expect(
+      grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY),
+    ).rejects.toThrow('Storage failed')
+    await revokeOrigin(ORIGIN)
+
+    expect(await getOriginRecord(ORIGIN)).toBeNull()
   })
 })

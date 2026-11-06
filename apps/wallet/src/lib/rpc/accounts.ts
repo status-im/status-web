@@ -1,16 +1,13 @@
 import { ProviderRpcError } from '@status-im/ethereum-provider'
 
-import {
-  connectAccount,
-  debugLog,
-  getChainIdForOrigin,
-} from '../../data/dapp-permissions'
+import { debugLog, getChainIdForOrigin } from '../../data/dapp-permissions'
 import {
   getAccountName,
   getAddress,
   getOriginAddress,
   requireWalletFor,
 } from './account'
+import { notPermitted } from './errors'
 import { assertNoPendingApproval, requestApproval } from './request-approval'
 
 import type { RpcContext } from './context'
@@ -58,9 +55,14 @@ export async function eth_requestAccounts({
     })
   }
 
-  await connectAccount(origin, address)
-  void debugLog('granted', { origin, address })
-  return [address]
+  // The approval page persisted the connection before publishing its result.
+  // Reconnecting here could undo a Disconnect that happened in the meantime.
+  const approvedAddress = await getOriginAddress(origin)
+  if (!approvedAddress) {
+    throw notPermitted()
+  }
+  void debugLog('granted', { origin, address: approvedAddress })
+  return [approvedAddress]
 }
 
 export async function eth_accounts({ origin }: RpcContext): Promise<string[]> {

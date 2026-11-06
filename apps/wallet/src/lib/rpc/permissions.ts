@@ -5,7 +5,6 @@ import {
   ETH_ACCOUNTS_CAPABILITY,
   getOriginRecord,
   grantPermission,
-  isOriginPermitted,
   normalizeOrigin,
   type Permission,
 } from '../../data/dapp-permissions'
@@ -77,25 +76,14 @@ export async function wallet_requestPermissions({
 }: RpcContext): Promise<PermissionResponse[]> {
   const { methodName, caveats } = parseRequestPermissionsParam(params)
 
-  // The dispatch gate does not cover this method, because the error has to be
-  // status-go's distinct ErrDAppNotFound rather than the parity string.
-  //
-  // Permitted, not merely present: `setChainIdForOrigin` creates a bare record
-  // for any origin that switched chains, and records written before that call
-  // was gated outlive the upgrade. Accepting those would let a page the user
-  // never approved grant itself `eth_accounts` with no popup. status-go's
-  // `SelectDApp` likewise returns a permitted dApp, not any row.
-  if (!(await isOriginPermitted(origin))) {
+  // Check and persist together so a concurrent disconnect cannot be undone.
+  // Preserve status-go's distinct ErrDAppNotFound response on refusal.
+  if (!(await grantPermission(origin, methodName, caveats))) {
     throw new ProviderRpcError({
       code: 4100,
       message: 'dApp not found; permission not persisted',
     })
   }
-
-  // Safe only because the origin is already permitted, so the record exists
-  // with its accounts intact: `grantPermission` on a fresh origin would create
-  // one with no account, which then adopts whichever the wallet has selected.
-  await grantPermission(origin, methodName, caveats)
 
   return [
     { invoker: normalizeOrigin(origin), parentCapability: methodName, caveats },

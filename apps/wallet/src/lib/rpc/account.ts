@@ -2,7 +2,6 @@ import { ProviderRpcError } from '@status-im/ethereum-provider'
 import { storage } from '@wxt-dev/storage'
 
 import {
-  adoptSelectedAddress,
   getSelectedAddress,
   isOriginPermitted,
   isSameAddress,
@@ -97,10 +96,7 @@ export async function getOriginAddress(origin: string): Promise<string | null> {
     return selected
   }
 
-  // Connected before per-account tracking existed: the account it has been
-  // showing is the active one, so pin it there once.
-  const active = await getAddress()
-  return active ? await adoptSelectedAddress(origin, active) : null
+  return null
 }
 
 /**

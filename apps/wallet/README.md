@@ -29,6 +29,16 @@ The extension also reads the API app and the shared wallet package, so those nee
 in `apps/api/.env.local` and `packages/wallet/.env.local`. The tracked `.env` files only define
 names and non-secret defaults; real keys go in the gitignored `.env.local`.
 
+## dApp connections
+
+The [permission store](src/data/dapp-permissions.ts) keeps approved connections across reloads
+and account switches. Permission updates require an existing `eth_accounts` grant. The connection
+check and write share a Web Lock across extension pages and the background service worker, including
+legacy storage migration, so an overlapping permission request cannot restore a disconnected dApp.
+Older records without an approved account keep their chain setting but require a new connection
+approval. After disconnecting, the user must approve a new connection before the dApp can access
+accounts again.
+
 ## Chrome Web Store release
 
 The wallet job in [`ci/Jenkinsfile`](../../ci/Jenkinsfile) builds the extension, zips
