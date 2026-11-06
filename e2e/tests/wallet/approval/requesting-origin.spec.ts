@@ -12,16 +12,6 @@ test(
   async ({ walletContext, walletPage }, testInfo) => {
     // walletPage completes onboarding before the dapp starts making requests.
     await expect(walletPage).toHaveURL(/\/portfolio\/assets/)
-    await walletPage.evaluate(async () => {
-      const browser = Reflect.get(globalThis, 'chrome')
-      const currentWindow = await browser.windows.getCurrent()
-      await browser.windows.update(currentWindow.id!, {
-        left: 0,
-        top: 0,
-        width: 1000,
-        height: 800,
-      })
-    })
 
     const dapp = await walletContext.newPage()
     await dapp.route(`${ORIGIN}/**`, route =>
@@ -64,9 +54,39 @@ test(
       )
       .toBe('function')
 
+    // Playwright can open the dapp in a second window. Keep every browser
+    // window on screen so Chrome accepts the wallet's positioned popup.
+    await walletPage.evaluate(async () => {
+      const browser = Reflect.get(globalThis, 'chrome')
+      const windows = await browser.windows.getAll()
+      for (const currentWindow of windows) {
+        await browser.windows.update(currentWindow.id, {
+          left: 0,
+          top: 0,
+          width: 1000,
+          height: 800,
+        })
+      }
+    })
+
     const connectionPopupPromise = walletContext.waitForEvent('page')
     await dapp.getByRole('button', { name: 'Connect' }).click()
-    const connectionPopup = await connectionPopupPromise
+    const connectionPopup = await connectionPopupPromise.catch(async error => {
+      const diagnostic = await walletPage.evaluate(async () => {
+        const browser = Reflect.get(globalThis, 'chrome')
+        return {
+          screen: { width: screen.availWidth, height: screen.availHeight },
+          windows: await browser.windows.getAll(),
+        }
+      })
+      throw new Error(
+        `Connection popup did not open: ${JSON.stringify({
+          diagnostic,
+          dappResult: await dapp.locator('#result').textContent(),
+        })}`,
+        { cause: error },
+      )
+    })
     await connectionPopup.setViewportSize({ width: 390, height: 628 })
     await expect(
       connectionPopup.getByRole('heading', { name: 'Connect dApp' }),
