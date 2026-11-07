@@ -137,6 +137,18 @@ document. Include those headers in the cache key, or bypass the cache when `rsc`
 
 ## Security for operators
 
+Admin authentication verifies the access-token signature using the realm's public keys at
+`KEYCLOAK_ISSUER/protocol/openid-connect/certs`. The runtime must be able to reach this endpoint;
+the verifier caches keys and can refresh them when Keycloak rotates signing keys. The token must
+have a valid expiry, match `KEYCLOAK_ISSUER`, identify `KEYCLOAK_CLIENT_ID` in its `azp` claim, and
+have Keycloak's `Bearer` token type and a valid email. `azp` is checked because Keycloak access-token
+audiences can name resource servers such as `account` instead of the login client. Invalid tokens
+or verification failures redirect to login before a user is looked up in Postgres. Users must sign
+in again when their access token expires; the cookie's 30-day lifetime does not extend token
+validity. Verification is local after fetching public keys, so it does not check session revocation
+on every request. See [`auth.ts`](../src/server/services/auth.ts) and
+[`keycloak-access-token.ts`](../src/server/services/keycloak-access-token.ts).
+
 `SITE_URL` is not optional in production. It pins the canonical origin used for OAuth
 `redirect_uri` and for server-side fetches back into the app. Without it the app falls back to
 `X-Forwarded-Host`, and anyone who can set that header can redirect OAuth flows or steer
