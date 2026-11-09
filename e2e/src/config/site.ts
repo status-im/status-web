@@ -51,3 +51,11 @@ export function strictConsole(baseURL: string): boolean {
  * a local run against `next dev` short, since each new route compiles.
  */
 export const SITEMAP_SAMPLE = process.env.SITEMAP_SAMPLE ?? '30'
+
+/**
+ * Token for the GitHub REST API, which the download tests use to look up
+ * release assets. Optional locally; CI passes the workflow's GITHUB_TOKEN.
+ * Anonymous requests to github.com time out whenever GitHub sheds anonymous
+ * traffic, and the anonymous API allows 60 requests an hour per IP.
+ */
+export const GITHUB_TOKEN = process.env.GITHUB_TOKEN ?? ''

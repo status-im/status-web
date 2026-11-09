@@ -3,9 +3,10 @@ import {
   STATUS_APP_DESKTOP_DOWNLOADS,
 } from '@constants/status-app.js'
 import { expect, test } from '@fixtures/site.fixture.js'
+import { getRelease } from '@helpers/github-releases.js'
 
 const RELEASE_ASSET_URL =
-  /^https:\/\/github\.com\/status-im\/status-app\/releases\/download\//
+  /^https:\/\/github\.com\/status-im\/status-app\/releases\/download\/([^/]+)\/[^/]+$/
 
 test.describe('status.app downloads', () => {
   for (const download of STATUS_APP_DESKTOP_DOWNLOADS) {
@@ -50,8 +51,15 @@ test.describe('status.app downloads', () => {
         expect(location).toMatch(RELEASE_ASSET_URL)
         expect(location).toMatch(download.asset)
 
-        const asset = await request.head(location)
-        expect(asset.status(), location).toBe(200)
+        // Checked through the API: a HEAD on github.com is anonymous traffic,
+        // which GitHub answers with 504s when it is under load.
+        const tag = decodeURIComponent(location.match(RELEASE_ASSET_URL)![1]!)
+        const release = await getRelease(request, 'status-im/status-app', tag)
+        expect(release.draft, tag).toBe(false)
+        const asset = release.assets.find(
+          asset => asset.browser_download_url === location,
+        )
+        expect(asset?.state, location).toBe('uploaded')
       },
     )
   }

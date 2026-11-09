@@ -19,6 +19,7 @@ Rules for agents working in `e2e/`. The root [AGENTS.md](../AGENTS.md) applies t
 - Do not tag a MetaMask Hub flow `@wallet-send` or `@wallet-swap`. The `wallet-flows` project greps `/@wallet(?![\w-])/` and will pick it up.
 - The status.app suite runs daily against production. Keep it read-only: open forms and dialogs, never submit them, and call `/api/download/*` only with `E2E_BOT_USER_AGENT` so Umami does not count a download.
 - Assert on structure, not on copy that editors change (post titles, job names, headline text).
+- Check GitHub releases through `@helpers/github-releases`, never with requests to github.com: GitHub answers anonymous traffic there with 504s when it is under load.
 - A known site bug that logs a console error goes in `src/constants/status-app.ts` with a comment saying what is broken. Delete the entry when the bug is fixed.
 
 ## Caveats
