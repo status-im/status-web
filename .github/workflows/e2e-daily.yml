@@ -62,6 +62,9 @@ jobs:
           # Sent as `x-e2e-bypass` on same-origin requests so the CDN can let
           # the run through bot protection. Optional until the rule exists.
           E2E_BYPASS_TOKEN: ${{ secrets.E2E_BYPASS_TOKEN }}
+          # The download tests look up release assets through the GitHub API.
+          # Anonymous requests to github.com time out when GitHub is under load.
+          GITHUB_TOKEN: ${{ github.token }}
           CI: true
 
       - name: Upload test report
