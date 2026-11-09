@@ -18,12 +18,14 @@ on:
         default: false
 
 permissions:
-  contents: write
-  pull-requests: write
-  statuses: write
+  contents: read
 
 jobs:
   sync:
+    permissions:
+      contents: write
+      pull-requests: write
+      statuses: write
     uses: acid-info/ai-tools/.github/workflows/ai-docs-sync.yml@ai-docs-sync/v1
     with:
       # Optional. Forces the target branch. Omitted: `develop` if it exists, else the default
