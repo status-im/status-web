@@ -67,7 +67,13 @@ The suite reads its settings from the shell, `e2e/.env.local` or `e2e/.env`, in 
 
 Against localhost only uncaught page errors fail a test, because `next dev` logs React warnings that production strips; set `E2E_STRICT_CONSOLE=1` for a local production build. The sitemap test checks 30 entries unless `SITEMAP_SAMPLE` says otherwise (`all` in CI). The `/insights` test skips on localhost: Hasura only answers CORS for the status.app origins.
 
-[`e2e-daily.yml`](../.github/workflows/e2e-daily.yml) runs the suite every day at 05:17 UTC against https://dev.status.app and https://status.app. A failure opens or comments on the issue labelled `e2e-daily`, and the next green run closes it. Same-origin requests carry an `x-e2e-bypass` header set from the `E2E_BYPASS_TOKEN` secret, so Cloudflare can skip its bot checks for the run. `E2E_BYPASS_TOKEN` is optional: when it is unset, the header is not sent. The download tests check release assets through the GitHub API with the workflow's `GITHUB_TOKEN`, since GitHub answers anonymous github.com traffic with 504s when it is under load.
+The download tests never call github.com. They read the redirect location that `/api/download/*` returns without following it, look up that release through the GitHub REST API (`api.github.com`), and check that the release is not a draft and that the location is one of its uploaded assets. `GITHUB_TOKEN` is optional locally: when it is set, the lookups are authenticated, and when it is unset they are anonymous, which the API limits to 60 requests an hour per IP. With the GitHub CLI you can pass your own token:
+
+```bash
+GITHUB_TOKEN=$(gh auth token) STATUS_APP_URL=https://status.app pnpm test:status-app tests/status-app/downloads.spec.ts
+```
+
+[`e2e-daily.yml`](../.github/workflows/e2e-daily.yml) runs the suite every day at 05:17 UTC against https://dev.status.app and https://status.app. A failure opens or comments on the issue labelled `e2e-daily`, and the next green run closes it. Same-origin requests carry an `x-e2e-bypass` header set from the `E2E_BYPASS_TOKEN` secret, so Cloudflare can skip its bot checks for the run. `E2E_BYPASS_TOKEN` is optional: when it is unset, the header is not sent. The workflow sets `GITHUB_TOKEN` from its own token, so the download tests check release assets through the GitHub API authenticated, since GitHub answers anonymous github.com traffic with 504s when it is under load.
 
 ## Anvil forks
 
