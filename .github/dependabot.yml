@@ -6,8 +6,7 @@ updates:
   - package-ecosystem: npm
     directory: /
     schedule:
-      interval: weekly
-      day: monday
+      interval: daily
       time: '04:00'
     allow:
       - dependency-name: '@playwright/test'
