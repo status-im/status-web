@@ -1,0 +1,23 @@
+# Dependabot only tracks Playwright here, so the e2e suites move to each new
+# Chromium build. Upgrade PRs are merged by hand. Security updates for every
+# other dependency are unaffected by `allow`.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '04:00'
+    allow:
+      - dependency-name: '@playwright/test'
+      - dependency-name: 'playwright'
+    # Skip releases younger than 3 days.
+    cooldown:
+      default-days: 3
+    groups:
+      playwright:
+        patterns: ['@playwright/test', 'playwright', 'playwright-core']
+    commit-message:
+      prefix: 'chore(e2e)'
+    open-pull-requests-limit: 2
