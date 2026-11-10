@@ -75,7 +75,7 @@ GITHUB_TOKEN=$(gh auth token) STATUS_APP_URL=https://status.app pnpm test:status
 
 [`e2e-daily.yml`](../.github/workflows/e2e-daily.yml) runs the suite every day at 05:17 UTC against https://dev.status.app and https://status.app. A failure opens or comments on the issue labelled `e2e-daily`, and the next green run closes it. Same-origin requests carry an `x-e2e-bypass` header set from the `E2E_BYPASS_TOKEN` secret, so Cloudflare can skip its bot checks for the run. `E2E_BYPASS_TOKEN` is optional: when it is unset, the header is not sent. The workflow sets `GITHUB_TOKEN` from its own token, so the download tests check release assets through the GitHub API authenticated, since GitHub answers anonymous github.com traffic with 504s when it is under load.
 
-[`dependabot.yml`](../.github/dependabot.yml) checks every day and opens a PR when a new Playwright release is at least 3 days old, so the suite follows Playwright's Chromium build. The PR runs this workflow against both sites; merge it by hand once it passes.
+[`dependabot.yml`](../.github/dependabot.yml) checks every day and opens a PR when a new Playwright release is at least 3 days old, so the suite follows Playwright's Chromium build. The PR runs this workflow against both sites; merge it by hand once it passes. Dependabot PRs only read Dependabot secrets, so once `E2E_BYPASS_TOKEN` exists, add it there too.
 
 ## Anvil forks
 
