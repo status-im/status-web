@@ -42,6 +42,37 @@ repository to ask, and otherwise fails the build. Failing is deliberate: an empt
 compiles fine and ships a `/specs` hub whose every detail URL 404s, which is how the specs section
 once went down in production.
 
+## Building while Ghost is down
+
+The build runs
+[`scripts/generate-blog-search-index.ts`](../scripts/generate-blog-search-index.ts), which fails
+with "Cannot generate an empty blog search index" when Ghost returns no posts. During a Ghost outage
+that blocks every build, including one you need for an unrelated fix such as rotating
+`GITHUB_TOKEN`.
+
+Set `ALLOW_EMPTY_BLOG_SEARCH_INDEX=1` for the build to get past it:
+
+```bash
+ALLOW_EMPTY_BLOG_SEARCH_INDEX=1 pnpm --filter status.app build
+```
+
+With the flag set, the script logs a warning and writes an empty `public/blog-search-index.json`
+instead of throwing. Blog search returns no results until the next build with Ghost back up. The
+homepage hides its blog section when Ghost returns no posts.
+
+The flag also shortens server-side Ghost calls. Ghost hangs for 60 seconds before it answers 504,
+so with the flag set, the Ghost client in
+[`src/app/(website)/_lib/ghost/client.ts`](<../src/app/(website)/_lib/ghost/client.ts>) and the RSS
+feed fetch give up after 10 seconds instead. Healthy calls take up to about 6 seconds. The check
+reads `process.env` on the server each time, so the timeout also applies to a running server that
+has the variable set. Browser fetches keep no timeout.
+
+`turbo.json` lists `ALLOW_EMPTY_BLOG_SEARCH_INDEX` in the `status.app#build` hash, so a build
+without the flag does not reuse a cached empty index.
+
+This change did not touch the `Dockerfile` or the `build:docker` script, so check that they pass
+`ALLOW_EMPTY_BLOG_SEARCH_INDEX` into `docker build` before you rely on it for an image build.
+
 ## Build and run locally
 
 From `apps/status.app`:
