@@ -40,6 +40,22 @@ const resolveAPIPrefix = version => {
   return prefix
 }
 
+/**
+ * While `ALLOW_EMPTY_BLOG_SEARCH_INDEX=1` is set (Ghost outage), give up on
+ * Ghost after 10s instead of waiting for its 60s 504. Healthy calls take up to
+ * ~6s (all posts with plaintext). Server only: this module also runs in the
+ * browser, where the flag is undefined and fetches keep no timeout.
+ */
+const OUTAGE_TIMEOUT_MS = 10_000
+
+export function getGhostTimeoutSignal() {
+  const isOutage =
+    typeof window === 'undefined' &&
+    globalThis.process?.env?.ALLOW_EMPTY_BLOG_SEARCH_INDEX === '1'
+
+  return isOutage ? AbortSignal.timeout(OUTAGE_TIMEOUT_MS) : undefined
+}
+
 const defaultMakeRequest = async ({ url, method, params, headers }) => {
   const queryString = new URLSearchParams(params).toString()
   const fullUrl = `${url}${queryString ? `?${queryString}` : ''}`
@@ -47,6 +63,7 @@ const defaultMakeRequest = async ({ url, method, params, headers }) => {
   const response = await fetch(fullUrl, {
     method: method.toUpperCase(),
     headers,
+    signal: getGhostTimeoutSignal(),
     next: {
       revalidate: 3600, // 1 hour
     },

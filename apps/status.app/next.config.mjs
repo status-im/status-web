@@ -31,9 +31,6 @@ let config = {
     '/**/*': ['./.contentlayer/generated/**/*'],
   },
   reactStrictMode: true,
-  // Ghost can hang for 60s before failing; give /blog and the sitemap room to
-  // fall back to empty data instead of timing out the build.
-  staticPageGenerationTimeout: 180,
   pageExtensions: ['ts', 'tsx', 'md', 'mdx'],
   // Keep SEO metadata in <head>; Search Console ignores streamed canonicals.
   // why: https://nextjs.org/docs/app/api-reference/config/next-config-js/htmlLimitedBots
