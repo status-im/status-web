@@ -4,6 +4,7 @@ import { clientEnv } from '~/config/env.client.mjs'
 import { buildLegacyNewsFeed } from '~app/_utils/legacy-news-feed'
 import { buildNewsFeed } from '~app/_utils/news-feed'
 import { baseUrl } from '~website/_lib/base-url'
+import { getGhostTimeoutSignal } from '~website/_lib/ghost/client'
 
 import type { FeedFormat } from '~app/_utils/feed-content'
 import type { X2jOptions } from 'fast-xml-parser'
@@ -54,6 +55,7 @@ export async function handleRssFeed(
         headers: {
           Accept: 'application/rss+xml',
         },
+        signal: getGhostTimeoutSignal(),
       }
     )
 

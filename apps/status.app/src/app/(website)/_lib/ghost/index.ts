@@ -1,6 +1,6 @@
 import { clientEnv } from '~/config/env.client.mjs'
 
-import { GhostContentAPI } from './client'
+import { getGhostTimeoutSignal, GhostContentAPI } from './client'
 
 import type { PostOrPage } from '@tryghost/content-api'
 
@@ -35,6 +35,7 @@ const ghostLive = GhostContentAPI({
       method: method.toUpperCase(),
       headers,
       cache: 'no-store',
+      signal: getGhostTimeoutSignal(),
     })
     if (!response.ok) {
       const error: Error & { statusCode?: number } = new Error(
