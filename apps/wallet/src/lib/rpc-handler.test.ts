@@ -6,6 +6,7 @@ import {
   ETH_ACCOUNTS_CAPABILITY,
   getOriginRecord,
   getPermissions,
+  grantPermission,
   selectAccountForOrigin,
   setChainIdForOrigin,
 } from '../data/dapp-permissions'
@@ -727,6 +728,24 @@ describe('wallet_getPermissions', () => {
       },
     ])
   })
+
+  test('drops unsupported capabilities and caveats stored by older versions', async () => {
+    await connect()
+    await grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY, [
+      { type: 'requiredMethods', value: ['personal_sign'] },
+    ])
+    await grantPermission(ORIGIN, 'eth_sendTransaction')
+
+    await expect(
+      handleRpcRequest('wallet_getPermissions', [], ORIGIN),
+    ).resolves.toEqual([
+      {
+        invoker: ORIGIN,
+        parentCapability: ETH_ACCOUNTS_CAPABILITY,
+        caveats: [{ type: 'restrictReturnedAccounts', value: [ADDRESS] }],
+      },
+    ])
+  })
 })
 
 describe('wallet_requestPermissions', () => {
@@ -785,6 +804,16 @@ describe('wallet_requestPermissions', () => {
     expect(await getPermissions(ORIGIN)).toEqual([
       { parentCapability: 'eth_accounts', caveats: [] },
     ])
+  })
+
+  test('accepts non-checksummed addresses', async () => {
+    await connect()
+
+    await expect(
+      request([
+        { eth_accounts: { restrictReturnedAccounts: [ADDRESS.toLowerCase()] } },
+      ]),
+    ).resolves.toMatchObject([{ parentCapability: 'eth_accounts' }])
   })
 
   test('rejects permissions the wallet does not support', async () => {

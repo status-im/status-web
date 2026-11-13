@@ -84,7 +84,9 @@ function parseRequestPermissionsParam(params: unknown): {
         !Array.isArray(value) ||
         value.length > MAX_RESTRICTED_ACCOUNTS ||
         !value.every(
-          account => typeof account === 'string' && isAddress(account),
+          account =>
+            typeof account === 'string' &&
+            isAddress(account, { strict: false }),
         )
       ) {
         throw new ProviderRpcError({
@@ -132,9 +134,9 @@ export async function wallet_requestPermissions({
  * `restrictReturnedAccounts` is derived here rather than stored: the record's
  * `accounts` lists every account ever connected to the origin, while
  * `eth_accounts` returns only the pinned one. Advertising the former would
- * claim access the wallet will never grant. Only that one caveat is derived --
- * anything else the dApp asked for through `wallet_requestPermissions` is
- * reported back as stored.
+ * claim access the wallet will never grant. Records written before requests
+ * were bounded may hold other capabilities or caveats; those are not reported,
+ * since the wallet implements none of them.
  */
 export async function wallet_getPermissions({
   origin,
@@ -145,25 +147,20 @@ export async function wallet_getPermissions({
   const exposed = await getOriginAddress(origin)
   const invoker = normalizeOrigin(origin)
 
-  return record.permissions.map(permission => ({
-    invoker,
-    parentCapability: permission.parentCapability,
-    caveats:
-      permission.parentCapability === ETH_ACCOUNTS_CAPABILITY
-        ? [
-            // A stored `restrictReturnedAccounts` is dropped: a dApp can write
-            // one through `wallet_requestPermissions`, and it must not shadow
-            // the derived value.
-            ...permission.caveats.filter(
-              caveat => caveat.type !== RESTRICT_RETURNED_ACCOUNTS,
-            ),
-            {
-              type: RESTRICT_RETURNED_ACCOUNTS,
-              value: exposed ? [exposed] : [],
-            },
-          ]
-        : permission.caveats,
-  }))
+  return record.permissions
+    .filter(
+      permission => permission.parentCapability === ETH_ACCOUNTS_CAPABILITY,
+    )
+    .map(permission => ({
+      invoker,
+      parentCapability: permission.parentCapability,
+      caveats: [
+        {
+          type: RESTRICT_RETURNED_ACCOUNTS,
+          value: exposed ? [exposed] : [],
+        },
+      ],
+    }))
 }
 
 /**
