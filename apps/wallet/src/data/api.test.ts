@@ -2,7 +2,7 @@ import { storage } from '@wxt-dev/storage'
 import { getAddress } from 'viem'
 import { afterEach, beforeEach, expect, test, vi } from 'vitest'
 
-import { createAPI, createAPIClient } from './api'
+import { createAPI, createAPIClient, createHandlerContext } from './api'
 
 type OnMessageListener = (message: unknown) => void
 type OnConnectListener = (port: unknown) => void
@@ -594,3 +594,8 @@ test('should preview an account of an existing wallet', async () => {
   })
   expect(accounts).toHaveLength(1)
 }, 15000)
+
+test('should reject handler contexts without a port', async () => {
+  await expect(createHandlerContext()).rejects.toThrow('Forbidden sender')
+  await expect(createHandlerContext({})).rejects.toThrow('Forbidden sender')
+})
