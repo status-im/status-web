@@ -46,7 +46,24 @@ async function handler(request: NextRequest) {
 
   if (url.searchParams.has('batch')) {
     const pathSegment = url.pathname.split('/').pop() ?? ''
-    const procedureCount = decodeURIComponent(pathSegment).split(',').length
+    let decodedPath: string
+    try {
+      decodedPath = decodeURIComponent(pathSegment)
+    } catch {
+      return Response.json(
+        {
+          error: {
+            json: {
+              message: 'Malformed procedure path encoding',
+              code: -32600,
+              data: { code: 'BAD_REQUEST', httpStatus: 400 },
+            },
+          },
+        },
+        { status: 400, headers: getCorsHeaders() }
+      )
+    }
+    const procedureCount = decodedPath.split(',').length
     if (procedureCount > MAX_TRPC_BATCH_SIZE) {
       return Response.json(
         {

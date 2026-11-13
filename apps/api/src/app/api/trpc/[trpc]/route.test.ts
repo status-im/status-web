@@ -114,6 +114,18 @@ describe('batch size limits', () => {
     expect(fetchRequestHandler).not.toHaveBeenCalled()
   })
 
+  it('rejects malformed path encoding with a 400 and CORS headers', async () => {
+    const request = new Request(
+      'http://localhost/api/trpc/%E0%A4%A?batch=1&input={}',
+      { method: 'GET' }
+    ) as NextRequest
+    const response = await POST(request)
+
+    expect(response.status).toBe(400)
+    expect(response.headers.get('access-control-allow-origin')).toBe('*')
+    expect(fetchRequestHandler).not.toHaveBeenCalled()
+  })
+
   it('lets a 10-procedure tRPC batch through', async () => {
     vi.mocked(fetchRequestHandler).mockResolvedValue(Response.json([]))
     const paths = Array(10).fill('market.tokenPrice').join(',')
