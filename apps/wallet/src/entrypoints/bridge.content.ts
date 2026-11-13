@@ -10,6 +10,12 @@ export default defineContentScript({
   runAt: 'document_start',
 
   main(ctx) {
+    // Sandboxed documents (CSP sandbox) have an opaque origin while
+    // `location.origin` still reports the host, so they must not act as the host.
+    if (window.origin === 'null') {
+      return
+    }
+
     function getFavicon(): string {
       const link = document.querySelector<HTMLLinkElement>(
         'link[rel="icon"], link[rel="shortcut icon"]',
