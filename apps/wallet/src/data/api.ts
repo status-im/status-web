@@ -9,6 +9,7 @@ import {
 } from 'viem/accounts'
 import { z } from 'zod'
 
+import { isExtensionPageSender } from '../lib/extension-sender'
 import { discoverAccounts, hasActivity } from './account-discovery'
 import * as bitcoin from './bitcoin/bitcoin'
 import { chromeLinkWithRetries } from './chromeLink'
@@ -33,7 +34,18 @@ import * as walletMetadata from './wallet-metadata'
 
 import type { WalletAccount, WalletMeta } from './wallet-metadata'
 
-const createContext = async () => {
+const createContext = async (opts?: { req?: chrome.runtime.Port }) => {
+  // Ports from the trpc-chrome handler: only this extension's pages may call
+  if (
+    opts?.req &&
+    !isExtensionPageSender(
+      opts.req.sender,
+      chrome.runtime.id,
+      chrome.runtime.getURL(''),
+    )
+  ) {
+    throw new TRPCError({ code: 'FORBIDDEN', message: 'Forbidden sender' })
+  }
   const walletCore = await getWalletCore()
   return { walletCore, session: sessionManager }
 }

@@ -7,6 +7,9 @@ import { createAPI, createAPIClient } from './api'
 type OnMessageListener = (message: unknown) => void
 type OnConnectListener = (port: unknown) => void
 
+const EXTENSION_ID = 'test-extension-id'
+const EXTENSION_BASE_URL = `chrome-extension://${EXTENSION_ID}/`
+
 // @see https://github.com/jlalmes/trpc-chrome/blob/af6cc54c66b652fee90be39b837b1b7ff8269cb5/test/__setup.ts
 const createChromeMock = () => {
   const linkPortOnMessageListeners: OnMessageListener[] = []
@@ -19,8 +22,11 @@ const createChromeMock = () => {
       clear: vi.fn(),
     },
     runtime: {
+      id: EXTENSION_ID,
+      getURL: vi.fn((path: string) => `${EXTENSION_BASE_URL}${path}`),
       connect: vi.fn(() => {
         const handlerPort = {
+          sender: { id: EXTENSION_ID, url: `${EXTENSION_BASE_URL}page.html` },
           postMessage: vi.fn(message => {
             linkPortOnMessageListeners.forEach(listener => listener(message))
           }),
