@@ -27,6 +27,7 @@ function advance(ms: number) {
 beforeEach(() => {
   vi.useFakeTimers()
   vi.stubGlobal('IS_REACT_ACT_ENVIRONMENT', true)
+  vi.spyOn(document, 'hasFocus').mockReturnValue(true)
   container = document.createElement('div')
   document.body.append(container)
   root = createRoot(container)
@@ -35,6 +36,7 @@ beforeEach(() => {
 afterEach(() => {
   act(() => root.unmount())
   container.remove()
+  vi.restoreAllMocks()
   vi.unstubAllGlobals()
   vi.useRealTimers()
 })
@@ -56,6 +58,20 @@ describe('useActivationDelay', () => {
 
     act(() => window.dispatchEvent(new Event('blur')))
     expect(isActive).toBe(false)
+    act(() => window.dispatchEvent(new Event('focus')))
+    advance(499)
+    expect(isActive).toBe(false)
+    advance(1)
+    expect(isActive).toBe(true)
+  })
+
+  it('waits for focus when visible but unfocused', () => {
+    const hasFocus = vi.spyOn(document, 'hasFocus').mockReturnValue(false)
+    act(() => root.render(<Probe />))
+    advance(1000)
+    expect(isActive).toBe(false)
+
+    hasFocus.mockReturnValue(true)
     act(() => window.dispatchEvent(new Event('focus')))
     advance(499)
     expect(isActive).toBe(false)

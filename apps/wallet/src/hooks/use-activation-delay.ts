@@ -34,7 +34,7 @@ export function useActivationDelay(
 
     const restart = () => {
       stop()
-      if (document.visibilityState === 'hidden') return
+      if (document.visibilityState !== 'visible' || !document.hasFocus()) return
       timer = setTimeout(() => setIsActive(true), delay)
     }
 
