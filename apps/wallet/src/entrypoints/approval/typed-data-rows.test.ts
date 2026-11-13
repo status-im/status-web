@@ -116,15 +116,27 @@ test('more declared fields than the row cap are dropped and flagged', () => {
   expect(truncated).toBe(true)
 })
 
-test('an oversized value is clipped', () => {
-  const { rows } = flattenTypedData(
-    { note: 'x'.repeat(MAX_VALUE_LENGTH + 50) },
+test('an oversized signed value is preserved for inspection', () => {
+  const fullValue = 'x'.repeat(MAX_VALUE_LENGTH + 50)
+  const { rows, truncated } = flattenTypedData(
+    { note: fullValue },
     { Memo: [{ name: 'note', type: 'string' }] },
     'Memo',
   )
 
-  expect(rows[0]!.value).toHaveLength(MAX_VALUE_LENGTH + 1)
-  expect(rows[0]!.value!.endsWith('…')).toBe(true)
+  expect(rows[0]!.value).toBe(fullValue)
+  expect(truncated).toBe(false)
+})
+
+test('an oversized signed field name is preserved for inspection', () => {
+  const fieldName = 'field'.repeat(MAX_VALUE_LENGTH)
+  const { rows } = flattenTypedData(
+    { [fieldName]: 'value' },
+    { Memo: [{ name: fieldName, type: 'string' }] },
+    'Memo',
+  )
+
+  expect(rows[0]!.key).toBe(fieldName)
 })
 
 // An empty row list would read as "this message signs nothing", which is a

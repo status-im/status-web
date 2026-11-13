@@ -4,6 +4,7 @@ Reference for the parts of [status-web](..) that span more than one app or packa
 
 - [architecture.md](architecture.md): apps vs packages, which app uses which package, the Status API, and how content reaches each site.
 - [deployment.md](deployment.md): the Jenkins pipelines, the `deploy-*` branches, Vercel previews, extension releases and where npm publishing stands.
+- [hardware-wallet-qr-signing.md](hardware-wallet-qr-signing.md): how hardware wallets sign over ERC-4527 QR codes, in the extension and for dApps, and how their nonces are held across the exchange.
 
 ## Writing docs
 

@@ -20,6 +20,8 @@ export default function robots(): MetadataRoute.Robots {
           '/c/*',
           '/cc$',
           '/cc/*',
+          '/m$',
+          '/m/*',
         ],
       },
     ],

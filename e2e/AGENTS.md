@@ -1,6 +1,6 @@
 # e2e
 
-Rules for agents working in `e2e/`. The root [AGENTS.md](../AGENTS.md) applies too. These are Playwright tests for the Hub and the wallet extension; they run against this repo's Hub on port 3003 unless `BASE_URL` points elsewhere.
+Rules for agents working in `e2e/`. The root [AGENTS.md](../AGENTS.md) applies too. These are Playwright tests for the Hub, the wallet extension and status.app. The Hub suites run against this repo's Hub on port 3003 unless `BASE_URL` points elsewhere; the status.app suite runs against `STATUS_APP_URL` and never starts a server.
 
 ## Commands
 
@@ -8,14 +8,19 @@ Rules for agents working in `e2e/`. The root [AGENTS.md](../AGENTS.md) applies t
 - `pnpm test:smoke` runs `@smoke` only: no wallet, no forks, and it still starts the local Hub.
 - `pnpm test:wallet` needs the MetaMask extension from `pnpm setup:metamask` and a seed in `.env`.
 - `pnpm test:anvil`, `pnpm test:all` and `pnpm test:ci` start the Docker forks and stop them afterwards.
+- `pnpm test:status-app` runs `@status-app` from `playwright.status-app.config.ts` against `STATUS_APP_URL` (default `http://localhost:3001`). Start the app first.
 - `pnpm anvil:up` and `pnpm anvil:down` are for when you call `playwright test` yourself against `@anvil`.
 - `pnpm test:wallet-send` and `pnpm test:wallet-swap` need `pnpm setup:wallet` and a running `apps/api`. `pnpm test:wallet-onboarding` runs `setup:wallet` itself and needs no backend. Keep all three opt-in; do not add them to `pnpm test`.
 
 ## Rules
 
 - Put a test-only wallet in `WALLET_SEED_PHRASE`. The address is derived from the seed, and a real seed in a repo file is a leak.
-- Tag every test with exactly one of `@smoke`, `@wallet`, `@anvil`, `@wallet-onboarding`, `@wallet-send`, `@wallet-swap`. Projects select on those tags, so an untagged test never runs.
+- Tag every test with exactly one of `@smoke`, `@wallet`, `@anvil`, `@wallet-onboarding`, `@wallet-send`, `@wallet-swap`, `@status-app`. Projects select on those tags, so an untagged test never runs.
 - Do not tag a MetaMask Hub flow `@wallet-send` or `@wallet-swap`. The `wallet-flows` project greps `/@wallet(?![\w-])/` and will pick it up.
+- The status.app suite runs daily against production. Keep it read-only: open forms and dialogs, never submit them, and call `/api/download/*` only with `E2E_BOT_USER_AGENT` so Umami does not count a download.
+- Assert on structure, not on copy that editors change (post titles, job names, headline text).
+- Check GitHub releases through `@helpers/github-releases`, never with requests to github.com: GitHub answers anonymous traffic there with 504s when it is under load.
+- A known site bug that logs a console error goes in `src/constants/status-app.ts` with a comment saying what is broken. Delete the entry when the bug is fixed.
 
 ## Caveats
 
@@ -27,3 +32,4 @@ Rules for agents working in `e2e/`. The root [AGENTS.md](../AGENTS.md) applies t
 
 - [README.md](README.md): setup and the full command list.
 - [playwright.config.ts](playwright.config.ts): projects, tags, and the servers each project starts.
+- [playwright.status-app.config.ts](playwright.status-app.config.ts): the status.app suite.

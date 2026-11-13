@@ -5,7 +5,7 @@ export default defineConfig(() => {
   return {
     plugins: [WxtVitest()],
     test: {
-      // environment: 'happy-dom',
+      setupFiles: ['./test/setup.ts'],
     },
   }
 })

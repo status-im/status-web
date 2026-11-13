@@ -10,6 +10,7 @@
     "test:anvil": "pnpm anvil:up && playwright test --project=anvil; EXIT=$?; pnpm anvil:down; exit $EXIT",
     "test:get-static": "playwright test --config playwright.static-export.config.ts --project=get.status.app",
     "test:static-export": "playwright test --config playwright.static-export.config.ts",
+    "test:status-app": "playwright test --config playwright.status-app.config.ts",
     "test:all": "pnpm anvil:up && pnpm test:smoke && pnpm test:wallet && playwright test --project=anvil; EXIT=$?; pnpm anvil:down; exit $EXIT",
     "test:ci": "pnpm anvil:up && CI=true playwright test; EXIT=$?; pnpm anvil:down; exit $EXIT",
     "anvil:up": "ENV_FILES=''; test -f .env && ENV_FILES=\"$ENV_FILES --env-file .env\"; test -f .env.local && ENV_FILES=\"$ENV_FILES --env-file .env.local\"; docker compose $ENV_FILES -f docker-compose.anvil.yml up -d --wait",
@@ -29,7 +30,7 @@
     "clean": "rimraf test-results .pw-chromium-profile .extensions"
   },
   "devDependencies": {
-    "@playwright/test": "^1.50.0",
+    "@playwright/test": "^1.65.0",
     "@status-im/eslint-config": "workspace:*",
     "@types/node": "^22.0.0",
     "dotenv": "^16.4.7",

@@ -35,10 +35,7 @@ export type OriginRecord = {
    * derived from it rather than stored alongside it.
    */
   accounts: string[]
-  /**
-   * The single account this origin currently sees. Null until adopted, which
-   * only happens for records predating per-account tracking.
-   */
+  /** The approved account this origin currently sees. */
   selectedAddress: string | null
   chainId: string
   grantedAt: number
@@ -81,27 +78,31 @@ export function isSameAddress(a: string | null, b: string | null): boolean {
  * anything is connected. The upgraded shape persists on the next real write.
  */
 function normalizeRecord(record: Partial<OriginRecord>): OriginRecord {
+  const accounts = record.accounts ?? []
+  const selectedAddress = record.selectedAddress ?? null
+  // Older grants stored no account. They cannot prove which account was
+  // approved, so retain their chain setting but require a new connection.
+  const approved = accounts.some(account =>
+    isSameAddress(account, selectedAddress),
+  )
+  const permissions = record.permissions ?? []
   return {
-    permissions: record.permissions ?? [],
-    accounts: record.accounts ?? [],
-    selectedAddress: record.selectedAddress ?? null,
+    permissions: approved ? permissions : [],
+    accounts,
+    selectedAddress: approved ? selectedAddress : null,
     chainId: record.chainId ?? DEFAULT_CHAIN_ID,
     grantedAt: record.grantedAt ?? Date.now(),
   }
 }
 
-// Serializes read-modify-write cycles so concurrent grants/revocations for
-// different origins can't clobber each other. Per-context only -- the page and
-// the service worker hold separate chains, so a simultaneous write from both
-// can still race. chrome.storage offers no transaction to close that, and in
-// practice the two never mutate permissions at the same moment.
-let writeChain: Promise<unknown> = Promise.resolve()
-
-function withStore<T>(
+// The extension pages and service worker share this lock. A per-context promise
+// queue cannot prevent a stale write from restoring a connection another
+// context has just revoked.
+async function withStore<T>(
   mutate: (store: PermissionStore) => { store: PermissionStore; result: T },
 ): Promise<T> {
-  const next = writeChain.then(async () => {
-    const current = await readStore()
+  return navigator.locks.request(DAPP_PERMISSIONS_KEY, async () => {
+    const current = await readStoreUnlocked()
     const { store, result } = mutate(current)
     // Mutations that decline to change anything hand back the same object.
     // Writing it anyway would fire `watchPermissions` on every refused switch.
@@ -110,9 +111,6 @@ function withStore<T>(
     }
     return result
   })
-  // Keep the chain alive even if this link rejects.
-  writeChain = next.catch(() => {})
-  return next
 }
 
 /**
@@ -130,20 +128,15 @@ async function migrateLegacyKeys(): Promise<PermissionStore | null> {
     return null
   }
 
-  const grantedAt = Date.now()
   const store: PermissionStore = {
     version: STORE_VERSION,
     origins: Object.fromEntries(
       origins.map(origin => [
         normalizeOrigin(origin),
-        // The legacy keys carried no account identity, so these records adopt
-        // the active account on first use -- see `adoptSelectedAddress`.
+        // The legacy keys carried no approved account identity. Preserve the
+        // chain preference, but require explicit approval before reconnecting.
         normalizeRecord({
-          permissions: [
-            { parentCapability: ETH_ACCOUNTS_CAPABILITY, caveats: [] },
-          ],
           chainId: chainIds?.[origin] ?? DEFAULT_CHAIN_ID,
-          grantedAt,
         }),
       ]),
     ),
@@ -154,7 +147,8 @@ async function migrateLegacyKeys(): Promise<PermissionStore | null> {
   return store
 }
 
-export async function readStore(): Promise<PermissionStore> {
+// Call only while holding the store lock: legacy migration can write on read.
+async function readStoreUnlocked(): Promise<PermissionStore> {
   const stored = await storage.getItem<PermissionStore>(DAPP_PERMISSIONS_KEY)
   if (!stored) {
     return (await migrateLegacyKeys()) ?? EMPTY_STORE
@@ -169,6 +163,10 @@ export async function readStore(): Promise<PermissionStore> {
       ]),
     ),
   }
+}
+
+export async function readStore(): Promise<PermissionStore> {
+  return navigator.locks.request(DAPP_PERMISSIONS_KEY, readStoreUnlocked)
 }
 
 /**
@@ -225,23 +223,27 @@ export async function getPermittedOrigins(): Promise<string[]> {
 }
 
 /**
- * Grants `parentCapability` to `origin`, replacing any existing grant of the
- * same capability. Creates the origin record if this is the first grant.
- *
- * Not the way to connect an account -- the record it creates has no account, so
- * `eth_accounts` would fall back to adopting whichever one the wallet has
- * selected. Anything granting `eth_accounts` must call `connectAccount`.
+ * Updates a connected origin's permission, checking the connection under the
+ * same lock as the write. Returns null if it has been revoked or was never
+ * approved. New connections must go through `connectAccount`.
  */
 export function grantPermission(
   origin: string,
   parentCapability: string,
   caveats: Caveat[] = [],
-): Promise<Permission> {
+): Promise<Permission | null> {
   const key = normalizeOrigin(origin)
   const permission: Permission = { parentCapability, caveats }
 
-  return withStore(store => {
-    const existing = normalizeRecord(store.origins[key] ?? {})
+  return withStore<Permission | null>(store => {
+    const existing = store.origins[key]
+    if (
+      !existing?.permissions.some(
+        p => p.parentCapability === ETH_ACCOUNTS_CAPABILITY,
+      )
+    ) {
+      return { store, result: null }
+    }
     const permissions = [
       ...existing.permissions.filter(
         p => p.parentCapability !== parentCapability,
@@ -351,44 +353,6 @@ export function selectAccountForOrigin(
         },
       },
       result: true,
-    }
-  })
-}
-
-/**
- * Pins a record that predates per-account tracking to `address`, which is the
- * account it has been showing all along. Idempotent and one-way: once a record
- * has a selected address nothing here can move it, so the fallback can never
- * become a path for drifting a dApp onto the wallet's current selection.
- */
-export function adoptSelectedAddress(
-  origin: string,
-  address: string,
-): Promise<string> {
-  const key = normalizeOrigin(origin)
-
-  return withStore(store => {
-    const existing = store.origins[key]
-    if (!existing) {
-      return { store, result: address }
-    }
-    if (existing.selectedAddress) {
-      return { store, result: existing.selectedAddress }
-    }
-
-    return {
-      store: {
-        ...store,
-        origins: {
-          ...store.origins,
-          [key]: {
-            ...existing,
-            accounts: existing.accounts.length ? existing.accounts : [address],
-            selectedAddress: address,
-          },
-        },
-      },
-      result: address,
     }
   })
 }

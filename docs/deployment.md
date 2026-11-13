@@ -8,7 +8,7 @@ Two of the three pipelines take the app name as a build parameter, so one file s
 
 ### ci/Jenkinsfile
 
-Builds the `connector` and `wallet` extensions with Turbo, zips the Chrome build output (`.output/chrome-mv3` for the wallet, `build/chrome-mv3-prod` for the connector), archives the ZIP and uploads it with `s5cmd`. Nothing is submitted to a store. The pipeline skips itself unless something under the selected app or its shared packages changed, or `FORCE_BUILD` is set.
+Builds the `connector` and `wallet` extensions with Turbo, zips the Chrome build output (`.output/chrome-mv3` for the wallet, `build/chrome-mv3-prod` for the connector), and archives the ZIP. Branch builds also upload it with `s5cmd`; PR builds use the Jenkins archive because the shared library has no PR bucket mapping for this repo. Nothing is submitted to a store. The pipeline skips itself unless something under the selected app or its shared packages changed, or `FORCE_BUILD` is set.
 
 ### ci/website.Jenkinsfile
 

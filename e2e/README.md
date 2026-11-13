@@ -1,6 +1,6 @@
 # e2e
 
-Playwright and TypeScript end-to-end tests for the [Status Network Hub](https://hub.status.network) and the wallet extension. Tags, projects and the dev servers each project needs are in [`playwright.config.ts`](./playwright.config.ts); page objects and fixtures are under [`src/`](./src).
+Playwright and TypeScript end-to-end tests for the [Status Network Hub](https://hub.status.network), the wallet extension and [status.app](https://status.app). Tags, projects and the dev servers each project needs are in [`playwright.config.ts`](./playwright.config.ts); page objects and fixtures are under [`src/`](./src).
 
 The default target is this repo's Hub: Playwright builds the Hub's workspace dependencies and starts `next dev` on `http://localhost:3003`, so a run covers the branch you are on. CI does the same on pull requests, `master` and `develop`. To test a deployed build instead, set `BASE_URL`, which is what stops the local server:
 
@@ -26,6 +26,7 @@ pnpm test:all             # forks up, smoke, wallet, anvil, forks down
 pnpm test:ci              # forks up, whole suite with CI=true, forks down
 pnpm test:static-export   # build then serve the three static exports
 pnpm test:get-static      # deprecated alias for the same config
+pnpm test:status-app      # status.app at STATUS_APP_URL, default http://localhost:3001
 # forks, and the servers the wallet extension projects need
 pnpm anvil:up             # mainnet and Linea forks in Docker
 pnpm anvil:down
@@ -50,6 +51,29 @@ pnpm clean
 `@smoke` runs in the `smoke` project (headless, no wallet), `@wallet` in `wallet-flows` (MetaMask, headed), and `@anvil` in `anvil` (headed, needs the forks). `@wallet-onboarding`, `@wallet-send` and `@wallet-swap` have their own projects, gated by `RUN_WALLET_ONBOARDING` and `RUN_WALLET_E2E`.
 
 Tag every test with exactly one of them. `wallet-flows` greps `/@wallet(?![\w-])/`, so a `@wallet-send` or `@wallet-swap` test stays out of the MetaMask flows.
+
+## status.app
+
+The status.app suite has its own config, [`playwright.status-app.config.ts`](./playwright.status-app.config.ts), and starts no server. Start one yourself and point `STATUS_APP_URL` at it, or at a deployed site:
+
+```bash
+pnpm --filter status.app dev:next                      # from the repo root, serves :3001
+pnpm test:status-app                                   # in e2e/
+STATUS_APP_URL=https://dev.status.app pnpm test:status-app
+STATUS_APP_URL=https://dev.status.app SITEMAP_SAMPLE=all pnpm test:status-app
+```
+
+The suite reads its settings from the shell, `e2e/.env.local` or `e2e/.env`, in that order of precedence; `.env.example` lists them. Every test is read-only: it opens forms and dialogs but never submits them.
+
+Against localhost only uncaught page errors fail a test, because `next dev` logs React warnings that production strips; set `E2E_STRICT_CONSOLE=1` for a local production build. The sitemap test checks 30 entries unless `SITEMAP_SAMPLE` says otherwise (`all` in CI). The `/insights` test skips on localhost: Hasura only answers CORS for the status.app origins.
+
+The download tests never call github.com. They read the redirect location that `/api/download/*` returns without following it, look up that release through the GitHub REST API (`api.github.com`), and check that the release is not a draft and that the location is one of its uploaded assets. `GITHUB_TOKEN` is optional locally: when it is set, the lookups are authenticated, and when it is unset they are anonymous, which the API limits to 60 requests an hour per IP. With the GitHub CLI you can pass your own token:
+
+```bash
+GITHUB_TOKEN=$(gh auth token) STATUS_APP_URL=https://status.app pnpm test:status-app tests/status-app/downloads.spec.ts
+```
+
+[`e2e-daily.yml`](../.github/workflows/e2e-daily.yml) runs the suite every day at 05:17 UTC against https://dev.status.app and https://status.app. A failure opens or comments on the issue labelled `e2e-daily`, and the next green run closes it. Same-origin requests carry an `x-e2e-bypass` header set from the `E2E_BYPASS_TOKEN` secret, so Cloudflare can skip its bot checks for the run. `E2E_BYPASS_TOKEN` is optional: when it is unset, the header is not sent. The workflow sets `GITHUB_TOKEN` from its own token, so the download tests check release assets through the GitHub API authenticated, since GitHub answers anonymous github.com traffic with 504s when it is under load.
 
 ## Anvil forks
 

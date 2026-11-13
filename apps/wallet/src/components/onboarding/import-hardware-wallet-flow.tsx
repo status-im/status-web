@@ -55,16 +55,14 @@ export function ImportHardwareWalletFlow({
       derivationPath: account.derivationPath,
       publicKey: account.publicKey,
       sourceFingerprint: account.sourceFingerprint,
+      xpub: account.xpub,
+      accountPath: account.accountPath,
     })
     await onSuccess(wallet, `Imported ${wallet.name}`)
   }
 
   const handleAccounts = (accounts: HardwareWalletAccount[]) => {
-    if (accounts.length === 1) {
-      setPhase({ step: 'confirm', account: accounts[0] })
-    } else {
-      setPhase({ step: 'select', accounts })
-    }
+    setPhase({ step: 'select', accounts })
   }
 
   const handleConfirm = async (

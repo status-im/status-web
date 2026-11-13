@@ -4,13 +4,15 @@ import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 import {
   connectAccount,
   ETH_ACCOUNTS_CAPABILITY,
+  getOriginRecord,
   getPermissions,
-  grantPermission,
   selectAccountForOrigin,
   setChainIdForOrigin,
 } from '../data/dapp-permissions'
+import { disconnectDapp } from './dapp-events'
 import { requestFeeRate } from './gas-fees'
 import { getPublicClient } from './public-client'
+import { requestApproval } from './rpc/request-approval'
 import { handleRpcRequest, LOCAL_HANDLERS } from './rpc-handler'
 import { REMOTE_ALLOWED, UNGATED_LOCAL } from './rpc-methods'
 
@@ -62,6 +64,8 @@ const GAS_FEES = {
 }
 
 const TX_HASH = `0x${'ab'.repeat(32)}`
+const UNSIGNED_TX = '0x02c0'
+const RESERVATION_ID = 'reservation-1'
 const ERC20_TRANSFER = `0xa9059cbb${'00'.repeat(64)}`
 
 const ORIGIN = 'https://app.velora.xyz'
@@ -81,6 +85,21 @@ let autoApprove = true
 
 /** Popups the handler opened, counted by the mock's `windows.create`. */
 let popupsOpened = 0
+
+/** Leaves the popup open instead of answering it, as a user who looked away would. */
+let holdPopup = false
+
+/** Windows the handler brought to the front. */
+let focusedWindows: number[] = []
+
+/** What the popup returns when it signed itself, as it does for hardware wallets. */
+let popupSignature: string | undefined
+
+/** The approval record the last popup was opened for. */
+let lastApproval: Record<string, unknown> | undefined
+
+/** Runs after the popup saves an approved connection, before the worker resumes. */
+let afterApprovalPersisted: (() => Promise<void>) | null = null
 
 type PushedEvent = {
   tabId: number
@@ -142,13 +161,34 @@ function createChromeMock() {
       // Stands in for the user acting on the approval popup.
       create: async () => {
         popupsOpened++
-        const pending = session.get('pendingApproval') as { id: string }
+        const pending = session.get('pendingApproval') as {
+          id: string
+          type: string
+          origin: string
+          address: string
+        }
+        lastApproval = pending
+        if (holdPopup) return { id: 1 }
         queueMicrotask(() => {
-          void set({
-            approvalResult: { id: pending.id, approved: autoApprove },
-          })
+          void (async () => {
+            if (autoApprove && pending.type === 'eth_requestAccounts') {
+              await connectAccount(pending.origin, pending.address)
+              await afterApprovalPersisted?.()
+            }
+            await set({
+              approvalResult: {
+                id: pending.id,
+                approved: autoApprove,
+                ...(popupSignature && { signature: popupSignature }),
+              },
+            })
+          })()
         })
         return { id: 1 }
+      },
+      update: async (windowId: number) => {
+        focusedWindows.push(windowId)
+        return { id: windowId }
       },
       onRemoved: {
         addListener: () => {},
@@ -171,12 +211,19 @@ const signed: { walletId?: string; fromAddress?: string } = {}
 let signedTypedData: Record<string, unknown> | null = null
 let sentTransactions: Array<{ via: string; input: Record<string, unknown> }> =
   []
+let hardwareCalls: Array<{ via: string; input: Record<string, unknown> }> = []
 
 beforeEach(async () => {
   autoApprove = true
+  holdPopup = false
+  focusedWindows = []
   popupsOpened = 0
+  popupSignature = undefined
+  lastApproval = undefined
+  afterApprovalPersisted = null
   signedTypedData = null
   sentTransactions = []
+  hardwareCalls = []
   nodeRequest.mockClear()
   clientFor.mockClear()
   feeRequest.mockReset()
@@ -208,6 +255,23 @@ beforeEach(async () => {
           sendContractCall: async (input: Record<string, unknown>) => {
             sentTransactions.push({ via: 'sendContractCall', input })
             return { id: { txid: TX_HASH } }
+          },
+          buildUnsignedTransaction: async (input: Record<string, unknown>) => {
+            hardwareCalls.push({ via: 'build', input })
+            return {
+              serializedUnsignedTx: UNSIGNED_TX,
+              chainId: 1,
+              nonceReservationId: RESERVATION_ID,
+            }
+          },
+          broadcastSignedTransaction: async (
+            input: Record<string, unknown>,
+          ) => {
+            hardwareCalls.push({ via: 'broadcast', input })
+            return { txid: TX_HASH }
+          },
+          releaseNonceReservation: async (input: Record<string, unknown>) => {
+            hardwareCalls.push({ via: 'release', input })
           },
         },
       },
@@ -244,12 +308,30 @@ afterEach(async () => {
   vi.unstubAllGlobals()
 })
 
+/** Declines the held popup: the approval slot is module state that later tests share. */
+async function answerHeldPopup() {
+  await chrome.storage.session.set({
+    approvalResult: { id: lastApproval!.id, approved: false },
+  })
+}
+
 const connect = (origin = ORIGIN) =>
   handleRpcRequest('eth_requestAccounts', [], origin)
 const accounts = () => handleRpcRequest('eth_accounts', [], ORIGIN)
 
 test('approving a connection returns the account', async () => {
   await expect(connect()).resolves.toEqual([ADDRESS])
+})
+
+test('a disconnect after popup approval is not undone by the service worker', async () => {
+  afterApprovalPersisted = () => disconnectDapp(ORIGIN)
+
+  await expect(connect()).rejects.toMatchObject({ code: 4100 })
+  expect(await accounts()).toEqual([])
+  expect(await getOriginRecord(ORIGIN)).toBeNull()
+
+  await selectAccount(OTHER_ADDRESS, OTHER_WALLET_ID)
+  expect(await accounts()).toEqual([])
 })
 
 test('the grant survives a dApp reload', async () => {
@@ -307,20 +389,52 @@ test('an explicit revoke tells the origin its accounts are gone', async () => {
 // They then overwrote each other's record and one window was left showing a
 // request that no longer existed -- a blank approval popup.
 test('concurrent connect requests open a single popup', async () => {
-  const [first, second] = await Promise.allSettled([connect(), connect()])
-
+  // Keep the first approval pending while the second request reaches it.
+  holdPopup = true
+  const first = connect()
+  await expect(connect()).rejects.toMatchObject({ code: -32002 })
   expect(popupsOpened).toBe(1)
-  expect([first.status, second.status].sort()).toEqual([
-    'fulfilled',
-    'rejected',
-  ])
-  const rejected = [first, second].find(r => r.status === 'rejected')
-  expect((rejected as PromiseRejectedResult).reason).toMatchObject({
-    code: -32002,
+  // The real popup saves the connection before publishing the verdict.
+  await connectAccount(ORIGIN, ADDRESS)
+  await chrome.storage.session.set({
+    approvalResult: { id: lastApproval!.id, approved: true },
   })
+  await expect(first).resolves.toEqual([ADDRESS])
 })
 
 describe('switching accounts in the wallet', () => {
+  test('a disconnect during an account read cannot expose the wallet selection', async () => {
+    await connect()
+    await selectAccount(OTHER_ADDRESS, OTHER_WALLET_ID)
+    const entered = Promise.withResolvers<void>()
+    const release = Promise.withResolvers<void>()
+    const getItem = storage.getItem.bind(storage)
+    const read = vi
+      .spyOn(storage, 'getItem')
+      .mockImplementationOnce(async key => {
+        const value = await getItem(key)
+        entered.resolve()
+        await release.promise
+        return value
+      })
+
+    const reading = LOCAL_HANDLERS.eth_accounts({
+      method: 'eth_accounts',
+      params: [],
+      origin: ORIGIN,
+    })
+    await entered.promise
+    const disconnect = disconnectDapp(ORIGIN)
+    release.resolve()
+    try {
+      await disconnect
+      expect(await reading).toEqual([])
+      expect(await getOriginRecord(ORIGIN)).toBeNull()
+    } finally {
+      read.mockRestore()
+    }
+  })
+
   test('an unconnected account is not exposed to the dApp', async () => {
     await connect()
     await selectAccount(OTHER_ADDRESS, OTHER_WALLET_ID)
@@ -392,13 +506,18 @@ describe('personal_sign follows the origin, not the wallet selection', () => {
 })
 
 describe('records predating per-account tracking', () => {
-  test('adopt the active account once, then hold it', async () => {
-    await grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY)
+  test('require approval instead of adopting the active account', async () => {
+    await storage.setItem('session:connectedOrigins', [ORIGIN])
 
-    expect(await accounts()).toEqual([ADDRESS])
+    expect(await accounts()).toEqual([])
 
     await selectAccount(OTHER_ADDRESS, OTHER_WALLET_ID)
-    expect(await accounts()).toEqual([ADDRESS])
+    expect(await accounts()).toEqual([])
+    await expect(
+      handleRpcRequest('personal_sign', ['0xdeadbeef'], ORIGIN),
+    ).rejects.toMatchObject({ code: 4100 })
+    await expect(connect()).resolves.toEqual([OTHER_ADDRESS])
+    expect(await accounts()).toEqual([OTHER_ADDRESS])
   })
 })
 
@@ -625,6 +744,45 @@ describe('wallet_requestPermissions', () => {
   const request = (params: unknown, origin = ORIGIN) =>
     handleRpcRequest('wallet_requestPermissions', params, origin)
 
+  test('a concurrent disconnect cannot be undone by a permission request', async () => {
+    await connect()
+
+    await Promise.allSettled([
+      LOCAL_HANDLERS.wallet_requestPermissions({
+        method: 'wallet_requestPermissions',
+        params: [{ eth_accounts: {} }],
+        origin: ORIGIN,
+      }),
+      disconnectDapp(ORIGIN),
+    ])
+    await selectAccount(OTHER_ADDRESS, OTHER_WALLET_ID)
+
+    expect(await accounts()).toEqual([])
+    expect(await getOriginRecord(ORIGIN)).toBeNull()
+    expect(await handleRpcRequest('wallet_getPermissions', [], ORIGIN)).toEqual(
+      [],
+    )
+  })
+
+  test('a revoked origin is refused until the user approves a new connection', async () => {
+    await connect()
+    await disconnectDapp(ORIGIN)
+    await selectAccount(OTHER_ADDRESS, OTHER_WALLET_ID)
+
+    await expect(request([{ eth_accounts: {} }])).rejects.toMatchObject({
+      code: 4100,
+      message: 'dApp not found; permission not persisted',
+    })
+    expect(await accounts()).toEqual([])
+
+    await expect(connect()).resolves.toEqual([OTHER_ADDRESS])
+    expect(popupsOpened).toBe(2)
+    await expect(request([{ eth_accounts: {} }])).resolves.toMatchObject([
+      { parentCapability: 'eth_accounts', caveats: [] },
+    ])
+    expect(await accounts()).toEqual([OTHER_ADDRESS])
+  })
+
   test('persists the requested capability and echoes it', async () => {
     await connect()
 
@@ -707,7 +865,7 @@ describe('personal_sign distinguishes its two failures', () => {
   // A permitted origin whose pinned account no longer resolves -- the wallet
   // holding it was deleted. Reporting this as "not permitted" would be false.
   test('a permitted origin with no resolvable account is not', async () => {
-    await grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY)
+    await connectAccount(ORIGIN, ADDRESS)
     await storage.removeItem('local:vault:metadata')
     await chrome.storage.session.remove([
       'dappAddress',
@@ -719,7 +877,7 @@ describe('personal_sign distinguishes its two failures', () => {
       handleRpcRequest('personal_sign', ['0xdeadbeef'], ORIGIN),
     ).rejects.toMatchObject({
       code: 4100,
-      message: 'No connected account',
+      message: 'No wallet available',
     })
   })
 })
@@ -1318,5 +1476,277 @@ describe('eth_sendTransaction', () => {
     expect((rejected as PromiseRejectedResult).reason).toMatchObject({
       code: -32002,
     })
+  })
+
+  test('a request refused while a popup is open brings that popup to the front', async () => {
+    await connect()
+    const opened = popupsOpened
+    holdPopup = true
+
+    const first = handleRpcRequest(
+      'personal_sign',
+      ['0xdeadbeef', ADDRESS],
+      ORIGIN,
+    )
+    try {
+      await vi.waitFor(() => expect(popupsOpened).toBe(opened + 1))
+
+      await expect(
+        handleRpcRequest('personal_sign', ['0xdeadbeef', ADDRESS], ORIGIN),
+      ).rejects.toMatchObject({ code: -32002 })
+      expect(focusedWindows).toEqual([1])
+    } finally {
+      await answerHeldPopup()
+    }
+    await expect(first).rejects.toMatchObject({ code: 4001 })
+  })
+
+  test('a repeated connect brings the open connect popup to the front', async () => {
+    holdPopup = true
+
+    const first = connect(OTHER_ORIGIN)
+    try {
+      await vi.waitFor(() => expect(popupsOpened).toBe(1))
+
+      await expect(connect(OTHER_ORIGIN)).rejects.toMatchObject({
+        code: -32002,
+      })
+      expect(focusedWindows).toEqual([1])
+    } finally {
+      await answerHeldPopup()
+    }
+    await expect(first).rejects.toMatchObject({ code: 4001 })
+  })
+
+  test('a refused request from another site leaves the popup where it is', async () => {
+    holdPopup = true
+
+    const first = connect(OTHER_ORIGIN)
+    try {
+      await vi.waitFor(() => expect(popupsOpened).toBe(1))
+
+      await expect(connect()).rejects.toMatchObject({ code: -32002 })
+      expect(focusedWindows).toEqual([])
+    } finally {
+      await answerHeldPopup()
+    }
+    await expect(first).rejects.toMatchObject({ code: 4001 })
+  })
+
+  test("the popup's own site raises it however it spells its origin", async () => {
+    holdPopup = true
+
+    const first = connect(OTHER_ORIGIN)
+    try {
+      await vi.waitFor(() => expect(popupsOpened).toBe(1))
+
+      await expect(
+        connect(`${OTHER_ORIGIN.toUpperCase()}/`),
+      ).rejects.toMatchObject({ code: -32002 })
+      expect(focusedWindows).toEqual([1])
+    } finally {
+      await answerHeldPopup()
+    }
+    await expect(first).rejects.toMatchObject({ code: 4001 })
+  })
+
+  test('a request refused while another is still in flight raises only its own popup', async () => {
+    holdPopup = true
+    const approval = (origin: string) => ({
+      type: 'eth_requestAccounts' as const,
+      origin,
+      title: origin,
+      favicon: `${origin}/favicon.ico`,
+      address: ADDRESS,
+      accountName: 'Wallet 1',
+      chainId: '0x1',
+      walletType: 'mnemonic' as const,
+    })
+
+    const first = requestApproval(approval(OTHER_ORIGIN))
+    try {
+      await vi.waitFor(() => expect(popupsOpened).toBe(1))
+
+      await expect(requestApproval(approval(ORIGIN))).rejects.toMatchObject({
+        code: -32002,
+      })
+      expect(focusedWindows).toEqual([])
+
+      await expect(
+        requestApproval(approval(OTHER_ORIGIN)),
+      ).rejects.toMatchObject({ code: -32002 })
+      expect(focusedWindows).toEqual([1])
+    } finally {
+      await answerHeldPopup()
+    }
+    await expect(first).resolves.toBeNull()
+  })
+
+  test('a site that keeps asking raises its popup at most once a second', async () => {
+    vi.useFakeTimers({ toFake: ['performance'] })
+    holdPopup = true
+
+    const first = connect(OTHER_ORIGIN)
+    try {
+      await vi.waitFor(() => expect(popupsOpened).toBe(1))
+
+      await expect(connect(OTHER_ORIGIN)).rejects.toMatchObject({
+        code: -32002,
+      })
+      await expect(connect(OTHER_ORIGIN)).rejects.toMatchObject({
+        code: -32002,
+      })
+      expect(focusedWindows).toEqual([1])
+
+      vi.advanceTimersByTime(1000)
+      await expect(connect(OTHER_ORIGIN)).rejects.toMatchObject({
+        code: -32002,
+      })
+      expect(focusedWindows).toEqual([1, 1])
+    } finally {
+      vi.useRealTimers()
+      await answerHeldPopup()
+    }
+    await expect(first).rejects.toMatchObject({ code: 4001 })
+  })
+})
+
+test('a software wallet signs in the worker even when the popup returns a signature', async () => {
+  await connect()
+  popupSignature = '0xinjected'
+
+  await expect(
+    handleRpcRequest('personal_sign', ['0xdeadbeef', ADDRESS], ORIGIN),
+  ).resolves.toBe('0xsig')
+  await expect(
+    signTypedData(ADDRESS, JSON.stringify(TYPED_DATA)),
+  ).resolves.toBe('0xtypedsig')
+})
+
+const HARDWARE_PATH = "m/44'/60'/1'/0/0"
+
+describe('hardware wallets', () => {
+  beforeEach(async () => {
+    const metadata = JSON.parse(
+      (await storage.getItem<string>('local:vault:metadata'))!,
+    )
+    metadata[WALLET_ID].type = 'hardware-qr'
+    metadata[WALLET_ID].accounts[0].derivationPath = HARDWARE_PATH
+    metadata[WALLET_ID].hardware = {
+      vendor: 'keystone',
+      publicKey: 'xpub',
+      sourceFingerprint: 0x12345678,
+    }
+    await storage.setItem('local:vault:metadata', JSON.stringify(metadata))
+  })
+
+  test('the connect popup is told the account is on a hardware wallet', async () => {
+    await connect()
+
+    expect(lastApproval).toMatchObject({
+      type: 'eth_requestAccounts',
+      walletType: 'hardware-qr',
+    })
+  })
+
+  test('personal_sign returns the signature the popup produced', async () => {
+    await connect()
+    popupSignature = '0xhardwaresig'
+
+    await expect(
+      handleRpcRequest('personal_sign', ['0xdeadbeef', ADDRESS], ORIGIN),
+    ).resolves.toBe('0xhardwaresig')
+    expect(lastApproval).toMatchObject({
+      type: 'personal_sign',
+      walletType: 'hardware-qr',
+      sourceFingerprint: 0x12345678,
+      derivationPath: HARDWARE_PATH,
+    })
+  })
+
+  test('eth_signTypedData_v4 returns the signature the popup produced', async () => {
+    await connect()
+    popupSignature = '0xhardwaretypedsig'
+
+    await expect(
+      signTypedData(ADDRESS, JSON.stringify(TYPED_DATA)),
+    ).resolves.toBe('0xhardwaretypedsig')
+    expect(lastApproval).toMatchObject({
+      type: 'eth_signTypedData_v4',
+      walletType: 'hardware-qr',
+      sourceFingerprint: 0x12345678,
+      derivationPath: HARDWARE_PATH,
+    })
+    expect(signedTypedData).toBeNull()
+  })
+
+  test('eth_sendTransaction broadcasts what the popup signed, at the approved fee', async () => {
+    await connect()
+    popupSignature = '0xhardwaretxsig'
+
+    await expect(
+      sendTransaction({ to: OTHER_ADDRESS, value: '0x1' }),
+    ).resolves.toBe(TX_HASH)
+    expect(lastApproval).toMatchObject({
+      type: 'eth_sendTransaction',
+      walletType: 'hardware-qr',
+      sourceFingerprint: 0x12345678,
+      derivationPath: HARDWARE_PATH,
+      serializedUnsignedTx: UNSIGNED_TX,
+    })
+    expect(hardwareCalls).toEqual([
+      {
+        via: 'build',
+        input: expect.objectContaining({
+          walletId: WALLET_ID,
+          fromAddress: ADDRESS,
+          toAddress: OTHER_ADDRESS,
+          value: '0x1',
+          gasLimit: GAS_FEES.txParams.gasLimit,
+          maxFeePerGas: GAS_FEES.txParams.maxFeePerGas,
+          maxInclusionFeePerGas: GAS_FEES.txParams.maxPriorityFeePerGas,
+          chainId: 1,
+        }),
+      },
+      {
+        via: 'broadcast',
+        input: {
+          serializedUnsignedTx: UNSIGNED_TX,
+          signature: '0xhardwaretxsig',
+          fromAddress: ADDRESS,
+          nonceReservationId: RESERVATION_ID,
+        },
+      },
+    ])
+    expect(sentTransactions).toEqual([])
+  })
+
+  test('eth_sendTransaction on another chain is refused before a nonce is held', async () => {
+    await connect()
+    await handleRpcRequest(
+      'wallet_switchEthereumChain',
+      [{ chainId: '0x6300b5ea' }],
+      ORIGIN,
+    )
+    const opened = popupsOpened
+
+    await expect(
+      sendTransaction({ to: OTHER_ADDRESS, value: '0x1' }),
+    ).rejects.toMatchObject({ code: 4200 })
+    expect(hardwareCalls).toEqual([])
+    expect(popupsOpened).toBe(opened)
+  })
+
+  test('a rejected eth_sendTransaction releases the held nonce', async () => {
+    await connect()
+    autoApprove = false
+
+    await expect(
+      sendTransaction({ to: OTHER_ADDRESS, value: '0x1' }),
+    ).rejects.toMatchObject({ code: 4001 })
+    expect(hardwareCalls).toEqual([
+      { via: 'build', input: expect.anything() },
+      { via: 'release', input: { nonceReservationId: RESERVATION_ID } },
+    ])
   })
 })

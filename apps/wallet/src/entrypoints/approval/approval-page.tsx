@@ -2,7 +2,12 @@ import { type ReactNode, useEffect, useState } from 'react'
 
 import { Button } from '@status-im/components'
 import { CloseIcon } from '@status-im/icons/20'
-import { PasswordModal } from '@status-im/wallet/components'
+import {
+  type HardwareSignRequest,
+  HardwareSignScreen,
+  PasswordModal,
+} from '@status-im/wallet/components'
+import { type Hex, hexToBytes } from 'viem'
 import { formatEther } from 'viem/utils'
 
 import {
@@ -12,10 +17,14 @@ import {
 } from '../../data/approval'
 import { connectAccount } from '../../data/dapp-permissions'
 import { getChainByHex, toChainId } from '../../lib/chains'
-import { personalMessageText } from '../../lib/personal-message'
+import { checkHardwareSignature } from '../../lib/hardware-signature'
+import {
+  personalMessageBytes,
+  personalMessageText,
+} from '../../lib/personal-message'
 import { signedDomainFields } from '../../lib/rpc/typed-data'
 import { apiClient } from '../../providers/api-client'
-import { clip, flattenTypedData } from './typed-data-rows'
+import { clip, flattenTypedData, MAX_VALUE_LENGTH } from './typed-data-rows'
 
 function truncateAddress(address: string): string {
   return `${address.slice(0, 6)}...${address.slice(-3)}`
@@ -29,6 +38,7 @@ export function ApprovalPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSessionActive, setIsSessionActive] = useState(false)
   const [isUnlocking, setIsUnlocking] = useState(false)
+  const [isHardwareSigning, setIsHardwareSigning] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -81,7 +91,12 @@ export function ApprovalPage() {
     )
   }
 
-  const needsPassword = !isSessionActive
+  const isHardwareWallet = approval.walletType === 'hardware-qr'
+  const hardwareSignRequest = isHardwareWallet
+    ? toHardwareSignRequest(approval)
+    : null
+
+  const needsPassword = !isSessionActive && !isHardwareWallet
 
   const handlePasswordConfirm = async (password: string) => {
     setIsUnlocking(true)
@@ -125,6 +140,53 @@ export function ApprovalPage() {
       approved,
     })
     window.close()
+  }
+
+  const handleConfirm = () => {
+    if (hardwareSignRequest) {
+      setIsHardwareSigning(true)
+      return
+    }
+    respond(true)
+  }
+
+  const handleHardwareSignature = async (signature: string) => {
+    if (isSubmitting) return
+    setIsSubmitting(true)
+    await setApprovalResult({ id: approval.id, approved: true, signature })
+    window.close()
+  }
+
+  if (isHardwareSigning && hardwareSignRequest) {
+    return (
+      <div
+        data-customisation="blue"
+        className="flex h-screen flex-col bg-white-100 p-4"
+      >
+        <HardwareSignScreen
+          request={hardwareSignRequest}
+          address={approval.address}
+          sourceFingerprint={
+            'sourceFingerprint' in approval
+              ? approval.sourceFingerprint
+              : undefined
+          }
+          derivationPath={
+            'derivationPath' in approval ? approval.derivationPath : undefined
+          }
+          origin={approval.origin}
+          checkSignature={signature =>
+            checkHardwareSignature(
+              hardwareSignRequest,
+              approval.address,
+              signature,
+            )
+          }
+          onSignature={handleHardwareSignature}
+          onCancel={() => respond(false)}
+        />
+      </div>
+    )
   }
 
   return (
@@ -188,7 +250,7 @@ export function ApprovalPage() {
         </Button>
         <Button
           variant="primary"
-          onPress={() => respond(true)}
+          onPress={handleConfirm}
           disabled={isSubmitting}
         >
           {view.confirmLabel}
@@ -196,6 +258,31 @@ export function ApprovalPage() {
       </div>
     </div>
   )
+}
+
+/** What the device signs, or null for a request that only needs the user's yes. */
+function toHardwareSignRequest(
+  approval: PendingApproval,
+): HardwareSignRequest | null {
+  switch (approval.type) {
+    case 'personal_sign':
+      return {
+        kind: 'personalMessage',
+        message: personalMessageBytes(approval.message),
+      }
+    case 'eth_signTypedData_v4':
+      return { kind: 'typedData', typedData: approval.typedData }
+    case 'eth_sendTransaction':
+      return approval.serializedUnsignedTx
+        ? {
+            kind: 'transaction',
+            serializedTx: hexToBytes(approval.serializedUnsignedTx as Hex),
+            chainId: toChainId(approval.chainId),
+          }
+        : null
+    case 'eth_requestAccounts':
+      return null
+  }
 }
 
 /**
@@ -321,6 +408,11 @@ function TypedDataContent({
     payload?.types,
     payload?.primaryType,
   )
+  const hasShortenedValues = rows.some(
+    row =>
+      row.key.length > MAX_VALUE_LENGTH ||
+      (row.value !== null && row.value.length > MAX_VALUE_LENGTH),
+  )
 
   return (
     <>
@@ -355,11 +447,15 @@ function TypedDataContent({
                 className="flex gap-2 text-13"
                 style={{ paddingLeft: `${row.depth * 12}px` }}
               >
-                <span className="shrink-0 text-neutral-50">{row.key}</span>
+                <InspectableText
+                  value={row.key}
+                  className="max-w-[50%] shrink-0 text-neutral-50"
+                />
                 {row.value !== null && (
-                  <span className="min-w-0 break-all text-neutral-100">
-                    {row.value}
-                  </span>
+                  <InspectableText
+                    value={row.value}
+                    className="text-neutral-100"
+                  />
                 )}
               </li>
             ))}
@@ -368,6 +464,12 @@ function TypedDataContent({
         {truncated && rows.length > 0 && (
           <p className="mt-2 text-11 text-neutral-50">
             Some signed fields are hidden. Sign only if you trust this dApp.
+          </p>
+        )}
+        {hasShortenedValues && (
+          <p className="mt-2 text-11 text-neutral-50">
+            Long values are shortened by default. Use Show full value to inspect
+            them before signing.
           </p>
         )}
       </div>
@@ -405,9 +507,10 @@ function TransactionContent({
         <>
           <p className="mb-2 text-13 font-medium text-neutral-50">Data</p>
           <div className="mb-4 rounded-16 border border-neutral-10 bg-neutral-2.5 px-4 py-3">
-            <p className="break-all font-mono text-11 text-neutral-100">
-              {clip(approval.data)}
-            </p>
+            <InspectableText
+              value={approval.data}
+              className="font-mono text-11 text-neutral-100"
+            />
           </div>
         </>
       )}
@@ -423,10 +526,41 @@ function DetailRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex gap-2 text-13">
       <span className="shrink-0 text-neutral-50">{label}</span>
-      <span className="min-w-0 break-all font-medium text-neutral-100">
-        {clip(value)}
-      </span>
+      <InspectableText value={value} className="font-medium text-neutral-100" />
     </div>
+  )
+}
+
+function InspectableText({
+  value,
+  className,
+}: {
+  value: string
+  className?: string
+}) {
+  const [expanded, setExpanded] = useState(false)
+  const isLong = value.length > MAX_VALUE_LENGTH
+
+  return (
+    <span className={`min-w-0 break-all ${className ?? ''}`}>
+      <span
+        className={
+          expanded ? 'block max-h-48 overflow-y-auto whitespace-pre-wrap' : ''
+        }
+      >
+        {expanded ? value : clip(value)}
+      </span>
+      {isLong && (
+        <button
+          type="button"
+          className="mt-1 block py-1.5 text-11 font-medium text-customisation-blue-50 hover:underline"
+          aria-expanded={expanded}
+          onClick={() => setExpanded(!expanded)}
+        >
+          {expanded ? 'Hide full value' : 'Show full value'}
+        </button>
+      )}
+    </span>
   )
 }
 

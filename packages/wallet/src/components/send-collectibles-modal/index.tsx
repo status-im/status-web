@@ -6,6 +6,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { Avatar, Button, useToast } from '@status-im/components'
 import { CloseIcon, ExternalIcon } from '@status-im/icons/20'
 
+import { HardwareSignCancelledError } from '../hardware-sign-screen'
 import { AddressField } from './address-field'
 import { AmountField } from './amount-field'
 import { BottomBar } from './bottom-bar'
@@ -202,6 +203,7 @@ const SendCollectiblesModal = (props: Props) => {
       toast.positive('NFT transfer submitted')
       handleOpenChange(false)
     } catch (error: unknown) {
+      if (error instanceof HardwareSignCancelledError) return
       toast.negative(getNftSendErrorMessage(error))
     } finally {
       setIsSending(false)
