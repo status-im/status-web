@@ -150,7 +150,7 @@ export const getLogosJobs = async (): Promise<Jobs> =>
 
 export const submitApplication = async (id: string, body: BodyInit) =>
   await fetch(
-    `${GREENHOUSE_API_URL}/${serverEnv.GREENHOUSE_STATUS_BOARD_ID}/jobs/${id}`,
+    `${GREENHOUSE_API_URL}/${serverEnv.GREENHOUSE_STATUS_BOARD_ID}/jobs/${encodeURIComponent(id)}`,
     {
       method: 'POST',
       headers: {
