@@ -6,6 +6,7 @@ import {
   ETH_ACCOUNTS_CAPABILITY,
   getOriginRecord,
   getPermissions,
+  grantPermission,
   selectAccountForOrigin,
   setChainIdForOrigin,
 } from '../data/dapp-permissions'
@@ -709,19 +710,11 @@ describe('wallet_getPermissions', () => {
     ])
   })
 
-  test('keeps the caveats the dApp asked for alongside the derived one', async () => {
+  test('a dApp-requested restrictReturnedAccounts does not shadow the derived one', async () => {
     await connect()
     await handleRpcRequest(
       'wallet_requestPermissions',
-      [
-        {
-          eth_accounts: {
-            requiredMethods: ['personal_sign'],
-            // A dApp-written value for the derived caveat must not survive.
-            restrictReturnedAccounts: [OTHER_ADDRESS],
-          },
-        },
-      ],
+      [{ eth_accounts: { restrictReturnedAccounts: [OTHER_ADDRESS] } }],
       ORIGIN,
     )
 
@@ -731,10 +724,25 @@ describe('wallet_getPermissions', () => {
       {
         invoker: ORIGIN,
         parentCapability: ETH_ACCOUNTS_CAPABILITY,
-        caveats: [
-          { type: 'requiredMethods', value: ['personal_sign'] },
-          { type: 'restrictReturnedAccounts', value: [ADDRESS] },
-        ],
+        caveats: [{ type: 'restrictReturnedAccounts', value: [ADDRESS] }],
+      },
+    ])
+  })
+
+  test('drops unsupported capabilities and caveats stored by older versions', async () => {
+    await connect()
+    await grantPermission(ORIGIN, ETH_ACCOUNTS_CAPABILITY, [
+      { type: 'requiredMethods', value: ['personal_sign'] },
+    ])
+    await grantPermission(ORIGIN, 'eth_sendTransaction')
+
+    await expect(
+      handleRpcRequest('wallet_getPermissions', [], ORIGIN),
+    ).resolves.toEqual([
+      {
+        invoker: ORIGIN,
+        parentCapability: ETH_ACCOUNTS_CAPABILITY,
+        caveats: [{ type: 'restrictReturnedAccounts', value: [ADDRESS] }],
       },
     ])
   })
@@ -787,20 +795,57 @@ describe('wallet_requestPermissions', () => {
     await connect()
 
     await expect(
-      request([{ eth_accounts: { requiredMethods: ['personal_sign'] } }]),
+      request([{ eth_accounts: { restrictReturnedAccounts: [ADDRESS] } }]),
     ).resolves.toEqual([
-      {
-        invoker: ORIGIN,
-        parentCapability: 'eth_accounts',
-        caveats: [{ type: 'requiredMethods', value: ['personal_sign'] }],
-      },
+      { invoker: ORIGIN, parentCapability: 'eth_accounts', caveats: [] },
     ])
 
+    // The caveat is derived on read, so none of the dApp's payload is stored.
     expect(await getPermissions(ORIGIN)).toEqual([
-      {
-        parentCapability: 'eth_accounts',
-        caveats: [{ type: 'requiredMethods', value: ['personal_sign'] }],
-      },
+      { parentCapability: 'eth_accounts', caveats: [] },
+    ])
+  })
+
+  test('accepts non-checksummed addresses', async () => {
+    await connect()
+
+    await expect(
+      request([
+        { eth_accounts: { restrictReturnedAccounts: [ADDRESS.toLowerCase()] } },
+      ]),
+    ).resolves.toMatchObject([{ parentCapability: 'eth_accounts' }])
+  })
+
+  test('rejects permissions the wallet does not support', async () => {
+    await connect()
+
+    await expect(request([{ eth_sendTransaction: {} }])).rejects.toMatchObject({
+      code: 4200,
+    })
+    await expect(request([{ ['x'.repeat(10_000)]: {} }])).rejects.toMatchObject(
+      { code: 4200 },
+    )
+    expect(await getPermissions(ORIGIN)).toEqual([
+      { parentCapability: 'eth_accounts', caveats: [] },
+    ])
+  })
+
+  test.each([
+    ['an unknown caveat type', { requiredMethods: ['personal_sign'] }],
+    ['a non-array account list', { restrictReturnedAccounts: ADDRESS }],
+    ['a non-address account', { restrictReturnedAccounts: ['x'.repeat(1000)] }],
+    [
+      'too many accounts',
+      { restrictReturnedAccounts: Array(101).fill(ADDRESS) },
+    ],
+  ])('rejects %s and stores nothing', async (_label, caveats) => {
+    await connect()
+
+    await expect(request([{ eth_accounts: caveats }])).rejects.toMatchObject({
+      code: -32602,
+    })
+    expect(await getPermissions(ORIGIN)).toEqual([
+      { parentCapability: 'eth_accounts', caveats: [] },
     ])
   })
 
