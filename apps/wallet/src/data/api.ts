@@ -9,6 +9,7 @@ import {
 } from 'viem/accounts'
 import { z } from 'zod'
 
+import { personalMessageBytes } from '../lib/personal-message'
 import { discoverAccounts, hasActivity } from './account-discovery'
 import * as bitcoin from './bitcoin/bitcoin'
 import { chromeLinkWithRetries } from './chromeLink'
@@ -781,11 +782,8 @@ const apiRouter = router({
               const privateKeyHex = walletCore.HexCoding.encode(
                 privateKey.data(),
               )
-              const message = input.message.startsWith('0x')
-                ? { raw: input.message as `0x${string}` }
-                : input.message
               const signature = await viemSignMessage({
-                message,
+                message: { raw: personalMessageBytes(input.message) },
                 privateKey: privateKeyHex as `0x${string}`,
               })
               return { signature }
