@@ -6,6 +6,7 @@ import { createRoot } from 'react-dom/client'
 import { hexToBytes } from 'viem'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { ACTIVATION_DELAY_MS } from '../../hooks/use-activation-delay'
 import { ApprovalPage } from './approval-page'
 
 import type { PendingApproval } from '../../data/approval'
@@ -90,6 +91,10 @@ async function open(pending: PendingApproval) {
   session.set('pendingApproval', pending)
   act(() => root.render(<ApprovalPage />))
   await settle()
+  // Let the confirm button's activation delay run out.
+  await act(async () => {
+    await new Promise(resolve => setTimeout(resolve, ACTIVATION_DELAY_MS))
+  })
 }
 
 async function pressButton(label: string) {
@@ -184,6 +189,24 @@ describe('hardware wallets', () => {
       kind: 'transaction',
       serializedTx: hexToBytes(UNSIGNED_TX),
       chainId: 1,
+    })
+  })
+
+  it('ignores a confirm click right after the popup opens', async () => {
+    session.set(
+      'pendingApproval',
+      approval({ type: 'personal_sign', message: 'hello', ...HARDWARE }),
+    )
+    act(() => root.render(<ApprovalPage />))
+    await settle()
+
+    await pressButton('Sign')
+    expect(mocks.screen).toBeNull()
+
+    await pressButton('Decline')
+    expect(session.get('approvalResult')).toEqual({
+      id: 'approval-1',
+      approved: false,
     })
   })
 
