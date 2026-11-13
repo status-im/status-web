@@ -76,3 +76,54 @@ describe('tRPC route response metadata', () => {
     expect(response.headers.get('retry-after')).toBe('1')
   })
 })
+
+describe('batch size limits', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  it('rejects JSON-RPC batches over 20 calls', async () => {
+    const calls = Array.from({ length: 21 }, (_, id) => ({
+      jsonrpc: '2.0',
+      id,
+      method: 'eth_blockNumber',
+    }))
+    const request = new Request('http://localhost/api/trpc/rpc.proxy', {
+      method: 'POST',
+      body: JSON.stringify(calls),
+    }) as NextRequest
+    const response = await POST(request)
+
+    expect(response.status).toBe(400)
+    await expect(response.json()).resolves.toMatchObject({
+      id: null,
+      error: { code: -32600 },
+    })
+    expect(fetchRequestHandler).not.toHaveBeenCalled()
+  })
+
+  it('rejects tRPC batches over 10 procedures', async () => {
+    const paths = Array(11).fill('market.tokenPrice').join(',')
+    const request = new Request(
+      `http://localhost/api/trpc/${paths}?batch=1&input={}`,
+      { method: 'GET' }
+    ) as NextRequest
+    const response = await POST(request)
+
+    expect(response.status).toBe(400)
+    expect(fetchRequestHandler).not.toHaveBeenCalled()
+  })
+
+  it('lets a 10-procedure tRPC batch through', async () => {
+    vi.mocked(fetchRequestHandler).mockResolvedValue(Response.json([]))
+    const paths = Array(10).fill('market.tokenPrice').join(',')
+    const request = new Request(
+      `http://localhost/api/trpc/${paths}?batch=1&input={}`,
+      { method: 'GET' }
+    ) as NextRequest
+    const response = await POST(request)
+
+    expect(response.status).toBe(200)
+    expect(fetchRequestHandler).toHaveBeenCalledOnce()
+  })
+})
