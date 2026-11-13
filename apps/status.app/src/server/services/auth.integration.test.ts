@@ -123,6 +123,7 @@ describe('Keycloak login and admin authentication integration', () => {
       aud: 'account',
       typ: 'Bearer',
       email: staff.email,
+      email_verified: true,
       sub: 'staff-id',
       exp: Math.floor(Date.now() / 1000) + 300,
       ...overrides,
@@ -241,6 +242,17 @@ describe('Keycloak login and admin authentication integration', () => {
     expect(mocks.findFirst).not.toHaveBeenCalled()
     expect(logoutRequest).toBeUndefined()
   })
+
+  it.each([false, undefined])(
+    'rejects a realm-signed token with email_verified=%s before looking up a user',
+    async emailVerified => {
+      accessToken = await sign({ email_verified: emailVerified })
+      await completeLogin()
+      await expect(auth()).rejects.toThrow('redirect:/login/keycloak')
+      expect(mocks.findFirst).not.toHaveBeenCalled()
+      expect(logoutRequest).toBeUndefined()
+    }
+  )
 
   it('redirects an expired token and accepts the replacement after a new OAuth login', async () => {
     await completeLogin()

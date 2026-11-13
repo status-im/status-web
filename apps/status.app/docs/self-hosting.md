@@ -141,7 +141,9 @@ Admin authentication verifies the access-token signature using the realm's publi
 `KEYCLOAK_ISSUER/protocol/openid-connect/certs`. The runtime must be able to reach this endpoint;
 the verifier caches keys and can refresh them when Keycloak rotates signing keys. The token must
 have a valid expiry, match `KEYCLOAK_ISSUER`, identify `KEYCLOAK_CLIENT_ID` in its `azp` claim, and
-have Keycloak's `Bearer` token type and a valid email. `azp` is checked because Keycloak access-token
+have Keycloak's `Bearer` token type, a valid email, and `email_verified: true`. Configure Keycloak
+to verify admin email ownership and include this boolean claim in access tokens; missing or false
+values are rejected. `azp` is checked because Keycloak access-token
 audiences can name resource servers such as `account` instead of the login client. Invalid tokens
 or verification failures redirect to login before a user is looked up in Postgres. Users must sign
 in again when their access token expires; the cookie's 30-day lifetime does not extend token

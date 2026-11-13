@@ -17,6 +17,7 @@ export function createKeycloakAccessTokenVerifier(config: {
   )
   const claimsSchema = z.object({
     email: z.string().email(),
+    email_verified: z.literal(true),
     // Keycloak access-token audiences can contain resource servers such as
     // "account". azp identifies the client that obtained this login token.
     azp: z.literal(clientId),

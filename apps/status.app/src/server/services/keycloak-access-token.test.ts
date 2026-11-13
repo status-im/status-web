@@ -70,6 +70,7 @@ describe('Keycloak access-token verification', () => {
       azp: clientId,
       typ: 'Bearer',
       email: 'staff@example.com',
+      email_verified: true,
       exp: Math.floor(Date.now() / 1000) + 300,
       ...overrides,
     }
@@ -129,6 +130,10 @@ describe('Keycloak access-token verification', () => {
     ['missing token type', { typ: undefined }],
     ['missing email', { email: undefined }],
     ['invalid email', { email: '' }],
+    ['unverified email', { email_verified: false }],
+    ['missing email verification', { email_verified: undefined }],
+    ['string email verification', { email_verified: 'true' }],
+    ['null email verification', { email_verified: null }],
   ])('rejects %s claims signed by the trusted realm', async (_, overrides) => {
     const token = await sign(claims(overrides as JWTPayload))
     await expect(verify(token)).rejects.toThrow()
