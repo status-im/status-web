@@ -212,6 +212,7 @@ async function page({
   // Full scan path: fetch all pages, then filter/search/sort/paginate in-memory
   if (shouldScanAll) {
     const collectibles: Collectible[] = []
+    let truncated = false as boolean
 
     await Promise.all(
       networks.map(async network => {
@@ -229,6 +230,9 @@ async function page({
           pageKey = response.pageKey ?? undefined
           // Stop at the budget and sort what was collected so far
         } while (pageKey && pageCount < MAX_UPSTREAM_PAGES)
+
+        // Budget hit with NFTs left upstream: results are partial
+        if (pageKey) truncated = true
       }),
     )
 
@@ -251,6 +255,7 @@ async function page({
     return {
       collectibles: paginatedCollectibles,
       hasMore: filteredCollectibles.length > offset + limit,
+      ...(truncated ? { truncated: true as const } : {}),
     }
   }
 
