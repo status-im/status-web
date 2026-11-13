@@ -9,6 +9,7 @@ import {
 } from 'viem/accounts'
 import { z } from 'zod'
 
+import { isExtensionPageSender } from '../lib/extension-sender'
 import { discoverAccounts, hasActivity } from './account-discovery'
 import * as bitcoin from './bitcoin/bitcoin'
 import { chromeLinkWithRetries } from './chromeLink'
@@ -36,6 +37,23 @@ import type { WalletAccount, WalletMeta } from './wallet-metadata'
 const createContext = async () => {
   const walletCore = await getWalletCore()
   return { walletCore, session: sessionManager }
+}
+
+// trpc-chrome handler: require a port from this extension's pages (fail closed)
+export const createHandlerContext = async (opts?: {
+  req?: chrome.runtime.Port
+}) => {
+  if (
+    !opts?.req ||
+    !isExtensionPageSender(
+      opts.req.sender,
+      chrome.runtime.id,
+      chrome.runtime.getURL(''),
+    )
+  ) {
+    throw new TRPCError({ code: 'FORBIDDEN', message: 'Forbidden sender' })
+  }
+  return createContext()
 }
 
 type Context = Awaited<ReturnType<typeof createContext>>
@@ -1070,7 +1088,10 @@ export type APIRouter = typeof apiRouter
 
 export async function createAPI() {
   // @ts-expect-error: fixme!:
-  createChromeHandler({ router: apiRouter, createContext })
+  createChromeHandler({
+    router: apiRouter,
+    createContext: createHandlerContext,
+  })
 
   const ctx = await createContext()
   const api = createCallerFactory(apiRouter)(ctx)
