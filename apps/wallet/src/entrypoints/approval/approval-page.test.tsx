@@ -93,7 +93,7 @@ async function open(pending: PendingApproval) {
   await settle()
   // Let the confirm button's activation delay run out.
   await act(async () => {
-    await new Promise(resolve => setTimeout(resolve, ACTIVATION_DELAY_MS))
+    await vi.advanceTimersByTimeAsync(ACTIVATION_DELAY_MS)
   })
 }
 
@@ -107,6 +107,7 @@ async function pressButton(label: string) {
 }
 
 beforeEach(() => {
+  vi.useFakeTimers({ shouldAdvanceTime: true })
   vi.stubGlobal('IS_REACT_ACT_ENVIRONMENT', true)
   vi.clearAllMocks()
   mocks.screen = null
@@ -138,6 +139,7 @@ afterEach(() => {
   container.remove()
   close.mockRestore()
   vi.unstubAllGlobals()
+  vi.useRealTimers()
 })
 
 describe('hardware wallets', () => {
