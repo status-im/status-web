@@ -181,7 +181,7 @@ export const projectsRouter = router({
       return mapProject(project)
     }),
 
-  create: authProcedure.input(projectSchema).mutation(async ({ input }) => {
+  create: canEditInsights.input(projectSchema).mutation(async ({ input }) => {
     const [newProject] = await db
       .insert(Projects)
       .values({
@@ -197,7 +197,7 @@ export const projectsRouter = router({
     return newProject
   }),
 
-  update: authProcedure
+  update: canEditInsights
     .input(
       z.object({
         id: z.number(),
@@ -214,7 +214,7 @@ export const projectsRouter = router({
       return updatedProject
     }),
 
-  updatePosition: authProcedure
+  updatePosition: canEditInsights
     .input(
       z.object({
         id: z.number(),
@@ -261,7 +261,7 @@ export const projectsRouter = router({
       })
     }),
 
-  delete: authProcedure
+  delete: canEditInsights
     .input(
       z.object({
         id: z.number(),
@@ -349,7 +349,7 @@ export const projectsRouter = router({
       return {}
     }),
 
-  updateMilestone: authProcedure
+  updateMilestone: canEditInsights
     .input(
       z.object({
         milestoneId: z.number(),
