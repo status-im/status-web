@@ -19,6 +19,10 @@ describe('personalMessageBytes', () => {
     expect(personalMessageBytes('0xhello')).toEqual(text('0xhello'))
   })
 
+  it('encodes odd-length hex as UTF-8', () => {
+    expect(personalMessageBytes('0xabc')).toEqual(text('0xabc'))
+  })
+
   it('reads 0x as an empty message', () => {
     expect(personalMessageBytes('0x')).toEqual(new Uint8Array())
   })
