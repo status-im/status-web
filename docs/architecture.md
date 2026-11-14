@@ -33,13 +33,12 @@ Taken from the `dependencies` block of each workspace's `package.json`:
 - `apps/hub` sends `NEXT_PUBLIC_STATUS_API_URL` traffic here for exchange rates and the RPC proxy.
 - `apps/wallet` points `WXT_STATUS_API_URL` here for assets, collectibles, activities and RPC.
 - `apps/portfolio` calls the same router in-process through `createAPI` instead of over HTTP ([`src/data/api.ts`](../apps/portfolio/src/data/api.ts)).
-- `apps/status.app` runs its own tRPC v11 server for the admin insights and reporting area under [`src/server`](../apps/status.app/src/server).
 
 ## Content pipelines
 
 hub, status.network and get.status.app export statically in production (`output: 'export'` behind a `NODE_ENV` check in each `next.config`). Their `postbuild` runs `next-sitemap`, then each app's own `scripts/strip-default-locale-prefix.sh`, which moves the default locale out of `/en` to the root and copies each page to `page/index.html`. next-intl needs explicit locale prefixes for a static export, and simple file servers do not map `/page` to `page.html`, so both rewrites happen after the build. status.app and portfolio need a Node server and do neither.
 
-- status.app turns `content/help`, `content/legal` and the `content/specs` submodule into MDX at build time through [Contentlayer](../apps/status.app/contentlayer.config.ts) and `next-contentlayer2`. Admin insights use GraphQL codegen against Hasura, and reporting data lives in Postgres through [Drizzle](../apps/status.app/drizzle.config.ts).
+- status.app turns `content/help`, `content/legal` and the `content/specs` submodule into MDX at build time through [Contentlayer](../apps/status.app/contentlayer.config.ts) and `next-contentlayer2`. Public Insights use GraphQL codegen against Hasura. The admin UI, Keycloak login and admin-only tRPC services are retired; the existing Postgres schema and migrations remain available through [Drizzle maintenance commands](../apps/status.app/drizzle.config.ts).
 - status.network takes its blog from Ghost through the client in [`src/app/_lib`](../apps/status.network/src/app/_lib), and the `content/legal-external` submodule supplies the legal pages.
 - get.status.app is the download-focused subset of status.app, and also ships `llms.txt`.
 - community-dapp reads the deployed contracts through the ABIs exported from `@status-im/community-contracts/abi` and exchanges community data over Waku.

@@ -1,8 +1,7 @@
 import { relations } from 'drizzle-orm'
 import { pgTable, serial, timestamp, varchar } from 'drizzle-orm/pg-core'
 
-import { publicId } from '~server/api/lib/public-id'
-
+import { publicId } from '../public-id'
 import { WorkstreamsToProjects } from './workstreams-to-projects'
 
 export const Workstreams = pgTable('workstreams', {

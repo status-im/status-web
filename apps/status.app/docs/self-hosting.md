@@ -10,8 +10,7 @@ variables, cache headers and security settings have to look the way they do. The
 ## Why a Node runtime
 
 `apps/hub`, `apps/status.network` and `apps/get.status.app` export to static files. status.app
-cannot: API routes, ISR, middleware, server actions, the Postgres-backed admin and the Keycloak
-login all need a process. The image therefore ships Next.js `output: 'standalone'` and runs
+cannot: public API routes, ISR, middleware and server actions need a process. The image therefore ships Next.js `output: 'standalone'` and runs
 `node apps/status.app/server.js` in a `node:22-slim` Debian container (`ARG NODE_VERSION=22.13.1`).
 
 The base image is Debian slim, not Alpine, because several native modules in the workspace (keccak,
@@ -19,13 +18,16 @@ The base image is Debian slim, not Alpine, because several native modules in the
 
 ## Services the image expects
 
-Postgres and Keycloak are not in the image. Point it at instances you run:
+The public site uses Ghost, GitHub, Greenhouse, Infura and Hasura. [`.env.example`](../.env.example)
+lists the configuration for those services and optional Umami analytics.
 
-- Postgres: `POSTGRES_URL`, any standard connection string.
-- Keycloak: `KEYCLOAK_API_URL`, `KEYCLOAK_REALM`, `KEYCLOAK_ISSUER`, `KEYCLOAK_CLIENT_ID`,
-  `KEYCLOAK_CLIENT_SECRET`.
+The admin screens, Keycloak login routes and admin-only tRPC services have been removed. Postgres,
+Keycloak and BambooHR are no longer website runtime dependencies. Public Insights continue to use
+Hasura through [`src/app/(website)/insights/_graphql`](<../src/app/(website)/insights/_graphql>).
 
-[`.env.example`](../.env.example) lists every variable and says when it is needed.
+The existing database is not modified or dropped. Its [schema](../src/server/db/schema),
+[migrations](../migrations) and `db:*` scripts remain for maintenance; set `POSTGRES_URL` only when
+using those commands. They are not called by the running website.
 
 ## Content submodules
 
@@ -108,15 +110,14 @@ Build secrets (`docker build --secret id=...,env=...`): `INFURA_API_KEY`, `GREEN
 `GITHUB_TOKEN`. Secret mounts keep them out of the image layers, but they are still needed at build
 time, because SSG and ISR fetch from GitHub and Greenhouse while the build runs.
 
-Runtime env (`docker run -e VAR`): everything the server reads from `process.env`, including
-`SITE_URL`, `POSTGRES_URL`, `KEYCLOAK_*`, `BAMBOOHR_API_KEY` and the server-side keys above, plus
-`UMAMI_WEBSITE_ID` and `UMAMI_API_URL` if you want download analytics. Server routes and ISR
+Runtime env (`docker run -e VAR`): the server-side keys above, plus `UMAMI_WEBSITE_ID` and
+`UMAMI_API_URL` if you want download analytics. Server routes and ISR
 revalidation fetch GitHub releases and Greenhouse jobs at runtime, so those values are not baked in.
 
-[`src/config/env.server.mjs`](../src/config/env.server.mjs) knows the difference: during
-`next build` (`NEXT_PHASE === 'phase-production-build'`) the runtime-only variables are optional,
-and afterwards they are required. `SITE_URL` is required only on a self-hosted production run,
-which is why a Vercel build does not need it.
+[`src/config/env.server.mjs`](../src/config/env.server.mjs) validates the public-service keys for
+both builds and runtime. `POSTGRES_URL` is optional for website startup. The removed login flow's
+`SITE_URL` environment variable is no longer needed; public canonical URLs still use
+[`src/config/site.ts`](../src/config/site.ts).
 
 ## Health endpoint
 
@@ -168,14 +169,12 @@ document. Include those headers in the cache key, or bypass the cache when `rsc`
 
 ## Security for operators
 
-`SITE_URL` is not optional in production. It pins the canonical origin used for OAuth
-`redirect_uri` and for server-side fetches back into the app. Without it the app falls back to
-`X-Forwarded-Host`, and anyone who can set that header can redirect OAuth flows or steer
-server-side fetches at a host of their choosing. Let the reverse proxy strip inbound
-`X-Forwarded-*` headers and set them itself.
+The removed `/admin` and `/login/keycloak/*` routes return 404. The website no longer exposes admin
+authentication or admin write operations. Let the reverse proxy strip inbound `X-Forwarded-*` headers and set
+them itself.
 
-Keep `POSTGRES_URL`, `KEYCLOAK_*` and `BAMBOOHR_API_KEY` out of the image. Pass them at `docker run`
-time with `-e VAR` and they stay absent from `docker history` and `docker inspect`.
+Remove unused Keycloak, BambooHR and Postgres secrets from website deployment settings. Keep any
+credentials needed for separate database maintenance outside the website container.
 
 `NEXT_PUBLIC_*` values are inlined into the JavaScript bundle, by design. Nothing private belongs
 behind a `NEXT_PUBLIC_` name.

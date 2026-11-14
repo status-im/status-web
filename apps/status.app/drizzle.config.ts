@@ -11,7 +11,7 @@ export default defineConfig({
   dialect: 'postgresql',
   // strict: true,
   dbCredentials: {
-    url: serverEnv.POSTGRES_URL,
+    url: serverEnv.POSTGRES_URL ?? '',
   },
   // Print all statements
   verbose: true,

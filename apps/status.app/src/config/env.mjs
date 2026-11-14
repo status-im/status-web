@@ -1,4 +1,4 @@
-// note: ensures loadEnvConfig is evaluated before env.server.mjs or env.client.mjs when a module is not imported via Next.js (e.g. drizzle.config.ts or local debugging)
+// Load local environment values for tools that run outside Next.js, such as Drizzle.
 
 import { loadEnvConfig } from '@next/env'
 

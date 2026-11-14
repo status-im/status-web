@@ -64,7 +64,6 @@ let config = {
         port: '',
         pathname: '/markets/images/**',
       },
-      // TODO remove this once we have everything connected to cloudinary for the admin tool
       {
         protocol: 'https',
         hostname: 'avatars.githubusercontent.com',

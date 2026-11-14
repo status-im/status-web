@@ -38,9 +38,6 @@ patchedDependencies:
   '@noble/secp256k1@1.7.2':
     hash: i72ifz5lfv7aay2tf35fcyibhu
     path: patches/@noble__secp256k1@1.7.2.patch
-  '@trpc/server@11.1.0':
-    hash: j772m5gatolhdil2x65xum5qqi
-    path: patches/@trpc__server@11.1.0.patch
   '@waku/message-encryption@0.0.38':
     hash: btzltuys2izviswdx6ib5gikfe
     path: patches/@waku__message-encryption@0.0.38.patch
@@ -1556,12 +1553,6 @@ importers:
       '@tanstack/react-query-devtools':
         specifier: 5.29.0
         version: 5.29.0(@tanstack/react-query@5.29.0(react@19.1.2))(react@19.1.2)
-      '@trpc/react-query':
-        specifier: 11.1.0
-        version: 11.1.0(@tanstack/react-query@5.29.0(react@19.1.2))(@trpc/client@10.45.2(@trpc/server@11.1.0(patch_hash=j772m5gatolhdil2x65xum5qqi)(typescript@5.9.3)))(@trpc/server@11.1.0(patch_hash=j772m5gatolhdil2x65xum5qqi)(typescript@5.9.3))(react-dom@19.1.2(react@19.1.2))(react@19.1.2)(typescript@5.9.3)
-      '@trpc/server':
-        specifier: 11.1.0
-        version: 11.1.0(patch_hash=j772m5gatolhdil2x65xum5qqi)(typescript@5.9.3)
       '@tryghost/content-api':
         specifier: ^1.11.13
         version: 1.12.0
@@ -1613,9 +1604,6 @@ importers:
       '@visx/visx':
         specifier: ^3.0.0
         version: 3.12.0(@react-spring/web@9.7.5(react-dom@19.1.2(react@19.1.2))(react@19.1.2))(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
-      arctic:
-        specifier: 1.2.0
-        version: 1.2.0(patch_hash=np2mbzzdnalh3n27syyoxx3zu4)
       class-variance-authority:
         specifier: ^0.6.0
         version: 0.6.1
@@ -1640,9 +1628,6 @@ importers:
       drizzle-orm:
         specifier: ^0.31.0
         version: 0.31.4(@neondatabase/serverless@0.7.2)(@opentelemetry/api@1.9.0)(@types/pg@8.20.0)(@types/react@19.1.2)(@vercel/postgres@0.8.0)(pg@8.21.0)(react@19.1.2)
-      drizzle-zod:
-        specifier: ^0.5.1
-        version: 0.5.1(drizzle-orm@0.31.4(@neondatabase/serverless@0.7.2)(@opentelemetry/api@1.9.0)(@types/pg@8.20.0)(@types/react@19.1.2)(@vercel/postgres@0.8.0)(pg@8.21.0)(react@19.1.2))(zod@3.25.76)
       emoji-datasource-twitter:
         specifier: ^15.1.2
         version: 15.1.2
@@ -1691,9 +1676,6 @@ importers:
       next-mdx-remote:
         specifier: ^6.0.0
         version: 6.0.0(@types/react@19.1.2)(react@19.1.2)
-      oslo:
-        specifier: 1.0.1
-        version: 1.0.1(patch_hash=d3ggqvlr26vmqrkdyyommjkaeu)
       parallax-controller:
         specifier: ^1.7.1
         version: 1.7.1
@@ -10732,11 +10714,6 @@ packages:
 
   '@trpc/server@10.45.2':
     resolution: {integrity: sha512-wOrSThNNE4HUnuhJG6PfDRp4L2009KDVxsd+2VYH8ro6o/7/jwYZ8Uu5j+VaW+mOmc8EHerHzGcdbGNQSAUPgg==}
-
-  '@trpc/server@11.1.0':
-    resolution: {integrity: sha512-uAJ7ikejeujVkf53XFJ/0W8nr7bDjul+Szk5Rsepq97Hb/WS1RkRXdyX4KqAyCE9b1vDFCJVJwSxiIZdRtbTZQ==}
-    peerDependencies:
-      typescript: '>=5.7.2'
 
   '@trustwallet/wallet-core@4.3.23':
     resolution: {integrity: sha512-b7KTYcdIvxxUjtehA+QeoGfFNs1F2bsReCUpDVeHnt1xrzadxhHZi741CPSXIl82zpLD4aMMomAtOy5a9zMlVg==}
@@ -35347,10 +35324,6 @@ snapshots:
     dependencies:
       '@trpc/server': 10.45.2
 
-  '@trpc/client@10.45.2(@trpc/server@11.1.0(patch_hash=j772m5gatolhdil2x65xum5qqi)(typescript@5.9.3))':
-    dependencies:
-      '@trpc/server': 11.1.0(patch_hash=j772m5gatolhdil2x65xum5qqi)(typescript@5.9.3)
-
   '@trpc/next@10.45.2(@tanstack/react-query@5.90.12(react@19.1.2))(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/react-query@11.1.0(@tanstack/react-query@5.90.12(react@19.1.2))(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/server@10.45.2)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)(typescript@5.9.3))(@trpc/server@10.45.2)(next@15.5.27(patch_hash=hlkquu7azy5wgjyc3hfpcpxmhu)(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.65.0)(@types/node@20.11.5)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)(sass@1.94.0))(react-dom@19.1.2(react@19.1.2))(react@19.1.2)':
     dependencies:
       '@tanstack/react-query': 5.90.12(react@19.1.2)
@@ -35369,15 +35342,6 @@ snapshots:
       react: 19.1.2
       react-dom: 19.1.2(react@19.1.2)
 
-  '@trpc/react-query@11.1.0(@tanstack/react-query@5.29.0(react@19.1.2))(@trpc/client@10.45.2(@trpc/server@11.1.0(patch_hash=j772m5gatolhdil2x65xum5qqi)(typescript@5.9.3)))(@trpc/server@11.1.0(patch_hash=j772m5gatolhdil2x65xum5qqi)(typescript@5.9.3))(react-dom@19.1.2(react@19.1.2))(react@19.1.2)(typescript@5.9.3)':
-    dependencies:
-      '@tanstack/react-query': 5.29.0(react@19.1.2)
-      '@trpc/client': 10.45.2(@trpc/server@11.1.0(patch_hash=j772m5gatolhdil2x65xum5qqi)(typescript@5.9.3))
-      '@trpc/server': 11.1.0(patch_hash=j772m5gatolhdil2x65xum5qqi)(typescript@5.9.3)
-      react: 19.1.2
-      react-dom: 19.1.2(react@19.1.2)
-      typescript: 5.9.3
-
   '@trpc/react-query@11.1.0(@tanstack/react-query@5.90.12(react@19.1.2))(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/server@10.45.2)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)(typescript@5.9.3)':
     dependencies:
       '@tanstack/react-query': 5.90.12(react@19.1.2)
@@ -35388,10 +35352,6 @@ snapshots:
       typescript: 5.9.3
 
   '@trpc/server@10.45.2': {}
-
-  '@trpc/server@11.1.0(patch_hash=j772m5gatolhdil2x65xum5qqi)(typescript@5.9.3)':
-    dependencies:
-      typescript: 5.9.3
 
   '@trustwallet/wallet-core@4.3.23':
     dependencies:
