@@ -7,16 +7,6 @@ if (typeof window !== 'undefined') {
   )
 }
 
-// During `next build`, runtime-only secrets (Postgres, Keycloak, BambooHR) are not
-// available — but build-time secrets used by SSG/ISR (Ghost, GitHub, Greenhouse, Infura)
-// must be present. Container runtime gets all of them.
-//
-// why: https://nextjs.org/docs/app/guides/self-hosting#environment-variables
-const isBuild = process.env.NEXT_PHASE === 'phase-production-build'
-const runtimeRequired = isBuild ? z.string().optional() : z.string()
-const siteUrlRequired =
-  !isBuild && process.env.NODE_ENV === 'production' && !process.env.VERCEL
-
 export const envSchema = z.object({
   NODE_ENV: z
     .union([
@@ -35,16 +25,6 @@ export const envSchema = z.object({
     ])
     .optional(),
   PORT: z.coerce.number().optional(),
-  /**
-   * Trusted canonical origin (e.g. `https://status.app`).
-   *
-   * When set, used by `getBaseUrl()` instead of `x-forwarded-host`. REQUIRED
-   * for self-hosted deployments — without it, `x-forwarded-host` is honored
-   * and an attacker controlling the host header could direct OAuth state /
-   * server-side fetches to a chosen domain.
-   */
-  SITE_URL: siteUrlRequired ? z.string().url() : z.string().url().optional(),
-
   // Build-time strict — read during SSG/ISR/`generateMetadata`/sitemap.
   INFURA_API_KEY: z.string(),
   NEXT_PUBLIC_GHOST_API_KEY: z.string(),
@@ -53,14 +33,8 @@ export const envSchema = z.object({
   GREENHOUSE_LOGOS_BOARD_ID: z.string(),
   GITHUB_TOKEN: z.string(),
 
-  // Runtime-required — admin / API routes only.
-  POSTGRES_URL: runtimeRequired,
-  KEYCLOAK_API_URL: runtimeRequired,
-  KEYCLOAK_REALM: runtimeRequired,
-  KEYCLOAK_ISSUER: runtimeRequired,
-  KEYCLOAK_CLIENT_ID: runtimeRequired,
-  KEYCLOAK_CLIENT_SECRET: runtimeRequired,
-  BAMBOOHR_API_KEY: runtimeRequired,
+  // Only the retained database maintenance commands use this connection.
+  POSTGRES_URL: z.string().optional(),
 
   // Optional — Umami analytics for /api/download tracking on self-hosted.
   UMAMI_API_URL: z.string().optional(),

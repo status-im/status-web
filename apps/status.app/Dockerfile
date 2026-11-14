@@ -83,22 +83,12 @@ ENV GREENHOUSE_STATUS_BOARD_ID=$GREENHOUSE_STATUS_BOARD_ID
 ENV GREENHOUSE_LOGOS_BOARD_ID=$GREENHOUSE_LOGOS_BOARD_ID
 
 # Server-side build secrets via BuildKit mounts (not persisted in layer ENV).
-# Runtime-only placeholders are scoped to this RUN so env.server.mjs validation
-# passes during build; real values are injected at `docker run` time.
 RUN --mount=type=secret,id=infura_api_key \
     --mount=type=secret,id=greenhouse_api_key \
     --mount=type=secret,id=github_token \
     export INFURA_API_KEY="$(cat /run/secrets/infura_api_key)" \
     GREENHOUSE_API_KEY="$(cat /run/secrets/greenhouse_api_key)" \
     GITHUB_TOKEN="$(cat /run/secrets/github_token)" \
-    POSTGRES_URL="postgres://build:build@build-placeholder/build" \
-    KEYCLOAK_API_URL="https://build-placeholder.invalid" \
-    KEYCLOAK_REALM="build-placeholder" \
-    KEYCLOAK_ISSUER="https://build-placeholder.invalid/realms/build-placeholder" \
-    KEYCLOAK_CLIENT_ID="build-placeholder" \
-    KEYCLOAK_CLIENT_SECRET="build-placeholder" \
-    BAMBOOHR_API_KEY="build-placeholder" \
-    SITE_URL="https://build-placeholder.invalid" \
     && pnpm turbo run build --filter=status.app^... \
     && pnpm --filter status.app build
 

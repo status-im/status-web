@@ -7,8 +7,7 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core'
 
-import { publicId } from '~server/api/lib/public-id'
-
+import { publicId } from '../public-id'
 import { ReportsToMilestones } from './reports-to-milestones'
 import { Users } from './users'
 

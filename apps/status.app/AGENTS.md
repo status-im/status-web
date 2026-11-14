@@ -4,8 +4,7 @@ Rules for agents working in `apps/status.app`. The root `AGENTS.md` also applies
 
 ## Role
 
-Next.js 15 app behind https://status.app: marketing site, help centre, specs hub, blog and admin
-tooling. Port 3001. `content/` is published site content, never code documentation.
+Next.js 15 app behind https://status.app: marketing site, help centre, specs hub and blog. Port 3001. `content/` is published site content, never code documentation.
 
 ## Commands
 
@@ -25,6 +24,8 @@ tooling. Port 3001. `content/` is published site content, never code documentati
 
 - Leave `content/**` alone during code work. It is site content (help centre, legal, the `specs`
   submodule, the editorial `style-guide`) and it ships to readers.
+- Keep the retired admin database schema and migrations for existing-data maintenance. Do not
+  restore admin routes or authentication when changing public Insights pages.
 - Drizzle owns the schema in `src/server/db/schema/*`. Change it, run `db:generate` and commit the
   SQL it writes under `migrations/`. Never hand-edit a generated migration. `db:push` only against
   a database you can throw away.

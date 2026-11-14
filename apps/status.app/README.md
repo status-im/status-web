@@ -1,7 +1,7 @@
 # status.app
 
 Next.js 15 app behind [status.app](https://status.app): the marketing pages, help centre, specs
-hub, blog and the admin screens that feed them.
+hub and blog.
 
 ## Run
 
@@ -33,10 +33,12 @@ cp .env.example .env.local   # then fill in the values you need
 vercel env pull .env.local
 ```
 
-`.env.example` groups the variables by when they are needed: build time for SSG and ISR fetches
-(Ghost, Infura, Greenhouse, GitHub), runtime for the admin and API routes (Postgres, Keycloak,
-BambooHR), and a few optional ones. Postgres and Keycloak live outside this app; you need them only
-when you work on the admin area.
+`.env.example` lists the values for SSG, ISR and public API fetches (Ghost, Infura, Greenhouse,
+GitHub and Hasura), plus optional analytics settings. The public site does not require Postgres,
+Keycloak or BambooHR. `/admin`, `/login/keycloak` and the admin-only tRPC services have been removed.
+
+The database schema, migrations and `db:*` commands remain for maintenance of existing data.
+Only those commands need `POSTGRES_URL`; the website does not connect to that database.
 
 `pnpm --filter status.app env:check` validates the values against `src/config/env.server.mjs` and
 `src/config/env.client.mjs`. It reads `.env`, so it will report variables you only set in

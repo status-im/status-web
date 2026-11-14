@@ -7,8 +7,7 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core'
 
-import { publicId } from '~server/api/lib/public-id'
-
+import { publicId } from '../public-id'
 import { Milestones } from './milestones'
 
 export const MilestoneLinks = pgTable('milestone_links', {

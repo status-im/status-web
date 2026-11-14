@@ -41,7 +41,6 @@
       "~hooks/*": ["./src/app/_hooks/*"],
       "~website/*": ["./src/app/(website)/*"],
       "~sharing/*": ["./src/app/(sharing)/*"],
-      "~admin/*": ["./src/app/admin/*"],
       "~server/*": ["./src/server/*"],
       "~app/*": ["./src/app/*"],
       "~public/*": ["./public/*"],
