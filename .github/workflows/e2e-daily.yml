@@ -8,11 +8,9 @@ on:
   schedule:
     # 05:17 UTC. Off the hour, when GitHub delays scheduled runs the most.
     - cron: '17 5 * * *'
+  # Start it by hand to check a branch, e.g. a Playwright upgrade PR. No
+  # pull_request trigger: the suite tests the deployed sites, not the PR.
   workflow_dispatch:
-  # Playwright upgrades (Dependabot PRs) and changes to this workflow run the
-  # suite before merge. The report job skips them.
-  pull_request:
-    paths: ['e2e/package.json', '.github/workflows/e2e-daily.yml']
 
 permissions:
   contents: read
