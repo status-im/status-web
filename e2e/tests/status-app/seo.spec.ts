@@ -18,7 +18,7 @@ test.describe('status.app crawler files', () => {
       expect(response.status()).toBe(200)
       const body = await response.text()
       expect(body).toMatch(/^Sitemap: https:\/\/\S+\/sitemap\.xml$/m)
-      expect(body).toMatch(/^Disallow: \/admin/m)
+      expect(body).toMatch(/^Disallow: \/api\/\*$/m)
     },
   )
 
