@@ -47,7 +47,7 @@ If the community has published nothing in the last 30 days, or every shard times
 
 ## ENS names in sharing links
 
-Sharing links can carry an ENS name instead of a key, for example `/u#jakubgs.eth`. The page resolves the name with a `POST` to [`/api/ens`](../src/app/api/ens/route.ts), whose JSON body has an `ensName` string and an optional `compress` boolean (default `false`).
+Sharing links can carry an ENS name instead of a key, for example `/u#vitalik.eth`. The page resolves the name with a `POST` to [`/api/ens`](../src/app/api/ens/route.ts), whose JSON body has an `ensName` string and an optional `compress` boolean (default `false`).
 
 The route validates the body before it calls the resolver. `ensName` must be non-empty, at most 255 characters and at most 5 labels, which covers Status usernames like `name.stateofus.eth` and `name.eth`. The resolver makes one RPC call per label, so the label cap bounds the upstream work per request. A body that fails validation, or is not JSON, gets a 400 response with `{"error":"Invalid ENS name"}`:
 
