@@ -7,6 +7,7 @@ import erc20TokenList from '../../../constants/erc20.json'
 import { groupBy } from '../../../utils/group-by'
 import { getAssetTransfers, getTransactionStatus } from '../../services/alchemy'
 import { fetchTokensPriceForDate } from '../../services/coingecko/index'
+import { networksSchema } from '../lib/networks'
 import { portfolioRefreshProcedure, router } from '../lib/trpc'
 
 import type { AssetTransfer } from '../../services/alchemy/types'
@@ -92,16 +93,20 @@ async function runWithConcurrency<T>(
   return results
 }
 
+// Each transfer in a page triggers its own status lookup, so the page size
+// bounds upstream calls. Clients request 20.
+export const MAX_PAGE_LIMIT = 50
+
+export const pageInputSchema = z.object({
+  address: z.string(),
+  networks: networksSchema,
+  limit: z.number().int().positive().max(MAX_PAGE_LIMIT).optional(),
+  pageKeys: z.record(z.string()).optional(),
+})
+
 export const activitiesRouter = router({
   page: portfolioRefreshProcedure
-    .input(
-      z.object({
-        address: z.string(),
-        networks: z.array(z.enum(['ethereum'])),
-        limit: z.number().optional(),
-        pageKeys: z.record(z.string()).optional(),
-      }),
-    )
+    .input(pageInputSchema)
     .query(async ({ input }) => {
       const key = JSON.stringify(input)
       return await cachedPage(key)
