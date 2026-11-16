@@ -66,6 +66,7 @@
         ".contentlayer/**",
         "public/blog-search-index.json"
       ],
+      "env": ["ALLOW_EMPTY_BLOG_SEARCH_INDEX"],
       "passThroughEnv": [
         "NEXT_PUBLIC_GHOST_API_URL",
         "NEXT_PUBLIC_GHOST_API_KEY",

@@ -1,7 +1,7 @@
 import { loadEnvConfig } from '@next/env'
 import { writeFile } from 'node:fs/promises'
 import path from 'node:path'
-import { cwd } from 'node:process'
+import { cwd, env } from 'node:process'
 
 import { createBlogSearchPayload } from '../src/app/(website)/blog/_utils/search'
 
@@ -19,7 +19,15 @@ async function main() {
   const posts = await getPostsForSearch()
 
   if (posts.length === 0) {
-    throw new Error('Cannot generate an empty blog search index')
+    // Escape hatch for shipping while Ghost is unreachable. Search returns no
+    // results until the next build with Ghost back up.
+    if (env['ALLOW_EMPTY_BLOG_SEARCH_INDEX'] !== '1') {
+      throw new Error('Cannot generate an empty blog search index')
+    }
+
+    console.warn(
+      'ALLOW_EMPTY_BLOG_SEARCH_INDEX=1: writing an empty blog search index',
+    )
   }
 
   const payload = createBlogSearchPayload(posts)

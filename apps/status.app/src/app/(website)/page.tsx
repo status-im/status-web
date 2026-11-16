@@ -581,24 +581,24 @@ export default async function HomePage() {
 
         {!isGetSite && (
           <>
-            {/* BLOG */}
-            <div className="relative z-30 flex-1 bg-white-100 py-40">
-              <div className="container">
-                <div className="mb-6 flex items-center justify-between">
-                  <h3 className="text-27 font-semibold">{t('blogTitle')}</h3>
-                  <Button variant="outline" href="/blog" size="32">
-                    {t('blogLink')}
-                  </Button>
-                </div>
-                {posts.length > 0 && (
+            {/* BLOG: hidden when Ghost returns no posts (e.g. Ghost is down) */}
+            {posts.length > 0 && (
+              <div className="relative z-30 flex-1 bg-white-100 py-40">
+                <div className="container">
+                  <div className="mb-6 flex items-center justify-between">
+                    <h3 className="text-27 font-semibold">{t('blogTitle')}</h3>
+                    <Button variant="outline" href="/blog" size="32">
+                      {t('blogLink')}
+                    </Button>
+                  </div>
                   <PostGrid
                     posts={posts}
                     isLoading={false}
                     hasNextPage={false}
                   />
-                )}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* PRE-FOOTER */}
             <div className="relative z-10 bg-white-100">
