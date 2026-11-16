@@ -39,6 +39,16 @@ Older records without an approved account keep their chain setting but require a
 approval. After disconnecting, the user must approve a new connection before the dApp can access
 accounts again.
 
+`wallet_requestPermissions` accepts only `eth_accounts`; any other permission name fails with code
+4200. When the caveats value is a map, its only accepted key is `restrictReturnedAccounts`, which
+must be an array of at most 100 addresses (checksummed or not); any other key or an invalid account
+list fails with code -32602. A caveats value that is not a map counts as no caveats. The wallet
+stores the `eth_accounts` permission with no caveats: it validates the requested caveat and then
+discards it, so nothing from the dApp's caveats is persisted. `wallet_getPermissions` reports only
+`eth_accounts`, with a `restrictReturnedAccounts` caveat derived from the account the dApp can see,
+and omits any other capabilities or caveats that older versions stored. The handlers are in
+[`src/lib/rpc/permissions.ts`](src/lib/rpc/permissions.ts).
+
 ## Signing requests
 
 The approval popup shortens long values for readability: typed-data field names and values, signed
