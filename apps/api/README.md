@@ -39,6 +39,24 @@ runs the same schema against `.env` without a build.
 `POST /api/trpc/rpc.proxy?chainId=<id>` takes a plain JSON-RPC body, runs it through the tRPC
 mutation and returns JSON-RPC. The wallet and hub use it for chain reads.
 
+The relay only forwards the methods in `RPC_RELAY_ALLOWED_METHODS` in
+[`rpc.ts`](../../packages/wallet/src/data/api/routers/rpc.ts): the extension's dApp forwarding table
+(`REMOTE_ALLOWED` in `apps/wallet/src/lib/rpc-methods.ts`) plus `eth_chainId` and `net_version`. Any
+other method, such as `debug_*`, `trace_*`, `admin_*`, `txpool_*`, `personal_*` or `eth_sign*`, gets
+a JSON-RPC error with code `-32601` and never reaches the node.
+
+Each HTTP request has a cap on fan-out, and every call in it still counts against the per-IP rate
+limit:
+
+| Request                                      | Limit           |
+| -------------------------------------------- | --------------- |
+| JSON-RPC batch (array body) to `rpc.proxy`   | 20 calls        |
+| tRPC HTTP batch (`?batch=1`)                 | 10 procedures   |
+
+An oversized batch gets a 400 with error code `-32600` and is not processed. A tRPC batch whose
+procedure path cannot be URL-decoded also gets a 400. Current clients stay well below these limits:
+the wallet's nonce tracker sends 2-call JSON-RPC batches and no HTTP client uses tRPC batching.
+
 CORS is open on purpose, since everything here is public read traffic. Queries are cached for an
 hour unless the procedure is on the no-store list in
 [`route.ts`](src/app/api/trpc/%5Btrpc%5D/route.ts); `vercel.json` caps `app/api/**/*` at

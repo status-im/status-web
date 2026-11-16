@@ -25,6 +25,13 @@ leave the background service worker, and must never be logged.
   reaches it through `createAPIClient` (`createTRPCProxyClient`) in
   `src/providers/api-client.tsx`. Throw `TRPCError` there; any other error type reaches the UI as a
   generic failure.
+- The chrome handler uses `createHandlerContext`, which throws `FORBIDDEN` ("Forbidden sender")
+  unless the port's sender is one of this extension's pages: `isExtensionPageSender` in
+  `src/lib/extension-sender.ts` checks `sender.id` against `chrome.runtime.id` and that
+  `sender.url` starts with `chrome.runtime.getURL('')`. Content scripts in web pages are rejected.
+  Keep this check on the handler, and reach the router only from extension pages such as the main
+  page and the approval window. The dapp RPC path (`runtime.onMessage` with `status:rpc`) does not
+  go through it.
 - Calls to the Status API over HTTP go through `src/utils/trpc.ts` to
   `${WXT_STATUS_API_URL}/api/trpc/<endpoint>`. Keep that channel separate from the internal
   chrome-transport router.
