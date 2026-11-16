@@ -1,5 +1,9 @@
+import { create, toBinary } from '@bufbuild/protobuf'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
+import { ApplicationMetadataMessageSchema } from '../protos/application-metadata-message_pb'
+import { ProtocolMessageSchema } from '../protos/protocol-message_pb'
+import { SegmentMessageSchema } from '../protos/segment-message_pb'
 import { RequestClient } from './request-client'
 
 import type { LightNode } from '@waku/interfaces'
@@ -75,5 +79,54 @@ describe('RequestClient', () => {
 
     await expect(result).resolves.toBeUndefined()
     expect(queryGenerator).toHaveBeenCalledTimes(3)
+  })
+
+  it('skips messages with a malformed signature', async () => {
+    vi.useFakeTimers({ now: new Date('2026-01-31T00:00:00Z') })
+
+    const message = toBinary(
+      ProtocolMessageSchema,
+      create(ProtocolMessageSchema, {
+        publicMessage: toBinary(
+          ApplicationMetadataMessageSchema,
+          create(ApplicationMetadataMessageSchema, {
+            // invalid r and s
+            signature: new Uint8Array(65),
+            payload: new Uint8Array([1]),
+          }),
+        ),
+      }),
+    )
+    // segmented, so the payload is not mistaken for a segment
+    const segments = [message.slice(0, 1), message.slice(1)].map(
+      (payload, index) =>
+        toBinary(
+          SegmentMessageSchema,
+          create(SegmentMessageSchema, {
+            entireMessageHash: new Uint8Array([1]),
+            index,
+            segmentsCount: 2,
+            payload,
+          }),
+        ),
+    )
+    const queryGenerator = vi.fn(async function* () {
+      yield segments.map(payload =>
+        Promise.resolve({
+          payload,
+          signaturePublicKey: new Uint8Array(65),
+          timestamp: new Date(),
+        }),
+      )
+    })
+    const waku = { store: { queryGenerator } } as unknown as LightNode
+    const client = new RequestClient(waku, { ethProviderApiKey: '' })
+
+    await expect(
+      client.fetchCommunityDescription(communityPublicKey),
+    ).resolves.toBeUndefined()
+
+    // the shard keeps walking windows instead of aborting
+    expect(queryGenerator).toHaveBeenCalledTimes(90)
   })
 })
