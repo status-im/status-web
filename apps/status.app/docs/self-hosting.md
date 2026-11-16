@@ -21,9 +21,10 @@ The base image is Debian slim, not Alpine, because several native modules in the
 The public site uses Ghost, GitHub, Greenhouse, Infura and Hasura. [`.env.example`](../.env.example)
 lists the configuration for those services and optional Umami analytics.
 
-The admin screens, Keycloak login routes and admin-only tRPC services have been removed. Postgres,
-Keycloak and BambooHR are no longer website runtime dependencies. Public Insights continue to use
-Hasura through [`src/app/(website)/insights/_graphql`](<../src/app/(website)/insights/_graphql>).
+We removed the admin screens, the Keycloak login routes, the admin-only tRPC services and the
+Postgres integration. The website does not need Postgres, Keycloak or BambooHR at build time or at
+runtime. Public Insights still use Hasura through
+[`src/app/(website)/insights/_graphql`](<../src/app/(website)/insights/_graphql>).
 
 ## Content submodules
 
@@ -110,8 +111,8 @@ Runtime env (`docker run -e VAR`): the server-side keys above, plus `UMAMI_WEBSI
 `UMAMI_API_URL` if you want download analytics. Server routes and ISR
 revalidation fetch GitHub releases and Greenhouse jobs at runtime, so those values are not baked in.
 
-[`src/config/env.server.mjs`](../src/config/env.server.mjs) validates the public-service keys for
-both builds and runtime. Public canonical URLs use
+[`src/config/env.server.mjs`](../src/config/env.server.mjs) validates the public-service keys with
+the same schema for builds and runtime. Public canonical URLs use
 [`src/config/site.ts`](../src/config/site.ts).
 
 ## Health endpoint
