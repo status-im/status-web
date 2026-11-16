@@ -24,8 +24,6 @@ export const routing = defineRouting({
  */
 export const nonLocalizedPaths = [
   'api',
-  'admin',
-  'login',
   'c',
   'cc',
   'u',

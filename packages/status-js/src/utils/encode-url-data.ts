@@ -12,6 +12,10 @@ import {
 
 import type { Channel, Community, URLData, User } from '../protos/url_pb'
 
+// note: well above the largest valid payload (about 1 KiB for a community with
+// multi-byte text and tags) while bounding the cost of high-ratio inputs
+const MAX_DECOMPRESSED_LENGTH = 4096
+
 export type EncodedURLData = string & { _: 'EncodedURLData' }
 
 const colorSchema = z.string().regex(/^#[0-9A-Fa-f]{6}$/)
@@ -111,7 +115,9 @@ function decodeURLData(data: string): URLData {
   z.string().max(500).parse(data) // default max in order not to compute arbitrary values
 
   const decoded = base64url.decode(data)
-  const decompressed = brotliDecompressSync(decoded)
+  const decompressed = brotliDecompressSync(decoded, {
+    maxOutputLength: MAX_DECOMPRESSED_LENGTH,
+  })
   const deserialized = fromBinary(
     URLDataSchema,
     decompressed as unknown as Uint8Array,

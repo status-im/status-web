@@ -18,6 +18,7 @@ import {
   fetchTokenPriceHistory,
   fetchTokensPrice,
 } from '../../services/coingecko/index'
+import { networksSchema } from '../lib/networks'
 import {
   ethRPCAndMarketProcedure,
   ethRPCProcedure,
@@ -206,7 +207,7 @@ export const assetsRouter = router({
     .input(
       z.object({
         address: z.string(),
-        networks: z.array(z.enum(['ethereum'])),
+        networks: networksSchema,
       }),
     )
     .query(async ({ input }) => {
@@ -227,7 +228,7 @@ export const assetsRouter = router({
     .input(
       z.object({
         address: z.string(),
-        networks: z.array(z.enum(['ethereum'])),
+        networks: networksSchema,
         symbol: z.string(),
         skipMetadata: z.boolean().optional(),
         previousMetadata: tokenMetadataSchema.optional(),
@@ -251,7 +252,7 @@ export const assetsRouter = router({
     .input(
       z.object({
         address: z.string(),
-        networks: z.array(z.enum(['ethereum'])),
+        networks: networksSchema,
         contract: z.string(),
         skipMetadata: z.boolean().optional(),
         previousMetadata: tokenMetadataSchema.optional(),
@@ -299,7 +300,7 @@ export const assetsRouter = router({
     .input(
       z.object({
         address: z.string(),
-        networks: z.array(z.enum(['ethereum'])),
+        networks: networksSchema,
         days: z.enum(['1', '7', '30', '90', '365', 'all']).optional(),
       }),
     )
@@ -312,7 +313,7 @@ export const assetsRouter = router({
     .input(
       z.object({
         address: z.string(),
-        networks: z.array(z.enum(['ethereum'])),
+        networks: networksSchema,
         days: z.enum(['1', '7', '30', '90', '365', 'all']).optional(),
         contract: z.string(),
       }),
@@ -326,7 +327,7 @@ export const assetsRouter = router({
     .input(
       z.object({
         address: z.string(),
-        networks: z.array(z.enum(['ethereum'])),
+        networks: networksSchema,
         symbol: z.string(),
         days: z.enum(['1', '7', '30', '90', '365', 'all']).optional(),
       }),
@@ -340,7 +341,7 @@ export const assetsRouter = router({
     .input(
       z.object({
         address: z.string(),
-        networks: z.array(z.enum(['ethereum'])),
+        networks: networksSchema,
         contract: z.string(),
         symbol: z.string(),
         days: z.enum(['1', '7', '30', '90', '365', 'all']).optional(),

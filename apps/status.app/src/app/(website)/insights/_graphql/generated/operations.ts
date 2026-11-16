@@ -158,25 +158,3 @@ export type GetInitialDatePerEpicQuery = {
     created_at?: any | null
   }>
 }
-
-export type MilestonesQueryVariables = Types.Exact<{
-  where?: Types.InputMaybe<Types.Gh_Milestones_Bool_Exp>
-  orderBy?: Types.InputMaybe<
-    Array<Types.Gh_Milestones_Order_By> | Types.Gh_Milestones_Order_By
-  >
-}>
-
-export type MilestonesQuery = {
-  __typename?: 'query_root'
-  gh_milestones: Array<{
-    __typename?: 'gh_milestones'
-    id?: any | null
-    number?: any | null
-    created_at?: any | null
-    due_on?: any | null
-    title?: string | null
-    repository?: string | null
-    html_url?: string | null
-    description?: string | null
-  }>
-}

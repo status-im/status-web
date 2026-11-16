@@ -592,10 +592,16 @@ class RequestClient {
       return
     }
 
-    const signerPublicKeyBytes = recoverPublicKey(
-      decodedMetadata.signature,
-      decodedMetadata.payload,
-    )
+    let signerPublicKeyBytes: Uint8Array
+    try {
+      signerPublicKeyBytes = recoverPublicKey(
+        decodedMetadata.signature,
+        decodedMetadata.payload,
+      )
+    } catch {
+      // malformed signature
+      return
+    }
 
     const messageId = payloadToId(
       decodedProtocol?.publicMessage ?? wakuMessage.payload,
