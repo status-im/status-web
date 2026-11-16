@@ -63,6 +63,11 @@ export type Collectible = {
   price_eur?: number
 }
 
+// Alchemy returns at most 100 NFTs per page, so 50 pages cover 5,000 NFTs per
+// network, well beyond typical wallets, while bounding upstream work per request.
+const MAX_UPSTREAM_PAGES = 50
+const MAX_LIMIT = 100
+
 export const collectiblesRouter = router({
   page: portfolioRefreshProcedure
     .input(
@@ -70,8 +75,8 @@ export const collectiblesRouter = router({
         address: z.string(),
         networks: z.array(z.enum(['ethereum'])),
         pages: z.record(z.string(), z.string()).optional(),
-        limit: z.number().optional(),
-        offset: z.number().optional(),
+        limit: z.number().int().min(1).max(MAX_LIMIT).optional(),
+        offset: z.number().int().min(0).optional(),
         search: z.string().optional(),
         sort: z
           .object({
@@ -207,20 +212,27 @@ async function page({
   // Full scan path: fetch all pages, then filter/search/sort/paginate in-memory
   if (shouldScanAll) {
     const collectibles: Collectible[] = []
+    let truncated = false as boolean
 
     await Promise.all(
       networks.map(async network => {
         let pageKey: string | undefined = pages?.[network]
+        let pageCount = 0
 
         do {
           const response = await getNFTs(address, network, pageKey)
+          pageCount++
 
           for (const nft of response.ownedNfts) {
             collectibles.push(map(nft, network))
           }
 
           pageKey = response.pageKey ?? undefined
-        } while (pageKey)
+          // Stop at the budget and sort what was collected so far
+        } while (pageKey && pageCount < MAX_UPSTREAM_PAGES)
+
+        // Budget hit with NFTs left upstream: results are partial
+        if (pageKey) truncated = true
       }),
     )
 
@@ -243,6 +255,7 @@ async function page({
     return {
       collectibles: paginatedCollectibles,
       hasMore: filteredCollectibles.length > offset + limit,
+      ...(truncated ? { truncated: true as const } : {}),
     }
   }
 
@@ -280,8 +293,10 @@ async function page({
 
   for (const network of networks) {
     let pageKey: string | undefined = pages?.[network]
+    let pageCount = 0
 
     while (paginatedCollectibles.length < limit) {
+      pageCount++
       const response = await getNFTs(
         address,
         network,
@@ -304,6 +319,8 @@ async function page({
 
       if (
         !pageKey ||
+        // Return the page key so the client can continue from here
+        pageCount >= MAX_UPSTREAM_PAGES ||
         paginatedCollectibles.length >= limit ||
         (!hasVerified && (hasRelaxed || hasBare))
       ) {
