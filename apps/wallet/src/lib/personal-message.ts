@@ -1,8 +1,12 @@
 import { bytesToHex, hexToBytes, isHex } from 'viem'
 
-/** A personal_sign message as the software wallet signs it: hex is decoded, any other string is UTF-8. */
+/**
+ * A personal_sign message as every signer signs it: even-length hex is
+ * decoded, any other string (odd-length or invalid hex included) is UTF-8,
+ * like MetaMask.
+ */
 export function personalMessageBytes(message: string): Uint8Array {
-  return isHex(message, { strict: true })
+  return isHex(message, { strict: true }) && message.length % 2 === 0
     ? hexToBytes(message)
     : new TextEncoder().encode(message)
 }
