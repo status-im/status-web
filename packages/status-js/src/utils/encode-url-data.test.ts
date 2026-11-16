@@ -58,6 +58,14 @@ describe('Encode URL data', () => {
     `)
   })
 
+  test('should throw for oversized decompressed data', () => {
+    expect(() => {
+      // 1 MiB of zeros
+      const encodedData = 'W___j38CIB4LBHLvHwA='
+      decodeCommunityURLData(encodedData)
+    }).toThrowError(RangeError)
+  })
+
   test('should encode and decode channel', () => {
     const data = {
       emoji: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
