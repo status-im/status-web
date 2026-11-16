@@ -19,6 +19,15 @@ export type { ApiRouter }
 
 export const dynamic = 'force-dynamic'
 
+/**
+ * Upper bounds on fan-out per HTTP request, each call still pays the per-IP
+ * rate limit. Current callers stay well below: the wallet's nonce tracker
+ * sends 2-call JSON-RPC batches, viem/wagmi transports run with batching off,
+ * and no HTTP client uses tRPC batching (the extension calls in-process).
+ */
+const MAX_JSON_RPC_BATCH_SIZE = 20
+const MAX_TRPC_BATCH_SIZE = 10
+
 async function handler(request: NextRequest) {
   const url = new URL(request.url)
   const isRpcProxyPath = url.pathname.endsWith('/rpc.proxy')
@@ -33,6 +42,42 @@ async function handler(request: NextRequest) {
 
   if (request.method === 'POST' && isRpcProxyPath && isTrpcFormat) {
     console.log('NORMAL::')
+  }
+
+  if (url.searchParams.has('batch')) {
+    const pathSegment = url.pathname.split('/').pop() ?? ''
+    let decodedPath: string
+    try {
+      decodedPath = decodeURIComponent(pathSegment)
+    } catch {
+      return Response.json(
+        {
+          error: {
+            json: {
+              message: 'Malformed procedure path encoding',
+              code: -32600,
+              data: { code: 'BAD_REQUEST', httpStatus: 400 },
+            },
+          },
+        },
+        { status: 400, headers: getCorsHeaders() }
+      )
+    }
+    const procedureCount = decodedPath.split(',').length
+    if (procedureCount > MAX_TRPC_BATCH_SIZE) {
+      return Response.json(
+        {
+          error: {
+            json: {
+              message: `Batch too large: ${procedureCount} procedures, max ${MAX_TRPC_BATCH_SIZE}`,
+              code: -32600,
+              data: { code: 'BAD_REQUEST', httpStatus: 400 },
+            },
+          },
+        },
+        { status: 400, headers: getCorsHeaders() }
+      )
+    }
   }
 
   try {
@@ -274,6 +319,20 @@ async function handleJsonRpcProxy(request: NextRequest): Promise<Response> {
   }
 
   if (Array.isArray(jsonRpcBody)) {
+    if (jsonRpcBody.length > MAX_JSON_RPC_BATCH_SIZE) {
+      return Response.json(
+        {
+          jsonrpc: '2.0',
+          id: null,
+          error: {
+            code: -32600,
+            message: `Batch too large: ${jsonRpcBody.length} calls, max ${MAX_JSON_RPC_BATCH_SIZE}`,
+          },
+        },
+        { status: 400, headers: corsHeaders }
+      )
+    }
+
     const outcomes = await Promise.all(
       jsonRpcBody.map(async call => {
         try {

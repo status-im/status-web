@@ -29,6 +29,57 @@ const CHAIN_ID_TO_PROXY_PATH: Record<number, string> = {
   374: 'status/hoodi',
 }
 
+/**
+ * Methods the relay forwards upstream; anything else gets a JSON-RPC
+ * "method not found" error without reaching the node, so the public relay
+ * cannot reach debug_*, trace_*, admin_*, txpool_*, personal_* or eth_sign*.
+ *
+ * Built from what the callers send: the extension's dApp forwarding table
+ * (`REMOTE_ALLOWED` in `apps/wallet/src/lib/rpc-methods.ts`, mirroring
+ * status-go's connector), plus `eth_chainId` and `net_version`, which viem
+ * and wagmi transports (extension, hub) ask the node for directly. Keep the
+ * two lists in step when the extension starts forwarding a new method.
+ */
+export const RPC_RELAY_ALLOWED_METHODS: ReadonlySet<string> = new Set([
+  'eth_chainId',
+  'net_version',
+  'net_peerCount',
+  'net_listening',
+  'eth_protocolVersion',
+  'eth_syncing',
+  'eth_coinbase',
+  'eth_mining',
+  'eth_hashrate',
+  'eth_gasPrice',
+  'eth_maxPriorityFeePerGas',
+  'eth_feeHistory',
+  'eth_blockNumber',
+  'eth_getBalance',
+  'eth_getStorageAt',
+  'eth_getTransactionCount',
+  'eth_getBlockTransactionCountByHash',
+  'eth_getBlockTransactionCountByNumber',
+  'eth_getUncleCountByBlockHash',
+  'eth_getUncleCountByBlockNumber',
+  'eth_getCode',
+  'eth_sendRawTransaction',
+  'eth_call',
+  'eth_estimateGas',
+  'linea_estimateGas',
+  'eth_getBlockByHash',
+  'eth_getBlockByNumber',
+  'eth_getTransactionByHash',
+  'eth_getTransactionByBlockHashAndIndex',
+  'eth_getTransactionByBlockNumberAndIndex',
+  'eth_getTransactionReceipt',
+  'eth_getUncleByBlockHashAndIndex',
+  'eth_getUncleByBlockNumberAndIndex',
+  'eth_getLogs',
+  'eth_getWork',
+  'eth_submitWork',
+  'eth_submitHashrate',
+])
+
 export const rpcRouter = router({
   proxy: ethRPCProcedure
     .input(
@@ -41,6 +92,17 @@ export const rpcRouter = router({
       }),
     )
     .mutation(async ({ input }) => {
+      if (!RPC_RELAY_ALLOWED_METHODS.has(input.method)) {
+        return {
+          jsonrpc: '2.0',
+          id: input.id ?? 1,
+          error: {
+            code: -32601,
+            message: `Method not supported: ${input.method}`,
+          },
+        }
+      }
+
       const chainId = input.chainId ?? 1
       const proxyPath = CHAIN_ID_TO_PROXY_PATH[chainId]
 
