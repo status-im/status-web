@@ -16,6 +16,7 @@ import {
   setApprovalResult,
 } from '../../data/approval'
 import { connectAccount } from '../../data/dapp-permissions'
+import { useActivationDelay } from '../../hooks/use-activation-delay'
 import { getChainByHex, toChainId } from '../../lib/chains'
 import { checkHardwareSignature } from '../../lib/hardware-signature'
 import {
@@ -39,6 +40,13 @@ export function ApprovalPage() {
   const [isSessionActive, setIsSessionActive] = useState(false)
   const [isUnlocking, setIsUnlocking] = useState(false)
   const [isHardwareSigning, setIsHardwareSigning] = useState(false)
+
+  // Approve stays inert briefly after the request (or the window) becomes
+  // visible, so clicks started on the dApp page cannot land on it.
+  const isConfirmActive = useActivationDelay(
+    phase === 'ready' &&
+      (isSessionActive || approval?.walletType === 'hardware-qr'),
+  )
 
   useEffect(() => {
     let cancelled = false
@@ -143,6 +151,7 @@ export function ApprovalPage() {
   }
 
   const handleConfirm = () => {
+    if (!isConfirmActive) return
     if (hardwareSignRequest) {
       setIsHardwareSigning(true)
       return
@@ -251,7 +260,7 @@ export function ApprovalPage() {
         <Button
           variant="primary"
           onPress={handleConfirm}
-          disabled={isSubmitting}
+          disabled={isSubmitting || !isConfirmActive}
         >
           {view.confirmLabel}
         </Button>
