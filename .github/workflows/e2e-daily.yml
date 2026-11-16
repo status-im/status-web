@@ -9,12 +9,16 @@ on:
     # 05:17 UTC. Off the hour, when GitHub delays scheduled runs the most.
     - cron: '17 5 * * *'
   workflow_dispatch:
+  # Playwright upgrades (Dependabot PRs) and changes to this workflow run the
+  # suite before merge. The report job skips them.
+  pull_request:
+    paths: ['e2e/package.json', '.github/workflows/e2e-daily.yml']
 
 permissions:
   contents: read
 
 concurrency:
-  group: e2e-daily
+  group: e2e-daily-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
