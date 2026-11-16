@@ -37,9 +37,6 @@ vercel env pull .env.local
 GitHub and Hasura), plus optional analytics settings. The public site does not require Postgres,
 Keycloak or BambooHR. `/admin`, `/login/keycloak` and the admin-only tRPC services have been removed.
 
-The database schema, migrations and `db:*` commands remain for maintenance of existing data.
-Only those commands need `POSTGRES_URL`; the website does not connect to that database.
-
 `pnpm --filter status.app env:check` validates the values against `src/config/env.server.mjs` and
 `src/config/env.client.mjs`. It reads `.env`, so it will report variables you only set in
 `.env.local` as missing.

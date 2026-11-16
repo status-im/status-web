@@ -25,10 +25,6 @@ The admin screens, Keycloak login routes and admin-only tRPC services have been 
 Keycloak and BambooHR are no longer website runtime dependencies. Public Insights continue to use
 Hasura through [`src/app/(website)/insights/_graphql`](<../src/app/(website)/insights/_graphql>).
 
-The existing database is not modified or dropped. Its [schema](../src/server/db/schema),
-[migrations](../migrations) and `db:*` scripts remain for maintenance; set `POSTGRES_URL` only when
-using those commands. They are not called by the running website.
-
 ## Content submodules
 
 `content/specs` is a git submodule (`status-im/status-specs`). The build copies `apps/status.app/`
@@ -115,8 +111,7 @@ Runtime env (`docker run -e VAR`): the server-side keys above, plus `UMAMI_WEBSI
 revalidation fetch GitHub releases and Greenhouse jobs at runtime, so those values are not baked in.
 
 [`src/config/env.server.mjs`](../src/config/env.server.mjs) validates the public-service keys for
-both builds and runtime. `POSTGRES_URL` is optional for website startup. The removed login flow's
-`SITE_URL` environment variable is no longer needed; public canonical URLs still use
+both builds and runtime. Public canonical URLs use
 [`src/config/site.ts`](../src/config/site.ts).
 
 ## Health endpoint
@@ -173,8 +168,7 @@ The removed `/admin` and `/login/keycloak/*` routes return 404. The website no l
 authentication or admin write operations. Let the reverse proxy strip inbound `X-Forwarded-*` headers and set
 them itself.
 
-Remove unused Keycloak, BambooHR and Postgres secrets from website deployment settings. Keep any
-credentials needed for separate database maintenance outside the website container.
+Remove unused Keycloak, BambooHR and Postgres secrets from website deployment settings.
 
 `NEXT_PUBLIC_*` values are inlined into the JavaScript bundle, by design. Nothing private belongs
 behind a `NEXT_PUBLIC_` name.

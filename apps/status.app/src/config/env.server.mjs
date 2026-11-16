@@ -33,9 +33,6 @@ export const envSchema = z.object({
   GREENHOUSE_LOGOS_BOARD_ID: z.string(),
   GITHUB_TOKEN: z.string(),
 
-  // Only the retained database maintenance commands use this connection.
-  POSTGRES_URL: z.string().optional(),
-
   // Optional — Umami analytics for /api/download tracking on self-hosted.
   UMAMI_API_URL: z.string().optional(),
   UMAMI_WEBSITE_ID: z.string().optional(),

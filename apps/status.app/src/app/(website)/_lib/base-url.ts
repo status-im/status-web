@@ -6,8 +6,8 @@ import { SITE_URL } from '~/config/site'
  * social share links and the RSS feed.
  *
  * why the canonical origin is the fallback: these URLs are rendered during
- * `next build` (SSG/ISR), when neither the Vercel system vars nor the runtime
- * `SITE_URL` are guaranteed to exist. Falling through to `localhost` there
+ * `next build` (SSG/ISR), when Vercel system variables may be absent.
+ * Falling through to `localhost` there
  * shipped `http://localhost:3001` to crawlers on every blog post, so localhost
  * is now opt-in for non-production builds only.
  */
