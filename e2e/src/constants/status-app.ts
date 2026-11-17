@@ -16,6 +16,9 @@ const BLOCKED_REQUESTS = [
 const IGNORED_CONSOLE_ERRORS = [
   // The help search dialog has no DialogTitle (Radix accessibility warning).
   /`DialogContent` requires a `DialogTitle`/,
+  // Firefox logs third-party cookies it blocks (e.g. GitHub's `_gh_sess` on
+  // avatar images) as errors. That is browser policy, not a site bug.
+  /Cookie [“"][^”"]+[”"] has been rejected because it is in a cross-site context/,
 ]
 
 export const STATUS_APP_RULES: SiteRules = {
