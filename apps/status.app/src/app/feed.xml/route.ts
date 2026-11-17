@@ -1,7 +1,9 @@
 import { baseUrl } from '~website/_lib/base-url'
 import { getPosts } from '~website/_lib/ghost'
-
-import type { PostOrPage } from '@tryghost/content-api'
+import {
+  cacheGhostResult,
+  ghostFeedUnavailable,
+} from '~website/_lib/ghost/cache'
 
 const FEED_ITEM_LIMIT = 20
 const FEED_TAG = 'status'
@@ -10,6 +12,11 @@ const FEED_SUBTITLE =
   'The open-source, decentralised wallet and messenger. Own your crypto and chat privately.'
 
 export const revalidate = 3600
+
+const getFeedPosts = cacheGhostResult(
+  'Atom feed posts',
+  async () => (await getPosts({ limit: FEED_ITEM_LIMIT, tag: FEED_TAG })).posts
+)
 
 function escapeXml(value: string): string {
   return value
@@ -32,20 +39,9 @@ export async function GET() {
   const site = baseUrl()
   const feedUrl = `${site}/feed.xml`
 
-  let posts: PostOrPage[]
-  try {
-    const response = await getPosts({ limit: FEED_ITEM_LIMIT, tag: FEED_TAG })
-    posts = response.posts
-  } catch (error) {
-    // An empty feed reads as "every entry was withdrawn" to a reader, so a
-    // failed Ghost call has to say retry rather than serve one.
-    console.error('Failed to fetch posts for the feed from Ghost API:', error)
-
-    return new Response('Feed temporarily unavailable', {
-      status: 503,
-      headers: { 'cache-control': 'no-store' },
-    })
-  }
+  const posts = await getFeedPosts()
+  // An empty feed reads as "every entry was withdrawn" to a reader.
+  if (!posts) return ghostFeedUnavailable()
 
   const visiblePosts = posts.filter(post => !!post.slug)
 

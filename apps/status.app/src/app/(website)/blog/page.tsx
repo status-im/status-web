@@ -6,6 +6,7 @@ import { buildLandingPageStructuredData } from '~/utils/structured-data'
 import { Metadata } from '~app/_metadata'
 import { Body } from '~components/body'
 import { BLOG_PAGE_SIZE, getPosts } from '~website/_lib/ghost'
+import { cacheGhostResult } from '~website/_lib/ghost/cache'
 
 import { isBlogCategory } from './_categories'
 import { BlogPager } from './_components/blog-pager'
@@ -22,6 +23,8 @@ import type { Metadata as NextMetadata } from 'next'
 
 export const revalidate = 3600 // 1 hour
 
+const getCachedBlogPosts = cacheGhostResult('blog posts', () => getPosts())
+
 /**
  * A Ghost blip should cost the listing rather than the whole page.
  *
@@ -33,12 +36,8 @@ async function getBlogPosts(): Promise<{
   posts: PostOrPage[]
   meta: PostsOrPages['meta']
 }> {
-  try {
-    return await getPosts()
-  } catch (error) {
-    console.error('Failed to fetch blog posts from Ghost API:', error)
-
-    return {
+  return (
+    (await getCachedBlogPosts()) ?? {
       posts: [],
       meta: {
         pagination: {
@@ -51,7 +50,7 @@ async function getBlogPosts(): Promise<{
         },
       },
     }
-  }
+  )
 }
 
 export async function generateMetadata(): Promise<NextMetadata> {
