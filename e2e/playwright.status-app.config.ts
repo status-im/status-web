@@ -30,7 +30,6 @@ export default defineConfig<SiteOptions>({
   outputDir: 'test-results/artifacts',
 
   use: {
-    ...devices['Desktop Chrome'],
     baseURL: STATUS_APP_URL,
     headless: true,
     screenshot: 'only-on-failure',
@@ -40,5 +39,16 @@ export default defineConfig<SiteOptions>({
     siteRules: STATUS_APP_RULES,
   },
 
-  projects: [{ name: 'status.app', grep: /@status-app/ }],
+  projects: [
+    {
+      name: 'chromium',
+      grep: /@status-app/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'firefox',
+      grep: /@status-app/,
+      use: { ...devices['Desktop Firefox'] },
+    },
+  ],
 })

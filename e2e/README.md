@@ -61,7 +61,10 @@ pnpm --filter status.app dev:next                      # from the repo root, ser
 pnpm test:status-app                                   # in e2e/
 STATUS_APP_URL=https://dev.status.app pnpm test:status-app
 STATUS_APP_URL=https://dev.status.app SITEMAP_SAMPLE=all pnpm test:status-app
+STATUS_APP_URL=https://dev.status.app pnpm test:status-app --project=firefox
 ```
+
+The suite runs in two projects, `chromium` and `firefox`; pass `--project=firefox` (or `chromium`) to run only one.
 
 The suite reads its settings from the shell, `e2e/.env.local` or `e2e/.env`, in that order of precedence; `.env.example` lists them. Every test is read-only: it opens forms and dialogs but never submits them.
 
