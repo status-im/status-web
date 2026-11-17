@@ -1,7 +1,5 @@
 import { unstable_cache } from 'next/cache'
 
-import { clientEnv } from '~/config/env.client.mjs'
-
 const GHOST_RETRY_SECONDS = 60
 
 export function cacheGhostResult<Args extends unknown[], Result>(
@@ -27,7 +25,11 @@ export function cacheGhostResult<Args extends unknown[], Result>(
       pending.set(key, result)
       return result
     },
-    ['status-app-ghost', clientEnv.NEXT_PUBLIC_GHOST_API_URL, name],
+    [
+      'status-app-ghost',
+      globalThis.process?.env['NEXT_PUBLIC_GHOST_API_URL'] ?? '',
+      name,
+    ],
     { revalidate: GHOST_RETRY_SECONDS }
   )
 }
