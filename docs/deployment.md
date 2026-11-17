@@ -28,7 +28,9 @@ Builds the `apps/status.app` image from [`Dockerfile`](../apps/status.app/Docker
 
 ## Vercel
 
-Every app except the two extensions has a `vercel.json` with its own build command and an `ignoreCommand`, so a push that touches neither the app nor its workspace dependencies skips the rebuild. The root [`vercel.json`](../vercel.json) turns off automatic deployments for `main`, which is not a branch here.
+Vercel's Git integration skips `docs/repo/sync`, the branch used by [AI Docs Sync](../.github/workflows/ai-docs-sync.yml), before adding a build to the queue. Keep that branch excluded in each project's `vercel.json`. The root [`vercel.json`](../vercel.json) also turns off automatic deployments for `main`, which is not a branch here.
+
+For other branches, each app except the two extensions has a `vercel.json` with a build command and an `ignoreCommand`. The command can cancel an unchanged project's build after it has already entered the queue. Vercel's [Skip deployments setting](https://vercel.com/docs/monorepos#skipping-unaffected-projects) works before queueing but relies on declared workspace dependencies. Keep cross-app file references in mind, such as the status.app source used by get.status.app and the status.network legal content read by hub.
 
 [`.github/workflows/preview-deploy.yml`](../.github/workflows/preview-deploy.yml) deploys previews only for pull requests opened from forks, and the job runs in the `preview-deploy-approval` environment. Turbo decides which of `status.app`, `hub`, `portfolio`, `api`, `status.network` and the components Storybook are affected, and the workflow posts the preview URLs as a PR comment.
 
