@@ -2,6 +2,7 @@ import { baseUrl } from '~website/_lib/base-url'
 import { getPosts } from '~website/_lib/ghost'
 import {
   cacheGhostResult,
+  ghostFeedCacheControl,
   ghostFeedUnavailable,
 } from '~website/_lib/ghost/cache'
 
@@ -94,7 +95,7 @@ export async function GET() {
   return new Response(xml, {
     headers: {
       'content-type': 'application/xml; charset=utf-8',
-      'cache-control': 'public, max-age=0, must-revalidate',
+      'cache-control': ghostFeedCacheControl(300),
     },
   })
 }

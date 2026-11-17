@@ -72,10 +72,18 @@ seconds and bulk requests (including the search index build) ten seconds. Browse
 their existing behavior.
 
 The [Ghost cache](<../src/app/(website)/_lib/ghost/cache.ts>) stores results, including failures,
-in the Next.js Data Cache for 60 seconds. The home and blog listing pages render without posts
-when Ghost is unavailable. The RSS and Atom feeds return `503` with `Retry-After: 60` when there
-is no successful result. Both versions of each app news feed share the same upstream cache
-entry. Traffic rechecks Ghost after the cache interval.
+for the blog listing and feeds in the Next.js Data Cache for 60 seconds. The home page uses
+hourly ISR and can regenerate without the blog section during an outage. The sitemap uses
+hourly ISR with cached Ghost requests for both blog and Learn entries.
+
+Successful RSS and Atom responses can be cached by a CDN and served stale for up to a day if
+the origin returns an error. Without a usable cached response, the feeds return `503` with
+`Retry-After: 60`. Both versions of each app news feed share the same upstream cache entry.
+Traffic rechecks Ghost after the cache interval.
+
+On Vercel, [the project configuration](../vercel.json) enables Fluid Compute for status.app
+deployments and sets a 15-second execution limit for App Router functions. This bills active CPU
+time separately from provisioned memory time.
 
 ## Build and run locally
 

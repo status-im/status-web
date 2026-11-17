@@ -43,3 +43,7 @@ export function ghostFeedUnavailable() {
     },
   })
 }
+
+export function ghostFeedCacheControl(maxAge: number) {
+  return `public, s-maxage=${maxAge}, stale-while-revalidate=300, stale-if-error=86400`
+}

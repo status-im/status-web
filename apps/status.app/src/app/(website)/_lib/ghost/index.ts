@@ -364,7 +364,7 @@ export const getLearnPostsForSitemap = async (): Promise<
   PostSitemapEntry[]
 > => {
   try {
-    const posts = await ghostLive.posts.browse({
+    const posts = await ghost.posts.browse({
       limit: 'all',
       fields: 'slug,updated_at,published_at',
       filter: `tag:${LEARN_TAG}+visibility:public+${LEARN_FETCH_EXCLUDED_TAGS_FILTER}`,

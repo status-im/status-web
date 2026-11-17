@@ -6,6 +6,7 @@ import { buildNewsFeed } from '~app/_utils/news-feed'
 import { baseUrl } from '~website/_lib/base-url'
 import {
   cacheGhostResult,
+  ghostFeedCacheControl,
   ghostFeedUnavailable,
 } from '~website/_lib/ghost/cache'
 import { getGhostTimeoutSignal } from '~website/_lib/ghost/client'
@@ -85,18 +86,12 @@ export async function handleRssFeed(
           ? buildNewsFeed(feed.body, format)
           : buildLegacyNewsFeed(feed.body, lineBreak)
 
-    const response = new Response(newXml, {
+    return new Response(newXml, {
       headers: {
         'content-type': feed.contentType,
+        'cache-control': ghostFeedCacheControl(type === 'main' ? 60 : 300),
       },
     })
-    if (type !== 'main') {
-      response.headers.set(
-        'cache-control',
-        'public, s-maxage=300, stale-while-revalidate=300'
-      )
-    }
-    return response
   } catch (error) {
     console.error(`Error rendering RSS feed: ${type}`, error)
     return ghostFeedUnavailable()
