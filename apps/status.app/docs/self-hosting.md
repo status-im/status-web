@@ -72,16 +72,20 @@ seconds and bulk requests (including the search index build) ten seconds. Browse
 their existing behavior.
 
 The [Ghost cache](<../src/app/(website)/_lib/ghost/cache.ts>) stores results, including failures,
-for the blog listing and feeds in the Next.js Data Cache for 60 seconds. The blog listing shows
-a maintenance notice when loading posts fails, while search can still use its built index.
+for the blog listing and feeds in the Next.js Data Cache for 60 seconds. When loading posts fails,
+the blog listing stays up and its empty state reads "The blog is under maintenance", while search
+can still use its built index.
 
 [Article pages](<../src/app/(website)/blog/[slug]/page.tsx>) generate on the first request and use
-hourly ISR. If refreshing a cached Ghost post fails, Next.js renders the last successful post.
-When no post is cached, the article redirects temporarily to a
-[maintenance response](<../src/app/(website)/blog/maintenance/[slug]/route.ts>) that returns HTTP
-503 and asks clients to retry after 60 seconds. The article retries after 60 seconds. A 404 from
-Ghost still means the article does not exist. The [locale middleware](../src/middleware.ts) keeps
-unprefixed article and maintenance URLs on the routes that can handle them.
+hourly ISR, so a failed article read cannot stop a deployment. The article page caches each Ghost
+post itself, and if a refresh fails it renders the last successful post. When no post is cached and
+Ghost fails, the article redirects temporarily to a
+[maintenance response](<../src/app/(website)/blog/maintenance/[slug]/route.ts>) at
+`/blog/maintenance/<slug>`. That response returns HTTP 503 with `Retry-After: 60` and
+`Cache-Control: no-store`, and links back to the article. The article retries Ghost after 60
+seconds instead of waiting for the hourly interval. A 404 from Ghost still means the article does
+not exist and shows the 404 page. The [locale middleware](../src/middleware.ts) keeps unprefixed
+article and maintenance URLs on the routes that can handle them.
 
 The home page uses hourly ISR and can regenerate without the blog section during an outage.
 The sitemap uses hourly ISR with cached Ghost requests for both blog and Learn entries.
