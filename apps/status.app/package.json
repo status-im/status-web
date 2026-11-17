@@ -15,6 +15,7 @@
     "watch:content": "node --watch-path=./content --watch-preserve-output ./scripts/trigger-content-compilation.cjs",
     "prebuild": "node scripts/ensure-specs-content.mjs",
     "build": "pnpm lint && pnpm generate:blog-search && next build",
+    "capture:feeds": "node scripts/capture-feed-snapshots.mjs",
     "generate:blog-search": "tsx scripts/generate-blog-search-index.ts",
     "prebuild:content": "node scripts/ensure-specs-content.mjs",
     "build:content": "contentlayer2 build && :",

@@ -80,14 +80,41 @@ can render slugs on demand, including when Ghost supplies no slugs at build time
 page uses hourly ISR and can regenerate without the blog section during an outage. The
 sitemap uses hourly ISR with cached Ghost requests for both blog and Learn entries.
 
-Successful RSS and Atom responses can be cached by a CDN and served stale for up to a day if
-the origin returns an error. Without a usable cached response, the feeds return `503` with
-`Retry-After: 60`. Both versions of each app news feed share the same upstream cache entry.
-Traffic rechecks Ghost after the cache interval.
-
 On Vercel, [the project configuration](../vercel.json) enables Fluid Compute for status.app
 deployments and sets a 15-second execution limit for App Router functions. This bills active CPU
 time separately from provisioned memory time.
+
+## Feed snapshots
+
+Production builds serve committed XML in [public/feeds](../public/feeds) at the original URLs
+using [Next.js rewrites](../next.config.mjs). A snapshot is served directly and never queries
+Ghost at request time. Readers pick up updates when refreshed snapshots are deployed.
+
+The current snapshots come from the [November 5, 2026 production deployment][rss-capture]
+and the [October 6, 2026 Atom capture][atom-capture]. The RSS self link points readers to
+`https://status.app/rss`. The desktop and mobile news feeds
+still use their live handlers until valid snapshots are available for each version.
+
+To refresh when Ghost is healthy, start the app with the real Ghost configuration and
+`NEXT_PUBLIC_VERCEL_ENV=production` so feed links use `https://status.app`. Local development
+serves the live feeds. In another terminal, capture and review the XML, then commit it and deploy.
+
+```bash
+NEXT_PUBLIC_VERCEL_ENV=production pnpm --filter status.app dev:next
+pnpm --filter status.app capture:feeds http://localhost:3001
+```
+
+[The capture script](../scripts/capture-feed-snapshots.mjs) also accepts a directory of
+[feed files](../scripts/feed-snapshots.mjs) and optional URL paths to capture a subset.
+It validates that every requested file is nonempty XML in the expected feed format before
+replacing any files.
+
+For routes without a snapshot, the CDN can serve a previous successful response stale after
+an error. Without a usable cached response, these routes return `503` with `Retry-After: 60`.
+Both versions of each app news feed share an upstream cache entry.
+
+[rss-capture]: https://status-website-eenm08ld5-status-im-web.vercel.app/rss
+[atom-capture]: https://web.archive.org/web/20261006204929id_/https://status.app/feed.xml
 
 ## Build and run locally
 
