@@ -64,7 +64,7 @@ STATUS_APP_URL=https://dev.status.app SITEMAP_SAMPLE=all pnpm test:status-app
 STATUS_APP_URL=https://dev.status.app pnpm test:status-app --project=firefox
 ```
 
-The suite runs in two projects, `chromium` and `firefox`; pass `--project=firefox` (or `chromium`) to run only one.
+The suite runs in two projects, `chromium` (Desktop Chrome) and `firefox` (Desktop Firefox), and a plain `pnpm test:status-app` runs both. Pass `--project=firefox` (or `chromium`) to run only one. The first-run steps install Chromium only, so run `pnpm exec playwright install firefox` before you use the `firefox` project. Firefox logs the third-party cookies it rejects (GitHub's `_gh_sess` on avatars, for example) as console errors; the status.app rules in [`src/constants/status-app.ts`](./src/constants/status-app.ts) ignore that message.
 
 The suite reads its settings from the shell, `e2e/.env.local` or `e2e/.env`, in that order of precedence; `.env.example` lists them. Every test is read-only: it opens forms and dialogs but never submits them.
 
@@ -76,9 +76,9 @@ The download tests never call github.com. They read the redirect location that `
 GITHUB_TOKEN=$(gh auth token) STATUS_APP_URL=https://status.app pnpm test:status-app tests/status-app/downloads.spec.ts
 ```
 
-[`e2e-daily.yml`](../.github/workflows/e2e-daily.yml) runs the suite every day at 05:17 UTC against https://dev.status.app and https://status.app. A failure opens or comments on the issue labelled `e2e-daily`, and the next green run closes it. Same-origin requests carry an `x-e2e-bypass` header set from the `E2E_BYPASS_TOKEN` secret, so Cloudflare can skip its bot checks for the run. `E2E_BYPASS_TOKEN` is optional: when it is unset, the header is not sent. The workflow sets `GITHUB_TOKEN` from its own token, so the download tests check release assets through the GitHub API authenticated, since GitHub answers anonymous github.com traffic with 504s when it is under load.
+[`e2e-daily.yml`](../.github/workflows/e2e-daily.yml) runs the suite every day at 05:17 UTC against https://dev.status.app and https://status.app, in Chromium and Firefox. That makes four jobs, one per site and browser. Each job installs only its browser, runs `pnpm test:status-app --project=<browser>` and uploads `e2e/test-results/` as an artifact named `e2e-daily-status-app-<environment>-<browser>`. A failure opens or comments on the issue labelled `e2e-daily`, and the next green run closes it. Same-origin requests carry an `x-e2e-bypass` header set from the `E2E_BYPASS_TOKEN` secret, so Cloudflare can skip its bot checks for the run. `E2E_BYPASS_TOKEN` is optional: when it is unset, the header is not sent. The workflow sets `GITHUB_TOKEN` from its own token, so the download tests check release assets through the GitHub API authenticated, since GitHub answers anonymous github.com traffic with 504s when it is under load.
 
-[`dependabot.yml`](../.github/dependabot.yml) checks every day and opens a PR when a new Playwright release is at least 3 days old, so the suite follows Playwright's Chromium build. The workflow also runs on any pull request that touches `e2e/package.json` or `e2e-daily.yml`, so an upgrade PR is tested against both sites before you merge it by hand. The report job skips pull request runs, and each ref gets its own concurrency group, so a PR run does not queue behind the daily run. Dependabot PRs only read Dependabot secrets, so once `E2E_BYPASS_TOKEN` exists, add it there too.
+[`dependabot.yml`](../.github/dependabot.yml) checks every day and opens a PR when a new Playwright release is at least 3 days old, so the suite follows Playwright's browser builds. The workflow also runs on any pull request that touches `e2e/package.json` or `e2e-daily.yml`, so an upgrade PR is tested against both sites before you merge it by hand. The report job skips pull request runs, and each ref gets its own concurrency group, so a PR run does not queue behind the daily run. Dependabot PRs only read Dependabot secrets, so once `E2E_BYPASS_TOKEN` exists, add it there too.
 
 ## Anvil forks
 
