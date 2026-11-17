@@ -72,7 +72,8 @@ seconds and bulk requests (including the search index build) ten seconds. Browse
 their existing behavior.
 
 The [Ghost cache](<../src/app/(website)/_lib/ghost/cache.ts>) stores results, including failures,
-for the blog listing and feeds in the Next.js Data Cache for 60 seconds. The home page uses
+for the blog listing and feeds in the Next.js Data Cache for 60 seconds. The blog listing
+and article pages show a maintenance notice when loading posts fails. The home page uses
 hourly ISR and can regenerate without the blog section during an outage. The sitemap uses
 hourly ISR with cached Ghost requests for both blog and Learn entries.
 

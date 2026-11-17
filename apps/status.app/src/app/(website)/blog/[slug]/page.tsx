@@ -1,4 +1,4 @@
-import { type ReactElement } from 'react'
+import { cache, type ReactElement } from 'react'
 
 import { Avatar, Text } from '@status-im/components'
 import {
@@ -37,6 +37,8 @@ import type { PostOrPage } from '@tryghost/content-api'
 export const revalidate = 3600 // 1 hour
 export const dynamicParams = true
 
+const getBlogPost = cache(getPostBySlug)
+
 export async function generateStaticParams() {
   const slugs = await getPostSlugs()
   return slugs.map(slug => ({ slug })) satisfies Array<
@@ -47,7 +49,15 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const t = await getTranslations('blog')
   const slug = (await params).slug
-  const post = await getPostBySlug(slug)
+  let post
+  try {
+    post = await getBlogPost(slug)
+  } catch {
+    return Metadata({
+      title: t('maintenanceTitle'),
+      description: t('maintenanceDescription'),
+    })
+  }
 
   if (!post) {
     return Metadata({
@@ -78,7 +88,7 @@ export default async function BlogDetailPage(props: Props) {
   const { params } = props
   const t = await getTranslations('blog')
 
-  const post = await getPostBySlug((await params).slug)
+  const post = await getBlogPost((await params).slug)
 
   if (!post) {
     return notFound()
