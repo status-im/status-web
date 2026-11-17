@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Status</title>
+  <subtitle>The open-source, decentralised wallet and messenger. Own your crypto and chat privately.</subtitle>
+  <link href="https://status.app/feed.xml" rel="self" />
+  <link href="https://status.app" />
+  <id>https://status.app/</id>
+  <updated>2026-07-18T11:59:55.000Z</updated>
+  <entry>
+    <title>Elements of Private, Secure Messaging Apps</title>
+    <link href="https://status.app/blog/elements-of-private-secure-messaging-apps-2" />
+    <id>https://status.app/blog/elements-of-private-secure-messaging-apps-2</id>
+    <published>2026-07-16T15:32:11.000Z</published>
+    <updated>2026-07-18T11:59:55.000Z</updated>
+    <author><name>Bobby Zalke</name></author>
+    <summary>Privacy in messaging is often reduced to a single feature: encryption.
+
+But private communication is not defined by one mechanism. It is the result of multiple layers working together each addressing a different type of privacy risk.
+
+Over time, both user expectations and system architectures have evolved. Messaging apps today are no longer just communication tools, but they are platforms that interact with identity, data, and networks at scale.
+
+This makes it important to revisit what “private </summary>
+  </entry>
+  <entry>
+    <title>Status v2.38: Mobile Browser, Private Notifications, New L2 Networks, and a Faster App Experience</title>
+    <link href="https://status.app/blog/status-v2-38-mobile-browser-private-notifications-new-l2-networks-and-a-faster-app-experience" />
+    <id>https://status.app/blog/status-v2-38-mobile-browser-private-notifications-new-l2-networks-and-a-faster-app-experience</id>
+    <published>2026-06-12T14:18:07.000Z</published>
+    <updated>2026-06-16T10:56:49.000Z</updated>
+    <author><name>Bobby Zalke</name></author>
+    <summary>Status v2.38 expands the capabilities of the privacy super app across mobile browsing and notifications, blockchain network support, user messaging experience, improved mobile interface scaling, and overall performance. The release ships a built-in Status Mobile Web Browser with the wallet and the Status decentralized dApp connector, real-time private push notifications for Android and iOS, support for eight new Ethereum Layer 2 networks in the self-custodial Status wallet, a revamped chat input</summary>
+  </entry>
+  <entry>
+    <title>Status v2.37: More control over your digital footprint, view on-chain friends, Linea support, Keycard &amp; dApps on mobile, smart QR code scan, and more</title>
+    <link href="https://status.app/blog/status-v2-37-more-control-over-your-digital-footprint-view-on-chain-friends-linea-support-keycard-dapps-on-mobile-smart-qr-code-scan-and-more" />
+    <id>https://status.app/blog/status-v2-37-more-control-over-your-digital-footprint-view-on-chain-friends-linea-support-keycard-dapps-on-mobile-smart-qr-code-scan-and-more</id>
+    <published>2026-03-19T16:41:21.000Z</published>
+    <updated>2026-05-07T13:19:35.000Z</updated>
+    <author><name>Bobby Zalke</name></author>
+    <summary>Release Roundup
+
+
+
+Status v2.37 brings you:
+
+ * More control over your digital footprint. A Fully Sandboxed, Local-only Mode
+ * Linea blockchain is now available in Status
+ * Your Ethereum on-chain social graph comes to Status
+ * Reliable messaging comes to Status communities with the SDS protocol (Phase 1 of 3)
+ * Keycard support now on Status mobile
+ * Connect to dApps via WalletConnect on Status mobile
+ * Maximize your view: collapsible navigation bar
+ * Smart QR scanner for everything 
+ * De</summary>
+  </entry>
+  <entry>
+    <title>Status Communities Get Reliable Messaging with the SDS Protocol</title>
+    <link href="https://status.app/blog/status-communities-get-reliable-messaging-with-the-sds-protocol" />
+    <id>https://status.app/blog/status-communities-get-reliable-messaging-with-the-sds-protocol</id>
+    <published>2026-03-19T16:25:49.000Z</published>
+    <updated>2026-05-25T06:45:30.000Z</updated>
+    <author><name>Volo</name></author>
+    <summary>What is the SDS Protocol?
+
+
+
+SDS stands for Scalable Data Sync - a protocol designed to reliably synchronize messages across distributed, decentralized networks. Its full name is the Scalable Data Sync protocol for distributed logs.
+
+In simple terms, SDS is the mechanism that ensures messages sent in a decentralized network are reliably delivered and that gaps in message history can be detected and recovered, without relying on any central server. 
+
+For a deeper dive into SDS, explore the full s</summary>
+  </entry>
+  <entry>
+    <title>Status Mobile v2.36: Advancing the Privacy Super App With Message Backup, Emoji Reactions, and More</title>
+    <link href="https://status.app/blog/status-mobile-v2-36" />
+    <id>https://status.app/blog/status-mobile-v2-36</id>
+    <published>2026-01-28T11:31:32.000Z</published>
+    <updated>2026-05-07T13:19:51.000Z</updated>
+    <author><name>Bobby Zalke</name></author>
+    <summary>Privacy isn’t just about encrypted but isolated apps. It’s about an integrated environment for digital interactions that protects user sovereignty and enables digital freedom.
+
+When you chat or transact with friends and business partners, hopping between different apps can break privacy even if each tool claims to be “fully private.”
+
+
+v2.36 marks a new milestone for Status Mobile.
+
+For the first time, the new Status mobile app is being released on iOS alongside Android, bringing a more unified </summary>
+  </entry>
+  <entry>
+    <title>Migrate from Status Legacy to Unified Status Mobile App</title>
+    <link href="https://status.app/blog/migrate-from-status-legacy-to-unified-status-mobile-app" />
+    <id>https://status.app/blog/migrate-from-status-legacy-to-unified-status-mobile-app</id>
+    <published>2026-01-27T00:27:13.000Z</published>
+    <updated>2026-05-25T06:46:05.000Z</updated>
+    <author><name>Volo</name></author>
+    <summary>If you’re currently using the Clojure-based Legacy Status Mobile app, now is a great time to switch to the new unified Status Mobile app (referred to as Status Mobile app in this article). All ongoing improvements, new features, and performance updates will be delivered in the new app going forward.</summary>
+  </entry>
+  <entry>
+    <title>Status v2.36: Private Browser, Secure Message Sync &amp; Emoji Reactions and more</title>
+    <link href="https://status.app/blog/status-v2-36-private-browser-secure-message-sync-emoji-reactions-and-more-2" />
+    <id>https://status.app/blog/status-v2-36-private-browser-secure-message-sync-emoji-reactions-and-more-2</id>
+    <published>2025-12-10T19:38:57.000Z</published>
+    <updated>2026-05-07T13:20:05.000Z</updated>
+    <author><name>Bobby Zalke</name></author>
+    <summary>Every time you switch from chat to browser…
+Every time you move from wallet to dApp…
+Every time you jump between apps…
+Your metadata leaks and your privacy disappears.
+
+Status was created to push back against that design.
+
+Because real privacy isn’t just encrypted messages. Real privacy means your entire digital flow stays inside one secure environment: your conversations, your browsing, your wallet, your dApps, your identity.
+
+All private. All in one place. All yours.
+
+That’s the mission: to bu</summary>
+  </entry>
+  <entry>
+    <title>Introducing the Unified Status Mobile App</title>
+    <link href="https://status.app/blog/introducing-unified-status-mobile-app" />
+    <id>https://status.app/blog/introducing-unified-status-mobile-app</id>
+    <published>2025-11-06T16:06:43.000Z</published>
+    <updated>2026-05-07T13:20:19.000Z</updated>
+    <author><name>Us</name></author>
+    <summary>Meet the unified Status Mobile app (referred to as Status Mobile app in this article) — built from a single Status Desktop codebase to deliver a unified experience across mobile and desktop devices. </summary>
+  </entry>
+  <entry>
+    <title>Legacy Mobile App v2.34.4, Unified Mobile App, and What’s Next</title>
+    <link href="https://status.app/blog/legacy-mobile-app-v2-34-4-unified-mobile-app-and-whats-next" />
+    <id>https://status.app/blog/legacy-mobile-app-v2-34-4-unified-mobile-app-and-whats-next</id>
+    <published>2025-10-28T17:24:54.000Z</published>
+    <updated>2026-05-07T13:18:35.000Z</updated>
+    <author><name>Us</name></author>
+    <summary>The initial version of the unified Status Mobile App for Android will be released next week, with iOS support to follow shortly. </summary>
+  </entry>
+  <entry>
+    <title>Status Desktop v2.35: Local Backups, New Home Page, Performance Boosts, and More</title>
+    <link href="https://status.app/blog/status-desktop-v2-35-local-backups-new-home-page-performance-boosts-and-more" />
+    <id>https://status.app/blog/status-desktop-v2-35-local-backups-new-home-page-performance-boosts-and-more</id>
+    <published>2025-09-05T10:14:16.000Z</published>
+    <updated>2026-05-25T07:40:23.000Z</updated>
+    <author><name>Us</name></author>
+    <summary>The latest Status Desktop release adds local user data backups, quick search and pinning for the Home Page, and big performance boosts.</summary>
+  </entry>
+  <entry>
+    <title>Status Steps Up as Founding Member of Linea Consortium</title>
+    <link href="https://status.app/blog/status-steps-up-as-founding-member-of-linea-consortium" />
+    <id>https://status.app/blog/status-steps-up-as-founding-member-of-linea-consortium</id>
+    <published>2025-07-29T09:00:00.000Z</published>
+    <updated>2025-10-01T10:09:00.000Z</updated>
+    <author><name>Us</name></author>
+    <summary>Status (SNT) has been appointed a founding member of the new Linea Consortium, alongside Consensys, ENS Labs, and Eigen Labs. </summary>
+  </entry>
+  <entry>
+    <title>Status Core Development Fund Update</title>
+    <link href="https://status.app/blog/status-core-development-fund-update" />
+    <id>https://status.app/blog/status-core-development-fund-update</id>
+    <published>2025-07-14T13:27:09.000Z</published>
+    <updated>2026-05-07T13:23:01.000Z</updated>
+    <author><name>Us</name></author>
+    <summary>The Status team is migrating our Core Development fund to a new multisig wallet as part of the continued development of Status, Status Network, and related projects in our ecosystem.</summary>
+  </entry>
+  <entry>
+    <title>Status Mobile v2.34: More New Chains, In-App News Feed, Watch Address &amp; More</title>
+    <link href="https://status.app/blog/status-mobile-v2-34-more-new-chains-in-app-news-feed-watch-address-more" />
+    <id>https://status.app/blog/status-mobile-v2-34-more-new-chains-in-app-news-feed-watch-address-more</id>
+    <published>2025-06-23T14:29:51.000Z</published>
+    <updated>2026-05-07T13:27:29.000Z</updated>
+    <author><name>Us</name></author>
+    <summary>We’re back with another powerful release — Status v2.34 brings major new functionality to Status Mobile, including in-app news and the ability to watch Ethereum addresses.</summary>
+  </entry>
+  <entry>
+    <title>Status v2.34: More New Chains, Market Centre, Real-Time Token List, &amp; More</title>
+    <link href="https://status.app/blog/status-v2-34-more-new-chains-market-centre-real-time-token-list-more" />
+    <id>https://status.app/blog/status-v2-34-more-new-chains-market-centre-real-time-token-list-more</id>
+    <published>2025-06-12T13:19:57.000Z</published>
+    <updated>2026-05-07T13:35:46.000Z</updated>
+    <author><name>Us</name></author>
+    <summary>We’re back with another powerful release — Status v2.34 brings major new functionality to Desktop.</summary>
+  </entry>
+  <entry>
+    <title>No Encryption Backdoors. No Compromises. That’s Status.</title>
+    <link href="https://status.app/blog/no-encryption-backdoors-no-compromises-thats-status" />
+    <id>https://status.app/blog/no-encryption-backdoors-no-compromises-thats-status</id>
+    <published>2025-03-28T14:16:53.000Z</published>
+    <updated>2026-05-07T13:50:33.000Z</updated>
+    <author><name>Samuel Hawksby-Robinson</name></author>
+    <summary>Once a backdoor exists, the encryption does not.</summary>
+  </entry>
+  <entry>
+    <title>Status v2.33 Brings Base Support to Mobile and Desktop</title>
+    <link href="https://status.app/blog/base-support-mobile-desktop" />
+    <id>https://status.app/blog/base-support-mobile-desktop</id>
+    <published>2025-03-20T18:10:55.000Z</published>
+    <updated>2026-05-07T13:54:45.000Z</updated>
+    <author><name>Us</name></author>
+    <summary>Status v2.33 is now available for Mobile and Desktop. Use Status with Base, the Ethereum L2, now!</summary>
+  </entry>
+  <entry>
+    <title>Why Status is Resilient Against Recent Signal Device Linking Attacks</title>
+    <link href="https://status.app/blog/why-status-is-resilient-against-recent-signal-device-linking-attacks" />
+    <id>https://status.app/blog/why-status-is-resilient-against-recent-signal-device-linking-attacks</id>
+    <published>2025-03-03T15:39:34.000Z</published>
+    <updated>2025-03-04T18:26:31.000Z</updated>
+    <author><name>Samuel Hawksby-Robinson</name></author>
+    <summary>Recent reports have highlighted that Russian state-aligned threat actors have been targeting Signal users through its linked device functionality.</summary>
+  </entry>
+  <entry>
+    <title>Status vs Telegram: Preserving Privacy for Crypto Users</title>
+    <link href="https://status.app/blog/status-vs-telegram-preserving-privacy-for-crypto-users" />
+    <id>https://status.app/blog/status-vs-telegram-preserving-privacy-for-crypto-users</id>
+    <published>2025-01-28T14:24:19.000Z</published>
+    <updated>2026-05-25T07:51:36.000Z</updated>
+    <author><name>Us</name></author>
+    <summary>Let’s look at how Status handles encryption, privacy, and more in comparison with Telegram.</summary>
+  </entry>
+  <entry>
+    <title>Status v2.32 Launched for Mobile and Desktop</title>
+    <link href="https://status.app/blog/status-v2-32-launched-for-mobile-and-desktop" />
+    <id>https://status.app/blog/status-v2-32-launched-for-mobile-and-desktop</id>
+    <published>2025-01-07T15:33:44.000Z</published>
+    <updated>2026-05-25T07:55:08.000Z</updated>
+    <author><name>Us</name></author>
+    <summary>Status v2.32 is now officially available for Status Mobile and Desktop.</summary>
+  </entry>
+  <entry>
+    <title>Status 2024 - Year in Review</title>
+    <link href="https://status.app/blog/status-2024-year-in-review" />
+    <id>https://status.app/blog/status-2024-year-in-review</id>
+    <published>2024-12-20T15:51:16.000Z</published>
+    <updated>2026-05-25T08:08:24.000Z</updated>
+    <author><name>Us</name></author>
+    <summary>2024 has been a year to remember for Status!</summary>
+  </entry>
+</feed>

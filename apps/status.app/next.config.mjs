@@ -13,11 +13,16 @@ import createNextIntlPlugin from 'next-intl/plugin'
 // eslint-disable-next-line import/no-unresolved
 import withVercelToolbar from '@vercel/toolbar/plugins/next'
 
+import { getFeedSnapshots } from './scripts/feed-snapshots.mjs'
 import { serverEnv } from './src/config/env.server.mjs'
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+// Keep live handlers available in local development for capturing fresh snapshots.
+const feedSnapshots =
+  serverEnv.NODE_ENV === 'development' ? [] : getFeedSnapshots()
 
 /** @type {import('next').NextConfig} */
 let config = {
@@ -140,8 +145,28 @@ let config = {
     // '@contentlayer/source-remote-files',
     // '@contentlayer/utils',
   ],
+  async rewrites() {
+    return {
+      beforeFiles: feedSnapshots.map(({ source, file }) => ({
+        source,
+        destination: `/feeds/${file}`,
+      })),
+    }
+  },
   headers: async () => {
     return [
+      ...feedSnapshots.map(({ source, atom }) => ({
+        source,
+        headers: [
+          {
+            key: 'Content-Type',
+            value: atom
+              ? 'application/xml; charset=utf-8'
+              : 'application/rss+xml; charset=utf-8',
+          },
+          { key: 'Cache-Control', value: 'public, max-age=300, s-maxage=300' },
+        ],
+      })),
       {
         source: '/.well-known/apple-app-site-association',
         headers: [
