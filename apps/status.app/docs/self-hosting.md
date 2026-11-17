@@ -59,18 +59,31 @@ With the flag set, the script logs a warning and writes an empty `public/blog-se
 instead of throwing. Blog search returns no results until the next build with Ghost back up. The
 homepage hides its blog section when Ghost returns no posts.
 
-The flag also shortens server-side Ghost calls. Ghost hangs for 60 seconds before it answers 504,
-so with the flag set, the Ghost client in
-[`src/app/(website)/_lib/ghost/client.ts`](<../src/app/(website)/_lib/ghost/client.ts>) and the RSS
-feed fetch give up after 10 seconds instead. Healthy calls take up to about 6 seconds. The check
-reads `process.env` on the server each time, so the timeout also applies to a running server that
-has the variable set. Browser fetches keep no timeout.
-
 `turbo.json` lists `ALLOW_EMPTY_BLOG_SEARCH_INDEX` in the `status.app#build` hash, so a build
 without the flag does not reuse a cached empty index.
 
 This change did not touch the `Dockerfile` or the `build:docker` script, so check that they pass
 `ALLOW_EMPTY_BLOG_SEARCH_INDEX` into `docker build` before you rely on it for an image build.
+
+## Serving requests while Ghost is down
+
+The [Ghost client](<../src/app/(website)/_lib/ghost/client.ts>) gives server-side requests three
+seconds and bulk requests (including the search index build) ten seconds. Browser fetches keep
+their existing behavior.
+
+The [Ghost cache](<../src/app/(website)/_lib/ghost/cache.ts>) stores results, including failures,
+for the blog listing and feeds in the Next.js Data Cache for 60 seconds. The home page uses
+hourly ISR and can regenerate without the blog section during an outage. The sitemap uses
+hourly ISR with cached Ghost requests for both blog and Learn entries.
+
+Successful RSS and Atom responses can be cached by a CDN and served stale for up to a day if
+the origin returns an error. Without a usable cached response, the feeds return `503` with
+`Retry-After: 60`. Both versions of each app news feed share the same upstream cache entry.
+Traffic rechecks Ghost after the cache interval.
+
+On Vercel, [the project configuration](../vercel.json) enables Fluid Compute for status.app
+deployments and sets a 15-second execution limit for App Router functions. This bills active CPU
+time separately from provisioned memory time.
 
 ## Build and run locally
 

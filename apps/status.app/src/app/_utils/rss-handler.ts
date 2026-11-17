@@ -4,6 +4,11 @@ import { clientEnv } from '~/config/env.client.mjs'
 import { buildLegacyNewsFeed } from '~app/_utils/legacy-news-feed'
 import { buildNewsFeed } from '~app/_utils/news-feed'
 import { baseUrl } from '~website/_lib/base-url'
+import {
+  cacheGhostResult,
+  ghostFeedCacheControl,
+  ghostFeedUnavailable,
+} from '~website/_lib/ghost/cache'
 import { getGhostTimeoutSignal } from '~website/_lib/ghost/client'
 
 import type { FeedFormat } from '~app/_utils/feed-content'
@@ -42,49 +47,54 @@ type FeedType = keyof typeof FEED
  */
 type FeedVersion = 'v1' | 'v2'
 
+const getRssFeed = cacheGhostResult('RSS feeds', async (type: FeedType) => {
+  const response = await fetch(
+    `${clientEnv.NEXT_PUBLIC_GHOST_API_URL}${FEED[type].path}`,
+    {
+      headers: {
+        Accept: 'application/rss+xml',
+      },
+      cache: 'no-store',
+      signal: getGhostTimeoutSignal(),
+    }
+  )
+
+  if (!response.ok) {
+    throw new Error(`Ghost returned ${response.status} for ${type}`)
+  }
+
+  return {
+    body: await response.text(),
+    contentType: response.headers.get('content-type') || 'application/xml',
+  }
+})
+
 export async function handleRssFeed(
   type: FeedType,
   version: FeedVersion = 'v1'
 ) {
-  const { format, lineBreak, path } = FEED[type]
+  const feed = await getRssFeed(type)
+  if (!feed) return ghostFeedUnavailable()
+
+  const { format, lineBreak } = FEED[type]
 
   try {
-    const response = await fetch(
-      `${clientEnv.NEXT_PUBLIC_GHOST_API_URL}${path}`,
-      {
-        headers: {
-          Accept: 'application/rss+xml',
-        },
-        signal: getGhostTimeoutSignal(),
-      }
-    )
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch RSS feed: ${type}`)
-    }
-
-    const body = await response.text()
     const newXml =
       type === 'main'
-        ? buildBlogFeed(body)
+        ? buildBlogFeed(feed.body)
         : version === 'v2'
-          ? buildNewsFeed(body, format)
-          : buildLegacyNewsFeed(body, lineBreak)
+          ? buildNewsFeed(feed.body, format)
+          : buildLegacyNewsFeed(feed.body, lineBreak)
 
     return new Response(newXml, {
       headers: {
-        'content-type':
-          response.headers.get('content-type') || 'application/xml',
+        'content-type': feed.contentType,
+        'cache-control': ghostFeedCacheControl(type === 'main' ? 60 : 300),
       },
     })
   } catch (error) {
-    console.error(`Error fetching RSS feed: ${type}`, error)
-    return new Response(JSON.stringify({ error: 'Failed to fetch RSS feed' }), {
-      status: 500,
-      headers: {
-        'content-type': 'application/json',
-      },
-    })
+    console.error(`Error rendering RSS feed: ${type}`, error)
+    return ghostFeedUnavailable()
   }
 }
 
