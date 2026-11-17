@@ -28,9 +28,11 @@ Builds the `apps/status.app` image from [`Dockerfile`](../apps/status.app/Docker
 
 ## Vercel
 
-Vercel's Git integration skips `docs/repo/sync`, the branch used by [AI Docs Sync](../.github/workflows/ai-docs-sync.yml), before adding a build to the queue. Keep that branch excluded in each project's `vercel.json`. The root [`vercel.json`](../vercel.json) also turns off automatic deployments for `main`, which is not a branch here.
+[`hub`](../apps/hub/vercel.json) disables Vercel Git deployments on all branches; Jenkins publishes the site. [`get.status.app`](../apps/get.status.app/vercel.json) allows Vercel Git deployments only from `master` because its public hostname is assigned to that Vercel project. These Git settings leave explicit CLI deployments available.
 
-For other branches, each app except the two extensions has a `vercel.json` with a build command and an `ignoreCommand`. The command can cancel an unchanged project's build after it has already entered the queue. Vercel's [Skip deployments setting](https://vercel.com/docs/monorepos#skipping-unaffected-projects) works before queueing but relies on declared workspace dependencies. Keep cross-app file references in mind, such as the status.app source used by get.status.app and the status.network legal content read by hub.
+Projects that use Vercel Git deployments exclude `docs/repo/sync`, the branch used by [AI Docs Sync](../.github/workflows/ai-docs-sync.yml), in their `vercel.json`. The root [`vercel.json`](../vercel.json) also excludes `main`, which is not a branch here.
+
+An `ignoreCommand` in `vercel.json` overrides the dashboard's Ignored Build Step for a deployment. It can cancel a build after it enters the queue. Vercel's [Skip deployments setting](https://vercel.com/docs/monorepos#skipping-unaffected-projects) works before queueing and uses the project's workspace dependencies and the lockfile. A test dependency update that changes an app's lockfile entries can still trigger that app.
 
 [`apps/status.app/vercel.json`](../apps/status.app/vercel.json) also enables Fluid Compute (`"fluid": true`) and sets `maxDuration` to 15 seconds for every function under `src/app/**/*`. Together with the 3-second timeout on regular Ghost requests, this limits how long status.app functions run while Ghost is down.
 
