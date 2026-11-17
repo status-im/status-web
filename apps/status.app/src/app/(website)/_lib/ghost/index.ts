@@ -35,7 +35,7 @@ const ghostLive = GhostContentAPI({
       method: method.toUpperCase(),
       headers,
       cache: 'no-store',
-      signal: getGhostTimeoutSignal({ bulk: params.limit === 'all' }),
+      signal: getGhostTimeoutSignal({ bulk: params['limit'] === 'all' }),
     })
     if (!response.ok) {
       const error: Error & { statusCode?: number } = new Error(
