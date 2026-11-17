@@ -1,11 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "git": {
-    "deploymentEnabled": {
-      "docs/repo/sync": false
-    }
+    "deploymentEnabled": false
   },
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD ../../{patches,package.json,turbo.json} ../../packages/{colors,icons,components,wallet,status-network,sitemap-utils} ../../e2e ./",
   "installCommand": "pnpm install --dir ../../ --frozen-lockfile",
   "buildCommand": "turbo run build --cwd ../../ --filter=./apps/hub..."
 }
