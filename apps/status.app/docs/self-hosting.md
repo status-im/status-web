@@ -86,8 +86,8 @@ Production builds serve committed XML in [public/feeds](../public/feeds) at the 
 using [Next.js rewrites](../next.config.mjs). A snapshot is served directly and never queries
 Ghost at request time. Readers pick up updates when refreshed snapshots are deployed.
 
-The current snapshots are the public [RSS capture from July 15, 2026][rss-capture] and
-[Atom capture from October 6, 2026][atom-capture]. The desktop and mobile news feeds
+The current snapshots come from the [November 5, 2026 production deployment][rss-capture]
+and the [October 6, 2026 Atom capture][atom-capture]. The desktop and mobile news feeds
 still use their live handlers until valid snapshots are available for each version.
 
 To refresh when Ghost is healthy, start the app with the real Ghost configuration and
@@ -108,7 +108,7 @@ For routes without a snapshot, the CDN can serve a previous successful response 
 an error. Without a usable cached response, these routes return `503` with `Retry-After: 60`.
 Both versions of each app news feed share an upstream cache entry.
 
-[rss-capture]: https://web.archive.org/web/20260715164449id_/https://status.app/rss
+[rss-capture]: https://status-website-eenm08ld5-status-im-web.vercel.app/rss
 [atom-capture]: https://web.archive.org/web/20261006204929id_/https://status.app/feed.xml
 
 ## Build and run locally
