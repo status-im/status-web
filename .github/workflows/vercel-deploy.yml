@@ -1,0 +1,73 @@
+name: Vercel branch deploy
+
+on:
+  push:
+    branches: [develop, master]
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      projects: ${{ steps.plan.outputs.projects }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.17.0
+      - name: Select Vercel projects
+        id: plan
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BEFORE: ${{ github.event.before }}
+        run: node ci/vercel-deploy-plan.mjs "$BEFORE" "$GITHUB_SHA" "$GITHUB_REF_NAME"
+
+  deploy:
+    needs: plan
+    if: needs.plan.outputs.projects != '[]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        project: ${{ fromJSON(needs.plan.outputs.projects) }}
+    concurrency:
+      group: vercel-${{ github.ref }}-${{ matrix.project }}
+      cancel-in-progress: false
+    steps:
+      - name: Request Vercel deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          PROJECT: ${{ matrix.project }}
+          REPO_ID: ${{ github.event.repository.id }}
+        shell: bash
+        run: |
+          : "${VERCEL_TOKEN:?Missing VERCEL_TOKEN}" "${VERCEL_ORG_ID:?Missing VERCEL_ORG_ID}"
+          # Use the current branch tip when a newer push landed while this job was queued.
+          sha=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/$GITHUB_REF_NAME" --jq .object.sha)
+          payload=$(jq -n --arg project "$PROJECT" --arg ref "$GITHUB_REF_NAME" \
+            --arg sha "$sha" --argjson repoId "$REPO_ID" '
+            {
+              name: $project,
+              project: $project,
+              gitSource: {type: "github", repoId: $repoId, ref: $ref, sha: $sha},
+              projectSettings: {commandForIgnoringBuildStep: "exit 1"}
+            } + if $ref == "master" then {target: "production"} else {} end
+          ')
+          curl --silent --show-error --fail-with-body --max-time 60 \
+            --header "Authorization: Bearer $VERCEL_TOKEN" \
+            --header 'Content-Type: application/json' \
+            --data "$payload" \
+            "https://api.vercel.com/v13/deployments?teamId=$VERCEL_ORG_ID" |
+            jq -er 'select(.id and .url and .readyState != "CANCELED" and .readyState != "ERROR") | "https://\(.url) (\(.readyState))"'

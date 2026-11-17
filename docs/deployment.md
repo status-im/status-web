@@ -28,11 +28,13 @@ Builds the `apps/status.app` image from [`Dockerfile`](../apps/status.app/Docker
 
 ## Vercel
 
-[`hub`](../apps/hub/vercel.json) disables Vercel Git deployments on all branches; Jenkins publishes the site. [`get.status.app`](../apps/get.status.app/vercel.json) allows Vercel Git deployments only from `master` because its public hostname is assigned to that Vercel project. These Git settings leave explicit CLI deployments available.
+[`Vercel branch deploy`](../.github/workflows/vercel-deploy.yml) owns deploys from `develop` (preview) and `master` (production). Keep native Git deploys disabled for those branches in each connected project's `vercel.json`. The workflow uses the existing `VERCEL_TOKEN` and `VERCEL_ORG_ID` repository secrets to request builds for the selected projects through the Vercel API.
 
-Projects that use Vercel Git deployments exclude `docs/repo/sync`, the branch used by [AI Docs Sync](../.github/workflows/ai-docs-sync.yml), in their `vercel.json`. The root [`vercel.json`](../vercel.json) also excludes `main`, which is not a branch here.
+The [deployment plan](../ci/vercel-deploy-plan.mjs) compares the whole push before requesting any builds. It skips repo docs, `e2e/`, and changes to the deployment policy itself. It also skips lockfile changes from verified Playwright Dependabot PRs that only update the test workspace. Any incidental lockfile changes from those PRs take effect on the next app deployment. Other lockfile changes use Turbo's dependency analysis. Markdown under published content directories still triggers deployments for its apps.
 
-An `ignoreCommand` in `vercel.json` overrides the dashboard's Ignored Build Step for a deployment. It can cancel a build after it enters the queue. Vercel's [Skip deployments setting](https://vercel.com/docs/monorepos#skipping-unaffected-projects) works before queueing and uses the project's workspace dependencies and the lockfile. A test dependency update that changes an app's lockfile entries can still trigger that app.
+Native Git previews exclude `docs/*` branches and Dependabot's Playwright branch. Use the `-no-deploy` branch suffix to opt out of a preview on another feature branch. The branch name does not affect the workflow's decision after a merge. Vercel's [Skip deployments setting](https://vercel.com/docs/monorepos#skipping-unaffected-projects) filters unaffected projects on preview branches. A project's `ignoreCommand` overrides the dashboard's Ignored Build Step. It lets the workflow's `develop` and `master` builds proceed once requested and still filters other branches after queueing.
+
+[`hub`](../apps/hub/vercel.json) uses Jenkins for automatic deployments. [`get.status.app`](../apps/get.status.app/vercel.json) receives only `master` deployments from the branch workflow because its public hostname is assigned to its Vercel project. Both disable native Vercel Git deployments on all branches.
 
 [`apps/status.app/vercel.json`](../apps/status.app/vercel.json) also enables Fluid Compute (`"fluid": true`) and sets `maxDuration` to 15 seconds for every function under `src/app/**/*`. Together with the 3-second timeout on regular Ghost requests, this limits how long status.app functions run while Ghost is down.
 
