@@ -87,7 +87,8 @@ using [Next.js rewrites](../next.config.mjs). A snapshot is served directly and 
 Ghost at request time. Readers pick up updates when refreshed snapshots are deployed.
 
 The current snapshots come from the [November 5, 2026 production deployment][rss-capture]
-and the [October 6, 2026 Atom capture][atom-capture]. The desktop and mobile news feeds
+and the [October 6, 2026 Atom capture][atom-capture]. The RSS self link points readers to
+`https://status.app/rss`. The desktop and mobile news feeds
 still use their live handlers until valid snapshots are available for each version.
 
 To refresh when Ghost is healthy, start the app with the real Ghost configuration and

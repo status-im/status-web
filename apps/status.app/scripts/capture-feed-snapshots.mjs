@@ -29,7 +29,19 @@ const snapshots = await Promise.all(
       body = await readFile(join(source, feed.file))
     }
 
-    validateFeed(body.toString('utf8'), feed)
+    const xml = body.toString('utf8')
+    validateFeed(xml, feed)
+
+    // Ghost's self link points readers back to the origin we are preserving.
+    if (feed.source === '/rss') {
+      body = Buffer.from(
+        xml.replace(
+          '<atom:link href="https://our.status.im/rss/" rel="self"',
+          '<atom:link href="https://status.app/rss" rel="self"',
+        ),
+      )
+    }
+
     return { feed, body }
   }),
 )
