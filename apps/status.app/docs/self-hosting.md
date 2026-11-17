@@ -73,7 +73,8 @@ their existing behavior.
 
 The [Ghost cache](<../src/app/(website)/_lib/ghost/cache.ts>) stores results, including failures,
 for the blog listing and feeds in the Next.js Data Cache for 60 seconds. The blog listing
-and article pages show a maintenance notice when loading posts fails. The
+and article pages show a maintenance notice when loading posts fails. Article pages with
+the notice revalidate after 60 seconds. The
 [locale middleware](../src/middleware.ts) leaves unprefixed article URLs on the route that
 can render slugs on demand, including when Ghost supplies no slugs at build time. The home
 page uses hourly ISR and can regenerate without the blog section during an outage. The

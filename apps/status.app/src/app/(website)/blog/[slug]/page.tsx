@@ -27,6 +27,8 @@ import {
   getPostsByTagSlug,
   getPostSlugs,
 } from '~website/_lib/ghost'
+import { cacheGhostResult } from '~website/_lib/ghost/cache'
+import { BlogEmptyState } from '~website/blog/_components/blog-empty-state'
 import { PostAuthor } from '~website/blog/_components/post-author'
 import { PostCard } from '~website/blog/_components/post-card'
 import { PostTag } from '~website/blog/_components/post-tag'
@@ -37,7 +39,20 @@ import type { PostOrPage } from '@tryghost/content-api'
 export const revalidate = 3600 // 1 hour
 export const dynamicParams = true
 
-const getBlogPost = cache(getPostBySlug)
+const getBlogPost = cache(async (slug: string) => {
+  try {
+    return await getPostBySlug(slug)
+  } catch (error) {
+    console.error('Failed to fetch blog article from Ghost:', error)
+    return null
+  }
+})
+
+// Lower the ISR revalidation interval only for pages with the notice.
+const getBlogMaintenance = cacheGhostResult(
+  'blog article maintenance',
+  async () => null
+)
 
 export async function generateStaticParams() {
   const slugs = await getPostSlugs()
@@ -49,13 +64,13 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const t = await getTranslations('blog')
   const slug = (await params).slug
-  let post
-  try {
-    post = await getBlogPost(slug)
-  } catch {
+  const post = await getBlogPost(slug)
+
+  if (post === null) {
     return Metadata({
       title: t('maintenanceTitle'),
       description: t('maintenanceDescription'),
+      alternates: { canonical: `/blog/${slug}` },
     })
   }
 
@@ -89,6 +104,15 @@ export default async function BlogDetailPage(props: Props) {
   const t = await getTranslations('blog')
 
   const post = await getBlogPost((await params).slug)
+
+  if (post === null) {
+    await getBlogMaintenance()
+    return (
+      <Body>
+        <BlogEmptyState postsUnavailable />
+      </Body>
+    )
+  }
 
   if (!post) {
     return notFound()
