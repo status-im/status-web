@@ -6,13 +6,15 @@ import {
   LinkedinIcon,
   TwitterIcon,
 } from '@status-im/icons/social'
-import { notFound } from 'next/navigation'
+import { unstable_cache } from 'next/cache'
+import { notFound, redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import production from 'react/jsx-runtime'
 import rehypeParse from 'rehype-parse'
 import rehypeReact, { type Options } from 'rehype-react'
 import { unified } from 'unified'
 
+import { clientEnv } from '~/config/env.client.mjs'
 import { SITE_LOGO_URL } from '~/config/site'
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
 import { Metadata, toMetaDescription } from '~app/_metadata'
@@ -25,10 +27,8 @@ import {
   DISALLOWED_TAGS,
   getPostBySlug,
   getPostsByTagSlug,
-  getPostSlugs,
 } from '~website/_lib/ghost'
 import { cacheGhostResult } from '~website/_lib/ghost/cache'
-import { BlogEmptyState } from '~website/blog/_components/blog-empty-state'
 import { PostAuthor } from '~website/blog/_components/post-author'
 import { PostCard } from '~website/blog/_components/post-card'
 import { PostTag } from '~website/blog/_components/post-tag'
@@ -39,26 +39,31 @@ import type { PostOrPage } from '@tryghost/content-api'
 export const revalidate = 3600 // 1 hour
 export const dynamicParams = true
 
-const getBlogPost = cache(async (slug: string) => {
-  try {
-    return await getPostBySlug(slug)
-  } catch (error) {
-    console.error('Failed to fetch blog article from Ghost:', error)
-    return null
-  }
-})
+// A failed refresh leaves the last successful Ghost post in the Data Cache.
+const getCachedBlogPost = unstable_cache(
+  async (slug: string) => (await getPostBySlug(slug)) ?? null,
+  ['blog-article', clientEnv.NEXT_PUBLIC_GHOST_API_URL],
+  { revalidate }
+)
 
-// Lower the ISR revalidation interval only for pages with the notice.
+// Retry an uncached article sooner than the normal one-hour ISR interval.
 const getBlogMaintenance = cacheGhostResult(
   'blog article maintenance',
   async () => null
 )
 
-export async function generateStaticParams() {
-  const slugs = await getPostSlugs()
-  return slugs.map(slug => ({ slug })) satisfies Array<
-    Awaited<Promise<Props['params']>>
-  >
+const getBlogPost = cache(async (slug: string) => {
+  try {
+    return await getCachedBlogPost(slug)
+  } catch (error) {
+    console.error('Failed to fetch blog article from Ghost:', error)
+    return undefined
+  }
+})
+
+// Generate on demand so a failed article read cannot stop a deployment.
+export function generateStaticParams() {
+  return []
 }
 
 export async function generateMetadata({ params }: Props) {
@@ -66,12 +71,8 @@ export async function generateMetadata({ params }: Props) {
   const slug = (await params).slug
   const post = await getBlogPost(slug)
 
-  if (post === null) {
-    return Metadata({
-      title: t('maintenanceTitle'),
-      description: t('maintenanceDescription'),
-      alternates: { canonical: `/blog/${slug}` },
-    })
+  if (post === undefined) {
+    return Metadata({ title: t('maintenanceTitle') })
   }
 
   if (!post) {
@@ -103,15 +104,12 @@ export default async function BlogDetailPage(props: Props) {
   const { params } = props
   const t = await getTranslations('blog')
 
-  const post = await getBlogPost((await params).slug)
+  const { slug } = await params
+  const post = await getBlogPost(slug)
 
-  if (post === null) {
+  if (post === undefined) {
     await getBlogMaintenance()
-    return (
-      <Body>
-        <BlogEmptyState postsUnavailable />
-      </Body>
-    )
+    redirect(`/blog/maintenance/${encodeURIComponent(slug)}`)
   }
 
   if (!post) {

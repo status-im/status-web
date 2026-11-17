@@ -72,13 +72,19 @@ seconds and bulk requests (including the search index build) ten seconds. Browse
 their existing behavior.
 
 The [Ghost cache](<../src/app/(website)/_lib/ghost/cache.ts>) stores results, including failures,
-for the blog listing and feeds in the Next.js Data Cache for 60 seconds. The blog listing
-and article pages show a maintenance notice when loading posts fails. Article pages with
-the notice revalidate after 60 seconds. The
-[locale middleware](../src/middleware.ts) leaves unprefixed article URLs on the route that
-can render slugs on demand, including when Ghost supplies no slugs at build time. The home
-page uses hourly ISR and can regenerate without the blog section during an outage. The
-sitemap uses hourly ISR with cached Ghost requests for both blog and Learn entries.
+for the blog listing and feeds in the Next.js Data Cache for 60 seconds. The blog listing shows
+a maintenance notice when loading posts fails, while search can still use its built index.
+
+[Article pages](<../src/app/(website)/blog/[slug]/page.tsx>) generate on the first request and use
+hourly ISR. If refreshing a cached Ghost post fails, Next.js renders the last successful post.
+When no post is cached, the article redirects temporarily to a
+[maintenance response](<../src/app/(website)/blog/maintenance/[slug]/route.ts>) that returns HTTP
+503 and asks clients to retry after 60 seconds. The article retries after 60 seconds. A 404 from
+Ghost still means the article does not exist. The [locale middleware](../src/middleware.ts) keeps
+unprefixed article and maintenance URLs on the routes that can handle them.
+
+The home page uses hourly ISR and can regenerate without the blog section during an outage.
+The sitemap uses hourly ISR with cached Ghost requests for both blog and Learn entries.
 
 On Vercel, [the project configuration](../vercel.json) enables Fluid Compute for status.app
 deployments and sets a 15-second execution limit for App Router functions. This bills active CPU

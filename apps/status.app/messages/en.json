@@ -258,7 +258,8 @@
     "emptyTitle": "No posts yet",
     "emptyDescription": "Check back soon for new articles.",
     "maintenanceTitle": "The blog is under maintenance",
-    "maintenanceDescription": "Please check back soon."
+    "maintenanceDescription": "Please check back soon.",
+    "retryArticle": "Try the article again"
   },
   "jobs": {
     "metaTitle": "Jobs",
