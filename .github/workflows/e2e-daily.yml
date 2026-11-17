@@ -1,8 +1,8 @@
 name: E2E daily
 
-# Runs the status.app suite against staging and production once a day. A failed
-# scheduled run opens (or comments on) one issue labelled `e2e-daily`; the next
-# green run closes it.
+# Runs the status.app suite against staging and production, in Chromium and
+# Firefox, once a day. A failed scheduled run opens (or comments on) one issue
+# labelled `e2e-daily`; the next green run closes it.
 
 on:
   schedule:
@@ -23,13 +23,15 @@ concurrency:
 
 jobs:
   status-app:
-    name: status.app (${{ matrix.environment }})
+    name: status.app (${{ matrix.environment }}, ${{ matrix.browser }})
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
     strategy:
       fail-fast: false
       matrix:
+        environment: [staging, production]
+        browser: [chromium, firefox]
         include:
           - environment: staging
             url: https://dev.status.app
@@ -56,10 +58,10 @@ jobs:
         run: pnpm install --frozen-lockfile --filter e2e...
 
       - name: Install Playwright browsers
-        run: cd e2e && pnpm exec playwright install chromium --with-deps
+        run: cd e2e && pnpm exec playwright install ${{ matrix.browser }} --with-deps
 
       - name: Run status.app E2E tests
-        run: cd e2e && pnpm test:status-app
+        run: cd e2e && pnpm test:status-app --project=${{ matrix.browser }}
         env:
           STATUS_APP_URL: ${{ matrix.url }}
           SITEMAP_SAMPLE: all
@@ -75,7 +77,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: e2e-daily-status-app-${{ matrix.environment }}
+          name: e2e-daily-status-app-${{ matrix.environment }}-${{ matrix.browser }}
           path: e2e/test-results/
           retention-days: 14
 
