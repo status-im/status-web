@@ -32,6 +32,8 @@ Vercel's Git integration skips `docs/repo/sync`, the branch used by [AI Docs Syn
 
 For other branches, each app except the two extensions has a `vercel.json` with a build command and an `ignoreCommand`. The command can cancel an unchanged project's build after it has already entered the queue. Vercel's [Skip deployments setting](https://vercel.com/docs/monorepos#skipping-unaffected-projects) works before queueing but relies on declared workspace dependencies. Keep cross-app file references in mind, such as the status.app source used by get.status.app and the status.network legal content read by hub.
 
+[`apps/status.app/vercel.json`](../apps/status.app/vercel.json) also enables Fluid Compute (`"fluid": true`) and sets `maxDuration` to 15 seconds for every function under `src/app/**/*`. Together with the 3-second timeout on regular Ghost requests, this limits how long status.app functions run while Ghost is down.
+
 [`.github/workflows/preview-deploy.yml`](../.github/workflows/preview-deploy.yml) deploys previews only for pull requests opened from forks, and the job runs in the `preview-deploy-approval` environment. Turbo decides which of `status.app`, `hub`, `portfolio`, `api`, `status.network` and the components Storybook are affected, and the workflow posts the preview URLs as a PR comment.
 
 ## Extension store releases
