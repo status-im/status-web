@@ -11,9 +11,7 @@ const ghost = GhostContentAPI({
   version: 'v5.0',
 })
 
-// Dedicated Ghost client for /learn fetches. Skips the Next.js data cache so
-// editorial changes (new posts, retitles, unpublishes) surface immediately
-// instead of waiting up to an hour for the default 1h fetch revalidation.
+// Uncached Ghost requests for /learn and callers that manage their own cache.
 const ghostLive = GhostContentAPI({
   url: clientEnv.NEXT_PUBLIC_GHOST_API_URL,
   key: clientEnv.NEXT_PUBLIC_GHOST_API_KEY,
@@ -183,7 +181,8 @@ export function findLatestReleasePost(posts: PostOrPage[]): PostOrPage | null {
 
 export const getPostBySlug = async (slug: string) => {
   try {
-    const post = await ghost.posts.read(
+    // The article's unstable_cache owns caching and preserves the request timeout.
+    const post = await ghostLive.posts.read(
       { slug },
       {
         include: ['tags', 'authors'],
@@ -256,21 +255,6 @@ export const getPostsByAuthorSlug = async (slug: string, page = 1) => {
     posts: [...response],
     author,
     meta: response.meta,
-  }
-}
-
-export const getPostSlugs = async (): Promise<string[]> => {
-  try {
-    const posts = await ghost.posts.browse({
-      limit: 7,
-      fields: 'slug',
-      filter: `visibility:public+${EXCLUDED_TAGS_FILTER}`,
-    })
-
-    return posts.map(post => post.slug)
-  } catch (error) {
-    console.error('Failed to fetch post slugs from Ghost API:', error)
-    return []
   }
 }
 

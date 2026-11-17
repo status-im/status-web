@@ -256,7 +256,10 @@
     "noResultsTitle": "No posts found",
     "noResultsDescription": "Try another search or clear the selected category.",
     "emptyTitle": "No posts yet",
-    "emptyDescription": "Check back soon for new articles."
+    "emptyDescription": "Check back soon for new articles.",
+    "maintenanceTitle": "The blog is under maintenance",
+    "maintenanceDescription": "Please check back soon.",
+    "retryArticle": "Try the article again"
   },
   "jobs": {
     "metaTitle": "Jobs",

@@ -15,6 +15,7 @@ import {
   BLOG_SEARCH_QUERY_MAX_LENGTH,
   BLOG_SEARCH_RESULTS_PER_PAGE,
 } from '../_utils/search-config'
+import { BlogEmptyState } from './blog-empty-state'
 import { HighlightedPostCard } from './highlighted-post-card'
 import { InfinitePostGrid } from './infinite-post-grid'
 import { PostGrid } from './post-grid'
@@ -25,6 +26,7 @@ import type { PostOrPage, PostsOrPages } from '@tryghost/content-api'
 type Props = {
   initialPosts: PostOrPage[]
   meta: PostsOrPages['meta']
+  postsUnavailable: boolean
   /** Server-rendered results for the incoming URL, or null if none were produced. */
   initialResults: BlogSearchResults | null
   initialQuery: string
@@ -42,8 +44,14 @@ const toRequestKey = (
 ) => `${query}|${category ?? ''}|${limit}`
 
 export function BlogSearch(props: Props) {
-  const { initialPosts, meta, initialResults, initialQuery, initialCategory } =
-    props
+  const {
+    initialPosts,
+    meta,
+    postsUnavailable,
+    initialResults,
+    initialQuery,
+    initialCategory,
+  } = props
   const t = useTranslations('blog')
   const pathname = usePathname()
   const [query, setQuery] = useState(initialQuery)
@@ -333,15 +341,7 @@ export function BlogSearch(props: Props) {
           />
         </div>
       ) : (
-        <div className="flex min-h-[320px] flex-col items-center justify-center text-center">
-          <Text size={19} weight="semibold">
-            {t('emptyTitle')}
-          </Text>
-          <div className="pb-1" />
-          <Text size={15} color="$neutral-50">
-            {t('emptyDescription')}
-          </Text>
-        </div>
+        <BlogEmptyState postsUnavailable={postsUnavailable} />
       )}
     </>
   )

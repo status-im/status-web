@@ -26,31 +26,31 @@ export const revalidate = 3600 // 1 hour
 const getCachedBlogPosts = cacheGhostResult('blog posts', () => getPosts())
 
 /**
- * A Ghost blip should cost the listing rather than the whole page.
- *
- * The heading, the search box and the nav are all still useful without posts,
- * and unlike the `/blog/page/[page]` continuations this route never reads "no
- * posts" as "no such page", so an empty render cannot be cached as a 404.
+ * Keep the listing page available during a Ghost outage. The search index
+ * can still serve results, and the empty state can explain the outage.
  */
 async function getBlogPosts(): Promise<{
   posts: PostOrPage[]
   meta: PostsOrPages['meta']
+  postsUnavailable: boolean
 }> {
-  return (
-    (await getCachedBlogPosts()) ?? {
-      posts: [],
-      meta: {
-        pagination: {
-          page: 1,
-          limit: BLOG_PAGE_SIZE,
-          pages: 0,
-          total: 0,
-          next: null,
-          prev: null,
-        },
+  const result = await getCachedBlogPosts()
+  if (result) return { ...result, postsUnavailable: false }
+
+  return {
+    posts: [],
+    meta: {
+      pagination: {
+        page: 1,
+        limit: BLOG_PAGE_SIZE,
+        pages: 0,
+        total: 0,
+        next: null,
+        prev: null,
       },
-    }
-  )
+    },
+    postsUnavailable: true,
+  }
 }
 
 export async function generateMetadata(): Promise<NextMetadata> {
@@ -74,10 +74,8 @@ type Props = {
 
 export default async function BlogPage({ searchParams }: Props) {
   const t = await getTranslations('blog')
-  const [{ posts: initialPosts, meta }, params] = await Promise.all([
-    getBlogPosts(),
-    searchParams,
-  ])
+  const [{ posts: initialPosts, meta, postsUnavailable }, params] =
+    await Promise.all([getBlogPosts(), searchParams])
   const query =
     typeof params.q === 'string'
       ? params.q.slice(0, BLOG_SEARCH_QUERY_MAX_LENGTH)
@@ -127,6 +125,7 @@ export default async function BlogPage({ searchParams }: Props) {
             <BlogSearch
               initialPosts={initialPosts}
               meta={meta}
+              postsUnavailable={postsUnavailable}
               initialResults={initialResults}
               initialQuery={query}
               initialCategory={category}
