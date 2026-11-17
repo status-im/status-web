@@ -1,5 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "git": {
+    "deploymentEnabled": {
+      "docs/repo/sync": false
+    }
+  },
   "ignoreCommand": "git diff --quiet HEAD^ HEAD ../../{patches,package.json,turbo.json} ../../packages/{colors,icons} ./",
   "installCommand": "pnpm install --dir ../../ --frozen-lockfile",
   "buildCommand": "git submodule update --init --recursive && turbo run build --cwd ../../ --filter=./apps/status.network..."
