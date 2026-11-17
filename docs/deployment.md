@@ -30,6 +30,8 @@ Builds the `apps/status.app` image from [`Dockerfile`](../apps/status.app/Docker
 
 Every app except the two extensions has a `vercel.json` with its own build command and an `ignoreCommand`, so a push that touches neither the app nor its workspace dependencies skips the rebuild. The root [`vercel.json`](../vercel.json) turns off automatic deployments for `main`, which is not a branch here.
 
+[`apps/status.app/vercel.json`](../apps/status.app/vercel.json) also enables Fluid Compute (`"fluid": true`) and sets `maxDuration` to 15 seconds for every function under `src/app/**/*`. Together with the 3-second timeout on regular Ghost requests, this limits how long status.app functions run while Ghost is down.
+
 [`.github/workflows/preview-deploy.yml`](../.github/workflows/preview-deploy.yml) deploys previews only for pull requests opened from forks, and the job runs in the `preview-deploy-approval` environment. Turbo decides which of `status.app`, `hub`, `portfolio`, `api`, `status.network` and the components Storybook are affected, and the workflow posts the preview URLs as a PR comment.
 
 ## Extension store releases
