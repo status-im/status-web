@@ -1,10 +1,14 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
+import { remoteBaseURLs } from './global-setup.sites.js'
 import { loadEnvConfig } from './src/config/env.js'
 import { runsHubProjects } from './src/config/test-servers.js'
+import { assertTargetsAnswer } from './src/helpers/target-check.js'
 
-async function globalSetup(): Promise<void> {
+import type { FullConfig } from '@playwright/test'
+
+async function globalSetup(config: FullConfig): Promise<void> {
   console.log('[global-setup] Validating environment...')
 
   const env = loadEnvConfig()
@@ -45,6 +49,10 @@ async function globalSetup(): Promise<void> {
   if (runsHubProjects() && /localhost|127\.0\.0\.1/.test(env.BASE_URL)) {
     await warmUpRoutes(env.BASE_URL, ['/', '/pre-deposits'])
   }
+
+  // A deployed Hub (BASE_URL) that does not answer would make every test wait
+  // out its navigation timeout; stop here instead.
+  if (runsHubProjects()) await assertTargetsAnswer(remoteBaseURLs(config))
 }
 
 /** Hit routes once to trigger dev-server compilation; failures are non-fatal. */

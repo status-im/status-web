@@ -24,6 +24,7 @@ Rules for agents working in `e2e/`. The root [AGENTS.md](../AGENTS.md) applies t
 
 ## Caveats
 
+- The global setups abort the run when a deployed target sends no response. Do not turn that into a status check: tests report a 5xx themselves. Keep `src/helpers/target-check.ts` in step with the copy in logos-web.
 - The `@anvil` fixture redirects RPC by the `?chainId=` query parameter and skips `localhost` on purpose, so the Hub has to point `NEXT_PUBLIC_STATUS_API_URL` at a non-localhost host.
 - The default fork URLs are pruning nodes. SNT funding reads historical state, so point `MAINNET_FORK_URL` at an archive provider or those tests fail with historical-state errors.
 - Put local values in `.env` or `.env.local`, both gitignored. `.env.example` documents names only; never put a value in it.

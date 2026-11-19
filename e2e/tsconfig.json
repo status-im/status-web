@@ -35,6 +35,7 @@
     "playwright.config.ts",
     "playwright.status-app.config.ts",
     "global-setup.ts",
+    "global-setup.sites.ts",
     "global-teardown.ts",
     "download-metamask-extension.ts"
   ],
