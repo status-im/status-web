@@ -220,6 +220,19 @@ contract InitializeVotingTest is FeaturedVotingContractTest {
         featuredVotingContract.initializeVoting(communityIDs[0], 100);
     }
 
+    function test_RevertWhen_VoteAmountIsZero() public {
+        vm.prank(votingContract);
+        directoryContract.addCommunity(communityIDs[0]);
+
+        vm.expectRevert(bytes("vote amount must be greater than zero"));
+        vm.prank(alice);
+        featuredVotingContract.initializeVoting(communityIDs[0], 0);
+
+        vm.prank(bob);
+        featuredVotingContract.initializeVoting(communityIDs[0], 100);
+        assertEq(featuredVotingContract.getVotings().length, 1);
+    }
+
     function test_RevertWhen_CooldownPeriodHasNotPassed() public {
         vm.prank(votingContract);
         directoryContract.addCommunity(communityIDs[0]);
