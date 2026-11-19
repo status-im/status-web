@@ -1,4 +1,9 @@
-import { isLocalTarget } from './src/config/site.js'
+import {
+  BYPASS_HEADER,
+  BYPASS_TOKEN,
+  isLocalTarget,
+  STATUS_APP_URL,
+} from './src/config/site.js'
 import { selectedProjects } from './src/config/test-servers.js'
 import { assertTargetsAnswer } from './src/helpers/target-check.js'
 
@@ -33,5 +38,14 @@ export function remoteBaseURLs(config: FullConfig): string[] {
  * before the first test when a deployed target does not answer.
  */
 export default async function globalSetup(config: FullConfig): Promise<void> {
-  await assertTargetsAnswer(remoteBaseURLs(config))
+  await assertTargetsAnswer(remoteBaseURLs(config), bypassHeader)
+}
+
+/**
+ * The bypass header goes to status.app only, as in `site.fixture.ts`: the token
+ * must never leave the origin it was issued for.
+ */
+function bypassHeader(url: string): Record<string, string> {
+  const sameOrigin = new URL(url).origin === new URL(STATUS_APP_URL).origin
+  return BYPASS_TOKEN && sameOrigin ? { [BYPASS_HEADER]: BYPASS_TOKEN } : {}
 }
