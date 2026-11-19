@@ -198,6 +198,7 @@ contract VotingContract is Ownable2Step {
                 (block.timestamp - _getVotingRoom(roomId).endAt) > timeBetweenVoting, "Community was in a vote recently"
             );
         }
+        require(voteAmount > 0, "vote amount must be greater than zero");
         require(token.balanceOf(msg.sender) >= voteAmount, "not enough token");
 
         uint256 votingRoomID = votingRooms.length + 1;
