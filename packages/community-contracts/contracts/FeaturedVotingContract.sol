@@ -131,7 +131,10 @@ contract FeaturedVotingContract is Ownable2Step {
     }
 
     function initializeVoting(bytes calldata publicKey, uint256 voteAmount) public {
-        require(votings.length == 0 || votings[votings.length - 1].finalized, "vote already ongoing");
+        require(
+            votings.length == 0 || (votings[votings.length - 1].finalized && votings[votings.length - 1].evaluated),
+            "vote already ongoing"
+        );
         require(directory.isCommunityInDirectory(publicKey), "community not in directory");
         require(!isInCooldownPeriod(publicKey), "community has been featured recently");
         require(token.balanceOf(msg.sender) >= voteAmount, "not enough token");
@@ -186,6 +189,9 @@ contract FeaturedVotingContract is Ownable2Step {
             bytes[] storage featured = featuredByVotingID[voting.id];
 
             for (uint256 i = 0; i < featuredPerVotingCount; i++) {
+                if (communitiesVotesCount == 0) {
+                    break;
+                }
                 uint256 highestIndex = 0;
 
                 for (uint256 j = 1; j < communitiesVotesCount; j++) {

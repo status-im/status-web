@@ -206,6 +206,37 @@ contract InitializeVotingTest is FeaturedVotingContractTest {
         featuredVotingContract.initializeVoting(communityIDs[0], 100);
     }
 
+    function test_RevertWhen_PreviousVotingIsOnlyPartiallyFinalized() public {
+        vm.startPrank(votingContract);
+        directoryContract.addCommunity(communityIDs[0]);
+        directoryContract.addCommunity(communityIDs[1]);
+        directoryContract.addCommunity(communityIDs[2]);
+        vm.stopPrank();
+
+        vm.prank(bob);
+        featuredVotingContract.initializeVoting(communityIDs[0], 100);
+
+        FeaturedVotingContract.SignedVote[] memory votes = new FeaturedVotingContract.SignedVote[](1);
+        votes[0] = _createSignedVote(alicesKey, alice, communityIDs[1], 100, block.timestamp);
+        _ensureVoteTokens(alice, 100);
+        featuredVotingContract.castVotes(votes);
+
+        skip(votingWithVerificationLength + 1);
+        vm.roll(block.number + 1);
+        featuredVotingContract.finalizeVoting(1);
+        assertTrue(_getVoting(0).finalized);
+        assertFalse(_getVoting(0).evaluated);
+
+        vm.expectRevert(bytes("vote already ongoing"));
+        vm.prank(bob);
+        featuredVotingContract.initializeVoting(communityIDs[2], 100);
+
+        featuredVotingContract.finalizeVoting(1);
+        vm.prank(bob);
+        featuredVotingContract.initializeVoting(communityIDs[2], 100);
+        assertEq(featuredVotingContract.getVotings().length, 2);
+    }
+
     function test_RevertWhen_CommunityIsNotInDirectory() public {
         vm.expectRevert(bytes("community not in directory"));
         featuredVotingContract.initializeVoting(communityIDs[0], 100);
@@ -338,6 +369,26 @@ contract FinalizeVotingTest is FeaturedVotingContractTest {
         bytes[] memory featuredCommunities = directoryContract.getFeaturedCommunities();
         assertEq(featuredCommunities.length, 1);
         assertEq(featuredCommunities[0], communityIDs[0]);
+    }
+
+    function test_FinalizeVoting_AllVotesInvalidAtSnapshot() public {
+        vm.prank(votingContract);
+        directoryContract.addCommunity(communityIDs[0]);
+
+        vm.prank(bob);
+        featuredVotingContract.initializeVoting(communityIDs[0], 100);
+        uint256 bobBalance = mockSNT.balanceOf(bob);
+        vm.prank(bob);
+        mockSNT.transfer(makeAddr("otherHolder"), bobBalance);
+
+        skip(votingWithVerificationLength + 1);
+        vm.roll(block.number + 1);
+        featuredVotingContract.finalizeVoting(1);
+
+        FeaturedVotingContract.Voting memory voting = _getVoting(0);
+        assertTrue(voting.finalized);
+        assertTrue(voting.evaluated);
+        assertEq(directoryContract.getFeaturedCommunities().length, 0);
     }
 
     function test_FinalizeVoting_FeatureByFirstCastedWhenVoteIsADraw() public {
