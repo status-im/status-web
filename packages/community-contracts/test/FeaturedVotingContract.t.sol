@@ -372,11 +372,23 @@ contract FinalizeVotingTest is FeaturedVotingContractTest {
     }
 
     function test_FinalizeVoting_AllVotesInvalidAtSnapshot() public {
-        vm.prank(votingContract);
+        vm.startPrank(votingContract);
         directoryContract.addCommunity(communityIDs[0]);
+        directoryContract.addCommunity(communityIDs[1]);
+        vm.stopPrank();
 
         vm.prank(bob);
         featuredVotingContract.initializeVoting(communityIDs[0], 100);
+
+        skip(votingWithVerificationLength + 1);
+        vm.roll(block.number + 1);
+        featuredVotingContract.finalizeVoting(1);
+        bytes[] memory featured = directoryContract.getFeaturedCommunities();
+        assertEq(featured.length, 1);
+        assertEq(featured[0], communityIDs[0]);
+
+        vm.prank(bob);
+        featuredVotingContract.initializeVoting(communityIDs[1], 100);
         uint256 bobBalance = mockSNT.balanceOf(bob);
         vm.prank(bob);
         mockSNT.transfer(makeAddr("otherHolder"), bobBalance);
@@ -385,7 +397,7 @@ contract FinalizeVotingTest is FeaturedVotingContractTest {
         vm.roll(block.number + 1);
         featuredVotingContract.finalizeVoting(1);
 
-        FeaturedVotingContract.Voting memory voting = _getVoting(0);
+        FeaturedVotingContract.Voting memory voting = _getVoting(1);
         assertTrue(voting.finalized);
         assertTrue(voting.evaluated);
         assertEq(directoryContract.getFeaturedCommunities().length, 0);
