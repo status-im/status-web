@@ -37,6 +37,7 @@ const isDocsOrTest = file =>
     '.github/workflows/ai-docs-sync.yml',
     '.github/workflows/e2e.yml',
     '.github/workflows/e2e-daily.yml',
+    '.github/workflows/playwright-reviewers.yml',
   ].includes(file) ||
   /^(?:(?:apps|packages)\/[^/]+\/)?(?:README|AGENTS)\.md$/.test(file) ||
   /^(?:(?:apps|packages)\/[^/]+\/)?docs\/.*\.mdx?$/.test(file)

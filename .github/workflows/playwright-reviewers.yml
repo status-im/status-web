@@ -1,0 +1,42 @@
+name: Playwright PR reviewers
+
+# Requests reviews on the Playwright upgrade PRs opened by Dependabot (see
+# .github/dependabot.yml), so the maintainers below get notified. Dependabot
+# no longer supports a `reviewers` option. `pull_request_target` gives the
+# token write access on Dependabot PRs; the job never checks out PR code.
+
+on:
+  pull_request_target:
+    types: [opened, reopened]
+
+permissions: {}
+
+jobs:
+  request-reviewers:
+    name: Request reviewers
+    if: >-
+      github.event.pull_request.user.login == 'dependabot[bot]' &&
+      startsWith(github.event.pull_request.head.ref, 'dependabot/npm_and_yarn/playwright-')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Request reviewers
+        uses: actions/github-script@v7
+        env:
+          # GitHub logins, comma-separated. Each needs access to the repo.
+          REVIEWERS: JulesFiliot, jinhojang6
+        with:
+          script: |
+            const reviewers = process.env.REVIEWERS.split(',')
+              .map(login => login.trim())
+              .filter(Boolean)
+            if (reviewers.length === 0) return
+
+            await github.rest.pulls.requestReviewers({
+              ...context.repo,
+              pull_number: context.payload.pull_request.number,
+              reviewers,
+            })
