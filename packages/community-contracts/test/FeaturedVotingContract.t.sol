@@ -403,6 +403,39 @@ contract FinalizeVotingTest is FeaturedVotingContractTest {
         assertEq(directoryContract.getFeaturedCommunities().length, 0);
     }
 
+    function test_FinalizeVoting_RemovedCommunityDoesNotBlockRemainingBatches() public {
+        vm.startPrank(votingContract);
+        directoryContract.addCommunity(communityIDs[0]);
+        directoryContract.addCommunity(communityIDs[1]);
+        directoryContract.addCommunity(communityIDs[2]);
+        vm.stopPrank();
+
+        _ensureVoteTokens(alice, 100);
+        vm.prank(bob);
+        featuredVotingContract.initializeVoting(communityIDs[0], 200);
+
+        FeaturedVotingContract.SignedVote[] memory votes = new FeaturedVotingContract.SignedVote[](1);
+        votes[0] = _createSignedVote(alicesKey, alice, communityIDs[1], 100, block.timestamp);
+        featuredVotingContract.castVotes(votes);
+
+        skip(votingWithVerificationLength + 1);
+        vm.roll(block.number + 1);
+        featuredVotingContract.finalizeVoting(1);
+
+        vm.prank(votingContract);
+        directoryContract.removeCommunity(communityIDs[0]);
+        featuredVotingContract.finalizeVoting(1);
+
+        bytes[] memory featured = directoryContract.getFeaturedCommunities();
+        assertEq(featured.length, 1);
+        assertEq(featured[0], communityIDs[1]);
+        assertTrue(_getVoting(0).evaluated);
+
+        vm.prank(bob);
+        featuredVotingContract.initializeVoting(communityIDs[2], 100);
+        assertEq(featuredVotingContract.getVotings().length, 2);
+    }
+
     function test_FinalizeVoting_FeatureByFirstCastedWhenVoteIsADraw() public {
         vm.startPrank(votingContract);
         directoryContract.addCommunity(communityIDs[1]);

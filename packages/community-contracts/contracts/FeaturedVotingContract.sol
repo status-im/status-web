@@ -188,6 +188,16 @@ contract FeaturedVotingContract is Ownable2Step {
         if (voting.evaluated) {
             bytes[] storage featured = featuredByVotingID[voting.id];
 
+            // A community may have been removed while votes were evaluated in batches.
+            for (uint256 i = 0; i < communitiesVotesCount; i++) {
+                if (
+                    communitiesVotes[i].totalSntAmount > 0
+                        && !directory.isCommunityInDirectory(communitiesVotes[i].community)
+                ) {
+                    communitiesVotes[i].totalSntAmount = 0;
+                }
+            }
+
             for (uint256 i = 0; i < featuredPerVotingCount; i++) {
                 if (communitiesVotesCount == 0) {
                     break;
