@@ -26,6 +26,8 @@ export default defineConfig({
       : []),
   ],
   outputDir: 'test-results/artifacts',
+  // Aborts the run when a project points at a deployed URL that does not answer.
+  globalSetup: './global-setup.sites.ts',
 
   projects: [
     {

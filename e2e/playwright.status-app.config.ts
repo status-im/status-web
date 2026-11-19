@@ -28,6 +28,8 @@ export default defineConfig<SiteOptions>({
       : []),
   ],
   outputDir: 'test-results/artifacts',
+  // Aborts the run when a deployed target does not answer.
+  globalSetup: './global-setup.sites.ts',
 
   use: {
     baseURL: STATUS_APP_URL,
