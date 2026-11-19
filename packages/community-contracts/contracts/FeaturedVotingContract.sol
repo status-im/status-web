@@ -169,9 +169,14 @@ contract FeaturedVotingContract is Ownable2Step {
             require(voting.endAt < block.timestamp, "vote still ongoing");
             voting.finalized = true;
             voting.endAt = block.timestamp;
-            voting.endBlock = block.number;
+            // MiniMe checkpoints in the current block can still change after this call.
+            // Use a completed block so every finalization batch sees the same balances.
+            voting.endBlock = block.number - 1;
             voting.evaluatingPos = 0;
             voting.evaluated = false;
+            // Discard cast-time totals before recounting each vote at finalization.
+            communitiesVotesCount = 0;
+            delete communitiesVotes;
         }
 
         require(!voting.evaluated, "vote already finalized");
