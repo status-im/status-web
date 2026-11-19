@@ -40,6 +40,12 @@ Native Git previews exclude `docs/**` branches and Dependabot's Playwright branc
 
 [`.github/workflows/preview-deploy.yml`](../.github/workflows/preview-deploy.yml) deploys previews only for pull requests opened from forks, and the job runs in the `preview-deploy-approval` environment. Turbo decides which of `status.app`, `hub`, `portfolio`, `api`, `status.network` and the components Storybook are affected, and the workflow posts the preview URLs as a PR comment.
 
+## Playwright upgrade reviewers
+
+Dependabot opens the daily Playwright upgrade PRs but no longer supports a `reviewers` option, so [`playwright-reviewers.yml`](../.github/workflows/playwright-reviewers.yml) requests the reviews instead. It runs on `pull_request_target` when a PR is opened or reopened, and its job only runs for PRs from `dependabot[bot]` on `dependabot/npm_and_yarn/playwright-*` branches. `pull_request_target` gives the token write access on Dependabot PRs; the job never checks out PR code.
+
+The reviewers are the comma-separated GitHub logins in the workflow's `REVIEWERS` env var, currently `JulesFiliot, jinhojang6`. Each login needs access to the repo.
+
 ## Extension store releases
 
 The wallet Jenkins job stops at a ZIP. Uploading it to the existing Chrome Web Store item and publishing are manual and belong to the release owner; [`apps/wallet/README.md`](../apps/wallet/README.md#chrome-web-store-release) has the steps.
