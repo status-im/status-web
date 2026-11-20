@@ -4,7 +4,7 @@ import { getTranslations } from 'next-intl/server'
 
 import { Body } from '~components/body'
 import { Breadcrumbs } from '~components/breadcrumbs'
-import { getArchivePostsByAuthor } from '~website/_lib/blog-archive'
+import { getPostsByAuthorSlug } from '~website/_lib/ghost'
 
 import { BlogPager } from './blog-pager'
 import { InfinitePostGrid } from './infinite-post-grid'
@@ -24,7 +24,7 @@ export async function AuthorArchive(props: Props) {
   const { slug, page } = props
 
   const t = await getTranslations('blog')
-  const response = getArchivePostsByAuthor(slug, page)
+  const response = await getPostsByAuthorSlug(slug, page)
 
   if (!response) {
     notFound()

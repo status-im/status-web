@@ -7,10 +7,10 @@ import { match } from 'ts-pattern'
 
 import { useIntersectionObserver } from '~hooks/use-intersection-observer'
 import {
-  getArchivePosts,
-  getArchivePostsByAuthor,
-  getArchivePostsByTag,
-} from '~website/_lib/blog-archive'
+  getPosts,
+  getPostsByAuthorSlug,
+  getPostsByTagSlug,
+} from '~website/_lib/ghost'
 
 import { PostGrid } from './post-grid'
 
@@ -74,9 +74,9 @@ export const InfinitePostGrid = (props: Props) => {
       const [, tag] = queryKey
 
       const response = await match(type)
-        .with('posts', () => getArchivePosts({ page }))
-        .with('author', () => getArchivePostsByAuthor(tag, page))
-        .with('tag', () => getArchivePostsByTag(tag, page))
+        .with('posts', () => getPosts({ page }))
+        .with('author', () => getPostsByAuthorSlug(tag, page))
+        .with('tag', () => getPostsByTagSlug(tag, page))
         .exhaustive()
 
       return response!

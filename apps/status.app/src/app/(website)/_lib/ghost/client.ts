@@ -61,6 +61,8 @@ const defaultMakeRequest = async ({ url, method, params, headers }) => {
   })
 
   if (!response.ok) {
+    // Carry the status so callers can tell "Ghost has no such post" apart from
+    // "the call to Ghost failed". See `isGhostNotFoundError`.
     const error = new Error(`HTTP error! status: ${response.status}`)
     error.statusCode = response.status
     throw error

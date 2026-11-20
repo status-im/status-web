@@ -1,16 +1,20 @@
+import { cache, type ReactElement } from 'react'
+
 import { Avatar, Text } from '@status-im/components'
 import {
   FacebookIcon,
   LinkedinIcon,
   TwitterIcon,
 } from '@status-im/icons/social'
-import { notFound } from 'next/navigation'
+import { unstable_cache } from 'next/cache'
+import { notFound, redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import production from 'react/jsx-runtime'
 import rehypeParse from 'rehype-parse'
 import rehypeReact, { type Options } from 'rehype-react'
 import { unified } from 'unified'
 
+import { clientEnv } from '~/config/env.client.mjs'
 import { SITE_LOGO_URL } from '~/config/site'
 import { jsonLD, JSONLDScript } from '~/utils/json-ld'
 import { Metadata, toMetaDescription } from '~app/_metadata'
@@ -20,30 +24,65 @@ import { Breadcrumbs } from '~components/breadcrumbs'
 import { blogComponents } from '~components/content'
 import { baseUrl } from '~website/_lib/base-url'
 import {
-  archivedPosts,
-  getArchivedPost,
-  getArchivePostsByTag,
-} from '~website/_lib/blog-archive'
-import { getArchivedArticle } from '~website/_lib/blog-archive/articles'
+  DISALLOWED_TAGS,
+  getPostBySlug,
+  getPostsByTagSlug,
+} from '~website/_lib/ghost'
+import { cacheGhostResult } from '~website/_lib/ghost/cache'
 import { PostAuthor } from '~website/blog/_components/post-author'
 import { PostCard } from '~website/blog/_components/post-card'
 import { PostTag } from '~website/blog/_components/post-tag'
+import { getPostFAQItems } from '~website/blog/_utils/faq'
 
-import type { ReactElement } from 'react'
+import type { PostOrPage } from '@tryghost/content-api'
 
-export const dynamicParams = false
+export const revalidate = 3600 // 1 hour
+export const dynamicParams = true
 
+// A failed refresh leaves the last successful Ghost post in the Data Cache.
+const getCachedBlogPost = unstable_cache(
+  async (slug: string) => (await getPostBySlug(slug)) ?? null,
+  ['blog-article', clientEnv.NEXT_PUBLIC_GHOST_API_URL],
+  { revalidate }
+)
+
+// Retry an uncached article sooner than the normal one-hour ISR interval.
+const getBlogMaintenance = cacheGhostResult(
+  'blog article maintenance',
+  async () => null
+)
+
+const getBlogPost = cache(async (slug: string) => {
+  try {
+    return await getCachedBlogPost(slug)
+  } catch (error) {
+    console.error('Failed to fetch blog article from Ghost:', error)
+    return undefined
+  }
+})
+
+// Generate on demand so a failed article read cannot stop a deployment.
 export function generateStaticParams() {
-  return archivedPosts.map(post => ({ slug: post.slug }))
+  return []
 }
 
 export async function generateMetadata({ params }: Props) {
-  const { slug } = await params
-  const post = getArchivedPost(slug)
-  if (!post) notFound()
+  const t = await getTranslations('blog')
+  const slug = (await params).slug
+  const post = await getBlogPost(slug)
+
+  if (post === undefined) {
+    return Metadata({ title: t('maintenanceTitle') })
+  }
+
+  if (!post) {
+    return Metadata({
+      title: t('postNotFound'),
+    })
+  }
 
   return Metadata({
-    title: post.title,
+    title: post.title!,
     description: toMetaDescription(post.custom_excerpt ?? post.excerpt),
     alternates: {
       canonical: `/blog/${slug}`,
@@ -52,7 +91,7 @@ export async function generateMetadata({ params }: Props) {
       type: 'article',
       title: post.og_title ?? undefined,
       description: post.og_description ?? undefined,
-      images: post.feature_image ? [post.feature_image] : undefined,
+      images: [post.og_image ?? post.feature_image!],
     },
   })
 }
@@ -66,16 +105,37 @@ export default async function BlogDetailPage(props: Props) {
   const t = await getTranslations('blog')
 
   const { slug } = await params
-  const post = getArchivedPost(slug)
-  if (!post) notFound()
+  const post = await getBlogPost(slug)
 
-  const { html, faqItems = [] } = getArchivedArticle(slug)
-  const tagArchive = post.primary_tag?.slug
-    ? getArchivePostsByTag(post.primary_tag.slug)
-    : undefined
-  const relatedPosts = (tagArchive?.posts ?? [])
-    .filter(related => related.slug !== slug)
-    .slice(0, 4)
+  if (post === undefined) {
+    await getBlogMaintenance()
+    redirect(`/blog/maintenance/${encodeURIComponent(slug)}`)
+  }
+
+  if (!post) {
+    return notFound()
+  }
+
+  if (post.primary_tag && DISALLOWED_TAGS.includes(post.primary_tag.slug)) {
+    return notFound()
+  }
+
+  let relatedPosts: PostOrPage[] = []
+  if (post.primary_tag) {
+    // The post itself already loaded, so a failure here costs a decorative
+    // strip at the bottom of the page. Swallow it rather than 500 the article.
+    try {
+      const response = await getPostsByTagSlug(post.primary_tag.slug)
+
+      if (response) {
+        relatedPosts = response.posts
+          .filter(p => p.slug !== post.slug)
+          .slice(0, 4)
+      }
+    } catch (error) {
+      console.error('Failed to fetch related posts from Ghost API:', error)
+    }
+  }
 
   const rehypeReactOptions: Options = {
     ...production,
@@ -85,7 +145,7 @@ export default async function BlogDetailPage(props: Props) {
   const { result } = await unified()
     .use(rehypeParse, { fragment: true })
     .use(rehypeReact, rehypeReactOptions)
-    .process(html)
+    .process(post.html!)
 
   const content = result as ReactElement
 
@@ -96,27 +156,32 @@ export default async function BlogDetailPage(props: Props) {
       href: '/blog',
     },
     {
-      label: post.title,
+      label: post.title!,
       href: `/blog/${post.slug}`,
     },
   ]
 
-  if (tagArchive) {
+  if (post.primary_tag) {
     breadcrumbs.splice(1, 0, {
-      label: tagArchive.tag.name ?? tagArchive.tag.slug,
-      href: `/blog/tag/${tagArchive.tag.slug}`,
+      label: post.primary_tag.name ?? post.primary_tag.slug,
+      href: `/blog/tag/${post.primary_tag.slug}`,
     })
   }
 
   const author = post.primary_author!
   const tag = post.primary_tag
+  const faqItems = getPostFAQItems(
+    post.codeinjection_head,
+    post.codeinjection_foot
+  )
+
   // const { asPath } = useRouter()
   const asPath = `/blog/${post.slug}`
 
   const url = `${baseUrl()}${asPath}`
   const shareUrl = encodeURIComponent(url)
   const articleSchema = jsonLD.article({
-    headline: post.title,
+    headline: post.title!,
     description: post.excerpt ?? undefined,
     image: post.feature_image ?? undefined,
     datePublished: post.published_at ?? undefined,
@@ -151,13 +216,13 @@ export default async function BlogDetailPage(props: Props) {
         <div className="container-blog gap-3 pb-6 pt-12 xl:pt-20">
           {tag && <PostTag size="32" tag={tag} asLink />}
 
-          <h1 className="text-40 font-bold xl:text-64">{post.title}</h1>
+          <h1 className="text-40 font-bold xl:text-64">{post.title!}</h1>
 
           <div className="mt-auto flex h-5 items-center gap-1">
             <PostAuthor author={author} asLink />
             <Text size={15} color="$neutral-50">
               {t('publishedOn', {
-                date: formatDate(new Date(post.published_at)),
+                date: formatDate(new Date(post.published_at!)),
               })}
             </Text>
           </div>

@@ -6,7 +6,7 @@ import { getTranslations } from 'next-intl/server'
 
 import { Body } from '~components/body'
 import { Breadcrumbs } from '~components/breadcrumbs'
-import { getArchivePostsByTag } from '~website/_lib/blog-archive'
+import { getPostsByTagSlug } from '~website/_lib/ghost'
 import { TAGS } from '~website/blog/_tags'
 
 import { BlogPager } from './blog-pager'
@@ -29,7 +29,7 @@ export async function TagArchive(props: Props) {
   const { slug, page } = props
 
   const t = await getTranslations('blog')
-  const response = getArchivePostsByTag(slug, page)
+  const response = await getPostsByTagSlug(slug, page)
 
   if (!response) {
     notFound()

@@ -46,6 +46,36 @@ const ghostLive = GhostContentAPI({
   },
 })
 
+/**
+ * The answers Ghost gives about the slug itself, as opposed to a failed call.
+ *
+ * 404 is the ordinary miss. 422 is Ghost refusing the slug against its own
+ * `isSlug` validation, which is what a slug carrying a dot, an uppercase
+ * letter or a space gets: `/blog/run-prater-beacon-node.sh` is a filename a
+ * crawler lifted out of a code block, not a post that might exist later.
+ * Both are permanent answers about that URL, so both are the 404 to render.
+ */
+const NO_SUCH_POST_STATUS_CODES = [404, 422]
+
+/**
+ * Anything outside {@link NO_SUCH_POST_STATUS_CODES}, a 429 under crawl load,
+ * a 5xx, a network blip, is a failed call. Treating those as "not found" turns
+ * a momentary Ghost outage into a `notFound()` that Next then caches for the
+ * route's whole revalidate window, so a crawler that arrives during the blip
+ * sees a 404 for the next hour.
+ */
+function isGhostNotFoundError(error: unknown): boolean {
+  if (typeof error !== 'object' || error === null || !('statusCode' in error)) {
+    return false
+  }
+
+  const { statusCode } = error as { statusCode?: number }
+
+  return (
+    statusCode !== undefined && NO_SUCH_POST_STATUS_CODES.includes(statusCode)
+  )
+}
+
 type Params = { page?: number; limit?: number; tag?: string }
 
 // Tags hidden from blog list but accessible by direct URL
@@ -79,8 +109,31 @@ const LEARN_FETCH_EXCLUDED_TAGS_FILTER = [
   .map(tag => `tag:-${tag}`)
   .join('+')
 
-const BLOG_PAGE_SIZE = 7
+function hasDisallowedTag(post: { tags?: Array<{ slug?: string | null }> }) {
+  return post.tags?.some(
+    tag => !!tag.slug && DISALLOWED_TAGS.includes(tag.slug)
+  )
+}
 
+/**
+ * Page size for /blog and its `/blog/page/[page]` continuations. Shared so the
+ * crawlable pager splits the archive on exactly the boundaries Ghost does.
+ */
+export const BLOG_PAGE_SIZE = 7
+
+/** Page size for the tag and author archives and their continuations. */
+export const ARCHIVE_PAGE_SIZE = 6
+
+/**
+ * @see getPostsByTagSlug for why this does not swallow errors.
+ *
+ * `/blog/page/[page]` reads "no posts" as "no such page" and calls
+ * `notFound()`, so returning an empty list on a failed call would turn a Ghost
+ * blip into a 404 cached for the route's whole revalidate window, on every
+ * continuation URL at once. Callers that can live without the result catch it
+ * themselves: the homepage strip and `/blog` render without posts, the feed
+ * answers 503.
+ */
 export const getPosts = async (params: Params = {}) => {
   const { page = 1, limit = BLOG_PAGE_SIZE, tag } = params
 
@@ -97,6 +150,23 @@ export const getPosts = async (params: Params = {}) => {
   return { posts: [...response], meta: response.meta }
 }
 
+export const getPostsForSearch = async () => {
+  try {
+    const response = await ghost.posts.browse({
+      include: ['tags', 'authors'],
+      formats: ['plaintext'],
+      order: 'published_at DESC',
+      limit: 'all',
+      filter: `visibility:public+${EXCLUDED_TAGS_FILTER}`,
+    })
+
+    return [...response]
+  } catch (error) {
+    console.error('Failed to fetch posts for blog search:', error)
+    return []
+  }
+}
+
 const RELEASE_TITLE_PATTERN = /\bstatus\s+v?\d+\.\d+/i
 
 export function findLatestReleasePost(posts: PostOrPage[]): PostOrPage | null {
@@ -107,6 +177,138 @@ export function findLatestReleasePost(posts: PostOrPage[]): PostOrPage | null {
   )
 
   return releasePost ?? null
+}
+
+export const getPostBySlug = async (slug: string) => {
+  try {
+    // The article's unstable_cache owns caching and preserves the request timeout.
+    const post = await ghostLive.posts.read(
+      { slug },
+      {
+        include: ['tags', 'authors'],
+      }
+    )
+
+    if (hasDisallowedTag(post)) {
+      return
+    }
+
+    return post
+  } catch (error) {
+    if (isGhostNotFoundError(error)) {
+      return
+    }
+
+    throw error
+  }
+}
+
+/**
+ * An archive is "not found" when Ghost returns no posts for it.
+ *
+ * Ghost answers both an unknown tag and a page past the end with 200 and an
+ * empty list, so emptiness is the only not-found signal a browse can give. A
+ * thrown error means the call itself failed, and the previous blanket `catch`
+ * turned those into `notFound()`, which Next then cached for the route's whole
+ * revalidate window. Let them propagate instead: callers that can live without
+ * the result, like the related-posts strip, catch it themselves.
+ */
+export const getPostsByTagSlug = async (slug: string, page = 1) => {
+  const response = await ghost.posts.browse({
+    filter: `tag:${slug}+visibility:public+${EXCLUDED_TAGS_FILTER}`,
+    include: ['tags', 'authors'],
+    limit: ARCHIVE_PAGE_SIZE,
+    order: 'published_at DESC',
+    page,
+  })
+
+  const tag = response[0]?.tags?.find(tag => tag.slug === slug)
+
+  if (!tag) {
+    return
+  }
+
+  return {
+    posts: [...response],
+    tag,
+    meta: response.meta,
+  }
+}
+
+/** @see getPostsByTagSlug for why this does not swallow errors. */
+export const getPostsByAuthorSlug = async (slug: string, page = 1) => {
+  const response = await ghost.posts.browse({
+    filter: `author:${slug}+visibility:public+${EXCLUDED_TAGS_FILTER}`,
+    include: ['tags', 'authors'],
+    limit: ARCHIVE_PAGE_SIZE,
+    order: 'published_at DESC',
+    page,
+  })
+
+  const author = response[0]?.authors?.find(author => author.slug === slug)
+
+  if (!author) {
+    return
+  }
+
+  return {
+    posts: [...response],
+    author,
+    meta: response.meta,
+  }
+}
+
+export type PostSitemapEntry = {
+  slug: string
+  updatedAt: string
+}
+
+/**
+ * Every public post, unsampled.
+ *
+ * These fetchers used to cap the page size outside Vercel production, which
+ * silently truncated the sitemap to the first 50 posts wherever
+ * `NEXT_PUBLIC_VERCEL_ENV` was undefined. A sampled sitemap is worse than no
+ * sitemap: the posts it omits lose their only discovery path, because /blog
+ * pages through Ghost on the client and links no further than its first grid.
+ */
+export const getPostsForSitemap = async (): Promise<PostSitemapEntry[]> => {
+  try {
+    const posts = await ghost.posts.browse({
+      limit: 'all',
+      fields: 'slug,updated_at,published_at',
+      filter: `visibility:public+${EXCLUDED_TAGS_FILTER}`,
+    })
+
+    return posts
+      .filter(post => !!post.slug)
+      .map(post => ({
+        slug: post.slug,
+        updatedAt: post.updated_at ?? post.published_at ?? '',
+      }))
+  } catch (error) {
+    console.error('Failed to fetch posts for sitemap from Ghost API:', error)
+    return []
+  }
+}
+
+export const getTagSlugs = async (): Promise<string[]> => {
+  try {
+    const tags = await ghost.tags.browse({
+      limit: 'all',
+      fields: 'slug',
+      filter: `visibility:public`,
+    })
+
+    return tags
+      .map(tag => tag.slug)
+      .filter(
+        (slug): slug is string => !!slug && !ALL_EXCLUDED_TAGS.includes(slug)
+      )
+  } catch (error) {
+    console.error('Failed to fetch tag slugs from Ghost API:', error)
+    return []
+  }
 }
 
 type LearnParams = { page?: number; limit?: number }
@@ -139,5 +341,45 @@ export const getLearnPosts = async (params: LearnParams = {}) => {
         },
       },
     }
+  }
+}
+
+export const getLearnPostsForSitemap = async (): Promise<
+  PostSitemapEntry[]
+> => {
+  try {
+    const posts = await ghost.posts.browse({
+      limit: 'all',
+      fields: 'slug,updated_at,published_at',
+      filter: `tag:${LEARN_TAG}+visibility:public+${LEARN_FETCH_EXCLUDED_TAGS_FILTER}`,
+    })
+
+    return posts
+      .filter(post => !!post.slug)
+      .map(post => ({
+        slug: post.slug,
+        updatedAt: post.updated_at ?? post.published_at ?? '',
+      }))
+  } catch (error) {
+    console.error(
+      'Failed to fetch /learn posts for sitemap from Ghost API:',
+      error
+    )
+    return []
+  }
+}
+
+export const getAuthorSlugs = async (): Promise<string[]> => {
+  try {
+    const authors = await ghost.authors.browse({
+      limit: 'all',
+      fields: 'slug',
+      filter: `visibility:public`,
+    })
+
+    return authors.map(author => author.slug)
+  } catch (error) {
+    console.error('Failed to fetch author slugs from Ghost API:', error)
+    return []
   }
 }

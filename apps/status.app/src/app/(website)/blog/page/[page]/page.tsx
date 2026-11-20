@@ -4,7 +4,7 @@ import { getTranslations } from 'next-intl/server'
 
 import { Metadata } from '~app/_metadata'
 import { Body } from '~components/body'
-import { getArchivePosts } from '~website/_lib/blog-archive'
+import { getPosts } from '~website/_lib/ghost'
 import { BlogPager } from '~website/blog/_components/blog-pager'
 import { PostGrid } from '~website/blog/_components/post-grid'
 import {
@@ -47,7 +47,7 @@ export default async function BlogArchivePage(props: Props) {
   const t = await getTranslations('blog')
   const page = resolvePageParam((await props.params).page, '/blog')
 
-  const { posts, meta } = getArchivePosts({ page })
+  const { posts, meta } = await getPosts({ page })
 
   if (posts.length === 0) {
     notFound()

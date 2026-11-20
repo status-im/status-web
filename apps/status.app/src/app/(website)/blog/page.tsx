@@ -1,13 +1,16 @@
 import { Text } from '@status-im/components'
 import { getTranslations } from 'next-intl/server'
 
+import { isBlogInMaintenance } from '~/config/blog-maintenance'
 import { JSONLDScript } from '~/utils/json-ld'
 import { buildLandingPageStructuredData } from '~/utils/structured-data'
 import { Metadata } from '~app/_metadata'
 import { Body } from '~components/body'
-import { getArchivePosts } from '~website/_lib/blog-archive'
+import { BLOG_PAGE_SIZE, getPosts } from '~website/_lib/ghost'
+import { cacheGhostResult } from '~website/_lib/ghost/cache'
 
 import { isBlogCategory } from './_categories'
+import { BlogEmptyState } from './_components/blog-empty-state'
 import { BlogPager } from './_components/blog-pager'
 import { BlogSearch } from './_components/blog-search'
 import { searchBlogPosts } from './_utils/search.server'
@@ -17,7 +20,40 @@ import {
 } from './_utils/search-config'
 
 import type { BlogSearchResults } from './_utils/search-config'
+import type { PostOrPage, PostsOrPages } from '@tryghost/content-api'
 import type { Metadata as NextMetadata } from 'next'
+
+export const revalidate = 3600 // 1 hour
+
+const getCachedBlogPosts = cacheGhostResult('blog posts', () => getPosts())
+
+/**
+ * Keep the listing page available during a Ghost outage. The search index
+ * can still serve results, and the empty state can explain the outage.
+ */
+async function getBlogPosts(): Promise<{
+  posts: PostOrPage[]
+  meta: PostsOrPages['meta']
+  postsUnavailable: boolean
+}> {
+  const result = await getCachedBlogPosts()
+  if (result) return { ...result, postsUnavailable: false }
+
+  return {
+    posts: [],
+    meta: {
+      pagination: {
+        page: 1,
+        limit: BLOG_PAGE_SIZE,
+        pages: 0,
+        total: 0,
+        next: null,
+        prev: null,
+      },
+    },
+    postsUnavailable: true,
+  }
+}
 
 export async function generateMetadata(): Promise<NextMetadata> {
   const t = await getTranslations('blog')
@@ -40,8 +76,43 @@ type Props = {
 
 export default async function BlogPage({ searchParams }: Props) {
   const t = await getTranslations('blog')
-  const { posts: initialPosts, meta } = getArchivePosts()
-  const params = await searchParams
+
+  // No second `WebSite` node here: a site declares one, at its root. The
+  // `SearchAction` it used to carry fed the sitelinks search box, which Google
+  // retired, and left Google crawling the literal
+  // `/blog?q={search_term_string}` template URL.
+  const webpageSchema = buildLandingPageStructuredData({
+    name: t('title'),
+    description: t('description'),
+    path: '/blog',
+  })
+
+  return (
+    <>
+      <JSONLDScript schema={webpageSchema} />
+      <Body>
+        <div className="px-5">
+          <div className="mx-auto max-w-[1184px] pb-24 pt-12 xl:pb-32 xl:pt-20">
+            <div className="mb-10 grid gap-2">
+              <h1 className="text-40 font-bold xl:text-64">{t('title')}</h1>
+              <Text size={19}>{t('description')}</Text>
+            </div>
+
+            {isBlogInMaintenance() ? (
+              <BlogEmptyState postsUnavailable />
+            ) : (
+              <BlogPosts searchParams={searchParams} />
+            )}
+          </div>
+        </div>
+      </Body>
+    </>
+  )
+}
+
+async function BlogPosts({ searchParams }: Props) {
+  const [{ posts: initialPosts, meta, postsUnavailable }, params] =
+    await Promise.all([getBlogPosts(), searchParams])
   const query =
     typeof params.q === 'string'
       ? params.q.slice(0, BLOG_SEARCH_QUERY_MAX_LENGTH)
@@ -67,45 +138,23 @@ export default async function BlogPage({ searchParams }: Props) {
     }
   }
 
-  // No second `WebSite` node here: a site declares one, at its root. The
-  // `SearchAction` it used to carry fed the sitelinks search box, which Google
-  // retired, and left Google crawling the literal
-  // `/blog?q={search_term_string}` template URL.
-  const webpageSchema = buildLandingPageStructuredData({
-    name: t('title'),
-    description: t('description'),
-    path: '/blog',
-  })
-
   return (
     <>
-      <JSONLDScript schema={webpageSchema} />
-      <Body>
-        <div className="px-5">
-          <div className="mx-auto max-w-[1184px] pb-24 pt-12 xl:pb-32 xl:pt-20">
-            <div className="mb-10 grid gap-2">
-              <h1 className="text-40 font-bold xl:text-64">{t('title')}</h1>
-              <Text size={19}>{t('description')}</Text>
-            </div>
+      <BlogSearch
+        initialPosts={initialPosts}
+        meta={meta}
+        postsUnavailable={postsUnavailable}
+        initialResults={initialResults}
+        initialQuery={query}
+        initialCategory={category}
+      />
 
-            <BlogSearch
-              initialPosts={initialPosts}
-              meta={meta}
-              postsUnavailable={false}
-              initialResults={initialResults}
-              initialQuery={query}
-              initialCategory={category}
-            />
-
-            <BlogPager
-              basePath="/blog"
-              currentPage={1}
-              totalPages={meta.pagination.pages}
-              hideWhenInteractive
-            />
-          </div>
-        </div>
-      </Body>
+      <BlogPager
+        basePath="/blog"
+        currentPage={1}
+        totalPages={meta.pagination.pages}
+        hideWhenInteractive
+      />
     </>
   )
 }

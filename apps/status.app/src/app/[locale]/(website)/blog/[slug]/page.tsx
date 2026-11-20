@@ -1,7 +1,2 @@
-export {
-  default,
-  generateMetadata,
-  generateStaticParams,
-} from '~website/blog/[slug]/page'
-
-export const dynamicParams = false
+export * from '~website/blog/[slug]/page'
+export { default } from '~website/blog/[slug]/page'
