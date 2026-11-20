@@ -25,7 +25,7 @@ The site needs four Ghost variables, two for the build and two for the browser:
 
 `.env` is committed with demo Ghost values, so a build works out of the box. For live content copy `.env.example` to `.env.local` and fill in the real values; Next reads `.env.local` over `.env`. `pnpm --filter status.network env:check` validates `.env` (not `.env.local`) and runs in `prebuild`.
 
-When Ghost is unreachable at build time, `/blog/[slug]` falls back to the committed list in `content/network-blog-slugs.json`.
+During a build, [Ghost requests](src/app/_lib/ghost.ts) time out after 10 seconds. If Ghost is unreachable, `/blog/[slug]` falls back to the committed list in `content/network-blog-slugs.json`.
 
 ## Deploy
 
