@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server'
 
+import { isBlogInMaintenance } from '~/config/blog-maintenance'
 import { Metadata, toMetaDescription } from '~app/_metadata'
 import { getPostsByTagSlug, getTagSlugs } from '~website/_lib/ghost'
 import { TagArchive } from '~website/blog/_components/tag-archive'
@@ -8,6 +9,8 @@ export const revalidate = 3600 // 1 hour
 export const dynamicParams = true
 
 export async function generateStaticParams() {
+  if (isBlogInMaintenance()) return []
+
   const slugs = await getTagSlugs()
   return slugs.map(slug => ({ slug })) satisfies Array<Awaited<Props['params']>>
 }

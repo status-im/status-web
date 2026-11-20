@@ -1,3 +1,4 @@
+import { isBlogInMaintenance } from '~/config/blog-maintenance'
 import { SITE_URL } from '~/config/site'
 import { allHelpDocs, allSpecsDocs } from '~content'
 import {
@@ -58,10 +59,9 @@ function toDate(value: string | Date | undefined): Date {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const buildDate = new Date()
 
-  const [posts, learnPosts] = await Promise.all([
-    getPostsForSitemap(),
-    getLearnPostsForSitemap(),
-  ])
+  const [posts, learnPosts] = isBlogInMaintenance()
+    ? [[], []]
+    : await Promise.all([getPostsForSitemap(), getLearnPostsForSitemap()])
 
   const entries = new Map<string, Date>()
 

@@ -41,9 +41,23 @@ repository to ask, and otherwise fails the build. Failing is deliberate: an empt
 compiles fine and ships a `/specs` hub whose every detail URL 404s, which is how the specs section
 once went down in production.
 
-## Building while Ghost is down
+## Blog maintenance
 
-The build runs
+The build defaults to maintenance mode. It prerenders [the blog landing page](<../src/app/(website)/blog/page.tsx>)
+with the maintenance notice and builds an empty blog search index. Requests for articles,
+author archives, category archives and paginated listings are served the
+[maintenance HTML](<../src/app/(website)/blog/_utils/maintenance-response.ts>) with HTTP 503
+directly at the requested URL, before fetching anything from Ghost. The sitemap omits
+blog article URLs while they are unavailable.
+
+When the Ghost Content API is healthy again, set `BLOG_MAINTENANCE_MODE=0` in the deployment
+environment and rebuild. This re-enables the existing Ghost-powered blog, search index and
+article entries in the sitemap. The flag is evaluated at build time and included in the
+Turborepo cache key.
+
+## Building the live blog
+
+When maintenance mode is disabled, the build runs
 [`scripts/generate-blog-search-index.ts`](../scripts/generate-blog-search-index.ts), which fails
 with "Cannot generate an empty blog search index" when Ghost returns no posts. During a Ghost outage
 that blocks every build, including one you need for an unrelated fix such as rotating
@@ -65,9 +79,9 @@ without the flag does not reuse a cached empty index.
 This change did not touch the `Dockerfile` or the `build:docker` script, so check that they pass
 `ALLOW_EMPTY_BLOG_SEARCH_INDEX` into `docker build` before you rely on it for an image build.
 
-## Serving requests while Ghost is down
+## Live blog fallback
 
-The [Ghost client](<../src/app/(website)/_lib/ghost/client.ts>) gives server-side requests three
+With maintenance mode disabled, the [Ghost client](<../src/app/(website)/_lib/ghost/client.ts>) gives server-side requests three
 seconds and bulk requests (including the search index build) ten seconds. Browser fetches keep
 their existing behavior.
 
