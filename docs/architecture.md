@@ -4,7 +4,7 @@ How the status-web monorepo splits into [`apps/`](../apps) and [`packages/`](../
 
 ## Apps and packages
 
-The nine apps are the deployed products: six Next.js apps, the `community-dapp` webpack app, and the `wallet` and `connector` browser extensions. Each starts a dev server on its own port, through its `dev`, `dev:next` or `dev:content` script; the root [AGENTS.md](../AGENTS.md) table lists them.
+The nine apps are the deployed products: six Next.js 16 apps, the `community-dapp` webpack app, and the `wallet` and `connector` browser extensions. Each starts a dev server on its own port, through its `dev`, `dev:next` or `dev:content` script; the root [AGENTS.md](../AGENTS.md) table lists them. The Next.js production builds use Webpack, including the Contentlayer integration on status.app.
 
 The packages are libraries. `colors`, `icons`, `components`, `js`, `eslint-config` and `ethereum-provider` are public on npm; `wallet`, `status-network`, `sitemap-utils` and `community-contracts` are private. Turborepo builds a package before the apps that depend on it (`"dependsOn": ["^build"]` in [`turbo.json`](../turbo.json)), so `pnpm build` resolves a fresh `dist/`. Starting `next dev` right after editing a package is the usual way to run an app against a stale build.
 

@@ -1,6 +1,6 @@
 # status.app
 
-Next.js 15 app behind [status.app](https://status.app): the marketing pages, help centre, specs
+Next.js 16 app behind [status.app](https://status.app): the marketing pages, help centre, specs
 hub and blog.
 
 ## Run
@@ -15,7 +15,7 @@ second in another terminal while you edit anything under `content/`, otherwise t
 output goes stale.
 
 ```bash
-pnpm --filter status.app build         # lint, blog search index, next build
+pnpm --filter status.app build         # lint, blog search index, Webpack build
 pnpm --filter status.app test          # vitest
 pnpm --filter status.app types:check   # Contentlayer build, then tsc
 ```

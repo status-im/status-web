@@ -31,14 +31,6 @@ let config = {
   typescript: {
     ignoreBuildErrors: false,
   },
-  eslint: {
-    // note: handled by npm scripts which can specify --ext option to fiter out markdown files and let remark process them
-    ignoreDuringBuilds: true,
-    // ignoreDuringBuilds: false,
-    // dirs: ['src'],
-    // ignoreDuringBuilds: true,
-    // dirs: ['src', 'docs'],
-  },
 
   images: {
     // disableStaticImages: true,
@@ -94,32 +86,6 @@ let config = {
     staleTimes: {
       dynamic: 30,
       static: 180,
-    },
-    // note: https://nextjs.org/blog/turbopack-for-development-stable#breaking-changes
-    turbo: {
-      resolve: {
-        alias: {
-          '@achingbrain/nat-port-mapper': {
-            browser: false,
-          },
-        },
-      },
-      rules: {
-        fs: {
-          // note: https://github.com/vercel/next.js/discussions/67196
-          // note: https://github.com/vercel/next.js/pull/64205 available only in canary?
-          browser: false,
-        },
-        tls: {
-          browser: false,
-        },
-        net: {
-          browser: false,
-        },
-        child_process: {
-          browser: false,
-        },
-      },
     },
   },
   // note: fallback for non-Turbopack builds

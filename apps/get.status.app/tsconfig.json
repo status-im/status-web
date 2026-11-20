@@ -21,8 +21,12 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "preserveSymlinks": false,
-    "jsx": "preserve",
-    "plugins": [{ "name": "next" }],
+    "jsx": "react-jsx",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
     "baseUrl": ".",
     "paths": {
       "@tryghost/content-api": [
@@ -51,7 +55,8 @@
     "src/**/*.tsx",
     "env.d.ts",
     "../status.app/global.d.ts",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
   ],
   "exclude": ["node_modules", ".next"]
 }

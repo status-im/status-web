@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7
 #
-# Multi-stage Docker build for self-hosting `apps/status.app` (Next.js 15).
+# Multi-stage Docker build for self-hosting `apps/status.app` (Next.js 16).
 #
 # Layout: build context is the monorepo root.
 # Build:  docker build -f apps/status.app/Dockerfile \

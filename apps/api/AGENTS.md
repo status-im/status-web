@@ -9,7 +9,7 @@ Serves the tRPC `apiRouter` from `@status-im/wallet/data` over HTTP, plus a JSON
 ## Commands
 
 - `pnpm --filter api dev`: dev server on :3030.
-- `pnpm --filter api build`: `next build`.
+- `pnpm --filter api build`: `next build --webpack`.
 - `pnpm --filter api test`: vitest, covering the route handler.
 - `pnpm --filter api typecheck`: tsc.
 - `pnpm --filter api env:check`: validate `.env` against `src/config/env.server.mjs`.

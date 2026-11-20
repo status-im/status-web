@@ -21,7 +21,7 @@ const AnimatedFrames = ({
 }: Props) => {
   const [frameIndex, setFrameIndex] = useState(0)
   const frameRef = useRef<number | null>(null)
-  const lastFrameTime = useRef(performance.now())
+  const lastFrameTime = useRef(0)
   const [animationStarted, setAnimationStarted] = useState(false)
 
   useEffect(() => {
