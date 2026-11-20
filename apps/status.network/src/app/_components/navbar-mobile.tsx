@@ -43,6 +43,7 @@ const NavBarMobile = () => {
 
   useEffect(() => {
     if (isOpen) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Also close after history navigation.
       setIsOpen(false)
       scrollPositionRef.current = 0
       window.scrollTo({

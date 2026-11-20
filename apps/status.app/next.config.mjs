@@ -26,6 +26,7 @@ const feedSnapshots =
 
 /** @type {import('next').NextConfig} */
 let config = {
+  agentRules: false,
   // Self-hosting: emit a standalone server bundle (Dockerfile copies .next/standalone/).
   // why: https://nextjs.org/docs/app/api-reference/config/next-config-js/output#automatically-copying-traced-files
   ...(serverEnv.NODE_ENV === 'production' && { output: 'standalone' }),
@@ -45,16 +46,9 @@ let config = {
   typescript: {
     ignoreBuildErrors: false,
   },
-  eslint: {
-    // note: handled by npm scripts which can specify --ext option to fiter out markdown files and let remark process them
-    ignoreDuringBuilds: true,
-    // ignoreDuringBuilds: false,
-    // dirs: ['src'],
-    // ignoreDuringBuilds: true,
-    // dirs: ['src', 'docs'],
-  },
 
   images: {
+    qualities: [60, 75, 100],
     // disableStaticImages: true,
 
     remotePatterns: [
@@ -76,34 +70,6 @@ let config = {
         pathname: '/u/**',
       },
     ],
-  },
-  experimental: {
-    // note: https://nextjs.org/blog/turbopack-for-development-stable#breaking-changes
-    turbo: {
-      resolve: {
-        alias: {
-          '@achingbrain/nat-port-mapper': {
-            browser: false,
-          },
-        },
-      },
-      rules: {
-        fs: {
-          // note: https://github.com/vercel/next.js/discussions/67196
-          // note: https://github.com/vercel/next.js/pull/64205 available only in canary?
-          browser: false,
-        },
-        tls: {
-          browser: false,
-        },
-        net: {
-          browser: false,
-        },
-        child_process: {
-          browser: false,
-        },
-      },
-    },
   },
   // note: fallback for non-Turbopack builds
   webpack: (config, { isServer }) => {

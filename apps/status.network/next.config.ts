@@ -1,11 +1,13 @@
 import type { NextConfig } from 'next'
 import createNextIntlPlugin from 'next-intl/plugin'
 import { serverEnv } from './src/config/env.server.mjs'
+import { redirects } from './vercel.json'
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 const GHOST_IMAGE_HOSTS = ['our.status.im', 'demo.ghost.io']
 
 const nextConfig: NextConfig = {
+  agentRules: false,
   // Only enable static export for builds, not dev mode
   // This allows middleware to work in dev mode for locale routing
   ...(serverEnv.NODE_ENV === 'production' && { output: 'export' }),
@@ -26,22 +28,7 @@ const nextConfig: NextConfig = {
     })),
   },
   async redirects() {
-    return [
-      {
-        source:
-          '/blog/pre-deposit-vaults-withdrawal-timeline-and-rewards-distribution',
-        destination:
-          'https://status.app/blog/pre-deposit-vaults-withdrawal-timeline-and-rewards-distribution',
-        statusCode: 301,
-      },
-      {
-        source:
-          '/blog/status-network-merges-with-linea-scaling-gasless-privacy-upstream',
-        destination:
-          'https://status.app/blog/status-network-merges-with-linea-scaling-gasless-privacy-upstream',
-        statusCode: 301,
-      },
-    ]
+    return redirects
   },
 }
 

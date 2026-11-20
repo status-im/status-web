@@ -67,6 +67,7 @@ const GHOST_URL = (process.env.GHOST_API_URL ?? DEFAULT_GHOST_URL).replace(
 )
 const GHOST_API_KEY = process.env.GHOST_API_KEY
 const REVALIDATE_SECONDS = 3600
+const GHOST_REQUEST_TIMEOUT_MS = 10_000
 
 const EMPTY_PAGINATION: Pagination = {
   page: 1,
@@ -187,6 +188,7 @@ async function fetchPosts(
 
   try {
     const response = await fetch(url.toString(), {
+      signal: AbortSignal.timeout(GHOST_REQUEST_TIMEOUT_MS),
       next: {
         revalidate: REVALIDATE_SECONDS,
       },
@@ -225,6 +227,7 @@ async function fetchTags(
 
   try {
     const response = await fetch(url.toString(), {
+      signal: AbortSignal.timeout(GHOST_REQUEST_TIMEOUT_MS),
       next: {
         revalidate: REVALIDATE_SECONDS,
       },

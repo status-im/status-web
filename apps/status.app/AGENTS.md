@@ -4,13 +4,13 @@ Rules for agents working in `apps/status.app`. The root `AGENTS.md` also applies
 
 ## Role
 
-Next.js 15 app behind https://status.app: marketing site, help centre, specs hub and blog. Port 3001. `content/` is published site content, never code documentation.
+Next.js 16 app behind https://status.app: marketing site, help centre, specs hub and blog. Port 3001. `content/` is published site content, never code documentation.
 
 ## Commands
 
 - `pnpm --filter status.app dev:next`: dev server on :3001.
 - `pnpm --filter status.app dev:content`: watch `content/` and rebuild Contentlayer.
-- `pnpm --filter status.app build`: `lint` (remark and eslint), blog search index, then `next build`. The index step fails when Ghost returns no posts; set `ALLOW_EMPTY_BLOG_SEARCH_INDEX=1` to ship an empty index instead.
+- `pnpm --filter status.app build`: `lint` (remark and eslint), blog search index, then `next build --webpack`. The index step fails when Ghost returns no posts; set `ALLOW_EMPTY_BLOG_SEARCH_INDEX=1` to ship an empty index instead.
 - `pnpm --filter status.app test`: vitest.
 - `pnpm --filter status.app types:check`: Contentlayer build, then `tsc`.
 - `pnpm --filter status.app codegen`: regenerate GraphQL types from `codegen.yml`.

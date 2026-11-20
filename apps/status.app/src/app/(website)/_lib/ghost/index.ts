@@ -292,25 +292,6 @@ export const getPostsForSitemap = async (): Promise<PostSitemapEntry[]> => {
   }
 }
 
-export const getTagSlugs = async (): Promise<string[]> => {
-  try {
-    const tags = await ghost.tags.browse({
-      limit: 'all',
-      fields: 'slug',
-      filter: `visibility:public`,
-    })
-
-    return tags
-      .map(tag => tag.slug)
-      .filter(
-        (slug): slug is string => !!slug && !ALL_EXCLUDED_TAGS.includes(slug)
-      )
-  } catch (error) {
-    console.error('Failed to fetch tag slugs from Ghost API:', error)
-    return []
-  }
-}
-
 type LearnParams = { page?: number; limit?: number }
 
 export const getLearnPosts = async (params: LearnParams = {}) => {
@@ -365,21 +346,6 @@ export const getLearnPostsForSitemap = async (): Promise<
       'Failed to fetch /learn posts for sitemap from Ghost API:',
       error
     )
-    return []
-  }
-}
-
-export const getAuthorSlugs = async (): Promise<string[]> => {
-  try {
-    const authors = await ghost.authors.browse({
-      limit: 'all',
-      fields: 'slug',
-      filter: `visibility:public`,
-    })
-
-    return authors.map(author => author.slug)
-  } catch (error) {
-    console.error('Failed to fetch author slugs from Ghost API:', error)
     return []
   }
 }
