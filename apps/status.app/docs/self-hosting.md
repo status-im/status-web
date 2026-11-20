@@ -138,6 +138,10 @@ seconds instead of waiting for the hourly interval. A 404 from Ghost still means
 not exist and shows the 404 page. The [locale middleware](../src/middleware.ts) keeps unprefixed
 article and maintenance URLs on the routes that can handle them.
 
+The [author](<../src/app/(website)/blog/author/[slug]/page.tsx>) and
+[tag](<../src/app/(website)/blog/tag/[slug]/page.tsx>) archives also generate on the first request
+and revalidate hourly.
+
 The home page uses hourly ISR and can regenerate without the blog section during an outage.
 The sitemap uses hourly ISR with cached Ghost requests for both blog and Learn entries.
 

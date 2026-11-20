@@ -26,6 +26,7 @@ const feedSnapshots =
 
 /** @type {import('next').NextConfig} */
 let config = {
+  agentRules: false,
   env: {
     BLOG_MAINTENANCE_MODE:
       process.env.BLOG_MAINTENANCE_MODE === '1' ? '1' : '0',

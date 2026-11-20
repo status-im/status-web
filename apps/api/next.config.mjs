@@ -5,6 +5,7 @@ import './src/config/env.server.mjs'
 
 /** @type {import('next').NextConfig} */
 let config = {
+  agentRules: false,
   logging: {
     fetches: {
       fullUrl: true,

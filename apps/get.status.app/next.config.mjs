@@ -49,6 +49,7 @@ const webpackAliases = {
 
 /** @type {import('next').NextConfig} */
 let config = {
+  agentRules: false,
   ...(serverEnv.NODE_ENV === 'production' && { output: 'export' }),
   reactStrictMode: true,
   pageExtensions: ['ts', 'tsx'],
@@ -91,6 +92,8 @@ let config = {
     '@status-im/components',
     '@status-im/colors',
     '@status-im/js',
+    // Shared status.app MDX uses Shiki, which needs bundling in Turbopack dev.
+    'shiki',
   ],
 }
 
