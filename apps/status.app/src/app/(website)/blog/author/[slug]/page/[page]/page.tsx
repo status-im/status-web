@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server'
 
 import { Metadata, toMetaDescription } from '~app/_metadata'
-import { getPostsByAuthorSlug } from '~website/_lib/ghost'
+import { getArchivePostsByAuthor } from '~website/_lib/blog-archive'
 import { AuthorArchive } from '~website/blog/_components/author-archive'
 import {
   parsePageParam,
@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props) {
     return Metadata({ title: t('title') })
   }
 
-  const response = await getPostsByAuthorSlug(slug, page)
+  const response = getArchivePostsByAuthor(slug, page)
   const authorName =
     response?.author.name ?? response?.author.slug ?? t('unknownAuthor')
 

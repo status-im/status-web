@@ -41,58 +41,32 @@ repository to ask, and otherwise fails the build. Failing is deliberate: an empt
 compiles fine and ships a `/specs` hub whose every detail URL 404s, which is how the specs section
 once went down in production.
 
-## Building while Ghost is down
+## Blog archive
 
-The build runs
-[`scripts/generate-blog-search-index.ts`](../scripts/generate-blog-search-index.ts), which fails
-with "Cannot generate an empty blog search index" when Ghost returns no posts. During a Ghost outage
-that blocks every build, including one you need for an unrelated fix such as rotating
-`GITHUB_TOKEN`.
+The [checked-in blog archive](<../src/app/(website)/_lib/blog-archive>) contains post metadata
+and recovered article bodies. Its sources are the [committed RSS snapshot][rss-source] and
+[the November 5 production deployment][archive-capture]. Only articles with a recovered body
+are included. Existing rules keep app-news posts accessible by direct link and out of the
+blog listing, search and sitemap.
 
-Set `ALLOW_EMPTY_BLOG_SEARCH_INDEX=1` for the build to get past it:
+The [article route](<../src/app/(website)/blog/[slug]/page.tsx>) prerenders every archived slug
+at its original URL. Blog listings, category and author pages, and the
+[build-time search index](../scripts/generate-blog-search-index.ts) use the same archive.
+To restore another article, add its original slug and metadata to `posts.json` and its
+article HTML to `bodies.json`, then deploy. Review imported HTML and verify its image URLs.
+Use the original publication date and keep the metadata sorted newest first.
 
-```bash
-ALLOW_EMPTY_BLOG_SEARCH_INDEX=1 pnpm --filter status.app build
-```
+For a slug with no archive entry, [middleware](../src/middleware.ts) sends a small HTTP 503
+directly at the requested URL, with `Retry-After: 300` and `Cache-Control: no-store`.
+Article requests and the search index build do not query Ghost.
 
-With the flag set, the script logs a warning and writes an empty `public/blog-search-index.json`
-instead of throwing. Blog search returns no results until the next build with Ghost back up. The
-homepage hides its blog section when Ghost returns no posts.
+The home page, Learn and feeds without a snapshot still have live Ghost integrations. The
+[Ghost client](<../src/app/(website)/_lib/ghost/client.ts>) bounds their server-side request
+times. [Vercel configuration](../vercel.json) also sets a 15-second execution limit for App
+Router functions.
 
-`turbo.json` lists `ALLOW_EMPTY_BLOG_SEARCH_INDEX` in the `status.app#build` hash, so a build
-without the flag does not reuse a cached empty index.
-
-This change did not touch the `Dockerfile` or the `build:docker` script, so check that they pass
-`ALLOW_EMPTY_BLOG_SEARCH_INDEX` into `docker build` before you rely on it for an image build.
-
-## Serving requests while Ghost is down
-
-The [Ghost client](<../src/app/(website)/_lib/ghost/client.ts>) gives server-side requests three
-seconds and bulk requests (including the search index build) ten seconds. Browser fetches keep
-their existing behavior.
-
-The [Ghost cache](<../src/app/(website)/_lib/ghost/cache.ts>) stores results, including failures,
-for the blog listing and feeds in the Next.js Data Cache for 60 seconds. When loading posts fails,
-the blog listing stays up and its empty state reads "The blog is under maintenance", while search
-can still use its built index.
-
-[Article pages](<../src/app/(website)/blog/[slug]/page.tsx>) generate on the first request and use
-hourly ISR, so a failed article read cannot stop a deployment. The article page caches each Ghost
-post itself, and if a refresh fails it renders the last successful post. When no post is cached and
-Ghost fails, the article redirects temporarily to a
-[maintenance response](<../src/app/(website)/blog/maintenance/[slug]/route.ts>) at
-`/blog/maintenance/<slug>`. That response returns HTTP 503 with `Retry-After: 60` and
-`Cache-Control: no-store`, and links back to the article. The article retries Ghost after 60
-seconds instead of waiting for the hourly interval. A 404 from Ghost still means the article does
-not exist and shows the 404 page. The [locale middleware](../src/middleware.ts) keeps unprefixed
-article and maintenance URLs on the routes that can handle them.
-
-The home page uses hourly ISR and can regenerate without the blog section during an outage.
-The sitemap uses hourly ISR with cached Ghost requests for both blog and Learn entries.
-
-On Vercel, [the project configuration](../vercel.json) enables Fluid Compute for status.app
-deployments and sets a 15-second execution limit for App Router functions. This bills active CPU
-time separately from provisioned memory time.
+[rss-source]: ../public/feeds/blog-rss.xml
+[archive-capture]: https://status-website-eenm08ld5-status-im-web.vercel.app/blog-search-index.json
 
 ## Feed snapshots
 

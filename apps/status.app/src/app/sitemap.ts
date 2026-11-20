@@ -1,16 +1,11 @@
 import { SITE_URL } from '~/config/site'
 import { allHelpDocs, allSpecsDocs } from '~content'
-import {
-  getLearnPostsForSitemap,
-  getPostsForSitemap,
-} from '~website/_lib/ghost'
+import { listedArchivePosts } from '~website/_lib/blog-archive'
 
 import { isHelpDocWorkInProgress } from './_utils/help-doc'
 
 import type { MetadataRoute } from 'next'
 
-// Cache the sitemap for 1 hour so /sitemap.xml does not hit the Ghost
-// API on every request. Crawlers do not need second-by-second freshness.
 export const revalidate = 3600
 
 const BASE_URL = SITE_URL
@@ -55,13 +50,8 @@ function toDate(value: string | Date | undefined): Date {
   return Number.isNaN(date.getTime()) ? new Date() : date
 }
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export default function sitemap(): MetadataRoute.Sitemap {
   const buildDate = new Date()
-
-  const [posts, learnPosts] = await Promise.all([
-    getPostsForSitemap(),
-    getLearnPostsForSitemap(),
-  ])
 
   const entries = new Map<string, Date>()
 
@@ -69,12 +59,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entries.set(toUrl(path), buildDate)
   }
 
-  for (const post of posts) {
-    entries.set(toUrl(`/blog/${post.slug}`), toDate(post.updatedAt))
-  }
-
-  for (const post of learnPosts) {
-    entries.set(toUrl(`/blog/${post.slug}`), toDate(post.updatedAt))
+  for (const post of listedArchivePosts) {
+    entries.set(
+      toUrl(`/blog/${post.slug}`),
+      toDate(post.updated_at ?? post.published_at)
+    )
   }
 
   for (const doc of allHelpDocs) {

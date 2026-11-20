@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server'
 
 import { Metadata, toMetaDescription } from '~app/_metadata'
-import { getPostsByTagSlug } from '~website/_lib/ghost'
+import { getArchivePostsByTag } from '~website/_lib/blog-archive'
 import { TagArchive } from '~website/blog/_components/tag-archive'
 import {
   parsePageParam,
@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props) {
     return Metadata({ title: t('title') })
   }
 
-  const response = await getPostsByTagSlug(slug, page)
+  const response = getArchivePostsByTag(slug, page)
   const name = response?.tag.name ?? slug
 
   return Metadata({

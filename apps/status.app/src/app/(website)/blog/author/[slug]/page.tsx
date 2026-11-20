@@ -1,14 +1,17 @@
 import { getTranslations } from 'next-intl/server'
 
 import { Metadata, toMetaDescription } from '~app/_metadata'
-import { getAuthorSlugs, getPostsByAuthorSlug } from '~website/_lib/ghost'
+import {
+  getArchiveAuthorSlugs,
+  getArchivePostsByAuthor,
+} from '~website/_lib/blog-archive'
 import { AuthorArchive } from '~website/blog/_components/author-archive'
 
 export const revalidate = 3600 // 1 hour
 export const dynamicParams = true
 
 export async function generateStaticParams() {
-  const slugs = await getAuthorSlugs()
+  const slugs = getArchiveAuthorSlugs()
   return slugs.map(slug => ({ slug })) satisfies Array<Awaited<Props['params']>>
 }
 
@@ -19,7 +22,7 @@ type Props = {
 export async function generateMetadata({ params }: Props) {
   const t = await getTranslations('blog')
   const slug = (await params).slug
-  const response = await getPostsByAuthorSlug(slug)
+  const response = getArchivePostsByAuthor(slug)
 
   if (!response) {
     return Metadata({

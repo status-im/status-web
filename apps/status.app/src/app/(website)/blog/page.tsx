@@ -5,8 +5,7 @@ import { JSONLDScript } from '~/utils/json-ld'
 import { buildLandingPageStructuredData } from '~/utils/structured-data'
 import { Metadata } from '~app/_metadata'
 import { Body } from '~components/body'
-import { BLOG_PAGE_SIZE, getPosts } from '~website/_lib/ghost'
-import { cacheGhostResult } from '~website/_lib/ghost/cache'
+import { getArchivePosts } from '~website/_lib/blog-archive'
 
 import { isBlogCategory } from './_categories'
 import { BlogPager } from './_components/blog-pager'
@@ -18,40 +17,7 @@ import {
 } from './_utils/search-config'
 
 import type { BlogSearchResults } from './_utils/search-config'
-import type { PostOrPage, PostsOrPages } from '@tryghost/content-api'
 import type { Metadata as NextMetadata } from 'next'
-
-export const revalidate = 3600 // 1 hour
-
-const getCachedBlogPosts = cacheGhostResult('blog posts', () => getPosts())
-
-/**
- * Keep the listing page available during a Ghost outage. The search index
- * can still serve results, and the empty state can explain the outage.
- */
-async function getBlogPosts(): Promise<{
-  posts: PostOrPage[]
-  meta: PostsOrPages['meta']
-  postsUnavailable: boolean
-}> {
-  const result = await getCachedBlogPosts()
-  if (result) return { ...result, postsUnavailable: false }
-
-  return {
-    posts: [],
-    meta: {
-      pagination: {
-        page: 1,
-        limit: BLOG_PAGE_SIZE,
-        pages: 0,
-        total: 0,
-        next: null,
-        prev: null,
-      },
-    },
-    postsUnavailable: true,
-  }
-}
 
 export async function generateMetadata(): Promise<NextMetadata> {
   const t = await getTranslations('blog')
@@ -74,8 +40,8 @@ type Props = {
 
 export default async function BlogPage({ searchParams }: Props) {
   const t = await getTranslations('blog')
-  const [{ posts: initialPosts, meta, postsUnavailable }, params] =
-    await Promise.all([getBlogPosts(), searchParams])
+  const { posts: initialPosts, meta } = getArchivePosts()
+  const params = await searchParams
   const query =
     typeof params.q === 'string'
       ? params.q.slice(0, BLOG_SEARCH_QUERY_MAX_LENGTH)
@@ -125,7 +91,7 @@ export default async function BlogPage({ searchParams }: Props) {
             <BlogSearch
               initialPosts={initialPosts}
               meta={meta}
-              postsUnavailable={postsUnavailable}
+              postsUnavailable={false}
               initialResults={initialResults}
               initialQuery={query}
               initialCategory={category}
