@@ -5,43 +5,27 @@
     "title": "Status 2.39.3 is Here!",
     "published_at": "2026-11-05T13:21:11.000Z",
     "excerpt": "Status 2.39.3 brings improvements for a smoother experience: 💬 Messaging: Optimised network performance by reducing the load on store nodes. 📰 News Feed: Fixed message formatting on mobile, making news easier to read. Update Status to get the latest improvements! Update Status",
-    "custom_excerpt": null,
     "feature_image": "https://our.status.im/content/images/2026/11/Patch-Release-2.39.3-Platform-Update.png",
-    "feature_image_alt": null,
     "primary_author": {
       "id": "6932cdb783429200019697e1",
-      "name": "Bobby Zalke",
       "slug": "bobby",
-      "profile_image": null,
-      "cover_image": null,
-      "bio": null,
-      "website": null,
-      "location": null,
-      "facebook": null,
-      "twitter": null,
-      "meta_title": null,
-      "meta_description": null,
-      "threads": null,
-      "bluesky": null,
-      "mastodon": null,
-      "tiktok": null,
-      "youtube": null,
-      "instagram": null,
-      "linkedin": null,
-      "url": "https://our.status.im/author/bobby/"
+      "name": "Bobby Zalke"
     },
     "primary_tag": {
-      "name": "Desktop news",
-      "slug": "desktop-news"
+      "id": "archive-desktop-news",
+      "slug": "desktop-news",
+      "name": "Desktop news"
     },
     "tags": [
       {
-        "name": "Desktop news",
-        "slug": "desktop-news"
+        "id": "archive-desktop-news",
+        "slug": "desktop-news",
+        "name": "Desktop news"
       },
       {
-        "name": "Mobile news",
-        "slug": "mobile-news"
+        "id": "archive-mobile-news",
+        "slug": "mobile-news",
+        "name": "Mobile news"
       }
     ]
   },
@@ -51,43 +35,27 @@
     "title": "Privacy Digest #3 (20 - 30 Oct 2026)",
     "published_at": "2026-10-30T11:38:21.000Z",
     "excerpt": "What's buzzing in the privacy world this week 👀 💬 Discord: Public server conversations will become searchable on Google starting in December. 🎙️ Signal: A security flaw could keep audio and video transmitting after hanging up. Now fixed. 💸 Meta: Ordered to pay $25 billion for",
-    "custom_excerpt": null,
     "feature_image": "https://our.status.im/content/images/2026/10/Privacy-Digest--3_-Digital-Shadows.png",
-    "feature_image_alt": null,
     "primary_author": {
       "id": "6932cdb783429200019697e1",
-      "name": "Bobby Zalke",
       "slug": "bobby",
-      "profile_image": null,
-      "cover_image": null,
-      "bio": null,
-      "website": null,
-      "location": null,
-      "facebook": null,
-      "twitter": null,
-      "meta_title": null,
-      "meta_description": null,
-      "threads": null,
-      "bluesky": null,
-      "mastodon": null,
-      "tiktok": null,
-      "youtube": null,
-      "instagram": null,
-      "linkedin": null,
-      "url": "https://our.status.im/author/bobby/"
+      "name": "Bobby Zalke"
     },
     "primary_tag": {
-      "name": "Desktop news",
-      "slug": "desktop-news"
+      "id": "archive-desktop-news",
+      "slug": "desktop-news",
+      "name": "Desktop news"
     },
     "tags": [
       {
-        "name": "Desktop news",
-        "slug": "desktop-news"
+        "id": "archive-desktop-news",
+        "slug": "desktop-news",
+        "name": "Desktop news"
       },
       {
-        "name": "Mobile news",
-        "slug": "mobile-news"
+        "id": "archive-mobile-news",
+        "slug": "mobile-news",
+        "name": "Mobile news"
       }
     ]
   },
@@ -97,43 +65,27 @@
     "title": "Status 2.39.2 is here",
     "published_at": "2026-10-27T06:41:21.000Z",
     "excerpt": "Status 2.39.2 brings several fixes to the in-app browser, news message formatting, and app time synchronization: In-app browser: The browser now displays correctly on iOS when you adjust the app’s interface zoom. In-app news: News messages now display bullet points, spacing, and links",
-    "custom_excerpt": null,
     "feature_image": "https://our.status.im/content/images/2026/10/Patch-release-banner-updated-to-2.39.2.png",
-    "feature_image_alt": null,
     "primary_author": {
       "id": "6932cdb783429200019697e1",
-      "name": "Bobby Zalke",
       "slug": "bobby",
-      "profile_image": null,
-      "cover_image": null,
-      "bio": null,
-      "website": null,
-      "location": null,
-      "facebook": null,
-      "twitter": null,
-      "meta_title": null,
-      "meta_description": null,
-      "threads": null,
-      "bluesky": null,
-      "mastodon": null,
-      "tiktok": null,
-      "youtube": null,
-      "instagram": null,
-      "linkedin": null,
-      "url": "https://our.status.im/author/bobby/"
+      "name": "Bobby Zalke"
     },
     "primary_tag": {
-      "name": "Mobile news",
-      "slug": "mobile-news"
+      "id": "archive-mobile-news",
+      "slug": "mobile-news",
+      "name": "Mobile news"
     },
     "tags": [
       {
-        "name": "Mobile news",
-        "slug": "mobile-news"
+        "id": "archive-mobile-news",
+        "slug": "mobile-news",
+        "name": "Mobile news"
       },
       {
-        "name": "Desktop news",
-        "slug": "desktop-news"
+        "id": "archive-desktop-news",
+        "slug": "desktop-news",
+        "name": "Desktop news"
       }
     ]
   },
@@ -143,43 +95,27 @@
     "title": "Important update for Status users with assets on Blast",
     "published_at": "2026-10-22T12:46:04.000Z",
     "excerpt": "Blast is winding down its network on October 26, 2026 , according to its official announcement on X https://x.com/blast/status/2106032805280891073?s=20 . As a result, Blast will no longer be supported in Status starting with the next release (v2.40). The Blast team, in their announcement, recommends",
-    "custom_excerpt": null,
     "feature_image": "https://our.status.im/content/images/2026/10/Gradient-banner-with-white-BLAST-wordmark.png",
-    "feature_image_alt": null,
     "primary_author": {
       "id": "6932cdb783429200019697e1",
-      "name": "Bobby Zalke",
       "slug": "bobby",
-      "profile_image": null,
-      "cover_image": null,
-      "bio": null,
-      "website": null,
-      "location": null,
-      "facebook": null,
-      "twitter": null,
-      "meta_title": null,
-      "meta_description": null,
-      "threads": null,
-      "bluesky": null,
-      "mastodon": null,
-      "tiktok": null,
-      "youtube": null,
-      "instagram": null,
-      "linkedin": null,
-      "url": "https://our.status.im/author/bobby/"
+      "name": "Bobby Zalke"
     },
     "primary_tag": {
-      "name": "Mobile news",
-      "slug": "mobile-news"
+      "id": "archive-mobile-news",
+      "slug": "mobile-news",
+      "name": "Mobile news"
     },
     "tags": [
       {
-        "name": "Mobile news",
-        "slug": "mobile-news"
+        "id": "archive-mobile-news",
+        "slug": "mobile-news",
+        "name": "Mobile news"
       },
       {
-        "name": "Desktop news",
-        "slug": "desktop-news"
+        "id": "archive-desktop-news",
+        "slug": "desktop-news",
+        "name": "Desktop news"
       }
     ]
   },
@@ -189,43 +125,27 @@
     "title": "Privacy Digest #2 (13- 20 October 2026)",
     "published_at": "2026-10-20T18:26:34.000Z",
     "excerpt": "What's buzzing in the privacy world this week: 🕶️ Meta glasses recorded without “Hey Meta” || 🎯 Spyware delivered through ads, no click needed || 🟣 Farcaster adds new posting conditions || 🔐 Ledger implants stole recovery phrases || 🇺🇸 Florida’s under-14 social media ban",
-    "custom_excerpt": null,
     "feature_image": "https://our.status.im/content/images/2026/10/Privacy-Digest--2-Banner.png",
-    "feature_image_alt": null,
     "primary_author": {
       "id": "6932cdb783429200019697e1",
-      "name": "Bobby Zalke",
       "slug": "bobby",
-      "profile_image": null,
-      "cover_image": null,
-      "bio": null,
-      "website": null,
-      "location": null,
-      "facebook": null,
-      "twitter": null,
-      "meta_title": null,
-      "meta_description": null,
-      "threads": null,
-      "bluesky": null,
-      "mastodon": null,
-      "tiktok": null,
-      "youtube": null,
-      "instagram": null,
-      "linkedin": null,
-      "url": "https://our.status.im/author/bobby/"
+      "name": "Bobby Zalke"
     },
     "primary_tag": {
-      "name": "Mobile news",
-      "slug": "mobile-news"
+      "id": "archive-mobile-news",
+      "slug": "mobile-news",
+      "name": "Mobile news"
     },
     "tags": [
       {
-        "name": "Mobile news",
-        "slug": "mobile-news"
+        "id": "archive-mobile-news",
+        "slug": "mobile-news",
+        "name": "Mobile news"
       },
       {
-        "name": "Desktop news",
-        "slug": "desktop-news"
+        "id": "archive-desktop-news",
+        "slug": "desktop-news",
+        "name": "Desktop news"
       }
     ]
   },
@@ -235,43 +155,27 @@
     "title": "Status 2.39.1 is here",
     "published_at": "2026-10-19T12:13:45.000Z",
     "excerpt": "Status 2.39.1 brings several fixes to make your everyday conversations smoother and more reliable: Offline messages: Messages sent while you were offline are now properly retrieved in community chats when you reconnect, so you can pick up where you left off; @everyone mentions: @everyone mentions now work correctly",
-    "custom_excerpt": null,
     "feature_image": "https://our.status.im/content/images/2026/10/Screenshot---2026-10-19T171526.583-1.png",
-    "feature_image_alt": null,
     "primary_author": {
       "id": "6932cdb783429200019697e1",
-      "name": "Bobby Zalke",
       "slug": "bobby",
-      "profile_image": null,
-      "cover_image": null,
-      "bio": null,
-      "website": null,
-      "location": null,
-      "facebook": null,
-      "twitter": null,
-      "meta_title": null,
-      "meta_description": null,
-      "threads": null,
-      "bluesky": null,
-      "mastodon": null,
-      "tiktok": null,
-      "youtube": null,
-      "instagram": null,
-      "linkedin": null,
-      "url": "https://our.status.im/author/bobby/"
+      "name": "Bobby Zalke"
     },
     "primary_tag": {
-      "name": "Mobile news",
-      "slug": "mobile-news"
+      "id": "archive-mobile-news",
+      "slug": "mobile-news",
+      "name": "Mobile news"
     },
     "tags": [
       {
-        "name": "Mobile news",
-        "slug": "mobile-news"
+        "id": "archive-mobile-news",
+        "slug": "mobile-news",
+        "name": "Mobile news"
       },
       {
-        "name": "Desktop news",
-        "slug": "desktop-news"
+        "id": "archive-desktop-news",
+        "slug": "desktop-news",
+        "name": "Desktop news"
       }
     ]
   },
@@ -281,43 +185,27 @@
     "title": "Privacy Digest #1 (1-12 Oct. 2026)",
     "published_at": "2026-10-14T12:39:19.000Z",
     "excerpt": "What's buzzing in the privacy world this week 💬Double Counter’s Oct 4 breach left Discord IDs/usernames for ~28M accounts and IP/location data for ~27M treated as exposed. 🔐Ledger confirms a hidden hardware implant in a wallet linked to the CryptoBilis incident.",
-    "custom_excerpt": null,
     "feature_image": "https://our.status.im/content/images/2026/10/Privacy-Digest_-Global-tech-collage.png",
-    "feature_image_alt": null,
     "primary_author": {
       "id": "6932cdb783429200019697e1",
-      "name": "Bobby Zalke",
       "slug": "bobby",
-      "profile_image": null,
-      "cover_image": null,
-      "bio": null,
-      "website": null,
-      "location": null,
-      "facebook": null,
-      "twitter": null,
-      "meta_title": null,
-      "meta_description": null,
-      "threads": null,
-      "bluesky": null,
-      "mastodon": null,
-      "tiktok": null,
-      "youtube": null,
-      "instagram": null,
-      "linkedin": null,
-      "url": "https://our.status.im/author/bobby/"
+      "name": "Bobby Zalke"
     },
     "primary_tag": {
-      "name": "Desktop news",
-      "slug": "desktop-news"
+      "id": "archive-desktop-news",
+      "slug": "desktop-news",
+      "name": "Desktop news"
     },
     "tags": [
       {
-        "name": "Desktop news",
-        "slug": "desktop-news"
+        "id": "archive-desktop-news",
+        "slug": "desktop-news",
+        "name": "Desktop news"
       },
       {
-        "name": "Mobile news",
-        "slug": "mobile-news"
+        "id": "archive-mobile-news",
+        "slug": "mobile-news",
+        "name": "Mobile news"
       }
     ]
   },
@@ -327,43 +215,27 @@
     "title": "Status 2.39 is HERE",
     "published_at": "2026-10-08T14:11:50.000Z",
     "excerpt": "This is a big one! From reliable message delivery and confirmation in communities and Incognito browsing on mobile to the new Swap & Bridge experience and Robinhood Chain support, Status 2.39 is packed with exciting new features… Explore full release now!",
-    "custom_excerpt": null,
     "feature_image": "https://our.status.im/content/images/2026/10/Status-2.39.jpeg",
-    "feature_image_alt": null,
     "primary_author": {
       "id": "6932cdb783429200019697e1",
-      "name": "Bobby Zalke",
       "slug": "bobby",
-      "profile_image": null,
-      "cover_image": null,
-      "bio": null,
-      "website": null,
-      "location": null,
-      "facebook": null,
-      "twitter": null,
-      "meta_title": null,
-      "meta_description": null,
-      "threads": null,
-      "bluesky": null,
-      "mastodon": null,
-      "tiktok": null,
-      "youtube": null,
-      "instagram": null,
-      "linkedin": null,
-      "url": "https://our.status.im/author/bobby/"
+      "name": "Bobby Zalke"
     },
     "primary_tag": {
-      "name": "Desktop news",
-      "slug": "desktop-news"
+      "id": "archive-desktop-news",
+      "slug": "desktop-news",
+      "name": "Desktop news"
     },
     "tags": [
       {
-        "name": "Desktop news",
-        "slug": "desktop-news"
+        "id": "archive-desktop-news",
+        "slug": "desktop-news",
+        "name": "Desktop news"
       },
       {
-        "name": "Mobile news",
-        "slug": "mobile-news"
+        "id": "archive-mobile-news",
+        "slug": "mobile-news",
+        "name": "Mobile news"
       }
     ]
   },
@@ -373,32 +245,12 @@
     "title": "Status 2.39: Reliable message delivery, new token Swap+ Bridge, browser Incognito mode, Robinhood chain, and more…",
     "published_at": "2026-10-08T13:24:09.000Z",
     "excerpt": "Status 2.39 brings a wide range of new features and improvements across messaging, wallet, browser, communities, Keycard, performance, navigation, and p2p network status visibility.\n\nOne of the major additions is the full rollout of SDS (Scalable Data Sync) protocol in Status Communities, bringing  reliable message delivery and confirmation, while the app automatically ensures no messages are missed. But there is a lot more in this release.\n\nImportant: This is a breaking change. If you’re on Sta",
-    "custom_excerpt": null,
     "feature_image": "https://our.status.im/content/images/2026/10/WhatsApp-Image-2026-10-08-at-6.09.35-PM.jpeg",
-    "feature_image_alt": null,
     "primary_author": {
       "id": "6932cdb783429200019697e1",
-      "name": "Bobby Zalke",
       "slug": "bobby",
-      "profile_image": null,
-      "cover_image": null,
-      "bio": null,
-      "website": null,
-      "location": null,
-      "facebook": null,
-      "twitter": null,
-      "meta_title": null,
-      "meta_description": null,
-      "threads": null,
-      "bluesky": null,
-      "mastodon": null,
-      "tiktok": null,
-      "youtube": null,
-      "instagram": null,
-      "linkedin": null,
-      "url": "https://our.status.im/author/bobby/"
+      "name": "Bobby Zalke"
     },
-    "primary_tag": null,
     "tags": []
   },
   {
@@ -407,43 +259,27 @@
     "title": "Can 12 Random Words Still Be Guessable?",
     "published_at": "2026-08-13T14:39:53.000Z",
     "excerpt": "A seed phrase can look perfectly random while the randomness behind it isn't. $100M+ in Bitcoin was stolen, The COLDCARD incident showed why how your seed is generated matters. See how Status approaches it",
-    "custom_excerpt": null,
     "feature_image": "https://our.status.im/content/images/2026/08/Screenshot---2026-08-13T193742.210-1.png",
-    "feature_image_alt": null,
     "primary_author": {
       "id": "6932cdb783429200019697e1",
-      "name": "Bobby Zalke",
       "slug": "bobby",
-      "profile_image": null,
-      "cover_image": null,
-      "bio": null,
-      "website": null,
-      "location": null,
-      "facebook": null,
-      "twitter": null,
-      "meta_title": null,
-      "meta_description": null,
-      "threads": null,
-      "bluesky": null,
-      "mastodon": null,
-      "tiktok": null,
-      "youtube": null,
-      "instagram": null,
-      "linkedin": null,
-      "url": "https://our.status.im/author/bobby/"
+      "name": "Bobby Zalke"
     },
     "primary_tag": {
-      "name": "Desktop news",
-      "slug": "desktop-news"
+      "id": "archive-desktop-news",
+      "slug": "desktop-news",
+      "name": "Desktop news"
     },
     "tags": [
       {
-        "name": "Desktop news",
-        "slug": "desktop-news"
+        "id": "archive-desktop-news",
+        "slug": "desktop-news",
+        "name": "Desktop news"
       },
       {
-        "name": "Mobile news",
-        "slug": "mobile-news"
+        "id": "archive-mobile-news",
+        "slug": "mobile-news",
+        "name": "Mobile news"
       }
     ]
   },
@@ -453,32 +289,12 @@
     "title": "When Your Recovery Phrase Isn’t Random Enough",
     "published_at": "2026-08-13T14:29:17.000Z",
     "excerpt": "More than $100M worth of Bitcoin has been linked to thefts involving a weakness in COLDCARD seed generation.\n\nThe surprising part: attackers did not need to steal the hardware wallet, connect to it, or know the PIN.\n\nThe problem started when some wallets created their recovery phrase.\n\nCOLDCARD disclosed that affected firmware did not always get randomness from the hardware random-number generator as intended. In some cases, recovery phrase generation could fall back to a much more predictable s",
-    "custom_excerpt": null,
     "feature_image": "https://our.status.im/content/images/2026/08/Screenshot---2026-08-13T193742.210.png",
-    "feature_image_alt": null,
     "primary_author": {
       "id": "6932cdb783429200019697e1",
-      "name": "Bobby Zalke",
       "slug": "bobby",
-      "profile_image": null,
-      "cover_image": null,
-      "bio": null,
-      "website": null,
-      "location": null,
-      "facebook": null,
-      "twitter": null,
-      "meta_title": null,
-      "meta_description": null,
-      "threads": null,
-      "bluesky": null,
-      "mastodon": null,
-      "tiktok": null,
-      "youtube": null,
-      "instagram": null,
-      "linkedin": null,
-      "url": "https://our.status.im/author/bobby/"
+      "name": "Bobby Zalke"
     },
-    "primary_tag": null,
     "tags": []
   },
   {
@@ -487,43 +303,27 @@
     "title": "Status v2.38.2 is Here!",
     "published_at": "2026-07-21T11:19:19.000Z",
     "excerpt": "Fixes for high CPU and data usage overheating mobile devices, endless message loading in communities, unwanted \"paste from clipboard\" prompt and the Cancel button not working on the \"Add new account\" screen on iOS. Also moved to a new GIF provider. Update your Status",
-    "custom_excerpt": null,
     "feature_image": "https://our.status.im/content/images/2026/07/ChatGPT-Image-Jul-21--2026--03_04_23-PM.png",
-    "feature_image_alt": null,
     "primary_author": {
       "id": "6932cdb783429200019697e1",
-      "name": "Bobby Zalke",
       "slug": "bobby",
-      "profile_image": null,
-      "cover_image": null,
-      "bio": null,
-      "website": null,
-      "location": null,
-      "facebook": null,
-      "twitter": null,
-      "meta_title": null,
-      "meta_description": null,
-      "threads": null,
-      "bluesky": null,
-      "mastodon": null,
-      "tiktok": null,
-      "youtube": null,
-      "instagram": null,
-      "linkedin": null,
-      "url": "https://our.status.im/author/bobby/"
+      "name": "Bobby Zalke"
     },
     "primary_tag": {
-      "name": "Mobile news",
-      "slug": "mobile-news"
+      "id": "archive-mobile-news",
+      "slug": "mobile-news",
+      "name": "Mobile news"
     },
     "tags": [
       {
-        "name": "Mobile news",
-        "slug": "mobile-news"
+        "id": "archive-mobile-news",
+        "slug": "mobile-news",
+        "name": "Mobile news"
       },
       {
-        "name": "Desktop news",
-        "slug": "desktop-news"
+        "id": "archive-desktop-news",
+        "slug": "desktop-news",
+        "name": "Desktop news"
       }
     ]
   },
@@ -533,56 +333,22 @@
     "title": "Elements of Private, Secure Messaging Apps",
     "published_at": "2026-07-16T15:32:11.000Z",
     "excerpt": "Privacy in messaging is often reduced to a single feature: encryption.\n\nBut private communication is not defined by one mechanism. It is the result of multiple layers working together each addressing a different type of privacy risk.\n\nOver time, both user expectations and system architectures have evolved. Messaging apps today are no longer just communication tools, but they are platforms that interact with identity, data, and networks at scale.\n\nThis makes it important to revisit what “private ",
-    "custom_excerpt": null,
     "feature_image": "https://our.status.im/content/images/2026/07/ChatGPT-Image-Jul-16--2026--10_37_44-PM.png",
-    "feature_image_alt": null,
     "primary_author": {
       "id": "6932cdb783429200019697e1",
-      "name": "Bobby Zalke",
       "slug": "bobby",
-      "profile_image": null,
-      "cover_image": null,
-      "bio": null,
-      "website": null,
-      "location": null,
-      "facebook": null,
-      "twitter": null,
-      "meta_title": null,
-      "meta_description": null,
-      "threads": null,
-      "bluesky": null,
-      "mastodon": null,
-      "tiktok": null,
-      "youtube": null,
-      "instagram": null,
-      "linkedin": null,
-      "url": "https://our.status.im/author/bobby/"
+      "name": "Bobby Zalke"
     },
     "primary_tag": {
       "id": "63b48c62fc2070000104be85",
-      "name": "Status",
       "slug": "status",
-      "description": null,
-      "feature_image": null,
-      "visibility": "public",
-      "og_image": null,
-      "og_title": null,
-      "og_description": null,
-      "twitter_image": null,
-      "twitter_title": null,
-      "twitter_description": null,
-      "meta_title": null,
-      "meta_description": null,
-      "codeinjection_head": null,
-      "codeinjection_foot": null,
-      "canonical_url": null,
-      "accent_color": null,
-      "url": "https://our.status.im/tag/status/"
+      "name": "Status"
     },
     "tags": [
       {
-        "name": "Status",
-        "slug": "status"
+        "id": "archive-status",
+        "slug": "status",
+        "name": "Status"
       }
     ]
   },
@@ -592,43 +358,27 @@
     "title": "Still using an older version of Status?",
     "published_at": "2026-06-19T12:15:00.000Z",
     "excerpt": "Status v2.38 is Live! Bringing the Mobile Web Browser, real-time private mobile notifications, 8 new Ethereum L2 networks, a revamped chat input, a full Activity Center, shorter login times, and much more... Update Now",
-    "custom_excerpt": null,
     "feature_image": "https://our.status.im/content/images/2026/06/2.38--1--1.png",
-    "feature_image_alt": null,
     "primary_author": {
       "id": "6932cdb783429200019697e1",
-      "name": "Bobby Zalke",
       "slug": "bobby",
-      "profile_image": null,
-      "cover_image": null,
-      "bio": null,
-      "website": null,
-      "location": null,
-      "facebook": null,
-      "twitter": null,
-      "meta_title": null,
-      "meta_description": null,
-      "threads": null,
-      "bluesky": null,
-      "mastodon": null,
-      "tiktok": null,
-      "youtube": null,
-      "instagram": null,
-      "linkedin": null,
-      "url": "https://our.status.im/author/bobby/"
+      "name": "Bobby Zalke"
     },
     "primary_tag": {
-      "name": "Desktop news",
-      "slug": "desktop-news"
+      "id": "archive-desktop-news",
+      "slug": "desktop-news",
+      "name": "Desktop news"
     },
     "tags": [
       {
-        "name": "Desktop news",
-        "slug": "desktop-news"
+        "id": "archive-desktop-news",
+        "slug": "desktop-news",
+        "name": "Desktop news"
       },
       {
-        "name": "Mobile news",
-        "slug": "mobile-news"
+        "id": "archive-mobile-news",
+        "slug": "mobile-news",
+        "name": "Mobile news"
       }
     ]
   },
@@ -638,43 +388,27 @@
     "title": "Status v2.38 is Live!",
     "published_at": "2026-06-16T13:41:17.000Z",
     "excerpt": "Bringing the Mobile Web Browser, real-time private mobile notifications, 8 new Ethereum L2 networks, a revamped chat input, a full Activity Center, shorter login times, better mobile interface scaling, update to Qt 6.11, and overall user experience improvements that make Status faster, smoother, and more reliable. Update Status",
-    "custom_excerpt": null,
     "feature_image": "https://our.status.im/content/images/2026/06/2.38-2.png",
-    "feature_image_alt": null,
     "primary_author": {
       "id": "6932cdb783429200019697e1",
-      "name": "Bobby Zalke",
       "slug": "bobby",
-      "profile_image": null,
-      "cover_image": null,
-      "bio": null,
-      "website": null,
-      "location": null,
-      "facebook": null,
-      "twitter": null,
-      "meta_title": null,
-      "meta_description": null,
-      "threads": null,
-      "bluesky": null,
-      "mastodon": null,
-      "tiktok": null,
-      "youtube": null,
-      "instagram": null,
-      "linkedin": null,
-      "url": "https://our.status.im/author/bobby/"
+      "name": "Bobby Zalke"
     },
     "primary_tag": {
-      "name": "Desktop news",
-      "slug": "desktop-news"
+      "id": "archive-desktop-news",
+      "slug": "desktop-news",
+      "name": "Desktop news"
     },
     "tags": [
       {
-        "name": "Desktop news",
-        "slug": "desktop-news"
+        "id": "archive-desktop-news",
+        "slug": "desktop-news",
+        "name": "Desktop news"
       },
       {
-        "name": "Mobile news",
-        "slug": "mobile-news"
+        "id": "archive-mobile-news",
+        "slug": "mobile-news",
+        "name": "Mobile news"
       }
     ]
   },
@@ -682,76 +416,25 @@
     "id": "6a2c0740834292000196a7f6",
     "slug": "status-v2-38-mobile-browser-private-notifications-new-l2-networks-and-a-faster-app-experience",
     "title": "Status v2.38: Mobile Browser, Private Notifications, New L2 Networks, and a Faster App Experience",
-    "custom_excerpt": null,
+    "published_at": "2026-06-12T14:18:07.000+00:00",
+    "updated_at": "2026-06-16T10:56:49.000+00:00",
     "excerpt": "Status v2.38 expands the capabilities of the privacy super app across mobile browsing and notifications, blockchain network support, user messaging experience, improved mobile interface scaling, and overall performance. The release ships a built-in Status Mobile Web Browser with the wallet and the Status decentralized dApp connector, real-time private push notifications for Android and iOS, support for eight new Ethereum Layer 2 networks in the self-custodial Status wallet, a revamped chat input",
     "feature_image": "https://our.status.im/content/images/2026/06/2.38-1.png",
-    "feature_image_alt": null,
-    "published_at": "2026-06-12T14:18:07.000+00:00",
-    "primary_tag": {
-      "id": "63b48c62fc2070000104be85",
-      "name": "Status",
-      "slug": "status",
-      "description": null,
-      "feature_image": null,
-      "visibility": "public",
-      "og_image": null,
-      "og_title": null,
-      "og_description": null,
-      "twitter_image": null,
-      "twitter_title": null,
-      "twitter_description": null,
-      "meta_title": null,
-      "meta_description": null,
-      "codeinjection_head": null,
-      "codeinjection_foot": null,
-      "canonical_url": null,
-      "accent_color": null,
-      "url": "https://our.status.im/tag/status/"
-    },
     "primary_author": {
       "id": "6932cdb783429200019697e1",
-      "name": "Bobby Zalke",
       "slug": "bobby",
-      "profile_image": null,
-      "cover_image": null,
-      "bio": null,
-      "website": null,
-      "location": null,
-      "facebook": null,
-      "twitter": null,
-      "meta_title": null,
-      "meta_description": null,
-      "threads": null,
-      "bluesky": null,
-      "mastodon": null,
-      "tiktok": null,
-      "youtube": null,
-      "instagram": null,
-      "linkedin": null,
-      "url": "https://our.status.im/author/bobby/"
+      "name": "Bobby Zalke"
     },
-    "updated_at": "2026-06-16T10:56:49.000+00:00",
+    "primary_tag": {
+      "id": "63b48c62fc2070000104be85",
+      "slug": "status",
+      "name": "Status"
+    },
     "tags": [
       {
         "id": "63b48c62fc2070000104be85",
-        "name": "Status",
         "slug": "status",
-        "description": null,
-        "feature_image": null,
-        "visibility": "public",
-        "og_image": null,
-        "og_title": null,
-        "og_description": null,
-        "twitter_image": null,
-        "twitter_title": null,
-        "twitter_description": null,
-        "meta_title": null,
-        "meta_description": null,
-        "codeinjection_head": null,
-        "codeinjection_foot": null,
-        "canonical_url": null,
-        "accent_color": null,
-        "url": "https://our.status.im/tag/status/"
+        "name": "Status"
       }
     ]
   },
@@ -759,76 +442,26 @@
     "id": "6a02dfb7834292000196a6a0",
     "slug": "pre-deposit-vaults-withdrawal-timeline-and-rewards-distribution",
     "title": "Pre-deposit vaults: withdrawal timeline and rewards distribution",
-    "custom_excerpt": null,
+    "published_at": "2026-05-12T08:16:27.000+00:00",
+    "updated_at": "2026-05-22T19:02:45.000+00:00",
     "excerpt": "Following the announcement of Status Network merging into Linea, this post details the practical next steps for pre-deposit vault participants: when each vault opens for withdrawal, how rewards and accrued yield will be distributed, and what depositors need to do (or not do) to receive their funds correctly.\n\nAs committed in the merger announcement, all pre-deposit vaults are fully backed. Principal, accrued yield, and liquid rewards (SNT + LINEA) will be made available in full.\n\nThe timeline be",
     "feature_image": "https://our.status.im/content/images/2026/05/44---Blog---Cover.jpg",
     "feature_image_alt": "Pre-deposit vaults: withdrawal timeline.",
-    "published_at": "2026-05-12T08:16:27.000+00:00",
-    "primary_tag": {
-      "id": "63b48c62fc2070000104be99",
-      "name": "Status Network",
-      "slug": "status-network",
-      "description": null,
-      "feature_image": null,
-      "visibility": "public",
-      "og_image": null,
-      "og_title": null,
-      "og_description": null,
-      "twitter_image": null,
-      "twitter_title": null,
-      "twitter_description": null,
-      "meta_title": null,
-      "meta_description": null,
-      "codeinjection_head": null,
-      "codeinjection_foot": null,
-      "canonical_url": null,
-      "accent_color": null,
-      "url": "https://our.status.im/tag/status-network/"
-    },
     "primary_author": {
       "id": "6915ef6ff70ca800016c5a8d",
-      "name": "Kamila Lipska",
       "slug": "kamila",
-      "profile_image": null,
-      "cover_image": null,
-      "bio": null,
-      "website": null,
-      "location": null,
-      "facebook": null,
-      "twitter": null,
-      "meta_title": null,
-      "meta_description": null,
-      "threads": null,
-      "bluesky": null,
-      "mastodon": null,
-      "tiktok": null,
-      "youtube": null,
-      "instagram": null,
-      "linkedin": null,
-      "url": "https://our.status.im/author/kamila/"
+      "name": "Kamila Lipska"
     },
-    "updated_at": "2026-05-22T19:02:45.000+00:00",
+    "primary_tag": {
+      "id": "63b48c62fc2070000104be99",
+      "slug": "status-network",
+      "name": "Status Network"
+    },
     "tags": [
       {
         "id": "63b48c62fc2070000104be99",
-        "name": "Status Network",
         "slug": "status-network",
-        "description": null,
-        "feature_image": null,
-        "visibility": "public",
-        "og_image": null,
-        "og_title": null,
-        "og_description": null,
-        "twitter_image": null,
-        "twitter_title": null,
-        "twitter_description": null,
-        "meta_title": null,
-        "meta_description": null,
-        "codeinjection_head": null,
-        "codeinjection_foot": null,
-        "canonical_url": null,
-        "accent_color": null,
-        "url": "https://our.status.im/tag/status-network/"
+        "name": "Status Network"
       }
     ]
   },
@@ -836,76 +469,26 @@
     "id": "69eb305d834292000196a5d8",
     "slug": "status-network-merges-with-linea-scaling-gasless-privacy-upstream",
     "title": "Status Network to merge into Linea",
-    "custom_excerpt": null,
+    "published_at": "2026-04-30T17:52:14.000+00:00",
+    "updated_at": "2026-05-22T19:08:17.000+00:00",
     "excerpt": "Status Network pioneered native gasless execution as a breakthrough that unlocks new use cases for privacy, DeFi and agentic commerce. Over the past two years we set out to prove the gasless design could work at scale. \n\nToday we're moving to a larger stage. After productive discussions across both ecosystems, the strategic decision has been made to plan a merge of Status Network’s production-ready gasless and privacy L2 tech into the Linea ecosystem as its native distribution layer. Rather than",
     "feature_image": "https://our.status.im/content/images/2026/04/Merge-Status-Network-.png",
     "feature_image_alt": "Status Network merging with Linea, gasless privacy-first L2 rollup infrastructure.",
-    "published_at": "2026-04-30T17:52:14.000+00:00",
-    "primary_tag": {
-      "id": "63b48c62fc2070000104be99",
-      "name": "Status Network",
-      "slug": "status-network",
-      "description": null,
-      "feature_image": null,
-      "visibility": "public",
-      "og_image": null,
-      "og_title": null,
-      "og_description": null,
-      "twitter_image": null,
-      "twitter_title": null,
-      "twitter_description": null,
-      "meta_title": null,
-      "meta_description": null,
-      "codeinjection_head": null,
-      "codeinjection_foot": null,
-      "canonical_url": null,
-      "accent_color": null,
-      "url": "https://our.status.im/tag/status-network/"
-    },
     "primary_author": {
       "id": "6915ef6ff70ca800016c5a8d",
-      "name": "Kamila Lipska",
       "slug": "kamila",
-      "profile_image": null,
-      "cover_image": null,
-      "bio": null,
-      "website": null,
-      "location": null,
-      "facebook": null,
-      "twitter": null,
-      "meta_title": null,
-      "meta_description": null,
-      "threads": null,
-      "bluesky": null,
-      "mastodon": null,
-      "tiktok": null,
-      "youtube": null,
-      "instagram": null,
-      "linkedin": null,
-      "url": "https://our.status.im/author/kamila/"
+      "name": "Kamila Lipska"
     },
-    "updated_at": "2026-05-22T19:08:17.000+00:00",
+    "primary_tag": {
+      "id": "63b48c62fc2070000104be99",
+      "slug": "status-network",
+      "name": "Status Network"
+    },
     "tags": [
       {
         "id": "63b48c62fc2070000104be99",
-        "name": "Status Network",
         "slug": "status-network",
-        "description": null,
-        "feature_image": null,
-        "visibility": "public",
-        "og_image": null,
-        "og_title": null,
-        "og_description": null,
-        "twitter_image": null,
-        "twitter_title": null,
-        "twitter_description": null,
-        "meta_title": null,
-        "meta_description": null,
-        "codeinjection_head": null,
-        "codeinjection_foot": null,
-        "canonical_url": null,
-        "accent_color": null,
-        "url": "https://our.status.im/tag/status-network/"
+        "name": "Status Network"
       }
     ]
   },
@@ -913,76 +496,26 @@
     "id": "69dcfacd834292000196a599",
     "slug": "karma-tokenomics-designing-a-sustainable-l2-based-on-reputation",
     "title": "Karma Tokenomics: designing a sustainable L2 based on reputation",
-    "custom_excerpt": null,
+    "published_at": "2026-04-15T08:07:08.000+00:00",
+    "updated_at": "2026-04-15T08:07:08.000+00:00",
     "excerpt": "Every L2 building its revenue model on sequencing fees is building on a shrinking foundation. Gas fees on L2s dropped by up to 99% after Dencun. Fusaka pushed them further. Responsive pricing (like what Arbitrum has implemented) is a genuine improvement with better fee accuracy and tighter alignment with actual network demand. But optimizing gas pricing is still optimizing something that trends toward zero as scaling improves and competition intensifies. \n\nStatus Network's position on this has b",
     "feature_image": "https://our.status.im/content/images/2026/04/42---Blog---Cover.jpg",
     "feature_image_alt": "Karma Tokenomics: How Status L2 Runs on Reputation.",
-    "published_at": "2026-04-15T08:07:08.000+00:00",
-    "primary_tag": {
-      "id": "63b48c62fc2070000104be99",
-      "name": "Status Network",
-      "slug": "status-network",
-      "description": null,
-      "feature_image": null,
-      "visibility": "public",
-      "og_image": null,
-      "og_title": null,
-      "og_description": null,
-      "twitter_image": null,
-      "twitter_title": null,
-      "twitter_description": null,
-      "meta_title": null,
-      "meta_description": null,
-      "codeinjection_head": null,
-      "codeinjection_foot": null,
-      "canonical_url": null,
-      "accent_color": null,
-      "url": "https://our.status.im/tag/status-network/"
-    },
     "primary_author": {
       "id": "6915ef6ff70ca800016c5a8d",
-      "name": "Kamila Lipska",
       "slug": "kamila",
-      "profile_image": null,
-      "cover_image": null,
-      "bio": null,
-      "website": null,
-      "location": null,
-      "facebook": null,
-      "twitter": null,
-      "meta_title": null,
-      "meta_description": null,
-      "threads": null,
-      "bluesky": null,
-      "mastodon": null,
-      "tiktok": null,
-      "youtube": null,
-      "instagram": null,
-      "linkedin": null,
-      "url": "https://our.status.im/author/kamila/"
+      "name": "Kamila Lipska"
     },
-    "updated_at": "2026-04-15T08:07:08.000+00:00",
+    "primary_tag": {
+      "id": "63b48c62fc2070000104be99",
+      "slug": "status-network",
+      "name": "Status Network"
+    },
     "tags": [
       {
         "id": "63b48c62fc2070000104be99",
-        "name": "Status Network",
         "slug": "status-network",
-        "description": null,
-        "feature_image": null,
-        "visibility": "public",
-        "og_image": null,
-        "og_title": null,
-        "og_description": null,
-        "twitter_image": null,
-        "twitter_title": null,
-        "twitter_description": null,
-        "meta_title": null,
-        "meta_description": null,
-        "codeinjection_head": null,
-        "codeinjection_foot": null,
-        "canonical_url": null,
-        "accent_color": null,
-        "url": "https://our.status.im/tag/status-network/"
+        "name": "Status Network"
       }
     ]
   }
