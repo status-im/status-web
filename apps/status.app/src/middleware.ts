@@ -21,7 +21,7 @@ export default function middleware(request: NextRequest) {
       return unavailableBlogPost()
     }
 
-    if (slug === 'icon.png') return NextResponse.next()
+    if (/^icon(?:-[a-z0-9]+)?\.png$/.test(slug)) return NextResponse.next()
     if (!getArchivedPost(slug)) return unavailableBlogPost()
     if (pathname.startsWith('/blog/')) return NextResponse.next()
   }
