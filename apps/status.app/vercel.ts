@@ -26,7 +26,7 @@ export const config = {
   ...(isBlogInMaintenance() && {
     routes: [
       {
-        src: '^/(?:en/)?blog/(?!icon(?:-[a-z0-9]+)?\\.png/?$)[^/]+/?$',
+        src: '^/(?:en/)?blog/(?!icon(?:-[a-z0-9]+)?\\.png/?$).+$',
         dest: '/_next/static/blog-maintenance.html',
         check: true,
         status: 503,
