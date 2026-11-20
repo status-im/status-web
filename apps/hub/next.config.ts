@@ -7,6 +7,7 @@ import type { NextConfig } from 'next'
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
 const nextConfig: NextConfig = {
+  agentRules: false,
   // Only enable static export for builds, not dev mode
   // This allows middleware to work in dev mode for locale routing
   ...(serverEnv.NODE_ENV === 'production' && { output: 'export' }),

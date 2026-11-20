@@ -17,6 +17,7 @@ const require = createRequire(import.meta.url)
 
 /** @type {import('next').NextConfig} */
 let config = {
+  agentRules: false,
   logging: {
     fetches: {
       fullUrl: true,

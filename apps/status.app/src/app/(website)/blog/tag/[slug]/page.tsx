@@ -1,15 +1,15 @@
 import { getTranslations } from 'next-intl/server'
 
 import { Metadata, toMetaDescription } from '~app/_metadata'
-import { getPostsByTagSlug, getTagSlugs } from '~website/_lib/ghost'
+import { getPostsByTagSlug } from '~website/_lib/ghost'
 import { TagArchive } from '~website/blog/_components/tag-archive'
 
 export const revalidate = 3600 // 1 hour
 export const dynamicParams = true
 
-export async function generateStaticParams() {
-  const slugs = await getTagSlugs()
-  return slugs.map(slug => ({ slug })) satisfies Array<Awaited<Props['params']>>
+// Generate on demand so Ghost availability does not block the build.
+export function generateStaticParams() {
+  return []
 }
 
 type Props = {
