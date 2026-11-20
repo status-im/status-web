@@ -1,8 +1,10 @@
+import { blogMaintenanceHeaders } from '~/config/blog-maintenance'
+
 import messages from '../../../../../messages/en.json'
 
 const { maintenanceTitle, maintenanceDescription, retryArticle } = messages.blog
 
-const body = `<!doctype html>
+export const blogMaintenanceHtml = `<!doctype html>
 <html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,12 +24,8 @@ a{color:#255dd6}
 </html>`
 
 export function blogMaintenanceResponse() {
-  return new Response(body, {
+  return new Response(blogMaintenanceHtml, {
     status: 503,
-    headers: {
-      'Cache-Control': 'no-store',
-      'Content-Type': 'text/html; charset=utf-8',
-      'Retry-After': '300',
-    },
+    headers: blogMaintenanceHeaders,
   })
 }
