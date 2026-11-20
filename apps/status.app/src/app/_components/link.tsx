@@ -40,7 +40,7 @@ const Link = (
   return (
     <IntlLink
       {...restProps}
-      prefetch={prefetch === 'unstable_forceStale' ? undefined : prefetch}
+      prefetch={prefetch}
       locale={typeof locale === 'string' ? locale : undefined}
       ref={ref}
     />
