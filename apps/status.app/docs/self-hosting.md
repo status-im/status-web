@@ -200,8 +200,8 @@ the server is gone and not that a dependency is slow.
 
 Download tracking (`/api/download/*`) used `@vercel/analytics/server`. The self-hosted build sends
 the same events to Umami through [`src/server/services/umami.ts`](../src/server/services/umami.ts).
-Set `UMAMI_WEBSITE_ID` to turn it on, `UMAMI_API_URL` to point at your instance. Downloads work
-without either; they just go uncounted.
+Set `UMAMI_WEBSITE_ID` to turn it on. `UMAMI_API_URL` points at your instance and defaults to
+`https://analytic.status.im/api/send`. Downloads work without either; they just go uncounted.
 
 ## Publishing the image
 
