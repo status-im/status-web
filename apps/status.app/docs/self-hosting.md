@@ -60,8 +60,9 @@ The blog is enabled by default. Set `BLOG_MAINTENANCE_MODE=1` and rebuild to ena
 the emergency maintenance mode. In that mode, the build prerenders [the blog landing page](<../src/app/(website)/blog/_page.tsx>)
 with the maintenance notice and builds an empty blog search index. The
 [locale middleware](../src/middleware.ts) returns the maintenance notice with HTTP 503 at
-article, author archive, category archive and paginated URLs. This runs before those pages query
-Ghost on Vercel and self-hosted deployments. The sitemap
+article, author archive, category archive and paginated URLs before those pages query Ghost on
+Vercel and self-hosted deployments. First-page aliases also return 503 during maintenance and
+redirect to the canonical listing when the live blog is enabled. The sitemap
 keeps existing article URLs using a
 [committed snapshot](../src/app/_data/blog-sitemap-snapshot.json). It combines the
 [October 6, 2026 public sitemap][blog-sitemap-archive] and the additional public post
