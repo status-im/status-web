@@ -45,10 +45,9 @@ once went down in production.
 
 The build defaults to maintenance mode. It prerenders [the blog landing page](<../src/app/(website)/blog/page.tsx>)
 with the maintenance notice and builds an empty blog search index. The
-[postbuild script](../scripts/generate-blog-maintenance.ts) writes the shared notice to
-`.next/static/blog-maintenance.html`. The [Vercel route](../vercel.ts) serves that static file
-with HTTP 503 at article, author archive, category archive and paginated URLs before Next.js
-middleware runs. Middleware serves the same notice on self-hosted deployments. The sitemap
+[locale middleware](../src/middleware.ts) returns the maintenance notice with HTTP 503 at
+article, author archive, category archive and paginated URLs. This runs before those pages query
+Ghost on Vercel and self-hosted deployments. The sitemap
 keeps existing article URLs using a
 [committed snapshot](../src/app/_data/blog-sitemap-snapshot.json). It combines the
 [October 6, 2026 public sitemap][blog-sitemap-archive] and the additional public post

@@ -25,8 +25,6 @@ a{color:#255dd6}
 </html>`
 }
 
-export const blogMaintenanceHtml = renderBlogMaintenance('')
-
 export function blogMaintenanceResponse(retrySegments?: string[]) {
   const retryPath = retrySegments
     ? `/blog/${retrySegments.map(encodeURIComponent).join('/')}`
