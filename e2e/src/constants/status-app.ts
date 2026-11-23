@@ -4,7 +4,7 @@ import type { SiteRules } from '@fixtures/site.fixture.js'
 
 /** Analytics endpoints answered locally so test runs are not counted. */
 const BLOCKED_REQUESTS = [
-  /umami\.bi\.status\.im/,
+  /analytic\.status\.im/,
   /\/_vercel\/(insights|speed-insights)\//,
   /va\.vercel-scripts\.com/,
 ]

@@ -2,7 +2,7 @@ import 'server-only'
 
 import { serverEnv } from '~/config/env.server.mjs'
 
-const DEFAULT_UMAMI_API_URL = 'https://umami.bi.status.im/api/send'
+const DEFAULT_UMAMI_API_URL = 'https://analytic.status.im/api/send'
 
 type EventPayload = Record<string, string | number | boolean | null | undefined>
 
@@ -15,7 +15,7 @@ type EventPayload = Record<string, string | number | boolean | null | undefined>
  *
  * Configured via env:
  *   UMAMI_WEBSITE_ID  — required; the website ID from the Umami dashboard
- *   UMAMI_API_URL     — optional; defaults to https://umami.bi.status.im/api/send
+ *   UMAMI_API_URL     — optional; defaults to https://analytic.status.im/api/send
  *
  * Errors are swallowed: analytics must never break the user's request.
  *

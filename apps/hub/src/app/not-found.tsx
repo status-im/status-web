@@ -88,7 +88,7 @@ export default async function GlobalNotFound() {
         </NextIntlClientProvider>
         <Script
           strategy="afterInteractive"
-          src="https://umami.bi.status.im/script.js"
+          src="https://analytic.status.im/script.js"
           data-website-id="5a1d3ceb-20f1-4808-b2c3-3414704740e5"
           data-domains="hub.status.network"
         />

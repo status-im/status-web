@@ -79,7 +79,7 @@ export default async function RootLayout({ children }: Props) {
         <link rel="preconnect" href="https://res.cloudinary.com" />
         {/* The analytics script is already preloaded by `next/script`, but the
             connection to its origin is only opened once the preload resolves. */}
-        <link rel="preconnect" href="https://umami.bi.status.im" />
+        <link rel="preconnect" href="https://analytic.status.im" />
         <link
           rel="alternate"
           type="application/atom+xml"
@@ -109,7 +109,7 @@ export default async function RootLayout({ children }: Props) {
         <Analytics />
         <Script
           strategy="afterInteractive"
-          src="https://umami.bi.status.im/script.js"
+          src="https://analytic.status.im/script.js"
           data-website-id="785550f6-3fea-4df0-aebe-2d5a999e6d49"
           data-domains="status.app"
           data-exclude-hash="true"

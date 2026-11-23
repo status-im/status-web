@@ -102,7 +102,7 @@ export default function RootLayout({ children }: Props) {
         <Analytics debug={false} />
         <Script
           strategy="afterInteractive"
-          src="https://umami.bi.status.im/script.js"
+          src="https://analytic.status.im/script.js"
           data-website-id="8916f2ff-52fc-47e9-a70f-62a50d67ce6a"
           data-domains="get.status.app"
           data-exclude-hash="true"
