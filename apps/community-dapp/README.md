@@ -8,6 +8,8 @@ Community directory curator dapp for Status: SNT holders vote on which communiti
 
 `predev` builds the contracts first, and `dev` regenerates the Waku protobufs before webpack starts. Running it locally also needs an Anvil chain with deployed contracts; [docs/local-development.md](docs/local-development.md) has the walkthrough.
 
+To start a featured vote on mobile, connect a funded wallet, select an eligible community in the directory and enter a positive amount. The feature button is disabled at 0 SNT.
+
 ## Build
 
     ENV=preview INFURA_API_KEY=<key> pnpm --filter @status-im/community-dapp build        # Optimism Sepolia
