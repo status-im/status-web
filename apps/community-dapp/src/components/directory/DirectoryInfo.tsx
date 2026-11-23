@@ -23,7 +23,7 @@ export function DirectoryInfo() {
   const castVotes = useContractFunction(featuredVotingContract, 'castVotes')
   const finalizeVoting = useContractFunction(featuredVotingContract, 'finalizeVoting')
   const [loading, setLoading] = useState(false)
-  const { finalizeVotingLimit, batchCount, batchDoneCount, beingEvaluated, beingFinalized } = useFeaturedBatches()
+  const { verification, finalization } = useFeaturedBatches()
 
   useEffect(() => {
     if (finalizeVoting.state.status === 'Success' || castVotes.state.status === 'Success') {
@@ -62,8 +62,8 @@ export function DirectoryInfo() {
             const votes = mapFeaturesVotes(votesToSend, getTypedFeatureVote)
 
             const batchedVotes = votes.slice(
-              batchDoneCount * config.votesLimit,
-              batchDoneCount * config.votesLimit + finalizeVotingLimit,
+              verification.batchDoneCount * config.votesLimit,
+              verification.batchDoneCount * config.votesLimit + verification.limit,
             )
 
             await castVotes.send(batchedVotes)
@@ -75,25 +75,21 @@ export function DirectoryInfo() {
           ) : (
             <>
               Verify Weekly featured{' '}
-              {batchCount > 1 && (
+              {verification.batchCount > 1 && (
                 <>
-                  ({beingEvaluated ? batchDoneCount : 0}/{batchCount} verified)
+                  ({verification.beingEvaluated ? verification.batchDoneCount : 0}/{verification.batchCount} verified)
                 </>
               )}
             </>
           )}
         </ProposeButton>
       )}
-      {isActive && featuredVotingState === 'ended' && (
-        <ProposeButton
-          onClick={() => {
-            finalizeVoting.send(finalizeVotingLimit < 1 ? 1 : finalizeVotingLimit)
-          }}
-        >
+      {isActive && featuredVotingState === 'ended' && finalization && (
+        <ProposeButton onClick={() => finalizeVoting.send(finalization.limit)}>
           Finalize Weekly featured{' '}
-          {batchCount > 1 && (
+          {finalization.batchCount > 1 && (
             <>
-              ({beingFinalized ? batchDoneCount : 0}/{batchCount} finalized)
+              ({finalization.batchDoneCount}/{finalization.batchCount} finalized)
             </>
           )}
         </ProposeButton>

@@ -1,16 +1,30 @@
+import { useContractCall } from '@usedapp/core'
 import { config } from '../config'
 import { useFeaturedVotes } from '../providers/featuredVotes/provider'
+import { useContracts } from './useContracts'
 
 export const useFeaturedBatches = () => {
   const { activeVoting, votes } = useFeaturedVotes()
+  const { featuredVotingContract } = useContracts()
+  const [onChainVotes] =
+    useContractCall(
+      activeVoting && {
+        abi: featuredVotingContract.interface,
+        address: featuredVotingContract.address,
+        method: 'getVotesByVotingId',
+        args: [activeVoting.id],
+      },
+    ) ?? []
 
   if (!activeVoting) {
     return {
-      finalizeVotingLimit: 1,
-      batchCount: 1,
-      batchDoneCount: 0,
-      beingEvaluated: false,
-      beingFinalized: false,
+      verification: {
+        limit: 1,
+        batchCount: 1,
+        batchDoneCount: 0,
+        beingEvaluated: false,
+      },
+      finalization: null,
     }
   }
 
@@ -22,25 +36,31 @@ export const useFeaturedBatches = () => {
     0,
   )
 
-  const beingFinalized = !evaluated && finalized
   const beingEvaluated = evaluated && !finalized
   const currentPosition = activeVoting.evaluatingPos
-  const firstFinalization = beingEvaluated && currentPosition === votesCount + 1
+  const unverifiedVotesCount = votesCount - currentPosition + 1
+  const verificationBatchCount = Math.ceil(votesCount / config.votesLimit)
+  const verificationLimit = beingEvaluated && unverifiedVotesCount === 0 ? votesCount : unverifiedVotesCount
 
-  const votesLeftCount = votesCount - currentPosition + 1
-  const finalizeVotingLimit = firstFinalization
-    ? Math.min(votesCount, config.votesLimit)
-    : Math.min(votesLeftCount, config.votesLimit)
-  const batchCount = Math.ceil((beingFinalized ? votesCount + 1 : votesCount) / config.votesLimit)
-  const batchLeftCount = Math.ceil(votesLeftCount / config.votesLimit)
-
-  const batchDoneCount = batchCount - batchLeftCount
+  // The first finalization call recounts all stored votes, including the vote that started the round.
+  const onChainVotesCount = onChainVotes?.length ?? 0
+  const remainingVotes = onChainVotesCount - (finalized ? currentPosition : 0)
+  const finalizationBatchCount = Math.ceil(onChainVotesCount / config.votesLimit)
 
   return {
-    finalizeVotingLimit,
-    batchCount,
-    batchDoneCount,
-    beingFinalized,
-    beingEvaluated,
+    verification: {
+      limit: Math.min(verificationLimit, config.votesLimit),
+      batchCount: verificationBatchCount,
+      batchDoneCount: verificationBatchCount - Math.ceil(unverifiedVotesCount / config.votesLimit),
+      beingEvaluated,
+    },
+    finalization:
+      remainingVotes > 0
+        ? {
+            limit: Math.min(remainingVotes, config.votesLimit),
+            batchCount: finalizationBatchCount,
+            batchDoneCount: finalizationBatchCount - Math.ceil(remainingVotes / config.votesLimit),
+          }
+        : null,
   }
 }

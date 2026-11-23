@@ -89,3 +89,7 @@ pnpm --filter @status-im/community-dapp run dev
 ```
 
 `INFURA_API_KEY` is required even in development, because `RequestClient` fetches community details over Waku. A key is often already in `apps/status.app/.env.local`. Open <http://localhost:8080>.
+
+## 6. Finalize a weekly featured vote
+
+Use **Verify Weekly featured** during the verification period to submit signed votes from Waku. After that period, use **Finalize Weekly featured** until all batches finish. Finalization reads the votes recorded by the contract, including the vote that started the round. Once the final batch completes, an eligible community can start the next round.

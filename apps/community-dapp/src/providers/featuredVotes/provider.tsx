@@ -57,9 +57,7 @@ export function FeaturedVotesProvider({ children }: FeaturedVotesProviderProps) 
     if (featuredVotings) {
       const lastVoting: FeaturedVoting = featuredVotings[featuredVotings.length - 1]
 
-      if (lastVoting && (!lastVoting.evaluated || !lastVoting.finalized)) {
-        setActiveVoting(lastVoting)
-      }
+      setActiveVoting(lastVoting && (!lastVoting.evaluated || !lastVoting.finalized) ? lastVoting : null)
     }
   }, [featuredVotings])
 
