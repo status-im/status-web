@@ -41,9 +41,30 @@ repository to ask, and otherwise fails the build. Failing is deliberate: an empt
 compiles fine and ships a `/specs` hub whose every detail URL 404s, which is how the specs section
 once went down in production.
 
-## Building while Ghost is down
+## Blog maintenance
 
-The build runs
+The build defaults to maintenance mode. It prerenders [the blog landing page](<../src/app/(website)/blog/page.tsx>)
+with the maintenance notice and builds an empty blog search index. The
+[postbuild script](../scripts/generate-blog-maintenance.ts) writes the shared notice to
+`.next/static/blog-maintenance.html`. The [Vercel route](../vercel.ts) serves that static file
+with HTTP 503 at article, author archive, category archive and paginated URLs before Next.js
+middleware runs. Middleware serves the same notice on self-hosted deployments. The sitemap
+keeps existing article URLs using a
+[committed snapshot](../src/app/_data/blog-sitemap-snapshot.json). It combines the
+[October 6, 2026 public sitemap][blog-sitemap-archive] and the additional public post
+from the [November 5, 2026 production search index][blog-sitemap-index].
+
+When the Ghost Content API is healthy again, set `BLOG_MAINTENANCE_MODE=0` in the deployment
+environment and rebuild. This re-enables the existing Ghost-powered blog, search index and
+article entries in the sitemap. The flag is evaluated at build time and included in the
+Turborepo cache key.
+
+[blog-sitemap-archive]: https://web.archive.org/web/20261006194959id_/https://status.app/sitemap.xml
+[blog-sitemap-index]: https://status-website-eenm08ld5-status-im-web.vercel.app/blog-search-index.json
+
+## Building the live blog
+
+When maintenance mode is disabled, the build runs
 [`scripts/generate-blog-search-index.ts`](../scripts/generate-blog-search-index.ts), which fails
 with "Cannot generate an empty blog search index" when Ghost returns no posts. During a Ghost outage
 that blocks every build, including one you need for an unrelated fix such as rotating
@@ -65,9 +86,9 @@ without the flag does not reuse a cached empty index.
 This change did not touch the `Dockerfile` or the `build:docker` script, so check that they pass
 `ALLOW_EMPTY_BLOG_SEARCH_INDEX` into `docker build` before you rely on it for an image build.
 
-## Serving requests while Ghost is down
+## Live blog fallback
 
-The [Ghost client](<../src/app/(website)/_lib/ghost/client.ts>) gives server-side requests three
+With maintenance mode disabled, the [Ghost client](<../src/app/(website)/_lib/ghost/client.ts>) gives server-side requests three
 seconds and bulk requests (including the search index build) ten seconds. Browser fetches keep
 their existing behavior.
 
@@ -89,13 +110,15 @@ article and maintenance URLs on the routes that can handle them.
 
 The [author](<../src/app/(website)/blog/author/[slug]/page.tsx>) and
 [tag](<../src/app/(website)/blog/tag/[slug]/page.tsx>) archives also generate on the first request
-and revalidate hourly. The locale middleware also keeps archive requests on the unprefixed routes
-so new author and tag slugs can render on demand.
+and revalidate hourly. They retain their last successful data if Ghost fails during revalidation.
+Without a cached result, the request redirects to the same HTTP 503 response as articles, with a
+retry link back to the requested archive page. An empty archive still shows the 404 page. Locale
+middleware sends live archive requests to the unprefixed routes.
 
 The home page uses hourly ISR and can regenerate without the blog section during an outage.
 The sitemap uses hourly ISR with cached Ghost requests for both blog and Learn entries.
 
-On Vercel, [the project configuration](../vercel.json) enables Fluid Compute for status.app
+On Vercel, [the project configuration](../vercel.ts) enables Fluid Compute for status.app
 deployments and sets a 15-second execution limit for App Router functions. This bills active CPU
 time separately from provisioned memory time.
 

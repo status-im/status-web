@@ -27,6 +27,10 @@ const feedSnapshots =
 /** @type {import('next').NextConfig} */
 let config = {
   agentRules: false,
+  env: {
+    BLOG_MAINTENANCE_MODE:
+      process.env.BLOG_MAINTENANCE_MODE === '0' ? '0' : '1',
+  },
   // Self-hosting: emit a standalone server bundle (Dockerfile copies .next/standalone/).
   // why: https://nextjs.org/docs/app/api-reference/config/next-config-js/output#automatically-copying-traced-files
   ...(serverEnv.NODE_ENV === 'production' && { output: 'standalone' }),

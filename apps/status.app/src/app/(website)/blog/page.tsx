@@ -1,6 +1,7 @@
 import { Text } from '@status-im/components'
 import { getTranslations } from 'next-intl/server'
 
+import { isBlogInMaintenance } from '~/config/blog-maintenance'
 import { JSONLDScript } from '~/utils/json-ld'
 import { buildLandingPageStructuredData } from '~/utils/structured-data'
 import { Metadata } from '~app/_metadata'
@@ -9,6 +10,7 @@ import { BLOG_PAGE_SIZE, getPosts } from '~website/_lib/ghost'
 import { cacheGhostResult } from '~website/_lib/ghost/cache'
 
 import { isBlogCategory } from './_categories'
+import { BlogEmptyState } from './_components/blog-empty-state'
 import { BlogPager } from './_components/blog-pager'
 import { BlogSearch } from './_components/blog-search'
 import { searchBlogPosts } from './_utils/search.server'
@@ -74,6 +76,41 @@ type Props = {
 
 export default async function BlogPage({ searchParams }: Props) {
   const t = await getTranslations('blog')
+
+  // No second `WebSite` node here: a site declares one, at its root. The
+  // `SearchAction` it used to carry fed the sitelinks search box, which Google
+  // retired, and left Google crawling the literal
+  // `/blog?q={search_term_string}` template URL.
+  const webpageSchema = buildLandingPageStructuredData({
+    name: t('title'),
+    description: t('description'),
+    path: '/blog',
+  })
+
+  return (
+    <>
+      <JSONLDScript schema={webpageSchema} />
+      <Body>
+        <div className="px-5">
+          <div className="mx-auto max-w-[1184px] pb-24 pt-12 xl:pb-32 xl:pt-20">
+            <div className="mb-10 grid gap-2">
+              <h1 className="text-40 font-bold xl:text-64">{t('title')}</h1>
+              <Text size={19}>{t('description')}</Text>
+            </div>
+
+            {isBlogInMaintenance() ? (
+              <BlogEmptyState postsUnavailable />
+            ) : (
+              <BlogPosts searchParams={searchParams} />
+            )}
+          </div>
+        </div>
+      </Body>
+    </>
+  )
+}
+
+async function BlogPosts({ searchParams }: Props) {
   const [{ posts: initialPosts, meta, postsUnavailable }, params] =
     await Promise.all([getBlogPosts(), searchParams])
   const query =
@@ -101,45 +138,23 @@ export default async function BlogPage({ searchParams }: Props) {
     }
   }
 
-  // No second `WebSite` node here: a site declares one, at its root. The
-  // `SearchAction` it used to carry fed the sitelinks search box, which Google
-  // retired, and left Google crawling the literal
-  // `/blog?q={search_term_string}` template URL.
-  const webpageSchema = buildLandingPageStructuredData({
-    name: t('title'),
-    description: t('description'),
-    path: '/blog',
-  })
-
   return (
     <>
-      <JSONLDScript schema={webpageSchema} />
-      <Body>
-        <div className="px-5">
-          <div className="mx-auto max-w-[1184px] pb-24 pt-12 xl:pb-32 xl:pt-20">
-            <div className="mb-10 grid gap-2">
-              <h1 className="text-40 font-bold xl:text-64">{t('title')}</h1>
-              <Text size={19}>{t('description')}</Text>
-            </div>
+      <BlogSearch
+        initialPosts={initialPosts}
+        meta={meta}
+        postsUnavailable={postsUnavailable}
+        initialResults={initialResults}
+        initialQuery={query}
+        initialCategory={category}
+      />
 
-            <BlogSearch
-              initialPosts={initialPosts}
-              meta={meta}
-              postsUnavailable={postsUnavailable}
-              initialResults={initialResults}
-              initialQuery={query}
-              initialCategory={category}
-            />
-
-            <BlogPager
-              basePath="/blog"
-              currentPage={1}
-              totalPages={meta.pagination.pages}
-              hideWhenInteractive
-            />
-          </div>
-        </div>
-      </Body>
+      <BlogPager
+        basePath="/blog"
+        currentPage={1}
+        totalPages={meta.pagination.pages}
+        hideWhenInteractive
+      />
     </>
   )
 }

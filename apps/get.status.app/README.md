@@ -17,6 +17,9 @@ Copy `.env.example` to `.env.local`, or pull from Vercel with `vercel env pull .
 
 Built and deployed by [`ci/website.Jenkinsfile`](../../ci/website.Jenkinsfile) with `APP_NAME=get.status.app`: branch `deploy-get-status-app-master` publishes get.status.app, `deploy-get-status-app-develop` publishes dev-get.status.app.
 
+The build clears `NEXT_DEPLOYMENT_ID` so client-side links work on static hosting, where
+Next.js deployment ID response headers are unavailable.
+
 ## Pages
 
 `/`, `/apps`, `/legal/terms-of-use` and `/legal/privacy-policy`, plus the catch-all 404. The header, footer and promo bar come from status.app and check `isGetSite` in `src/config/site-scope.ts` to hide links to pages this site does not have. `src/config/routes.ts` holds the app route list.

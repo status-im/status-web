@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react'
 export function useLocalStorage<T>(
   key: string,
   initialValue: T
-): [T, (value: T | ((val: T) => T)) => void] {
+): [T, (value: T | ((val: T) => T)) => void, boolean] {
   const [storedValue, setStoredValue] = useState<T>(initialValue)
+  const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
     try {
@@ -16,6 +17,8 @@ export function useLocalStorage<T>(
       // If error also return initialValue
       console.log(error)
       setStoredValue(initialValue)
+    } finally {
+      setIsLoaded(true)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -36,5 +39,5 @@ export function useLocalStorage<T>(
     }
   }
 
-  return [storedValue, setValue]
+  return [storedValue, setValue, isLoaded]
 }

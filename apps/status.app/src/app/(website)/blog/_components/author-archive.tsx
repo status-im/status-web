@@ -4,7 +4,10 @@ import { getTranslations } from 'next-intl/server'
 
 import { Body } from '~components/body'
 import { Breadcrumbs } from '~components/breadcrumbs'
-import { getPostsByAuthorSlug } from '~website/_lib/ghost'
+import {
+  readAuthorArchive,
+  redirectToArchiveMaintenance,
+} from '~website/blog/_utils/archive-data'
 
 import { BlogPager } from './blog-pager'
 import { InfinitePostGrid } from './infinite-post-grid'
@@ -24,7 +27,11 @@ export async function AuthorArchive(props: Props) {
   const { slug, page } = props
 
   const t = await getTranslations('blog')
-  const response = await getPostsByAuthorSlug(slug, page)
+  const response = await readAuthorArchive(slug, page)
+
+  if (response === undefined) {
+    return redirectToArchiveMaintenance('author', slug, page)
+  }
 
   if (!response) {
     notFound()

@@ -4,6 +4,7 @@ import path from 'node:path'
 import { cwd, env } from 'node:process'
 
 import { createBlogSearchPayload } from '../src/app/(website)/blog/_utils/search'
+import { isBlogInMaintenance } from '../src/config/blog-maintenance'
 
 // Duplicated as an inline literal rather than shared with search.server.ts on
 // purpose: that module needs a statically analysable path for @vercel/nft.
@@ -13,12 +14,14 @@ const OUTPUT_PATH = 'public/blog-search-index.json'
 async function main() {
   loadEnvConfig(cwd())
 
-  const { getPostsForSearch } = await import(
-    '../src/app/(website)/_lib/ghost/index'
-  )
-  const posts = await getPostsForSearch()
+  const maintenance = isBlogInMaintenance()
+  const posts = maintenance
+    ? []
+    : await (
+        await import('../src/app/(website)/_lib/ghost/index')
+      ).getPostsForSearch()
 
-  if (posts.length === 0) {
+  if (!maintenance && posts.length === 0) {
     // Escape hatch for shipping while Ghost is unreachable. Search returns no
     // results until the next build with Ghost back up.
     if (env['ALLOW_EMPTY_BLOG_SEARCH_INDEX'] !== '1') {

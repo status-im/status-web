@@ -17,6 +17,7 @@ import type { ReactNode } from 'react'
 
 type AccountsContextType = {
   accounts: Account[]
+  accountsLoaded: boolean
   activeAccounts: Account[]
   setAccounts: (accounts: Account[] | ((prev: Account[]) => Account[])) => void
   addAccount: (account: Account) => void
@@ -31,7 +32,10 @@ const AccountsContext = createContext<AccountsContextType | undefined>(
 )
 
 export const AccountsProvider = ({ children }: { children: ReactNode }) => {
-  const [accounts, setAccounts] = useLocalStorage<Account[]>('accounts', [])
+  const [accounts, setAccounts, accountsLoaded] = useLocalStorage<Account[]>(
+    'accounts',
+    []
+  )
   const router = useRouter()
   const { disconnect } = useDisconnect()
   const toast = useToast()
@@ -104,6 +108,7 @@ export const AccountsProvider = ({ children }: { children: ReactNode }) => {
     <AccountsContext.Provider
       value={{
         accounts,
+        accountsLoaded,
         activeAccounts,
         setAccounts,
         addAccount,

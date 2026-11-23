@@ -1,3 +1,4 @@
+import { isBlogInMaintenance } from '~/config/blog-maintenance'
 import { SITE_URL } from '~/config/site'
 import { allHelpDocs, allSpecsDocs } from '~content'
 import {
@@ -5,6 +6,7 @@ import {
   getPostsForSitemap,
 } from '~website/_lib/ghost'
 
+import previousBlogUrls from './_data/blog-sitemap-snapshot.json'
 import { isHelpDocWorkInProgress } from './_utils/help-doc'
 
 import type { MetadataRoute } from 'next'
@@ -58,23 +60,25 @@ function toDate(value: string | Date | undefined): Date {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const buildDate = new Date()
 
-  const [posts, learnPosts] = await Promise.all([
-    getPostsForSitemap(),
-    getLearnPostsForSitemap(),
-  ])
-
-  const entries = new Map<string, Date>()
+  const entries = new Map<string, Date | string>()
 
   for (const path of STATIC_PATHS) {
     entries.set(toUrl(path), buildDate)
   }
 
-  for (const post of posts) {
-    entries.set(toUrl(`/blog/${post.slug}`), toDate(post.updatedAt))
-  }
+  if (isBlogInMaintenance()) {
+    for (const [path, lastModified] of Object.entries(previousBlogUrls)) {
+      entries.set(toUrl(path), lastModified)
+    }
+  } else {
+    const posts = await Promise.all([
+      getPostsForSitemap(),
+      getLearnPostsForSitemap(),
+    ])
 
-  for (const post of learnPosts) {
-    entries.set(toUrl(`/blog/${post.slug}`), toDate(post.updatedAt))
+    for (const post of posts.flat()) {
+      entries.set(toUrl(`/blog/${post.slug}`), toDate(post.updatedAt))
+    }
   }
 
   for (const doc of allHelpDocs) {

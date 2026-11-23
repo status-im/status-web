@@ -6,8 +6,11 @@ import { getTranslations } from 'next-intl/server'
 
 import { Body } from '~components/body'
 import { Breadcrumbs } from '~components/breadcrumbs'
-import { getPostsByTagSlug } from '~website/_lib/ghost'
 import { TAGS } from '~website/blog/_tags'
+import {
+  readTagArchive,
+  redirectToArchiveMaintenance,
+} from '~website/blog/_utils/archive-data'
 
 import { BlogPager } from './blog-pager'
 import { InfinitePostGrid } from './infinite-post-grid'
@@ -29,7 +32,11 @@ export async function TagArchive(props: Props) {
   const { slug, page } = props
 
   const t = await getTranslations('blog')
-  const response = await getPostsByTagSlug(slug, page)
+  const response = await readTagArchive(slug, page)
+
+  if (response === undefined) {
+    return redirectToArchiveMaintenance('tag', slug, page)
+  }
 
   if (!response) {
     notFound()
