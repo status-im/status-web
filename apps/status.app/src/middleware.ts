@@ -10,14 +10,17 @@ const localize = createMiddleware(routing)
 
 export default function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
-  const blogPath = pathname.match(/^\/(?:en\/)?blog\/(.+)$/)
+  const maintenance = isBlogInMaintenance()
+  const blogPath = (maintenance ? pathname.toLowerCase() : pathname).match(
+    /^\/(?:en\/)?blog\/(.+)$/
+  )
 
   if (blogPath) {
     if (/^icon(?:-[a-z0-9]+)?\.png$/.test(blogPath[1])) {
       return NextResponse.next()
     }
 
-    if (isBlogInMaintenance()) return blogMaintenanceResponse()
+    if (maintenance) return blogMaintenanceResponse()
 
     // Serve live articles and archives from their unprefixed routes.
     if (

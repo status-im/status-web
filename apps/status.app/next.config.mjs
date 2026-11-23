@@ -23,13 +23,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 // Keep live handlers available in local development for capturing fresh snapshots.
 const feedSnapshots =
   serverEnv.NODE_ENV === 'development' ? [] : getFeedSnapshots()
+const blogMaintenanceMode =
+  process.env.BLOG_MAINTENANCE_MODE === '0' ? '0' : '1'
 
 /** @type {import('next').NextConfig} */
 let config = {
   agentRules: false,
   env: {
-    BLOG_MAINTENANCE_MODE:
-      process.env.BLOG_MAINTENANCE_MODE === '0' ? '0' : '1',
+    BLOG_MAINTENANCE_MODE: blogMaintenanceMode,
   },
   // Self-hosting: emit a standalone server bundle (Dockerfile copies .next/standalone/).
   // why: https://nextjs.org/docs/app/api-reference/config/next-config-js/output#automatically-copying-traced-files
@@ -271,40 +272,42 @@ let config = {
         destination: '/help/keycard/if-you-can-t-unblock-your-keycard',
         statusCode: 301,
       },
-      // Page 1 of an archive is the archive root, so `/page/1` would be a
-      // second URL for the same listing. The locale-prefixed forms are listed
-      // too: `localePrefix: 'as-needed'` strips `/en` today, but only while
-      // `en` is the sole locale. `resolvePageParam` backstops both.
-      {
-        source: '/blog/page/1',
-        destination: '/blog',
-        statusCode: 301,
-      },
-      {
-        source: '/blog/tag/:slug/page/1',
-        destination: '/blog/tag/:slug',
-        statusCode: 301,
-      },
-      {
-        source: '/blog/author/:slug/page/1',
-        destination: '/blog/author/:slug',
-        statusCode: 301,
-      },
-      {
-        source: '/:locale(en)/blog/page/1',
-        destination: '/:locale/blog',
-        statusCode: 301,
-      },
-      {
-        source: '/:locale(en)/blog/tag/:slug/page/1',
-        destination: '/:locale/blog/tag/:slug',
-        statusCode: 301,
-      },
-      {
-        source: '/:locale(en)/blog/author/:slug/page/1',
-        destination: '/:locale/blog/author/:slug',
-        statusCode: 301,
-      },
+      // Let middleware return 503 at the original URL during maintenance.
+      // The live blog redirects first-page aliases to their canonical URL.
+      ...(blogMaintenanceMode === '0'
+        ? [
+            {
+              source: '/blog/page/1',
+              destination: '/blog',
+              statusCode: 301,
+            },
+            {
+              source: '/blog/tag/:slug/page/1',
+              destination: '/blog/tag/:slug',
+              statusCode: 301,
+            },
+            {
+              source: '/blog/author/:slug/page/1',
+              destination: '/blog/author/:slug',
+              statusCode: 301,
+            },
+            {
+              source: '/:locale(en)/blog/page/1',
+              destination: '/:locale/blog',
+              statusCode: 301,
+            },
+            {
+              source: '/:locale(en)/blog/tag/:slug/page/1',
+              destination: '/:locale/blog/tag/:slug',
+              statusCode: 301,
+            },
+            {
+              source: '/:locale(en)/blog/author/:slug/page/1',
+              destination: '/:locale/blog/author/:slug',
+              statusCode: 301,
+            },
+          ]
+        : []),
       // Legacy status.im paths still crawled and returning 404. Only the ones
       // whose modern equivalent is unambiguous; the rest stay 404 on purpose.
       {
