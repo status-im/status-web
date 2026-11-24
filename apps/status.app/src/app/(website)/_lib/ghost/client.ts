@@ -49,9 +49,12 @@ export function getGhostTimeoutSignal({ bulk = false } = {}) {
 
 // During `next build`, once Ghost has failed to answer twice in a row, fail the
 // remaining requests at once instead of waiting out a timeout on every page.
-// State is per process, so each static-generation worker probes on its own.
+// After a cooldown one probe request goes through; if it succeeds, the breaker
+// closes. State is per process, so each static-generation worker probes on its own.
 const GHOST_BREAKER_THRESHOLD = 2
+const GHOST_BREAKER_COOLDOWN_MS = 30_000
 let ghostTransportFailures = 0
+let ghostBreakerOpenedAt = 0
 
 function isTransportError(error) {
   return (
@@ -63,6 +66,7 @@ function isTransportError(error) {
 
 export function resetGhostBreaker() {
   ghostTransportFailures = 0
+  ghostBreakerOpenedAt = 0
 }
 
 /**
@@ -75,9 +79,14 @@ export async function ghostFetch(url, init = {}, { bulk = false } = {}) {
     globalThis.process?.env['NEXT_PHASE'] === 'phase-production-build'
 
   if (breakerActive && ghostTransportFailures >= GHOST_BREAKER_THRESHOLD) {
-    const error = new Error('Ghost unreachable, request skipped')
-    error.name = 'TimeoutError'
-    throw error
+    if (Date.now() - ghostBreakerOpenedAt >= GHOST_BREAKER_COOLDOWN_MS) {
+      // Let this request through as the probe; skip the others meanwhile.
+      ghostBreakerOpenedAt = Date.now()
+    } else {
+      const error = new Error('Ghost unreachable, request skipped')
+      error.name = 'TimeoutError'
+      throw error
+    }
   }
 
   try {
@@ -85,11 +94,14 @@ export async function ghostFetch(url, init = {}, { bulk = false } = {}) {
       ...init,
       signal: getGhostTimeoutSignal({ bulk }),
     })
-    if (breakerActive) ghostTransportFailures = 0
+    if (breakerActive) resetGhostBreaker()
     return response
   } catch (error) {
     if (breakerActive && isTransportError(error)) {
       ghostTransportFailures++
+      if (ghostTransportFailures >= GHOST_BREAKER_THRESHOLD) {
+        ghostBreakerOpenedAt = Date.now()
+      }
       if (ghostTransportFailures === GHOST_BREAKER_THRESHOLD) {
         console.warn('Ghost unreachable, skipping remaining requests')
       }

@@ -96,4 +96,55 @@ describe('ghostFetch', () => {
     }
     expect(fetchMock).toHaveBeenCalledTimes(4)
   })
+
+  it('lets one probe through after the cooldown', async () => {
+    const now = vi.spyOn(Date, 'now').mockReturnValue(0)
+    fetchMock.mockImplementation(fetchFailed)
+    await ghostFetch(URL).catch(() => {})
+    await ghostFetch(URL).catch(() => {})
+
+    now.mockReturnValue(29_999)
+    await expect(ghostFetch(URL)).rejects.toThrow('request skipped')
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+
+    now.mockReturnValue(30_000)
+    fetchMock.mockImplementationOnce(
+      () => new Promise(resolve => setTimeout(resolve, 0, new Response('{}')))
+    )
+    const probe = ghostFetch(URL)
+    await expect(ghostFetch(URL)).rejects.toThrow('request skipped')
+    await probe
+    expect(fetchMock).toHaveBeenCalledTimes(3)
+  })
+
+  it('closes after a successful probe', async () => {
+    const now = vi.spyOn(Date, 'now').mockReturnValue(0)
+    fetchMock.mockImplementationOnce(fetchFailed)
+    fetchMock.mockImplementationOnce(fetchFailed)
+    fetchMock.mockResolvedValue(new Response('{}'))
+    await ghostFetch(URL).catch(() => {})
+    await ghostFetch(URL).catch(() => {})
+
+    now.mockReturnValue(30_000)
+    await ghostFetch(URL)
+    await ghostFetch(URL)
+    await ghostFetch(URL)
+    expect(fetchMock).toHaveBeenCalledTimes(5)
+  })
+
+  it('re-opens after a failed probe', async () => {
+    const now = vi.spyOn(Date, 'now').mockReturnValue(0)
+    fetchMock.mockImplementation(fetchFailed)
+    await ghostFetch(URL).catch(() => {})
+    await ghostFetch(URL).catch(() => {})
+
+    now.mockReturnValue(30_000)
+    await expect(ghostFetch(URL)).rejects.toThrow('fetch failed')
+
+    now.mockReturnValue(59_999)
+    await expect(ghostFetch(URL)).rejects.toThrow('request skipped')
+    now.mockReturnValue(60_000)
+    await expect(ghostFetch(URL)).rejects.toThrow('fetch failed')
+    expect(fetchMock).toHaveBeenCalledTimes(4)
+  })
 })
