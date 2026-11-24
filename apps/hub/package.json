@@ -5,11 +5,10 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "predev": "node scripts/generate-legal-last-edited.mjs",
-    "dev": "next dev --webpack --port 3003",
+    "dev": "next dev --port 3003",
     "generate:legal-dates": "node scripts/generate-legal-last-edited.mjs",
     "prebuild": "node scripts/generate-legal-last-edited.mjs",
-    "build": "next build --webpack",
-    "build:export": "next build --webpack",
+    "build": "next build",
     "build:strip-locale": "bash scripts/strip-default-locale-prefix.sh",
     "postbuild": "next-sitemap && pnpm build:strip-locale",
     "start": "serve out",

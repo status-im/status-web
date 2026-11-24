@@ -8,6 +8,7 @@ const {
   discoverPages,
   discoverLegalPages,
 } = require('@status-im/sitemap-utils')
+const { fetchGhostJson } = require('./src/app/_lib/ghost-request.cjs')
 
 // Discover pages from app directory
 const APP_DIR = path.join(__dirname, 'src', 'app')
@@ -38,14 +39,9 @@ async function fetchAllBlogPosts() {
     url.searchParams.set('page', String(page))
 
     try {
-      const response = await fetch(url.toString(), {
-        signal: AbortSignal.timeout(10_000),
+      const data = await fetchGhostJson(url, {
+        retries: requireBlogContent ? 2 : 0,
       })
-      if (!response.ok) {
-        throw new Error(`Ghost API request failed with ${response.status}`)
-      }
-
-      const data = await response.json()
       posts.push(...data.posts)
 
       if (!data.meta.pagination.next) break

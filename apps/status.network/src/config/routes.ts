@@ -40,21 +40,6 @@ export function getLocalizedRoutes(
   } as const
 }
 
-export const ROUTES = {
-  Navigation: [
-    { name: 'About', href: '/#about' },
-    { name: 'Features', href: '/#features' },
-    { name: 'Partners', href: '/#partners' },
-    { name: 'Network', href: '/#network' },
-    { name: 'Tokenomics', href: '/#tokenomics' },
-    { name: 'Blog', href: '/#blog' },
-  ],
-  Docs: 'https://docs.status.network/',
-  Bridge: 'https://bridge.status.network/ ',
-  Partner: 'https://statusnetwork.typeform.com/partner',
-  Hub: 'https://hub.status.network/',
-} as const
-
 export const LEGAL = {
   termsOfUse: {
     name: 'Terms of Use',
@@ -124,5 +109,3 @@ export const SOCIALS = {
     src: gitHubIcon,
   },
 } as const
-
-export type Routes = (typeof ROUTES)[keyof typeof ROUTES]

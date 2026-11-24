@@ -6,7 +6,7 @@
     "preinstall": "npx only-allow pnpm",
     "dev": "next dev --turbopack --port 3005",
     "prebuild": "pnpm env:check",
-    "build": "next build --webpack",
+    "build": "env -u NEXT_DEPLOYMENT_ID next build",
     "build:strip-locale": "bash scripts/strip-default-locale-prefix.sh",
     "postbuild": "next-sitemap && pnpm build:strip-locale && cp serve.json out/serve.json && cp src/app/icon.png out/icon.png && cp llms.txt out/llms.txt",
     "start": "serve out -l 3005",
