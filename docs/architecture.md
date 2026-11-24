@@ -4,7 +4,7 @@ How the status-web monorepo splits into [`apps/`](../apps) and [`packages/`](../
 
 ## Apps and packages
 
-The nine apps are the deployed products: six Next.js 16 apps, the `community-dapp` webpack app, and the `wallet` and `connector` browser extensions. Each starts a dev server on its own port, through its `dev`, `dev:next` or `dev:content` script; the root [AGENTS.md](../AGENTS.md) table lists them. The Next.js production builds use Webpack, including the Contentlayer integration on status.app.
+The nine apps are the deployed products: six Next.js 16 apps, the `community-dapp` webpack app, and the `wallet` and `connector` browser extensions. Each starts a dev server on its own port, through its `dev`, `dev:next` or `dev:content` script; the root [AGENTS.md](../AGENTS.md) table lists them. Most Next.js production builds use Webpack; status.app builds with Turbopack and generates its Contentlayer content in a separate `build:content` step.
 
 The packages are libraries. `colors`, `icons`, `components`, `js`, `eslint-config` and `ethereum-provider` are public on npm; `wallet`, `status-network`, `sitemap-utils` and `community-contracts` are private. Turborepo builds a package before the apps that depend on it (`"dependsOn": ["^build"]` in [`turbo.json`](../turbo.json)), so `pnpm build` resolves a fresh `dist/`. Starting `next dev` right after editing a package is the usual way to run an app against a stale build.
 
@@ -38,7 +38,7 @@ Taken from the `dependencies` block of each workspace's `package.json`:
 
 hub, status.network and get.status.app export statically in production (`output: 'export'` behind a `NODE_ENV` check in each `next.config`). Their `postbuild` runs `next-sitemap`, then each app's own `scripts/strip-default-locale-prefix.sh`, which moves the default locale out of `/en` to the root and copies each page to `page/index.html`. next-intl needs explicit locale prefixes for a static export, and simple file servers do not map `/page` to `page.html`, so both rewrites happen after the build. status.app and portfolio need a Node server and do neither.
 
-- status.app turns `content/help`, `content/legal` and the `content/specs` submodule into MDX at build time through [Contentlayer](../apps/status.app/contentlayer.config.ts) and `next-contentlayer2`. Public Insights use GraphQL codegen against Hasura.
+- status.app turns `content/help`, `content/legal` and the `content/specs` submodule into MDX at build time through [Contentlayer](../apps/status.app/contentlayer.config.ts) (`contentlayer2 build` before `next build`, `contentlayer2 dev` next to `next dev`). Public Insights use GraphQL codegen against Hasura.
 - status.network takes its blog from Ghost through the client in [`src/app/_lib`](../apps/status.network/src/app/_lib), and the `content/legal-external` submodule supplies the legal pages.
 - get.status.app is the download-focused subset of status.app, and also ships `llms.txt`.
 - community-dapp reads the deployed contracts through the ABIs exported from `@status-im/community-contracts/abi` and exchanges community data over Waku.

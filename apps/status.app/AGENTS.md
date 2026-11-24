@@ -10,7 +10,7 @@ Next.js 16 app behind https://status.app: marketing site, help centre, specs hub
 
 - `pnpm --filter status.app dev:next`: dev server on :3001.
 - `pnpm --filter status.app dev:content`: watch `content/` and rebuild Contentlayer.
-- `pnpm --filter status.app build`: `lint` (remark and eslint), blog search index, then `next build --webpack`. During blog maintenance, the index is empty and middleware serves the archive and article notice. See [self-hosting](docs/self-hosting.md) for the build switches.
+- `pnpm --filter status.app build`: `build:prepare` (Contentlayer, remark and eslint, blog search index), then `next build` with Turbopack. `build:webpack` runs the same steps with `next build --webpack` as a fallback. During blog maintenance, the index is empty and middleware serves the archive and article notice. See [self-hosting](docs/self-hosting.md) for the build switches.
 - `pnpm --filter status.app test`: vitest.
 - `pnpm --filter status.app types:check`: Contentlayer build, then `tsc`.
 - `pnpm --filter status.app codegen`: regenerate GraphQL types from `codegen.yml`.
