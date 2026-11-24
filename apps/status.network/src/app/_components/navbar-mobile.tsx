@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useLocale, useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import { ButtonLink } from './button-link'
 import { Divider } from './divider'
 import { LanguageSelector } from './language-selector'
@@ -22,22 +22,14 @@ const NavBarMobile = () => {
   const locale = useLocale()
   const localizedRoutes = getLocalizedRoutes(t, locale)
 
-  const scrollPositionRef = useRef(0)
-
   useLayoutEffect(() => {
-    if (isOpen) {
-      scrollPositionRef.current = window.scrollY
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-      window.scrollTo({
-        top: scrollPositionRef.current,
-        behavior: 'instant',
-      })
-    }
+    if (!isOpen) return
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
 
     return () => {
-      document.body.style.overflow = ''
+      document.body.style.overflow = previousOverflow
     }
   }, [isOpen])
 
@@ -45,17 +37,13 @@ const NavBarMobile = () => {
     if (isOpen) {
       // eslint-disable-next-line react-hooks/set-state-in-effect -- Also close after history navigation.
       setIsOpen(false)
-      scrollPositionRef.current = 0
-      window.scrollTo({
-        top: 0,
-        behavior: 'instant',
-      })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname])
 
+  // Keep anchor positions stable while the menu expands and collapses.
   return (
-    <header className="sticky top-0 z-[100] block lg:hidden">
+    <header className="sticky top-0 z-[100] block h-[56px] lg:hidden">
       <motion.nav
         key="nav-bar-mobile"
         className={cx([

@@ -1,5 +1,5 @@
 import { HighlightedPostCard, PostCard } from '~app/_components/blog/post-card'
-import { getPosts } from '~app/_lib/ghost'
+import { getPosts, requireBlogContent } from '~app/_lib/ghost'
 import { Metadata } from '~app/_metadata'
 import { jsonLD, JSONLDScript } from '~app/_utils/json-ld'
 import { getTranslations } from 'next-intl/server'
@@ -17,6 +17,12 @@ export default async function BlogPage() {
     getPosts({ limit: 'all' }),
     getTranslations(),
   ])
+
+  if (requireBlogContent && posts.length === 0) {
+    throw new Error(
+      'Ghost returned no posts for the Status Network blog index.',
+    )
+  }
 
   const highlightedPost = posts[0]
   const listedPosts = posts.slice(1)

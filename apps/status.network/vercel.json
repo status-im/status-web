@@ -14,7 +14,7 @@
   },
   "ignoreCommand": "case \"$VERCEL_GIT_COMMIT_REF\" in develop|master) exit 1 ;; esac; git diff --quiet HEAD^ HEAD ../../{patches,package.json,turbo.json} ../../packages/{colors,icons} ./",
   "installCommand": "pnpm install --dir ../../ --frozen-lockfile",
-  "buildCommand": "git submodule update --init --recursive && turbo run build --cwd ../../ --filter=./apps/status.network...",
+  "buildCommand": "git submodule update --init --recursive && REQUIRE_NETWORK_BLOG=1 turbo run build --cwd ../../ --filter=./apps/status.network...",
   "redirects": [
     {
       "source": "/blog/pre-deposit-vaults-withdrawal-timeline-and-rewards-distribution",

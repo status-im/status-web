@@ -1,6 +1,8 @@
 /* eslint-env node */
-/* eslint-disable no-undef */
+
+/* eslint-disable @typescript-eslint/no-require-imports -- This config uses CommonJS. */
 const path = require('path')
+const publishedBlogSlugs = require('./content/network-blog-slugs.json')
 const {
   buildLocalizedPaths,
   discoverPages,
@@ -14,6 +16,7 @@ const PAGES = discoverPages(APP_DIR)
 const LEGAL_PAGES = discoverLegalPages(APP_DIR)
 const ALLOWED_PATHS = buildLocalizedPaths(LOCALES, PAGES).map(p => p.loc)
 
+const requireBlogContent = process.env.REQUIRE_NETWORK_BLOG === '1'
 const GHOST_URL = (
   process.env.GHOST_API_URL || 'https://our.status.im'
 ).replace(/\/+$/, '')
@@ -35,15 +38,28 @@ async function fetchAllBlogPosts() {
     url.searchParams.set('page', String(page))
 
     try {
-      const response = await fetch(url.toString())
-      if (!response.ok) break
+      const response = await fetch(url.toString(), {
+        signal: AbortSignal.timeout(10_000),
+      })
+      if (!response.ok) {
+        throw new Error(`Ghost API request failed with ${response.status}`)
+      }
 
       const data = await response.json()
       posts.push(...data.posts)
 
       if (!data.meta.pagination.next) break
       page = data.meta.pagination.next
-    } catch {
+    } catch (error) {
+      if (requireBlogContent) {
+        process.exitCode = 1
+        throw new Error(
+          'Failed to fetch Status Network posts for the sitemap.',
+          {
+            cause: error,
+          },
+        )
+      }
       break
     }
   }
@@ -54,6 +70,7 @@ async function fetchAllBlogPosts() {
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
   siteUrl: 'https://status.network',
+  outDir: 'out',
   generateRobotsTxt: false,
   exclude: [
     '/api/*',
@@ -106,6 +123,17 @@ module.exports = {
 
     // Add blog posts with actual publish dates
     const posts = await fetchAllBlogPosts()
+    if (requireBlogContent) {
+      const slugs = new Set(posts.map(post => post.slug))
+      const missingSlugs = publishedBlogSlugs.filter(slug => !slugs.has(slug))
+      if (missingSlugs.length > 0) {
+        // next-sitemap logs thrown errors without setting a failing exit code.
+        process.exitCode = 1
+        throw new Error(
+          `Status Network sitemap is missing blog posts: ${missingSlugs.join(', ')}`,
+        )
+      }
+    }
     for (const post of posts) {
       result.push({
         loc: `/blog/${post.slug}`,

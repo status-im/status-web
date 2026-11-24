@@ -16,8 +16,6 @@ Run it from the repo root. Without real Ghost credentials the marketing pages re
 
 `prebuild` regenerates the legal dates and runs `env:check`. `postbuild` writes the sitemap, strips the default locale prefix and copies `serve.json` into `out/`.
 
-The export uses Next.js build IDs for client-side navigation. Both build commands unset `NEXT_DEPLOYMENT_ID` so Next.js includes a matching build ID in the generated HTML and page data. Vercel serves `out/` as static files without the Next.js deployment ID response header.
-
 ## Environment
 
 The site needs four Ghost variables, two for the build and two for the browser:

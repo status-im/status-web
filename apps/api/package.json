@@ -6,7 +6,7 @@
     "preinstall": "npx only-allow pnpm",
     "test": "vitest run",
     "dev": "next dev --turbopack --port 3030",
-    "build": "next build --webpack",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "lint:fix": "pnpm lint --fix",
