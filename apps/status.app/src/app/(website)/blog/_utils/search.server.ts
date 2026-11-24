@@ -20,6 +20,10 @@ import type { BlogSearchResults } from './search-config'
  * globbing the working directory, and drags the ~1GB `.next/cache` into the
  * function until it blows past Vercel's 250mb limit.
  *
+ * Turbopack cannot scope this read either and would trace the whole project,
+ * so the read opts out of tracing and next.config.mjs includes the file
+ * explicitly (outputFileTracingIncludes).
+ *
  * Keep in sync with the output path in scripts/generate-blog-search-index.ts.
  */
 const SEARCH_INDEX_PATHS = [
@@ -54,7 +58,10 @@ function memoizeUntilFailure<T>(
 async function loadBlogSearchPayload(): Promise<BlogSearchPayload> {
   for (const indexPath of SEARCH_INDEX_PATHS) {
     try {
-      const payload = await readFile(indexPath, 'utf8')
+      const payload = await readFile(
+        /* turbopackIgnore: true */ indexPath,
+        'utf8'
+      )
       return JSON.parse(payload) as BlogSearchPayload
     } catch (error) {
       const isMissingFile =
