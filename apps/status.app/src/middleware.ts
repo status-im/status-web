@@ -31,6 +31,9 @@ export default function middleware(request: NextRequest) {
   return localize(request)
 }
 
+// Localized pages only exist as routes under [locale]; src/app/(website) keeps
+// their implementations in _page.tsx files. Paths the matcher skips are not
+// rewritten to /en, so they return 404 unless they have their own route.
 export const config = {
   matcher: [
     '/blog/:path*',

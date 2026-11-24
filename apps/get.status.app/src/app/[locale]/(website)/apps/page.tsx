@@ -1,4 +1,4 @@
-import AppsPage from '../../../../../../status.app/src/app/(website)/apps/page'
+import AppsPage from '../../../../../../status.app/src/app/(website)/apps/_page'
 import { cloudinaryLoader } from '../../../_components/assets/loader'
 
 import type { Metadata } from 'next'

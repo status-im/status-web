@@ -1,2 +1,2 @@
-export * from '~website/apps/page'
-export { default } from '~website/apps/page'
+export * from '~website/apps/_page'
+export { default } from '~website/apps/_page'
