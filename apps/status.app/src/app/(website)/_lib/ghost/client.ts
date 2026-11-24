@@ -113,7 +113,13 @@ export async function ghostFetch(url, init = {}, { bulk = false } = {}) {
 }
 
 const defaultMakeRequest = async ({ url, method, params, headers }) => {
-  const queryString = new URLSearchParams(params).toString()
+  // Keep every bulk page bounded, including the first request. Ghost may do
+  // expensive work for `all` even when it ultimately caps the response.
+  const bulk = params?.limit === 'all' || Number(params?.limit) === 100
+  const queryString = new URLSearchParams({
+    ...params,
+    ...(params?.limit === 'all' && { limit: 100 }),
+  }).toString()
   const fullUrl = `${url}${queryString ? `?${queryString}` : ''}`
 
   const response = await ghostFetch(
@@ -125,7 +131,7 @@ const defaultMakeRequest = async ({ url, method, params, headers }) => {
         revalidate: 3600, // 1 hour
       },
     },
-    { bulk: params?.limit === 'all' }
+    { bulk }
   )
 
   if (!response.ok) {
