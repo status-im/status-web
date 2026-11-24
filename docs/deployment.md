@@ -36,6 +36,8 @@ Native Git previews exclude `docs/**` branches and Dependabot's Playwright branc
 
 [`hub`](../apps/hub/vercel.json) uses Jenkins for automatic deployments. [`get.status.app`](../apps/get.status.app/vercel.json) receives only `master` deployments from the branch workflow because its public hostname is assigned to its Vercel project. Both disable native Vercel Git deployments on all branches. Vercel serves the postbuild `out/` directory for [`status.network`](../apps/status.network/vercel.json) and `get.status.app` so the default locale uses the same URLs as the Jenkins static exports.
 
+The Status Network Vercel configuration serves the legacy blog redirects to status.app as HTTP 301 responses. The Next.js development server reads the same rules.
+
 The status.app Vercel install uses the same workspace filter as the Dockerfile, so it installs only status.app and its workspace dependencies instead of every workspace in the repo (including `apps/wallet` and its `wxt prepare` postinstall). [`apps/status.app/vercel.ts`](../apps/status.app/vercel.ts) sets the install command to:
 
 ```sh

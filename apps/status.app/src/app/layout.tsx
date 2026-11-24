@@ -72,6 +72,7 @@ export default async function RootLayout({ children }: Props) {
     <html
       lang={locale}
       data-platform="unknown"
+      data-scroll-behavior="smooth"
       className={inter.variable}
       suppressHydrationWarning
     >
