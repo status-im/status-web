@@ -36,6 +36,14 @@ Native Git previews exclude `docs/**` branches and Dependabot's Playwright branc
 
 [`hub`](../apps/hub/vercel.json) uses Jenkins for automatic deployments. [`get.status.app`](../apps/get.status.app/vercel.json) receives only `master` deployments from the branch workflow because its public hostname is assigned to its Vercel project. Both disable native Vercel Git deployments on all branches.
 
+The status.app Vercel install uses the same workspace filter as the Dockerfile, so it installs only status.app and its workspace dependencies instead of every workspace in the repo (including `apps/wallet` and its `wxt prepare` postinstall). [`apps/status.app/vercel.ts`](../apps/status.app/vercel.ts) sets the install command to:
+
+```sh
+pnpm install --dir ../../ --frozen-lockfile --filter status.app...
+```
+
+The root package's devDependencies (`turbo`, `husky`) are still installed, so the build command (`turbo run build --cwd ../../ --filter=./apps/status.app...`) and the root `prepare` script keep working.
+
 [`apps/status.app/vercel.ts`](../apps/status.app/vercel.ts) also enables Fluid Compute (`"fluid": true`) and sets `maxDuration` to 15 seconds for every function under `src/app/**/*`. Together with the 3-second timeout on regular Ghost requests, this limits how long status.app functions run while Ghost is down.
 
 [`.github/workflows/preview-deploy.yml`](../.github/workflows/preview-deploy.yml) deploys previews only for pull requests opened from forks, and the job runs in the `preview-deploy-approval` environment. Turbo decides which of `status.app`, `hub`, `portfolio`, `api`, `status.network` and the components Storybook are affected, and the workflow posts the preview URLs as a PR comment.
