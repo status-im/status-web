@@ -68,6 +68,7 @@ const GHOST_URL = (process.env.GHOST_API_URL ?? DEFAULT_GHOST_URL).replace(
 const GHOST_API_KEY = process.env.GHOST_API_KEY
 const REVALIDATE_SECONDS = 3600
 const GHOST_REQUEST_TIMEOUT_MS = 10_000
+export const requireBlogContent = process.env.REQUIRE_NETWORK_BLOG === '1'
 
 const EMPTY_PAGINATION: Pagination = {
   page: 1,
@@ -116,18 +117,13 @@ export async function getPostBySlug(slug: string): Promise<GhostPost | null> {
 }
 
 export async function getPostSlugs(): Promise<string[]> {
-  try {
-    const response = await fetchPosts({
-      fields: 'slug',
-      limit: 'all',
-      filter: `tag:${NETWORK_BLOG_TAG}+visibility:public+${DISALLOWED_TAGS_FILTER}`,
-    })
+  const response = await fetchPosts({
+    fields: 'slug',
+    limit: 'all',
+    filter: `tag:${NETWORK_BLOG_TAG}+visibility:public+${DISALLOWED_TAGS_FILTER}`,
+  })
 
-    return response.posts.map(post => post.slug)
-  } catch (error) {
-    console.error('Failed to fetch post slugs from Ghost API:', error)
-    return []
-  }
+  return response.posts.map(post => post.slug)
 }
 
 export async function getLatestPostsByTag(
@@ -173,20 +169,23 @@ async function fetchPosts(
   params: Record<string, string>,
 ): Promise<GhostPostsResponse> {
   if (!GHOST_API_KEY) {
+    if (requireBlogContent) {
+      throw new Error('Set GHOST_API_KEY to build the Status Network blog.')
+    }
     return {
       posts: [],
       meta: { pagination: EMPTY_PAGINATION },
     }
   }
 
-  const url = new URL('/ghost/api/content/posts/', GHOST_URL)
-  url.searchParams.set('key', GHOST_API_KEY)
-
-  for (const [key, value] of Object.entries(params)) {
-    url.searchParams.set(key, value)
-  }
-
   try {
+    const url = new URL('/ghost/api/content/posts/', GHOST_URL)
+    url.searchParams.set('key', GHOST_API_KEY)
+
+    for (const [key, value] of Object.entries(params)) {
+      url.searchParams.set(key, value)
+    }
+
     const response = await fetch(url.toString(), {
       signal: AbortSignal.timeout(GHOST_REQUEST_TIMEOUT_MS),
       next: {
@@ -200,6 +199,11 @@ async function fetchPosts(
 
     return (await response.json()) as GhostPostsResponse
   } catch (error) {
+    if (requireBlogContent) {
+      throw new Error('Failed to fetch Status Network posts from Ghost.', {
+        cause: error,
+      })
+    }
     console.error('Failed to fetch posts from Ghost API:', error)
     return {
       posts: [],

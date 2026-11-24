@@ -19,6 +19,7 @@ Built and deployed by [`ci/website.Jenkinsfile`](../../ci/website.Jenkinsfile) w
 
 The build clears `NEXT_DEPLOYMENT_ID` so client-side links work on static hosting, where
 Next.js deployment ID response headers are unavailable.
+The `postbuild` step writes the sitemap to `out/sitemap.xml`.
 
 ## Pages
 

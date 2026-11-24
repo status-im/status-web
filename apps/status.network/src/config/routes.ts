@@ -26,12 +26,12 @@ export function getLocalizedRoutes(
 
   return {
     Navigation: [
-      { name: t('navigation.about'), href: '#about' },
-      { name: t('navigation.features'), href: '#features' },
-      { name: t('navigation.partners'), href: '#partners' },
-      { name: t('navigation.network'), href: '#network' },
-      { name: t('navigation.tokenomics'), href: '#tokenomics' },
-      { name: t('navigation.blog'), href: '#blog' },
+      { name: t('navigation.about'), href: '/#about' },
+      { name: t('navigation.features'), href: '/#features' },
+      { name: t('navigation.partners'), href: '/#partners' },
+      { name: t('navigation.network'), href: '/#network' },
+      { name: t('navigation.tokenomics'), href: '/#tokenomics' },
+      { name: t('navigation.blog'), href: '/#blog' },
     ],
     Docs: `https://docs.status.network${localePrefix}/`,
     Bridge: 'https://bridge.status.network/ ',
@@ -42,12 +42,12 @@ export function getLocalizedRoutes(
 
 export const ROUTES = {
   Navigation: [
-    { name: 'About', href: '#about' },
-    { name: 'Features', href: '#features' },
-    { name: 'Partners', href: '#partners' },
-    { name: 'Network', href: '#network' },
-    { name: 'Tokenomics', href: '#tokenomics' },
-    { name: 'Blog', href: '#blog' },
+    { name: 'About', href: '/#about' },
+    { name: 'Features', href: '/#features' },
+    { name: 'Partners', href: '/#partners' },
+    { name: 'Network', href: '/#network' },
+    { name: 'Tokenomics', href: '/#tokenomics' },
+    { name: 'Blog', href: '/#blog' },
   ],
   Docs: 'https://docs.status.network/',
   Bridge: 'https://bridge.status.network/ ',

@@ -28,7 +28,7 @@ The Status Network website on port 3002, built from [`src/app`](src/app), with a
 - `content/` is published site content (legal, the `legal-external` submodule, `karma-tokenomics.md`). Do not edit it during docs work.
 - Run `git submodule update --init --recursive apps/status.network/content/legal-external` before a build that needs the real legal pages.
 - Hub renders its legal pages from this app's `content/legal` and `content/legal-external`, so a change there affects both sites.
-- When Ghost is unreachable at build time, `/blog/[slug]` falls back to `content/network-blog-slugs.json`. Update that list when new posts ship.
+- Use `content/network-blog-slugs.json` for offline and CI builds. Keep `REQUIRE_NETWORK_BLOG=1` in Jenkins and Vercel builds so a Ghost failure cannot publish an empty blog.
 
 ## Docs
 

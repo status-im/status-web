@@ -2,7 +2,12 @@ import { BlogPostDetailHydrated } from '~app/_components/blog/blog-post-detail-h
 import { PostCard } from '~app/_components/blog/post-card'
 import { ghostPostToDetail } from '~app/_lib/blog-post-detail'
 import { getCodeInjectionJsonLd, getPostFAQItems } from '~app/_lib/faq'
-import { getPostBySlug, getPostsByTagSlug, getPostSlugs } from '~app/_lib/ghost'
+import {
+  getPostBySlug,
+  getPostsByTagSlug,
+  getPostSlugs,
+  requireBlogContent,
+} from '~app/_lib/ghost'
 import { Metadata } from '~app/_metadata'
 import { jsonLD, JSONLDScript } from '~app/_utils/json-ld'
 import { getTranslations } from 'next-intl/server'
@@ -15,6 +20,17 @@ type Props = {
 
 export async function generateStaticParams() {
   let slugs = await getPostSlugs()
+
+  if (requireBlogContent) {
+    const missingSlugs = networkBlogSlugFallback.filter(
+      slug => !slugs.includes(slug),
+    )
+    if (missingSlugs.length > 0) {
+      throw new Error(
+        `Ghost is missing published Status Network blog posts: ${missingSlugs.join(', ')}`,
+      )
+    }
+  }
 
   if (slugs.length === 0) {
     const fallback = networkBlogSlugFallback
@@ -68,6 +84,10 @@ export async function generateMetadata({ params }: Props) {
 export default async function BlogDetailPage({ params }: Props) {
   const { slug } = await params
   const [post, t] = await Promise.all([getPostBySlug(slug), getTranslations()])
+
+  if (requireBlogContent && !post?.html?.trim()) {
+    throw new Error(`Ghost returned no article content for /blog/${slug}.`)
+  }
 
   if (!post) {
     return notFound()

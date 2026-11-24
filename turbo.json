@@ -82,7 +82,8 @@
     "status.network#build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**", "out/**"],
-      "passThroughEnv": [
+      "env": [
+        "REQUIRE_NETWORK_BLOG",
         "GHOST_API_URL",
         "GHOST_API_KEY",
         "NEXT_PUBLIC_GHOST_API_URL",
