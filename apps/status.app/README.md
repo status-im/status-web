@@ -15,7 +15,7 @@ second in another terminal while you edit anything under `content/`, otherwise t
 output goes stale.
 
 ```bash
-pnpm --filter status.app build         # lint, blog search index, Webpack build
+pnpm --filter status.app build         # Contentlayer, lint, blog search index, Turbopack build
 pnpm --filter status.app test          # vitest
 pnpm --filter status.app types:check   # Contentlayer build, then tsc
 ```

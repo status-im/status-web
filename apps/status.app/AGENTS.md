@@ -38,8 +38,9 @@ Next.js 16 app behind https://status.app: marketing site, help centre, specs hub
 
 - `content/specs` is a git submodule. `scripts/ensure-specs-content.mjs` runs before Contentlayer
   and fails the build rather than ship an empty `/specs` hub; see [self-hosting](docs/self-hosting.md).
-- `.contentlayer/` is generated and gitignored. `prelint`, `build` and `next dev` rewrite it, and
-  `pnpm --filter status.app clean` removes it when content looks stale.
+- `.contentlayer/` is generated and gitignored. `prelint`, `build` (through `build:content`),
+  `types:check` and `dev:content` rewrite it; plain `next dev` and `next build` do not. Run
+  `pnpm --filter status.app clean` when content looks stale.
 - The generated GraphQL files are listed in `knip.ignore` in `package.json`. Keep those entries if
   you move the folder.
 - Use `dev:next` to start the app.
