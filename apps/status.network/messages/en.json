@@ -531,6 +531,14 @@
       "translation": "Blog",
       "notes": "blog::breadcrumb_blog"
     },
+    "maintenance_title": {
+      "translation": "The blog is under maintenance",
+      "notes": "blog::maintenance_title"
+    },
+    "maintenance_description": {
+      "translation": "Please check back soon.",
+      "notes": "blog::maintenance_description"
+    },
     "no_posts": {
       "translation": "No posts available yet.",
       "notes": "blog::no_posts"

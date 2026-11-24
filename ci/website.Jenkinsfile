@@ -98,7 +98,7 @@ pipeline {
       steps {
         script {
           nix.develop(
-            "pnpm turbo run build --filter='${params.APP_NAME}^...'",
+            "pnpm turbo run build --filter=${params.APP_NAME}...",
             pure: false,
           )
         }
@@ -192,7 +192,6 @@ def buildStatusNetworkApp() {
     string(credentialsId: 'status-network-ghost-api-key', variable: 'GHOST_API_KEY'),
   ]) {
     withEnv([
-      'REQUIRE_NETWORK_BLOG=1',
       "GHOST_API_URL=${params.GHOST_API_URL}",
       "NEXT_PUBLIC_GHOST_API_URL=${params.GHOST_API_URL}",
       "NEXT_PUBLIC_GHOST_API_KEY=${env.GHOST_API_KEY}",

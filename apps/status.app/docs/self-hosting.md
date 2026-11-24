@@ -59,10 +59,10 @@ unless it has its own route.
 The blog is enabled by default. Set `BLOG_MAINTENANCE_MODE=1` and rebuild to enable
 the emergency maintenance mode. In that mode, the build prerenders [the blog landing page](<../src/app/(website)/blog/_page.tsx>)
 with the maintenance notice and builds an empty blog search index. The
-[locale middleware](../src/middleware.ts) returns the maintenance notice with HTTP 503 at
-article, author archive, category archive and paginated URLs before those pages query Ghost on
-Vercel and self-hosted deployments. First-page aliases also return 503 during maintenance and
-redirect to the canonical listing when the live blog is enabled. The sitemap
+[prebuild script](../scripts/generate-blog-maintenance.ts) writes the shared notice to
+`public/blog-maintenance.html`. The [Vercel route](../vercel.ts) serves that static file
+with HTTP 503 at article, author archive, category archive and paginated URLs before Next.js
+middleware runs. Middleware serves the same notice on self-hosted deployments. The sitemap
 keeps existing article URLs using a
 [committed snapshot](../src/app/_data/blog-sitemap-snapshot.json). It combines the
 [October 6, 2026 public sitemap][blog-sitemap-archive] and the additional public post
@@ -137,11 +137,6 @@ Ghost fails, the article redirects temporarily to a
 seconds instead of waiting for the hourly interval. A 404 from Ghost still means the article does
 not exist and shows the 404 page. The [locale middleware](../src/middleware.ts) keeps unprefixed
 article and maintenance URLs on the routes that can handle them.
-
-The [author](<../src/app/(website)/blog/author/[slug]/page.tsx>) and
-[tag](<../src/app/(website)/blog/tag/[slug]/page.tsx>) archives also generate on the first request
-and revalidate hourly. The locale middleware also keeps archive requests on the unprefixed routes
-so new author and tag slugs can render on demand.
 
 The home page uses hourly ISR and can regenerate without the blog section during an outage.
 The sitemap uses hourly ISR with cached Ghost requests for both blog and Learn entries.

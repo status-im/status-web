@@ -9,6 +9,7 @@
     "generate:legal-dates": "node scripts/generate-legal-last-edited.mjs",
     "prebuild": "node scripts/generate-legal-last-edited.mjs",
     "build": "next build",
+    "build:export": "next build",
     "build:strip-locale": "bash scripts/strip-default-locale-prefix.sh",
     "postbuild": "next-sitemap && pnpm build:strip-locale",
     "start": "serve out",

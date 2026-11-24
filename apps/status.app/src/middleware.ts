@@ -10,17 +10,14 @@ const localize = createMiddleware(routing)
 
 export default function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
-  const maintenance = isBlogInMaintenance()
-  const blogPath = (maintenance ? pathname.toLowerCase() : pathname).match(
-    /^\/(?:en\/)?blog\/(.+)$/
-  )
+  const blogPath = pathname.match(/^\/(?:en\/)?blog\/(.+)$/)
 
   if (blogPath) {
     if (/^icon(?:-[a-z0-9]+)?\.png$/.test(blogPath[1])) {
       return NextResponse.next()
     }
 
-    if (maintenance) return blogMaintenanceResponse()
+    if (isBlogInMaintenance()) return blogMaintenanceResponse()
 
     // Preserve the original locale handling when the live blog is enabled.
     if (

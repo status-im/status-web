@@ -1,5 +1,5 @@
 import { HighlightedPostCard, PostCard } from '~app/_components/blog/post-card'
-import { getPosts, requireBlogContent } from '~app/_lib/ghost'
+import { getPosts } from '~app/_lib/ghost'
 import { Metadata } from '~app/_metadata'
 import { jsonLD, JSONLDScript } from '~app/_utils/json-ld'
 import { getTranslations } from 'next-intl/server'
@@ -12,20 +12,24 @@ export const metadata = Metadata({
 
 export const dynamic = 'force-static'
 
-export default async function BlogPage() {
-  const [{ posts }, t] = await Promise.all([
+export default async function BlogPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const [{ posts, unavailable }, t] = await Promise.all([
     getPosts({ limit: 'all' }),
     getTranslations(),
   ])
 
-  if (requireBlogContent && posts.length === 0) {
-    throw new Error(
-      'Ghost returned no posts for the Status Network blog index.',
-    )
-  }
-
   const highlightedPost = posts[0]
   const listedPosts = posts.slice(1)
+  const maintenance = unavailable
+    ? await getTranslations({
+        locale: (await params).locale,
+        namespace: 'blog',
+      })
+    : null
 
   const websiteSchema = jsonLD.website({
     '@id': 'https://status.network/blog/#website',
@@ -67,7 +71,18 @@ export default async function BlogPage() {
             </>
           ) : (
             <div className="rounded-20 border border-neutral-20 bg-neutral-10 p-6">
-              <p className="text-19">{t('blog.no_posts')}</p>
+              {maintenance ? (
+                <>
+                  <h2 className="text-19 font-600">
+                    {maintenance('maintenance_title')}
+                  </h2>
+                  <p className="mt-2">
+                    {maintenance('maintenance_description')}
+                  </p>
+                </>
+              ) : (
+                <p className="text-19">{t('blog.no_posts')}</p>
+              )}
             </div>
           )}
         </div>

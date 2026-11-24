@@ -14,27 +14,5 @@
   },
   "ignoreCommand": "case \"$VERCEL_GIT_COMMIT_REF\" in develop|master) exit 1 ;; esac; git diff --quiet HEAD^ HEAD ../../{patches,package.json,turbo.json} ../../packages/{colors,icons} ./",
   "installCommand": "pnpm install --dir ../../ --frozen-lockfile",
-  "buildCommand": "git submodule update --init --recursive && turbo run build --cwd ../../ --filter='status.network^...' && REQUIRE_NETWORK_BLOG=1 pnpm build",
-  "redirects": [
-    {
-      "source": "/blog/pre-deposit-vaults-withdrawal-timeline-and-rewards-distribution",
-      "destination": "https://status.app/blog/pre-deposit-vaults-withdrawal-timeline-and-rewards-distribution",
-      "statusCode": 301
-    },
-    {
-      "source": "/blog/status-network-merges-with-linea-scaling-gasless-privacy-upstream",
-      "destination": "https://status.app/blog/status-network-merges-with-linea-scaling-gasless-privacy-upstream",
-      "statusCode": 301
-    },
-    {
-      "source": "/ko/blog/pre-deposit-vaults-withdrawal-timeline-and-rewards-distribution",
-      "destination": "https://status.app/blog/pre-deposit-vaults-withdrawal-timeline-and-rewards-distribution",
-      "statusCode": 301
-    },
-    {
-      "source": "/ko/blog/status-network-merges-with-linea-scaling-gasless-privacy-upstream",
-      "destination": "https://status.app/blog/status-network-merges-with-linea-scaling-gasless-privacy-upstream",
-      "statusCode": 301
-    }
-  ]
+  "buildCommand": "git submodule update --init --recursive && turbo run build --cwd ../../ --filter=./apps/status.network..."
 }

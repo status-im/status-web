@@ -21,14 +21,14 @@ The Status Network website on port 3002, built from [`src/app`](src/app), with a
 - `env:check` reads `.env` and runs in `prebuild`. The four Ghost variables must be in `.env` for a build to pass; `.env` is committed with demo values, so the check passes out of the box.
 - Run `generate:legal-dates` after editing legal markdown. `predev` and `prebuild` run it too.
 - `build:strip-locale` runs in `postbuild` and strips the default locale prefix from `out/`. Update `scripts/strip-default-locale-prefix.sh` if the default locale changes.
-- Update `vercel.json` when a published blog URL moves. `postbuild` generates matching redirect pages for GitHub Pages and copies `serve.json` into `out/` for local serving.
+- `postbuild` also copies `serve.json` into `out/`. It sets `cleanUrls` for `serve`; update it if the static server needs different URL handling.
 
 ## Caveats
 
 - `content/` is published site content (legal, the `legal-external` submodule, `karma-tokenomics.md`). Do not edit it during docs work.
 - Run `git submodule update --init --recursive apps/status.network/content/legal-external` before a build that needs the real legal pages.
 - Hub renders its legal pages from this app's `content/legal` and `content/legal-external`, so a change there affects both sites.
-- Use `content/network-blog-slugs.json` for offline and CI builds. Keep `REQUIRE_NETWORK_BLOG=1` in Jenkins and Vercel to check the current production blog routes before publishing.
+- When Ghost is unreachable at build time, `/blog/[slug]` falls back to `content/network-blog-slugs.json`. Update that list when new posts ship.
 
 ## Docs
 

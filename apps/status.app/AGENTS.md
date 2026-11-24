@@ -4,7 +4,7 @@ Rules for agents working in `apps/status.app`. The root `AGENTS.md` also applies
 
 ## Role
 
-Next.js 16 app behind https://status.app: marketing site, help centre, specs hub and blog. Port 3001. `content/` is published site content, never code documentation.
+Next.js 15 app behind https://status.app: marketing site, help centre, specs hub and blog. Port 3001. `content/` is published site content, never code documentation.
 
 ## Commands
 

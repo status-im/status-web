@@ -1,3 +1,8 @@
+import {
+  blogMaintenanceHeaders,
+  isBlogInMaintenance,
+} from './src/config/blog-maintenance'
+
 export const config = {
   fluid: true,
   functions: {
@@ -19,4 +24,15 @@ export const config = {
   installCommand:
     'pnpm install --dir ../../ --frozen-lockfile --filter status.app...',
   buildCommand: 'turbo run build --cwd ../../ --filter=./apps/status.app...',
+  ...(isBlogInMaintenance() && {
+    routes: [
+      {
+        src: '^/(?:en/)?blog/(?!icon(?:-[a-z0-9]+)?\\.png/?$).+$',
+        dest: '/_next/static/blog-maintenance.html',
+        check: true,
+        status: 503,
+        headers: blogMaintenanceHeaders,
+      },
+    ],
+  }),
 }

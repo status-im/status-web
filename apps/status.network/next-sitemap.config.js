@@ -1,14 +1,12 @@
 /* eslint-env node */
 
 /* eslint-disable @typescript-eslint/no-require-imports -- This config uses CommonJS. */
-const fs = require('node:fs')
 const path = require('path')
 const {
   buildLocalizedPaths,
   discoverPages,
   discoverLegalPages,
 } = require('@status-im/sitemap-utils')
-const { redirects } = require('./vercel.json')
 
 // Discover pages from app directory
 const APP_DIR = path.join(__dirname, 'src', 'app')
@@ -17,28 +15,43 @@ const PAGES = discoverPages(APP_DIR)
 const LEGAL_PAGES = discoverLegalPages(APP_DIR)
 const ALLOWED_PATHS = buildLocalizedPaths(LOCALES, PAGES).map(p => p.loc)
 
-function getExportedBlogPaths() {
-  // next-sitemap runs before the default locale prefix is stripped.
-  const directory = path.join(__dirname, 'out', 'en', 'blog')
-  if (!fs.existsSync(directory)) return []
+const GHOST_URL = (
+  process.env.GHOST_API_URL || 'https://our.status.im'
+).replace(/\/+$/, '')
+const GHOST_API_KEY = process.env.GHOST_API_KEY
+const NETWORK_BLOG_TAG = 'status-network-blog'
 
-  const redirectedPaths = new Set(redirects.map(({ source }) => source))
-  const paths = []
-  for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
-    if (!entry.isFile() || !entry.name.endsWith('.html')) continue
+async function fetchAllBlogPosts() {
+  if (!GHOST_API_KEY) return []
 
-    const loc = `/blog/${entry.name.slice(0, -5)}`
-    if (redirectedPaths.has(loc)) continue
+  const posts = []
+  let page = 1
 
-    const html = fs.readFileSync(path.join(directory, entry.name), 'utf8')
-    if (!/<article[\s>]/.test(html)) continue
+  while (true) {
+    const url = new URL('/ghost/api/content/posts/', GHOST_URL)
+    url.searchParams.set('key', GHOST_API_KEY)
+    url.searchParams.set('fields', 'slug,published_at')
+    url.searchParams.set('filter', `tag:${NETWORK_BLOG_TAG}+visibility:public`)
+    url.searchParams.set('limit', '100')
+    url.searchParams.set('page', String(page))
 
-    const publishedTime = html.match(
-      /<meta property="article:published_time" content="([^"]+)"/,
-    )?.[1]
-    paths.push(publishedTime ? { loc, lastmod: publishedTime } : { loc })
+    try {
+      const response = await fetch(url.toString(), {
+        signal: AbortSignal.timeout(10_000),
+      })
+      if (!response.ok) break
+
+      const data = await response.json()
+      posts.push(...data.posts)
+
+      if (!data.meta.pagination.next) break
+      page = data.meta.pagination.next
+    } catch {
+      break
+    }
   }
-  return paths
+
+  return posts
 }
 
 /** @type {import('next-sitemap').IConfig} */
@@ -95,7 +108,14 @@ module.exports = {
       }
     }
 
-    result.push(...getExportedBlogPaths())
+    // Add blog posts with actual publish dates
+    const posts = await fetchAllBlogPosts()
+    for (const post of posts) {
+      result.push({
+        loc: `/blog/${post.slug}`,
+        lastmod: post.published_at,
+      })
+    }
 
     return result
   },
