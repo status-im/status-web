@@ -6,5 +6,5 @@ export const blogMaintenanceHeaders = {
 
 export function isBlogInMaintenance() {
   // eslint-disable-next-line no-restricted-globals -- Read the same build flag in Next.js and Vercel.
-  return process.env['BLOG_MAINTENANCE_MODE'] !== '0'
+  return process.env['BLOG_MAINTENANCE_MODE'] === '1'
 }

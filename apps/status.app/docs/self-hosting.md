@@ -56,7 +56,8 @@ unless it has its own route.
 
 ## Blog maintenance
 
-The build defaults to maintenance mode. It prerenders [the blog landing page](<../src/app/(website)/blog/_page.tsx>)
+The blog is enabled by default. Set `BLOG_MAINTENANCE_MODE=1` and rebuild to enable
+the emergency maintenance mode. In that mode, the build prerenders [the blog landing page](<../src/app/(website)/blog/_page.tsx>)
 with the maintenance notice and builds an empty blog search index. The
 [postbuild script](../scripts/generate-blog-maintenance.ts) writes the shared notice to
 `.next/static/blog-maintenance.html`. The [Vercel route](../vercel.ts) serves that static file
@@ -67,8 +68,8 @@ keeps existing article URLs using a
 [October 6, 2026 public sitemap][blog-sitemap-archive] and the additional public post
 from the [November 5, 2026 production search index][blog-sitemap-index].
 
-When the Ghost Content API is healthy again, set `BLOG_MAINTENANCE_MODE=0` in the deployment
-environment and rebuild. This re-enables the existing Ghost-powered blog, search index and
+To exit maintenance mode, remove `BLOG_MAINTENANCE_MODE` or set it to `0` in the deployment
+environment and rebuild. This re-enables the Ghost-powered blog, search index and
 article entries in the sitemap. The flag is evaluated at build time and included in the
 Turborepo cache key.
 

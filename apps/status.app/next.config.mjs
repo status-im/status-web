@@ -28,7 +28,7 @@ const feedSnapshots =
 let config = {
   env: {
     BLOG_MAINTENANCE_MODE:
-      process.env.BLOG_MAINTENANCE_MODE === '0' ? '0' : '1',
+      process.env.BLOG_MAINTENANCE_MODE === '1' ? '1' : '0',
   },
   // Self-hosting: emit a standalone server bundle (Dockerfile copies .next/standalone/).
   // why: https://nextjs.org/docs/app/api-reference/config/next-config-js/output#automatically-copying-traced-files
