@@ -10,7 +10,6 @@ import { getPostsByTagSlug } from '~website/_lib/ghost'
 import { TAGS } from '~website/blog/_tags'
 
 import { BlogPager } from './blog-pager'
-import { InfinitePostGrid } from './infinite-post-grid'
 import { PostGrid } from './post-grid'
 
 import type { SLUGS } from '~website/blog/_tags'
@@ -22,8 +21,7 @@ type Props = {
 
 /**
  * A tag archive, shared by `/blog/tag/[slug]` and its `/page/[page]`
- * continuations. Page 1 keeps the infinite scroll; later pages are plain
- * server-rendered grids, which is what the pager links to.
+ * continuations. All pages use server-rendered grids and pagination links.
  */
 export async function TagArchive(props: Props) {
   const { slug, page } = props
@@ -38,7 +36,6 @@ export async function TagArchive(props: Props) {
   const { posts, tag, meta } = response
   const name = tag.name || tag.slug
   const basePath = `/blog/tag/${tag.slug}`
-  const isFirstPage = page === 1
 
   return (
     <Body>
@@ -72,22 +69,12 @@ export async function TagArchive(props: Props) {
             {tag.description && <Text size={19}>{tag.description}</Text>}
           </div>
 
-          {isFirstPage ? (
-            <InfinitePostGrid
-              type="tag"
-              initialPosts={posts}
-              meta={meta}
-              queryKey={tag.slug}
-            />
-          ) : (
-            <PostGrid posts={posts} isLoading={false} />
-          )}
+          <PostGrid posts={posts} isLoading={false} />
 
           <BlogPager
             basePath={basePath}
             currentPage={page}
             totalPages={meta.pagination.pages}
-            hideWhenInteractive={isFirstPage}
           />
         </div>
       </div>

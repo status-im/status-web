@@ -82,6 +82,9 @@ let config = {
     ],
   },
   experimental: {
+    // Bound Ghost load while prerendering archives.
+    cpus: 2,
+    staticGenerationMaxConcurrency: 1,
     // note: https://nextjs.org/blog/turbopack-for-development-stable#breaking-changes
     turbo: {
       resolve: {

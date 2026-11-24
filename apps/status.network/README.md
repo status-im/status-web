@@ -21,11 +21,13 @@ Run it from the repo root. Without real Ghost credentials the marketing pages re
 The site needs four Ghost variables, two for the build and two for the browser:
 
 - `GHOST_API_URL` and `GHOST_API_KEY` are read during the build.
-- `NEXT_PUBLIC_GHOST_API_URL` and `NEXT_PUBLIC_GHOST_API_KEY` are inlined at build time so the browser can refresh blog content after deploy. Set them to the same values.
+- `NEXT_PUBLIC_GHOST_API_URL` and `NEXT_PUBLIC_GHOST_API_KEY` are retained for public client configuration. Set them to the same values.
 
 `.env` is committed with demo Ghost values, so a build works out of the box. For live content copy `.env.example` to `.env.local` and fill in the real values; Next reads `.env.local` over `.env`. `pnpm --filter status.network env:check` validates `.env` (not `.env.local`) and runs in `prebuild`.
 
 When the network blog tag returns no posts, the listing uses the committed slugs in `content/network-blog-slugs.json` and fetches their published content from Ghost. Those slugs also remain available as article routes if their network tag is missing. Ghost must still be reachable to provide the article content. Bulk requests follow all pages when Ghost caps the response.
+
+The Ghost homepage cards and article body use their build-time content without browser refresh. Republish the site to show Ghost edits.
 
 ## Deploy
 

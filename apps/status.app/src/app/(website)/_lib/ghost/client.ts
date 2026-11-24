@@ -43,7 +43,9 @@ const resolveAPIPrefix = version => {
 export function getGhostTimeoutSignal({ bulk = false } = {}) {
   // Healthy bulk requests (such as the build-time search index) can take ~6s.
   if (typeof window === 'undefined') {
-    return AbortSignal.timeout(bulk ? 10_000 : 3_000)
+    const building =
+      globalThis.process?.env['NEXT_PHASE'] === 'phase-production-build'
+    return AbortSignal.timeout(bulk || building ? 10_000 : 3_000)
   }
 }
 

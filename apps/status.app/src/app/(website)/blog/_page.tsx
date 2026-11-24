@@ -153,7 +153,6 @@ async function BlogPosts({ searchParams }: Props) {
         basePath="/blog"
         currentPage={1}
         totalPages={meta.pagination.pages}
-        hideWhenInteractive
       />
     </>
   )

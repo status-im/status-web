@@ -74,6 +74,7 @@ describe('ghostFetch', () => {
   })
 
   it('times out a hanging request', async () => {
+    vi.stubEnv('NEXT_PHASE', '')
     fetchMock.mockImplementation(
       (_url: string, init: RequestInit) =>
         new Promise((_, reject) => {
