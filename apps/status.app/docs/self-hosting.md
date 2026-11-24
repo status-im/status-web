@@ -303,3 +303,6 @@ server-rendered pagination links. Scrolling no longer fetches Ghost from the bro
 [Search](../src/app/api/blog/search/route.ts) reads the index generated at build time.
 Article pages retain hourly ISR, so the first visit and later revalidation may contact Ghost;
 this app is not a complete static export.
+
+The main blog listing and its numbered pages read the same complete build-time index as search.
+They do not request Ghost while serving readers. Deploy again to publish changes to these lists.
