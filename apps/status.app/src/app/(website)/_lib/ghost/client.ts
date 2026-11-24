@@ -327,9 +327,26 @@ export function GhostContentAPI({
       params,
       headers,
     })
-      .then(res => {
+      .then(async res => {
         if (!Array.isArray(res[resourceType])) {
           return res[resourceType]
+        }
+        // Ghost can cap `limit=all` at 100 results. Follow its pagination so
+        // search indexes, sitemaps and archives do not silently lose entries.
+        if (params.limit === 'all' && res.meta?.pagination?.next) {
+          const items = [...res[resourceType]]
+          let next = res.meta.pagination.next
+          while (next) {
+            const page = await makeRequest({
+              url: apiUrl,
+              method: 'get',
+              params: { ...params, limit: 100, page: next },
+              headers,
+            })
+            items.push(...page[resourceType])
+            next = page.meta?.pagination?.next
+          }
+          return Object.assign(items, { meta: res.meta })
         }
         if (res[resourceType].length === 1 && !res.meta) {
           return res[resourceType][0]

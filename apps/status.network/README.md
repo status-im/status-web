@@ -25,7 +25,7 @@ The site needs four Ghost variables, two for the build and two for the browser:
 
 `.env` is committed with demo Ghost values, so a build works out of the box. For live content copy `.env.example` to `.env.local` and fill in the real values; Next reads `.env.local` over `.env`. `pnpm --filter status.network env:check` validates `.env` (not `.env.local`) and runs in `prebuild`.
 
-When Ghost is unreachable at build time, `/blog/[slug]` falls back to the committed list in `content/network-blog-slugs.json`.
+When the network blog tag returns no posts, the listing uses the committed slugs in `content/network-blog-slugs.json` and fetches their published content from Ghost. Those slugs also remain available as article routes if their network tag is missing. Ghost must still be reachable to provide the article content. Bulk requests follow all pages when Ghost caps the response.
 
 ## Deploy
 

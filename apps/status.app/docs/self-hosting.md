@@ -83,6 +83,9 @@ with "Cannot generate an empty blog search index" when Ghost returns no posts. D
 that blocks every build, including one you need for an unrelated fix such as rotating
 `GITHUB_TOKEN`.
 
+Ghost may cap a `limit=all` response. The Ghost client follows pagination for bulk requests,
+including the search index and sitemap, and fails the request if a later page cannot be fetched.
+
 Set `ALLOW_EMPTY_BLOG_SEARCH_INDEX=1` for the build to get past it:
 
 ```bash

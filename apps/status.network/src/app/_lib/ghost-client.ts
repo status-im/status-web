@@ -1,4 +1,5 @@
 import { clientEnv } from '~/config/env.client.mjs'
+import networkBlogSlugFallback from '../../../content/network-blog-slugs.json'
 import type { BlogPostDetail } from './blog-post-detail'
 import {
   DEFAULT_GHOST_URL,
@@ -121,9 +122,12 @@ export async function fetchNetworkBlogPostBySlug(
   url.searchParams.set('key', apiKey)
   url.searchParams.set('include', 'tags,authors')
   url.searchParams.set('limit', '1')
+  const networkFilter = networkBlogSlugFallback.includes(slug)
+    ? ''
+    : `+tag:${NETWORK_BLOG_TAG}`
   url.searchParams.set(
     'filter',
-    `slug:${slug}+tag:${NETWORK_BLOG_TAG}+visibility:public+${DISALLOWED_TAGS_FILTER}`,
+    `slug:${slug}${networkFilter}+visibility:public+${DISALLOWED_TAGS_FILTER}`,
   )
 
   const response = await fetch(url.toString(), { cache: 'no-store' })
