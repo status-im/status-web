@@ -1,6 +1,6 @@
 import { clientEnv } from '~/config/env.client.mjs'
 
-import { getGhostTimeoutSignal, GhostContentAPI } from './client'
+import { GhostContentAPI, ghostFetch } from './client'
 
 import type { PostOrPage } from '@tryghost/content-api'
 
@@ -29,12 +29,11 @@ const ghostLive = GhostContentAPI({
   }) => {
     const queryString = new URLSearchParams(params).toString()
     const fullUrl = `${url}${queryString ? `?${queryString}` : ''}`
-    const response = await fetch(fullUrl, {
-      method: method.toUpperCase(),
-      headers,
-      cache: 'no-store',
-      signal: getGhostTimeoutSignal({ bulk: params['limit'] === 'all' }),
-    })
+    const response = await ghostFetch(
+      fullUrl,
+      { method: method.toUpperCase(), headers, cache: 'no-store' },
+      { bulk: params['limit'] === 'all' }
+    )
     if (!response.ok) {
       const error: Error & { statusCode?: number } = new Error(
         `HTTP error! status: ${response.status}`

@@ -47,18 +47,72 @@ export function getGhostTimeoutSignal({ bulk = false } = {}) {
   }
 }
 
+// During `next build`, once Ghost has failed to answer twice in a row, fail the
+// remaining requests at once instead of waiting out a timeout on every page.
+// State is per process, so each static-generation worker probes on its own.
+const GHOST_BREAKER_THRESHOLD = 2
+let ghostTransportFailures = 0
+
+function isTransportError(error) {
+  return (
+    error?.name === 'TimeoutError' ||
+    error?.name === 'AbortError' ||
+    (error instanceof TypeError && error.message === 'fetch failed')
+  )
+}
+
+export function resetGhostBreaker() {
+  ghostTransportFailures = 0
+}
+
+/**
+ * `fetch` with the Ghost timeout and, during `next build` only, a circuit
+ * breaker. An open breaker throws like a timeout, so callers need no changes.
+ */
+export async function ghostFetch(url, init = {}, { bulk = false } = {}) {
+  const breakerActive =
+    typeof window === 'undefined' &&
+    globalThis.process?.env['NEXT_PHASE'] === 'phase-production-build'
+
+  if (breakerActive && ghostTransportFailures >= GHOST_BREAKER_THRESHOLD) {
+    const error = new Error('Ghost unreachable, request skipped')
+    error.name = 'TimeoutError'
+    throw error
+  }
+
+  try {
+    const response = await fetch(url, {
+      ...init,
+      signal: getGhostTimeoutSignal({ bulk }),
+    })
+    if (breakerActive) ghostTransportFailures = 0
+    return response
+  } catch (error) {
+    if (breakerActive && isTransportError(error)) {
+      ghostTransportFailures++
+      if (ghostTransportFailures === GHOST_BREAKER_THRESHOLD) {
+        console.warn('Ghost unreachable, skipping remaining requests')
+      }
+    }
+    throw error
+  }
+}
+
 const defaultMakeRequest = async ({ url, method, params, headers }) => {
   const queryString = new URLSearchParams(params).toString()
   const fullUrl = `${url}${queryString ? `?${queryString}` : ''}`
 
-  const response = await fetch(fullUrl, {
-    method: method.toUpperCase(),
-    headers,
-    signal: getGhostTimeoutSignal({ bulk: params?.limit === 'all' }),
-    next: {
-      revalidate: 3600, // 1 hour
+  const response = await ghostFetch(
+    fullUrl,
+    {
+      method: method.toUpperCase(),
+      headers,
+      next: {
+        revalidate: 3600, // 1 hour
+      },
     },
-  })
+    { bulk: params?.limit === 'all' }
+  )
 
   if (!response.ok) {
     // Carry the status so callers can tell "Ghost has no such post" apart from
