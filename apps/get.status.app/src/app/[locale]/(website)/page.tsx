@@ -1,4 +1,4 @@
-import HomePage from '../../../../../status.app/src/app/(website)/page'
+import HomePage from '../../../../../status.app/src/app/(website)/_page'
 import { cloudinaryLoader } from '../../_components/assets/loader'
 
 import type { Metadata } from 'next'

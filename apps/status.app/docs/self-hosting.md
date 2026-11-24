@@ -43,7 +43,7 @@ once went down in production.
 
 ## Blog maintenance
 
-The build defaults to maintenance mode. It prerenders [the blog landing page](<../src/app/(website)/blog/page.tsx>)
+The build defaults to maintenance mode. It prerenders [the blog landing page](<../src/app/(website)/blog/_page.tsx>)
 with the maintenance notice and builds an empty blog search index. The
 [postbuild script](../scripts/generate-blog-maintenance.ts) writes the shared notice to
 `.next/static/blog-maintenance.html`. The [Vercel route](../vercel.ts) serves that static file

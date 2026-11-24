@@ -1,1 +1,1 @@
-export { default, generateMetadata } from '~website/brand/page'
+export { default, generateMetadata } from '~website/brand/_page'

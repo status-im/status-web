@@ -1,2 +1,2 @@
-export * from '~website/keycard/page'
-export { default } from '~website/keycard/page'
+export * from '~website/keycard/_page'
+export { default } from '~website/keycard/_page'

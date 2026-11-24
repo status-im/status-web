@@ -1,2 +1,2 @@
-export * from '~website/insights/page'
-export { default } from '~website/insights/page'
+export * from '~website/insights/_page'
+export { default } from '~website/insights/_page'

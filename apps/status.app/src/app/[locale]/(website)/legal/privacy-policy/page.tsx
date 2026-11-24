@@ -1,2 +1,2 @@
-export * from '~website/legal/privacy-policy/page'
-export { default } from '~website/legal/privacy-policy/page'
+export * from '~website/legal/privacy-policy/_page'
+export { default } from '~website/legal/privacy-policy/_page'
