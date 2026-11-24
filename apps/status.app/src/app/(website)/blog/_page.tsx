@@ -6,52 +6,29 @@ import { JSONLDScript } from '~/utils/json-ld'
 import { buildLandingPageStructuredData } from '~/utils/structured-data'
 import { Metadata } from '~app/_metadata'
 import { Body } from '~components/body'
-import { BLOG_PAGE_SIZE, getPosts } from '~website/_lib/ghost'
-import { cacheGhostResult } from '~website/_lib/ghost/cache'
+import { BLOG_PAGE_SIZE } from '~website/_lib/ghost'
 
 import { isBlogCategory } from './_categories'
 import { BlogEmptyState } from './_components/blog-empty-state'
 import { BlogPager } from './_components/blog-pager'
 import { BlogSearch } from './_components/blog-search'
-import { searchBlogPosts } from './_utils/search.server'
+import { readBlogPostsPage, searchBlogPosts } from './_utils/search.server'
 import {
   BLOG_SEARCH_QUERY_MAX_LENGTH,
   BLOG_SEARCH_RESULTS_PER_PAGE,
 } from './_utils/search-config'
 
 import type { BlogSearchResults } from './_utils/search-config'
-import type { PostOrPage, PostsOrPages } from '@tryghost/content-api'
 import type { Metadata as NextMetadata } from 'next'
 
 export const revalidate = 3600 // 1 hour
 
-const getCachedBlogPosts = cacheGhostResult('blog posts', () => getPosts())
-
-/**
- * Keep the listing page available during a Ghost outage. The search index
- * can still serve results, and the empty state can explain the outage.
- */
-async function getBlogPosts(): Promise<{
-  posts: PostOrPage[]
-  meta: PostsOrPages['meta']
-  postsUnavailable: boolean
-}> {
-  const result = await getCachedBlogPosts()
-  if (result) return { ...result, postsUnavailable: false }
-
+// Browse the same complete build-time snapshot used by search. Reader traffic
+// must not depend on another request to Ghost for every archive page.
+async function getBlogPosts() {
   return {
-    posts: [],
-    meta: {
-      pagination: {
-        page: 1,
-        limit: BLOG_PAGE_SIZE,
-        pages: 0,
-        total: 0,
-        next: null,
-        prev: null,
-      },
-    },
-    postsUnavailable: true,
+    ...(await readBlogPostsPage(1, BLOG_PAGE_SIZE)),
+    postsUnavailable: false,
   }
 }
 
@@ -153,7 +130,6 @@ async function BlogPosts({ searchParams }: Props) {
         basePath="/blog"
         currentPage={1}
         totalPages={meta.pagination.pages}
-        hideWhenInteractive
       />
     </>
   )

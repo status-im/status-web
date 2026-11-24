@@ -56,7 +56,8 @@ unless it has its own route.
 
 ## Blog maintenance
 
-The build defaults to maintenance mode. It prerenders [the blog landing page](<../src/app/(website)/blog/_page.tsx>)
+The blog is enabled by default. Set `BLOG_MAINTENANCE_MODE=1` and rebuild to enable
+the emergency maintenance mode. In that mode, the build prerenders [the blog landing page](<../src/app/(website)/blog/_page.tsx>)
 with the maintenance notice and builds an empty blog search index. The
 [postbuild script](../scripts/generate-blog-maintenance.ts) writes the shared notice to
 `.next/static/blog-maintenance.html`. The [Vercel route](../vercel.ts) serves that static file
@@ -67,8 +68,8 @@ keeps existing article URLs using a
 [October 6, 2026 public sitemap][blog-sitemap-archive] and the additional public post
 from the [November 5, 2026 production search index][blog-sitemap-index].
 
-When the Ghost Content API is healthy again, set `BLOG_MAINTENANCE_MODE=0` in the deployment
-environment and rebuild. This re-enables the existing Ghost-powered blog, search index and
+To exit maintenance mode, remove `BLOG_MAINTENANCE_MODE` or set it to `0` in the deployment
+environment and rebuild. This re-enables the Ghost-powered blog, search index and
 article entries in the sitemap. The flag is evaluated at build time and included in the
 Turborepo cache key.
 
@@ -82,6 +83,9 @@ When maintenance mode is disabled, the build runs
 with "Cannot generate an empty blog search index" when Ghost returns no posts. During a Ghost outage
 that blocks every build, including one you need for an unrelated fix such as rotating
 `GITHUB_TOKEN`.
+
+Ghost may cap a `limit=all` response. The Ghost client follows pagination for bulk requests,
+including the search index and sitemap, and fails the request if a later page cannot be fetched.
 
 Set `ALLOW_EMPTY_BLOG_SEARCH_INDEX=1` for the build to get past it:
 
@@ -102,8 +106,8 @@ This change did not touch the `Dockerfile` or the `build:docker` script, so chec
 ## Live blog fallback
 
 With maintenance mode disabled, the [Ghost client](<../src/app/(website)/_lib/ghost/client.ts>) gives server-side requests three
-seconds and bulk requests (including the search index build) ten seconds. Browser fetches keep
-their existing behavior.
+seconds at runtime and ten seconds during builds or bulk requests (including the search index).
+Static generation uses two workers with one page per worker at a time to bound origin load.
 
 During `next build`, both Ghost clients also stop waiting once Ghost looks unreachable, so pages do
 not each wait out their own timeout. `ghostFetch` checks `NEXT_PHASE=phase-production-build`, which
@@ -291,3 +295,14 @@ Behind a load balancer, follow the
   [custom cache handler](https://nextjs.org/docs/app/api-reference/config/next-config-js/incrementalCacheHandlerPath)
   backed by Redis, S3 or similar. Nothing like that is configured yet; each replica keeps its own
   cache.
+
+## Blog browsing traffic
+
+The [blog grids](<../src/app/(website)/blog/_components/tag-archive.tsx>) use the existing
+server-rendered pagination links. Scrolling no longer fetches Ghost from the browser.
+[Search](../src/app/api/blog/search/route.ts) reads the index generated at build time.
+Article pages retain hourly ISR, so the first visit and later revalidation may contact Ghost;
+this app is not a complete static export.
+
+The main blog listing and its numbered pages read the same complete build-time index as search.
+They do not request Ghost while serving readers. Deploy again to publish changes to these lists.

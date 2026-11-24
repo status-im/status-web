@@ -17,7 +17,6 @@ import {
 } from '../_utils/search-config'
 import { BlogEmptyState } from './blog-empty-state'
 import { HighlightedPostCard } from './highlighted-post-card'
-import { InfinitePostGrid } from './infinite-post-grid'
 import { PostGrid } from './post-grid'
 
 import type { BlogSearchResults } from '../_utils/search-config'
@@ -46,7 +45,6 @@ const toRequestKey = (
 export function BlogSearch(props: Props) {
   const {
     initialPosts,
-    meta,
     postsUnavailable,
     initialResults,
     initialQuery,
@@ -332,13 +330,7 @@ export function BlogSearch(props: Props) {
             {highlightedPost && <HighlightedPostCard post={highlightedPost} />}
           </div>
 
-          <InfinitePostGrid
-            type="posts"
-            initialPosts={initialPosts}
-            meta={meta}
-            queryKey="all"
-            skip={1}
-          />
+          <PostGrid posts={initialPosts.slice(1)} isLoading={false} />
         </div>
       ) : (
         <BlogEmptyState postsUnavailable={postsUnavailable} />

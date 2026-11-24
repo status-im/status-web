@@ -43,7 +43,9 @@ const resolveAPIPrefix = version => {
 export function getGhostTimeoutSignal({ bulk = false } = {}) {
   // Healthy bulk requests (such as the build-time search index) can take ~6s.
   if (typeof window === 'undefined') {
-    return AbortSignal.timeout(bulk ? 10_000 : 3_000)
+    const building =
+      globalThis.process?.env['NEXT_PHASE'] === 'phase-production-build'
+    return AbortSignal.timeout(bulk || building ? 10_000 : 3_000)
   }
 }
 
@@ -111,7 +113,13 @@ export async function ghostFetch(url, init = {}, { bulk = false } = {}) {
 }
 
 const defaultMakeRequest = async ({ url, method, params, headers }) => {
-  const queryString = new URLSearchParams(params).toString()
+  // Keep every bulk page bounded, including the first request. Ghost may do
+  // expensive work for `all` even when it ultimately caps the response.
+  const bulk = params?.limit === 'all' || Number(params?.limit) === 100
+  const queryString = new URLSearchParams({
+    ...params,
+    ...(params?.limit === 'all' && { limit: 100 }),
+  }).toString()
   const fullUrl = `${url}${queryString ? `?${queryString}` : ''}`
 
   const response = await ghostFetch(
@@ -123,7 +131,7 @@ const defaultMakeRequest = async ({ url, method, params, headers }) => {
         revalidate: 3600, // 1 hour
       },
     },
-    { bulk: params?.limit === 'all' }
+    { bulk }
   )
 
   if (!response.ok) {
@@ -327,9 +335,26 @@ export function GhostContentAPI({
       params,
       headers,
     })
-      .then(res => {
+      .then(async res => {
         if (!Array.isArray(res[resourceType])) {
           return res[resourceType]
+        }
+        // Ghost can cap `limit=all` at 100 results. Follow its pagination so
+        // search indexes, sitemaps and archives do not silently lose entries.
+        if (params.limit === 'all' && res.meta?.pagination?.next) {
+          const items = [...res[resourceType]]
+          let next = res.meta.pagination.next
+          while (next) {
+            const page = await makeRequest({
+              url: apiUrl,
+              method: 'get',
+              params: { ...params, limit: 100, page: next },
+              headers,
+            })
+            items.push(...page[resourceType])
+            next = page.meta?.pagination?.next
+          }
+          return Object.assign(items, { meta: res.meta })
         }
         if (res[resourceType].length === 1 && !res.meta) {
           return res[resourceType][0]

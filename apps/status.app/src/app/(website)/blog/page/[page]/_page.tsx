@@ -4,13 +4,14 @@ import { getTranslations } from 'next-intl/server'
 
 import { Metadata } from '~app/_metadata'
 import { Body } from '~components/body'
-import { getPosts } from '~website/_lib/ghost'
+import { BLOG_PAGE_SIZE } from '~website/_lib/ghost'
 import { BlogPager } from '~website/blog/_components/blog-pager'
 import { PostGrid } from '~website/blog/_components/post-grid'
 import {
   parsePageParam,
   resolvePageParam,
 } from '~website/blog/_utils/page-param'
+import { readBlogPostsPage } from '~website/blog/_utils/search.server'
 
 export const revalidate = 3600 // 1 hour
 export const dynamicParams = true
@@ -47,7 +48,7 @@ export default async function BlogArchivePage(props: Props) {
   const t = await getTranslations('blog')
   const page = resolvePageParam((await props.params).page, '/blog')
 
-  const { posts, meta } = await getPosts({ page })
+  const { posts, meta } = await readBlogPostsPage(page, BLOG_PAGE_SIZE)
 
   if (posts.length === 0) {
     notFound()

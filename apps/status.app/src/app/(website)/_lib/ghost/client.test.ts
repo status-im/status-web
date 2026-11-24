@@ -1,8 +1,91 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { ghostFetch, resetGhostBreaker } from './client'
+import { GhostContentAPI, ghostFetch, resetGhostBreaker } from './client'
 
 const URL = 'https://ghost.test/ghost/api/content/posts/'
+
+describe('GhostContentAPI pagination', () => {
+  it('bounds the first bulk request and follows the next page', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        Response.json({
+          posts: [{ slug: 'first' }],
+          meta: { pagination: { next: 2 } },
+        })
+      )
+      .mockResolvedValueOnce(
+        Response.json({
+          posts: [{ slug: 'second' }],
+          meta: { pagination: { next: null } },
+        })
+      )
+    vi.stubGlobal('fetch', fetchMock)
+    try {
+      const api = GhostContentAPI({
+        url: 'https://ghost.test',
+        key: '0123456789abcdef0123456789',
+        version: 'v5.0',
+      })
+      const posts = await api.posts.browse({ limit: 'all' })
+      expect(posts.map(post => post.slug)).toEqual(['first', 'second'])
+      for (const [url] of fetchMock.mock.calls) {
+        expect(new globalThis.URL(url).searchParams.get('limit')).toBe('100')
+      }
+      expect(
+        new globalThis.URL(fetchMock.mock.calls[1][0]).searchParams.get('page')
+      ).toBe('2')
+    } finally {
+      vi.unstubAllGlobals()
+    }
+  })
+
+  it('collects every page when Ghost caps limit=all', async () => {
+    const makeRequest = vi
+      .fn()
+      .mockResolvedValueOnce({
+        posts: [{ slug: 'first' }],
+        meta: { pagination: { next: 2 } },
+      })
+      .mockResolvedValueOnce({
+        posts: [{ slug: 'second' }],
+        meta: { pagination: { next: null } },
+      })
+    const api = GhostContentAPI({
+      url: 'https://ghost.test',
+      key: '0123456789abcdef0123456789',
+      version: 'v5.0',
+      makeRequest,
+    })
+
+    const posts = await api.posts.browse({ limit: 'all' })
+    expect(posts.map(post => post.slug)).toEqual(['first', 'second'])
+    expect(makeRequest.mock.calls[1][0].params).toMatchObject({
+      page: 2,
+      limit: 100,
+    })
+  })
+
+  it('propagates an error on a later page', async () => {
+    const makeRequest = vi
+      .fn()
+      .mockResolvedValueOnce({
+        posts: [{ slug: 'first' }],
+        meta: { pagination: { next: 2 } },
+      })
+      .mockRejectedValueOnce(new Error('Ghost unavailable'))
+    const api = GhostContentAPI({
+      url: 'https://ghost.test',
+      key: '0123456789abcdef0123456789',
+      version: 'v5.0',
+      makeRequest,
+    })
+
+    await expect(api.posts.browse({ limit: 'all' })).rejects.toThrow(
+      'Ghost unavailable'
+    )
+  })
+})
 
 function fetchFailed() {
   return Promise.reject(new TypeError('fetch failed'))
@@ -26,6 +109,7 @@ describe('ghostFetch', () => {
   })
 
   it('times out a hanging request', async () => {
+    vi.stubEnv('NEXT_PHASE', '')
     fetchMock.mockImplementation(
       (_url: string, init: RequestInit) =>
         new Promise((_, reject) => {

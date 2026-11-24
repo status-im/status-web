@@ -2,18 +2,13 @@
 
 import {
   BLOG_ARTICLE_CLASS_NAMES,
-  blogPostDetailEqual,
   type BlogPostDetail,
 } from '~app/_lib/blog-post-detail'
 import { getPostFAQItems } from '~app/_lib/faq'
-import {
-  canRefreshBlogFromClient,
-  fetchNetworkBlogPostBySlug,
-} from '~app/_lib/ghost-client'
 import { formatDate } from '~app/_utils/format-date'
 import { Link } from '~components/link'
 import { useLocale } from 'next-intl'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { PostAuthor } from './post-author'
 
 type Labels = {
@@ -28,39 +23,9 @@ type Props = {
   labels: Labels
 }
 
-export function BlogPostDetailHydrated({ slug, initialPost, labels }: Props) {
+export function BlogPostDetailHydrated({ initialPost, labels }: Props) {
   const locale = useLocale()
-  const [post, setPost] = useState(initialPost)
-
-  useEffect(() => {
-    let cancelled = false
-
-    async function refresh() {
-      if (!canRefreshBlogFromClient()) {
-        return
-      }
-
-      try {
-        const fresh = await fetchNetworkBlogPostBySlug(slug)
-
-        if (cancelled || !fresh) {
-          return
-        }
-
-        setPost(current =>
-          blogPostDetailEqual(current, fresh) ? current : fresh,
-        )
-      } catch {
-        // Keep build-time snapshot on failure.
-      }
-    }
-
-    void refresh()
-
-    return () => {
-      cancelled = true
-    }
-  }, [slug])
+  const post = initialPost
 
   const faqItems = useMemo(
     () => getPostFAQItems(post.codeinjection_head, post.codeinjection_foot),

@@ -7,7 +7,6 @@ import { Breadcrumbs } from '~components/breadcrumbs'
 import { getPostsByAuthorSlug } from '~website/_lib/ghost'
 
 import { BlogPager } from './blog-pager'
-import { InfinitePostGrid } from './infinite-post-grid'
 import { PostGrid } from './post-grid'
 
 type Props = {
@@ -17,8 +16,7 @@ type Props = {
 
 /**
  * An author archive, shared by `/blog/author/[slug]` and its `/page/[page]`
- * continuations. Page 1 keeps the infinite scroll; later pages are plain
- * server-rendered grids, which is what the pager links to.
+ * continuations. All pages use server-rendered grids and pagination links.
  */
 export async function AuthorArchive(props: Props) {
   const { slug, page } = props
@@ -33,7 +31,6 @@ export async function AuthorArchive(props: Props) {
   const { posts, author, meta } = response
   const name = author.name ?? author.slug
   const basePath = `/blog/author/${author.slug}`
-  const isFirstPage = page === 1
 
   return (
     <Body>
@@ -70,22 +67,12 @@ export async function AuthorArchive(props: Props) {
             )}
           </div>
 
-          {isFirstPage ? (
-            <InfinitePostGrid
-              type="author"
-              initialPosts={posts}
-              meta={meta}
-              queryKey={author.slug}
-            />
-          ) : (
-            <PostGrid posts={posts} isLoading={false} />
-          )}
+          <PostGrid posts={posts} isLoading={false} />
 
           <BlogPager
             basePath={basePath}
             currentPage={page}
             totalPages={meta.pagination.pages}
-            hideWhenInteractive={isFirstPage}
           />
         </div>
       </div>

@@ -134,3 +134,22 @@ export async function searchBlogPosts({
     total: resultIds.length,
   }
 }
+
+/** Blog browsing uses the deployment snapshot without contacting Ghost. */
+export async function readBlogPostsPage(page: number, limit: number) {
+  const { posts } = await readBlogSearchPayload()
+  const pages = Math.ceil(posts.length / limit)
+  return {
+    posts: posts.slice((page - 1) * limit, page * limit),
+    meta: {
+      pagination: {
+        page,
+        limit,
+        pages,
+        total: posts.length,
+        next: page < pages ? page + 1 : null,
+        prev: page > 1 ? page - 1 : null,
+      },
+    },
+  }
+}

@@ -1,11 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import {
-  canRefreshBlogFromClient,
-  fetchHomepageBlogCards,
-  type HomepageBlogCard,
-} from '../../_lib/ghost-client'
+import { type HomepageBlogCard } from '../../_lib/ghost-client'
 import { fetchHomepageNaverBlogCards } from '../../_lib/naver-client'
 import { ButtonLink } from '../button-link'
 import { BlogCard } from './blog-card'
@@ -37,15 +33,12 @@ export function BlogSectionHydrated({
     let cancelled = false
 
     async function refresh() {
-      if (source === 'ghost' && !canRefreshBlogFromClient()) {
+      if (source === 'ghost') {
         return
       }
 
       try {
-        const fresh =
-          source === 'naver'
-            ? await fetchHomepageNaverBlogCards()
-            : await fetchHomepageBlogCards()
+        const fresh = await fetchHomepageNaverBlogCards()
 
         if (cancelled || fresh.length === 0) {
           return
