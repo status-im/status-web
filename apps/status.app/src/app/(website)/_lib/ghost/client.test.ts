@@ -30,11 +30,11 @@ describe('GhostContentAPI pagination', () => {
       const posts = await api.posts.browse({ limit: 'all' })
       expect(posts.map(post => post.slug)).toEqual(['first', 'second'])
       for (const [url] of fetchMock.mock.calls) {
-        expect(new URL(url).searchParams.get('limit')).toBe('100')
+        expect(new globalThis.URL(url).searchParams.get('limit')).toBe('100')
       }
-      expect(new URL(fetchMock.mock.calls[1][0]).searchParams.get('page')).toBe(
-        '2'
-      )
+      expect(
+        new globalThis.URL(fetchMock.mock.calls[1][0]).searchParams.get('page')
+      ).toBe('2')
     } finally {
       vi.unstubAllGlobals()
     }
