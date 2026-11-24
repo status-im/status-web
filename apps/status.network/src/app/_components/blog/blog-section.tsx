@@ -38,10 +38,6 @@ const Blog = async () => {
   const blogSource = BLOG_SOURCE_BY_LOCALE[locale] ?? DEFAULT_BLOG_SOURCE
   const cards = await blogSource.getCards()
 
-  if (cards.length === 0) {
-    return null
-  }
-
   return (
     <BlogSectionHydrated
       initialCards={cards}

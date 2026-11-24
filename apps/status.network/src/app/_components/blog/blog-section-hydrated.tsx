@@ -57,24 +57,22 @@ export function BlogSectionHydrated({
     }
   }, [source])
 
-  if (cards.length === 0) {
-    return null
-  }
-
   return (
     <section className="w-full" id="blog">
       <div className="px-5 py-[120px] lg:px-[120px] lg:py-[168px]">
-        <div className="mb-6 flex items-center justify-between lg:mb-12">
+        <div className="flex items-center justify-between">
           <h2 className="text-27 font-600">{title}</h2>
           <ButtonLink variant="white" size="32" href={viewBlogHref}>
             {viewBlogLabel}
           </ButtonLink>
         </div>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {cards.map(card => (
-            <BlogCard key={card.link} {...card} />
-          ))}
-        </div>
+        {cards.length > 0 && (
+          <div className="mt-6 grid gap-6 md:grid-cols-2 lg:mt-12 lg:grid-cols-3">
+            {cards.map(card => (
+              <BlogCard key={card.link} {...card} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   )

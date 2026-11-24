@@ -27,9 +27,11 @@ const nextConfig: NextConfig = {
       pathname: '/content/images/**',
     })),
   },
-  async redirects() {
-    return redirects
-  },
+  ...(serverEnv.NODE_ENV === 'development' && {
+    async redirects() {
+      return redirects
+    },
+  }),
 }
 
 export default withNextIntl(nextConfig)

@@ -98,7 +98,7 @@ pipeline {
       steps {
         script {
           nix.develop(
-            "pnpm turbo run build --filter=${params.APP_NAME}...",
+            "pnpm turbo run build --filter='${params.APP_NAME}^...'",
             pure: false,
           )
         }

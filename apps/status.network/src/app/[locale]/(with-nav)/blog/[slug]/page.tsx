@@ -21,18 +21,7 @@ type Props = {
 export async function generateStaticParams() {
   let slugs = await getPostSlugs()
 
-  if (requireBlogContent) {
-    const missingSlugs = networkBlogSlugFallback.filter(
-      slug => !slugs.includes(slug),
-    )
-    if (missingSlugs.length > 0) {
-      throw new Error(
-        `Ghost is missing published Status Network blog posts: ${missingSlugs.join(', ')}`,
-      )
-    }
-  }
-
-  if (slugs.length === 0) {
+  if (!requireBlogContent && slugs.length === 0) {
     const fallback = networkBlogSlugFallback
     if (fallback.length > 0) {
       console.info(
@@ -70,6 +59,7 @@ export async function generateMetadata({ params }: Props) {
     pathname: `/blog/${slug}`,
     openGraph: {
       type: 'article',
+      publishedTime: post.published_at ?? undefined,
       title: post.og_title ?? post.title,
       description:
         post.og_description ??
