@@ -41,6 +41,19 @@ repository to ask, and otherwise fails the build. Failing is deliberate: an empt
 compiles fine and ships a `/specs` hub whose every detail URL 404s, which is how the specs section
 once went down in production.
 
+## Locale routing
+
+The [locale middleware](../src/middleware.ts) rewrites an unprefixed URL such as `/x` to `/en/x`,
+so readers only ever get the `[locale]` copy of a localized page. Localized pages therefore exist as
+routes only under `src/app/[locale]`. `src/app/(website)` keeps their implementations in
+`_page.tsx` files, which the `[locale]` pages re-export, and `next build` no longer compiles or
+prerenders an unprefixed copy of each page.
+
+The root blog article, author, tag and maintenance routes under
+[`src/app/(website)/blog`](<../src/app/(website)/blog>) stay, because the middleware serves those
+URLs unprefixed. A path the middleware matcher skips is not rewritten to `/en`, so it returns 404
+unless it has its own route.
+
 ## Blog maintenance
 
 The build defaults to maintenance mode. It prerenders [the blog landing page](<../src/app/(website)/blog/_page.tsx>)
@@ -91,6 +104,17 @@ This change did not touch the `Dockerfile` or the `build:docker` script, so chec
 With maintenance mode disabled, the [Ghost client](<../src/app/(website)/_lib/ghost/client.ts>) gives server-side requests three
 seconds and bulk requests (including the search index build) ten seconds. Browser fetches keep
 their existing behavior.
+
+During `next build`, both Ghost clients also stop waiting once Ghost looks unreachable, so pages do
+not each wait out their own timeout. `ghostFetch` checks `NEXT_PHASE=phase-production-build`, which
+Next sets before it forks the static-generation workers. After two transport failures in a row
+(timeout, abort or `fetch failed`), the worker logs "Ghost unreachable, skipping remaining requests"
+and later requests throw a `TimeoutError` at once, so pages render exactly as they would after a
+real timeout. HTTP errors such as 404 do not count, and a successful request resets the count.
+After a 30-second cooldown one probe request goes through: if it succeeds the breaker closes,
+otherwise requests are skipped for another 30 seconds. The state is per process, so each worker
+opens and probes on its own. ISR, feeds, on-demand article pages and
+`generate-blog-search-index.ts` run outside the build phase and keep the plain timeouts.
 
 The [Ghost cache](<../src/app/(website)/_lib/ghost/cache.ts>) stores results, including failures,
 for the blog listing and feeds in the Next.js Data Cache for 60 seconds. When loading posts fails,
