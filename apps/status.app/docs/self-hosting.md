@@ -69,9 +69,9 @@ keeps existing article URLs using a
 from the [November 5, 2026 production search index][blog-sitemap-index].
 
 To exit maintenance mode, remove `BLOG_MAINTENANCE_MODE` or set it to `0` in the deployment
-environment and rebuild. This re-enables the Ghost-powered blog, search index and
-article entries in the sitemap. The flag is evaluated at build time and included in the
-Turborepo cache key.
+environment and rebuild. Any value other than `1` leaves the blog enabled. This re-enables the
+Ghost-powered blog, search index and article entries in the sitemap. The flag is evaluated at
+build time and included in the Turborepo cache key.
 
 [blog-sitemap-archive]: https://web.archive.org/web/20261006194959id_/https://status.app/sitemap.xml
 [blog-sitemap-index]: https://status-website-eenm08ld5-status-im-web.vercel.app/blog-search-index.json
@@ -84,8 +84,10 @@ with "Cannot generate an empty blog search index" when Ghost returns no posts. D
 that blocks every build, including one you need for an unrelated fix such as rotating
 `GITHUB_TOKEN`.
 
-Ghost may cap a `limit=all` response. The Ghost client follows pagination for bulk requests,
-including the search index and sitemap, and fails the request if a later page cannot be fetched.
+Ghost caps bulk responses at 100 posts. The Ghost client sends every `limit=all` request as
+`limit=100`, including the first one, and follows Ghost's pagination until the last page, so the
+search index, sitemap and archives keep every post. If a later page cannot be fetched, the whole
+request fails.
 
 Set `ALLOW_EMPTY_BLOG_SEARCH_INDEX=1` for the build to get past it:
 
@@ -94,8 +96,9 @@ ALLOW_EMPTY_BLOG_SEARCH_INDEX=1 pnpm --filter status.app build
 ```
 
 With the flag set, the script logs a warning and writes an empty `public/blog-search-index.json`
-instead of throwing. Blog search returns no results until the next build with Ghost back up. The
-homepage hides its blog section when Ghost returns no posts.
+instead of throwing. Until the next build with Ghost back up, blog search returns no results, the
+main blog listing shows no posts and its numbered pages (`/blog/page/<n>`) return 404, because they
+all read that index. The homepage hides its blog section when Ghost returns no posts.
 
 `turbo.json` lists `ALLOW_EMPTY_BLOG_SEARCH_INDEX` in the `status.app#build` hash, so a build
 without the flag does not reuse a cached empty index.
@@ -121,9 +124,8 @@ opens and probes on its own. ISR, feeds, on-demand article pages and
 `generate-blog-search-index.ts` run outside the build phase and keep the plain timeouts.
 
 The [Ghost cache](<../src/app/(website)/_lib/ghost/cache.ts>) stores results, including failures,
-for the blog listing and feeds in the Next.js Data Cache for 60 seconds. When loading posts fails,
-the blog listing stays up and its empty state reads "The blog is under maintenance", while search
-can still use its built index.
+for the feeds in the Next.js Data Cache for 60 seconds. The main blog listing no longer calls Ghost
+at all: it reads the built search index, so a Ghost outage after deployment does not empty it.
 
 [Article pages](<../src/app/(website)/blog/[slug]/page.tsx>) generate on the first request and use
 hourly ISR, so a failed article read cannot stop a deployment. The article page caches each Ghost
@@ -298,11 +300,14 @@ Behind a load balancer, follow the
 
 ## Blog browsing traffic
 
-The [blog grids](<../src/app/(website)/blog/_components/tag-archive.tsx>) use the existing
-server-rendered pagination links. Scrolling no longer fetches Ghost from the browser.
-[Search](../src/app/api/blog/search/route.ts) reads the index generated at build time.
-Article pages retain hourly ISR, so the first visit and later revalidation may contact Ghost;
-this app is not a complete static export.
+The [blog grids](<../src/app/(website)/blog/_components/tag-archive.tsx>) on the main listing and
+on every tag and author archive page are server-rendered and use pagination links. The browser
+never fetches Ghost to load more posts. [Search](../src/app/api/blog/search/route.ts) reads the
+index generated at build time. Tag and author archives still read Ghost on the server, and article
+pages retain hourly ISR, so the first visit and later revalidation may contact Ghost; this app is
+not a complete static export.
 
-The main blog listing and its numbered pages read the same complete build-time index as search.
-They do not request Ghost while serving readers. Deploy again to publish changes to these lists.
+The main blog listing and its numbered pages (`/blog/page/<n>`) read the same complete build-time
+index as search, split into pages of `BLOG_PAGE_SIZE` posts. A page number past the end returns
+404. They do not request Ghost while serving readers. Deploy again to publish changes to these
+lists.
