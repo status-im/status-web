@@ -101,7 +101,12 @@ export async function getPosts(params: GetPostsParams = {}) {
     filter,
   })
 
-  if (!tag && page === 1 && !response.unavailable && response.posts.length === 0) {
+  if (
+    !tag &&
+    page === 1 &&
+    !response.unavailable &&
+    response.posts.length === 0
+  ) {
     const posts = (
       await Promise.all(networkBlogSlugFallback.map(getPostBySlug))
     ).filter((post): post is GhostPost => post !== null)
