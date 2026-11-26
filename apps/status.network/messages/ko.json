@@ -531,6 +531,14 @@
       "translation": "블로그",
       "notes": "blog::breadcrumb_blog"
     },
+    "maintenance_title": {
+      "translation": "블로그 점검 중입니다",
+      "notes": "blog::maintenance_title"
+    },
+    "maintenance_description": {
+      "translation": "잠시 후 다시 방문해 주세요.",
+      "notes": "blog::maintenance_description"
+    },
     "no_posts": {
       "translation": "아직 게시글이 없습니다.",
       "notes": "blog::no_posts"

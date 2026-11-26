@@ -46,7 +46,7 @@ by the [wallet](https://ci.status.im/job/status-web/job/main/job/wallet/) and
 
 [`e2e`](./e2e) holds the Playwright tests for the hub and the wallet extension.
 
-The sites and dapps are Next.js 15 and Tailwind CSS, apart from community-dapp, which webpacks a
+The sites and dapps are Next.js 16 and Tailwind CSS, apart from community-dapp, which webpacks a
 styled-components app. The wallet is WXT, the connector is Plasmo, the API is tRPC. status.app
 builds its pages from `content/` through Contentlayer and keeps reporting data in Postgres with
 Drizzle. The packages build with Vite and the components have a Storybook.

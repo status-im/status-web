@@ -1,5 +1,6 @@
 import { loadMessages } from '~/i18n/messages'
 import { routing } from '~/i18n/routing'
+import { setRequestLocale } from 'next-intl/server'
 import { Inter } from 'next/font/google'
 import { ButtonLink } from './_components/button-link'
 import { Metadata } from './_metadata'
@@ -26,6 +27,7 @@ export const metadata = Metadata({
 // Fallback for routes outside `[locale]` during static export.
 export default async function GlobalNotFound() {
   const locale = routing.defaultLocale
+  setRequestLocale(locale)
   const messages = await loadMessages(locale)
   const notFoundMessages = messages['not_found'] as
     | Record<string, string>

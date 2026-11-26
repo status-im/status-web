@@ -14,19 +14,11 @@ import type { BlogSearchResults } from './search-config'
  * two candidates cover the differing working directories of the Vercel and
  * standalone/Docker runtimes.
  *
- * These paths MUST stay inline string literals. @vercel/nft resolves
- * `path.join(cwd(), '<literal>')` to a single file; move the segments into
- * imported constants and it can no longer resolve the expression, falls back to
- * globbing the working directory, and drags the ~1GB `.next/cache` into the
- * function until it blows past Vercel's 250mb limit.
+ * Keep the paths inline at each read so the bundler traces the index file
+ * instead of the working directory.
  *
  * Keep in sync with the output path in scripts/generate-blog-search-index.ts.
  */
-const SEARCH_INDEX_PATHS = [
-  path.join(cwd(), 'public/blog-search-index.json'),
-  path.join(cwd(), 'apps/status.app/public/blog-search-index.json'),
-]
-
 let searchPayloadPromise: Promise<BlogSearchPayload> | undefined
 
 /**
@@ -52,21 +44,24 @@ function memoizeUntilFailure<T>(
 }
 
 async function loadBlogSearchPayload(): Promise<BlogSearchPayload> {
-  for (const indexPath of SEARCH_INDEX_PATHS) {
-    try {
-      const payload = await readFile(indexPath, 'utf8')
-      return JSON.parse(payload) as BlogSearchPayload
-    } catch (error) {
-      const isMissingFile =
-        error instanceof Error && 'code' in error && error.code === 'ENOENT'
+  let payload: string
+  try {
+    payload = await readFile(
+      path.join(cwd(), 'public/blog-search-index.json'),
+      'utf8'
+    )
+  } catch (error) {
+    const isMissingFile =
+      error instanceof Error && 'code' in error && error.code === 'ENOENT'
 
-      if (!isMissingFile) throw error
-    }
+    if (!isMissingFile) throw error
+
+    payload = await readFile(
+      path.join(cwd(), 'apps/status.app/public/blog-search-index.json'),
+      'utf8'
+    )
   }
-
-  throw new Error(
-    `Blog search index was not found. Looked in: ${SEARCH_INDEX_PATHS.join(', ')}`
-  )
+  return JSON.parse(payload) as BlogSearchPayload
 }
 
 export function readBlogSearchPayload(): Promise<BlogSearchPayload> {

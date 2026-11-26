@@ -1,6 +1,9 @@
+'use client'
+
 import { Suspense } from 'react'
 
 import { DetailDrawer } from '../_components/detail-drawer'
+import { useAccounts } from '../_providers/accounts-context'
 
 // export const experimental_ppr = true
 
@@ -10,7 +13,12 @@ type Props = {
   detail: React.ReactNode
 }
 
-export default async function Layout({ nav, list, detail }: Props) {
+export default function Layout({ nav, list, detail }: Props) {
+  const { hasLoadedAccounts } = useAccounts()
+
+  // Address controls look up the saved account when they render.
+  if (!hasLoadedAccounts) return <div>Loading...</div>
+
   return (
     <div className="flex min-h-full overflow-hidden">
       <div className="grid flex-1 grid-cols-[auto_1fr] divide-x divide-neutral-10 overflow-hidden">

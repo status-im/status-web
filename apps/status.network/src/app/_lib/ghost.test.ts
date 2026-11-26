@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 vi.mock('server-only', () => ({}))
 
 afterEach(() => {
+  vi.restoreAllMocks()
   vi.unstubAllEnvs()
   vi.unstubAllGlobals()
   vi.resetModules()
@@ -58,5 +59,17 @@ describe('network Ghost posts', () => {
     expect(
       new URL(fetchMock.mock.calls.at(-1)![0]).searchParams.get('filter'),
     ).toContain('tag:status-network-blog')
+  })
+
+  it('reports a listing failure without fetching fallback articles', async () => {
+    vi.stubEnv('GHOST_API_KEY', 'test')
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    const fetchMock = vi.fn(async () => new Response(null, { status: 503 }))
+    vi.stubGlobal('fetch', fetchMock)
+    const { getPosts } = await import('./ghost')
+
+    const result = await getPosts({ limit: 'all' })
+    expect(result).toMatchObject({ posts: [], unavailable: true })
+    expect(fetchMock).toHaveBeenCalledTimes(1)
   })
 })

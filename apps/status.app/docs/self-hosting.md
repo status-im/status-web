@@ -59,8 +59,8 @@ unless it has its own route.
 The blog is enabled by default. Set `BLOG_MAINTENANCE_MODE=1` and rebuild to enable
 the emergency maintenance mode. In that mode, the build prerenders [the blog landing page](<../src/app/(website)/blog/_page.tsx>)
 with the maintenance notice and builds an empty blog search index. The
-[postbuild script](../scripts/generate-blog-maintenance.ts) writes the shared notice to
-`.next/static/blog-maintenance.html`. The [Vercel route](../vercel.ts) serves that static file
+[prebuild script](../scripts/generate-blog-maintenance.ts) writes the shared notice to
+`public/blog-maintenance.html`. The [Vercel route](../vercel.ts) serves that static file
 with HTTP 503 at article, author archive, category archive and paginated URLs before Next.js
 middleware runs. Middleware serves the same notice on self-hosted deployments. The sitemap
 keeps existing article URLs using a

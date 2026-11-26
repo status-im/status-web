@@ -5,7 +5,13 @@ import globals from 'globals'
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   {
-    ignores: ['**/.next', '**/dist', '**/node_modules', '**/coverage'],
+    ignores: [
+      'next-env.d.ts',
+      '**/.next',
+      '**/dist',
+      '**/node_modules',
+      '**/coverage',
+    ],
   },
   ...configs,
   ...tailwindcssConfigs,

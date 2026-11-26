@@ -27,6 +27,8 @@ The site needs four Ghost variables, two for the build and two for the browser:
 
 When the network blog tag returns no posts, the listing uses the committed slugs in `content/network-blog-slugs.json` and fetches their published content from Ghost. Those slugs also remain available as article routes if their network tag is missing. Ghost must still be reachable to provide the article content. Bulk requests follow all pages when Ghost caps the response.
 
+If the Ghost listing request fails, `/blog` displays a maintenance notice. The committed slugs still provide fallback article paths.
+
 The Ghost homepage cards and article body use their build-time content without browser refresh. Republish the site to show Ghost edits.
 
 ## Deploy

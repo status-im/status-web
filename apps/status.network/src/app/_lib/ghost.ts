@@ -55,6 +55,7 @@ type Pagination = {
 type GhostPostsResponse = {
   posts: GhostPost[]
   meta: { pagination: Pagination }
+  unavailable?: true
 }
 
 type GhostTagsResponse = {
@@ -68,6 +69,7 @@ const GHOST_URL = (process.env.GHOST_API_URL ?? DEFAULT_GHOST_URL).replace(
 )
 const GHOST_API_KEY = process.env.GHOST_API_KEY
 const REVALIDATE_SECONDS = 3600
+const REQUEST_TIMEOUT_MS = 10_000
 
 const EMPTY_PAGINATION: Pagination = {
   page: 1,
@@ -99,7 +101,12 @@ export async function getPosts(params: GetPostsParams = {}) {
     filter,
   })
 
-  if (!tag && page === 1 && response.posts.length === 0) {
+  if (
+    !tag &&
+    page === 1 &&
+    !response.unavailable &&
+    response.posts.length === 0
+  ) {
     const posts = (
       await Promise.all(networkBlogSlugFallback.map(getPostBySlug))
     ).filter((post): post is GhostPost => post !== null)
@@ -112,6 +119,7 @@ export async function getPosts(params: GetPostsParams = {}) {
   return {
     posts: response.posts,
     meta: response.meta,
+    unavailable: response.unavailable === true,
   }
 }
 
@@ -204,6 +212,7 @@ async function fetchPosts(
     let firstPage: GhostPostsResponse | undefined
     do {
       const response = await fetch(url.toString(), {
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
         next: {
           revalidate: REVALIDATE_SECONDS,
         },
@@ -227,6 +236,7 @@ async function fetchPosts(
     return {
       posts: [],
       meta: { pagination: EMPTY_PAGINATION },
+      unavailable: true,
     }
   }
 }
@@ -250,6 +260,7 @@ async function fetchTags(
 
   try {
     const response = await fetch(url.toString(), {
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
       next: {
         revalidate: REVALIDATE_SECONDS,
       },

@@ -1,5 +1,6 @@
 /* eslint-env node */
-/* eslint-disable no-undef */
+
+/* eslint-disable @typescript-eslint/no-require-imports -- This config uses CommonJS. */
 const path = require('path')
 const {
   buildLocalizedPaths,
@@ -35,7 +36,9 @@ async function fetchAllBlogPosts() {
     url.searchParams.set('page', String(page))
 
     try {
-      const response = await fetch(url.toString())
+      const response = await fetch(url.toString(), {
+        signal: AbortSignal.timeout(10_000),
+      })
       if (!response.ok) break
 
       const data = await response.json()
@@ -54,6 +57,7 @@ async function fetchAllBlogPosts() {
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
   siteUrl: 'https://status.network',
+  outDir: 'out',
   generateRobotsTxt: false,
   exclude: [
     '/api/*',

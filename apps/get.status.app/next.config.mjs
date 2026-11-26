@@ -1,13 +1,7 @@
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
-
 import { serverEnv } from './src/config/env.server.mjs'
 import './src/config/env.client.mjs'
 
 import createNextIntlPlugin from 'next-intl/plugin'
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const statusAppRoot = path.join(__dirname, '../status.app')
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
@@ -29,34 +23,14 @@ const turbopackAliases = {
   '~': '../status.app/src',
 }
 
-// Webpack (production build) accepts absolute paths.
-const webpackAliases = {
-  '~/config/routes': path.join(__dirname, 'src/config/routes.ts'),
-  '~/config/site-scope': path.join(__dirname, 'src/config/site-scope.ts'),
-  '~/config/env.server.mjs': path.join(__dirname, 'src/config/env.server.mjs'),
-  '~/config/env.client.mjs': path.join(__dirname, 'src/config/env.client.mjs'),
-  '~website/_lib/ghost': path.join(__dirname, 'src/stubs/ghost.ts'),
-  '~components/assets$': path.join(__dirname, 'src/app/_components/assets'),
-  '~components/assets': path.join(__dirname, 'src/app/_components/assets'),
-  '~components': path.join(statusAppRoot, 'src/app/_components'),
-  '~hooks': path.join(statusAppRoot, 'src/app/_hooks'),
-  '~website': path.join(statusAppRoot, 'src/app/(website)'),
-  '~server': path.join(statusAppRoot, 'src/server'),
-  '~app': path.join(statusAppRoot, 'src/app'),
-  '~public': path.join(statusAppRoot, 'public'),
-  '~': path.join(statusAppRoot, 'src'),
-}
-
 /** @type {import('next').NextConfig} */
-let config = {
+const config = {
+  agentRules: false,
   ...(serverEnv.NODE_ENV === 'production' && { output: 'export' }),
   reactStrictMode: true,
   pageExtensions: ['ts', 'tsx'],
   typescript: {
     ignoreBuildErrors: false,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
   },
   images: {
     unoptimized: true,
@@ -74,26 +48,13 @@ let config = {
   turbopack: {
     resolveAlias: turbopackAliases,
   },
-  webpack: (webpackConfig, { isServer }) => {
-    webpackConfig.resolve.alias = {
-      ...webpackConfig.resolve.alias,
-      ...webpackAliases,
-    }
-
-    if (!isServer) {
-      webpackConfig.resolve.fallback.fs = false
-      webpackConfig.resolve.fallback.tls = false
-      webpackConfig.resolve.fallback.net = false
-      webpackConfig.resolve.fallback.child_process = false
-    }
-
-    return webpackConfig
-  },
   transpilePackages: [
     '@status-im/icons',
     '@status-im/components',
     '@status-im/colors',
     '@status-im/js',
+    // Shared status.app MDX uses Shiki, which needs bundling in Turbopack.
+    'shiki',
   ],
 }
 

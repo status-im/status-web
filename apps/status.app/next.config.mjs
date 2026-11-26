@@ -26,6 +26,7 @@ const feedSnapshots =
 
 /** @type {import('next').NextConfig} */
 let config = {
+  agentRules: false,
   env: {
     BLOG_MAINTENANCE_MODE:
       process.env.BLOG_MAINTENANCE_MODE === '1' ? '1' : '0',
@@ -49,16 +50,9 @@ let config = {
   typescript: {
     ignoreBuildErrors: false,
   },
-  eslint: {
-    // note: handled by npm scripts which can specify --ext option to fiter out markdown files and let remark process them
-    ignoreDuringBuilds: true,
-    // ignoreDuringBuilds: false,
-    // dirs: ['src'],
-    // ignoreDuringBuilds: true,
-    // dirs: ['src', 'docs'],
-  },
 
   images: {
+    qualities: [60, 75, 100],
     // disableStaticImages: true,
 
     remotePatterns: [
@@ -85,32 +79,6 @@ let config = {
     // Bound Ghost load while prerendering archives.
     cpus: 2,
     staticGenerationMaxConcurrency: 1,
-    // note: https://nextjs.org/blog/turbopack-for-development-stable#breaking-changes
-    turbo: {
-      resolve: {
-        alias: {
-          '@achingbrain/nat-port-mapper': {
-            browser: false,
-          },
-        },
-      },
-      rules: {
-        fs: {
-          // note: https://github.com/vercel/next.js/discussions/67196
-          // note: https://github.com/vercel/next.js/pull/64205 available only in canary?
-          browser: false,
-        },
-        tls: {
-          browser: false,
-        },
-        net: {
-          browser: false,
-        },
-        child_process: {
-          browser: false,
-        },
-      },
-    },
   },
   // note: fallback for non-Turbopack builds
   webpack: (config, { isServer }) => {

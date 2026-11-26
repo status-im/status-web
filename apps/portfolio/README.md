@@ -14,6 +14,9 @@ pnpm --filter portfolio build   # production build
 pnpm --filter portfolio start   # serve the build
 ```
 
+A saved address stays available when you reload an asset or collectible detail URL. The
+corresponding list stays open alongside the detail.
+
 ## Environment
 
 `.env` is committed with defaults. Pull the secrets locally:

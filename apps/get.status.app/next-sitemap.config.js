@@ -16,6 +16,7 @@ const ALLOWED_PATHS = buildLocalizedPaths(LOCALES, PAGES).map(p => p.loc)
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
   siteUrl: 'https://get.status.app',
+  outDir: 'out',
   generateRobotsTxt: false,
   generateIndexSitemap: false,
   changefreq: 'monthly',
