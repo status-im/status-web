@@ -131,7 +131,10 @@ contract FeaturedVotingContract is Ownable2Step {
     }
 
     function initializeVoting(bytes calldata publicKey, uint256 voteAmount) public {
-        require(votings.length == 0 || votings[votings.length - 1].finalized, "vote already ongoing");
+        require(
+            votings.length == 0 || (votings[votings.length - 1].finalized && votings[votings.length - 1].evaluated),
+            "vote already ongoing"
+        );
         require(directory.isCommunityInDirectory(publicKey), "community not in directory");
         require(!isInCooldownPeriod(publicKey), "community has been featured recently");
         require(token.balanceOf(msg.sender) >= voteAmount, "not enough token");
@@ -169,9 +172,14 @@ contract FeaturedVotingContract is Ownable2Step {
             require(voting.endAt < block.timestamp, "vote still ongoing");
             voting.finalized = true;
             voting.endAt = block.timestamp;
-            voting.endBlock = block.number;
+            // MiniMe checkpoints in the current block can still change after this call.
+            // Use a completed block so every finalization batch sees the same balances.
+            voting.endBlock = block.number - 1;
             voting.evaluatingPos = 0;
             voting.evaluated = false;
+            // Discard cast-time totals before recounting each vote at finalization.
+            communitiesVotesCount = 0;
+            delete communitiesVotes;
         }
 
         require(!voting.evaluated, "vote already finalized");
@@ -180,7 +188,20 @@ contract FeaturedVotingContract is Ownable2Step {
         if (voting.evaluated) {
             bytes[] storage featured = featuredByVotingID[voting.id];
 
+            // A community may have been removed while votes were evaluated in batches.
+            for (uint256 i = 0; i < communitiesVotesCount; i++) {
+                if (
+                    communitiesVotes[i].totalSntAmount > 0
+                        && !directory.isCommunityInDirectory(communitiesVotes[i].community)
+                ) {
+                    communitiesVotes[i].totalSntAmount = 0;
+                }
+            }
+
             for (uint256 i = 0; i < featuredPerVotingCount; i++) {
+                if (communitiesVotesCount == 0) {
+                    break;
+                }
                 uint256 highestIndex = 0;
 
                 for (uint256 j = 1; j < communitiesVotesCount; j++) {
