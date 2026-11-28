@@ -41,7 +41,7 @@ export function FeatureMobile() {
       abi: featuredVotingContract.interface,
       address: featuredVotingContract.address,
       method: 'isInCooldownPeriod',
-      args: [community.publicKey],
+      args: [publicKey],
     }) ?? []
   const inFeatured = isInCooldownPeriod
 
@@ -71,6 +71,7 @@ export function FeatureMobile() {
               !isConnected ||
               !account ||
               !isActive ||
+              !(proposingAmount > 0) ||
               inFeatured ||
               featuredVotingState === 'verification' ||
               featuredVotingState === 'ended'

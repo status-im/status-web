@@ -11,6 +11,8 @@ Foundry contracts behind the Status community directory, where SNT holders vote 
 
 Votes are EIP-712 signatures submitted in batches, and each voter's balance is checked at a block rather than trusted from the signed amount. The ABIs in [`abi/index.ts`](./abi/index.ts) are compiled from `out/`, so run `forge build` before importing `@status-im/community-contracts/abi`; `apps/community-dapp` does that for you in its `predev` and `prebuild` scripts.
 
+Starting either voting flow requires a positive SNT amount. This rejects zero-balance initiators but does not set a minimum stake or lock tokens.
+
 ## Build and test
 
     forge build       # compile

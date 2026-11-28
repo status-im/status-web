@@ -341,6 +341,22 @@ contract InitializeVotingRoomTest is VotingContractTest {
         votingContract.initializeVotingRoom(VotingContract.VoteType.FOR, communityID1, 100);
     }
 
+    function test_RevertWhen_VoteAmountIsZero() public {
+        vm.expectRevert(bytes("vote amount must be greater than zero"));
+        vm.prank(alice);
+        votingContract.initializeVotingRoom(VotingContract.VoteType.FOR, communityID1, 0);
+
+        vm.prank(address(votingContract));
+        directoryContract.addCommunity(communityID1);
+        vm.expectRevert(bytes("vote amount must be greater than zero"));
+        vm.prank(alice);
+        votingContract.initializeVotingRoom(VotingContract.VoteType.AGAINST, communityID1, 0);
+
+        vm.prank(bob);
+        votingContract.initializeVotingRoom(VotingContract.VoteType.AGAINST, communityID1, 100);
+        assertEq(votingContract.getActiveVotingRoom(communityID1).roomNumber, 1);
+    }
+
     function test_RevertWhen_TimeBetweenVotingHasNotPassed() public {
         // vote community `communityID1` into the directory
         vm.prank(bob);

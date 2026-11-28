@@ -134,6 +134,7 @@ contract FeaturedVotingContract is Ownable2Step {
         require(votings.length == 0 || votings[votings.length - 1].finalized, "vote already ongoing");
         require(directory.isCommunityInDirectory(publicKey), "community not in directory");
         require(!isInCooldownPeriod(publicKey), "community has been featured recently");
+        require(voteAmount > 0, "vote amount must be greater than zero");
         require(token.balanceOf(msg.sender) >= voteAmount, "not enough token");
 
         uint256 votingID = votings.length + 1;
